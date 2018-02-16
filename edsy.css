@@ -1,0 +1,1775 @@
+@font-face {
+	font-family: 'Euro Caps';
+	src: local('Euro Caps'), local('EuroCaps'), url('EuroCaps.woff2') format('woff2'), url('EuroCaps.woff') format('woff'), url('EuroCaps.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'Sintony';
+	src: local('Sintony'), url('Sintony.woff2') format('woff2'), url('Sintony.woff') format('woff'), url('Sintony.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'Telegrama';
+	src: local('Telegrama'), url('Telegrama.woff2') format('woff2'), url('Telegrama.woff') format('woff'), url('Telegrama.ttf') format('truetype');
+}
+
+
+.tar { text-align: right; }
+.tac { text-align: center; }
+
+* {
+	box-sizing: border-box;
+}
+
+:root {
+	--color-orange-5: hsl(27,100%,60%);
+	--color-orange-4: hsl(27,100%,48%);
+	--color-orange-3: hsl(27,100%,36%);
+	--color-orange-2: hsl(27,85%,18%);
+	--color-orange-1: hsl(27,65%,12%);
+	--color-red-5: hsl(0,100%,60%);
+	--color-red-4: hsl(0,100%,48%);
+	--color-red-3: hsl(0,100%,36%);
+	--color-red-2: hsl(0,90%,24%);
+	--color-red-1: hsl(0,75%,15%);
+	--color-blue-5: hsl(197,100%,60%);
+	--color-blue-4: hsl(197,100%,48%);
+	--color-blue-3: hsl(197,100%,36%);
+	--color-blue-2: hsl(197,90%,24%);
+	--color-blue-1: hsl(197,75%,18%);
+	--color-grey-5: hsl(0,0%,85%);
+	--color-grey-4: hsl(0,0%,70%);
+	--color-grey-3: hsl(0,0%,50%);
+	--color-grey-2: hsl(0,0%,30%);
+	--color-grey-1: hsl(0,0%,15%);
+	--font-caps: 'Euro Caps';
+	--font-text: 'Sintony', 'Verdana', 'Arial', sans-serif;
+	--font-fixed: 'Telegrama';
+}
+
+HTML,
+BODY {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	background-color: #222;
+	color: white;
+	font-size: 100%;
+	font-family: var(--font-caps);
+}
+
+DIV::-webkit-scrollbar,
+DIV::-webkit-scrollbar-corner {
+	width: 0.75em;
+	height: 0.75em;
+	background-color: var(--color-orange-1);
+}
+DIV::-webkit-scrollbar-thumb {
+	background-color: var(--color-orange-5);
+}
+
+ABBR {
+	display: inline-block;
+	margin: 0.1em 0;
+	border-bottom: 1px dotted white;
+	cursor: help;
+	line-height: 0.8;
+	text-decoration: none;
+}
+
+SMALL {
+	font-size: 62.5%;
+}
+
+SVG.filter {
+	display: none;
+}
+
+A {
+	color: var(--color-blue-4);
+	text-decoration: none;
+}
+A:hover {
+	color: var(--color-blue-5);
+	text-decoration: underline;
+}
+
+TABLE {
+	margin: 0;
+	border: none;
+	border-collapse: collapse;
+}
+
+TH,
+TD {
+	padding: 0;
+	border: none;
+	text-align: left;
+	vertical-align: top;
+	font-weight: normal;
+}
+
+FORM {
+	margin: 0;
+	padding: 0;
+}
+
+BUTTON {
+	margin: 0;
+	border-color: #fff #ddd #ddd #fff;
+	background-color: #eee;
+	padding: 0 0.5em;
+	cursor: pointer;
+}
+BUTTON:disabled {
+	border-color: #ccc #aaa #aaa #ccc;
+	background-color: #bbb;
+	cursor: auto;
+}
+
+LABEL {
+	margin: 0;
+	padding: 0;
+}
+
+INPUT {
+	margin: 0;
+	padding: 0;
+}
+INPUT:disabled {
+	border-color: transparent;
+	background-color: transparent;
+	color: inherit;
+}
+
+SELECT {
+	margin: 0;
+	cursor: pointer;
+}
+SELECT:disabled {
+	background-color: transparent;
+	color: inherit;
+	cursor: auto;
+}
+
+OPTGROUP {
+	background-color: #FF860D;
+	color: black;
+}
+
+OPTION {
+	background-color: white;
+	color: black;
+}
+OPTION:disabled {
+	background-color: #ccc;
+	color: #444;
+	font-style: italic;
+}
+
+
+.dropok {
+	border-color: var(--color-blue-5) !important;
+}
+
+.modgood {
+	color: var(--color-blue-5);
+}
+.modbad {
+	color: var(--color-red-5);
+}
+
+.icon {
+	display: inline-block;
+	vertical-align: middle;
+	box-sizing: content-box;
+	width: 13px;
+	height: 13px;
+	margin: 0;
+	padding: 0;
+	line-height: 13px;
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIAAAP///////yH5BAEKAAEALAAAAAANAA0AAAIajAOZx+qM3DuKLtgujhpO/IHdRmZAyaEVUwAAOw==);
+	background-origin: content-box;
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+BUTTON .icon {
+	filter: invert(100%);
+}
+BUTTON:disabled .icon {
+	filter: brightness(85%);
+}
+
+.icon.blueprintAvg {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAKEAAABumQCz9wBumQBumSH5BAEKAAIALAAAAAANAA0AAAImlAUQe5e5ontARIZSs+xtE3lfWH1gIG5kqXZaI2XeFUzQ9d31UQAAOw==);
+}
+.icon.blueprintHigh {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAKEAAABumQCz9wBumQBumSH5BAEKAAIALAAAAAANAA0AAAIilAUQe5e5ontARIZSs2zVzV1giI1XYJ4pKjWtqhqnuMVGAQA7);
+}
+.icon.blueprintMax {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIABAACz9wBumSH5BAEKAAEALAAAAAANAA0AAAIdjAOZd+prHnIRtqXYpXrmXn3aA4CZGIYY55GddBQAOw==);
+}
+.icon.blueprintMin {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIABAABumQCz9yH5BAEKAAEALAAAAAANAA0AAAIdjAOZd+prHnIRtqXYpXrmXn3aA4CZGIYY55GddBQAOw==);
+}
+.icon.blueprintRand {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAKEBAABumQCz9wCz9wCz9yH5BAEKAAIALAAAAAANAA0AAAIslAUQeae5noMAxSpiQ4oHE4RgQmbHR4rNB17nlG5jpZmekVYPg0c+1qAABQUAOw==);
+}
+BUTTON.icon.blueprintAvg:disabled,
+BUTTON.icon.blueprintGood:disabled,
+BUTTON.icon.blueprintMax:disabled,
+BUTTON.icon.blueprintBest:disabled {
+	filter: grayscale(100%);
+}
+
+.icon.damageExplosive {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIAAAP///////yH5BAEKAAEALAAAAAANAA0AAAIgjA+nCe2M0pKhoWgk1Vl5Bi1V6HWVeaYWuo7fNj6k6BUAOw==);
+}
+.icon.damageKinetic {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIAAAP///////yH5BAEKAAEALAAAAAANAA0AAAIdjI8ZwA3J4DORnjrnsvuizHWgR44ipaWqJDmaAhcAOw==);
+}
+.icon.damageThermal {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIAAAP///////yH5BAEKAAEALAAAAAANAA0AAAIgjI8ZwA3JzFuTnhrXzbq7CUqORFJNiXFghais1X6vkhQAOw==);
+}
+
+.icon.engineer {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIAAAP///////yH5BAEKAAEALAAAAAANAA0AAAIhjA+nCJ3r2AttmUoly9S9+oFXEl4j103gpESpxKaeNbIFADs=);
+}
+.icon.engineered {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIABAP///wAAACH5BAEKAAEALAAAAAANAA0AAAIdjA+nCJ3rYmMymlpDltpe101UwoUTVqLiCC7fYxQAOw==);
+}
+
+.icon.fileDelete {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIAAAP///////yH5BAEKAAEALAAAAAANAA0AAAIejIEJFup6mlyL0Sktvvry6GXgxpCfKaLVsbJl8zAFADs=);
+}
+.icon.fileReload {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIAAAP///////yH5BAEKAAEALAAAAAANAA0AAAIfjA15AZevFGsLzoUewxNS50kcOGIfR4nVp16rV2pLAQA7);
+}
+.icon.fileRename {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIAAAP///////yH5BAEKAAEALAAAAAANAA0AAAIgjG8Aoei6GGwpTVidzfLmizHbQUXUaIImCXKaFb2NUgAAOw==);
+}
+.icon.fileSave {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIAAAP///////yH5BAEKAAEALAAAAAANAA0AAAIbhINxe8nW0IOpwotx3RLwHX2KJ3aleYZfxgIFADs=);
+}
+.icon.fileSaveAs {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIAAAP///////yH5BAEKAAEALAAAAAANAA0AAAIchINxe8nW0IOpwotx3RJsb4HOJ2rdR6IhR2ZZAQA7);
+}
+
+.icon.missileDumbfire {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIAAAP///////yH5BAEKAAEALAAAAAANAA0AAAIajA9wi8mvgmNRzofoqhenXhkhRGLmKJknVgAAOw==);
+}
+.icon.missileSeeking {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIAAAP///////yH5BAEKAAEALAAAAAANAA0AAAIejI8AGOutzGKQWnkjfUo35l3HNCXlBmnkeIrf2wYFADs=);
+}
+
+.icon.mountFixed {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIAAAP///////yH5BAEKAAEALAAAAAANAA0AAAIcjA+nm6sAoQutstlMfjoyT2Gcs4Vm2YGTuWpOAQA7);
+}
+.icon.mountGimballed {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIAAAP///////yH5BAEKAAEALAAAAAANAA0AAAIgjA15exDOmlPxtZiyRgrajVxcd2WjRi2ex3Rsa1UjUwAAOw==);
+}
+.icon.mountTurreted {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIAAAP///////yH5BAEKAAEALAAAAAANAA0AAAIZjI+pC+3aUJRQAnhNxo+daVlOt5TBOJplAQA7);
+}
+
+.icon.repair {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIABAP///wAAACH5BAEKAAEALAAAAAANAA0AAAIajH8AyKHNlpHtvapu1Jh2OHFI5o0Z6JyoyBQAOw==);
+}
+
+.icon.shipyard {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIABAP///wAAACH5BAEKAAEALAAAAAANAA0AAAIcjI+pywzv4ANJBgqNxRfTDnZeNV6VNqXq17RJAQA7);
+}
+
+.icon.warning {
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIABAP///wAAACH5BAEKAAEALAAAAAANAA0AAAIfjA+nCr2b0jPOTRkwi1nTn0HSqGEm4lEjw1pXA8dyAQA7);
+}
+
+
+.togglebutton {
+	display: inline-block;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.togglebutton INPUT {
+	position: absolute;
+	margin: -1px;
+	border: 0;
+	padding: 0;
+	width: 1px;
+	height: 1px;
+	clip: rect(0 0 0 0);
+	overflow: hidden;
+}
+
+.togglebutton INPUT + DIV {
+	white-space: normal;
+}
+.togglebutton INPUT:disabled + DIV {
+	cursor: default;
+}
+
+
+.checkbox {
+	display: inline-block;
+	position: relative;
+	padding-right: 15px;
+	cursor: pointer;
+	white-space: nowrap;
+}
+.checkbox.left {
+	padding-right: 0;
+	padding-left: 15px;
+}
+.checkbox::before {
+	display: inline;
+	content: '\200B';
+}
+
+.checkbox INPUT {
+	position: absolute;
+	margin: -1px;
+	border: 0;
+	padding: 0;
+	width: 1px;
+	height: 1px;
+	clip: rect(0 0 0 0);
+	overflow: hidden;
+}
+
+.checkbox INPUT + DIV {
+	display: inline-block;
+	position: absolute;
+	right: 4px;
+	bottom: 6px;
+	width: 7px;
+	height: 7px;
+}
+.checkbox.left INPUT + DIV {
+	right: auto;
+	left: 4px;
+}
+.checkbox INPUT:checked + DIV {
+	background-color: var(--color-orange-5);
+}
+
+.checkbox INPUT + DIV::before,
+.checkbox INPUT + DIV::after {
+	box-sizing: border-box;
+	content: '';
+	display: block;
+	position: absolute;
+	top: -4px;
+	bottom: -4px;
+	width: 4px;
+	border: 2px solid var(--color-orange-3);
+}
+.checkbox INPUT + DIV::before {
+	left: -4px;
+	border-right: none;
+}
+.checkbox INPUT + DIV::after {
+	right: -4px;
+	border-left: none;
+}
+.checkbox INPUT:checked + DIV::before,
+.checkbox INPUT:checked + DIV::after {
+	border-color: var(--color-orange-5);
+}
+.checkbox INPUT:active + DIV::before,
+.checkbox INPUT:active + DIV::after {
+	border-color: white;
+}
+
+
+/*
+* MAIN BLOCK LAYOUT
+*/
+
+
+#page {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+#page_header {
+	flex: 0 0 auto;
+}
+
+#page_body {
+	flex: 1 0 10px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	padding: 0.5em;
+}
+
+
+#page_body:not(.shipyard) #page_body_shipyard,
+#page_body:not(.outfitting) #page_body_outfitting,
+#page_body:not(.options) #page_body_options {
+	display: none;
+}
+
+#page_body_shipyard {
+	flex: 0 1 auto;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+#shipyard_tabs {
+	flex: 0 0 auto;
+}
+
+#shipyard_container {
+	flex: 1 0 10px;
+	border: 2px solid var(--color-orange-5);
+	padding: 0 0.25em;
+	background-color: black;
+	overflow: auto;
+	white-space: nowrap;
+}
+
+
+#page_body_outfitting {
+	flex: 1 1 auto;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+
+#outfitting_top {
+	flex: 1 0 10px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+#outfitting_bottom {
+	flex: 0 0 auto;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+
+#outfitting_modules {
+	flex: 1 0 10px;
+	max-width: 20em;
+	min-width: auto;
+	display: flex;
+	flex-direction: column;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: arrow;
+}
+
+#outfitting_fit {
+	flex: 0 1 auto;
+	max-width: auto;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	margin: 0 0.5em;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: arrow;
+}
+
+#outfitting_details {
+	flex: 1 0 10px;
+	max-width: 20em;
+	min-width: 16em;
+	display: flex;
+	flex-direction: column;
+}
+
+#outfitting_stats {
+	flex: 0 1 auto;
+	max-width: auto;
+	min-width: 0;
+	display: flex;
+	flex-direction: row;
+	font-size: 87.5%; /* TODO? */
+	font-size: 100%;
+	margin-top: 0.5em;
+	border: 2px solid var(--color-orange-5);
+	background-color: black;
+	overflow-x: auto;
+}
+
+
+#page_body_options {
+	flex: 0 1 auto;
+	border: 2px solid var(--color-orange-5);
+	padding: 0 0.5em;
+	background-color: black;
+	overflow: auto;
+}
+
+
+/*
+* HEADER BLOCK
+*/
+
+
+#page_header {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+	background-color: var(--color-red-2);
+}
+
+#header_left {
+	flex: 1 0 auto;
+}
+
+#page_header HEADER {
+	padding: 0 0.5em;
+	font-family: var(--font-text);
+	font-size: 112.5%;
+	font-weight: bold;
+}
+
+#page_header HEADER A {
+	color: inherit;
+	text-decoration: none;
+}
+
+#page_header .togglebutton {
+	flex: 0 0 auto;
+	align-self: flex-end;
+}
+
+#page_header .togglebutton INPUT + DIV {
+	padding: 0 0.5em;
+}
+#page_header .togglebutton INPUT:checked + DIV {
+	background-color: var(--color-grey-1);
+	color: var(--color-red-5);
+}
+#page_header .togglebutton INPUT:active + DIV {
+	background-color: white;
+	color: black;
+}
+
+#page_header .togglebutton INPUT + DIV .icon {
+	margin-right: 0.2em;
+}
+
+#page_header .togglebutton INPUT:checked + DIV .icon {
+	filter: url(#tint_red_5);
+}
+#page_header .togglebutton INPUT:active + DIV .icon {
+	filter: invert(100%);
+}
+
+#header_right {
+	flex: 1 0 auto;
+	text-align: right;
+}
+
+#header_version {
+	padding: 0 0.5em;
+	font-family: var(--font-text);
+	font-size: 75%;
+	text-align: right;
+}
+
+#header_donate {
+	display: inline-block;
+}
+
+
+/*
+* SHIPYARD BLOCK
+*/
+
+
+#shipyard_tabs {
+	display: flex;
+	flex-direction: row;
+}
+
+#shipyard_tabs LABEL {
+	flex: 0 0 auto;
+	margin-left: 0.2em;
+}
+#shipyard_tabs LABEL:first-child {
+	margin-left: 0;
+}
+
+#shipyard_tabs SPAN {
+	flex: 1 0 0px;
+}
+
+#shipyard_tabs .togglebutton INPUT + DIV {
+	border: 1px solid var(--color-orange-3);
+	border-bottom: none;
+	padding: 0 0.2em;
+	background-color: var(--color-orange-1);
+	color: var(--color-orange-3);
+}
+#shipyard_tabs .togglebutton INPUT:checked + DIV {
+	border-color: var(--color-orange-5);
+	background-color: var(--color-orange-5);
+	color: black;
+}
+#shipyard_tabs .togglebutton INPUT:active + DIV {
+	border-color: white;
+	background-color: white;
+	color: black;
+}
+
+#shipyard_table THEAD TH {
+	padding: 0 0.25em;
+	color: var(--color-orange-5);
+	font-weight: bold;
+}
+/* TODO sortable?
+#shipyard_table THEAD TH:hover {
+	background-color: var(--color-orange-2);
+	cursor: pointer;
+}
+#shipyard_table THEAD TH:active {
+	background-color: white;
+	color: black;
+}
+#shipyard_table THEAD TH:active ABBR {
+	border-color: black;
+}
+*/
+
+#shipyard_table THEAD ABBR {
+	border-color: var(--color-orange-5);
+}
+
+#shipyard_table TBODY TR {
+	cursor: pointer;
+}
+#shipyard_table TBODY TR:nth-child(odd) {
+	background-color: var(--color-orange-1);
+}
+#shipyard_table TBODY TR:hover {
+	background-color: var(--color-orange-2);
+}
+#shipyard_table TBODY TR:active {
+	background-color: white;
+	color: black;
+}
+
+#shipyard_table TBODY TD {
+	padding: 0 0.25em;
+}
+#shipyard_table TBODY TD:first-child {
+	font-family: var(--font-text);
+	font-size: 87.5%;
+}
+
+
+/*
+* OUTFITTING MODULES BLOCK
+*/
+
+
+#outfitting_modules_tabs {
+	flex: 0 0 auto;
+	min-width: 0;
+	display: flex;
+	flex-direction: row;
+}
+
+#outfitting_modules_tabs LABEL {
+	flex: 0 0 auto;
+	margin-left: 0.2em;
+}
+#outfitting_modules_tabs LABEL:first-child {
+	margin-left: 0;
+}
+
+#outfitting_modules_tabs SPAN {
+	flex: 1 0 0px;
+}
+
+#outfitting_modules_tabs .togglebutton INPUT + DIV {
+	border: 1px solid var(--color-orange-3);
+	border-bottom: none;
+	padding: 0 0.2em;
+	background-color: var(--color-orange-1);
+	color: var(--color-orange-3);
+	font-family: var(--font-caps);
+	font-size: 87.5%;
+}
+#outfitting_modules_tabs .togglebutton INPUT:checked + DIV {
+	border-color: var(--color-orange-5);
+	background-color: var(--color-orange-5);
+	color: black;
+}
+#outfitting_modules_tabs .togglebutton INPUT:active + DIV {
+	border-color: white;
+	background-color: white;
+	color: black;
+}
+
+
+#outfitting_modules_container {
+	flex: 1 0 10px;
+	min-width: 0;
+	display: flex;
+	flex-direction: row;
+	border: 2px solid var(--color-orange-5);
+	background-color: black;
+	overflow-y: auto;
+}
+#outfitting_modules_container.dragready {
+	border-color: var(--color-blue-5);
+}
+
+#outfitting_modules_picker {
+	flex: 1 1 auto;
+	width: 10px;
+}
+
+#outfitting_modules .group > HEADER {
+	background-color: var(--color-grey-4);
+	color: black;
+	text-align: center;
+	font-weight: bold;
+}
+
+#outfitting_modules .mtype {
+	margin-bottom: 0.5em;
+}
+
+#outfitting_modules .mtype > HEADER {
+	color: white;
+	text-align: center;
+}
+
+#outfitting_modules.STORED .group:not(.stored),
+#outfitting_modules.STORED .mtype:not(.stored),
+#outfitting_modules.STORED .row:not(.stored),
+#outfitting_modules.hardpoint .group:not(.hardpoint),
+#outfitting_modules.hardpoint .group > HEADER,
+#outfitting_modules.utility .group:not(.utility),
+#outfitting_modules.utility .group > HEADER,
+#outfitting_modules.component .group:not(.component):not(.internal),
+#outfitting_modules.component .group > HEADER,
+#outfitting_modules.component .mtype.internal:not(.cft),
+#outfitting_modules.military .group:not(.internal),
+#outfitting_modules.military .group > HEADER,
+#outfitting_modules.military .mtype:not(.ihrp):not(.imrp):not(.iscb),
+#outfitting_modules.internal .group:not(.internal),
+#outfitting_modules.internal .group > HEADER,
+#outfitting_modules.SLOT #outfitting_modules_picker.hardpoint .group > HEADER,
+#outfitting_modules.SLOT #outfitting_modules_picker.utility .group > HEADER,
+#outfitting_modules.SLOT #outfitting_modules_picker.component .group > HEADER,
+#outfitting_modules.SLOT #outfitting_modules_picker.military .group > HEADER,
+#outfitting_modules.SLOT #outfitting_modules_picker.internal .group > HEADER {
+	display: none;
+}
+
+#outfitting_modules.SLOT #outfitting_modules_picker.hardpoint .group:not(.hardpoint),
+#outfitting_modules.SLOT #outfitting_modules_picker.utility .group:not(.utility),
+#outfitting_modules.SLOT #outfitting_modules_picker.component .group:not(.component):not(.internal),
+#outfitting_modules.SLOT #outfitting_modules_picker.component_BH .mtype:not(.cbh),
+#outfitting_modules.SLOT #outfitting_modules_picker.component_PP .mtype:not(.cpp),
+#outfitting_modules.SLOT #outfitting_modules_picker.component_TH .mtype:not(.ct),
+#outfitting_modules.SLOT #outfitting_modules_picker.component_FD .mtype:not(.cfsd),
+#outfitting_modules.SLOT #outfitting_modules_picker.component_LS .mtype:not(.cls),
+#outfitting_modules.SLOT #outfitting_modules_picker.component_PD .mtype:not(.cpd),
+#outfitting_modules.SLOT #outfitting_modules_picker.component_SS .mtype:not(.cs),
+#outfitting_modules.SLOT #outfitting_modules_picker.component_FT .mtype:not(.cft),
+#outfitting_modules.SLOT #outfitting_modules_picker.military .group:not(.internal),
+#outfitting_modules.SLOT #outfitting_modules_picker.military .mtype:not(.ihrp):not(.imrp):not(.iscb),
+#outfitting_modules.SLOT #outfitting_modules_picker.internal .group:not(.internal) {
+	display: none;
+}
+
+BODY:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size1 .sized:not(.fitsize1),
+BODY:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size2 .sized:not(.fitsize2),
+BODY:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size3 .sized:not(.fitsize3),
+BODY:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size4 .sized:not(.fitsize4),
+BODY:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size5 .sized:not(.fitsize5),
+BODY:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size6 .sized:not(.fitsize6),
+BODY:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size7 .sized:not(.fitsize7),
+BODY:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size8 .sized:not(.fitsize8),
+BODY:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.reserved .mtype:not(.reserved) {
+	display: none;
+}
+
+BODY.onlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size2 .row:not(.size2),
+BODY.onlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size3 .row:not(.size3),
+BODY.onlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size4 .row:not(.size4),
+BODY.onlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size5 .row:not(.size5),
+BODY.onlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size6 .row:not(.size6),
+BODY.onlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size7 .row:not(.size7),
+BODY.onlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size8 .row:not(.size8) {
+	display: none;
+}
+
+BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.size2 .row:not(.size8):not(.size7):not(.size6):not(.size5):not(.size4):not(.size3):not(.size2),
+BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.size3 .row:not(.size8):not(.size7):not(.size6):not(.size5):not(.size4):not(.size3),
+BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.size4 .row:not(.size8):not(.size7):not(.size6):not(.size5):not(.size4),
+BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.size5 .row:not(.size8):not(.size7):not(.size6):not(.size5),
+BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.size6 .row:not(.size8):not(.size7):not(.size6),
+BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.size7 .row:not(.size8):not(.size7),
+BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.size8 .row:not(.size8) {
+	display: none;
+}
+
+#outfitting_modules_picker .row {
+	margin: 0 0.5em;
+	display: flex;
+	flex-direction: row;
+}
+#outfitting_modules_picker .row.stored {
+	font-family: var(--font-text);
+	font-size: 87.5%;
+}
+
+#outfitting_modules_picker .togglebutton {
+	flex: 1 0 10px;
+}
+
+#outfitting_modules_picker .togglebutton INPUT + DIV {
+	margin: 1px;
+	border: 1px solid transparent;
+	padding: 0 0.2em;
+	background-color: var(--color-orange-1);
+	color: var(--color-orange-5);
+	text-align: center;
+	white-space: nowrap;
+}
+#outfitting_modules_picker .togglebutton.unique INPUT + DIV {
+	text-align: left;
+	white-space: normal;
+}
+#outfitting_modules_picker .togglebutton INPUT.notenough + DIV {
+	position: relative;
+}
+#outfitting_modules_picker .togglebutton INPUT.notenough + DIV::before {
+	content: '';
+	display: block;
+	position: absolute;
+	width: 13px;
+	height: 13px;
+	right: 2px;
+	top: 50%;
+	margin-top: -7px;
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIABAP///wAAACH5BAEKAAEALAAAAAANAA0AAAIfjA+nCr2b0jPOTRkwi1nTn0HSqGEm4lEjw1pXA8dyAQA7);
+	filter: url(#tint_red_3);
+}
+#outfitting_modules_picker .togglebutton INPUT + DIV .icon {
+	filter: url(#tint_orange_5);
+}
+
+#outfitting_modules_picker .togglebutton INPUT:active + DIV {
+	border-color: white !important;
+	background-color: white !important;
+	color: black !important;
+}
+#outfitting_modules_picker .togglebutton INPUT.notenough:active + DIV::before,
+#outfitting_modules_picker .togglebutton INPUT:active + DIV .icon {
+	filter: invert(100%) !important;
+}
+
+#outfitting_modules_picker .togglebutton INPUT:checked + DIV {
+	border-color: var(--color-orange-5);
+}
+#page_body_outfitting.module #outfitting_modules_picker .togglebutton INPUT:checked + DIV {
+	background-color: var(--color-orange-5);
+	color: black;
+}
+#page_body_outfitting.module #outfitting_modules_picker .togglebutton INPUT.notenough:checked + DIV::before,
+#page_body_outfitting.module #outfitting_modules_picker .togglebutton INPUT:checked + DIV .icon {
+	filter: invert(100%);
+}
+
+#outfitting_modules_picker .togglebutton INPUT.notallowed + DIV,
+#outfitting_modules_picker.size1 .sized:not(.fitsize1) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.size2 .sized:not(.fitsize2) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.size3 .sized:not(.fitsize3) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.size4 .sized:not(.fitsize4) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.size5 .sized:not(.fitsize5) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.size6 .sized:not(.fitsize6) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.size7 .sized:not(.fitsize7) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.size8 .sized:not(.fitsize8) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.reserved .mtype:not(.reserved) .togglebutton INPUT + DIV {
+	background-color: var(--color-red-1);
+	color: var(--color-red-5);
+}
+#outfitting_modules_picker .togglebutton INPUT.notallowed + DIV .icon,
+#outfitting_modules_picker.size1 .sized:not(.fitsize1) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.size2 .sized:not(.fitsize2) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.size3 .sized:not(.fitsize3) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.size4 .sized:not(.fitsize4) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.size5 .sized:not(.fitsize5) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.size6 .sized:not(.fitsize6) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.size7 .sized:not(.fitsize7) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.size8 .sized:not(.fitsize8) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.reserved .mtype:not(.reserved) .togglebutton INPUT + DIV .icon {
+	filter: url(#tint_red_5);
+}
+#outfitting_modules_picker .togglebutton INPUT.notallowed:checked + DIV,
+#outfitting_modules_picker.size1 .sized:not(.fitsize1) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.size2 .sized:not(.fitsize2) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.size3 .sized:not(.fitsize3) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.size4 .sized:not(.fitsize4) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.size5 .sized:not(.fitsize5) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.size6 .sized:not(.fitsize6) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.size7 .sized:not(.fitsize7) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.size8 .sized:not(.fitsize8) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.reserved .mtype:not(.reserved) .togglebutton INPUT:checked + DIV {
+	border-color: var(--color-red-5);
+}
+#page_body_outfitting.module #outfitting_modules_picker .togglebutton INPUT.notallowed:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.size1 .sized:not(.fitsize1) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.size2 .sized:not(.fitsize2) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.size3 .sized:not(.fitsize3) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.size4 .sized:not(.fitsize4) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.size5 .sized:not(.fitsize5) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.size6 .sized:not(.fitsize6) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.size7 .sized:not(.fitsize7) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.size8 .sized:not(.fitsize8) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.reserved .mtype:not(.reserved) .togglebutton INPUT:checked + DIV {
+	background-color: var(--color-red-5);
+	color: black;
+}
+
+#outfitting_modules_picker.hardpoint .group:not(.hardpoint) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.utility .group:not(.utility) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.component:not(.component_FT) .group:not(.component) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.component_BH .mtype:not(.cbh) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.component_PP .mtype:not(.cpp) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.component_TH .mtype:not(.ct) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.component_FD .mtype:not(.cfsd) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.component_LS .mtype:not(.cls) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.component_PD .mtype:not(.cpd) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.component_SS .mtype:not(.cs) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.component_FT .group:not(.internal) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.component_FT .mtype:not(.cft) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.military .group:not(.internal) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.military .mtype:not(.ihrp):not(.imrp):not(.iscb) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.internal .group:not(.internal) .togglebutton INPUT + DIV {
+	background-color: var(--color-grey-1);
+	color: var(--color-grey-5);
+}
+#outfitting_modules_picker.hardpoint .group:not(.hardpoint) .togglebutton INPUT.notenough + DIV::before,
+#outfitting_modules_picker.utility .group:not(.utility) .togglebutton INPUT.notenough + DIV::before,
+#outfitting_modules_picker.component:not(.component_FT) .group:not(.component) .togglebutton INPUT.notenough + DIV::before,
+#outfitting_modules_picker.component_BH .mtype:not(.cbh) .togglebutton INPUT.notenough + DIV::before,
+#outfitting_modules_picker.component_PP .mtype:not(.cpp) .togglebutton INPUT.notenough + DIV::before,
+#outfitting_modules_picker.component_TH .mtype:not(.ct) .togglebutton INPUT.notenough + DIV::before,
+#outfitting_modules_picker.component_FD .mtype:not(.cfsd) .togglebutton INPUT.notenough + DIV::before,
+#outfitting_modules_picker.component_LS .mtype:not(.cls) .togglebutton INPUT.notenough + DIV::before,
+#outfitting_modules_picker.component_PD .mtype:not(.cpd) .togglebutton INPUT.notenough + DIV::before,
+#outfitting_modules_picker.component_SS .mtype:not(.cs) .togglebutton INPUT.notenough + DIV::before,
+#outfitting_modules_picker.component_FT .group:not(.internal) .togglebutton INPUT.notenough + DIV::before,
+#outfitting_modules_picker.component_FT .mtype:not(.cft) .togglebutton INPUT.notenough + DIV::before,
+#outfitting_modules_picker.military .group:not(.internal) .togglebutton INPUT.notenough + DIV::before,
+#outfitting_modules_picker.military .mtype:not(.ihrp):not(.imrp):not(.iscb) .togglebutton INPUT.notenough + DIV::before,
+#outfitting_modules_picker.internal .group:not(.internal) .togglebutton INPUT.notenough + DIV::before {
+	filter: brightness(85%);
+}
+#outfitting_modules_picker.hardpoint .group:not(.hardpoint) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.utility .group:not(.utility) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.component:not(.component_FT) .group:not(.component) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.component_BH .mtype:not(.cbh) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.component_PP .mtype:not(.cpp) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.component_TH .mtype:not(.ct) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.component_FD .mtype:not(.cfsd) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.component_LS .mtype:not(.cls) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.component_PD .mtype:not(.cpd) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.component_SS .mtype:not(.cs) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.component_FT .group:not(.internal) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.component_FT .mtype:not(.cft) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.military .group:not(.internal) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.military .mtype:not(.ihrp):not(.imrp):not(.iscb) .togglebutton INPUT + DIV .icon,
+#outfitting_modules_picker.internal .group:not(.internal) .togglebutton INPUT + DIV .icon {
+	filter: brightness(85%);
+}
+#outfitting_modules_picker.hardpoint .group:not(.hardpoint) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.utility .group:not(.utility) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.component:not(.component_FT) .group:not(.component) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.component_BH .mtype:not(.cbh) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.component_PP .mtype:not(.cpp) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.component_TH .mtype:not(.ct) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.component_FD .mtype:not(.cfsd) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.component_LS .mtype:not(.cls) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.component_PD .mtype:not(.cpd) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.component_SS .mtype:not(.cs) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.component_FT .group:not(.internal) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.component_FT .mtype:not(.cft) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.military .group:not(.internal) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.military .mtype:not(.ihrp):not(.imrp):not(.iscb) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.internal .group:not(.internal) .togglebutton INPUT:checked + DIV {
+	border-color: var(--color-grey-5);
+}
+#page_body_outfitting.module #outfitting_modules_picker.hardpoint .group:not(.hardpoint) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.utility .group:not(.utility) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.component:not(.component_FT) .group:not(.component) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.component_BH .mtype:not(.cbh) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.component_PP .mtype:not(.cpp) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.component_TH .mtype:not(.ct) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.component_FD .mtype:not(.cfsd) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.component_LS .mtype:not(.cls) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.component_PD .mtype:not(.cpd) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.component_SS .mtype:not(.cs) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.component_FT .group:not(.internal) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.component_FT .mtype:not(.cft) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.military .group:not(.internal) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.military .mtype:not(.ihrp):not(.imrp):not(.iscb) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.module #outfitting_modules_picker.internal .group:not(.internal) .togglebutton INPUT:checked + DIV {
+	background-color: var(--color-grey-5);
+	color: black;
+}
+
+
+/*
+* OUTFITTING FIT BLOCK
+*/
+
+
+#outfitting_fit_settings {
+	flex: 0 0 auto;
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	align-content: flex-start;
+	font-size: 87.5%;
+}
+
+#outfitting_fit_settings > * {
+	flex: 0 0 auto;
+}
+
+#outfitting_fit_settings SELECT {
+	flex: 0 1 auto;
+	padding: 1px 0.2em;
+}
+
+#outfitting_fit_settings BUTTON {
+	margin-left: 0.2em;
+	padding: 1px;
+	line-height: 0;
+}
+/* TODO orange buttons? *
+#outfitting_fit_settings SELECT {
+	border: 1px outset var(--color-orange-5);
+	border-color: var(--color-orange-5) var(--color-orange-4) var(--color-orange-4) var(--color-orange-5);
+	background-color: var(--color-orange-1);
+	color: white;
+}
+
+#outfitting_fit_settings BUTTON {
+	border: 1px outset var(--color-orange-5);
+	border-color: var(--color-orange-5) var(--color-orange-4) var(--color-orange-4) var(--color-orange-5);
+	padding: 3px;
+	background-color: var(--color-orange-1);
+}
+#outfitting_fit_settings BUTTON:active {
+	border-color: white;
+	background-color: white;
+}
+
+#outfitting_fit_settings BUTTON .icon {
+	filter: url(#tint_orange_5);
+}
+#outfitting_fit_settings BUTTON:active .icon {
+	filter: invert(100%);
+}
+/* TODO? */
+
+#outfitting_fit_settings > SPAN {
+	flex: 1 0 auto;
+	font-family: var(--font-text);
+	font-size: 90%;
+	text-align: right;
+}
+
+#outfitting_fit_settings .togglebutton INPUT + DIV {
+	margin: 0 0 2px 2px;
+	border: 1px solid var(--color-orange-3);
+	background-color: var(--color-orange-1);
+	padding: 0 0.2em;
+	color: var(--color-orange-3);
+}
+#outfitting_fit_settings .togglebutton INPUT:checked + DIV {
+	border-color: var(--color-orange-5);
+	background-color: var(--color-orange-5);
+	color: black;
+}
+#outfitting_fit_settings .togglebutton INPUT:active + DIV {
+	border-color: white;
+	background-color: white;
+	color: black;
+}
+
+
+#outfitting_fit_slots {
+	flex: 1 0 10px;
+	min-width: 0;
+	display: flex;
+	flex-direction: row;
+	border: 2px solid var(--color-orange-5);
+	padding: 0 0.25em;
+	background-color: black;
+	overflow-y: auto;
+}
+
+#outfitting_fit_slots .slots_column {
+	flex: 0 1 auto;
+	min-width: 0;
+	padding: 0 0.25em;
+}
+
+#outfitting_fit_slots TABLE {
+	min-width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+#outfitting_fit_slots.nomass .outfitting_fit_mass,
+#outfitting_fit_slots.nopower .outfitting_fit_power,
+#outfitting_fit_slots.noprice .outfitting_fit_price {
+	display: none;
+}
+
+#outfitting_fit_slots TH,
+#outfitting_fit_slots TD {
+	padding: 1px 0.25em;
+	text-align: right;
+	white-space: nowrap;
+}
+#outfitting_fit_slots TH:first-child,
+#outfitting_fit_slots TD:first-child {
+	text-align: center;
+}
+#outfitting_fit_slots TH:nth-child(2),
+#outfitting_fit_slots TD:nth-child(2) {
+	text-align: left;
+}
+#outfitting_fit_slots THEAD TH {
+	border-bottom: 2px solid var(--color-orange-3);
+	padding: 0 0.25em;
+	color: var(--color-grey-5);
+}
+#outfitting_fit_slots THEAD TH:nth-child(4) {
+	text-align: center;
+}
+#outfitting_fit_slots TBODY TR:first-child TH,
+#outfitting_fit_slots TBODY TR:first-child TD {
+	border-top: 0.5em solid black;
+}
+#outfitting_fit_slots TBODY TH {
+	padding: 0 0.25em;
+	background-color: var(--color-grey-4);
+	color: black;
+	font-weight: bold;
+}
+
+#outfitting_fit_slots THEAD ABBR,
+#outfitting_fit_slots THEAD DIV {
+	border-color: var(--color-grey-5);
+	font-weight: bold;
+}
+
+#outfitting_fit_slots TBODY TH HEADER {
+}
+
+#outfitting_fit_slots .togglebutton {
+	display: block;
+}
+
+#outfitting_fit_slots .togglebutton INPUT + DIV {
+	max-width: 15em;
+	min-width: 8em;
+	border: 1px solid transparent;
+	padding: 0 0.2em;
+	background-color: var(--color-orange-1);
+	color: var(--color-orange-5);
+	white-space: normal;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+}
+#outfitting_fit_slots .notenough .togglebutton INPUT + DIV::before {
+	content: '';
+	display: block;
+	float: right;
+	width: 13px;
+	height: 13px;
+	margin: 2px;
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIABAP///wAAACH5BAEKAAEALAAAAAANAA0AAAIfjA+nCr2b0jPOTRkwi1nTn0HSqGEm4lEjw1pXA8dyAQA7);
+	filter: url(#tint_red_3);
+}
+#outfitting_fit_slots .togglebutton INPUT + DIV SPAN {
+	color: var(--color-orange-3);
+}
+#outfitting_fit_slots .togglebutton INPUT + DIV .icon {
+	filter: url(#tint_orange_5);
+}
+#outfitting_fit_slots .togglebutton INPUT + DIV .icon.engineer {
+	float: right;
+	margin: 2px;
+}
+
+#outfitting_fit_slots .togglebutton INPUT:active + DIV {
+	border-color: white !important;
+	background-color: white !important;
+	color: black !important;
+}
+#outfitting_fit_slots .togglebutton INPUT:active + DIV SPAN {
+	color: black !important;
+}
+#outfitting_fit_slots .notenough .togglebutton INPUT:active + DIV::before,
+#outfitting_fit_slots .togglebutton INPUT:active + DIV .icon {
+	filter: invert(100%) !important;
+}
+
+#outfitting_fit_slots .notallowed .togglebutton INPUT + DIV {
+	background-color: var(--color-red-1);
+	color: var(--color-red-5);
+}
+#outfitting_fit_slots .notallowed .togglebutton INPUT + DIV SPAN {
+	color: var(--color-red-3);
+}
+#outfitting_fit_slots .notallowed .togglebutton INPUT + DIV .icon {
+	filter: url(#tint_red_5);
+}
+#outfitting_fit_slots .notallowed .togglebutton INPUT:checked + DIV {
+	border-color: var(--color-red-5);
+}
+#page_body_outfitting.slot #outfitting_fit_slots .notallowed .togglebutton INPUT:checked + DIV {
+	background-color: var(--color-red-5);
+	color: black;
+}
+
+#outfitting_fit_slots .togglebutton INPUT:checked + DIV {
+	border-color: var(--color-orange-5);
+}
+#page_body_outfitting.slot #outfitting_fit_slots .togglebutton INPUT:checked + DIV {
+	background-color: var(--color-orange-5);
+	color: black;
+}
+#page_body_outfitting.slot #outfitting_fit_slots .togglebutton INPUT:checked + DIV SPAN {
+	color: black;
+}
+#page_body_outfitting.slot #outfitting_fit_slots .notenough .togglebutton INPUT:checked + DIV::before,
+#page_body_outfitting.slot #outfitting_fit_slots .togglebutton INPUT:checked + DIV .icon {
+	filter: invert(100%);
+}
+
+#outfitting_fit_slots .notallowed .togglebutton INPUT:checked + DIV {
+	border-color: var(--color-red-5);
+}
+#page_body_outfitting.slot #outfitting_fit_slots .notallowed .togglebutton INPUT:checked + DIV {
+	background-color: var(--color-red-5);
+}
+
+#outfitting_fit_slots .dragready .togglebutton INPUT + DIV {
+	border-color: var(--color-blue-5);
+}
+
+#outfitting_fit_slots .dragerror .togglebutton INPUT + DIV {
+	background-color: var(--color-grey-1);
+	color: var(--color-grey-5);
+}
+#outfitting_fit_slots .dragerror .togglebutton INPUT + DIV SPAN {
+	color: var(--color-grey-3);
+}
+#outfitting_fit_slots .dragerror .notenough .togglebutton INPUT + DIV::before,
+#outfitting_fit_slots .dragerror .togglebutton INPUT + DIV .icon {
+	filter: brightness(85%);
+}
+#outfitting_fit_slots .dragerror .togglebutton INPUT:checked + DIV {
+	border-color: var(--color-grey-5);
+}
+#page_body_outfitting.slot #outfitting_fit_slots .dragerror .togglebutton INPUT:checked + DIV {
+	background-color: var(--color-grey-5);
+	color: black;
+}
+
+
+#outfitting_fit_slots .checkbox SPAN {
+	margin-right: 0.2em;
+}
+
+#outfitting_fit_slots .outfitting_fit_powerdist {
+	padding: 0;
+	text-align: center;
+	vertical-align: bottom;
+}
+
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON {
+	position: relative;
+	min-width: 13px;
+	margin: 0;
+	border: none;
+	padding: 0;
+	background-color: transparent;
+	color: var(--color-orange-5);
+	font-size: 62.5%;
+	text-align: center;
+	vertical-align: bottom;
+}
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON:active {
+	background-color: white;
+	color: black;
+}
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON#outfitting_fit_powerdist_eng {
+	margin: 0 5px 7px 5px;
+}
+
+#outfitting_fit_slots .outfitting_fit_powerdist DIV {
+	position: absolute;
+	bottom: 100%;
+	left: 50%;
+	margin-left: -11px;
+	line-height: 0;
+}
+
+#outfitting_fit_slots .outfitting_fit_powerdist DIV SPAN {
+	display: inline-block;
+	width: 5px;
+	height: 5px;
+	margin-right: 1px;
+	border: 2px solid var(--color-orange-1);
+	border-radius: 2px;
+	background-color: var(--color-orange-1);
+}
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist1 DIV SPAN:nth-child(1) {
+	border-color: var(--color-orange-3);
+	background-color: var(--color-orange-3);
+}
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist2 DIV SPAN:nth-child(1),
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist3 DIV SPAN:nth-child(1),
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist4 DIV SPAN:nth-child(1),
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist5 DIV SPAN:nth-child(1),
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist6 DIV SPAN:nth-child(1),
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist7 DIV SPAN:nth-child(1),
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist8 DIV SPAN:nth-child(1) {
+	border-color: var(--color-orange-5);
+	background-color: var(--color-orange-5);
+}
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist3 DIV SPAN:nth-child(2) {
+	border-color: var(--color-orange-3);
+	background-color: var(--color-orange-3);
+}
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist4 DIV SPAN:nth-child(2),
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist5 DIV SPAN:nth-child(2),
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist6 DIV SPAN:nth-child(2),
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist7 DIV SPAN:nth-child(2),
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist8 DIV SPAN:nth-child(2) {
+	border-color: var(--color-orange-5);
+	background-color: var(--color-orange-5);
+}
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist5 DIV SPAN:nth-child(3) {
+	border-color: var(--color-orange-3);
+	background-color: var(--color-orange-3);
+}
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist6 DIV SPAN:nth-child(3),
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist7 DIV SPAN:nth-child(3),
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist8 DIV SPAN:nth-child(3) {
+	border-color: var(--color-orange-5);
+	background-color: var(--color-orange-5);
+}
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist7 DIV SPAN:nth-child(4) {
+	border-color: var(--color-orange-3);
+	background-color: var(--color-orange-3);
+}
+#outfitting_fit_slots .outfitting_fit_powerdist BUTTON.dist8 DIV SPAN:nth-child(4) {
+	border-color: var(--color-orange-5);
+	background-color: var(--color-orange-5);
+}
+
+#outfitting_fit_slots BUTTON.outfitting_fit_priority {
+	position: relative;
+	margin-left: 0.5em;
+	border: none;
+	padding: 0 6px 0.1em 6px;
+	background-color: transparent;
+	color: var(--color-orange-5);
+	font-family: var(--font-fixed);
+}
+#outfitting_fit_slots BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots BUTTON.outfitting_fit_priority::after {
+	box-sizing: border-box;
+	content: '';
+	display: block;
+	position: absolute;
+	top: 50%;
+	width: 4px;
+	height: 8px;
+	margin-top: -4px;
+	border: 4px solid transparent;
+}
+#outfitting_fit_slots BUTTON.outfitting_fit_priority::before {
+	left: 0;
+	border-left: none;
+	border-right-color: var(--color-orange-3);
+}
+#outfitting_fit_slots BUTTON.outfitting_fit_priority:active::before {
+	border-right-color: white;
+}
+#outfitting_fit_slots BUTTON.outfitting_fit_priority::after {
+	right: 0;
+	border-right: none;
+	border-left-color: var(--color-orange-3);
+}
+#outfitting_fit_slots BUTTON.outfitting_fit_priority:active::after {
+	border-left-color: white;
+}
+
+
+/*
+* OUTFITTING DETAILS BLOCK
+*/
+
+
+#outfitting_details_container {
+	flex: 1 0 10px;
+	border: 2px solid var(--color-orange-5);
+	padding: 0 0.25em;
+	background-color: black;
+	overflow-y: auto;
+}
+
+#outfitting_details_module HEADER {
+	margin-bottom: 0.25em;
+	border-bottom: 2px solid var(--color-orange-3);
+	padding: 0 0.25em;
+	color: var(--color-grey-5);
+	font-weight: bold;
+}
+
+#outfitting_details_module HEADER .icon {
+	filter: brightness(85%);
+}
+
+#outfitting_details_module .details_select {
+	display: flex;
+	flex-direction: row;
+}
+
+#outfitting_details_module .details_select SELECT {
+	flex: 1 0 10px;
+	min-width: 0;
+	margin-right: 0.5em;
+}
+
+#outfitting_details_module .details_select BUTTON {
+	flex: 0 0 auto;
+	margin: 1px;
+	border: none;
+	padding: 2px;
+	background-color: transparent;
+}
+
+#outfitting_details_module #details_select_blueprint BUTTON .icon {
+	filter: url(#tint_orange_3);
+}
+#outfitting_details_module #details_select_expeffect BUTTON .icon {
+	filter: none;
+}
+#outfitting_details_module.grade_1 #blueprint_grade_1 .icon,
+#outfitting_details_module.grade_2 #blueprint_grade_1 .icon,
+#outfitting_details_module.grade_2 #blueprint_grade_2 .icon,
+#outfitting_details_module.grade_3 #blueprint_grade_1 .icon,
+#outfitting_details_module.grade_3 #blueprint_grade_2 .icon,
+#outfitting_details_module.grade_3 #blueprint_grade_3 .icon,
+#outfitting_details_module.grade_4 #blueprint_grade_1 .icon,
+#outfitting_details_module.grade_4 #blueprint_grade_2 .icon,
+#outfitting_details_module.grade_4 #blueprint_grade_3 .icon,
+#outfitting_details_module.grade_4 #blueprint_grade_4 .icon,
+#outfitting_details_module.grade_5 #blueprint_grade_1 .icon,
+#outfitting_details_module.grade_5 #blueprint_grade_2 .icon,
+#outfitting_details_module.grade_5 #blueprint_grade_3 .icon,
+#outfitting_details_module.grade_5 #blueprint_grade_4 .icon,
+#outfitting_details_module.grade_5 #blueprint_grade_5 .icon {
+	filter: url(#tint_orange_5);
+	background-image: url(data:image/gif;base64,R0lGODlhDQANAIABAP///wAAACH5BAEKAAEALAAAAAANAA0AAAIdjA+nCJ3rYmMymlpDltpe101UwoUTVqLiCC7fYxQAOw==);
+}
+#outfitting_details_module #details_select_blueprint BUTTON:disabled .icon {
+	filter: brightness(85%);
+}
+#outfitting_details_module #details_select_expeffect BUTTON:disabled .icon {
+	filter: grayscale(100%);
+}
+
+#outfitting_details_module TABLE {
+	width: 100%;
+}
+
+#outfitting_details_module TH,
+#outfitting_details_module TD {
+	padding: 1px 0.25em;
+}
+#outfitting_details_module TH:first-child,
+#outfitting_details_module TD:first-child {
+	width: 100%;
+}
+
+#outfitting_details_module TBODY TD {
+	vertical-align: bottom;
+	font-size: 87.5%;
+}
+#outfitting_details_module TBODY TD:not(:nth-child(2)) {
+	padding-top: 0;
+	padding-bottom: 2px;
+}
+#outfitting_details_module TBODY TD:nth-child(4) {
+	text-align: right;
+}
+
+#outfitting_details_module ABBR {
+	display: block;
+	margin-top: 0;
+	border-color: var(--color-grey-3);
+	overflow-wrap: break-word;
+	word-break: break-all;
+	word-break: break-word;
+	hyphens: auto;
+	color: var(--color-grey-5);
+}
+
+#outfitting_details_module INPUT {
+	width: 4em;
+	text-align: right;
+	font-family: var(--font-caps);
+}
+
+
+/*
+* OUTFITTING STATS BLOCK
+*/
+
+
+#outfitting_stats INPUT.toggleinput {
+	position: absolute;
+	margin: -1px;
+	border: 0;
+	padding: 0;
+	width: 1px;
+	height: 1px;
+	clip: rect(0 0 0 0);
+	overflow: hidden;
+}
+
+.outfitting_stats_panel {
+	flex: 1 0 auto;
+	font-size: 100%;
+}
+
+.outfitting_stats_panel ABBR {
+	border-color: var(--color-orange-5);
+}
+
+.outfitting_stats_panel SMALL {
+	display: inline-block;
+	width: 0;
+	overflow: hidden;
+		display: none; /*TODO?*/
+}
+
+.outfitting_stats_panel TABLE {
+	width: 100%;
+}
+
+.outfitting_stats_panel TH,
+.outfitting_stats_panel TD {
+	padding: 0 0.25em;
+	text-align: right;
+}
+#outfitting_stats INPUT.toggleinput:not(:checked) + .outfitting_stats_panel TH:not(:first-child),
+#outfitting_stats INPUT.toggleinput:not(:checked) + .outfitting_stats_panel TD:not(:first-child) {
+	display: none;
+}
+
+#outfitting_stats INPUT.toggleinput:not(:checked) + .outfitting_stats_panel TBODY ABBR,
+#outfitting_stats INPUT.toggleinput:not(:checked) + .outfitting_stats_panel .outfitting_stats_power DIV,
+#outfitting_stats INPUT.toggleinput:not(:checked) + .outfitting_stats_panel .outfitting_stats_power SPAN {
+	visibility: hidden;
+}
+
+.outfitting_stats_panel THEAD TH {
+	padding-left: 0;
+	background-color: var(--color-orange-5);
+	color: black;
+	text-align: right;
+	font-weight: bold;
+}
+.outfitting_stats_panel THEAD TH:first-child {
+	border-left: 2px solid var(--color-orange-5);
+}
+#outfitting_stats INPUT.toggleinput:not(:checked) + .outfitting_stats_panel THEAD TH:first-child {
+	background-color: var(--color-orange-1);
+	border-color: var(--color-orange-3);
+	color: var(--color-orange-3);
+}
+#outfitting_stats INPUT.toggleinput:active + .outfitting_stats_panel THEAD TH:first-child {
+	background-color: white;
+	color: black;
+}
+
+.outfitting_stats_panel THEAD TH ABBR {
+	border-color: black;
+}
+
+.outfitting_stats_panel THEAD TH:first-child LABEL ABBR {
+	cursor: pointer;
+}
+
+.outfitting_stats_panel THEAD TD {
+	color: var(--color-orange-5);
+	text-align: center;
+	font-weight: bold;
+}
+
+.outfitting_stats_panel TBODY TH {
+	color: var(--color-orange-5);
+	text-align: right;
+	font-weight: bold;
+}
+.outfitting_stats_panel TBODY TH:first-child {
+	border-left: 2px solid var(--color-orange-3);
+}
+.outfitting_stats_panel TBODY TH.header {
+	text-align: center;
+}
+
+.outfitting_stats_panel:first-of-type TH:first-child {
+	border: none;
+}
+
+.outfitting_stats_panel INPUT {
+	width: 2.5em;
+	margin: 0;
+	border: 1px solid grey;
+	border-color: #eee #ddd #ddd #eee;
+	padding: 0;
+	text-align: right;
+	font-family: var(--font-caps);
+}
+
+.outfitting_stats_panel .outfitting_stats_power {
+	position: relative;
+}
+.outfitting_stats_panel .outfitting_stats_power::before {
+	display: inline;
+	content: '\200B';
+}
+
+.outfitting_stats_panel .outfitting_stats_power SPAN.marker {
+	pointer-events: none;
+	position: absolute;
+	z-index: 1;
+	top: -3px;
+	bottom: -3px;
+	right: 10%;
+	border-right: 1px solid var(--color-red-5);
+	padding-right: 3px;
+}
+.outfitting_stats_panel .outfitting_stats_power SPAN.marker:first-child {
+	right: 55%;
+	border-color: var(--color-blue-5);
+}
+
+.outfitting_stats_panel .outfitting_stats_power DIV {
+	position: absolute;
+	left: 0;
+	right: 0;
+	height: 50%;
+	background-color: var(--color-orange-2);
+	overflow: hidden;
+	white-space: nowrap;
+	text-align: left;
+	line-height: 1px;
+}
+.outfitting_stats_panel .outfitting_stats_power DIV#outfitting_stats_power_ret {
+	top: -1px;
+}
+.outfitting_stats_panel .outfitting_stats_power DIV#outfitting_stats_power_dep {
+	bottom: -1px;
+}
+
+.outfitting_stats_panel .outfitting_stats_power DIV SPAN.overload {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	width: 10%;
+	background-color: var(--color-red-2);
+}
+
+.outfitting_stats_panel .outfitting_stats_power ABBR {
+	display: inline-block;
+	height: 100%;
+	margin: 0;
+	border: none;
+	border-right: 2px solid var(--color-orange-3);
+	background-color: var(--color-orange-4);
+	padding: 1px 0;
+	color: black;
+	font-family: var(--font-fixed);
+	font-size: 56.25%;
+	overflow: hidden;
+	text-align: center;
+}
+.outfitting_stats_panel .outfitting_stats_power ABBR {
+	width: 15%; /* TODO */
+}
+.outfitting_stats_panel .outfitting_stats_power DIV#outfitting_stats_power_dep ABBR {
+	width: 18%; /* TODO */
+}
+
+
+/*
+* OPTIONS BLOCK
+*/
+
+
+#page_body_options {
+	display: flex;
+	flex-direction: column;
+	font-family: var(--font-text);
+	font-size: 87.5%;
+}
+
+#page_body_options SECTION {
+	flex: 0 0 auto;
+	margin-bottom: 1em;
+}
+#page_body_options SECTION:last-of-type {
+	flex: 1 0 auto;
+}
+
+#page_body_options HEADER {
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+#page_body_options UL {
+	margin: 0;
+	padding: 0;
+}
+
+#page_body_options LI {
+	margin-left: 1.25em;
+}
+
+#page_body_options .checkbox SPAN {
+	margin-left: 0.5em;
+}
+
+#page_body_options FOOTER {
+	flex: 0 0 auto;
+	color: var(--color-grey-5);
+	font-size: 85.7%;
+}

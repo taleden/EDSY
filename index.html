@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+<!--
+E:D Shipyard (EDSY) was created using assets and imagery from Elite: Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
+It is not endorsed by nor reflects the views or opinions of Frontier Developments and no employee of Frontier Developments was involved in the making of it.
+
+Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2018 taleden
+and is provided under a Creative Commons Attribution-NonCommercial 4.0 International License (http://creativecommons.org/licenses/by-nc/4.0/).
+
+The Elite: Dangerous game logic and data in this file remains the property of Frontier Developments plc,
+and is used here as authorized by Frontier Customer Services (https://forums.frontier.co.uk/showthread.php?t=5349).
+-->
+		<meta charset="utf-8">
+		<title>EDSY</title>
+		<link rel="stylesheet" type="text/css" href="edsy.css">
+	</head>
+	<body class="">
+		<div id="page">
+			<form id="page_header" name="header">
+				<div id="header_left">
+					<header><a href="http://www.edshipyard.com">EDSY</a></header>
+				</div>
+				<label class="togglebutton"><input name="tab" type="radio" value="shipyard"><div><span class="icon shipyard"></span>Shipyard</div></label>
+				<label class="togglebutton"><input name="tab" type="radio" value="outfitting"><div><span class="icon mountTurreted"></span>Outfitting</div></label>
+				<label class="togglebutton"><input name="tab" type="radio" value="options"><div><span class="icon repair"></span>Options</div></label>
+				<div id="header_right">
+					<span id="header_version">v3.0.0 alpha 1</span>
+					<div id="header_donate"></div>
+				</div>
+			</form>
+			<div id="page_body" class="">
+				<form id="page_body_shipyard" name="shipyard" class="">
+					<div id="shipyard_tabs">
+						<label class="togglebutton"><input name="tab" type="radio" value="table"><div>Shipyard</div></label>
+						<label class="togglebutton"><input name="tab" type="radio" value="stored"><div>Stored</div></label>
+					</div>
+					<div id="shipyard_container">
+					</div>
+				</form>
+				<div id="page_body_outfitting" class="">
+					<div id="outfitting_top">
+						<form id="outfitting_modules" name="modules" class="">
+							<div id="outfitting_modules_tabs">
+								<label class="togglebutton"><input name="tab" type="radio" value="ALL"><div>ALL</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="STORED"><div>STR</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="hardpoint"><div>HPT</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="utility"><div>UTL</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="component"><div>COR</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="military"><div>MIL</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="internal"><div>OPT</div></label>
+								<span></span>
+								<label class="togglebutton"><input name="tab" type="radio" value="SLOT"><div>SLOT</div></label>
+							</div>
+							<div id="outfitting_modules_container" class=""></div>
+						</form>
+						<form id="outfitting_fit" name="fit">
+							<div id="outfitting_fit_settings">
+								<!-- TODO
+								<select id="outfitting_fit_saved" name="outfitting_fit_saved">
+									<option value="">(Stock)</option>
+								</select>
+								<button id="outfitting_fit_saved_reload"><span class="icon fileReload"></span></button>
+								<button id="outfitting_fit_saved_save"><span class="icon fileSave"></span></button>
+								<button id="outfitting_fit_saved_saveas"><span class="icon fileSaveAs"></span></button>
+								<button id="outfitting_fit_saved_rename"><span class="icon fileRename"></span></button>
+								<button id="outfitting_fit_saved_delete"><span class="icon fileDelete"></span></button>
+								-->
+								<span><!-- Show: --></span>
+								<label class="togglebutton"><input name="outfitting_show_mass" type="checkbox" value="1"><div>Mass</div></label>
+								<label class="togglebutton"><input name="outfitting_show_power" type="checkbox" value="1"><div>Power</div></label>
+								<label class="togglebutton"><input name="outfitting_show_price" type="checkbox" value="1"><div>Price</div></label>
+							</div>
+							<div id="outfitting_fit_slots" class=""></div>
+						</form>
+						<form id="outfitting_details" name="details">
+							<div id="outfitting_details_container">
+								<div id="outfitting_details_module" class="">
+									<header id="outfitting_details_label"></header>
+									<div id="details_select_blueprint" class="details_select">
+										<select name="blueprint"><option value="">(No Blueprint)</option></select>
+										<button id="blueprint_grade_1" name="blueprint_grade" value="1"><span class="icon engineer"></span></button>
+										<button id="blueprint_grade_2" name="blueprint_grade" value="2"><span class="icon engineer"></span></button>
+										<button id="blueprint_grade_3" name="blueprint_grade" value="3"><span class="icon engineer"></span></button>
+										<button id="blueprint_grade_4" name="blueprint_grade" value="4"><span class="icon engineer"></span></button>
+										<button id="blueprint_grade_5" name="blueprint_grade" value="5"><span class="icon engineer"></span></button>
+									</div>
+									<div id="details_select_expeffect" class="details_select">
+										<select name="expeffect"><option value="">(No Experimental Effect)</option></select>
+										<button id="blueprint_roll_rand" name="blueprint_roll" value="-1"><span class="icon blueprintRand"></span></button>
+										<button id="blueprint_roll_min" name="blueprint_roll" value="0.0"><span class="icon blueprintMin"></span></button>
+										<button id="blueprint_roll_avg" name="blueprint_roll" value="0.5"><span class="icon blueprintAvg"></span></button>
+										<button id="blueprint_roll_high" name="blueprint_roll" value="0.8"><span class="icon blueprintHigh"></span></button>
+										<button id="blueprint_roll_max" name="blueprint_roll" value="1.0"><span class="icon blueprintMax"></span></button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div id="outfitting_bottom">
+						<form id="outfitting_stats" name="stats">
+							<input type="checkbox" id="toggle_stats_ttl" name="stats_ttl" value="1" class="toggleinput" checked>
+							<div id="outfitting_stats_ttl" class="outfitting_stats_panel"><!-- TODO outfitting total, insurance -->
+								<table>
+									<thead>
+										<tr>
+											<th><label for="toggle_stats_ttl"><abbr title="Totals and capacities">TTL</abbr></label></th>
+											<td><abbr title="Total mass and thruster maximum (in tons)">MASS</abbr></td>
+											<td><abbr title="Current and total fuel (in tons)">FUEL</abbr></td>
+											<td><abbr title="Current and total cargo (in tons)">CRGO</abbr></td>
+											<td><abbr title="Total passenger capacity and cabin class(es)">PSGR</abbr></td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<th><abbr title="Current values used to calculate other statistics">CUR</abbr></th>
+											<td id="outfitting_stats_cur_mass">90<small>T</small></td>
+											<td><input type="text" name="stats_cur_fuel"><small>T</small></td>
+											<td><input type="text" name="stats_cur_cargo"><small>T</small></td>
+											<td></td>
+										</tr>
+										<tr>
+											<th><abbr title="Maximum value or capacity">MAX</abbr></th>
+											<td id="outfitting_stats_max_mass">100<small>T</small></td>
+											<td id="outfitting_stats_max_fuel">16<small>T</small></td>
+											<td id="outfitting_stats_max_cargo">50<small>T</small></td>
+											<td id="outfitting_stats_max_psgr">4</td>
+										</tr>
+										<!-- TODO mlf, crew -->
+										<tr>
+											<th><abbr title="Power draw (in megawatts) with hardpoints retracted">RET</abbr></th>
+											<td colspan=4 id="outfitting_stats_power_ret">56.78 / 78.90<small>MW</small> (78.9%)</td>
+										</tr>
+										<tr>
+											<td colspan=5
+												><div class="outfitting_stats_power"
+													><span class="marker"></span
+													><span class="marker"></span
+													><div id="outfitting_stats_power_ret"
+														><span class="overload"></span
+														><abbr id="outfitting_stats_power_ret_1">1</abbr
+														><abbr id="outfitting_stats_power_ret_2">2</abbr
+														><abbr id="outfitting_stats_power_ret_3">3</abbr
+														><abbr id="outfitting_stats_power_ret_4">4</abbr
+														><abbr id="outfitting_stats_power_ret_5">5</abbr
+													></div
+													><div id="outfitting_stats_power_dep"
+														><span class="overload"></span
+														><abbr id="outfitting_stats_power_dep_1">1</abbr
+														><abbr id="outfitting_stats_power_dep_2">2</abbr
+														><abbr id="outfitting_stats_power_dep_3">3</abbr
+														><abbr id="outfitting_stats_power_dep_4">4</abbr
+														><abbr id="outfitting_stats_power_dep_5">5</abbr
+													></div
+												></div
+											></td>
+										</tr>
+										<tr>
+											<th><abbr title="Power draw (in megawatts) with hardpoints deployed">DEP</abbr></th>
+											<td colspan=4 id="outfitting_stats_power_ret">67.89 / 78.90<small>MW</small> (98.7%)</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<input type="checkbox" id="toggle_stats_nav" name="stats_nav" value="1" class="toggleinput" checked>
+							<div id="outfitting_stats_nav" class="outfitting_stats_panel">
+								<table>
+									<thead>
+										<tr>
+											<th><label for="toggle_stats_nav"><abbr title="Navigational (FSD and Thruster) statistics">NAV</abbr></label></th>
+											<td><abbr title="Single jump range (in light-years) and fuel scoop time to refuel per max-range jump">JMP</abbr></td>
+											<td><abbr title="Total jump range (in light-years) of max-range jumps on a full fuel tank, and fuel scoop time to refuel per tank">RNG</abbr></td>
+											<td><abbr title="Thruster speed (in meters per second) and fuel scoop rate (in tons per second)">SPD</abbr></td>
+											<td><abbr title="Boost speed (in meters per second)">BST</abbr></td>
+											<td><abbr title="Time (in seconds) for ENG capacitor to recharge for one boost">FRQ</abbr></td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<th><abbr title="Current values using configured power distributor, fuel and cargo settings">CUR</abbr></th>
+											<td id="outfitting_stats_cur_jump">67.89<small>LY</small></td>
+											<td id="outfitting_stats_cur_range">567.89<small>LY</small></td>
+											<td id="outfitting_stats_cur_speed">789<small>m/s</small></td>
+											<td id="outfitting_stats_cur_boost">890<small>m/s</small></td>
+											<td id="outfitting_stats_cur_boostfreq">8.9</td>
+										</tr>
+										<tr>
+											<th><abbr title="Values with full fuel and full cargo">LDN</abbr></th>
+											<td id="outfitting_stats_laden_jump"></td>
+											<td id="outfitting_stats_laden_range"></td>
+											<td id="outfitting_stats_laden_speed"></td>
+											<td id="outfitting_stats_laden_boost"></td>
+											<td></td>
+										</tr>
+										<tr>
+											<th><abbr title="Values with full fuel and no cargo">UNL</abbr></th>
+											<td id="outfitting_stats_unladen_jump"></td>
+											<td id="outfitting_stats_unladen_range"></td>
+											<td id="outfitting_stats_unladen_speed"></td>
+											<td id="outfitting_stats_unladen_boost"></td>
+											<td></td>
+										</tr>
+										<tr>
+											<th><abbr title="Maximum values with 4 ENG pips, minimal or no fuel, and no cargo">MAX</abbr></th>
+											<td id="outfitting_stats_max_jump"></td>
+											<td id="outfitting_stats_max_range"></td>
+											<td id="outfitting_stats_max_speed"></td>
+											<td id="outfitting_stats_max_boost"></td>
+											<td id="outfitting_stats_max_boostfreq">7.8</td>
+										</tr>
+										<tr>
+											<th><abbr title="Fuel scooping time per jump, time per tank, and rate">SCP</abbr></th>
+											<td id="outfitting_stats_scoop_jump">8:59</td>
+											<td id="outfitting_stats_scoop_range">78:59</td>
+											<td id="outfitting_stats_scoop_speed">6.789<small>T/s</small></td>
+											<td></td>
+											<td></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<input type="checkbox" id="toggle_stats_hnd" name="stats_hnd" value="1" class="toggleinput" checked>
+							<div id="outfitting_stats_hnd" class="outfitting_stats_panel">
+								<table>
+									<thead>
+										<tr>
+											<th><label for="toggle_stats_hnd"><abbr title="Handling statistics">HND</abbr></label></th>
+											<td><abbr title="Pitch (nose up/down) speed (in degrees per second) and 180-degree flip time (in seconds)">PIT</abbr></td>
+											<td><abbr title="Roll (tilt left/right) speed (in degrees per second) and 180-degree flip time (in seconds)">ROL</abbr></td>
+											<td><abbr title="Yaw (nose left/right) speed (in degrees per second) and 180-degree flip time (in seconds)">YAW</abbr></td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<th><abbr title="Current values using configured power distributor, fuel and cargo settings">CUR</abbr></th>
+											<td id="outfitting_stats_cur_pitch">89<small>&deg;/s</small></td>
+											<td id="outfitting_stats_cur_roll">189<small>&deg;/s</small></td>
+											<td id="outfitting_stats_cur_yaw">78<small>&deg;/s</small></td>
+										</tr>
+										<tr>
+											<th>&nbsp;</th>
+											<td id="outfitting_stats_cur_pitchtime">8.9</td>
+											<td id="outfitting_stats_cur_rolltime">7.8</td>
+											<td id="outfitting_stats_cur_yawtime">8:59</td>
+										</tr>
+										<tr>
+											<th><abbr title="Maximum values with 4 ENG pips, minimal or no fuel, and no cargo">MAX</abbr></th>
+											<td id="outfitting_stats_max_pitch"></td>
+											<td id="outfitting_stats_max_roll"></td>
+											<td id="outfitting_stats_max_yaw"></td>
+										</tr>
+										<tr>
+											<th>&nbsp;</th>
+											<td id="outfitting_stats_max_pitchtime">8.9</td>
+											<td id="outfitting_stats_max_rolltime">7.8</td>
+											<td id="outfitting_stats_max_yawtime">8:59</td>
+										</tr>
+										<tr>
+											<th><abbr title="Acceleration values (untested)">ACC</abbr></th>
+											<td id="outfitting_stats_acc_pitch"></td>
+											<td id="outfitting_stats_acc_roll"></td>
+											<td id="outfitting_stats_acc_yaw"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<input type="checkbox" id="toggle_stats_thm" name="stats_thm" value="1" class="toggleinput" checked>
+							<div id="outfitting_stats_thm" class="outfitting_stats_panel">
+								<table>
+									<thead>
+										<tr>
+											<th><label for="toggle_stats_thm"><abbr title="Thermal statistics">THM</abbr></label></th>
+											<td><abbr title="Heat level at equilibrium, or time from 66% to 100% heat if overheating">LVL</abbr></td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<th><abbr title="Values at idle, with thermal load only from power draw and power plant efficiency">IDL</abbr></th>
+											<td id="outfitting_stats_idl_heat">37%</td>
+										</tr>
+										<tr>
+											<th><abbr title="Values under maximum thrust">THR</abbr></th>
+											<td id="outfitting_stats_thr_heat">48%</td>
+										</tr>
+										<tr>
+											<th><abbr title="Values under maximum thrust with FSD charging">FSD</abbr></th>
+											<td id="outfitting_stats_fsd_heat">59%</td>
+										</tr>
+										<tr>
+											<th><abbr title="Values under maximum thrust with all weapons firing">WPN</abbr></th>
+											<td id="outfitting_stats_wpn_heat">8:59</td>
+										</tr>
+										<tr>
+											<th><abbr title="Values under maximum thrust with SCBs firing">SCB</abbr></th>
+											<td id="outfitting_stats_scb_heat">7:58</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<input type="checkbox" id="toggle_stats_shd" name="stats_shd" value="1" class="toggleinput" checked>
+							<div id="outfitting_stats_shd" class="outfitting_stats_panel"><!-- TODO shield 0-50 recover time, 50-100 regen time -->
+								<table>
+									<thead>
+										<tr>
+											<th><label for="toggle_stats_shd"><abbr title="Shield statistics">SHD</abbr></label></th>
+											<td><abbr title="Damage resistance (in %)">RES</abbr></td>
+											<td><abbr title="Raw and effective maximum strength (in megajoules)">STR</abbr></td>
+											<td><abbr title="Raw and effective regeneration rate (in megajoules per second)">RGN</abbr></td>
+											<td><abbr title="Raw and effective Shield Cell Bank reinforcement total (in megajoules)">RNF</abbr></td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<th><abbr title="Raw values">RAW</abbr></th>
+											<td></td>
+											<td id="outfitting_stats_raw_shield_strength">5678.9<small>MJ</small></td>
+											<td id="outfitting_stats_raw_shield_regen">78.9<small>MJ/s</small></td>
+											<td id="outfitting_stats_raw_shield_reinf">5678.9<small>MJ</small></td>
+										</tr>
+										<tr>
+											<th><abbr title="Effective values vs. absolute damage, including SYS pips">ABS</abbr></th>
+											<td id="outfitting_stats_abs_shield_resist">-78.9%</td>
+											<td id="outfitting_stats_abs_shield_strength">6789.0<small>MJ</small></td>
+											<td id="outfitting_stats_abs_shield_regen">89.0<small>MJ/s</small></td>
+											<td id="outfitting_stats_abs_shield_reinf">6789.0<small>MJ</small></td>
+										</tr>
+										<tr>
+											<th><abbr title="Effective values vs. thermal damage, including SYS pips and resistance">THM</abbr></th>
+											<td id="outfitting_stats_thm_shield_resist"></td>
+											<td id="outfitting_stats_thm_shield_strength"></td>
+											<td id="outfitting_stats_thm_shield_regen"></td>
+											<td id="outfitting_stats_thm_shield_reinf"></td>
+										</tr>
+										<tr>
+											<th><abbr title="Effective values vs. kinetic damage, including SYS pips and resistance">KIN</abbr></th>
+											<td id="outfitting_stats_kin_shield_resist"></td>
+											<td id="outfitting_stats_kin_shield_strength"></td>
+											<td id="outfitting_stats_kin_shield_regen"></td>
+											<td id="outfitting_stats_kin_shield_reinf"></td>
+										</tr>
+										<tr>
+											<th><abbr title="Effective values vs. explosive damage, including SYS pips and resistance">EXP</abbr></th>
+											<td id="outfitting_stats_exp_shield_resist"></td>
+											<td id="outfitting_stats_exp_shield_strength"></td>
+											<td id="outfitting_stats_exp_shield_regen"></td>
+											<td id="outfitting_stats_exp_shield_reinf"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<input type="checkbox" id="toggle_stats_arm" name="stats_arm" value="1" class="toggleinput" checked>
+							<div id="outfitting_stats_arm" class="outfitting_stats_panel">
+								<table>
+									<thead>
+										<tr>
+											<th><label for="toggle_stats_arm"><abbr title="Armour statistics">ARM</abbr></label></th>
+											<td><abbr title="Hull hardness and damage resistance (in %)">RES</abbr></td>
+											<td><abbr title="Raw and effective integrity">INT</abbr></td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<th><abbr title="Raw hull hardness and armour integrity">RAW</abbr></th>
+											<td id="outfitting_stats_raw_armour_hardness">189</td>
+											<td id="outfitting_stats_raw_armour_integ">5678.9</td>
+										</tr>
+										<tr>
+											<th><abbr title="Module Reinforcement Packages total protection value (in %) and integrity">MRP</abbr></th>
+											<td id="outfitting_stats_mod_armour_protect">-78.9%</td>
+											<td id="outfitting_stats_mod_armour_integ">6789.0</td>
+										</tr>
+										<tr>
+											<th><abbr title="Effective values vs. thermal damage, including resistance">THM</abbr></th>
+											<td id="outfitting_stats_thm_armour_resist"></td>
+											<td id="outfitting_stats_thm_armour_integ"></td>
+										</tr>
+										<tr>
+											<th><abbr title="Effective values vs. kinetic damage, including resistance">KIN</abbr></th>
+											<td id="outfitting_stats_kin_armour_resist"></td>
+											<td id="outfitting_stats_kin_armour_integ"></td>
+										</tr>
+										<tr>
+											<th><abbr title="Effective values vs. explosive damage, including resistance">EXP</abbr></th>
+											<td id="outfitting_stats_exp_armour_resist"></td>
+											<td id="outfitting_stats_exp_armour_integ"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<input type="checkbox" id="toggle_stats_wpn" name="stats_wpn" value="1" class="toggleinput" checked>
+							<div id="outfitting_stats_wpn" class="outfitting_stats_panel">
+								<table>
+									<thead>
+										<tr>
+											<th><label for="toggle_stats_wpn"><abbr title="Weapon statistics">WPN</abbr></label></th>
+											<td><abbr title="Burst damage per second from all weapons, while WEP capacitor and ammo last">BST</abbr></td>
+											<td></td>
+											<td><abbr title="Burst damage duration until WEP capacitor is drained">CAP</abbr></td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<th><abbr title="Raw damage per second">RAW</abbr></th>
+											<td id="outfitting_stats_wpn_raw_burst">5678.9</td>
+											<th><abbr title="Current value using configured power distributor settings">CUR</abbr></th>
+											<td id="outfitting_stats_wpn_cur_cap">7:59</td>
+										</tr>
+										<tr>
+											<th><abbr title="Absolute damage proportion">ABS</abbr></th>
+											<td id="outfitting_stats_wpn_abs_burst">89%</td>
+											<th><abbr title="Maximum value with 4 WEP pips">MAX</abbr></th>
+											<td id="outfitting_stats_wpn_max_cap">8:59</td>
+										</tr>
+										<tr>
+											<th><abbr title="Thermal damage proportion">THM</abbr></th>
+											<td id="outfitting_stats_thm_burst"></td>
+											<td></td>
+											<th class="header"><abbr title="Sustainable damage proportion once WEP capacitor is drained">SUS</abbr></th>
+										</tr>
+										<tr>
+											<th><abbr title="Kinetic damage proportion">KIN</abbr></th>
+											<td id="outfitting_stats_kin_burst"></td>
+											<th><abbr title="Current value using configured power distributor settings">CUR</abbr></th>
+											<td id="outfitting_stats_wpn_cur_sus">78.9%</td>
+										</tr>
+										<tr>
+											<th><abbr title="Explosive damage proportion">EXP</abbr></th>
+											<td id="outfitting_stats_exp_burst"></td>
+											<th><abbr title="Maximum value with 4 WEP pips">MAX</abbr></th>
+											<td id="outfitting_stats_wpn_max_sus">89.0%</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</form>
+					</div>
+				</div>
+				<form id="page_body_options" name="options">
+					<section>
+						<header>Options</header>
+						<ul>
+							<li>
+								<label class="checkbox left"><input type="checkbox" name="onlybest"><div></div><span>Hide Small Modules</span></label>
+							</li>
+							<li>
+								<label class="checkbox left"><input type="checkbox" name="experimental"><div></div><span>Experimental Mode</span></label>
+							</li>
+						</ul>
+					</section>
+					<section>
+						<header>Contact Me</header>
+						<ul>
+							<li><a href="https://discord.gg/hs3h3vH">discord</a></li>
+							<li><a href="https://forums.frontier.co.uk/showthread.php?t=92900">forum</a></li>
+							<li><a href="https://www.reddit.com/message/compose/?to=taleden&subject=EDSY">reddit</a></li>
+							<li><a href="#" id="contact_email">email</a></li>
+						</ul>
+					</section>
+					<footer>
+						E:D Shipyard (EDSY) was created using assets and imagery from <a href="http://www.elitedangerous.com/">Elite: Dangerous</a>,<br>
+						with the permission of <a href="http://frontier.co.uk/">Frontier Developments plc</a>, for non-commercial purposes.<br>
+						It is not endorsed by nor reflects the views or opinions of Frontier Developments<br>
+						and no employee of Frontier Developments was involved in the making of it.
+					</footer>
+				</form>
+			</div>
+		</div>
+		<svg class="filter">
+			<filter id="tint_orange_5" color-interpolation-filters="sRGB">
+				<feColorMatrix type="matrix" 
+					values="0 0 0 0 1.000
+							0 0 0 0 0.561
+							0 0 0 0 0.200
+							0 0 0 1 0" />
+			</filter>
+			<filter id="tint_orange_3" color-interpolation-filters="sRGB">
+				<feColorMatrix type="matrix" 
+					values="0 0 0 0 0.722
+							0 0 0 0 0.325
+							0 0 0 0 0.000
+							0 0 0 1 0" />
+			</filter>
+			<filter id="tint_red_5" color-interpolation-filters="sRGB">
+				<feColorMatrix type="matrix" 
+					values="0 0 0 0 1.000
+							0 0 0 0 0.200
+							0 0 0 0 0.200
+							0 0 0 1 0" />
+			</filter>
+			<filter id="tint_red_3" color-interpolation-filters="sRGB">
+				<feColorMatrix type="matrix" 
+					values="0 0 0 0 0.722
+							0 0 0 0 0.000
+							0 0 0 0 0.000
+							0 0 0 1 0" />
+			</filter>
+		</svg>
+		<script type="application/javascript" src="eddb.js"></script>
+		<script type="application/javascript" src="edsy.js"></script>
+	</body>
+</html>
