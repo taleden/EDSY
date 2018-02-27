@@ -17,23 +17,26 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 	</head>
 	<body class="">
 		<div id="page">
-			<form id="page_header" name="header">
+			<div id="page_header">
 				<div id="header_left">
-					<header><a href="http://www.edshipyard.com">EDSY</a></header>
+					<header><a href="http://www.edshipyard.com/new/">EDSY</a></header>
+					<div><a href="/">return to EDSY's old look</a></div>
 				</div>
-				<label class="togglebutton"><input name="tab" type="radio" value="shipyard"><div><span class="icon shipyard"></span>Shipyard</div></label>
-				<label class="togglebutton"><input name="tab" type="radio" value="outfitting"><div><span class="icon mountTurreted"></span>Outfitting</div></label>
-				<label class="togglebutton"><input name="tab" type="radio" value="options"><div><span class="icon repair"></span>Options</div></label>
+				<form id="page_tabs" name="header">
+					<label class="togglebutton"><input name="tab" type="radio" value="shipyard"><div><span class="icon shipyard"></span>Shipyard</div></label>
+					<label class="togglebutton"><input name="tab" type="radio" value="outfitting"><div><span class="icon mountTurreted"></span>Outfitting</div></label>
+					<label class="togglebutton"><input name="tab" type="radio" value="options"><div><span class="icon help"></span><span class="icon repair"></span>Help</div></label>
+				</form>
 				<div id="header_right">
-					<span id="header_version">v3.0.0 alpha 1</span>
+					<span id="header_version">v3.0.0 alpha 2</span>
 					<div id="header_donate"></div>
 				</div>
-			</form>
+			</div>
 			<div id="page_body" class="">
 				<form id="page_body_shipyard" name="shipyard" class="">
 					<div id="shipyard_tabs">
 						<label class="togglebutton"><input name="tab" type="radio" value="table"><div>Shipyard</div></label>
-						<label class="togglebutton"><input name="tab" type="radio" value="stored"><div>Stored</div></label>
+						<label class="togglebutton"><input name="tab" type="radio" value="stored"><!-- TODO div>Stored</div --></label>
 					</div>
 					<div id="shipyard_container">
 					</div>
@@ -54,7 +57,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 							</div>
 							<div id="outfitting_modules_container" class=""></div>
 						</form>
-						<form id="outfitting_fit" name="fit">
+						<form id="outfitting_fit" name="fit" class="">
 							<div id="outfitting_fit_settings">
 								<!-- TODO
 								<select id="outfitting_fit_saved" name="outfitting_fit_saved">
@@ -93,6 +96,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										<button id="blueprint_roll_high" name="blueprint_roll" value="0.8"><span class="icon blueprintHigh"></span></button>
 										<button id="blueprint_roll_max" name="blueprint_roll" value="1.0"><span class="icon blueprintMax"></span></button>
 									</div>
+									<div id="details_expeffect"></div>
 								</div>
 							</div>
 						</form>
@@ -105,38 +109,38 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 									<thead>
 										<tr>
 											<th><label for="toggle_stats_ttl"><abbr title="Totals and capacities">TTL</abbr></label></th>
-											<td><abbr title="Total mass and thruster maximum (in tons)">MASS</abbr></td>
-											<td><abbr title="Current and total fuel (in tons)">FUEL</abbr></td>
-											<td><abbr title="Current and total cargo (in tons)">CRGO</abbr></td>
-											<td><abbr title="Total passenger capacity and cabin class(es)">PSGR</abbr></td>
+											<td><abbr title="Current mass and maximum laden mass (in tons)">MASS</abbr></td>
+											<td><abbr title="Current fuel and total capacity (in tons)">FUEL</abbr></td>
+											<td><abbr title="Current cargo and total capacity (in tons)">CRGO</abbr></td>
+											<td><abbr title="Total passenger capacity">PSGR</abbr></td>
 										</tr>
 									</thead>
 									<tbody>
 										<tr>
 											<th><abbr title="Current values used to calculate other statistics">CUR</abbr></th>
-											<td id="outfitting_stats_cur_mass">90<small>T</small></td>
+											<td id="outfitting_stats_cur_mass"></td>
 											<td><input type="text" name="stats_cur_fuel"><small>T</small></td>
 											<td><input type="text" name="stats_cur_cargo"><small>T</small></td>
 											<td></td>
 										</tr>
 										<tr>
 											<th><abbr title="Maximum value or capacity">MAX</abbr></th>
-											<td id="outfitting_stats_max_mass">100<small>T</small></td>
-											<td id="outfitting_stats_max_fuel">16<small>T</small></td>
-											<td id="outfitting_stats_max_cargo">50<small>T</small></td>
-											<td id="outfitting_stats_max_psgr">4</td>
+											<td id="outfitting_stats_max_mass"></td>
+											<td id="outfitting_stats_max_fuel"></td>
+											<td id="outfitting_stats_max_cargo"></td>
+											<td id="outfitting_stats_max_psgr"></td>
 										</tr>
 										<!-- TODO mlf, crew -->
 										<tr>
 											<th><abbr title="Power draw (in megawatts) with hardpoints retracted">RET</abbr></th>
-											<td colspan=4 id="outfitting_stats_power_ret">56.78 / 78.90<small>MW</small> (78.9%)</td>
+											<td colspan=4 id="outfitting_stats_power_ret"></td>
 										</tr>
 										<tr>
 											<td colspan=5
 												><div class="outfitting_stats_power"
 													><span class="marker"></span
 													><span class="marker"></span
-													><div id="outfitting_stats_power_ret"
+													><div
 														><span class="overload"></span
 														><abbr id="outfitting_stats_power_ret_1">1</abbr
 														><abbr id="outfitting_stats_power_ret_2">2</abbr
@@ -144,7 +148,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 														><abbr id="outfitting_stats_power_ret_4">4</abbr
 														><abbr id="outfitting_stats_power_ret_5">5</abbr
 													></div
-													><div id="outfitting_stats_power_dep"
+													><div
 														><span class="overload"></span
 														><abbr id="outfitting_stats_power_dep_1">1</abbr
 														><abbr id="outfitting_stats_power_dep_2">2</abbr
@@ -157,7 +161,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										</tr>
 										<tr>
 											<th><abbr title="Power draw (in megawatts) with hardpoints deployed">DEP</abbr></th>
-											<td colspan=4 id="outfitting_stats_power_ret">67.89 / 78.90<small>MW</small> (98.7%)</td>
+											<td colspan=4 id="outfitting_stats_power_dep"></td>
 										</tr>
 									</tbody>
 								</table>
@@ -172,20 +176,20 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 											<td><abbr title="Total jump range (in light-years) of max-range jumps on a full fuel tank, and fuel scoop time to refuel per tank">RNG</abbr></td>
 											<td><abbr title="Thruster speed (in meters per second) and fuel scoop rate (in tons per second)">SPD</abbr></td>
 											<td><abbr title="Boost speed (in meters per second)">BST</abbr></td>
-											<td><abbr title="Time (in seconds) for ENG capacitor to recharge for one boost">FRQ</abbr></td>
+											<td><abbr title="Time for ENG capacitor to recharge for one boost">FRQ</abbr></td>
 										</tr>
 									</thead>
 									<tbody>
 										<tr>
-											<th><abbr title="Current values using configured power distributor, fuel and cargo settings">CUR</abbr></th>
-											<td id="outfitting_stats_cur_jump">67.89<small>LY</small></td>
-											<td id="outfitting_stats_cur_range">567.89<small>LY</small></td>
-											<td id="outfitting_stats_cur_speed">789<small>m/s</small></td>
-											<td id="outfitting_stats_cur_boost">890<small>m/s</small></td>
-											<td id="outfitting_stats_cur_boostfreq">8.9</td>
+											<th><abbr title="Current values using configured ENG pips, fuel and cargo settings">CUR</abbr></th>
+											<td id="outfitting_stats_cur_jump"></td>
+											<td id="outfitting_stats_cur_range"></td>
+											<td id="outfitting_stats_cur_speed"></td>
+											<td id="outfitting_stats_cur_boost"></td>
+											<td id="outfitting_stats_cur_boostfreq"></td>
 										</tr>
 										<tr>
-											<th><abbr title="Values with full fuel and full cargo">LDN</abbr></th>
+											<th><abbr title="Values with 4 ENG pips, full fuel, and full cargo">LDN</abbr></th>
 											<td id="outfitting_stats_laden_jump"></td>
 											<td id="outfitting_stats_laden_range"></td>
 											<td id="outfitting_stats_laden_speed"></td>
@@ -193,7 +197,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 											<td></td>
 										</tr>
 										<tr>
-											<th><abbr title="Values with full fuel and no cargo">UNL</abbr></th>
+											<th><abbr title="Values with 4 ENG pips, full fuel, and no cargo">UNL</abbr></th>
 											<td id="outfitting_stats_unladen_jump"></td>
 											<td id="outfitting_stats_unladen_range"></td>
 											<td id="outfitting_stats_unladen_speed"></td>
@@ -203,16 +207,16 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										<tr>
 											<th><abbr title="Maximum values with 4 ENG pips, minimal or no fuel, and no cargo">MAX</abbr></th>
 											<td id="outfitting_stats_max_jump"></td>
-											<td id="outfitting_stats_max_range"></td>
+											<td></td>
 											<td id="outfitting_stats_max_speed"></td>
 											<td id="outfitting_stats_max_boost"></td>
-											<td id="outfitting_stats_max_boostfreq">7.8</td>
+											<td id="outfitting_stats_max_boostfreq"></td>
 										</tr>
 										<tr>
 											<th><abbr title="Fuel scooping time per jump, time per tank, and rate">SCP</abbr></th>
-											<td id="outfitting_stats_scoop_jump">8:59</td>
-											<td id="outfitting_stats_scoop_range">78:59</td>
-											<td id="outfitting_stats_scoop_speed">6.789<small>T/s</small></td>
+											<td id="outfitting_stats_scoop_jump"></td>
+											<td id="outfitting_stats_scoop_range"></td>
+											<td id="outfitting_stats_scoop_speed"></td>
 											<td></td>
 											<td></td>
 										</tr>
@@ -225,23 +229,23 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 									<thead>
 										<tr>
 											<th><label for="toggle_stats_hnd"><abbr title="Handling statistics">HND</abbr></label></th>
-											<td><abbr title="Pitch (nose up/down) speed (in degrees per second) and 180-degree flip time (in seconds)">PIT</abbr></td>
-											<td><abbr title="Roll (tilt left/right) speed (in degrees per second) and 180-degree flip time (in seconds)">ROL</abbr></td>
-											<td><abbr title="Yaw (nose left/right) speed (in degrees per second) and 180-degree flip time (in seconds)">YAW</abbr></td>
+											<td><abbr title="Pitch (nose up/down) speed (in degrees per second) and 180-degree flip time">PIT</abbr></td>
+											<td><abbr title="Roll (tilt left/right) speed (in degrees per second) and 180-degree flip time">ROL</abbr></td>
+											<td><abbr title="Yaw (nose left/right) speed (in degrees per second) and 180-degree flip time">YAW</abbr></td>
 										</tr>
 									</thead>
 									<tbody>
 										<tr>
-											<th><abbr title="Current values using configured power distributor, fuel and cargo settings">CUR</abbr></th>
-											<td id="outfitting_stats_cur_pitch">89<small>&deg;/s</small></td>
-											<td id="outfitting_stats_cur_roll">189<small>&deg;/s</small></td>
-											<td id="outfitting_stats_cur_yaw">78<small>&deg;/s</small></td>
+											<th><abbr title="Current values using configured ENG pips, fuel and cargo settings">CUR</abbr></th>
+											<td id="outfitting_stats_cur_pitch"></td>
+											<td id="outfitting_stats_cur_roll"></td>
+											<td id="outfitting_stats_cur_yaw"></td>
 										</tr>
 										<tr>
 											<th>&nbsp;</th>
-											<td id="outfitting_stats_cur_pitchtime">8.9</td>
-											<td id="outfitting_stats_cur_rolltime">7.8</td>
-											<td id="outfitting_stats_cur_yawtime">8:59</td>
+											<td id="outfitting_stats_cur_pitchtime"></td>
+											<td id="outfitting_stats_cur_rolltime"></td>
+											<td id="outfitting_stats_cur_yawtime"></td>
 										</tr>
 										<tr>
 											<th><abbr title="Maximum values with 4 ENG pips, minimal or no fuel, and no cargo">MAX</abbr></th>
@@ -251,12 +255,12 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										</tr>
 										<tr>
 											<th>&nbsp;</th>
-											<td id="outfitting_stats_max_pitchtime">8.9</td>
-											<td id="outfitting_stats_max_rolltime">7.8</td>
-											<td id="outfitting_stats_max_yawtime">8:59</td>
+											<td id="outfitting_stats_max_pitchtime"></td>
+											<td id="outfitting_stats_max_rolltime"></td>
+											<td id="outfitting_stats_max_yawtime"></td>
 										</tr>
 										<tr>
-											<th><abbr title="Acceleration values (untested)">ACC</abbr></th>
+											<th><abbr title="Acceleration values (untested)"><!-- TODO ACC --></abbr></th>
 											<td id="outfitting_stats_acc_pitch"></td>
 											<td id="outfitting_stats_acc_roll"></td>
 											<td id="outfitting_stats_acc_yaw"></td>
@@ -276,23 +280,23 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 									<tbody>
 										<tr>
 											<th><abbr title="Values at idle, with thermal load only from power draw and power plant efficiency">IDL</abbr></th>
-											<td id="outfitting_stats_idl_heat">37%</td>
+											<td id="outfitting_stats_idl_heat"></td>
 										</tr>
 										<tr>
 											<th><abbr title="Values under maximum thrust">THR</abbr></th>
-											<td id="outfitting_stats_thr_heat">48%</td>
+											<td id="outfitting_stats_thr_heat"></td>
 										</tr>
 										<tr>
 											<th><abbr title="Values under maximum thrust with FSD charging">FSD</abbr></th>
-											<td id="outfitting_stats_fsd_heat">59%</td>
+											<td id="outfitting_stats_fsd_heat"></td>
 										</tr>
 										<tr>
 											<th><abbr title="Values under maximum thrust with all weapons firing">WPN</abbr></th>
-											<td id="outfitting_stats_wpn_heat">8:59</td>
+											<td id="outfitting_stats_wpn_heat"></td>
 										</tr>
 										<tr>
 											<th><abbr title="Values under maximum thrust with SCBs firing">SCB</abbr></th>
-											<td id="outfitting_stats_scb_heat">7:58</td>
+											<td id="outfitting_stats_scb_heat"></td>
 										</tr>
 									</tbody>
 								</table>
@@ -313,16 +317,16 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										<tr>
 											<th><abbr title="Raw values">RAW</abbr></th>
 											<td></td>
-											<td id="outfitting_stats_raw_shield_strength">5678.9<small>MJ</small></td>
-											<td id="outfitting_stats_raw_shield_regen">78.9<small>MJ/s</small></td>
-											<td id="outfitting_stats_raw_shield_reinf">5678.9<small>MJ</small></td>
+											<td id="outfitting_stats_raw_shield_strength"></td>
+											<td id="outfitting_stats_raw_shield_regen"></td>
+											<td id="outfitting_stats_raw_shield_reinf"></td>
 										</tr>
 										<tr>
 											<th><abbr title="Effective values vs. absolute damage, including SYS pips">ABS</abbr></th>
-											<td id="outfitting_stats_abs_shield_resist">-78.9%</td>
-											<td id="outfitting_stats_abs_shield_strength">6789.0<small>MJ</small></td>
-											<td id="outfitting_stats_abs_shield_regen">89.0<small>MJ/s</small></td>
-											<td id="outfitting_stats_abs_shield_reinf">6789.0<small>MJ</small></td>
+											<td id="outfitting_stats_abs_shield_resist"></td>
+											<td id="outfitting_stats_abs_shield_strength"></td>
+											<td id="outfitting_stats_abs_shield_regen"></td>
+											<td id="outfitting_stats_abs_shield_reinf"></td>
 										</tr>
 										<tr>
 											<th><abbr title="Effective values vs. thermal damage, including SYS pips and resistance">THM</abbr></th>
@@ -361,13 +365,13 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 									<tbody>
 										<tr>
 											<th><abbr title="Raw hull hardness and armour integrity">RAW</abbr></th>
-											<td id="outfitting_stats_raw_armour_hardness">189</td>
-											<td id="outfitting_stats_raw_armour_integ">5678.9</td>
+											<td id="outfitting_stats_raw_armour_hardness"></td>
+											<td id="outfitting_stats_raw_armour_integ"></td>
 										</tr>
 										<tr>
 											<th><abbr title="Module Reinforcement Packages total protection value (in %) and integrity">MRP</abbr></th>
-											<td id="outfitting_stats_mod_armour_protect">-78.9%</td>
-											<td id="outfitting_stats_mod_armour_integ">6789.0</td>
+											<td id="outfitting_stats_mod_armour_protect"></td>
+											<td id="outfitting_stats_mod_armour_integ"></td>
 										</tr>
 										<tr>
 											<th><abbr title="Effective values vs. thermal damage, including resistance">THM</abbr></th>
@@ -401,33 +405,33 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 									<tbody>
 										<tr>
 											<th><abbr title="Raw damage per second">RAW</abbr></th>
-											<td id="outfitting_stats_wpn_raw_burst">5678.9</td>
+											<td id="outfitting_stats_wpn_raw_burst"></td>
 											<th><abbr title="Current value using configured power distributor settings">CUR</abbr></th>
-											<td id="outfitting_stats_wpn_cur_cap">7:59</td>
+											<td id="outfitting_stats_wpn_cur_cap"></td>
 										</tr>
 										<tr>
 											<th><abbr title="Absolute damage proportion">ABS</abbr></th>
-											<td id="outfitting_stats_wpn_abs_burst">89%</td>
+											<td id="outfitting_stats_wpn_abs_burst"></td>
 											<th><abbr title="Maximum value with 4 WEP pips">MAX</abbr></th>
-											<td id="outfitting_stats_wpn_max_cap">8:59</td>
+											<td id="outfitting_stats_wpn_max_cap"></td>
 										</tr>
 										<tr>
 											<th><abbr title="Thermal damage proportion">THM</abbr></th>
-											<td id="outfitting_stats_thm_burst"></td>
+											<td id="outfitting_stats_wpn_thm_burst"></td>
 											<td></td>
 											<th class="header"><abbr title="Sustainable damage proportion once WEP capacitor is drained">SUS</abbr></th>
 										</tr>
 										<tr>
 											<th><abbr title="Kinetic damage proportion">KIN</abbr></th>
-											<td id="outfitting_stats_kin_burst"></td>
+											<td id="outfitting_stats_wpn_kin_burst"></td>
 											<th><abbr title="Current value using configured power distributor settings">CUR</abbr></th>
-											<td id="outfitting_stats_wpn_cur_sus">78.9%</td>
+											<td id="outfitting_stats_wpn_cur_sus"></td>
 										</tr>
 										<tr>
 											<th><abbr title="Explosive damage proportion">EXP</abbr></th>
-											<td id="outfitting_stats_exp_burst"></td>
+											<td id="outfitting_stats_wpn_exp_burst"></td>
 											<th><abbr title="Maximum value with 4 WEP pips">MAX</abbr></th>
-											<td id="outfitting_stats_wpn_max_sus">89.0%</td>
+											<td id="outfitting_stats_wpn_max_sus"></td>
 										</tr>
 									</tbody>
 								</table>
@@ -435,34 +439,50 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 						</form>
 					</div>
 				</div>
-				<form id="page_body_options" name="options">
-					<section>
-						<header>Options</header>
-						<ul>
-							<li>
+				<div id="page_body_options">
+					<form name="options">
+						<section>
+							<header>About</header>
+							<p>
+								This is a preview of EDSY's new design and layout. It is not yet complete! You can choose ships from the Shipyard, fit them
+								in Outfitting (by double-click or drag-and-drop), configure power settings, and apply engineering modifications, but many other
+								features are not yet implemented. In particular you cannot yet save or load modules or builds, share builds via URL hash, or
+								import or export builds. All of these features (and more!) are coming soon, so watch this space!
+							</p>
+							<p>
+								In the mean time, please try out the new design and send me your feedback using any of the links below.
+							</p>
+						</section>
+						<section>
+							<header>Options</header>
+							<div>
 								<label class="checkbox left"><input type="checkbox" name="onlybest"><div></div><span>Hide Small Modules</span></label>
-							</li>
-							<li>
+								&mdash; When enabled, the SLOT view of the module browser will display only the largest size class of each available module type.
+							</div>
+							<div>
 								<label class="checkbox left"><input type="checkbox" name="experimental"><div></div><span>Experimental Mode</span></label>
-							</li>
-						</ul>
-					</section>
-					<section>
-						<header>Contact Me</header>
-						<ul>
-							<li><a href="https://discord.gg/hs3h3vH">discord</a></li>
-							<li><a href="https://forums.frontier.co.uk/showthread.php?t=92900">forum</a></li>
-							<li><a href="https://www.reddit.com/message/compose/?to=taleden&subject=EDSY">reddit</a></li>
-							<li><a href="#" id="contact_email">email</a></li>
-						</ul>
-					</section>
-					<footer>
-						E:D Shipyard (EDSY) was created using assets and imagery from <a href="http://www.elitedangerous.com/">Elite: Dangerous</a>,<br>
-						with the permission of <a href="http://frontier.co.uk/">Frontier Developments plc</a>, for non-commercial purposes.<br>
-						It is not endorsed by nor reflects the views or opinions of Frontier Developments<br>
-						and no employee of Frontier Developments was involved in the making of it.
-					</footer>
-				</form>
+								&mdash; When enabled, the SLOT view of the module browser will display and allow you to fit modules that are too large for the
+								current slot, or are of a type not allowed by the ship or the slot. This option can be used to experiment with theoretical
+								"what-if" builds, but disallowed modules will be shown in red to signify that it will not be possible to actually fit them in-game.
+							</div>
+						</section>
+						<section>
+							<header>Contact Me</header>
+							<ul>
+								<li><a href="https://discord.gg/hs3h3vH">discord</a></li>
+								<li><a href="https://forums.frontier.co.uk/showthread.php?t=92900">forum</a></li>
+								<li><a href="https://www.reddit.com/message/compose/?to=taleden&subject=EDSY">reddit</a></li>
+								<li><a href="#" id="contact_email">email</a></li>
+							</ul>
+						</section>
+						<footer>
+							E:D Shipyard (EDSY) was created using assets and imagery from <a href="http://www.elitedangerous.com/">Elite: Dangerous</a>,
+							with the permission of <a href="http://frontier.co.uk/">Frontier Developments plc</a>, for non-commercial purposes.
+							It is not endorsed by nor reflects the views or opinions of Frontier Developments
+							and no employee of Frontier Developments was involved in the making of it.
+						</footer>
+					</form>
+				</div>
 			</div>
 		</div>
 		<svg class="filter">

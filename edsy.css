@@ -66,6 +66,14 @@ DIV::-webkit-scrollbar-thumb {
 	background-color: var(--color-orange-5);
 }
 
+HEADER {
+	margin: 0;
+}
+
+P {
+	margin: 0;
+}
+
 ABBR {
 	display: inline-block;
 	margin: 0.1em 0;
@@ -76,7 +84,7 @@ ABBR {
 }
 
 SMALL {
-	font-size: 62.5%;
+	font-size: 75%;
 }
 
 SVG.filter {
@@ -376,7 +384,7 @@ BUTTON.icon.blueprintBest:disabled {
 }
 .checkbox INPUT:active + DIV::before,
 .checkbox INPUT:active + DIV::after {
-	border-color: white;
+	border-color: white !important;
 }
 
 
@@ -531,6 +539,7 @@ BUTTON.icon.blueprintBest:disabled {
 }
 
 #page_header HEADER {
+	display: inline-block;
 	padding: 0 0.5em;
 	font-family: var(--font-text);
 	font-size: 112.5%;
@@ -542,9 +551,22 @@ BUTTON.icon.blueprintBest:disabled {
 	text-decoration: none;
 }
 
-#page_header .togglebutton {
+#header_left DIV {
+	display: inline-block;
+	position: absolute;
+	border-radius: 1em;
+	padding: 0 0.5em;
+	background-color: var(--color-grey-1);
+}
+
+#page_header FORM {
 	flex: 0 0 auto;
 	align-self: flex-end;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: arrow;
 }
 
 #page_header .togglebutton INPUT + DIV {
@@ -595,6 +617,11 @@ BUTTON.icon.blueprintBest:disabled {
 #shipyard_tabs {
 	display: flex;
 	flex-direction: row;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: arrow;
 }
 
 #shipyard_tabs LABEL {
@@ -631,6 +658,11 @@ BUTTON.icon.blueprintBest:disabled {
 	padding: 0 0.25em;
 	color: var(--color-orange-5);
 	font-weight: bold;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: arrow;
 }
 /* TODO sortable?
 #shipyard_table THEAD TH:hover {
@@ -1136,9 +1168,9 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	border-spacing: 0;
 }
 
-#outfitting_fit_slots.nomass .outfitting_fit_mass,
-#outfitting_fit_slots.nopower .outfitting_fit_power,
-#outfitting_fit_slots.noprice .outfitting_fit_price {
+#outfitting_fit.nomass .outfitting_fit_mass,
+#outfitting_fit.nopower .outfitting_fit_pwrdraw,
+#outfitting_fit.noprice .outfitting_fit_price {
 	display: none;
 }
 
@@ -1233,20 +1265,25 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	filter: invert(100%) !important;
 }
 
-#outfitting_fit_slots .notallowed .togglebutton INPUT + DIV {
+#outfitting_fit_slots .notallowed .togglebutton INPUT + DIV,
+#outfitting_fit_slots .togglebutton INPUT + DIV.overlimit {
 	background-color: var(--color-red-1);
 	color: var(--color-red-5);
 }
-#outfitting_fit_slots .notallowed .togglebutton INPUT + DIV SPAN {
+#outfitting_fit_slots .notallowed .togglebutton INPUT + DIV SPAN,
+#outfitting_fit_slots .togglebutton INPUT + DIV.overlimit SPAN {
 	color: var(--color-red-3);
 }
-#outfitting_fit_slots .notallowed .togglebutton INPUT + DIV .icon {
+#outfitting_fit_slots .notallowed .togglebutton INPUT + DIV .icon,
+#outfitting_fit_slots .togglebutton INPUT + DIV.overlimit .icon {
 	filter: url(#tint_red_5);
 }
-#outfitting_fit_slots .notallowed .togglebutton INPUT:checked + DIV {
+#outfitting_fit_slots .notallowed .togglebutton INPUT:checked + DIV,
+#outfitting_fit_slots .togglebutton INPUT:checked + DIV.overlimit {
 	border-color: var(--color-red-5);
 }
-#page_body_outfitting.slot #outfitting_fit_slots .notallowed .togglebutton INPUT:checked + DIV {
+#page_body_outfitting.slot #outfitting_fit_slots .notallowed .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.slot #outfitting_fit_slots .togglebutton INPUT:checked + DIV.overlimit {
 	background-color: var(--color-red-5);
 	color: black;
 }
@@ -1264,13 +1301,6 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #page_body_outfitting.slot #outfitting_fit_slots .notenough .togglebutton INPUT:checked + DIV::before,
 #page_body_outfitting.slot #outfitting_fit_slots .togglebutton INPUT:checked + DIV .icon {
 	filter: invert(100%);
-}
-
-#outfitting_fit_slots .notallowed .togglebutton INPUT:checked + DIV {
-	border-color: var(--color-red-5);
-}
-#page_body_outfitting.slot #outfitting_fit_slots .notallowed .togglebutton INPUT:checked + DIV {
-	background-color: var(--color-red-5);
 }
 
 #outfitting_fit_slots .dragready .togglebutton INPUT + DIV {
@@ -1300,6 +1330,71 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots .checkbox SPAN {
 	margin-right: 0.2em;
 }
+
+#outfitting_fit_slots.priority1okay .priority1 .checkbox INPUT:checked + DIV,
+#outfitting_fit_slots.priority2okay .priority2 .checkbox INPUT:checked + DIV,
+#outfitting_fit_slots.priority3okay .priority3 .checkbox INPUT:checked + DIV,
+#outfitting_fit_slots.priority4okay .priority4 .checkbox INPUT:checked + DIV,
+#outfitting_fit_slots.priority5okay .priority5 .checkbox INPUT:checked + DIV {
+	background-color: var(--color-blue-5);
+}
+#outfitting_fit_slots.priority1okay .priority1 .checkbox INPUT + DIV::before,
+#outfitting_fit_slots.priority2okay .priority2 .checkbox INPUT + DIV::before,
+#outfitting_fit_slots.priority3okay .priority3 .checkbox INPUT + DIV::before,
+#outfitting_fit_slots.priority4okay .priority4 .checkbox INPUT + DIV::before,
+#outfitting_fit_slots.priority5okay .priority5 .checkbox INPUT + DIV::before,
+#outfitting_fit_slots.priority1okay .priority1 .checkbox INPUT + DIV::after,
+#outfitting_fit_slots.priority2okay .priority2 .checkbox INPUT + DIV::after,
+#outfitting_fit_slots.priority3okay .priority3 .checkbox INPUT + DIV::after,
+#outfitting_fit_slots.priority4okay .priority4 .checkbox INPUT + DIV::after,
+#outfitting_fit_slots.priority5okay .priority5 .checkbox INPUT + DIV::after {
+	border-color: var(--color-blue-3);
+}
+#outfitting_fit_slots.priority1okay .priority1 .checkbox INPUT:checked + DIV::before,
+#outfitting_fit_slots.priority2okay .priority2 .checkbox INPUT:checked + DIV::before,
+#outfitting_fit_slots.priority3okay .priority3 .checkbox INPUT:checked + DIV::before,
+#outfitting_fit_slots.priority4okay .priority4 .checkbox INPUT:checked + DIV::before,
+#outfitting_fit_slots.priority5okay .priority5 .checkbox INPUT:checked + DIV::before,
+#outfitting_fit_slots.priority1okay .priority1 .checkbox INPUT:checked + DIV::after,
+#outfitting_fit_slots.priority2okay .priority2 .checkbox INPUT:checked + DIV::after,
+#outfitting_fit_slots.priority3okay .priority3 .checkbox INPUT:checked + DIV::after,
+#outfitting_fit_slots.priority4okay .priority4 .checkbox INPUT:checked + DIV::after,
+#outfitting_fit_slots.priority5okay .priority5 .checkbox INPUT:checked + DIV::after {
+	border-color: var(--color-blue-5);
+}
+
+#outfitting_fit_slots.priority1error .priority1 .checkbox INPUT:checked + DIV,
+#outfitting_fit_slots.priority2error .priority2 .checkbox INPUT:checked + DIV,
+#outfitting_fit_slots.priority3error .priority3 .checkbox INPUT:checked + DIV,
+#outfitting_fit_slots.priority4error .priority4 .checkbox INPUT:checked + DIV,
+#outfitting_fit_slots.priority5error .priority5 .checkbox INPUT:checked + DIV {
+	background-color: var(--color-red-5);
+}
+#outfitting_fit_slots.priority1error .priority1 .checkbox INPUT + DIV::before,
+#outfitting_fit_slots.priority2error .priority2 .checkbox INPUT + DIV::before,
+#outfitting_fit_slots.priority3error .priority3 .checkbox INPUT + DIV::before,
+#outfitting_fit_slots.priority4error .priority4 .checkbox INPUT + DIV::before,
+#outfitting_fit_slots.priority5error .priority5 .checkbox INPUT + DIV::before,
+#outfitting_fit_slots.priority1error .priority1 .checkbox INPUT + DIV::after,
+#outfitting_fit_slots.priority2error .priority2 .checkbox INPUT + DIV::after,
+#outfitting_fit_slots.priority3error .priority3 .checkbox INPUT + DIV::after,
+#outfitting_fit_slots.priority4error .priority4 .checkbox INPUT + DIV::after,
+#outfitting_fit_slots.priority5error .priority5 .checkbox INPUT + DIV::after {
+	border-color: var(--color-red-3);
+}
+#outfitting_fit_slots.priority1error .priority1 .checkbox INPUT:checked + DIV::before,
+#outfitting_fit_slots.priority2error .priority2 .checkbox INPUT:checked + DIV::before,
+#outfitting_fit_slots.priority3error .priority3 .checkbox INPUT:checked + DIV::before,
+#outfitting_fit_slots.priority4error .priority4 .checkbox INPUT:checked + DIV::before,
+#outfitting_fit_slots.priority5error .priority5 .checkbox INPUT:checked + DIV::before,
+#outfitting_fit_slots.priority1error .priority1 .checkbox INPUT:checked + DIV::after,
+#outfitting_fit_slots.priority2error .priority2 .checkbox INPUT:checked + DIV::after,
+#outfitting_fit_slots.priority3error .priority3 .checkbox INPUT:checked + DIV::after,
+#outfitting_fit_slots.priority4error .priority4 .checkbox INPUT:checked + DIV::after,
+#outfitting_fit_slots.priority5error .priority5 .checkbox INPUT:checked + DIV::after {
+	border-color: var(--color-red-5);
+}
+
 
 #outfitting_fit_slots .outfitting_fit_powerdist {
 	padding: 0;
@@ -1416,7 +1511,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	border-right-color: var(--color-orange-3);
 }
 #outfitting_fit_slots BUTTON.outfitting_fit_priority:active::before {
-	border-right-color: white;
+	border-right-color: white !important;
 }
 #outfitting_fit_slots BUTTON.outfitting_fit_priority::after {
 	right: 0;
@@ -1424,7 +1519,73 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	border-left-color: var(--color-orange-3);
 }
 #outfitting_fit_slots BUTTON.outfitting_fit_priority:active::after {
-	border-left-color: white;
+	border-left-color: white !important;
+}
+
+#outfitting_fit_slots.priority1okay .priority1 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority2okay .priority2 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority3okay .priority3 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority4okay .priority4 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority5okay .priority5 BUTTON.outfitting_fit_priority {
+	color: var(--color-blue-5);
+}
+#outfitting_fit_slots.priority1okay .priority1 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority2okay .priority2 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority3okay .priority3 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority4okay .priority4 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority5okay .priority5 BUTTON.outfitting_fit_priority::before {
+	border-right-color: var(--color-blue-3);
+}
+#outfitting_fit_slots.priority1okay .priority1 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority2okay .priority2 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority3okay .priority3 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority4okay .priority4 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority5okay .priority5 BUTTON.outfitting_fit_priority::after {
+	border-left-color: var(--color-blue-3);
+}
+
+#outfitting_fit_slots.priority1warning .priority1 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority2warning .priority2 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority3warning .priority3 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority4warning .priority4 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority5warning .priority5 BUTTON.outfitting_fit_priority {
+	color: var(--color-red-5);
+}
+#outfitting_fit_slots.priority1warning .priority1 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority2warning .priority2 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority3warning .priority3 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority4warning .priority4 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority5warning .priority5 BUTTON.outfitting_fit_priority::before {
+	border-right-color: var(--color-red-3);
+}
+#outfitting_fit_slots.priority1warning .priority1 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority2warning .priority2 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority3warning .priority3 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority4warning .priority4 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority5warning .priority5 BUTTON.outfitting_fit_priority::after {
+	border-left-color: var(--color-red-3);
+}
+
+#outfitting_fit_slots.priority1error .priority1 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority2error .priority2 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority3error .priority3 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority4error .priority4 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority5error .priority5 BUTTON.outfitting_fit_priority {
+	color: var(--color-red-5);
+}
+#outfitting_fit_slots.priority1error .priority1 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority2error .priority2 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority3error .priority3 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority4error .priority4 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority5error .priority5 BUTTON.outfitting_fit_priority::before {
+	border-right-color: var(--color-red-3);
+}
+#outfitting_fit_slots.priority1error .priority1 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority2error .priority2 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority3error .priority3 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority4error .priority4 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority5error .priority5 BUTTON.outfitting_fit_priority::after {
+	border-left-color: var(--color-red-3);
 }
 
 
@@ -1503,6 +1664,11 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	filter: grayscale(100%);
 }
 
+#outfitting_details_module #details_expeffect {
+	font-family: var(--font-text);
+	font-size: 87.5%;
+}
+
 #outfitting_details_module TABLE {
 	width: 100%;
 }
@@ -1567,15 +1733,25 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	font-size: 100%;
 }
 
+.outfitting_stats_panel .error {
+	color: var(--color-red-5);
+}
+.outfitting_stats_panel ABBR.error {
+	border-color: var(--color-red-5);
+}
+
 .outfitting_stats_panel ABBR {
 	border-color: var(--color-orange-5);
 }
 
 .outfitting_stats_panel SMALL {
-	display: inline-block;
-	width: 0;
-	overflow: hidden;
-		display: none; /*TODO?*/
+	color: var(--color-grey-4);
+}
+.outfitting_stats_panel .error SMALL {
+	color: var(--color-red-4);
+}
+.outfitting_stats_panel SMALL:not(.semantic) {
+	display: none;
 }
 
 .outfitting_stats_panel TABLE {
@@ -1620,6 +1796,11 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 
 .outfitting_stats_panel THEAD TH ABBR {
 	border-color: black;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: arrow;
 }
 
 .outfitting_stats_panel THEAD TH:first-child LABEL ABBR {
@@ -1669,14 +1850,14 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 .outfitting_stats_panel .outfitting_stats_power SPAN.marker {
 	pointer-events: none;
 	position: absolute;
-	z-index: 1;
+	z-index: 3;
 	top: -3px;
 	bottom: -3px;
 	right: 10%;
 	border-right: 1px solid var(--color-red-5);
 	padding-right: 3px;
 }
-.outfitting_stats_panel .outfitting_stats_power SPAN.marker:first-child {
+.outfitting_stats_panel .outfitting_stats_power SPAN.marker:first-of-type {
 	right: 55%;
 	border-color: var(--color-blue-5);
 }
@@ -1692,15 +1873,16 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	text-align: left;
 	line-height: 1px;
 }
-.outfitting_stats_panel .outfitting_stats_power DIV#outfitting_stats_power_ret {
+.outfitting_stats_panel .outfitting_stats_power DIV:first-of-type {
 	top: -1px;
 }
-.outfitting_stats_panel .outfitting_stats_power DIV#outfitting_stats_power_dep {
+.outfitting_stats_panel .outfitting_stats_power DIV:last-of-type {
 	bottom: -1px;
 }
 
 .outfitting_stats_panel .outfitting_stats_power DIV SPAN.overload {
 	position: absolute;
+	z-index: 1;
 	top: 0;
 	bottom: 0;
 	right: 0;
@@ -1710,6 +1892,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 
 .outfitting_stats_panel .outfitting_stats_power ABBR {
 	display: inline-block;
+	position: relative;
+	z-index: 2;
 	height: 100%;
 	margin: 0;
 	border: none;
@@ -1722,11 +1906,13 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	overflow: hidden;
 	text-align: center;
 }
-.outfitting_stats_panel .outfitting_stats_power ABBR {
-	width: 15%; /* TODO */
+.outfitting_stats_panel .outfitting_stats_power ABBR.okay {
+	border-right: 2px solid var(--color-blue-3);
+	background-color: var(--color-blue-4);
 }
-.outfitting_stats_panel .outfitting_stats_power DIV#outfitting_stats_power_dep ABBR {
-	width: 18%; /* TODO */
+.outfitting_stats_panel .outfitting_stats_power ABBR.error {
+	border-right: 2px solid var(--color-red-3);
+	background-color: var(--color-red-4);
 }
 
 
@@ -1735,29 +1921,37 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 */
 
 
-#page_body_options {
+#page_body_options FORM {
+	height: 100%;
 	display: flex;
 	flex-direction: column;
 	font-family: var(--font-text);
 	font-size: 87.5%;
+	max-width: 60em;
 }
 
 #page_body_options SECTION {
 	flex: 0 0 auto;
-	margin-bottom: 1em;
 }
 #page_body_options SECTION:last-of-type {
 	flex: 1 0 auto;
 }
 
 #page_body_options HEADER {
+	margin-bottom: 1em;
 	font-weight: bold;
 	text-decoration: underline;
+}
+
+#page_body_options SECTION > DIV,
+#page_body_options P {
+	margin-bottom: 1em;
 }
 
 #page_body_options UL {
 	margin: 0;
 	padding: 0;
+	margin-bottom: 1em;
 }
 
 #page_body_options LI {
@@ -1766,6 +1960,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 
 #page_body_options .checkbox SPAN {
 	margin-left: 0.5em;
+	color: var(--color-orange-5);
 }
 
 #page_body_options FOOTER {
