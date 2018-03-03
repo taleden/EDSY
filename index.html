@@ -28,15 +28,15 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 					<label class="togglebutton"><input name="tab" type="radio" value="options"><div><span class="icon help"></span><span class="icon repair"></span>Help</div></label>
 				</form>
 				<div id="header_right">
-					<span id="header_version">v3.0.0 alpha 2</span>
+					<span id="header_version">v3.0.0 alpha 3</span>
 					<div id="header_donate"></div>
 				</div>
 			</div>
 			<div id="page_body" class="">
 				<form id="page_body_shipyard" name="shipyard" class="">
 					<div id="shipyard_tabs">
-						<label class="togglebutton"><input name="tab" type="radio" value="table"><div>Shipyard</div></label>
-						<label class="togglebutton"><input name="tab" type="radio" value="stored"><!-- TODO div>Stored</div --></label>
+						<label class="togglebutton"><input name="tab" type="radio" value="ships"><div>Shipyard</div></label>
+						<label class="togglebutton"><input name="tab" type="radio" value="storedbuilds"><div>Stored</div></label>
 					</div>
 					<div id="shipyard_container">
 					</div>
@@ -59,22 +59,47 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 						</form>
 						<form id="outfitting_fit" name="fit" class="">
 							<div id="outfitting_fit_settings">
-								<!-- TODO
-								<select id="outfitting_fit_saved" name="outfitting_fit_saved">
+								<select id="outfitting_fit_stored" name="outfitting_fit_stored">
 									<option value="">(Stock)</option>
 								</select>
-								<button id="outfitting_fit_saved_reload"><span class="icon fileReload"></span></button>
-								<button id="outfitting_fit_saved_save"><span class="icon fileSave"></span></button>
-								<button id="outfitting_fit_saved_saveas"><span class="icon fileSaveAs"></span></button>
-								<button id="outfitting_fit_saved_rename"><span class="icon fileRename"></span></button>
-								<button id="outfitting_fit_saved_delete"><span class="icon fileDelete"></span></button>
-								-->
+								<button id="outfitting_fit_stored_reload"><span class="icon fileReload"></span></button>
+								<button id="outfitting_fit_stored_save"><span class="icon fileSave"></span></button>
+								<button id="outfitting_fit_stored_saveas"><span class="icon fileSaveAs"></span></button>
+								<button id="outfitting_fit_stored_rename"><span class="icon fileRename"></span></button>
+								<button id="outfitting_fit_stored_delete"><span class="icon fileDelete"></span></button>
 								<span><!-- Show: --></span>
 								<label class="togglebutton"><input name="outfitting_show_mass" type="checkbox" value="1"><div>Mass</div></label>
 								<label class="togglebutton"><input name="outfitting_show_power" type="checkbox" value="1"><div>Power</div></label>
 								<label class="togglebutton"><input name="outfitting_show_price" type="checkbox" value="1"><div>Price</div></label>
 							</div>
-							<div id="outfitting_fit_slots" class=""></div>
+							<div id="outfitting_fit_slots" class="">
+								<div id="outfitting_fit_header">
+									<div class="slots_header_row">
+										<span>Name:</span>
+										<input class="grow" name="shipname" type="text" maxlength=22>
+										<span>ID:</span>
+										<input name="shipnametag" type="text" maxlength=6>
+									</div>
+									<div class="slots_header_row outfitting_fit_powerdist">
+										<span>Crew:</span>
+										<button id="outfitting_fit_crewdist_avl" class="" name="crewdist_avl"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div>AVL</div></button>
+										<button id="outfitting_fit_crewdist_sys" class="" name="crewdist_sys"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div>SYS</div></button>
+										<button id="outfitting_fit_crewdist_eng" class="" name="crewdist_eng"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div>ENG</div></button>
+										<button id="outfitting_fit_crewdist_wep" class="" name="crewdist_wep"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div>WEP</div></button>
+										<span>Dist:</span>
+										<button id="outfitting_fit_powerdist_rst" class="" name="powerdist_rst"><div class="powerpips"></div><div>RST</div></button>
+										<button id="outfitting_fit_powerdist_sys" class="" name="powerdist_sys"><div class="powerpips"><span></span><span></span><span></span><span></span></div><div>SYS</div></button>
+										<button id="outfitting_fit_powerdist_eng" class="" name="powerdist_eng"><div class="powerpips"><span></span><span></span><span></span><span></span></div><div>ENG</div></button>
+										<button id="outfitting_fit_powerdist_wep" class="" name="powerdist_wep"><div class="powerpips"><span></span><span></span><span></span><span></span></div><div>WEP</div></button>
+									</div>
+								</div>
+								<div id="outfitting_fit_body">
+									<div id="slots_column_left" class="slots_body_column">
+									</div>
+									<div id="slots_column_right" class="slots_body_column">
+									</div>
+								</div>
+							</div>
 						</form>
 						<form id="outfitting_details" name="details">
 							<div id="outfitting_details_container">
@@ -130,7 +155,6 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 											<td id="outfitting_stats_max_cargo"></td>
 											<td id="outfitting_stats_max_psgr"></td>
 										</tr>
-										<!-- TODO mlf, crew -->
 										<tr>
 											<th><abbr title="Power draw (in megawatts) with hardpoints retracted">RET</abbr></th>
 											<td colspan=4 id="outfitting_stats_power_ret"></td>
@@ -162,6 +186,12 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										<tr>
 											<th><abbr title="Power draw (in megawatts) with hardpoints deployed">DEP</abbr></th>
 											<td colspan=4 id="outfitting_stats_power_dep"></td>
+										</tr>
+										<tr>
+											<th><abbr title="Insurance rebuy price">RBY</abbr></th>
+											<td id="outfitting_stats_rebuy" class="other"></td>
+											<th><abbr title="Total buy price">BUY</abbr></th>
+											<td colspan=2 id="outfitting_stats_price" class="other"></td>
 										</tr>
 									</tbody>
 								</table>
@@ -220,6 +250,14 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 											<td></td>
 											<td></td>
 										</tr>
+										<tr>
+											<th>&nbsp;</th>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+										</tr>
 									</tbody>
 								</table>
 							</div>
@@ -260,10 +298,16 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 											<td id="outfitting_stats_max_yawtime"></td>
 										</tr>
 										<tr>
-											<th><abbr title="Acceleration values (untested)"><!-- TODO ACC --></abbr></th>
-											<td id="outfitting_stats_acc_pitch"></td>
-											<td id="outfitting_stats_acc_roll"></td>
-											<td id="outfitting_stats_acc_yaw"></td>
+											<th><abbr title="Values during engine boost"><!-- TODO boost --></abbr></th>
+											<td id="outfitting_stats_bst_pitch"></td>
+											<td id="outfitting_stats_bst_roll"></td>
+											<td id="outfitting_stats_bst_yaw"></td>
+										</tr>
+										<tr>
+											<th>&nbsp;</th>
+											<td id="outfitting_stats_bst_pitchtime"></td>
+											<td id="outfitting_stats_bst_rolltime"></td>
+											<td id="outfitting_stats_bst_yawtime"></td>
 										</tr>
 									</tbody>
 								</table>
@@ -298,6 +342,10 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 											<th><abbr title="Values under maximum thrust with SCBs firing">SCB</abbr></th>
 											<td id="outfitting_stats_scb_heat"></td>
 										</tr>
+										<tr>
+											<th>&nbsp;</th>
+											<td></td>
+										</tr>
 									</tbody>
 								</table>
 							</div>
@@ -309,7 +357,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 											<th><label for="toggle_stats_shd"><abbr title="Shield statistics">SHD</abbr></label></th>
 											<td><abbr title="Damage resistance (in %)">RES</abbr></td>
 											<td><abbr title="Raw and effective maximum strength (in megajoules)">STR</abbr></td>
-											<td><abbr title="Raw and effective regeneration rate (in megajoules per second)">RGN</abbr></td>
+											<!-- <td><abbr title="Raw and effective regeneration rate (in megajoules per second)">RGN</abbr></td> -->
 											<td><abbr title="Raw and effective Shield Cell Bank reinforcement total (in megajoules)">RNF</abbr></td>
 										</tr>
 									</thead>
@@ -318,36 +366,43 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 											<th><abbr title="Raw values">RAW</abbr></th>
 											<td></td>
 											<td id="outfitting_stats_raw_shield_strength"></td>
-											<td id="outfitting_stats_raw_shield_regen"></td>
+											<!-- <td id="outfitting_stats_raw_shield_regen"></td> -->
 											<td id="outfitting_stats_raw_shield_reinf"></td>
 										</tr>
 										<tr>
 											<th><abbr title="Effective values vs. absolute damage, including SYS pips">ABS</abbr></th>
 											<td id="outfitting_stats_abs_shield_resist"></td>
 											<td id="outfitting_stats_abs_shield_strength"></td>
-											<td id="outfitting_stats_abs_shield_regen"></td>
+											<!-- <td id="outfitting_stats_abs_shield_regen"></td> -->
 											<td id="outfitting_stats_abs_shield_reinf"></td>
-										</tr>
-										<tr>
-											<th><abbr title="Effective values vs. thermal damage, including SYS pips and resistance">THM</abbr></th>
-											<td id="outfitting_stats_thm_shield_resist"></td>
-											<td id="outfitting_stats_thm_shield_strength"></td>
-											<td id="outfitting_stats_thm_shield_regen"></td>
-											<td id="outfitting_stats_thm_shield_reinf"></td>
 										</tr>
 										<tr>
 											<th><abbr title="Effective values vs. kinetic damage, including SYS pips and resistance">KIN</abbr></th>
 											<td id="outfitting_stats_kin_shield_resist"></td>
 											<td id="outfitting_stats_kin_shield_strength"></td>
-											<td id="outfitting_stats_kin_shield_regen"></td>
+											<!-- <td id="outfitting_stats_kin_shield_regen"></td> -->
 											<td id="outfitting_stats_kin_shield_reinf"></td>
+										</tr>
+										<tr>
+											<th><abbr title="Effective values vs. thermal damage, including SYS pips and resistance">THM</abbr></th>
+											<td id="outfitting_stats_thm_shield_resist"></td>
+											<td id="outfitting_stats_thm_shield_strength"></td>
+											<!-- <td id="outfitting_stats_thm_shield_regen"></td> -->
+											<td id="outfitting_stats_thm_shield_reinf"></td>
 										</tr>
 										<tr>
 											<th><abbr title="Effective values vs. explosive damage, including SYS pips and resistance">EXP</abbr></th>
 											<td id="outfitting_stats_exp_shield_resist"></td>
 											<td id="outfitting_stats_exp_shield_strength"></td>
-											<td id="outfitting_stats_exp_shield_regen"></td>
+											<!-- <td id="outfitting_stats_exp_shield_regen"></td> -->
 											<td id="outfitting_stats_exp_shield_reinf"></td>
+										</tr>
+										<tr>
+											<th><abbr title="Time to rebuild from 0% to 50%">BLD</abbr></th>
+											<td id="outfitting_stats_shield_build" class="other"></td>
+											<th><abbr title="Time to regenerate from 50% to 100%">RGN</abbr></th>
+											<!-- <td></td> -->
+											<td id="outfitting_stats_shield_regen" class="other"></td>
 										</tr>
 									</tbody>
 								</table>
@@ -374,19 +429,24 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 											<td id="outfitting_stats_mod_armour_integ"></td>
 										</tr>
 										<tr>
-											<th><abbr title="Effective values vs. thermal damage, including resistance">THM</abbr></th>
-											<td id="outfitting_stats_thm_armour_resist"></td>
-											<td id="outfitting_stats_thm_armour_integ"></td>
-										</tr>
-										<tr>
 											<th><abbr title="Effective values vs. kinetic damage, including resistance">KIN</abbr></th>
 											<td id="outfitting_stats_kin_armour_resist"></td>
 											<td id="outfitting_stats_kin_armour_integ"></td>
 										</tr>
 										<tr>
+											<th><abbr title="Effective values vs. thermal damage, including resistance">THM</abbr></th>
+											<td id="outfitting_stats_thm_armour_resist"></td>
+											<td id="outfitting_stats_thm_armour_integ"></td>
+										</tr>
+										<tr>
 											<th><abbr title="Effective values vs. explosive damage, including resistance">EXP</abbr></th>
 											<td id="outfitting_stats_exp_armour_resist"></td>
 											<td id="outfitting_stats_exp_armour_integ"></td>
+										</tr>
+										<tr>
+											<th><abbr title="Effective values vs. caustic damage, including resistance">CAU</abbr></th>
+											<td id="outfitting_stats_cau_armour_resist"></td>
+											<td id="outfitting_stats_cau_armour_integ"></td>
 										</tr>
 									</tbody>
 								</table>
@@ -399,21 +459,27 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 											<th><label for="toggle_stats_wpn"><abbr title="Weapon statistics">WPN</abbr></label></th>
 											<td><abbr title="Burst damage per second from all weapons, while WEP capacitor and ammo last">BST</abbr></td>
 											<td></td>
-											<td><abbr title="Burst damage duration until WEP capacitor is drained">CAP</abbr></td>
+											<td><abbr title="Burst damage duration until WEP capacitor or ammo are exhausted">DUR</abbr></td>
 										</tr>
 									</thead>
 									<tbody>
 										<tr>
 											<th><abbr title="Raw damage per second">RAW</abbr></th>
 											<td id="outfitting_stats_wpn_raw_burst"></td>
-											<th><abbr title="Current value using configured power distributor settings">CUR</abbr></th>
-											<td id="outfitting_stats_wpn_cur_cap"></td>
+											<th><abbr title="Current capacitor duration using configured power distributor settings">CUR</abbr></th>
+											<td id="outfitting_stats_wpn_cur_dur"></td>
 										</tr>
 										<tr>
 											<th><abbr title="Absolute damage proportion">ABS</abbr></th>
 											<td id="outfitting_stats_wpn_abs_burst"></td>
-											<th><abbr title="Maximum value with 4 WEP pips">MAX</abbr></th>
-											<td id="outfitting_stats_wpn_max_cap"></td>
+											<th><abbr title="Maximum capacitor duration with 4 WEP pips">MAX</abbr></th>
+											<td id="outfitting_stats_wpn_max_dur"></td>
+										</tr>
+										<tr>
+											<th><abbr title="Kinetic damage proportion">KIN</abbr></th>
+											<td id="outfitting_stats_wpn_kin_burst"></td>
+											<th><abbr title="Ammo duration with 4 WEP pips">AMM</abbr></th>
+											<td id="outfitting_stats_wpn_amm_dur"></td>
 										</tr>
 										<tr>
 											<th><abbr title="Thermal damage proportion">THM</abbr></th>
@@ -422,14 +488,14 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 											<th class="header"><abbr title="Sustainable damage proportion once WEP capacitor is drained">SUS</abbr></th>
 										</tr>
 										<tr>
-											<th><abbr title="Kinetic damage proportion">KIN</abbr></th>
-											<td id="outfitting_stats_wpn_kin_burst"></td>
+											<th><abbr title="Explosive damage proportion">EXP</abbr></th>
+											<td id="outfitting_stats_wpn_exp_burst"></td>
 											<th><abbr title="Current value using configured power distributor settings">CUR</abbr></th>
 											<td id="outfitting_stats_wpn_cur_sus"></td>
 										</tr>
 										<tr>
-											<th><abbr title="Explosive damage proportion">EXP</abbr></th>
-											<td id="outfitting_stats_wpn_exp_burst"></td>
+											<th><abbr title="Anti-xeno damage proportion">A-X</abbr></th>
+											<td id="outfitting_stats_wpn_axe_burst"></td>
 											<th><abbr title="Maximum value with 4 WEP pips">MAX</abbr></th>
 											<td id="outfitting_stats_wpn_max_sus"></td>
 										</tr>
@@ -444,23 +510,26 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 						<section>
 							<header>About</header>
 							<p>
-								This is a preview of EDSY's new design and layout. It is not yet complete! You can choose ships from the Shipyard, fit them
-								in Outfitting (by double-click or drag-and-drop), configure power settings, and apply engineering modifications, but many other
-								features are not yet implemented. In particular you cannot yet save or load modules or builds, share builds via URL hash, or
-								import or export builds. All of these features (and more!) are coming soon, so watch this space!
+								This is a preview of EDSY's new design and layout. It is not yet complete! Some features (such as stored modules and
+								API/Journal imports) have not yet been re-implemented, and there is plenty of polish and fine-tuning still to do.
+								Please give it a spin and report any problems or suggestions using the contact links below.
 							</p>
 							<p>
-								In the mean time, please try out the new design and send me your feedback using any of the links below.
+								Note that although stored builds are now supported on this preview site, they are still being kept separate from your
+								live builds from the old design of the site, to avoid the chance of corrupting those builds in case there are bugs.
+								Whenever you access this preview all of your live builds will be copied over for you to experiment with, but any
+								changes made on this preview site will not affect the live site, and deleted builds will be restored from the live site
+								the next time you return.
 							</p>
 						</section>
 						<section>
 							<header>Options</header>
 							<div>
-								<label class="checkbox left"><input type="checkbox" name="onlybest"><div></div><span>Hide Small Modules</span></label>
+								<label class="checkbox left"><input type="checkbox" name="onlybest"><div><div class="check"></div><span>Hide Small Modules</span></div></label>
 								&mdash; When enabled, the SLOT view of the module browser will display only the largest size class of each available module type.
 							</div>
 							<div>
-								<label class="checkbox left"><input type="checkbox" name="experimental"><div></div><span>Experimental Mode</span></label>
+								<label class="checkbox left"><input type="checkbox" name="experimental"><div><div class="check"></div><span>Experimental Mode</span></div></label>
 								&mdash; When enabled, the SLOT view of the module browser will display and allow you to fit modules that are too large for the
 								current slot, or are of a type not allowed by the ship or the slot. This option can be used to experiment with theoretical
 								"what-if" builds, but disallowed modules will be shown in red to signify that it will not be possible to actually fit them in-game.
