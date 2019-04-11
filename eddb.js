@@ -9,7 +9,7 @@ The Elite: Dangerous game logic and data in this file remains the property of Fr
 and is used here as authorized by Frontier Customer Services (https://forums.frontier.co.uk/showthread.php?t=5349).
 */
 var eddb = {
-	version : 3002,
+	version : 3004,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder',
@@ -1010,6 +1010,9 @@ var eddb = {
 		pitch      : { order: 16, abbr:'Pch',  name:'Pitch Speed',          unit:'&deg;/s',     min:    0,                  default:  0, scale:2,           desc:'Base pitch speed (in degrees per second) with outfitting mass equal to thruster optimal mass' }, // ship
 		yaw        : { order: 17, abbr:'Yaw',  name:'Yaw Speed',            unit:'&deg;/s',     min:    0,                  default:  0, scale:2,           desc:'Base yaw speed (in degrees per second) with outfitting mass equal to thruster optimal mass' }, // ship
 		roll       : { order: 18, abbr:'Rol',  name:'Roll Speed',           unit:'&deg;/s',     min:    0,                  default:  0, scale:2,           desc:'Base roll speed (in degrees per second) with outfitting mass equal to thruster optimal mass' }, // ship
+		minpitch   : { order: 19, abbr:'NPch', name:'Min Pitch Speed',      unit:'&deg;/s',     min:    0,                  default:'pitch',scale:2,        desc:'Minimum pitch speed (in degrees per second) with outfitting mass equal to thruster optimal mass and 0 ENG pips' }, // ship
+		minyaw     : { order: 19, abbr:'NYaw', name:'Min Yaw Speed',        unit:'&deg;/s',     min:    0,                  default:'yaw',  scale:2,        desc:'Minimum yaw speed (in degrees per second) with outfitting mass equal to thruster optimal mass and 0 ENG pips' }, // ship
+		minroll    : { order: 19, abbr:'NRol', name:'Min Roll Speed',       unit:'&deg;/s',     min:    0,                  default:'roll', scale:2,        desc:'Minimum roll speed (in degrees per second) with outfitting mass equal to thruster optimal mass and 0 ENG pips' }, // ship
 		shields    : { order: 19, abbr:'Shd',  name:'Shields',                                  min:    0,          step:1, default:  0, scale:0,           desc:'Base shield strength (modified by the shield generator module)' }, // ship
 		armour     : { order: 20, abbr:'Arm',  name:'Armour',                                   min:    0,          step:1, default:  0, scale:0,           desc:'Base armour strength (modified by the bulkhead module)' }, // ship
 		hardness   : { order: 21, abbr:'Hrd',  name:'Armour Hardness',                          min:    0,          step:1, default:  0, scale:0,           desc:'Armour hardness rating (compare to weapon armour pierce)' }, // ship
@@ -1069,7 +1072,7 @@ var eddb = {
 		syschg     : { order: 69, abbr:'SyR',  name:'Systems Recharge',     unit:'MW/s',        min:    0,                  default:  0, scale:2,           desc:'System capacitor recharge rate (nonsensically, in megawatts per second)' }, // distrib
 		repaircap  : { order: 70, abbr:'Cap',  name:'Repair Capacity',                          min:    0,          step:1, default:  0, scale:0,           desc:'Maximum repair material capacity' }, // afmu
 		repaircon  : { order: 71, abbr:'Cns',  name:'Consumption',          unit:'/s',          min:    0,                  default:  0, scale:1,           desc:'Rate of repair material consumption (in units per second)' }, // afmu
-		repairrtg  : { order: 72, abbr:'Rtg',  name:'Repair Rating',                            min:    0,                  default:  0, scale:3,           desc:'Module integrity repaired per material consumed' }, // afmu
+		repairrtg  : { order: 72, abbr:'Rtg',  name:'Repair Rating',                            min:    0,                  default:  1, scale:3,           desc:'Module integrity repaired per material consumed' }, // afmu
 		maxlimpet  : { order: 73, abbr:'Max',  name:'Max Active Limpets',                       min:    0,          step:1, default:  0, scale:0, modadd:1, desc:'Maximum active limpets' }, // limpet
 		targetrng  : { order: 74, abbr:'Rng',  name:'Target Range',         unit:'M',           min:    0,                  default:  0, scale:0,           desc:'Maximum limpet target range (in meters)' }, // limpet
 		limpettime : { order: 75, abbr:'Time', name:'Limpet Life Time',     unit:'s',           min:    0,          time:1, default:  0, scale:0,           desc:'Maximum limpet life time (in seconds)' }, // limpet
@@ -1088,22 +1091,29 @@ var eddb = {
 		vcount     : { order: 86, abbr:'Vcls', name:'Vehicle Count',                            min:    1,          step:1, default:  1, scale:0,           desc:'Maximum number of vehicles that can be deployed per slot' }, // fh
 		bins       : { order: 87, abbr:'Bins', name:'Bin Count',                                min:    0,          step:1, default:  0, scale:0, modadd:1, desc:'Number of bins' }, // refinery
 		dps        : { order: 88, abbr:'DPS',  name:'Damage per Second',    unit:'/s',          min:    0,                  default:  0, scale:2,           desc:'Raw damage per second, not including reload time' }, // wpn
+		sdps       : { order: 88, abbr:'SDPS', name:'Sustained DPS',        unit:'/s',          min:    0,                  default:  0, scale:2,           desc:'Sustained damage per second, including reload time' }, // wpn
 		damage     : { order: 89, abbr:'Dmg',  name:'Damage',                                   min:    0,                  default:  0, scale:1,           desc:'Raw damage per shot, or per second for beams' }, // wpn
 		range      : { order: 90, abbr:'Rng',  name:'Range',                unit:'M',           min:    0,                  default:  0, scale:0,           desc:'Maximum range (in meters)' }, // ecm
 		distdraw   : { order: 91, abbr:'Dst',  name:'Distributor Draw',     unit:'MW',   bad:1, min:    0,                  default:  0, scale:2,           desc:'Power distributor capacitor draw (in megawatts per shot, per second, or per shield unit)' }, // wpn,sg
 	//	distdraw   : { order: 92,              name:'Active Power Draw',    unit:'MW',   bad:1, min:    0,                  default:  0, scale:2,           desc:'Power distributor capacitor draw (in megawatts)' }, // ecm
+		eps        : { order: 91, abbr:'EPS',  name:'Energy per Second',    unit:'MW/s', bad:1, min:    0,                  default:  0, scale:2,           desc:'Power distributor capacitor draw (in megawatts per second), not including reload time' }, // wpn
+		seps       : { order: 91, abbr:'SEPS', name:'Sustained EPS',        unit:'MW/s', bad:1, min:    0,                  default:  0, scale:2,           desc:'Sustained power distributor capacitor draw (in megawatts per second), including reload time' }, // wpn
 		thmload    : { order: 93, abbr:'ThL',  name:'Thermal Load',                      bad:1, min:    0,                  default:  0, scale:1,           desc:'Waste heat generated per use, or per second' }, // unit:'/s' without rof (wpn-rof,ecm,thrust,fsd), otherwise per-shot (wpn+rof,chaff,pointdef), except per-use for scb
-		heateff    : { order: 94, abbr:'HEf',  name:'Heat Efficiency',      unit:'/MW',  bad:1, min:    0,                  default:  0, scale:1,           desc:'Waste heat generated per megawatt consumed' }, // power
+		hps        : { order: 94, abbr:'HPS',  name:'Heat per Second',      unit:'/s',   bad:1, min:    0,                  default:  0, scale:1,           desc:'Waste heat generated per second, not including reload time' }, // wpn
+		shps       : { order: 94, abbr:'SHPS', name:'Sustained HPS',        unit:'/s',   bad:1, min:    0,                  default:  0, scale:1,           desc:'Waste heat generated per second, including reload time' }, // wpn
+		heateff    : { order: 94, abbr:'HEf',  name:'Heat Efficiency',      unit:'/MW',  bad:1, min:    0,                  default:  0, scale:2,           desc:'Waste heat generated per megawatt consumed' }, // power
 		maxfuel    : { order: 95, abbr:'Max',  name:'Max Fuel per Jump',    unit:'T',           min:    0,                  default:  0, scale:2,           desc:'Maximum fuel use per jump (in tons)' }, // fsd
 		kinres     : { order: 96, abbr:'KiR',  name:'Kinetic Resistance',   unit:'%',           min:-1000, max:100,         default:  0, scale:1, modmod:-100, desc:'Resistance to kinetic damage' }, // shboost,bulkhead,hrp,sg
 		thmres     : { order: 97, abbr:'ThR',  name:'Thermal Resistance',   unit:'%',           min:-1000, max:100,         default:  0, scale:1, modmod:-100, desc:'Resistance to thermal damage' }, // shboost,bulkhead,hrp,sg
 		expres     : { order: 98, abbr:'ExR',  name:'Explosive Resistance', unit:'%',           min:-1000, max:100,         default:  0, scale:1, modmod:-100, desc:'Resistance to explosive damage' }, // shboost,bulkhead,hrp,sg
 		caures     : { order: 99, abbr:'CaR',  name:'Caustic Resistance',   unit:'%',           min:-1000, max:100,         default:  0, scale:1, modmod:-100, desc:'Resistance to caustic damage' }, // mahrp
+		axeres     : { order: 99, abbr:'AXR',  name:'Anti-Xeno Resistance', unit:'%',           min:-1000, max:100,         default:  0, scale:1, modmod:-100, desc:'Resistance to anti-xeno damage' }, // TODO hulls 90%, shields 95%
 		pierce     : { order: 99, abbr:'Prc',  name:'Armour Piercing',                          min:    0,                  default:  0, scale:0,           desc:'Armour pierce rating (compare to target ship armour hardness)' }, // wpn
 		maxrng     : { order:100, abbr:'Rng',  name:'Maximum Range',        unit:'M',           min:    0,                  default:  0, scale:0,           desc:'Maximum range (in meters)' }, // wpn,sensor
 		typemis    : { order:101, abbr:'Typ',  name:'Typical Emission',     unit:'M',           min:    0,                  default:  0, scale:0,           desc:'Range to resolve a contact with typical emissions (in meters)' }, // sensor
 		shotspd    : { order:102, abbr:'Spd',  name:'Shot Speed',           unit:'M/s',         min:    0,                  default:  0, scale:0,           desc:'Projectile speed (in meters per second)' }, // wpn
-		rof        : { order:103, abbr:'ROF',  name:'Rate of Fire',         unit:'/s',          min:    0,                  default:  1, scale:1,           desc:'Rate of fire (in shots per second)' }, // wpn
+		rof        : { order:103, abbr:'ROF',  name:'Rate of Fire',         unit:'/s',          min:    0,                  default:  1, scale:1,           desc:'Raw rate of fire (in shots per second), not including reload time' }, // wpn
+		srof       : { order:103, abbr:'SROF', name:'Sustained ROF',        unit:'/s',          min:    0,                  default:  1, scale:1,           desc:'Sustained rate of fire (in shots per second), including reload time' }, // wpn
 		bstint     : { order:104, abbr:'BInt', name:'Burst Interval',       unit:'s',    bad:1, min:    0,                  default:  1, scale:2,           desc:'Time between shots or busts (in seconds)' }, // wpn
 		bstrof     : { order:105, abbr:'BROF', name:'Burst Rate of Fire',   unit:'/s',          min:    0,                  default:  1, scale:1, modset:1, desc:'Burst rate of fire (in shots per second)' }, // wpn
 		bstsize    : { order:106, abbr:'BSz',  name:'Burst Size',                               min:    1,          step:1, default:  1, scale:0, modset:1, desc:'Number of shots in a burst' }, // wpn
@@ -1498,7 +1508,7 @@ var eddb = {
 		wpnx_feca : { name:'Feedback Cascade', damage:-20, thmload:-40, special:'Target shield cell disrupted' },
 		wpnx_fosh : { name:'Force Shell', shotspd:-16.6666666666667, special:'Target pushed off course' },
 		wpnx_fsin : { name:'FSD Interrupt', damage:-30, bstint:50, special:'Target FSD reboots' },
-		wpnx_hys : { name:'High Yield Shell', bstint:11.1111111111111, special:'Damage partly explosive; target module damage' }, // TODO: test damage type distribution
+		wpnx_hys : { name:'High Yield Shell', bstint:11.1111111111111, special:'Damage partly explosive; target module damage' }, // TODO: test damage type distribution; -50% damage mod?
 		wpnx_inro : { name:'Incendiary Rounds', bstint:5.263157894737, thmload:200, special:'Damage mostly thermal' },
 		wpnx_inim : { name:'Inertial Impact', damage:50, jitter:3, special:'Damage half kinetic' },
 		wpnx_iodi : { name:'Ion Disruption', special:'Target thrusters reboot' },
@@ -1585,6 +1595,7 @@ var eddb = {
 		hel : {
 			name:'Beam Lasers',
 			modulenames:{'Beam Laser':1},
+			keyattrs:['damage','distdraw','thmload','maxrng'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','dmgfall','jitter'],
 			blueprints:['wpn_eff','wpn_lw','wpn_lr','wpn_oc','wpn_sr','wpn_stu'],
 			expeffects:['wpnx_cose','miscx_db','miscx_fc','wpnx_os','wpnx_rese','miscx_sd','wpnx_thco','wpnx_thsh','wpnx_thve'],
@@ -1593,6 +1604,7 @@ var eddb = {
 		hul : {
 			name:'Burst Lasers',
 			modulenames:{'Burst Laser':1},
+			keyattrs:['damage','distdraw','thmload','maxrng'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','bstint','_bstsize','jitter','dmgfall'],
 			blueprints:['wpn_eff','wpn_foc','wpn_lw','wpn_lr','wpn_oc','wpn_rf','wpn_sr','wpn_stu'],
 			expeffects:['wpnx_cose','miscx_db','miscx_fc','wpnx_inim','wpnx_muse','wpnx_os','wpnx_phse','wpnx_scsp','miscx_sd','wpnx_thsh'],
@@ -1601,6 +1613,8 @@ var eddb = {
 		hc : {
 			name:'Cannons',
 			modulenames:{'Cannon':1},
+			ammocost:20,
+			keyattrs:['damage','distdraw','thmload','maxrng'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','bstint','ammoclip','ammomax','rldtime','jitter','dmgfall'], // shotspd?
 			blueprints:['wpn_eff','wpn_hc','wpn_lw','wpn_lr','wpn_oc','wpn_rf','wpn_sr','wpn_stu'],
 			expeffects:['wpnx_aulo','wpnx_difi','miscx_db','miscx_fc','wpnx_fosh','wpnx_hys','wpnx_muse','wpnx_os','wpnx_smro','miscx_sd','wpnx_thca'],
@@ -1610,11 +1624,14 @@ var eddb = {
 			name:'Experimental',
 			modulenames:{},
 			singleton:4,
+			keyattrs:['damage','distdraw','thmload','maxrng'],
 		},
 		
 		hfc : {
 			name:'Fragment Cannons',
 			modulenames:{'Fragment Cannon':1},
+			ammocost:17,
+			keyattrs:['damage','distdraw','thmload','maxrng'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','bstint','bstsize','ammoclip','ammomax','rldtime','jitter','bstrof'], // shotspd?
 			blueprints:['wpn_ds','wpn_eff','wpn_hc','wpn_lw','wpn_oc','wpn_rf','wpn_stu'],
 			expeffects:['wpnx_cosh','wpnx_dash','miscx_db','wpnx_drmu','miscx_fc','wpnx_inro','wpnx_muse','wpnx_os','wpnx_scsh','miscx_sd'],
@@ -1623,6 +1640,8 @@ var eddb = {
 		hm : {
 			name:'Mines',
 			modulenames:{},
+			ammocost:209,
+			keyattrs:['damage','distdraw','thmload'],
 			modifiable:['mass','integ','pwrdraw','damage','thmload','pierce','bstint','ammoclip','ammomax','rldtime','jitter'],
 			blueprints:['wpn_hc','wpn_lw','wpn_rf','wpn_stu'],
 			expeffects:['miscx_db','wpnx_emmu','miscx_fc','wpnx_iodi','wpnx_ovmu','wpnx_os','wpnx_raca','wpnx_reca','wpnx_slc','miscx_sd'],
@@ -1631,12 +1650,15 @@ var eddb = {
 		hml : {
 			name:'Mining Lasers',
 			modulenames:{'Mining Laser':1},
+			keyattrs:['distdraw','thmload','maxrng'],
 		//	modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng'],
 		},
 		
 		hmr : {
 			name:'Missiles',
 			modulenames:{'Missile Rack':1, 'Seeker Missile Rack':1},
+			ammocost:500,
+			keyattrs:['damage','distdraw','thmload'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','bstint','ammoclip','ammomax','rldtime','jitter'], // shotspd?
 			blueprints:['wpn_hc','wpn_lw','wpn_rf','wpn_stu'],
 			expeffects:['miscx_db','wpnx_emmu','miscx_fc','wpnx_fsin','wpnx_muse','wpnx_ovmu','wpnx_os','wpnx_pemu','miscx_sd','wpnx_thca'],
@@ -1645,6 +1667,8 @@ var eddb = {
 		hmc : {
 			name:'Multi-Cannons',
 			modulenames:{'Multi-cannon':1},
+			ammocost:1,
+			keyattrs:['damage','distdraw','thmload','maxrng'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','bstint','ammoclip','ammomax','rldtime','jitter','dmgfall'], // shotspd?
 			blueprints:['wpn_eff','wpn_hc','wpn_lw','wpn_lr','wpn_oc','wpn_rf','wpn_sr','wpn_stu'],
 			expeffects:['wpnx_aulo','wpnx_cosh','miscx_db','wpnx_emmu','miscx_fc','wpnx_inro','wpnx_muse','wpnx_os','wpnx_smro','miscx_sd','wpnx_thsh'],
@@ -1653,6 +1677,8 @@ var eddb = {
 		hpa : {
 			name:'Plasma Accelerators',
 			modulenames:{},
+			ammocost:200,
+			keyattrs:['damage','distdraw','thmload','maxrng'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','bstint','ammoclip','ammomax','rldtime','jitter','dmgfall'], // shotspd?
 			blueprints:['wpn_eff','wpn_foc','wpn_lw','wpn_lr','wpn_oc','wpn_rf','wpn_sr','wpn_stu'],
 			expeffects:['wpnx_dash','wpnx_difi','miscx_db','miscx_fc','wpnx_muse','wpnx_os','wpnx_phse','wpnx_plsl','miscx_sd','wpnx_tlb','wpnx_thco'],
@@ -1661,6 +1687,7 @@ var eddb = {
 		hpl : {
 			name:'Pulse Lasers',
 			modulenames:{'Pulse Laser':1},
+			keyattrs:['damage','distdraw','thmload','maxrng'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','bstint','jitter','dmgfall'],
 			blueprints:['wpn_eff','wpn_foc','wpn_lw','wpn_lr','wpn_oc','wpn_rf','wpn_sr','wpn_stu'],
 			expeffects:['wpnx_cose','miscx_db','wpnx_emmu','miscx_fc','wpnx_muse','wpnx_os','wpnx_phse','wpnx_scsp','miscx_sd','wpnx_thsh'],
@@ -1669,6 +1696,8 @@ var eddb = {
 		hrg : {
 			name:'Rail Guns',
 			modulenames:{},
+			ammocost:75,
+			keyattrs:['damage','distdraw','thmload','maxrng'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','bstint','ammoclip','ammomax','rldtime','jitter','dmgfall'],
 			blueprints:['wpn_hc','wpn_lw','wpn_lr','wpn_sr','wpn_stu'],
 			expeffects:['miscx_db','wpnx_feca','miscx_fc','wpnx_muse','wpnx_os','hrgx_plsl','miscx_sd','wpnx_supe'],
@@ -1677,6 +1706,8 @@ var eddb = {
 		htp : {
 			name:'Torpedoes',
 			modulenames:{},
+			ammocost:15000,
+			keyattrs:['damage','distdraw','thmload'],
 			modifiable:['mass','integ','pwrdraw','damage','thmload','pierce','bstint','ammoclip','rldtime','jitter'], // shotspd?
 			blueprints:['wpn_lw','wpn_stu'],
 			expeffects:['miscx_db','miscx_fc','wpnx_mlm','wpnx_os','wpnx_pepa','wpnx_reca','miscx_sd'],
@@ -1686,6 +1717,8 @@ var eddb = {
 		ucl : {
 			name:'Chaff Launchers',
 			modulenames:{},
+			ammocost:30,
+			keyattrs:['ammomax','jamdur'],
 			modifiable:['mass','integ','pwrdraw','distdraw','thmload','bstint','ammoclip','ammomax','rldtime'], // jamdur?
 			blueprints:['ucl_ammo','misc_lw','misc_rf','misc_sh'],
 		},
@@ -1693,6 +1726,7 @@ var eddb = {
 		uec : {
 			name:'ECMs',
 			modulenames:{},
+			keyattrs:['cooldown','duration'],
 			modifiable:['mass','integ','pwrdraw','distdraw','thmload'], // range? duration? cooldown?
 			blueprints:['misc_lw','misc_rf','misc_sh'],
 		},
@@ -1701,11 +1735,14 @@ var eddb = {
 			name:'Experimental',
 			modulenames:{},
 			singleton:1,
+			keyattrs:['cooldown','duration','scanrng','scantime'],
 		},
 		
 		uhsl : {
 			name:'Heat Sink Launchers',
 			modulenames:{},
+			ammocost:25,
+			keyattrs:['thmdrain','ammomax'],
 			modifiable:['mass','integ','pwrdraw','distdraw','bstint','ammoclip','ammomax','rldtime'], // duration? thmdrain?
 			blueprints:['uhsl_ammo','misc_lw','misc_rf','misc_sh'],
 		},
@@ -1714,6 +1751,7 @@ var eddb = {
 			name:'Kill Warrant Scanners',
 			modulenames:{'Kill Warrant Scanner':1},
 			singleton:1,
+			keyattrs:['scanrng','scantime'],
 			modifiable:['mass','integ','pwrdraw','boottime','scanrng','maxangle','scantime'],
 			blueprints:['scan_fs','misc_lw','scan_lr','misc_rf','misc_sh','scan_wa'],
 		},
@@ -1722,6 +1760,7 @@ var eddb = {
 			name:'Manifest Scanners',
 			modulenames:{'Manifest Scanner':1},
 			singleton:1,
+			keyattrs:['scanrng','scantime'],
 			modifiable:['mass','integ','pwrdraw','boottime','scanrng','maxangle','scantime'],
 			blueprints:['scan_fs','misc_lw','scan_lr','misc_rf','misc_sh','scan_wa'],
 		},
@@ -1729,6 +1768,8 @@ var eddb = {
 		upd : {
 			name:'Point Defence',
 			modulenames:{},
+			ammocost:1,
+			keyattrs:['maxrng'],
 			modifiable:['mass','integ','pwrdraw','damage','thmload','maxrng','bstint','ammoclip','ammomax','rldtime','jitter'], // shotspd?
 			blueprints:['upd_ammo','misc_lw','misc_rf','misc_sh'],
 		},
@@ -1736,6 +1777,7 @@ var eddb = {
 		usb : {
 			name:'Shield Boosters',
 			modulenames:{'Shield Booster':1},
+			keyattrs:['shieldbst','thmres'],
 			modifiable:['mass','integ','pwrdraw','shieldbst','kinres','thmres','expres'],
 			blueprints:['usb_br','usb_hd','usb_kr','usb_ra','usb_tr'],
 			expeffects:['usbx_bb','miscx_db','miscx_fc','usbx_fb','usbx_sc','usbx_tb'],
@@ -1745,6 +1787,7 @@ var eddb = {
 			name:'Wake Scanners',
 			modulenames:{'Frame Shift Wake Scanner':1},
 			singleton:1,
+			keyattrs:['scanrng','scantime'],
 			modifiable:['mass','integ','pwrdraw','boottime','scanrng','maxangle','scantime'],
 			blueprints:['scan_fs','misc_lw','scan_lr','misc_rf','misc_sh','scan_wa'],
 		},
@@ -1758,6 +1801,7 @@ var eddb = {
 		cbh : {
 			name:'Bulkheads',
 			modulenames:{},
+			keyattrs:['hullbst','kinres'],
 			modifiable:['mass','hullbst','kinres','thmres','expres'],
 			blueprints:['cbh_br','cbh_hd','cbh_kr','cbh_lw','cbh_tr'],
 			expeffects:['cbhx_ap','cbhx_dp','cbhx_lp','cbhx_rp'],
@@ -1766,6 +1810,7 @@ var eddb = {
 		cpp : {
 			name:'Power Plants',
 			modulenames:{'Power Plant':1},
+			keyattrs:['heateff'],
 			modifiable:['mass','integ','pwrcap','heateff'],
 			blueprints:['cpp_arm','cpp_le','cpp_oc'],
 			expeffects:['miscx_db','cppx_mon','miscx_sd','cppx_ts'],
@@ -1774,6 +1819,7 @@ var eddb = {
 		ct : {
 			name:'Thrusters',
 			modulenames:{'Thrusters':1},
+			keyattrs:['optmass','optmul'],
 			modifiable:['mass','integ','pwrdraw','optmass','optmul','thmload'],
 			blueprints:['ct_ct','ct_dt','ct_str'],
 			expeffects:['miscx_db','ctx_ddr','ctx_ddi','miscx_sd','ctx_ts'],
@@ -1782,6 +1828,7 @@ var eddb = {
 		cfsd : {
 			name:'Frame Shift Drives',
 			modulenames:{'Frame Shift Drive':1},
+			keyattrs:['optmass','maxfuel'],
 			modifiable:['mass','integ','pwrdraw','boottime','optmass','thmload','maxfuel'],
 			blueprints:['cfsd_fb','cfsd_ir','cfsd_sh'],
 			expeffects:['cfsdx_dc','cfsdx_db','cfsdx_mm','miscx_sd','cfsdx_ts'],
@@ -1790,6 +1837,7 @@ var eddb = {
 		cls : {
 			name:'Life Supports',
 			modulenames:{'Life Support':1},
+			keyattrs:['emgcylife'],
 			modifiable:['mass','integ','pwrdraw','boottime'], //emgcylife?
 			blueprints:['misc_lw4','misc_rf4','misc_sh4'],
 		},
@@ -1797,6 +1845,7 @@ var eddb = {
 		cpd : {
 			name:'Power Distributors',
 			modulenames:{'Power Distributor':1},
+			keyattrs:['engcap','engchg'],
 			modifiable:['mass','integ','pwrdraw','boottime','wepcap','wepchg','engcap','engchg','syscap','syschg'],
 			blueprints:['cpd_ce','cpd_ef','cpd_hc','cpd_sh','cpd_sf','cpd_wf'],
 			expeffects:['cpdx_cc','miscx_db','miscx_fc','miscx_sd','cpdx_sc'],
@@ -1805,6 +1854,7 @@ var eddb = {
 		cs : {
 			name:'Sensors',
 			modulenames:{'Sensors':1},
+			keyattrs:['typemis','maxrng'],
 			modifiable:['mass','integ','pwrdraw','boottime','maxangle','typemis'], // maxrng?
 			blueprints:['cs_lw','cs_lr','cs_wa'],
 		},
@@ -1812,12 +1862,15 @@ var eddb = {
 		cft : {
 			name:'Fuel Tanks',
 			modulenames:{},
+			keyattrs:['fuelcap'],
 		},
 		
 		
 		iafmu : {
 			name:'Auto Field-Maintenance Units',
 			modulenames:{'Auto Field-Maintenance Unit':1},
+			ammocost:1,
+			keyattrs:['repaircap'],
 			modifiable:['integ','pwrdraw','boottime'], // repaircap? repaircon? repairrtg?
 			blueprints:['misc_sh4'],
 		},
@@ -1825,11 +1878,13 @@ var eddb = {
 		icr : {
 			name:'Cargo Racks',
 			modulenames:{},
+			keyattrs:['cargocap'],
 		},
 		
 		iclc : {
 			name:'Collection Limpets',
 			modulenames:{'Collector Limpet Controller':1},
+			keyattrs:['maxlimpet','limpettime'],
 			modifiable:['mass','integ','pwrdraw','boottime'], // maxlimpet? targetrng? limpettime? maxspd? multispd?
 			blueprints:['misc_lw','misc_rf','misc_sh'],
 		},
@@ -1837,6 +1892,7 @@ var eddb = {
 		idlc : {
 			name:'Decontamination Limpets',
 			modulenames:{},
+			keyattrs:['maxlimpet','targetrng'],
 		//	modifiable:['mass','integ','pwrdraw','boottime'], // maxlimpet? targetrng? limpettime? maxspd? multispd?
 		},
 		
@@ -1849,6 +1905,7 @@ var eddb = {
 		ifsdi : {
 			name:'FSD Interdictors',
 			modulenames:{'Frame Shift Drive Interdictor':1},
+			keyattrs:['timerng','facinglim'],
 			modifiable:['mass','integ','pwrdraw','boottime','timerng','facinglim'],
 			blueprints:['ifsdi_eca','ifsdi_lr'],
 		},
@@ -1857,13 +1914,16 @@ var eddb = {
 			name:'Fighter Hangars',
 			modulenames:{},
 			singleton:1,
-		//	modifiable:['mass','integ','pwrdraw','boottime'], // vslots? ammoclip?
+			ammocost: 1030,
+			keyattrs:['vslots','vcount'],
+		//	modifiable:['mass','integ','pwrdraw','boottime'], // vslots? vcount?
 		},
 		
 		ifs : {
 			name:'Fuel Scoops',
 			modulenames:{'Fuel Scoop':1},
 			singleton:1,
+			keyattrs:['scooprate'],
 			modifiable:['integ','pwrdraw','boottime'], // scooprate?
 			blueprints:['misc_sh4'],
 		},
@@ -1871,6 +1931,7 @@ var eddb = {
 		iftlc : {
 			name:'Fuel Transfer Limpets',
 			modulenames:{'Fuel Transfer Limpet Controller':1},
+			keyattrs:['maxlimpet','targetrng'],
 			modifiable:['mass','integ','pwrdraw','boottime'], // maxlimpet? targetrng? limpettime? maxspd? fuelxfer?
 			blueprints:['misc_lw','misc_rf','misc_sh'],
 		},
@@ -1878,6 +1939,7 @@ var eddb = {
 		ihblc : {
 			name:'Hatch Breaker Limpets',
 			modulenames:{'Hatch Breaker Limpet Controller':1},
+			keyattrs:['maxlimpet','targetrng'],
 			modifiable:['mass','integ','pwrdraw','boottime'], // maxlimpet? targetrng? limpettime? maxspd? hacktime? mincargo? maxcargo?
 			blueprints:['misc_lw','misc_rf','misc_sh'],
 		},
@@ -1885,6 +1947,7 @@ var eddb = {
 		ihrp : {
 			name:'Hull Reinforcements',
 			modulenames:{'Hull Reinforcement Package':1},
+			keyattrs:['hullrnf','kinres'],
 			modifiable:['mass','hullrnf','kinres','thmres','expres','hullbst'],
 			blueprints:['ihrp_br','ihrp_hd','ihrp_kr','ihrp_lw','ihrp_tr'],
 			expeffects:['ihrpx_ap','ihrpx_dp','ihrpx_lp','ihrpx_rp'],
@@ -1893,28 +1956,34 @@ var eddb = {
 		imahrp : {
 			name:'Meta Alloy Hull Reinforcements',
 			modulenames:{'Meta Alloy Hull Reinforcement Package':1},
+			keyattrs:['hullrnf','caures'],
 		},
 		
 		imrp : {
 			name:'Module Reinforcements',
 			modulenames:{'Module Reinforcement Package':1},
+			keyattrs:['integ','dmgprot'],
 		},
 		
 		ipc : {
 			name:'Passenger Cabins',
 			modulenames:{'Economy Class Passenger Cabin':1, 'Business Class Passenger Cabin':1, 'First Class Passenger Cabin':1, 'Luxury Class Passenger Cabin':1},
+			keyattrs:['cabincap'],
 		//	modifiable:['mass'], // cabincap?
 		},
 		
 		ipvh : {
 			name:'Planetary Vehicle Hangars',
 			modulenames:{'Planetary Vehicle Hangar':1},
+			ammocost: 1030,
+			keyattrs:['vslots'],
 		//	modifiable:['mass','integ','pwrdraw','boottime'], // vslots?
 		},
 		
 		iplc : {
 			name:'Prospecting Limpets',
 			modulenames:{'Prospector Limpet Controller':1},
+			keyattrs:['maxlimpet','limpettime'],
 			modifiable:['mass','integ','pwrdraw','boottime'], // maxlimpet? limpettime? maxspd?
 			blueprints:['misc_lw','misc_rf','misc_sh'],
 		},
@@ -1922,6 +1991,7 @@ var eddb = {
 		inlc : {
 			name:'Recon Limpets',
 			modulenames:{},
+			keyattrs:['maxlimpet','targetrng'],
 		//	modifiable:['mass','integ','pwrdraw','boottime'], // maxlimpet? targetrng? maxspd?
 		},
 		
@@ -1929,6 +1999,7 @@ var eddb = {
 			name:'Refineries',
 			modulenames:{'Refinery':1},
 			singleton:1,
+			keyattrs:['bins'],
 			modifiable:['integ','pwrdraw','boottime'], // bins?
 			blueprints:['misc_sh4'],
 		},
@@ -1936,17 +2007,21 @@ var eddb = {
 		irlc : {
 			name:'Repair Limpets',
 			modulenames:{'Repair Limpet Controller':1},
+			keyattrs:['maxlimpet','repaircap'],
 		//	modifiable:['mass','integ','pwrdraw','boottime'], // maxlimpet? limpettime? maxspd?
 		},
 		
 		islc : {
 			name:'Research Limpets',
 			modulenames:{},
+			keyattrs:['maxlimpet','targetrng'],
 		},
 		
 		iscb : {
 			name:'Shield Cell Banks',
 			modulenames:{'Shield Cell Bank':1},
+			ammocost:300,
+			keyattrs:['shieldrnf','ammomax'],
 			modifiable:['mass','integ','pwrdraw','boottime','spinup','duration','shieldrnf','thmload','ammomax'],
 			blueprints:['iscb_rc','iscb_sp'],
 			expeffects:['iscbx_bc','miscx_db','miscx_fc','iscbx_rc','miscx_sd'],
@@ -1956,6 +2031,7 @@ var eddb = {
 			name:'Shield Generators',
 			modulenames:{'Shield Generator':1},
 			singleton:1,
+			keyattrs:['optmul','thmres'],
 			modifiable:['mass','integ','pwrdraw','boottime','optmass','optmul','genrate','bgenrate','distdraw','kinres','thmres','expres'],
 			blueprints:['isg_elp','isg_kr','isg_rf','isg_tr'],
 			expeffects:['miscx_db','isgx_fc','isgx_fb','isgx_hc','isgx_ld','isgx_mw','miscx_sd','isgx_tb'],
@@ -1965,6 +2041,7 @@ var eddb = {
 			name:'Stellar Body Scanners',
 			modulenames:{},
 			singleton:1,
+			keyattrs:['activerng','passiverng'],
 		//	modifiable:['mass','integ'], // activerng? passiverng? maxangle? scantime?
 		},
 		
@@ -1972,6 +2049,7 @@ var eddb = {
 			name:'Surface Scanners',
 			modulenames:{},
 			singleton:1,
+			keyattrs:['scanrngmod','scanratemod'],
 			modifiable:['mass','boottime','pwrdraw','scanrngmod','scanangmod','scanratemod'],
 			blueprints:['iss_fs','iss_lr','iss_wa'],
 		},
@@ -1999,7 +2077,7 @@ var eddb = {
 		61250 : { mtype:'hul', cost:   23000, name:'Burst Laser',                 mount:'F',              class:2, rating:'E', mass: 4.00, integ:40, pwrdraw:1.05, boottime:0, dps:13.045, damage: 3.530, distdraw:0.500, thmload:0.78, pierce: 35, maxrng:3000,               rof:3.695, bstint:0.630, bstrof:11, bstsize:3,                                                   brcdmg: 3.0, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049401, fdname:'Hpt_PulseLaserBurst_Fixed_Medium' },
 		61261 : { mtype:'hul', cost:   48500, name:'Burst Laser',                 mount:'G',              class:2, rating:'F', mass: 4.00, integ:40, pwrdraw:1.04, boottime:0, dps:10.296, damage: 2.450, distdraw:0.490, thmload:0.67, pierce: 35, maxrng:3000,               rof:4.203, bstint:0.560, bstrof:13, bstsize:3,                                                   brcdmg: 2.1, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049405, fdname:'Hpt_PulseLaserBurst_Gimbal_Medium' },
 		61262 : { mtype:'hul', cost:  162800, name:'Burst Laser',                 mount:'T',              class:2, rating:'F', mass: 4.00, integ:40, pwrdraw:0.98, boottime:0, dps: 6.760, damage: 1.720, distdraw:0.275, thmload:0.38, pierce: 35, maxrng:3000,               rof:3.930, bstint:0.630, bstrof:15, bstsize:3,                                                   brcdmg: 0.9, minbrc:60, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049408, fdname:'Hpt_PulseLaserBurst_Turret_Medium' },
-		61340 : { mtype:'hul', cost:  140400, name:'Burst Laser',                 mount:'F',              class:3, rating:'D', mass: 8.00, integ:64, pwrdraw:1.66, boottime:0, dps:20.785, damage: 7.730, distdraw:1.110, thmload:1.70, pierce: 52, maxrng:3000,               rof:2.689, bstint:0.830, bstrof: 7, bstsize:3,                                                   brcdmg: 3.9, minbrc:60, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049402, fdname:'Hpt_PulseLaserBurst_Fixed_Large' },
+		61340 : { mtype:'hul', cost:  140400, name:'Burst Laser',                 mount:'F',              class:3, rating:'D', mass: 8.00, integ:64, pwrdraw:1.66, boottime:0, dps:20.785, damage: 7.730, distdraw:1.110, thmload:1.70, pierce: 52, maxrng:3000,               rof:2.689, bstint:0.830, bstrof: 7, bstsize:3,                                                   brcdmg: 3.9, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049402, fdname:'Hpt_PulseLaserBurst_Fixed_Large' },
 		61351 : { mtype:'hul', cost:  281600, name:'Burst Laser',                 mount:'G',              class:3, rating:'E', mass: 8.00, integ:64, pwrdraw:1.65, boottime:0, dps:16.605, damage: 5.160, distdraw:1.030, thmload:1.42, pierce: 52, maxrng:3000,               rof:3.218, bstint:0.710, bstrof: 9, bstsize:3,                                                   brcdmg: 4.4, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049406, fdname:'Hpt_PulseLaserBurst_Gimbal_Large' },
 		61352 : { mtype:'hul', cost:  800400, name:'Burst Laser',                 mount:'T',              class:3, rating:'E', mass: 8.00, integ:64, pwrdraw:1.57, boottime:0, dps:11.010, damage: 3.530, distdraw:0.560, thmload:0.78, pierce: 52, maxrng:3000,               rof:3.119, bstint:0.780, bstrof:11, bstsize:3,                                                   brcdmg: 1.8, minbrc:60, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049409, fdname:'Hpt_PulseLaserBurst_Turret_Large' },
 		61450 : { mtype:'hul', cost:  281600, name:'Burst Laser',                 mount:'F',              class:4, rating:'E', mass:16.00, integ:80, pwrdraw:2.58, boottime:0, dps:32.259, damage:20.610, distdraw:2.980, thmload:4.53, pierce: 65, maxrng:3000,               rof:1.565, bstint:1.250, bstrof: 3, bstsize:3,                                                   brcdmg:17.5, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049403, fdname:'Hpt_PulseLaserBurst_Fixed_Huge' },
@@ -2030,9 +2108,9 @@ var eddb = {
 		71332 : { mtype:'hfc', cost: 5836800, name:'Fragment Cannon',             mount:'T',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.29, boottime:0,dps:143.280, damage: 2.985, distdraw:0.370, thmload:0.74, pierce: 45, maxrng:2000, shotspd: 667, rof:4.000, bstint:0.250,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 2.7, minbrc:40, maxbrc:80, jitter:5.0, dmgtype:'K', kinwgt:1, dmgfall:1800, fdid:128671322, fdname:'Hpt_Slugshot_Turret_Large' },
 		71334 : { mtype:'hfc', cost: 1751040, name:'Pacifier Frag-Cannon',        mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.02, boottime:0,dps:216.000, damage: 3.960, distdraw:0.570, thmload:1.13, pierce: 45, maxrng:3000, shotspd:1000, rof:4.545, bstint:0.220,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 3.1, minbrc:40, maxbrc:80, jitter:1.7, dmgtype:'K', kinwgt:1, dmgfall:1800, fdid:128671343, fdname:'Hpt_Slugshot_Fixed_Large_Range' }, // verify
 		
-		80190 : { mtype:'hm',  cost:   24260, name:'Mine Launcher',               mount:'F',              class:1, rating:'I', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0, dps:44.000, damage:44.000,                 thmload:5.00, pierce: 60,                            rof:1.000, bstint:1.000,                      ammoclip: 1, ammomax:  36,            rldtime:2.0,              minbrc: 0, maxbrc: 0,             dmgtype:'ET',expwgt:26/44, thmwgt:18/44, dmgfall:100000, fdid:128049500, fdname:'Hpt_MineLauncher_Fixed_Small' },
-		80191 : { mtype:'hm',  cost:   36390, name:'Shock Mine Launcher',         mount:'F',              class:1, rating:'I', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0, dps:32.000, damage:32.000,                 thmload:5.00, pierce: 60,                            rof:1.000, bstint:1.000,                      ammoclip: 1, ammomax:  36,            rldtime:2.0, brcdmg: 9.6, minbrc: 0, maxbrc: 0,             dmgtype:'ET',expwgt:20/32, thmwgt:12/32, dmgfall:100000, fdid:128671448, fdname:'Hpt_MineLauncher_Fixed_Small_Impulse' },
-		80290 : { mtype:'hm',  cost:  294080, name:'Mine Launcher',               mount:'F',              class:2, rating:'I', mass: 4.00, integ:51, pwrdraw:0.40, boottime:0, dps:44.000, damage:44.000,                 thmload:7.50, pierce: 60,                            rof:1.000, bstint:1.000,                      ammoclip: 3, ammomax:  72,            rldtime:6.6, brcdmg:13.2, minbrc: 0, maxbrc: 0,             dmgtype:'ET',expwgt:26/44, thmwgt:18/44, dmgfall:100000, fdid:128049501, fdname:'Hpt_MineLauncher_Fixed_Medium' },
+		80190 : { mtype:'hm',  cost:   24260, name:'Mine Launcher',               mount:'F',              class:1, rating:'I', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0, dps:44.000, damage:44.000,                 thmload:5.00, pierce: 60,                            rof:1.000, bstint:1.000,                      ammoclip: 1, ammomax:  36,            rldtime:2.0,              minbrc: 0, maxbrc: 0,             dmgtype:'ET',expwgt:26/44, thmwgt:18/44, dmgfall:000000, fdid:128049500, fdname:'Hpt_MineLauncher_Fixed_Small' },
+		80191 : { mtype:'hm',  cost:   36390, name:'Shock Mine Launcher',         mount:'F',              class:1, rating:'I', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0, dps:32.000, damage:32.000,                 thmload:5.00, pierce: 60,                            rof:1.000, bstint:1.000,                      ammoclip: 1, ammomax:  36,            rldtime:2.0, brcdmg: 9.6, minbrc: 0, maxbrc: 0,             dmgtype:'ET',expwgt:20/32, thmwgt:12/32, dmgfall:000000, fdid:128671448, fdname:'Hpt_MineLauncher_Fixed_Small_Impulse' },
+		80290 : { mtype:'hm',  cost:  294080, name:'Mine Launcher',               mount:'F',              class:2, rating:'I', mass: 4.00, integ:51, pwrdraw:0.40, boottime:0, dps:44.000, damage:44.000,                 thmload:7.50, pierce: 60,                            rof:1.000, bstint:1.000,                      ammoclip: 3, ammomax:  72,            rldtime:6.6, brcdmg:13.2, minbrc: 0, maxbrc: 0,             dmgtype:'ET',expwgt:26/44, thmwgt:18/44, dmgfall:000000, fdid:128049501, fdname:'Hpt_MineLauncher_Fixed_Medium' },
 		
 		81140 : { mtype:'hml', cost:    6800, name:'Mining Laser',                mount:'F',              class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:0.50, boottime:0, dps: 2.000, damage: 2.000, distdraw:1.500, thmload:2.00, pierce: 18, maxrng: 500,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 0.3, minbrc:10, maxbrc:20,             dmgtype:'T', thmwgt:1, dmgfall: 300, fdid:128049525, fdname:'Hpt_MiningLaser_Fixed_Small' },
 		81142 : { mtype:'hml', cost:    9400, name:'Mining Laser',                mount:'T',              class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:0.50, boottime:0, dps: 2.000, damage: 2.000, distdraw:1.500, thmload:2.00, pierce: 18, maxrng: 500,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 0.3, minbrc:10, maxbrc:20,             dmgtype:'T', thmwgt:1, dmgfall: 300, fdid:128740819, fdname:'Hpt_MiningLaser_Turret_Small' },
@@ -2040,23 +2118,23 @@ var eddb = {
 		81242 : { mtype:'hml', cost:   32580, name:'Mining Laser',                mount:'T',              class:2, rating:'D', mass: 2.00, integ:51, pwrdraw:0.75, boottime:0, dps: 4.000, damage: 4.000, distdraw:3.000, thmload:4.00, pierce: 18, maxrng: 500,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 0.6, minbrc:10, maxbrc:20,             dmgtype:'T', thmwgt:1, dmgfall: 300, fdid:128740820, fdname:'Hpt_MiningLaser_Turret_Medium' },
 		81144 : { mtype:'hml', cost:   33860, name:'Mining Lance Beam Laser',     mount:'F',              class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:0.70, boottime:0, dps: 8.000, damage: 8.000, distdraw:1.750, thmload:6.00, pierce: 18, maxrng:2000,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 1.2, minbrc:10, maxbrc:20,             dmgtype:'T', thmwgt:1, dmgfall: NaN, fdid:     null, fdname:'Hpt_MiningLaser_Fixed_Small_Advanced' }, // TODO: dmgfall,fdid
 		
-		82120 : { mtype:'hmr', cost:   32180, name:'Missile Rack',                mount:'F', missile:'D', class:1, rating:'B', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0, dps:25.000, damage:50.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip: 8, ammomax:  16,            rldtime:5.0, brcdmg:20.0,minbrc:100,maxbrc:100,             dmgtype:'E', expwgt:1, dmgfall:100000, fdid:128666724, fdname:'Hpt_DumbfireMissileRack_Fixed_Small' },
-		82123 : { mtype:'hmr', cost:   72600, name:'Seeker Missile Rack',         mount:'F', missile:'S', class:1, rating:'B', mass: 2.00, integ:40, pwrdraw:0.60, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 625, rof:0.333, bstint:3.000,                      ammoclip: 6, ammomax:   6,           rldtime:12.0, brcdmg:16.0, minbrc: 0, maxbrc: 0,             dmgtype:'E', expwgt:1, dmgfall:100000, fdid:128049492, fdname:'Hpt_BasicMissileRack_Fixed_Small' },
-		82220 : { mtype:'hmr', cost:  240400, name:'Missile Rack',                mount:'F', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:25.000, damage:50.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip:12, ammomax:  48,            rldtime:5.0, brcdmg:20.0,minbrc:100,maxbrc:100,             dmgtype:'E', expwgt:1, dmgfall:100000, fdid:128666725, fdname:'Hpt_DumbfireMissileRack_Fixed_Medium' },
-		82223 : { mtype:'hmr', cost:  512400, name:'Seeker Missile Rack',         mount:'F', missile:'S', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 625, rof:0.333, bstint:3.000,                      ammoclip: 6, ammomax:  18,           rldtime:12.0, brcdmg:16.0, minbrc: 0, maxbrc: 0,             dmgtype:'E', expwgt:1, dmgfall:100000, fdid:128049493, fdname:'Hpt_BasicMissileRack_Fixed_Medium' },
-		82224 : { mtype:'hmr', cost:  768600, name:'Pack-Hound Missile Rack',     mount:'F', missile:'S', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:60.000, damage: 7.500, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 600, rof:2.000, bstint:0.500,                      ammoclip:12, ammomax: 120, rounds: 4, rldtime:5.0, brcdmg: 3.0, minbrc: 0, maxbrc: 0,             dmgtype:'E', expwgt:1, dmgfall:100000, fdid:128671344, fdname:'Hpt_DrunkMissileRack_Fixed_Medium' },
-		82225 : { mtype:'hmr', cost: 1951040, name:'Rocket Propelled FSD Disrupter',mount:'F',missile:'D',class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 750, rof:0.333, bstint:3.000,                      ammoclip:12, ammomax:  48,            rldtime:5.0, brcdmg:16.0,minbrc:100,maxbrc:100,             dmgtype:'E', expwgt:1, dmgfall:100000, fdid:128732552, fdname:'Hpt_DumbfireMissileRack_Fixed_Medium_Lasso' },
+		82120 : { mtype:'hmr', cost:   32180, name:'Missile Rack',                mount:'F', missile:'D', class:1, rating:'B', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0, dps:25.000, damage:50.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip: 8, ammomax:  16,            rldtime:5.0, brcdmg:20.0,minbrc:100,maxbrc:100,             dmgtype:'E', expwgt:1, dmgfall:000000, fdid:128666724, fdname:'Hpt_DumbfireMissileRack_Fixed_Small' },
+		82123 : { mtype:'hmr', cost:   72600, name:'Seeker Missile Rack',         mount:'F', missile:'S', class:1, rating:'B', mass: 2.00, integ:40, pwrdraw:0.60, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 625, rof:0.333, bstint:3.000,                      ammoclip: 6, ammomax:   6,           rldtime:12.0, brcdmg:16.0, minbrc: 0, maxbrc: 0,             dmgtype:'E', expwgt:1, dmgfall:000000, fdid:128049492, fdname:'Hpt_BasicMissileRack_Fixed_Small' },
+		82220 : { mtype:'hmr', cost:  240400, name:'Missile Rack',                mount:'F', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:25.000, damage:50.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip:12, ammomax:  48,            rldtime:5.0, brcdmg:20.0,minbrc:100,maxbrc:100,             dmgtype:'E', expwgt:1, dmgfall:000000, fdid:128666725, fdname:'Hpt_DumbfireMissileRack_Fixed_Medium' },
+		82223 : { mtype:'hmr', cost:  512400, name:'Seeker Missile Rack',         mount:'F', missile:'S', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 625, rof:0.333, bstint:3.000,                      ammoclip: 6, ammomax:  18,           rldtime:12.0, brcdmg:16.0, minbrc: 0, maxbrc: 0,             dmgtype:'E', expwgt:1, dmgfall:000000, fdid:128049493, fdname:'Hpt_BasicMissileRack_Fixed_Medium' },
+		82224 : { mtype:'hmr', cost:  768600, name:'Pack-Hound Missile Rack',     mount:'F', missile:'S', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:60.000, damage: 7.500, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 600, rof:2.000, bstint:0.500,                      ammoclip:12, ammomax: 120, rounds: 4, rldtime:5.0, brcdmg: 3.0, minbrc: 0, maxbrc: 0,             dmgtype:'E', expwgt:1, dmgfall:000000, fdid:128671344, fdname:'Hpt_DrunkMissileRack_Fixed_Medium' },
+		82225 : { mtype:'hmr', cost: 1951040, name:'Rocket Propelled FSD Disrupter',mount:'F',missile:'D',class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 750, rof:0.333, bstint:3.000,                      ammoclip:12, ammomax:  48,            rldtime:5.0, brcdmg:16.0,minbrc:100,maxbrc:100,             dmgtype:'E', expwgt:1, dmgfall:000000, fdid:128732552, fdname:'Hpt_DumbfireMissileRack_Fixed_Medium_Lasso' },
 		
-		86220 : { mtype:'hex', cost:  540900, name:'AX Missile Rack',             mount:'F', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:32.0  , damage:64.0  , distdraw:0.14 , thmload:2.4 , pierce: 60,              shotspd: 750, rof:0.5  , bstint:2    ,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             dmgtype:'XE', expwgt:27/64, axewgt:37/64, dmgfall:100000, fdid:128788699, fdname:'Hpt_ATDumbfireMissile_Fixed_Medium' },
-		86222 : { mtype:'hex', cost: 2022700, name:'AX Missile Rack',             mount:'T', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:25.0  , damage:50.0  , distdraw:0.08 , thmload:1.5 , pierce: 60, maxrng:5000, shotspd: 750, rof:0.5  , bstint:2    ,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             dmgtype:'XE', expwgt:20/50, axewgt:30/50, dmgfall:100000, fdid:128788704, fdname:'Hpt_ATDumbfireMissile_Turret_Medium' },
-		86310 : { mtype:'hex', cost: 1352250, name:'AX Missile Rack',             mount:'F', missile:'D', class:3, rating:'A', mass: 8.00, integ:64, pwrdraw:1.62, boottime:0, dps:32.0  , damage:64.0  , distdraw:0.24 , thmload:3.6 , pierce: 60,              shotspd: 750, rof:0.5  , bstint:2    ,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             dmgtype:'XE', expwgt:27/64, axewgt:37/64, dmgfall:100000, fdid:128788700, fdname:'Hpt_ATDumbfireMissile_Fixed_Large' },
-		86312 : { mtype:'hex', cost: 4056750, name:'AX Missile Rack',             mount:'T', missile:'D', class:3, rating:'A', mass: 8.00, integ:64, pwrdraw:1.75, boottime:0, dps:25.0  , damage:50.0  , distdraw:0.14 , thmload:1.9 , pierce: 60, maxrng:5000, shotspd: 750, rof:0.5  , bstint:2    ,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             dmgtype:'XE', expwgt:20/50, axewgt:30/50, dmgfall:100000, fdid:128788705, fdname:'Hpt_ATDumbfireMissile_Turret_Large' },
+		86220 : { mtype:'hex', cost:  540900, name:'AX Missile Rack',             mount:'F', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:32.0  , damage:64.0  , distdraw:0.14 , thmload:2.4 , pierce: 60,              shotspd: 750, rof:0.5  , bstint:2    ,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             dmgtype:'XE', expwgt:27/64, axewgt:37/64, dmgfall:000000, fdid:128788699, fdname:'Hpt_ATDumbfireMissile_Fixed_Medium' },
+		86222 : { mtype:'hex', cost: 2022700, name:'AX Missile Rack',             mount:'T', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:25.0  , damage:50.0  , distdraw:0.08 , thmload:1.5 , pierce: 60, maxrng:5000, shotspd: 750, rof:0.5  , bstint:2    ,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             dmgtype:'XE', expwgt:20/50, axewgt:30/50, dmgfall:000000, fdid:128788704, fdname:'Hpt_ATDumbfireMissile_Turret_Medium' },
+		86310 : { mtype:'hex', cost: 1352250, name:'AX Missile Rack',             mount:'F', missile:'D', class:3, rating:'A', mass: 8.00, integ:64, pwrdraw:1.62, boottime:0, dps:32.0  , damage:64.0  , distdraw:0.24 , thmload:3.6 , pierce: 60,              shotspd: 750, rof:0.5  , bstint:2    ,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             dmgtype:'XE', expwgt:27/64, axewgt:37/64, dmgfall:000000, fdid:128788700, fdname:'Hpt_ATDumbfireMissile_Fixed_Large' },
+		86312 : { mtype:'hex', cost: 4056750, name:'AX Missile Rack',             mount:'T', missile:'D', class:3, rating:'A', mass: 8.00, integ:64, pwrdraw:1.75, boottime:0, dps:25.0  , damage:50.0  , distdraw:0.14 , thmload:1.9 , pierce: 60, maxrng:5000, shotspd: 750, rof:0.5  , bstint:2    ,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             dmgtype:'XE', expwgt:20/50, axewgt:30/50, dmgfall:000000, fdid:128788705, fdname:'Hpt_ATDumbfireMissile_Turret_Large' },
 		86253 : { mtype:'hex', cost:  379000, name:'AX Multi-Cannon',             mount:'F',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.46, boottime:0, dps:23.643, damage: 3.310, distdraw:0.11 , thmload:0.18, pierce: 17, maxrng:4000, shotspd:1600, rof:7.143, bstint:0.140,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 2.8, minbrc:50, maxbrc:80,             dmgtype:'XK', kinwgt:1.12/3.31 , axewgt:2.19 /3.31 , dmgfall:2000, fdid:128788701, fdname:'Hpt_ATMultiCannon_Fixed_Medium' },
 		86265 : { mtype:'hex', cost: 1826500, name:'AX Multi-Cannon',             mount:'T',              class:2, rating:'F', mass: 4.00, integ:51, pwrdraw:0.50, boottime:0, dps:10.812, damage: 1.730, distdraw:0.06 , thmload:0.09, pierce: 17, maxrng:4000, shotspd:1600, rof:6.250, bstint:0.160,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: 0.4, minbrc:50, maxbrc:50,             dmgtype:'XK', kinwgt:0.56/1.73 , axewgt:1.17 /1.73 , dmgfall:2000, fdid:128793059, fdname:'Hpt_ATMultiCannon_Turret_Medium' },
 		86333 : { mtype:'hex', cost: 1181500, name:'AX Multi-Cannon',             mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:0.64, boottime:0, dps:35.971, damage: 6.115, distdraw:0.18 , thmload:0.28, pierce: 33, maxrng:4000, shotspd:1600, rof:5.882, bstint:0.170,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 5.2, minbrc:50, maxbrc:80,             dmgtype:'XK', kinwgt:2.19/6.115, axewgt:3.925/6.115, dmgfall:2000, fdid:128788702, fdname:'Hpt_ATMultiCannon_Fixed_Large' },
 		86355 : { mtype:'hex', cost: 3821600, name:'AX Multi-Cannon',             mount:'T',              class:3, rating:'E', mass: 8.00, integ:64, pwrdraw:0.64, boottime:0, dps:20.688, damage: 3.310, distdraw:0.06 , thmload:0.09, pierce: 33, maxrng:4000, shotspd:1600, rof:6.250, bstint:0.160,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: 0.8, minbrc:50, maxbrc:50,             dmgtype:'XK', kinwgt:1.12/3.31 , axewgt:2.19 /3.31 , dmgfall:2000, fdid:128793060, fdname:'Hpt_ATMultiCannon_Turret_Large' },
-		86226 : { mtype:'hex', cost:  261800, name:'Remote Release Flak Launcher',mount:'F',              class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:17.0  , damage:34.0  , distdraw:0.24 , thmload:3.6 , pierce: 60,              shotspd: 550, rof:0.5  , bstint:2    ,                      ammoclip: 1, ammomax:  32,            rldtime:2.0, brcdmg: 1.7,minbrc:100,maxbrc:100,             dmgtype:'E', expwgt:1, dmgfall:100000, nosingleton:1, fdid:128785626, fdname:'Hpt_FlakMortar_Fixed_Medium' },
-		86228 : { mtype:'hex', cost: 1259200, name:'Remote Release Flak Launcher',mount:'T',              class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:17.0  , damage:34.0  , distdraw:0.24 , thmload:3.6 , pierce: 60,              shotspd: 550, rof:0.5  , bstint:2    ,                      ammoclip: 1, ammomax:  32,            rldtime:2.0, brcdmg: 1.7,minbrc:100,maxbrc:100,             dmgtype:'E', expwgt:1, dmgfall:100000, nosingleton:1, fdid:128793058, fdname:'Hpt_FlakMortar_Turret_Medium' },
+		86226 : { mtype:'hex', cost:  261800, name:'Remote Release Flak Launcher',mount:'F',              class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:17.0  , damage:34.0  , distdraw:0.24 , thmload:3.6 , pierce: 60,              shotspd: 550, rof:0.5  , bstint:2    ,                      ammoclip: 1, ammomax:  32,            rldtime:2.0, brcdmg: 1.7,minbrc:100,maxbrc:100,             dmgtype:'E', expwgt:1, dmgfall:000000, nosingleton:1, fdid:128785626, fdname:'Hpt_FlakMortar_Fixed_Medium' },
+		86228 : { mtype:'hex', cost: 1259200, name:'Remote Release Flak Launcher',mount:'T',              class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:17.0  , damage:34.0  , distdraw:0.24 , thmload:3.6 , pierce: 60,              shotspd: 550, rof:0.5  , bstint:2    ,                      ammoclip: 1, ammomax:  32,            rldtime:2.0, brcdmg: 1.7,minbrc:100,maxbrc:100,             dmgtype:'E', expwgt:1, dmgfall:000000, nosingleton:1, fdid:128793058, fdname:'Hpt_FlakMortar_Turret_Medium' },
 		
 		87220 : { mtype:'hex', cost:  580500, name:'Enzyme Missile Rack',         mount:'F', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps: 2.5  , damage: 5.0  , distdraw:0.08 , thmload:1.5 , pierce: 60,              shotspd: 750, rof:0.5  , bstint:2    ,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.0, minbrc:80,maxbrc:100,             dmgtype:'CE', expwgt:5/5, cauwgt:0/5, fdid:128833995, fdname:'Hpt_CausticMissile_Fixed_Medium' }, // TODO: verify damage,dps
 		87223 : { mtype:'hex', cost:  353760, name:'Remote Release Flechette Launcher',mount:'F',         class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps: 6.5  , damage:13.0  , distdraw:0.24 , thmload:3.6 , pierce: 80,              shotspd: 550, rof:0.5  , bstint:2    ,                      ammoclip: 1, ammomax:  72,            rldtime:2.0, brcdmg: 6.5,minbrc:100,maxbrc:100,             dmgtype:'KE', kinwgt:10/13, expwgt:3/13, nosingleton:1, fdid:128833996, fdname:'Hpt_FlechetteLauncher_Fixed_Medium' },
@@ -2065,9 +2143,11 @@ var eddb = {
 		87245 : { mtype:'hex', cost:  845200, name:'Shock Cannon',                mount:'G',              class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:0.61, boottime:0,dps:102.100, damage:10.210, distdraw:0.58 , thmload:2.10, pierce: 40, maxrng:3000, shotspd:1200,rof:10.0  , bstint:0.1  ,                      ammoclip:16, ammomax: 240,            rldtime:6.0, brcdmg: 7.1, minbrc:40, maxbrc:80,             dmgtype:'K', kinwgt:1, dmgfall:2500, nosingleton:1, fdid:128834003, fdname:'Hpt_PlasmaShockCannon_Gimbal_Medium' },
 		87256 : { mtype:'hex', cost: 1659200, name:'Shock Cannon',                mount:'T',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.50, boottime:0, dps:89.600, damage: 8.960, distdraw:0.39 , thmload:1.24, pierce: 40, maxrng:3000, shotspd:1200,rof:10.0  , bstint:0.1  ,                      ammoclip:16, ammomax: 240,            rldtime:6.0, brcdmg: 6.3, minbrc:40, maxbrc:80,             dmgtype:'K', kinwgt:1, dmgfall:2500, nosingleton:1, fdid:128834004, fdname:'Hpt_PlasmaShockCannon_Turret_Medium' },
 		
-		88220 : { mtype:'hex', cost:     NaN, name:'Guardian Gauss Cannon',       mount:'F',              class:2, rating:'B', mass: 4.00, integ:42, pwrdraw:2.61, boottime:0, dps:84.337, damage:70.0  , distdraw:7.20 ,thmload:25.00, pierce:140, maxrng:3000,               rof:1.205, bstint:0.83 ,                      ammoclip: 1, ammomax:  80,            rldtime:1.0, brcdmg:35.0, minbrc:20, maxbrc:40,             dmgtype:'TX', thmwgt:35/70, axewgt:35/70, dmgfall:1500, fdid:null, fdname:null }, // TODO: verify; fdid,fdname
-		88223 : { mtype:'hex', cost:     NaN, name:'Guardian Plasma Charger',     mount:'F',              class:2, rating:'B', mass: 4.00, integ:42, pwrdraw:2.13, boottime:0, dps:42.5  , damage: 5.0  , distdraw:1.25 , thmload:5.21, pierce: 80, maxrng:3000, shotspd:1200, rof:0.5  , bstint:2.0  ,                      ammoclip:15, ammomax: 200, rounds:17, rldtime:3.0, brcdmg: 1.3, minbrc:50, maxbrc:80,             dmgtype:'AX', abswgt:2.5/5, axewgt:2.5/5, dmgfall:1000, fdid:null, fdname:null }, // TODO: verify; fdid,fdname // TODO: model charge mechanic?
-		88255 : { mtype:'hex', cost:     NaN, name:'Guardian Plasma Charger',     mount:'T',              class:2, rating:'E', mass: 4.00, integ:42, pwrdraw:2.01, boottime:0, dps:34.0  , damage: 4.0  , distdraw:1.40 , thmload:5.80, pierce: 80, maxrng:3000, shotspd:1200, rof:0.5  , bstint:2.0  ,                      ammoclip:15, ammomax: 200, rounds:17, rldtime:3.0, brcdmg: 1.0, minbrc:50, maxbrc:80,             dmgtype:'AX', abswgt:2/4, axewgt:2/4, dmgfall:1000, fdid:null, fdname:null }, // TODO: verify; fdid,fdname // TODO: model charge mechanic?
+		88220 : { mtype:'hex', cost:     NaN, name:'Guardian Gauss Cannon',       mount:'F',              class:2, rating:'B', mass: 4.00, integ:42, pwrdraw:2.61, boottime:0, dps:84.337, damage:70.0  , distdraw:7.20 ,thmload:25.00, pierce:140, maxrng:3000,               rof:1.205, bstint:0.83 ,                      ammoclip: 1, ammomax:  80,            rldtime:1.0, brcdmg:35.0, minbrc:20, maxbrc:40,             dmgtype:'TX', thmwgt:35/70, axewgt:35/70, dmgfall:1500, fdid:128833687, fdname:'Hpt_Guardian_GaussCannon_Fixed_Medium' }, // TODO: verify
+		88223 : { mtype:'hex', cost:     NaN, name:'Guardian Plasma Charger',     mount:'F',              class:2, rating:'B', mass: 4.00, integ:42, pwrdraw:2.13, boottime:0, dps:42.5  , damage: 5.0  , distdraw:1.25 , thmload:5.21, pierce: 80, maxrng:3000, shotspd:1200, rof:0.5  , bstint:2.0  ,                      ammoclip:15, ammomax: 200, rounds:17, rldtime:3.0, brcdmg: 1.3, minbrc:50, maxbrc:80,             dmgtype:'AX', abswgt:2.5/5, axewgt:2.5/5, dmgfall:1000, fdid:128833998, fdname:'Hpt_Guardian_PlasmaLauncher_Fixed_Medium' }, // TODO: verify // TODO: model charge mechanic?
+		88255 : { mtype:'hex', cost:     NaN, name:'Guardian Plasma Charger',     mount:'T',              class:2, rating:'E', mass: 4.00, integ:42, pwrdraw:2.01, boottime:0, dps:34.0  , damage: 4.0  , distdraw:1.40 , thmload:5.80, pierce: 80, maxrng:3000, shotspd:1200, rof:0.5  , bstint:2.0  ,                      ammoclip:15, ammomax: 200, rounds:17, rldtime:3.0, brcdmg: 1.0, minbrc:50, maxbrc:80,             dmgtype:'AX', abswgt:2/4, axewgt:2/4, dmgfall:1000, fdid:128833999, fdname:'Hpt_Guardian_PlasmaLauncher_Turret_Medium' }, // TODO: verify // TODO: model charge mechanic?
+	//	88323 : { mtype:'hex', cost:     NaN, name:'Guardian Plasma Charger',     mount:'F',              class:3, rating:'?', mass: 8.00, integ:42, pwrdraw:2.13, boottime:0, dps:42.5  , damage: 5.0  , distdraw:1.25 , thmload:5.21, pierce: 80, maxrng:3000, shotspd:1200, rof:0.5  , bstint:2.0  ,                      ammoclip:15, ammomax: 200, rounds:17, rldtime:3.0, brcdmg: 1.3, minbrc:50, maxbrc:80,             dmgtype:'AX', abswgt:2.5/5, axewgt:2.5/5, dmgfall:1000, fdid:128834783, fdname:'Hpt_Guardian_PlasmaLauncher_Fixed_Large' }, // TODO: all stats // TODO: model charge mechanic?
+	//	88355 : { mtype:'hex', cost:     NaN, name:'Guardian Plasma Charger',     mount:'T',              class:3, rating:'?', mass: 8.00, integ:42, pwrdraw:2.01, boottime:0, dps:34.0  , damage: 4.0  , distdraw:1.40 , thmload:5.80, pierce: 80, maxrng:3000, shotspd:1200, rof:0.5  , bstint:2.0  ,                      ammoclip:15, ammomax: 200, rounds:17, rldtime:3.0, brcdmg: 1.0, minbrc:50, maxbrc:80,             dmgtype:'AX', abswgt:2/4, axewgt:2/4, dmgfall:1000, fdid:128834784, fdname:'Hpt_Guardian_PlasmaLauncher_Turret_Large' }, // TODO: all stats // TODO: model charge mechanic?
 		
 		72160 : { mtype:'hmc', cost:    9500, name:'Multi-cannon',                mount:'F',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.28, boottime:0, dps: 8.615, damage: 1.120, distdraw:0.060, thmload:0.09, pierce: 22, maxrng:4000, shotspd:1600, rof:7.692, bstint:0.130,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 1.0, minbrc:40, maxbrc:80,             dmgtype:'K', kinwgt:1, dmgfall:2000, fdid:128049455, fdname:'Hpt_MultiCannon_Fixed_Small' },
 		72171 : { mtype:'hmc', cost:   14250, name:'Multi-cannon',                mount:'G',              class:1, rating:'G', mass: 2.00, integ:40, pwrdraw:0.37, boottime:0, dps: 6.833, damage: 0.820, distdraw:0.070, thmload:0.10, pierce: 22, maxrng:4000, shotspd:1600, rof:8.333, bstint:0.120,                      ammoclip:90, ammomax:2100,            rldtime:5.0, brcdmg: 0.7, minbrc:40, maxbrc:80,             dmgtype:'K', kinwgt:1, dmgfall:2000, fdid:128049459, fdname:'Hpt_MultiCannon_Gimbal_Small' },
@@ -2103,8 +2183,8 @@ var eddb = {
 		84220 : { mtype:'hrg', cost:  412800, name:'Rail Gun',                    mount:'F',              class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.63, boottime:0, dps:50.036, damage:41.530, distdraw:5.110,thmload:20.00, pierce:100, maxrng:3000,               rof:1.205, bstint:0.830,                      ammoclip: 1, ammomax:  80,            rldtime:1.0, brcdmg:39.5, minbrc:40, maxbrc:80,             dmgtype:'TK',thmwgt:27.69/41.53, kinwgt:13.84/41.53, dmgfall:1000, fdid:128049489, fdname:'Hpt_Railgun_Fixed_Medium' },
 		84224 : { mtype:'hrg', cost:  619200, name:'Imperial Hammer Rail Gun',    mount:'F',              class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.63, boottime:0, dps:61.364, damage:15.000, distdraw:2.000,thmload:11.00, pierce:100, maxrng:3000,               rof:4.091, bstint:0.400, bstrof:6, bstsize:3, ammoclip: 3, ammomax: 240,            rldtime:1.2, brcdmg:14.3, minbrc:40, maxbrc:80,             dmgtype:'TK',thmwgt:10   /15   , kinwgt: 5   /15   , dmgfall:1000, fdid:128671341, fdname:'Hpt_Railgun_Fixed_Medium_Burst' }, // verify
 		
-		85193 : { mtype:'htp', cost:   11200, name:'Torpedo Pylon',               mount:'F', missile:'S', class:1, rating:'I', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0,dps:120.000,damage:120.000,                thmload:45.00, pierce:1e4,              shotspd: 250, rof:1.000, bstint:1.000,                      ammoclip: 1,                          rldtime:5.0, brcdmg:60.0, minbrc:100,maxbrc:100,            dmgtype:'E', expwgt:1, dmgfall:1e5, fdid:128049509, fdname:'Hpt_AdvancedTorpPylon_Fixed_Small' },
-		85293 : { mtype:'htp', cost:   44800, name:'Torpedo Pylon',               mount:'F', missile:'S', class:2, rating:'I', mass: 4.00, integ:51, pwrdraw:0.40, boottime:0,dps:120.000,damage:120.000,                thmload:50.00, pierce:1e4,              shotspd: 250, rof:1.000, bstint:1.000,                      ammoclip: 2,                          rldtime:5.0, brcdmg:60.0, minbrc:100,maxbrc:100,            dmgtype:'E', expwgt:1, dmgfall:1e5, fdid:128049510, fdname:'Hpt_AdvancedTorpPylon_Fixed_Medium' },
+		85193 : { mtype:'htp', cost:   11200, name:'Torpedo Pylon',               mount:'F', missile:'S', class:1, rating:'I', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0,dps:120.000,damage:120.000,                thmload:45.00, pierce:1e4,              shotspd: 250, rof:1.000, bstint:1.000,                      ammoclip: 1,                          rldtime:5.0, brcdmg:60.0, minbrc:100,maxbrc:100,            dmgtype:'E', expwgt:1, dmgfall:000000, fdid:128049509, fdname:'Hpt_AdvancedTorpPylon_Fixed_Small' },
+		85293 : { mtype:'htp', cost:   44800, name:'Torpedo Pylon',               mount:'F', missile:'S', class:2, rating:'I', mass: 4.00, integ:51, pwrdraw:0.40, boottime:0,dps:120.000,damage:120.000,                thmload:50.00, pierce:1e4,              shotspd: 250, rof:1.000, bstint:1.000,                      ammoclip: 2,                          rldtime:5.0, brcdmg:60.0, minbrc:100,maxbrc:100,            dmgtype:'E', expwgt:1, dmgfall:000000, fdid:128049510, fdname:'Hpt_AdvancedTorpPylon_Fixed_Medium' },
 		
 	//	TODO2 : { mtype:''   , cost:     NaN, name:'Plasma Burst Cannon',         mount:'F',              class:2, rating:'?', mass: 4.00, integ:NaN,pwrdraw:1.43, boottime:0, dps:15.750, damage:14.000, distdraw:3.000,thmload:15.00, pierce: 55, maxrng: NaN, shotspd: NaN, rof:1.125, bstint:2.000, bstrof:3, bstsize:3, ammoclip: 9, ammomax: NaN,            rldtime:8.0, brcdmg: NaN, minbrc:NaN,maxbrc:NaN,            dmgtype:'A', abswgt:3, kinwgt:1, thmwgt:1, dmgfall: NaN, fdid:     null, fdname:'Hpt_PlasmaBurstCannon_Fixed_Medium' },
 	//	TODO3 : { mtype:''   , cost:     NaN, name:'Stealth Laser',               mount:'F',              class:1, rating:'?', mass: 2.00, integ:NaN,pwrdraw:0.19, boottime:0, dps: 6.000, damage: 1.800, distdraw:0.330, thmload:0.01, pierce:1e4, maxrng: NaN,               rof:3.333, bstint:0.300,                                                                         brcdmg: NaN, minbrc:NaN,maxbrc:NaN,            dmgtype:'T', thmwgt:1, dmgfall: NaN, fdid:     null, fdname:'Hpt_PulseLaserStealth_Fixed_Small' },
@@ -2134,7 +2214,7 @@ var eddb = {
 		55020 : { mtype:'ucs',  cost: 365700, name:'Manifest Scanner',          class:0, rating:'B', mass:1.30, integ:56, pwrdraw:1.60,            boottime:3, scanrng:3500, maxangle:15.00, scantime:10, fdid:128662523, fdname:'Hpt_CargoScanner_Size0_Class4' },
 		55010 : { mtype:'ucs',  cost:1097100, name:'Manifest Scanner',          class:0, rating:'A', mass:1.30, integ:48, pwrdraw:3.20,            boottime:3, scanrng:4000, maxangle:15.00, scantime:10, fdid:128662524, fdname:'Hpt_CargoScanner_Size0_Class5' },
 		
-		53090 : { mtype:'upd',  cost:  18550, name:'Point Defence',  mount:'T', class:0, rating:'I', mass:0.50, integ:30, pwrdraw:0.20, passive:1, boottime:0, dps:2.0, damage:0.2,                   thmload:0.07,             maxrng:2500, shotspd:1000, rof:10.0, bstint:0.20, bstrof:15, bstsize:4, ammoclip:12, ammomax:10000, rldtime: 0.4, jitter:0.75, dmgtype:'K', dmgfall:1e5, fdid:128049522, fdname:'Hpt_PlasmaPointDefence_Turret_Tiny' },
+		53090 : { mtype:'upd',  cost:  18550, name:'Point Defence',  mount:'T', class:0, rating:'I', mass:0.50, integ:30, pwrdraw:0.20, passive:1, boottime:0, dps:2.0, damage:0.2,                   thmload:0.07,             maxrng:2500, shotspd:1000, rof:10.0, bstint:0.20, bstrof:15, bstsize:4, ammoclip:12, ammomax:10000, rldtime: 0.4, jitter:0.75, dmgtype:'K', dmgfall:000000, fdid:128049522, fdname:'Hpt_PlasmaPointDefence_Turret_Tiny' },
 		
 		54050 : { mtype:'usb',  cost:  10000, name:'Shield Booster',            class:0, rating:'E', mass:0.50, integ:25, pwrdraw:0.20, passive:1, boottime:0, shieldbst: 4.0, kinres:0.0, thmres:0.0, expres:0.0, fdid:128668532, fdname:'Hpt_ShieldBooster_Size0_Class1' },
 		54040 : { mtype:'usb',  cost:  23000, name:'Shield Booster',            class:0, rating:'D', mass:1.00, integ:35, pwrdraw:0.50, passive:1, boottime:0, shieldbst: 8.0, kinres:0.0, thmres:0.0, expres:0.0, fdid:128668533, fdname:'Hpt_ShieldBooster_Size0_Class2' },
@@ -2167,49 +2247,49 @@ var eddb = {
 		41230 : { mtype:'cpp', cost:    17800, name:'Power Plant', class:2, rating:'C', mass:  1.30, integ: 51, pwrcap: 8.00, heateff:0.50, fdid:128064035, fdname:'Int_Powerplant_Size2_Class3' },
 		41220 : { mtype:'cpp', cost:    53410, name:'Power Plant', class:2, rating:'B', mass:  2.00, integ: 61, pwrcap: 8.80, heateff:0.45, fdid:128064036, fdname:'Int_Powerplant_Size2_Class4' },
 		41210 : { mtype:'cpp', cost:   160220, name:'Power Plant', class:2, rating:'A', mass:  1.30, integ: 56, pwrcap: 9.60, heateff:0.40, fdid:128064037, fdname:'Int_Powerplant_Size2_Class5' },
-		41211 : { mtype:'cpp', cost:   162000, name:'Guardian Hybrid Power Plant', class:2, rating:'A', mass: 1.50, integ: 56, pwrcap:12.70, heateff:0.5 , fdid:null, fdname:null }, // TODO: verify; fdid,fdname
+		41211 : { mtype:'cpp', cost:   162000, name:'Guardian Hybrid Power Plant', class:2, rating:'A', mass: 1.50, integ: 56, pwrcap:12.70, heateff:0.5 , fdid:128833988, fdname:'Int_GuardianPowerplant_Size2' }, // TODO: verify
 		
 		41350 : { mtype:'cpp', cost:     6270, name:'Power Plant', class:3, rating:'E', mass:  5.00, integ: 58, pwrcap: 8.00, heateff:1.00, fdid:128064038, fdname:'Int_Powerplant_Size3_Class1' },
 		41340 : { mtype:'cpp', cost:    18810, name:'Power Plant', class:3, rating:'D', mass:  2.00, integ: 51, pwrcap: 9.00, heateff:0.75, fdid:128064039, fdname:'Int_Powerplant_Size3_Class2' },
 		41330 : { mtype:'cpp', cost:    56440, name:'Power Plant', class:3, rating:'C', mass:  2.50, integ: 64, pwrcap:10.00, heateff:0.50, fdid:128064040, fdname:'Int_Powerplant_Size3_Class3' },
 		41320 : { mtype:'cpp', cost:   169300, name:'Power Plant', class:3, rating:'B', mass:  4.00, integ: 77, pwrcap:11.00, heateff:0.45, fdid:128064041, fdname:'Int_Powerplant_Size3_Class4' },
 		41310 : { mtype:'cpp', cost:   507910, name:'Power Plant', class:3, rating:'A', mass:  2.50, integ: 70, pwrcap:12.00, heateff:0.40, fdid:128064042, fdname:'Int_Powerplant_Size3_Class5' },
-		41311 : { mtype:'cpp', cost:   291600, name:'Guardian Hybrid Power Plant', class:3, rating:'A', mass: 2.90, integ: 70, pwrcap:15.80, heateff:0.5 , fdid:null, fdname:null }, // TODO: verify; fdid,fdname
+		41311 : { mtype:'cpp', cost:   291600, name:'Guardian Hybrid Power Plant', class:3, rating:'A', mass: 2.90, integ: 70, pwrcap:15.80, heateff:0.5 , fdid:128833989, fdname:'Int_GuardianPowerplant_Size3' }, // TODO: verify
 		
 		41450 : { mtype:'cpp', cost:    19880, name:'Power Plant', class:4, rating:'E', mass: 10.00, integ: 72, pwrcap:10.40, heateff:1.00, fdid:128064043, fdname:'Int_Powerplant_Size4_Class1' },
 		41440 : { mtype:'cpp', cost:    59630, name:'Power Plant', class:4, rating:'D', mass:  4.00, integ: 64, pwrcap:11.70, heateff:0.75, fdid:128064044, fdname:'Int_Powerplant_Size4_Class2' },
 		41430 : { mtype:'cpp', cost:   178900, name:'Power Plant', class:4, rating:'C', mass:  5.00, integ: 80, pwrcap:13.00, heateff:0.50, fdid:128064045, fdname:'Int_Powerplant_Size4_Class3' },
 		41420 : { mtype:'cpp', cost:   536690, name:'Power Plant', class:4, rating:'B', mass:  8.00, integ: 96, pwrcap:14.30, heateff:0.45, fdid:128064046, fdname:'Int_Powerplant_Size4_Class4' },
 		41410 : { mtype:'cpp', cost:  1610080, name:'Power Plant', class:4, rating:'A', mass:  5.00, integ: 88, pwrcap:15.60, heateff:0.40, fdid:128064047, fdname:'Int_Powerplant_Size4_Class5' },
-		41411 : { mtype:'cpp', cost:   524880, name:'Guardian Hybrid Power Plant', class:4, rating:'A', mass: 5.90, integ: 88, pwrcap:20.60, heateff:0.5 , fdid:null, fdname:null }, // TODO: verify; fdid,fdname
+		41411 : { mtype:'cpp', cost:   524880, name:'Guardian Hybrid Power Plant', class:4, rating:'A', mass: 5.90, integ: 88, pwrcap:20.60, heateff:0.5 , fdid:128833990, fdname:'Int_GuardianPowerplant_Size4' }, // TODO: verify
 		
 		41550 : { mtype:'cpp', cost:    63010, name:'Power Plant', class:5, rating:'E', mass: 20.00, integ: 86, pwrcap:13.60, heateff:1.00, fdid:128064048, fdname:'Int_Powerplant_Size5_Class1' },
 		41540 : { mtype:'cpp', cost:   189040, name:'Power Plant', class:5, rating:'D', mass:  8.00, integ: 77, pwrcap:15.30, heateff:0.75, fdid:128064049, fdname:'Int_Powerplant_Size5_Class2' },
 		41530 : { mtype:'cpp', cost:   567110, name:'Power Plant', class:5, rating:'C', mass: 10.00, integ: 96, pwrcap:17.00, heateff:0.50, fdid:128064050, fdname:'Int_Powerplant_Size5_Class3' },
 		41520 : { mtype:'cpp', cost:  1701320, name:'Power Plant', class:5, rating:'B', mass: 16.00, integ:115, pwrcap:18.70, heateff:0.45, fdid:128064051, fdname:'Int_Powerplant_Size5_Class4' },
 		41510 : { mtype:'cpp', cost:  5103950, name:'Power Plant', class:5, rating:'A', mass: 10.00, integ:106, pwrcap:20.40, heateff:0.40, fdid:128064052, fdname:'Int_Powerplant_Size5_Class5' },
-		41511 : { mtype:'cpp', cost:   944790, name:'Guardian Hybrid Power Plant', class:5, rating:'A', mass:11.70, integ:106, pwrcap:26.90, heateff:0.5 , fdid:null, fdname:null }, // TODO: verify; fdid,fdname
+		41511 : { mtype:'cpp', cost:   944790, name:'Guardian Hybrid Power Plant', class:5, rating:'A', mass:11.70, integ:106, pwrcap:26.90, heateff:0.5 , fdid:128833991, fdname:'Int_GuardianPowerplant_Size5' }, // TODO: verify
 		
 		41650 : { mtype:'cpp', cost:   199750, name:'Power Plant', class:6, rating:'E', mass: 40.00, integ:102, pwrcap:16.80, heateff:1.00, fdid:128064053, fdname:'Int_Powerplant_Size6_Class1' },
 		41640 : { mtype:'cpp', cost:   599240, name:'Power Plant', class:6, rating:'D', mass: 16.00, integ: 90, pwrcap:18.90, heateff:0.75, fdid:128064054, fdname:'Int_Powerplant_Size6_Class2' },
 		41630 : { mtype:'cpp', cost:  1797730, name:'Power Plant', class:6, rating:'C', mass: 20.00, integ:113, pwrcap:21.00, heateff:0.50, fdid:128064055, fdname:'Int_Powerplant_Size6_Class3' },
 		41620 : { mtype:'cpp', cost:  5393180, name:'Power Plant', class:6, rating:'B', mass: 32.00, integ:136, pwrcap:23.10, heateff:0.45, fdid:128064056, fdname:'Int_Powerplant_Size6_Class4' },
 		41610 : { mtype:'cpp', cost: 16179530, name:'Power Plant', class:6, rating:'A', mass: 20.00, integ:124, pwrcap:25.20, heateff:0.40, fdid:128064057, fdname:'Int_Powerplant_Size6_Class5' },
-		41611 : { mtype:'cpp', cost:  1700610, name:'Guardian Hybrid Power Plant', class:6, rating:'A', mass:23.40, integ:124, pwrcap:33.30, heateff:0.5 , fdid:null, fdname:null }, // TODO: verify; fdid,fdname
+		41611 : { mtype:'cpp', cost:  1700610, name:'Guardian Hybrid Power Plant', class:6, rating:'A', mass:23.40, integ:124, pwrcap:33.30, heateff:0.5 , fdid:128833992, fdname:'Int_GuardianPowerplant_Size6' }, // TODO: verify
 		
 		41750 : { mtype:'cpp', cost:   633200, name:'Power Plant', class:7, rating:'E', mass: 80.00, integ:118, pwrcap:20.00, heateff:1.00, fdid:128064058, fdname:'Int_Powerplant_Size7_Class1' },
 		41740 : { mtype:'cpp', cost:  1899600, name:'Power Plant', class:7, rating:'D', mass: 32.00, integ:105, pwrcap:22.50, heateff:0.75, fdid:128064059, fdname:'Int_Powerplant_Size7_Class2' },
 		41730 : { mtype:'cpp', cost:  5698790, name:'Power Plant', class:7, rating:'C', mass: 40.00, integ:131, pwrcap:25.00, heateff:0.50, fdid:128064060, fdname:'Int_Powerplant_Size7_Class3' },
 		41720 : { mtype:'cpp', cost: 17096370, name:'Power Plant', class:7, rating:'B', mass: 64.00, integ:157, pwrcap:27.50, heateff:0.45, fdid:128064061, fdname:'Int_Powerplant_Size7_Class4' },
 		41710 : { mtype:'cpp', cost: 51289110, name:'Power Plant', class:7, rating:'A', mass: 40.00, integ:144, pwrcap:30.00, heateff:0.40, fdid:128064062, fdname:'Int_Powerplant_Size7_Class5' },
-		41711 : { mtype:'cpp', cost:  3061100, name:'Guardian Hybrid Power Plant', class:7, rating:'A', mass:46.80, integ:144, pwrcap:39.60, heateff:0.5 , fdid:null, fdname:null }, // TODO: verify; fdid,fdname
+		41711 : { mtype:'cpp', cost:  3061100, name:'Guardian Hybrid Power Plant', class:7, rating:'A', mass:46.80, integ:144, pwrcap:39.60, heateff:0.5 , fdid:128833993, fdname:'Int_GuardianPowerplant_Size7' }, // TODO: verify
 		
 		41850 : { mtype:'cpp', cost:  2007240, name:'Power Plant', class:8, rating:'E', mass:160.00, integ:135, pwrcap:24.00, heateff:1.00, fdid:128064063, fdname:'Int_Powerplant_Size8_Class1' },
 		41840 : { mtype:'cpp', cost:  6021720, name:'Power Plant', class:8, rating:'D', mass: 64.00, integ:120, pwrcap:27.00, heateff:0.75, fdid:128064064, fdname:'Int_Powerplant_Size8_Class2' },
 		41830 : { mtype:'cpp', cost: 18065170, name:'Power Plant', class:8, rating:'C', mass: 80.00, integ:150, pwrcap:30.00, heateff:0.50, fdid:128064065, fdname:'Int_Powerplant_Size8_Class3' },
 		41820 : { mtype:'cpp', cost: 54195500, name:'Power Plant', class:8, rating:'B', mass:128.00, integ:180, pwrcap:33.00, heateff:0.45, fdid:128064066, fdname:'Int_Powerplant_Size8_Class4' },
 		41810 : { mtype:'cpp', cost:162586490, name:'Power Plant', class:8, rating:'A', mass: 80.00, integ:165, pwrcap:36.00, heateff:0.40, fdid:128064067, fdname:'Int_Powerplant_Size8_Class5' },
-		41811 : { mtype:'cpp', cost:  5509980, name:'Guardian Hybrid Power Plant', class:8, rating:'A', mass:93.60, integ:165, pwrcap:47.50, heateff:0.5 , fdid:null, fdname:null }, // TODO: verify; fdid,fdname
+		41811 : { mtype:'cpp', cost:  5509980, name:'Guardian Hybrid Power Plant', class:8, rating:'A', mass:93.60, integ:165, pwrcap:47.50, heateff:0.5 , fdid:128833994, fdname:'Int_GuardianPowerplant_Size8' }, // TODO: verify
 		
 		
 		42250 : { mtype:'ct', cost:     1980, name:'Thrusters', class:2, rating:'E', mass:  2.50, integ: 46, pwrdraw: 2.00, boottime:0, minmass:  24, optmass:  48, maxmass:  72, minmul:83, optmul:100, maxmul:103, thmload:1.3, fdid:128064068, fdname:'Int_Engine_Size2_Class1' },
@@ -2700,16 +2780,16 @@ var eddb = {
 		 4540 : { mtype:'ihrp', cost:   450000, name:'Hull Reinforcement Package', class:5, rating:'D', mass:16.00, hullrnf:390, kinres:2.5, thmres:2.5, expres:2.5, fdid:128668546, fdname:'Int_HullReinforcement_Size5_Class2' },
 		
 		
-		 9151 : { mtype:'imahrp', cost:  7500, name:'Meta Alloy Hull Reinforcement Package', class:1, rating:'E', mass:  2, hullrnf: 72, caures:NaN, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size1_Class1' }, // TODO: verify; fdid
-		 9141 : { mtype:'imahrp', cost: 22500, name:'Meta Alloy Hull Reinforcement Package', class:1, rating:'D', mass:  2, hullrnf: 99, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size1_Class2' }, // TODO: verify; fdid // TODO BUG? mass:1
-		 9251 : { mtype:'imahrp', cost: 18000, name:'Meta Alloy Hull Reinforcement Package', class:2, rating:'E', mass:  4, hullrnf:135, caures:NaN, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size2_Class1' }, // TODO: verify; fdid
-		 9241 : { mtype:'imahrp', cost: 54000, name:'Meta Alloy Hull Reinforcement Package', class:2, rating:'D', mass:  2, hullrnf:171, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size2_Class2' }, // TODO: verify; fdid
-		 9351 : { mtype:'imahrp', cost: 42000, name:'Meta Alloy Hull Reinforcement Package', class:3, rating:'E', mass:  8, hullrnf:207, caures:NaN, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size3_Class1' }, // TODO: verify; fdid
-		 9341 : { mtype:'imahrp', cost:126000, name:'Meta Alloy Hull Reinforcement Package', class:3, rating:'D', mass:  4, hullrnf:234, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size3_Class2' }, // TODO: verify; fdid
-		 9451 : { mtype:'imahrp', cost: 97500, name:'Meta Alloy Hull Reinforcement Package', class:4, rating:'E', mass: 16, hullrnf:270, caures:NaN, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size4_Class1' }, // TODO: verify; fdid
-		 9441 : { mtype:'imahrp', cost:292500, name:'Meta Alloy Hull Reinforcement Package', class:4, rating:'D', mass:  8, hullrnf:297, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size4_Class2' }, // TODO: verify; fdid
-		 9551 : { mtype:'imahrp', cost:225000, name:'Meta Alloy Hull Reinforcement Package', class:5, rating:'E', mass: 32, hullrnf:324, caures:NaN, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size5_Class1' }, // TODO: verify; fdid
-		 9541 : { mtype:'imahrp', cost:675000, name:'Meta Alloy Hull Reinforcement Package', class:5, rating:'D', mass: 16, hullrnf:351, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size5_Class2' }, // TODO: verify; fdid
+		 9151 : { mtype:'imahrp', cost:  7500, name:'Meta Alloy Hull Reinforcement Package', class:1, rating:'E', mass:  2, hullrnf: 72, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size1_Class1' }, // TODO: fdid
+		 9141 : { mtype:'imahrp', cost: 22500, name:'Meta Alloy Hull Reinforcement Package', class:1, rating:'D', mass:  2, hullrnf: 99, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size1_Class2' }, // TODO: fdid
+		 9251 : { mtype:'imahrp', cost: 18000, name:'Meta Alloy Hull Reinforcement Package', class:2, rating:'E', mass:  4, hullrnf:135, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size2_Class1' }, // TODO: fdid
+		 9241 : { mtype:'imahrp', cost: 54000, name:'Meta Alloy Hull Reinforcement Package', class:2, rating:'D', mass:  2, hullrnf:171, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size2_Class2' }, // TODO: fdid
+		 9351 : { mtype:'imahrp', cost: 42000, name:'Meta Alloy Hull Reinforcement Package', class:3, rating:'E', mass:  8, hullrnf:207, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size3_Class1' }, // TODO: fdid
+		 9341 : { mtype:'imahrp', cost:126000, name:'Meta Alloy Hull Reinforcement Package', class:3, rating:'D', mass:  4, hullrnf:234, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size3_Class2' }, // TODO: fdid
+		 9451 : { mtype:'imahrp', cost: 97500, name:'Meta Alloy Hull Reinforcement Package', class:4, rating:'E', mass: 16, hullrnf:270, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size4_Class1' }, // TODO: fdid
+		 9441 : { mtype:'imahrp', cost:292500, name:'Meta Alloy Hull Reinforcement Package', class:4, rating:'D', mass:  8, hullrnf:297, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size4_Class2' }, // TODO: fdid
+		 9551 : { mtype:'imahrp', cost:225000, name:'Meta Alloy Hull Reinforcement Package', class:5, rating:'E', mass: 32, hullrnf:324, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size5_Class1' }, // TODO: fdid
+		 9541 : { mtype:'imahrp', cost:675000, name:'Meta Alloy Hull Reinforcement Package', class:5, rating:'D', mass: 16, hullrnf:351, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size5_Class2' }, // TODO: fdid
 		
 		
 		 8150 : { mtype:'imrp', cost:     5000, name:'Module Reinforcement Package', class:1, rating:'E', mass: 2.00, integ: 77, dmgprot:30, fdid:128737270, fdname:'Int_ModuleReinforcement_Size1_Class1' },

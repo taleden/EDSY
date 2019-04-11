@@ -28,7 +28,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 					<label class="togglebutton"><input name="tab" type="radio" value="options"><div><span class="icon help"></span><span class="icon repair"></span>Help</div></label>
 				</form>
 				<div id="header_right">
-					<span id="header_version">v3.0.0 alpha 3</span>
+					<span id="header_version">v3.0.0 alpha 4</span>
 					<div id="header_donate"></div>
 				</div>
 			</div>
@@ -59,6 +59,10 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 						</form>
 						<form id="outfitting_fit" name="fit" class="">
 							<div id="outfitting_fit_settings">
+								<!-- TODO
+								<button id="outfitting_fit_import"><span class="icon fileImport"></span></button>
+								<button id="outfitting_fit_export"><span class="icon fileExport"></span></button>
+								-->
 								<select id="outfitting_fit_stored" name="outfitting_fit_stored">
 									<option value="">(Stock)</option>
 								</select>
@@ -70,6 +74,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 								<span><!-- Show: --></span>
 								<label class="togglebutton"><input name="outfitting_show_mass" type="checkbox" value="1"><div>Mass</div></label>
 								<label class="togglebutton"><input name="outfitting_show_power" type="checkbox" value="1"><div>Power</div></label>
+								<label class="togglebutton"><input name="outfitting_show_attrs" type="checkbox" value="1"><div>Attrs</div></label>
 								<label class="togglebutton"><input name="outfitting_show_price" type="checkbox" value="1"><div>Price</div></label>
 							</div>
 							<div id="outfitting_fit_slots" class="">
@@ -80,7 +85,8 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										<span>ID:</span>
 										<input name="shipnametag" type="text" maxlength=6>
 									</div>
-									<div class="slots_header_row outfitting_fit_powerdist">
+									<!-- powerdist in fit --
+									<div id="outfitting_fit_powerdist" class="slots_header_row">
 										<span>Crew:</span>
 										<button id="outfitting_fit_crewdist_avl" class="" name="crewdist_avl"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div>AVL</div></button>
 										<button id="outfitting_fit_crewdist_sys" class="" name="crewdist_sys"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div>SYS</div></button>
@@ -92,6 +98,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										<button id="outfitting_fit_powerdist_eng" class="" name="powerdist_eng"><div class="powerpips"><span></span><span></span><span></span><span></span></div><div>ENG</div></button>
 										<button id="outfitting_fit_powerdist_wep" class="" name="powerdist_wep"><div class="powerpips"><span></span><span></span><span></span><span></span></div><div>WEP</div></button>
 									</div>
+									<!-- TODO -->
 								</div>
 								<div id="outfitting_fit_body">
 									<div id="slots_column_left" class="slots_body_column">
@@ -102,6 +109,16 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 							</div>
 						</form>
 						<form id="outfitting_details" name="details">
+							<div id="outfitting_details_settings">
+								<select id="outfitting_details_stored" name="outfitting_details_stored">
+									<option value="">(Stock)</option>
+								</select>
+								<button id="outfitting_details_stored_reload"><span class="icon fileReload"></span></button>
+								<button id="outfitting_details_stored_save"><span class="icon fileSave"></span></button>
+								<button id="outfitting_details_stored_saveas"><span class="icon fileSaveAs"></span></button>
+								<button id="outfitting_details_stored_rename"><span class="icon fileRename"></span></button>
+								<button id="outfitting_details_stored_delete"><span class="icon fileDelete"></span></button>
+							</div>
 							<div id="outfitting_details_container">
 								<div id="outfitting_details_module" class="">
 									<header id="outfitting_details_label"></header>
@@ -128,8 +145,9 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 					</div>
 					<div id="outfitting_bottom">
 						<form id="outfitting_stats" name="stats">
+							<!-- TODO old: prices in totals --
 							<input type="checkbox" id="toggle_stats_ttl" name="stats_ttl" value="1" class="toggleinput" checked>
-							<div id="outfitting_stats_ttl" class="outfitting_stats_panel"><!-- TODO outfitting total, insurance -->
+							<div id="outfitting_stats_ttl" class="outfitting_stats_panel">
 								<table>
 									<thead>
 										<tr>
@@ -161,7 +179,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										</tr>
 										<tr>
 											<td colspan=5
-												><div class="outfitting_stats_power"
+												><div class="outfitting_stats_powerbar"
 													><span class="marker"></span
 													><span class="marker"></span
 													><div
@@ -196,6 +214,98 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 									</tbody>
 								</table>
 							</div>
+							
+							<!-- TODO new: powerdist in totals -->
+							<input type="checkbox" id="toggle_stats_ttl" name="stats_ttl" value="1" class="toggleinput" checked>
+							<div id="outfitting_stats_ttl" class="outfitting_stats_panel">
+								<table>
+									<thead>
+										<tr>
+											<th><label for="toggle_stats_ttl"><abbr title="Totals and capacities">TTL</abbr></label></th>
+											<td><abbr title="Current mass and maximum laden mass (in tons)">MASS</abbr></td>
+											<td><abbr title="Current fuel and total capacity (in tons)">FUEL</abbr></td>
+											<td><abbr title="Current cargo and total capacity (in tons)">CRGO</abbr></td>
+											<td><abbr title="Total passenger capacity">PSGR</abbr></td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<th><abbr title="Current values used to calculate other statistics">CUR</abbr></th>
+											<td id="outfitting_stats_cur_mass"></td>
+											<td><input type="text" name="stats_cur_fuel"><small>T</small></td>
+											<td><input type="text" name="stats_cur_cargo"><small>T</small></td>
+											<td></td>
+										</tr>
+										<tr>
+											<th><abbr title="Maximum value or capacity">MAX</abbr></th>
+											<td id="outfitting_stats_max_mass"></td>
+											<td id="outfitting_stats_max_fuel"></td>
+											<td id="outfitting_stats_max_cargo"></td>
+											<td id="outfitting_stats_max_psgr"></td>
+										</tr>
+										<tr>
+											<th><abbr title="Crew power assignments">CRW</abbr></th>
+											<td colspan=4>
+												<div id="outfitting_fit_crewdist" class="outfitting_powerdist">
+													<button id="outfitting_fit_crewdist_avl" class="" name="crewdist_avl"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div>AVL</div></button>
+													<button id="outfitting_fit_crewdist_sys" class="" name="crewdist_sys"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div>SYS</div></button>
+													<button id="outfitting_fit_crewdist_eng" class="" name="crewdist_eng"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div>ENG</div></button>
+													<button id="outfitting_fit_crewdist_wep" class="" name="crewdist_wep"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div>WEP</div></button>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<th><abbr title="Power distributor settings">DST</abbr></th>
+											<td colspan=4>
+												<div id="outfitting_fit_powerdist" class="outfitting_powerdist">
+													<button id="outfitting_fit_powerdist_rst" class="" name="powerdist_rst"><div class="powerpips"></div><div>RST</div></button>
+													<button id="outfitting_fit_powerdist_sys" class="" name="powerdist_sys"><div class="powerpips"><span></span><span></span><span></span><span></span></div><div>SYS</div></button>
+													<button id="outfitting_fit_powerdist_eng" class="" name="powerdist_eng"><div class="powerpips"><span></span><span></span><span></span><span></span></div><div>ENG</div></button>
+													<button id="outfitting_fit_powerdist_wep" class="" name="powerdist_wep"><div class="powerpips"><span></span><span></span><span></span><span></span></div><div>WEP</div></button>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<th><abbr title="Power draw (in megawatts) with hardpoints retracted">RET</abbr></th>
+											<td colspan=1 id="outfitting_stats_power_ret"></td>
+											<td colspan=3 class="nopad"
+												><div class="outfitting_stats_powerbar"
+													><span class="marker"></span
+													><span class="marker"></span
+													><div
+														><span class="overload"></span
+														><abbr id="outfitting_stats_power_ret_1"><span>1</span></abbr
+														><abbr id="outfitting_stats_power_ret_2"><span>2</span></abbr
+														><abbr id="outfitting_stats_power_ret_3"><span>3</span></abbr
+														><abbr id="outfitting_stats_power_ret_4"><span>4</span></abbr
+														><abbr id="outfitting_stats_power_ret_5"><span>5</span></abbr
+													></div
+												></div
+											></td>
+										</tr>
+										<tr>
+											<th><abbr title="Power draw (in megawatts) with hardpoints deployed">DEP</abbr></th>
+											<td colspan=1 id="outfitting_stats_power_dep"></td>
+											<td colspan=3 class="nopad"
+												><div class="outfitting_stats_powerbar"
+													><span class="marker"></span
+													><span class="marker"></span
+													><div
+														><span class="overload"></span
+														><abbr id="outfitting_stats_power_dep_1"><span>1</span></abbr
+														><abbr id="outfitting_stats_power_dep_2"><span>2</span></abbr
+														><abbr id="outfitting_stats_power_dep_3"><span>3</span></abbr
+														><abbr id="outfitting_stats_power_dep_4"><span>4</span></abbr
+														><abbr id="outfitting_stats_power_dep_5"><span>5</span></abbr
+													></div
+												></div
+											></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!--  -->
+							
 							<input type="checkbox" id="toggle_stats_nav" name="stats_nav" value="1" class="toggleinput" checked>
 							<div id="outfitting_stats_nav" class="outfitting_stats_panel">
 								<table>
@@ -335,22 +445,22 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 											<td id="outfitting_stats_fsd_heat"></td>
 										</tr>
 										<tr>
-											<th><abbr title="Values under maximum thrust with all weapons firing">WPN</abbr></th>
-											<td id="outfitting_stats_wpn_heat"></td>
+											<th><abbr title="Values under maximum thrust with all weapons firing, with a full and a nearly empty WEP capacitor">WEP</abbr></th>
+											<td id="outfitting_stats_wpnfull_heat"></td>
+										</tr>
+										<tr>
+											<th></th>
+											<td id="outfitting_stats_wpnempty_heat"></td>
 										</tr>
 										<tr>
 											<th><abbr title="Values under maximum thrust with SCBs firing">SCB</abbr></th>
 											<td id="outfitting_stats_scb_heat"></td>
 										</tr>
-										<tr>
-											<th>&nbsp;</th>
-											<td></td>
-										</tr>
 									</tbody>
 								</table>
 							</div>
 							<input type="checkbox" id="toggle_stats_shd" name="stats_shd" value="1" class="toggleinput" checked>
-							<div id="outfitting_stats_shd" class="outfitting_stats_panel"><!-- TODO shield 0-50 recover time, 50-100 regen time -->
+							<div id="outfitting_stats_shd" class="outfitting_stats_panel">
 								<table>
 									<thead>
 										<tr>
@@ -502,6 +612,45 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 									</tbody>
 								</table>
 							</div>
+							<!-- TODO new: separate prices -->
+							<input type="checkbox" id="toggle_stats_prc" name="stats_prc" value="1" class="toggleinput" checked>
+							<div id="outfitting_stats_prc" class="outfitting_stats_panel">
+								<table>
+									<thead>
+										<tr>
+											<th><label for="toggle_stats_prc"><abbr title="Prices">PRC</abbr></label></th>
+											<td><abbr title="Price (in credits)">CR</abbr></td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<th><abbr title="Refuel price for all tanks">RFL</abbr></th>
+											<td id="outfitting_prc_fuel"></td>
+										</tr>
+										<tr>
+											<th><abbr title="Replacement price for all vehicles">RPL</abbr></th>
+											<td id="outfitting_prc_vehicle"></td>
+										</tr>
+										<tr>
+											<th><abbr title="Restock price for all AFMUs, SCBs and utility mounts">RSK</abbr></th>
+											<td id="outfitting_prc_misc"></td>
+										</tr>
+										<tr>
+											<th><abbr title="Rearm price for all hardpoint weapons">RAR</abbr></th>
+											<td id="outfitting_prc_ammo"></td>
+										</tr>
+										<tr>
+											<th><abbr title="Insurance rebuy price">RBY</abbr></th>
+											<td id="outfitting_stats_rebuy"></td><!-- TODO rename -->
+										</tr>
+										<tr>
+											<th><abbr title="Total buy price">BUY</abbr></th>
+											<td id="outfitting_stats_price"></td><!-- TODO rename -->
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!--  -->
 						</form>
 					</div>
 				</div>
