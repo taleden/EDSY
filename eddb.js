@@ -1,346 +1,348 @@
 ﻿/*
-E:D Shipyard was created using assets and imagery from Elite: Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
+E:D Shipyard (EDSY) was created using assets and imagery from Elite: Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
 It is not endorsed by nor reflects the views or opinions of Frontier Developments and no employee of Frontier Developments was involved in the making of it.
 
-Except where noted otherwise, all design, markup and script code for edshipyard.com is copyright (c) 2015,2016 taleden
+Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2019 taleden
 and is provided under a Creative Commons Attribution-NonCommercial 4.0 International License (http://creativecommons.org/licenses/by-nc/4.0/).
 
 The Elite: Dangerous game logic and data in this file remains the property of Frontier Developments plc,
 and is used here as authorized by Frontier Customer Services (https://forums.frontier.co.uk/showthread.php?t=5349).
 */
+'use strict';
 var eddb = {
-	version : 3004,
+	version : 3401,
+	edsy_versions_db : [34015,34015,34015,34015], /* HTML,CSS,DB,JS */
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder',
-			id:1, stype:'mp', name:'Sidewinder', class:1, cost:4070, retail:32000,
+			id:1, stype:'mp', name:'Sidewinder', class:1, cost:5070, retail:32000,
 			topspd:220, bstspd:320, mnv:5, shields:40, armour:60, mass:25,
 			minthrust:45.454, boostcost:7, pitch:42, yaw:16, roll:110, pitchacc:220, yawacc:110, rollacc:240, minpitch:34,
-			heatcap:140, heatdismin:1.18, heatdismax:18.15, fuelcost:50, hardness:20, masslock:6, crew:1,
+			heatcap:140, heatdismin:1.18, heatdismax:18.15, fuelcost:50, fuelreserve:0.30, hardness:20, masslock:6, crew:1,
 			slots:{
 				hardpoint:[1,1],
 				utility  :[0,0],
 				component:[1,2,2,2,1,1,1,1],
 				military :[],
-				internal :[2,2,1,1],
+				internal :[2,2,1,1,1,1],
 			},
 			stock:{
 				hardpoint:[62171,62171],
 				utility  :[0,0],
 				component:[40131,41250,42250,43250,44150,45150,46150,47130],
 				military :[],
-				internal :[30250,250,10150,0],
+				internal :[30250,250,0,0,3152,3151], // TODO: loaner flight assist modules
 			},
 			module:{
-				40131 : { cost:       0, mass: 0.00, fdid:128049250, fdname:'SideWinder_Armour_Grade1' }, // Lightweight Alloy
-				40122 : { cost:   25600, mass: 2.00, fdid:128049251, fdname:'SideWinder_Armour_Grade2' }, // Reinforced Alloy
-				40113 : { cost:   80320, mass: 4.00, fdid:128049252, fdname:'SideWinder_Armour_Grade3' }, // Military Grade Composite
-				40114 : { cost:  132060, mass: 4.00, fdid:128049253, fdname:'SideWinder_Armour_Mirrored' }, // Mirrored Surface Composite
-				40115 : { cost:  139420, mass: 4.00, fdid:128049254, fdname:'SideWinder_Armour_Reactive' }, // Reactive Surface Composite
+				40131 : { cost:     0, mass:0.00, fdid:128049250, fdname:'SideWinder_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 25600, mass:2.00, fdid:128049251, fdname:'SideWinder_Armour_Grade2' }, // Reinforced Alloy
+				40113 : { cost: 80320, mass:4.00, fdid:128049252, fdname:'SideWinder_Armour_Grade3' }, // Military Grade Composite
+				40114 : { cost:132060, mass:4.00, fdid:128049253, fdname:'SideWinder_Armour_Mirrored' }, // Mirrored Surface Composite
+				40115 : { cost:139420, mass:4.00, fdid:128049254, fdname:'SideWinder_Armour_Reactive' }, // Reactive Surface Composite
 			},
 		},
 		21 : {
 			fdid:128049255, fdname:'Eagle',
-			id:21, stype:'co', name:'Eagle', class:1, cost:10440, retail:44800,
+			id:21, stype:'co', name:'Eagle', class:1, cost:11440, retail:44800,
 			topspd:240, bstspd:350, mnv:7, shields:60, armour:40, mass:50,
 			minthrust:75.0, boostcost:8, pitch:50, yaw:18, roll:120, pitchacc:220, yawacc:110, rollacc:240, minpitch:40,
-			heatcap:165, heatdismin:1.38, heatdismax:21.48, fuelcost:50, hardness:28, masslock:6, crew:1,
+			heatcap:165, heatdismin:1.38, heatdismax:21.48, fuelcost:50, fuelreserve:0.34, hardness:28, masslock:6, crew:1,
 			slots:{
 				hardpoint:[1,1,1],
 				utility  :[0],
 				component:[1,2,3,3,1,2,2,2],
 				military :[2],
-				internal :[3,2,1,1],
+				internal :[3,2,1,1,1,1],
 			},
 			stock:{
 				hardpoint:[62160,62160,0],
 				utility  :[0],
 				component:[40131,41250,42350,43350,44150,45250,46250,47230],
 				military :[0],
-				internal :[30350,150,10150,0],
+				internal :[30350,150,0,0,3152,3151], // TODO: loaner flight assist modules
 			},
 			module:{
-				40131 : { cost:       0, mass: 0.00, fdid:128049256, fdname:'Eagle_Armour_Grade1' }, // Lightweight Alloy
-				40122 : { cost:   26880, mass: 4.00, fdid:128049257, fdname:'Eagle_Armour_Grade2' }, // Reinforced Alloy
-				40113 : { cost:   90050, mass: 8.00, fdid:128049258, fdname:'Eagle_Armour_Grade3' }, // Military Grade Composite
-				40114 : { cost:  140090, mass: 8.00, fdid:128049259, fdname:'Eagle_Armour_Mirrored' }, // Mirrored Surface Composite
-				40115 : { cost:  150390, mass: 8.00, fdid:128049260, fdname:'Eagle_Armour_Reactive' }, // Reactive Surface Composite
+				40131 : { cost:     0, mass:0.00, fdid:128049256, fdname:'Eagle_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 26880, mass:4.00, fdid:128049257, fdname:'Eagle_Armour_Grade2' }, // Reinforced Alloy
+				40113 : { cost: 90050, mass:8.00, fdid:128049258, fdname:'Eagle_Armour_Grade3' }, // Military Grade Composite
+				40114 : { cost:140090, mass:8.00, fdid:128049259, fdname:'Eagle_Armour_Mirrored' }, // Mirrored Surface Composite
+				40115 : { cost:150390, mass:8.00, fdid:128049260, fdname:'Eagle_Armour_Reactive' }, // Reactive Surface Composite
 			},
 		},
 		31 : {
 			fdid:128049261, fdname:'Hauler',
-			id:31, stype:'fr', name:'Hauler', class:1, cost:29790, retail:52720,
+			id:31, stype:'fr', name:'Hauler', class:1, cost:8160, retail:52720,
 			topspd:200, bstspd:300, mnv:4, shields:50, armour:100, mass:14,
 			minthrust:35.0, boostcost:7, pitch:36, yaw:14, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:30,
-			heatcap:123, heatdismin:1.06, heatdismax:16.20, fuelcost:50, hardness:20, masslock:6, crew:1,
+			heatcap:123, heatdismin:1.06, heatdismax:16.20, fuelcost:50, fuelreserve:0.25, hardness:20, masslock:6, crew:1,
 			slots:{
 				hardpoint:[1],
 				utility  :[0,0],
 				component:[1,2,2,2,1,1,1,2],
 				military :[],
-				internal :[3,3,2,1],
+				internal :[3,3,2,1,1,1],
 			},
 			stock:{
 				hardpoint:[62160],
 				utility  :[0,0],
 				component:[40131,41250,42250,43250,44150,45150,46150,47230],
 				military :[],
-				internal :[250,250,30250,10150],
+				internal :[250,250,30250,0,3152,3151],
 			},
 			module:{
-				40131 : { cost:       0, mass: 0.00, fdid:128049262, fdname:'Hauler_Armour_Grade1' }, // Lightweight Alloy
-				40122 : { cost:   42180, mass: 1.00, fdid:128049263, fdname:'Hauler_Armour_Grade2' }, // Reinforced Alloy
-				40113 : { cost:  185050, mass: 2.00, fdid:128049264, fdname:'Hauler_Armour_Grade3' }, // Military Grade Composite
-				40114 : { cost:  270300, mass: 2.00, fdid:128049265, fdname:'Hauler_Armour_Mirrored' }, // Mirrored Surface Composite
-				40115 : { cost:  282420, mass: 2.00, fdid:128049266, fdname:'Hauler_Armour_Reactive' }, // Reactive Surface Composite
+				40131 : { cost:     0, mass:0.00, fdid:128049262, fdname:'Hauler_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 42180, mass:1.00, fdid:128049263, fdname:'Hauler_Armour_Grade2' }, // Reinforced Alloy
+				40113 : { cost:185050, mass:2.00, fdid:128049264, fdname:'Hauler_Armour_Grade3' }, // Military Grade Composite
+				40114 : { cost:270300, mass:2.00, fdid:128049265, fdname:'Hauler_Armour_Mirrored' }, // Mirrored Surface Composite
+				40115 : { cost:282420, mass:2.00, fdid:128049266, fdname:'Hauler_Armour_Reactive' }, // Reactive Surface Composite
 			},
 		},
 		41 : {
 			fdid:128049267, fdname:'Adder',
-			id:41, stype:'ex', name:'Adder', class:1, cost:40000, retail:87810,
+			id:41, stype:'ex', name:'Adder', class:1, cost:18710, retail:87810,
 			topspd:220, bstspd:320, mnv:4, shields:60, armour:90, mass:35,
 			minthrust:45.454, boostcost:8, pitch:38, yaw:14, roll:100, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
-			heatcap:170, heatdismin:1.45, heatdismax:22.60, fuelcost:50, hardness:35, masslock:7, crew:2,
+			heatcap:170, heatdismin:1.45, heatdismax:22.60, fuelcost:50, fuelreserve:0.36, hardness:35, masslock:7, crew:2,
 			slots:{
 				hardpoint:[2,1,1],
 				utility  :[0,0],
 				component:[1,3,3,3,1,2,3,3],
 				military :[],
-				internal :[3,3,2,2,1],
+				internal :[3,3,2,2,1,1,1],
 			},
 			stock:{
 				hardpoint:[0,62160,62160],
 				utility  :[0,0],
 				component:[40131,41350,42350,43350,44150,45250,46350,47330],
 				military :[],
-				internal :[250,30350,150,0,10150],
+				internal :[250,30350,150,0,0,3152,3151], // verify positions
 			},
 			module:{
-				40131 : { cost:       0, mass: 0.00, fdid:128049268, fdname:'Adder_Armour_Grade1' }, // Lightweight Alloy
-				40122 : { cost:   35120, mass: 3.00, fdid:128049269, fdname:'Adder_Armour_Grade2' }, // Reinforced Alloy
-				40113 : { cost:   79030, mass: 5.00, fdid:128049270, fdname:'Adder_Armour_Grade3' }, // Military Grade Composite
-				40114 : { cost:  186770, mass: 5.00, fdid:128049271, fdname:'Adder_Armour_Mirrored' }, // Mirrored Surface Composite
-				40115 : { cost:  206960, mass: 5.00, fdid:128049272, fdname:'Adder_Armour_Reactive' }, // Reactive Surface Composite
+				40131 : { cost:     0, mass:0.00, fdid:128049268, fdname:'Adder_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 35120, mass:3.00, fdid:128049269, fdname:'Adder_Armour_Grade2' }, // Reinforced Alloy
+				40113 : { cost: 79030, mass:5.00, fdid:128049270, fdname:'Adder_Armour_Grade3' }, // Military Grade Composite
+				40114 : { cost:186770, mass:5.00, fdid:128049271, fdname:'Adder_Armour_Mirrored' }, // Mirrored Surface Composite
+				40115 : { cost:206960, mass:5.00, fdid:128049272, fdname:'Adder_Armour_Reactive' }, // Reactive Surface Composite
 			},
 		},
 		25 : {
 			fdid:128672138, fdname:'Empire_Eagle',
-			id:25, stype:'co', name:'Imperial Eagle', class:1, cost:72180, retail:110830,
+			id:25, stype:'co', name:'Imperial Eagle', class:1, cost:50890, retail:110830,
 			topspd:300, bstspd:400, mnv:5, shields:80, armour:60, mass:50,
 			minthrust:70.0, boostcost:8, pitch:40, yaw:15, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:30,
-			heatcap:163, heatdismin:1.50, heatdismax:21.20, fuelcost:50, hardness:28, masslock:6, crew:1, // verify masslock
+			heatcap:163, heatdismin:1.50, heatdismax:21.20, fuelcost:50, fuelreserve:0.37, hardness:28, masslock:6, crew:1, // verify masslock
 			slots:{
 				hardpoint:[2,1,1],
 				utility  :[0],
 				component:[1,3,3,3,1,2,2,2],
 				military :[2],
-				internal :[3,2,1,1],
+				internal :[3,2,1,1,1,1],
 			},
 			stock:{
 				hardpoint:[0,62160,62160],
 				utility  :[0],
 				component:[40131,41350,42350,43350,44150,45250,46250,47230],
 				military :[0],
-				internal :[30350,150,10150,0],
+				internal :[30350,150,0,0,3152,3151], // verify positions
 			},
 			module:{
-				40131 : { cost:       0, mass: 0.00, fdid:128672140, fdname:'Empire_Eagle_Armour_Grade1' }, // Lightweight Alloy
-				40122 : { cost:   66500, mass: 4.00, fdid:128672141, fdname:'Empire_Eagle_Armour_Grade2' }, // Reinforced Alloy
-				40113 : { cost:  222760, mass: 8.00, fdid:128672142, fdname:'Empire_Eagle_Armour_Grade3' }, // Military Grade Composite
-				40114 : { cost:  346550, mass: 8.00, fdid:128672143, fdname:'Empire_Eagle_Armour_Mirrored' }, // Mirrored Surface Composite
-				40115 : { cost:  372040, mass: 8.00, fdid:128672144, fdname:'Empire_Eagle_Armour_Reactive' }, // Reactive Surface Composite
+				40131 : { cost:     0, mass:0.00, fdid:128672140, fdname:'Empire_Eagle_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 66500, mass:4.00, fdid:128672141, fdname:'Empire_Eagle_Armour_Grade2' }, // Reinforced Alloy
+				40113 : { cost:222760, mass:8.00, fdid:128672142, fdname:'Empire_Eagle_Armour_Grade3' }, // Military Grade Composite
+				40114 : { cost:346550, mass:8.00, fdid:128672143, fdname:'Empire_Eagle_Armour_Mirrored' }, // Mirrored Surface Composite
+				40115 : { cost:372040, mass:8.00, fdid:128672144, fdname:'Empire_Eagle_Armour_Reactive' }, // Reactive Surface Composite
 			},
 		},
 		22 : {
 			fdid:128049273, fdname:'Viper',
-			id:22, stype:'co', name:'Viper MkIII', class:1, cost:95900, retail:142930,
+			id:22, stype:'co', name:'Viper Mk III', class:1, cost:74610, retail:142930,
 			topspd:320, bstspd:400, mnv:4, shields:105, armour:70, mass:50,
 			minthrust:62.5, boostcost:10, pitch:35, yaw:15, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
-			heatcap:195, heatdismin:1.69, heatdismax:26.20, fuelcost:50, hardness:35, masslock:7, crew:1,
+			heatcap:195, heatdismin:1.69, heatdismax:26.20, fuelcost:50, fuelreserve:0.41, hardness:35, masslock:7, crew:1,
 			slots:{
 				hardpoint:[2,2,1,1],
 				utility  :[0,0],
 				component:[1,3,3,3,2,3,3,2],
 				military :[3],
-				internal :[3,3,2,1],
+				internal :[3,3,2,1,1,1],
 			},
 			stock:{
 				hardpoint:[62160,62160,0,0],
 				utility  :[0,0],
 				component:[40131,41350,42350,43350,44250,45350,46350,47230],
 				military :[0],
-				internal :[250,30350,0,10150],
+				internal :[250,30350,0,0,3152,3151], // verify positions
 			},
 			module:{
-				40131 : { cost:       0, mass: 0.00, fdid:128049274, fdname:'Viper_Armour_Grade1' }, // Lightweight Alloy
-				40122 : { cost:   57170, mass: 5.00, fdid:128049275, fdname:'Viper_Armour_Grade2' }, // Reinforced Alloy
-				40113 : { cost:  128640, mass: 9.00, fdid:128049276, fdname:'Viper_Armour_Grade3' }, // Military Grade Composite
-				40114 : { cost:  304010, mass: 9.00, fdid:128049277, fdname:'Viper_Armour_Mirrored' }, // Mirrored Surface Composite
-				40115 : { cost:  336890, mass: 9.00, fdid:128049278, fdname:'Viper_Armour_Reactive' }, // Reactive Surface Composite
+				40131 : { cost:     0, mass:0.00, fdid:128049274, fdname:'Viper_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 57170, mass:5.00, fdid:128049275, fdname:'Viper_Armour_Grade2' }, // Reinforced Alloy
+				40113 : { cost:128640, mass:9.00, fdid:128049276, fdname:'Viper_Armour_Grade3' }, // Military Grade Composite
+				40114 : { cost:304010, mass:9.00, fdid:128049277, fdname:'Viper_Armour_Mirrored' }, // Mirrored Surface Composite
+				40115 : { cost:336890, mass:9.00, fdid:128049278, fdname:'Viper_Armour_Reactive' }, // Reactive Surface Composite
 			},
 		},
 		 2 : {
 			fdid:128049279, fdname:'CobraMkIII',
-			id:2, stype:'mp', name:'Cobra MkIII', class:1, cost:205800, retail:349720,
+			id:2, stype:'mp', name:'Cobra Mk III', class:1, cost:186260, retail:349720,
 			topspd:280, bstspd:400, mnv:5, shields:80, armour:120, mass:180,
 			minthrust:50.0, boostcost:10, pitch:40, yaw:10, roll:100, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
-			heatcap:225, heatdismin:1.92, heatdismax:30.63, fuelcost:50, hardness:35, masslock:8, crew:2,
+			heatcap:225, heatdismin:1.92, heatdismax:30.63, fuelcost:50, fuelreserve:0.49, hardness:35, masslock:8, crew:2,
 			slots:{
 				hardpoint:[2,2,1,1],
 				utility  :[0,0],
 				component:[1,4,4,4,3,3,3,4],
 				military :[],
-				internal :[4,4,4,2,2,2],
+				internal :[4,4,4,2,2,2,1,1],
 			},
 			stock:{
 				hardpoint:[62160,62160,0,0],
 				utility  :[0,0],
 				component:[40131,41450,42450,43450,44350,45350,46350,47430],
 				military :[],
-				internal :[350,350,30450,150,0,10150],
+				internal :[350,350,30450,150,0,0,3152,3151], // verify positions
 			},
 			module:{
-				40131 : { cost:       0, mass: 0.00, fdid:128049280, fdname:'CobraMkIII_Armour_Grade1' }, // Lightweight Alloy
-				40122 : { cost:  151890, mass:14.00, fdid:128049281, fdname:'CobraMkIII_Armour_Grade2' }, // Reinforced Alloy
-				40113 : { cost:  341750, mass:27.00, fdid:128049282, fdname:'CobraMkIII_Armour_Grade3' }, // Military Grade Composite
-				40114 : { cost:  797410, mass:27.00, fdid:128049283, fdname:'CobraMkIII_Armour_Mirrored' }, // Mirrored Surface Composite
-				40115 : { cost:  895000, mass:27.00, fdid:128049284, fdname:'CobraMkIII_Armour_Reactive' }, // Reactive Surface Composite
+				40131 : { cost:     0, mass: 0.00, fdid:128049280, fdname:'CobraMkIII_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost:151890, mass:14.00, fdid:128049281, fdname:'CobraMkIII_Armour_Grade2' }, // Reinforced Alloy
+				40113 : { cost:341750, mass:27.00, fdid:128049282, fdname:'CobraMkIII_Armour_Grade3' }, // Military Grade Composite
+				40114 : { cost:797410, mass:27.00, fdid:128049283, fdname:'CobraMkIII_Armour_Mirrored' }, // Mirrored Surface Composite
+				40115 : { cost:895000, mass:27.00, fdid:128049284, fdname:'CobraMkIII_Armour_Reactive' }, // Reactive Surface Composite
 			},
 		},
 		28 : {
 			fdid:128672255, fdname:'Viper_MkIV',
-			id:28, stype:'co', name:'Viper MkIV', class:1, cost:310220, retail:437930,
+			id:28, stype:'co', name:'Viper Mk IV', class:1, cost:290680, retail:437930,
 			topspd:270, bstspd:340, mnv:3, shields:150, armour:150, mass:190,
 			minthrust:64.815, boostcost:10, pitch:30, yaw:12, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:25,
-			heatcap:209, heatdismin:1.82, heatdismax:28.98, fuelcost:50, hardness:35, masslock:7, crew:1, // verify masslock
+			heatcap:209, heatdismin:1.82, heatdismax:28.98, fuelcost:50, fuelreserve:0.46, hardness:35, masslock:7, crew:1, // verify masslock
 			slots:{
 				hardpoint:[2,2,1,1],
 				utility  :[0,0],
 				component:[1,4,4,4,2,3,3,4],
 				military :[3],
-				internal :[4,4,3,2,2,1],
+				internal :[4,4,3,2,2,1,1,1],
 			},
 			stock:{
 				hardpoint:[62160,62160,0,0],
 				utility  :[0,0],
 				component:[40131,41450,42450,43450,44250,45350,46350,47430],
 				military :[0],
-				internal :[350,350,30350,150,0,10150],
+				internal :[350,350,30350,150,0,0,3152,3151], // verify positions
 			},
 			module:{
-				40131 : { cost:       0, mass: 0.00, fdid:128672257, fdname:'Viper_MkIV_Armour_Grade1' }, // Lightweight Alloy
-				40122 : { cost:  175180, mass: 5.00, fdid:128672258, fdname:'Viper_MkIV_Armour_Grade2' }, // Reinforced Alloy // verify
-				40113 : { cost:  394140, mass: 9.00, fdid:128672259, fdname:'Viper_MkIV_Armour_Grade3' }, // Military Grade Composite // verify
-				40114 : { cost:  931490, mass: 9.00, fdid:128672260, fdname:'Viper_MkIV_Armour_Mirrored' }, // Mirrored Surface Composite // verify
-				40115 : { cost: 1033210, mass: 9.00, fdid:128672261, fdname:'Viper_MkIV_Armour_Reactive' }, // Reactive Surface Composite // verify
+				40131 : { cost:      0, mass:0.00, fdid:128672257, fdname:'Viper_MkIV_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 175180, mass:5.00, fdid:128672258, fdname:'Viper_MkIV_Armour_Grade2' }, // Reinforced Alloy // verify
+				40113 : { cost: 394140, mass:9.00, fdid:128672259, fdname:'Viper_MkIV_Armour_Grade3' }, // Military Grade Composite // verify
+				40114 : { cost: 931490, mass:9.00, fdid:128672260, fdname:'Viper_MkIV_Armour_Mirrored' }, // Mirrored Surface Composite // verify
+				40115 : { cost:1033210, mass:9.00, fdid:128672261, fdname:'Viper_MkIV_Armour_Reactive' }, // Reactive Surface Composite // verify
 			},
 		},
 		43 : {
 			fdid:128671217, fdname:'DiamondBack',
-			id:43, stype:'ex', name:'Diamondback Scout', class:1, cost:461340, retail:564330,
+			id:43, stype:'ex', name:'Diamondback Scout', class:1, cost:441800, retail:564330,
 			topspd:280, bstspd:380, mnv:5, shields:120, armour:120, mass:170,
 			minthrust:60.714, boostcost:10, pitch:42, yaw:15, roll:100, pitchacc:200, yawacc:100, rollacc:220, minpitch:35,
-			heatcap:346, heatdismin:2.42, heatdismax:48.05, fuelcost:50, hardness:40, masslock:8, crew:1,
+			heatcap:346, heatdismin:2.42, heatdismax:48.05, fuelcost:50, fuelreserve:0.49, hardness:40, masslock:8, crew:1,
 			slots:{
-				hardpoint:[1,1,2,2],
+				hardpoint:[2,2,1,1],
 				utility  :[0,0,0,0],
 				component:[1,4,4,4,2,3,2,4],
 				military :[],
-				internal :[3,3,3,2],
+				internal :[3,3,3,2,1,1],
 			},
 			stock:{
-				hardpoint:[0,0,62160,62160],
+				hardpoint:[62160,62160,0,0],
 				utility  :[0,0,0,0],
 				component:[40131,41450,42450,43450,44250,45350,46250,47430],
 				military :[],
-				internal :[30350,0,0,10150],
+				internal :[30350,0,0,0,3152,3151],
 			},
 			module:{
-				40131 : { cost:       0, mass: 0.00, fdid:128671218, fdname:'DiamondBack_Armour_Grade1' }, // Lightweight Alloy
-				40122 : { cost:  225730, mass:13.00, fdid:128671219, fdname:'DiamondBack_Armour_Grade2' }, // Reinforced Alloy // verify
-				40113 : { cost:  507900, mass:26.00, fdid:128671220, fdname:'DiamondBack_Armour_Grade3' }, // Military Grade Composite // verify
-				40114 : { cost: 1185100, mass:26.00, fdid:128671221, fdname:'DiamondBack_Armour_Mirrored' }, // Mirrored Surface Composite // verify
-				40115 : { cost: 1330120, mass:26.00, fdid:128671222, fdname:'DiamondBack_Armour_Reactive' }, // Reactive Surface Composite // verify
+				40131 : { cost:      0, mass: 0.00, fdid:128671218, fdname:'DiamondBack_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 225730, mass:13.00, fdid:128671219, fdname:'DiamondBack_Armour_Grade2' }, // Reinforced Alloy // verify
+				40113 : { cost: 507900, mass:26.00, fdid:128671220, fdname:'DiamondBack_Armour_Grade3' }, // Military Grade Composite // verify
+				40114 : { cost:1185100, mass:26.00, fdid:128671221, fdname:'DiamondBack_Armour_Mirrored' }, // Mirrored Surface Composite // verify
+				40115 : { cost:1330120, mass:26.00, fdid:128671222, fdname:'DiamondBack_Armour_Reactive' }, // Reactive Surface Composite // verify
 			},
 		},
 		 8 : {
 			fdid:128672262, fdname:'CobraMkIV',
-			id:8, stype:'mp', name:'Cobra MkIV', class:1, cost:603740, retail:764720,
+			id:8, stype:'mp', name:'Cobra Mk IV', class:1, cost:584200, retail:764720,
 			topspd:200, bstspd:300, mnv:3, shields:120, armour:120, mass:210,
 			minthrust:50.0, boostcost:10, pitch:30, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:25,
-			heatcap:228, heatdismin:1.99, heatdismax:31.68, fuelcost:50, hardness:35, masslock:8, crew:2,
+			heatcap:228, heatdismin:1.99, heatdismax:31.68, fuelcost:50, fuelreserve:0.51, hardness:35, masslock:8, crew:2,
 			slots:{
 				hardpoint:[2,2,1,1,1],
 				utility  :[0,0],
 				component:[1,4,4,4,3,3,3,4],
 				military :[],
-				internal :[4,4,4,4,3,3,2,2],
+				internal :[4,4,4,4,3,3,2,2,1,1],
 			},
 			stock:{
 				hardpoint:[62160,62160,0,0,0],
 				utility  :[0,0],
 				component:[40131,41450,42450,43450,44350,45350,46350,47430],
 				military :[],
-				internal :[30450,350,350,350,250,250,150,10150],
+				internal :[30450,350,350,350,250,250,150,0,3152,3151], // verify positions
 			},
 			module:{
-				40131 : { cost:       0, mass: 0.00, fdid:128672264, fdname:'CobraMkIV_Armour_Grade1' }, // Lightweight Alloy
-				40122 : { cost:  305890, mass:14.00, fdid:128672265, fdname:'CobraMkIV_Armour_Grade2' }, // Reinforced Alloy
-				40113 : { cost:  688250, mass:27.00, fdid:128672266, fdname:'CobraMkIV_Armour_Grade3' }, // Military Grade Composite
-				40114 : { cost: 1605910, mass:27.00, fdid:128672267, fdname:'CobraMkIV_Armour_Mirrored' }, // Mirrored Surface Composite
-				40115 : { cost: 1802440, mass:27.00, fdid:128672268, fdname:'CobraMkIV_Armour_Reactive' }, // Reactive Surface Composite
+				40131 : { cost:      0, mass: 0.00, fdid:128672264, fdname:'CobraMkIV_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 305890, mass:14.00, fdid:128672265, fdname:'CobraMkIV_Armour_Grade2' }, // Reinforced Alloy
+				40113 : { cost: 688250, mass:27.00, fdid:128672266, fdname:'CobraMkIV_Armour_Grade3' }, // Military Grade Composite
+				40114 : { cost:1605910, mass:27.00, fdid:128672267, fdname:'CobraMkIV_Armour_Mirrored' }, // Mirrored Surface Composite
+				40115 : { cost:1802440, mass:27.00, fdid:128672268, fdname:'CobraMkIV_Armour_Reactive' }, // Reactive Surface Composite
 			},
 		},
 		32 : {
 			fdid:128049285, fdname:'Type6',
-			id:32, stype:'fr', name:'Type-6 Transporter', class:2, cost:865790, retail:1045950,
+			id:32, stype:'fr', name:'Type-6 Transporter', class:2, cost:858010, retail:1045950,
 			topspd:220, bstspd:350, mnv:3, shields:90, armour:180, mass:155,
 			minthrust:40.909, boostcost:10, pitch:30, yaw:17, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:23,
-			heatcap:179, heatdismin:1.70, heatdismax:24.55, fuelcost:50, hardness:35, masslock:8, crew:1,
+			heatcap:179, heatdismin:1.70, heatdismax:24.55, fuelcost:50, fuelreserve:0.39, hardness:35, masslock:8, crew:1,
 			slots:{
 				hardpoint:[1,1],
 				utility  :[0,0,0],
 				component:[1,3,4,4,2,3,2,4],
 				military :[],
-				internal :[5,5,4,4,3,2,2],
+				internal :[5,5,4,4,3,2,2,1],
 			},
 			stock:{
 				hardpoint:[62160,62160],
 				utility  :[0,0,0],
 				component:[40131,41350,42450,43450,44250,45350,46250,47430],
 				military :[],
-				internal :[450,450,350,350,30350,150,10150],
+				internal :[450,450,350,350,30350,150,0,3152], // verify positions
 			},
 			module:{
-				40131 : { cost:       0, mass: 0.00, fdid:128049286, fdname:'Type6_Armour_Grade1' }, // Lightweight Alloy
-				40122 : { cost:  418380, mass:12.00, fdid:128049287, fdname:'Type6_Armour_Grade2' }, // Reinforced Alloy
-				40113 : { cost:  941350, mass:23.00, fdid:128049288, fdname:'Type6_Armour_Grade3' }, // Military Grade Composite
-				40114 : { cost: 2224730, mass:23.00, fdid:128049289, fdname:'Type6_Armour_Mirrored' }, // Mirrored Surface Composite
-				40115 : { cost: 2465290, mass:23.00, fdid:128049290, fdname:'Type6_Armour_Reactive' }, // Reactive Surface Composite
+				40131 : { cost:      0, mass: 0.00, fdid:128049286, fdname:'Type6_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 418380, mass:12.00, fdid:128049287, fdname:'Type6_Armour_Grade2' }, // Reinforced Alloy
+				40113 : { cost: 941350, mass:23.00, fdid:128049288, fdname:'Type6_Armour_Grade3' }, // Military Grade Composite
+				40114 : { cost:2224730, mass:23.00, fdid:128049289, fdname:'Type6_Armour_Mirrored' }, // Mirrored Surface Composite
+				40115 : { cost:2465290, mass:23.00, fdid:128049290, fdname:'Type6_Armour_Reactive' }, // Reactive Surface Composite
 			},
 		},
 		53 : {
 			fdid:128049291, fdname:'Dolphin',
-			id:53, stype:'pa', name:'Dolphin', class:1, cost:1115320, retail:1337320,
+			id:53, stype:'pa', name:'Dolphin', class:1, cost:1095780, retail:1337320,
 			topspd:250, bstspd:350, mnv:3, shields:110, armour:110, mass:140,
 			minthrust:48.0, boostcost:10, pitch:30, yaw:20, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:23,
-			heatcap:165, heatdismin:1.91, heatdismax:31.35, fuelcost:50, hardness:35, masslock:9, crew:1, // verify masslock
+			heatcap:165, heatdismin:1.91, heatdismax:31.35, fuelcost:50, fuelreserve:0.50, hardness:35, masslock:9, crew:1, // verify masslock
 			slots:{
 				hardpoint:[1,1],
 				utility  :[0,0,0],
 				component:[1,4,5,4,4,3,3,4],
 				military :[],
-				internal :[5,4,4,3,2,2,2],
+				internal :[5,4,4,3,2,2,2,1,1],
 			},
-			reserved:{
-				internal :[{icr:1,ihrp:1,imahrp:1,imrp:1,ipc:1}],
-			},
+		//	reserved:{
+		//		internal :[{icr:1,ihrp:1,isrp:1,imahrp:1,imrp:1,ipc:1}],
+		//	},
 			stock:{
 				hardpoint:[62160,62160],
 				utility  :[0,0,0],
 				component:[40131,41450,42550,43450,44450,45350,46350,47430],
 				military :[],
-				internal :[6550,350,30450,250,150,0,10150],
+				internal :[6550,350,30450,250,150,0,0,3152,3151], // verify positions
 			},
 			module:{
 				40131 : { cost:      0, mass: 0.00, fdid:128049292, fdname:'Dolphin_Armour_Grade1' }, // Lightweight Alloy
@@ -352,136 +354,136 @@ var eddb = {
 		},
 		44 : {
 			fdid:128671831, fdname:'DiamondBackXL',
-			id:44, stype:'ex', name:'Diamondback Explorer', class:1, cost:1635700, retail:1894760,
+			id:44, stype:'ex', name:'Diamondback Explorer', class:1, cost:1616160, retail:1894760,
 			topspd:260, bstspd:340, mnv:4, shields:150, armour:150, mass:260,
 			minthrust:61.538, boostcost:13, pitch:35, yaw:13, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:28,
-			heatcap:351, heatdismin:2.46, heatdismax:50.55, fuelcost:50, hardness:42, masslock:10, crew:1,
+			heatcap:351, heatdismin:2.46, heatdismax:50.55, fuelcost:50, fuelreserve:0.52, hardness:42, masslock:10, crew:1,
 			slots:{
 				hardpoint:[3,2,2],
 				utility  :[0,0,0,0],
 				component:[1,4,4,5,3,4,3,5],
 				military :[],
-				internal :[4,4,3,3,2,2],
+				internal :[4,4,3,3,2,2,1,1],
 			},
 			stock:{
 				hardpoint:[0,62160,62160],
 				utility  :[0,0,0,0],
 				component:[40131,41450,42450,43550,44350,45450,46350,47530],
 				military :[],
-				internal :[30450,350,250,0,10150,0],
+				internal :[30450,350,250,0,0,0,3152,3151], // verify positions
 			},
 			module:{
-				40131 : { cost:       0, mass: 0.00, fdid:128671832, fdname:'DiamondBackXL_Armour_Grade1' }, // Lightweight Alloy
-				40122 : { cost:  757900, mass:23.00, fdid:128671833, fdname:'DiamondBackXL_Armour_Grade2' }, // Reinforced Alloy // verify
-				40113 : { cost: 1705290, mass:47.00, fdid:128671834, fdname:'DiamondBackXL_Armour_Grade3' }, // Military Grade Composite // verify
-				40114 : { cost: 3979000, mass:47.00, fdid:128671835, fdname:'DiamondBackXL_Armour_Mirrored' }, // Mirrored Surface Composite // verify
-				40115 : { cost: 4465960, mass:47.00, fdid:128671836, fdname:'DiamondBackXL_Armour_Reactive' }, // Reactive Surface Composite // verify
+				40131 : { cost:      0, mass: 0.00, fdid:128671832, fdname:'DiamondBackXL_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 757900, mass:23.00, fdid:128671833, fdname:'DiamondBackXL_Armour_Grade2' }, // Reinforced Alloy // verify
+				40113 : { cost:1705290, mass:47.00, fdid:128671834, fdname:'DiamondBackXL_Armour_Grade3' }, // Military Grade Composite // verify
+				40114 : { cost:3979000, mass:47.00, fdid:128671835, fdname:'DiamondBackXL_Armour_Mirrored' }, // Mirrored Surface Composite // verify
+				40115 : { cost:4465960, mass:47.00, fdid:128671836, fdname:'DiamondBackXL_Armour_Reactive' }, // Reactive Surface Composite // verify
 			},
 		},
 		 7 : {
 			fdid:128671223, fdname:'Empire_Courier',
-			id:7, stype:'mp', name:'Imperial Courier', class:1, cost:2481550, retail:2542930,
+			id:7, stype:'mp', name:'Imperial Courier', class:1, cost:2462010, retail:2542930,
 			faction:'Empire', rank:3,
 			topspd:280, bstspd:380, mnv:4, shields:200, armour:80, mass:35,
 			minthrust:78.571, boostcost:10, pitch:38, yaw:16, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:32,
-			heatcap:230, heatdismin:1.62, heatdismax:25.05, fuelcost:50, hardness:30, masslock:7, crew:1,
+			heatcap:230, heatdismin:1.62, heatdismax:25.05, fuelcost:50, fuelreserve:0.41, hardness:30, masslock:7, crew:1,
 			slots:{
 				hardpoint:[2,2,2],
 				utility  :[0,0,0,0],
 				component:[1,4,3,3,1,3,2,3],
 				military :[],
-				internal :[3,3,2,2,2,1],
+				internal :[3,3,2,2,2,1,1,1],
 			},
 			stock:{
 				hardpoint:[62160,62160,0],
 				utility  :[0,0,0,0],
 				component:[40131,41450,42350,43350,44150,45350,46250,47330],
 				military :[],
-				internal :[250,250,30250,150,150,10150],
+				internal :[250,250,30250,150,150,0,3152,3151], // verify positions
 			},
 			module:{
-				40131 : { cost:       0, mass: 0.00, fdid:128671224, fdname:'Empire_Courier_Armour_Grade1' }, // Lightweight Alloy
-				40122 : { cost: 1017200, mass: 4.00, fdid:128671225, fdname:'Empire_Courier_Armour_Grade2' }, // Reinforced Alloy // verify
-				40113 : { cost: 2288600, mass: 8.00, fdid:128671226, fdname:'Empire_Courier_Armour_Grade3' }, // Military Grade Composite // verify
-				40114 : { cost: 5408800, mass: 8.00, fdid:128671227, fdname:'Empire_Courier_Armour_Mirrored' }, // Mirrored Surface Composite // verify
-				40115 : { cost: 5993700, mass: 8.00, fdid:128671228, fdname:'Empire_Courier_Armour_Reactive' }, // Reactive Surface Composite // verify
+				40131 : { cost:      0, mass: 0.00, fdid:128671224, fdname:'Empire_Courier_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost:1017200, mass: 4.00, fdid:128671225, fdname:'Empire_Courier_Armour_Grade2' }, // Reinforced Alloy // verify
+				40113 : { cost:2288600, mass: 8.00, fdid:128671226, fdname:'Empire_Courier_Armour_Grade3' }, // Military Grade Composite // verify
+				40114 : { cost:5408800, mass: 8.00, fdid:128671227, fdname:'Empire_Courier_Armour_Mirrored' }, // Mirrored Surface Composite // verify
+				40115 : { cost:5993700, mass: 8.00, fdid:128671228, fdname:'Empire_Courier_Armour_Reactive' }, // Reactive Surface Composite // verify
 			},
 		},
 		35 : {
 			fdid:128672269, fdname:'Independant_Trader',
-			id:35, stype:'fr', name:'Keelback', class:2, cost:2943870, retail:3126150,
+			id:35, stype:'fr', name:'Keelback', class:2, cost:2937840, retail:3126150,
 			topspd:200, bstspd:300, mnv:2, shields:135, armour:270, mass:180,
 			minthrust:45.0, boostcost:10, pitch:27, yaw:15, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:20,
-			heatcap:215, heatdismin:1.87, heatdismax:29.78, fuelcost:50, hardness:45, masslock:8, crew:2, // verify masslock
+			heatcap:215, heatdismin:1.87, heatdismax:29.78, fuelcost:50, fuelreserve:0.39, hardness:45, masslock:8, crew:2, // verify masslock
 			slots:{
-				hardpoint:[1,1,2,2],
+				hardpoint:[2,2,1,1],
 				utility  :[0,0,0],
 				component:[1,4,4,4,1,3,2,4],
 				military :[],
-				internal :[5,5,4,3,2,2],
+				internal :[5,5,4,3,2,2,1],
 			},
 			stock:{
-				hardpoint:[62160,62160,0,0],
+				hardpoint:[0,0,62160,62160],
 				utility  :[0,0,0],
 				component:[40131,41450,42450,43450,44150,45350,46250,47430],
 				military :[],
-				internal :[450,450,350,30350,150,10150],
+				internal :[450,450,350,30350,150,0,3152],
 			},
 			module:{
-				40131 : { cost:       0, mass: 0.00, fdid:128672271, fdname:'Independant_Trader_Armour_Grade1' }, // Lightweight Alloy
-				40122 : { cost: 1250460, mass:12.00, fdid:128672272, fdname:'Independant_Trader_Armour_Grade2' }, // Reinforced Alloy // verify
-				40113 : { cost: 2813540, mass:23.00, fdid:128672273, fdname:'Independant_Trader_Armour_Grade3' }, // Military Grade Composite // verify
-				40114 : { cost: 6649330, mass:23.00, fdid:128672274, fdname:'Independant_Trader_Armour_Mirrored' }, // Mirrored Surface Composite // verify
-				40115 : { cost: 7368340, mass:23.00, fdid:128672275, fdname:'Independant_Trader_Armour_Reactive' }, // Reactive Surface Composite // verify
+				40131 : { cost:      0, mass: 0.00, fdid:128672271, fdname:'Independant_Trader_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost:1250460, mass:12.00, fdid:128672272, fdname:'Independant_Trader_Armour_Grade2' }, // Reinforced Alloy // verify
+				40113 : { cost:2813540, mass:23.00, fdid:128672273, fdname:'Independant_Trader_Armour_Grade3' }, // Military Grade Composite // verify
+				40114 : { cost:6649330, mass:23.00, fdid:128672274, fdname:'Independant_Trader_Armour_Mirrored' }, // Mirrored Surface Composite // verify
+				40115 : { cost:7368340, mass:23.00, fdid:128672275, fdname:'Independant_Trader_Armour_Reactive' }, // Reactive Surface Composite // verify
 			},
 		},
 		45 : {
 			fdid:128672276, fdname:'Asp_Scout',
-			id:45, stype:'ex', name:'Asp Scout', class:2, cost:3817240, retail:3961150,
+			id:45, stype:'ex', name:'Asp Scout', class:2, cost:3811220, retail:3961160,
 			topspd:220, bstspd:300, mnv:5, shields:120, armour:180, mass:150,
 			minthrust:50.0, boostcost:13, pitch:40, yaw:15, roll:110, pitchacc:200, yawacc:100, rollacc:220, minpitch:35,
-			heatcap:210, heatdismin:1.80, heatdismax:29.65, fuelcost:50, hardness:52, masslock:8, crew:2, // verify masslock
+			heatcap:210, heatdismin:1.80, heatdismax:29.65, fuelcost:50, fuelreserve:0.47, hardness:52, masslock:8, crew:2, // verify masslock
 			slots:{
-				hardpoint:[1,1,2,2],
+				hardpoint:[2,2,1,1],
 				utility  :[0,0],
 				component:[1,4,4,4,3,4,4,4],
 				military :[],
-				internal :[5,4,3,3,2,2],
+				internal :[5,4,3,3,2,2,1],
 			},
 			stock:{
-				hardpoint:[62160,62160,0,0],
+				hardpoint:[0,0,62160,62160],
 				utility  :[0,0],
 				component:[40131,41450,42450,43450,44350,45450,46450,47430],
 				military :[],
-				internal :[350,350,30350,0,10150,0],
+				internal :[350,350,30350,0,0,0,3152],
 			},
 			module:{
-				40131 : { cost:       0, mass: 0.00, fdid:128672278, fdname:'Asp_Scout_Armour_Grade1' }, // Lightweight Alloy
-				40122 : { cost: 1584460, mass:21.00, fdid:128672279, fdname:'Asp_Scout_Armour_Grade2' }, // Reinforced Alloy // verify
-				40113 : { cost: 3565040, mass:42.00, fdid:128672280, fdname:'Asp_Scout_Armour_Grade3' }, // Military Grade Composite // verify
-				40114 : { cost: 8425380, mass:42.00, fdid:128672281, fdname:'Asp_Scout_Armour_Mirrored' }, // Mirrored Surface Composite // verify
-				40115 : { cost: 9336440, mass:42.00, fdid:128672282, fdname:'Asp_Scout_Armour_Reactive' }, // Reactive Surface Composite // verify
+				40131 : { cost:      0, mass: 0.00, fdid:128672278, fdname:'Asp_Scout_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost:1584460, mass:21.00, fdid:128672279, fdname:'Asp_Scout_Armour_Grade2' }, // Reinforced Alloy // verify
+				40113 : { cost:3565040, mass:42.00, fdid:128672280, fdname:'Asp_Scout_Armour_Grade3' }, // Military Grade Composite // verify
+				40114 : { cost:8425380, mass:42.00, fdid:128672281, fdname:'Asp_Scout_Armour_Mirrored' }, // Mirrored Surface Composite // verify
+				40115 : { cost:9336440, mass:42.00, fdid:128672282, fdname:'Asp_Scout_Armour_Reactive' }, // Reactive Surface Composite // verify
 			},
 		},
 		23 : {
 			fdid:128049309, fdname:'Vulture',
-			id:23, stype:'co', name:'Vulture', class:1, cost:4689640, retail:4925620,
+			id:23, stype:'co', name:'Vulture', class:1, cost:4670100, retail:4925620,
 			topspd:210, bstspd:340, mnv:5, shields:240, armour:160, mass:230,
 			minthrust:90.476, boostcost:16, pitch:42, yaw:17, roll:110, pitchacc:180, yawacc:90, rollacc:200, minpitch:35,
-			heatcap:237, heatdismin:1.87, heatdismax:35.63, fuelcost:50, hardness:55, masslock:10, crew:2,
+			heatcap:237, heatdismin:1.87, heatdismax:35.63, fuelcost:50, fuelreserve:0.57, hardness:55, masslock:10, crew:2,
 			slots:{
 				hardpoint:[3,3],
 				utility  :[0,0,0,0],
 				component:[1,4,5,4,3,5,4,3],
 				military :[5],
-				internal :[5,4,2,1,1],
+				internal :[5,4,2,1,1,1,1],
 			},
 			stock:{
 				hardpoint:[62160,62160],
 				utility  :[0,0,0,0],
 				component:[40131,41450,42550,43450,44350,45550,46450,47330],
 				military :[0],
-				internal :[30550,350,10150,0,0],
+				internal :[30550,350,0,0,0,3152,3151], // verify positions
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128049310, fdname:'Vulture_Armour_Grade1' }, // Lightweight Alloy
@@ -493,23 +495,23 @@ var eddb = {
 		},
 		42 : {
 			fdid:128049303, fdname:'Asp',
-			id:42, stype:'ex', name:'Asp Explorer', class:2, cost:6135660, retail:6661150,
+			id:42, stype:'ex', name:'Asp Explorer', class:2, cost:6137180, retail:6661160,
 			topspd:250, bstspd:340, mnv:4, shields:140, armour:210, mass:280,
 			minthrust:48.0, boostcost:13, pitch:38, yaw:10, roll:100, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
-			heatcap:272, heatdismin:2.34, heatdismax:39.90, fuelcost:50, hardness:52, masslock:11, crew:2,
+			heatcap:272, heatdismin:2.34, heatdismax:39.90, fuelcost:50, fuelreserve:0.63, hardness:52, masslock:11, crew:2,
 			slots:{
-				hardpoint:[1,1,1,1,2,2],
+				hardpoint:[2,2,1,1,1,1],
 				utility  :[0,0,0,0],
 				component:[1,5,5,5,4,4,5,5],
 				military :[],
-				internal :[6,5,3,3,3,2,2],
+				internal :[6,5,3,3,3,2,2,1],
 			},
 			stock:{
-				hardpoint:[62160,62160,0,0,0,0],
+				hardpoint:[0,0,62160,62160,0,0], // verify positions
 				utility  :[0,0,0,0],
 				component:[40131,41550,42550,43550,44450,45450,46550,47530],
 				military :[],
-				internal :[550,30550,250,0,0,150,10150],
+				internal :[550,30550,250,0,0,150,0,3152], // verify positions
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128049304, fdname:'Asp_Armour_Grade1' }, // Lightweight Alloy
@@ -521,24 +523,24 @@ var eddb = {
 		},
 		 4 : {
 			fdid:128049321, fdname:'Federation_Dropship',
-			id:4, stype:'mp', name:'Federal Dropship', class:2, cost:13469990, retail:14314210,
+			id:4, stype:'co', name:'Federal Dropship', class:2, cost:13501480, retail:14314210,
 			faction:'Federation', rank:3,
 			topspd:180, bstspd:300, mnv:3, shields:200, armour:300, mass:580,
 			minthrust:55.556, boostcost:19, pitch:30, yaw:14, roll:80, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
-			heatcap:331, heatdismin:2.60, heatdismax:46.50, fuelcost:50, hardness:60, masslock:14, crew:2,
+			heatcap:331, heatdismin:2.60, heatdismax:46.50, fuelcost:50, fuelreserve:0.83, hardness:60, masslock:14, crew:2,
 			slots:{
 				hardpoint:[3,2,2,2,2],
 				utility  :[0,0,0,0],
 				component:[1,6,6,5,5,6,4,4],
 				military :[4,4],
-				internal :[6,5,5,4,3,3,2],
+				internal :[6,5,5,4,3,3,2,1],
 			},
 			stock:{
 				hardpoint:[0,0,0,62160,62160],
 				utility  :[0,0,0,0],
 				component:[40131,41650,42650,43550,44550,45650,46450,47430],
 				military :[0,0],
-				internal :[550,450,30550,350,0,0,10150],
+				internal :[550,450,30550,350,0,0,0,3152], // verify positions
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128049322, fdname:'Federation_Dropship_Armour_Grade1' }, // Lightweight Alloy
@@ -550,23 +552,23 @@ var eddb = {
 		},
 		33 : {
 			fdid:128049297, fdname:'Type7',
-			id:33, stype:'fr', name:'Type-7 Transporter', class:3, cost:16780500, retail:17472250,
+			id:33, stype:'fr', name:'Type-7 Transporter', class:3, cost:16774470, retail:17472250,
 			topspd:180, bstspd:300, mnv:1, shields:156, armour:340, mass:350,
 			minthrust:33.333, boostcost:10, pitch:22, yaw:22, roll:60, pitchacc:200, yawacc:50, rollacc:200, minpitch:16, minyaw:16,
-			heatcap:226, heatdismin:2.17, heatdismax:32.45, fuelcost:50, hardness:54, masslock:10, crew:1, // verify masslock
+			heatcap:226, heatdismin:2.17, heatdismax:32.45, fuelcost:50, fuelreserve:0.52, hardness:54, masslock:10, crew:1, // verify masslock
 			slots:{
 				hardpoint:[1,1,1,1],
 				utility  :[0,0,0,0],
 				component:[1,5,5,5,4,4,3,5],
 				military :[],
-				internal :[6,6,6,5,5,5,3,3,2],
+				internal :[6,6,6,5,5,5,3,3,2,1],
 			},
 			stock:{
 				hardpoint:[62160,62160,0,0],
 				utility  :[0,0,0,0],
 				component:[40131,41450,42550,43550,44450,45350,46350,47530],
 				military :[],
-				internal :[550,550,550,450,450,30450,0,0,10150],
+				internal :[550,550,550,450,450,30450,0,0,0,3152], // verify positions
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128049298, fdname:'Type7_Armour_Grade1' }, // Lightweight Alloy
@@ -578,23 +580,23 @@ var eddb = {
 		},
 		 9 : {
 			fdid:128816574, fdname:'TypeX',
-			id:9, stype:'mp', name:'Alliance Chieftain', class:2, cost:18572360, retail:19382250,
+			id:9, stype:'co', name:'Alliance Chieftain', class:2, cost:18603850, retail:19382250,
 			topspd:230, bstspd:330, mnv:4, shields:200, armour:280, mass:400,
 			minthrust:65.217, boostcost:19, pitch:38, yaw:16, roll:90, pitchacc:170, yawacc:60, rollacc:150, minpitch:32,
-			heatcap:289, heatdismin:2.60, heatdismax:46.50, fuelcost:50, hardness:65, masslock:13, crew:2,
+			heatcap:289, heatdismin:2.60, heatdismax:46.50, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:13, crew:2,
 			slots:{
 				hardpoint:[3,3,2,1,1,1],
 				utility  :[0,0,0,0],
 				component:[1,6,6,5,5,6,4,4],
 				military :[4,4,4],
-				internal :[6,5,4,2,2],
+				internal :[6,5,4,2,2,1],
 			},
 			stock:{
 				hardpoint:[62160,0,62160,0,0,0],
 				utility  :[0,0,0,0],
 				component:[40131,41650,42650,43550,44550,45650,46450,47430],
 				military :[0,0,0],
-				internal :[550,30550,350,0,10150],
+				internal :[550,30550,350,0,0,3152], // verify positions
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128816576, fdname:'TypeX_Armour_Grade1' }, // Lightweight Alloy
@@ -606,24 +608,24 @@ var eddb = {
 		},
 		26 : {
 			fdid:128672145, fdname:'Federation_Dropship_MkII',
-			id:26, stype:'co', name:'Federal Assault Ship', class:2, cost:19071000, retail:19814210,
+			id:26, stype:'co', name:'Federal Assault Ship', class:2, cost:19102490, retail:19814210,
 			faction:'Federation', rank:5,
 			topspd:210, bstspd:350, mnv:4, shields:200, armour:300, mass:480,
 			minthrust:71.429, boostcost:19, pitch:38, yaw:19, roll:90, pitchacc:170, yawacc:80, rollacc:200, minpitch:30,
-			heatcap:286, heatdismin:2.53, heatdismax:45.23, fuelcost:50, hardness:60, masslock:14, crew:2, // verify masslock
+			heatcap:286, heatdismin:2.53, heatdismax:45.23, fuelcost:50, fuelreserve:0.72, hardness:60, masslock:14, crew:2, // verify masslock
 			slots:{
 				hardpoint:[3,3,2,2],
 				utility  :[0,0,0,0],
 				component:[1,6,6,5,5,6,4,4],
 				military :[4,4],
-				internal :[5,5,4,3,2,2],
+				internal :[5,5,4,3,2,2,1],
 			},
 			stock:{
 				hardpoint:[0,0,62160,62160],
 				utility  :[0,0,0,0],
 				component:[40131,41650,42650,43550,44550,45650,46450,47430],
 				military :[0,0],
-				internal :[30550,450,350,350,0,10150],
+				internal :[30550,450,350,350,0,0,3152], // verify positions
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128672147, fdname:'Federation_Dropship_MkII_Armour_Grade1' }, // Lightweight Alloy
@@ -635,24 +637,24 @@ var eddb = {
 		},
 		 3 : {
 			fdid:128049315, fdname:'Empire_Trader',
-			id:3, stype:'mp', name:'Imperial Clipper', class:3, cost:21077780, retail:22295860,
+			id:3, stype:'mp', name:'Imperial Clipper', class:3, cost:21108270, retail:22295860,
 			faction:'Empire', rank:7,
 			topspd:300, bstspd:380, mnv:5, shields:180, armour:270, mass:400,
 			minthrust:60.0, boostcost:19, pitch:40, yaw:18, roll:80, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
-			heatcap:304, heatdismin:2.63, heatdismax:46.80, fuelcost:50, hardness:60, masslock:12, crew:2,
+			heatcap:304, heatdismin:2.63, heatdismax:46.80, fuelcost:50, fuelreserve:0.74, hardness:60, masslock:12, crew:2,
 			slots:{
 				hardpoint:[3,3,2,2],
 				utility  :[0,0,0,0],
 				component:[1,6,6,5,5,6,5,4],
 				military :[],
-				internal :[7,6,4,4,3,3,2,2],
+				internal :[7,6,4,4,3,3,2,2,1],
 			},
 			stock:{
 				hardpoint:[0,0,62160,62160],
 				utility  :[0,0,0,0],
 				component:[40131,41650,42650,43550,44550,45650,46550,47430],
 				military :[],
-				internal :[650,30650,350,0,0,0,150,0],
+				internal :[650,30650,350,0,0,0,150,0,3152], // verify positions
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128049316, fdname:'Empire_Trader_Armour_Grade1' }, // Lightweight Alloy
@@ -662,26 +664,82 @@ var eddb = {
 				40115 : { cost:52551340, mass:60.00, fdid:128049320, fdname:'Empire_Trader_Armour_Reactive' }, // Reactive Surface Composite // verify
 			},
 		},
+		10 : {
+			fdid:128816581, fdname:'TypeX_2',
+			id:10, stype:'co', name:'Alliance Crusader', class:2, cost:22087940, retail:22866340,
+			topspd:180, bstspd:300, mnv:3, shields:200, armour:300, mass:500,
+			minthrust:61.11, boostcost:19, pitch:32, yaw:16, roll:80, pitchacc:150, yawacc:50, rollacc:150, minpitch:30, // verify minthrust
+			heatcap:316, heatdismin:2.53, heatdismax:45.23, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:13, crew:3, // verify hardness,masslock
+			slots:{ // verify
+				hardpoint:[3,2,2,1,1,1],
+				utility  :[0,0,0,0],
+				component:[1,6,6,5,5,6,4,4],
+				military :[4,4,4],
+				internal :[6,5,3,3,2,2,1],
+			},
+			stock:{ // verify
+				hardpoint:[62160,0,62160,0,0,0],
+				utility  :[0,0,0,0],
+				component:[40131,41650,42650,43550,44550,45650,46450,47430],
+				military :[0,0,0],
+				internal :[550,30550,350,0,0,0,3152], // verify positions
+			},
+			module:{
+				40131 : { cost:       0, mass: 0.00, fdid:128816583, fdname:'TypeX_2_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 6803170, mass:40.00, fdid:128816584, fdname:'TypeX_2_Armour_Grade2' }, // Reinforced Alloy // verify
+				40113 : { cost:15307134, mass:78.00, fdid:128816585, fdname:'TypeX_2_Armour_Grade3' }, // Military Grade Composite // verify
+				40114 : { cost:36175859, mass:78.00, fdid:128816586, fdname:'TypeX_2_Armour_Mirrored' }, // Mirrored Surface Composite // verify
+				40115 : { cost:40087682, mass:78.00, fdid:128816587, fdname:'TypeX_2_Armour_Reactive' }, // Reactive Surface Composite // verify
+			},
+		},
+		13 : {
+			fdid:128816588, fdname:'TypeX_3',
+			id:13, stype:'co', name:'Alliance Challenger', class:2, cost:29561170, retail:30472250,
+			topspd:200, bstspd:310, mnv:4, shields:220, armour:300, mass:450,
+			minthrust:65.00, boostcost:19, pitch:35, yaw:16, roll:90, pitchacc:120, yawacc:50, rollacc:120, minpitch:32, // verify minthrust
+			heatcap:316, heatdismin:2.87, heatdismax:51.40, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:13, crew:2, // verify hardness,masslock
+			slots:{ // verify
+				hardpoint:[3,2,2,2,1,1,1],
+				utility  :[0,0,0,0],
+				component:[1,6,6,5,5,6,4,4],
+				military :[4,4,4],
+				internal :[6,6,3,3,2,2,1],
+			},
+			stock:{ // verify
+				hardpoint:[62160,0,62160,0,0,0,0],
+				utility  :[0,0,0,0],
+				component:[40131,41650,42650,43550,44550,45650,46450,47430],
+				military :[0,0,0],
+				internal :[550,30650,250,250,0,0,3152], // verify positions
+			},
+			module:{
+				40131 : { cost:       0, mass: 0.00, fdid:128816590, fdname:'TypeX_3_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 6803170, mass:40.00, fdid:128816591, fdname:'TypeX_3_Armour_Grade2' }, // Reinforced Alloy // verify
+				40113 : { cost:15307134, mass:78.00, fdid:128816592, fdname:'TypeX_3_Armour_Grade3' }, // Military Grade Composite // verify
+				40114 : { cost:36175859, mass:78.00, fdid:128816593, fdname:'TypeX_3_Armour_Mirrored' }, // Mirrored Surface Composite // verify
+				40115 : { cost:40087682, mass:78.00, fdid:128816594, fdname:'TypeX_3_Armour_Reactive' }, // Reactive Surface Composite // verify
+			},
+		},
 		27 : {
 			fdid:128672152, fdname:'Federation_Gunship',
-			id:27, stype:'mp', name:'Federal Gunship', class:2, cost:34774790, retail:35814210,
+			id:27, stype:'co', name:'Federal Gunship', class:2, cost:34806280, retail:35814210,
 			faction:'Federation', rank:7,
 			topspd:170, bstspd:280, mnv:1, shields:250, armour:350, mass:580,
 			minthrust:58.824, boostcost:23, pitch:25, yaw:18, roll:80, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
-			heatcap:325, heatdismin:2.87, heatdismax:51.40, fuelcost:50, hardness:60, masslock:14, crew:2, // verify masslock
+			heatcap:325, heatdismin:2.87, heatdismax:51.40, fuelcost:50, fuelreserve:0.82, hardness:60, masslock:14, crew:2, // verify masslock
 			slots:{
 				hardpoint:[3,2,2,2,2,1,1],
 				utility  :[0,0,0,0],
 				component:[1,6,6,5,5,7,5,4],
 				military :[4,4,4],
-				internal :[6,6,5,2,2],
+				internal :[6,6,5,2,2,1],
 			},
 			stock:{
 				hardpoint:[0,0,0,62160,62160,0,0],
 				utility  :[0,0,0,0],
 				component:[40131,41650,42650,43550,44550,45750,46550,47430],
 				military :[0,0,0],
-				internal :[0,30650,450,0,10150],
+				internal :[0,30650,450,0,0,3152], // verify positions
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128672154, fdname:'Federation_Gunship_Armour_Grade1' }, // Lightweight Alloy
@@ -691,28 +749,84 @@ var eddb = {
 				40115 : { cost:84414090, mass:87.00, fdid:128672158, fdname:'Federation_Gunship_Armour_Reactive' }, // Reactive Surface Composite // verify
 			},
 		},
+		11 : {
+			fdid:128839281, fdname:'Krait_Light',
+			id:11, stype:'mp', name:'Krait Phantom', class:2, cost:35732880, retail:37472250,
+			topspd:250, bstspd:350, mnv:3, shields:200, armour:180, mass:270,
+			minthrust:64.00, boostcost:13, pitch:31, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:200, minpitch:26, // verify minthrust
+			heatcap:300, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.63, hardness:60, masslock:16, crew:2, // verify hardness,masslock
+			slots:{ // verify
+				hardpoint:[3,3,2,2],
+				utility  :[0,0,0,0],
+				component:[1,7,6,5,4,7,6,5],
+				military :[],
+				internal :[6,5,5,5,3,3,3,2,1],
+			},
+			stock:{ // verify
+				hardpoint:[0,0,62160,62160],
+				utility  :[0,0,0,0],
+				component:[40131,41750,42650,43550,44450,45750,46650,47530],
+				military :[],
+				internal :[30650,550,550,550,0,0,0,150,3152], // verify positions
+			},
+			module:{
+				40131 : { cost:        0, mass: 0.00, fdid:128839283, fdname:'Krait_Light_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 22791270, mass:36.00, fdid:128839284, fdname:'Krait_Light_Armour_Grade2' }, // Reinforced Alloy // verify
+				40113 : { cost: 51280360, mass:67.00, fdid:128839285, fdname:'Krait_Light_Armour_Grade3' }, // Military Grade Composite // verify
+				40114 : { cost:121192590, mass:67.00, fdid:128839286, fdname:'Krait_Light_Armour_Mirrored' }, // Mirrored Surface Composite // verify
+				40115 : { cost:134297570, mass:67.00, fdid:128839287, fdname:'Krait_Light_Armour_Reactive' }, // Reactive Surface Composite // verify
+			},
+		},
+		14 : {
+			fdid:128816567, fdname:'Krait_MkII',
+			id:14, stype:'mp', name:'Krait Mk II', class:2, cost:44152080, retail:45814210,
+			topspd:240, bstspd:330, mnv:3, shields:220, armour:220, mass:320,
+			minthrust:62.50, boostcost:13, pitch:31, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:200, minpitch:26, // verify minthrust
+			heatcap:300, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.63, hardness:55, masslock:16, crew:3, // verify hardness,masslock
+			slots:{ // verify
+				hardpoint:[3,3,3,2,2],
+				utility  :[0,0,0,0],
+				component:[1,7,6,5,4,7,6,5],
+				military :[],
+				internal :[6,6,5,5,4,3,3,2,1],
+			},
+			stock:{ // verify
+				hardpoint:[0,0,0,62160,62160],
+				utility  :[0,0,0,0],
+				component:[40131,41750,42650,43550,44450,45750,46650,47530],
+				military :[],
+				internal :[30650,550,550,450,0,0,0,150,3152], // verify positions
+			},
+			module:{
+				40131 : { cost:        0, mass: 0.00, fdid:128816569, fdname:'Krait_MkII_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 22791270, mass:36.00, fdid:128816570, fdname:'Krait_MkII_Armour_Grade2' }, // Reinforced Alloy // verify
+				40113 : { cost: 51280360, mass:67.00, fdid:128816571, fdname:'Krait_MkII_Armour_Grade3' }, // Military Grade Composite // verify
+				40114 : { cost:121192590, mass:67.00, fdid:128816572, fdname:'Krait_MkII_Armour_Mirrored' }, // Mirrored Surface Composite // verify
+				40115 : { cost:134297570, mass:67.00, fdid:128816573, fdname:'Krait_MkII_Armour_Reactive' }, // Reactive Surface Composite // verify
+			},
+		},
 		51 : {
 			fdid:128049327, fdname:'Orca',
-			id:51, stype:'pa', name:'Orca', class:3, cost:47790580, retail:48539890,
+			id:51, stype:'pa', name:'Orca', class:3, cost:47792090, retail:48539890,
 			topspd:300, bstspd:380, mnv:1, shields:220, armour:220, mass:290,
 			minthrust:66.667, boostcost:16, pitch:25, yaw:18, roll:55, pitchacc:220, yawacc:110, rollacc:240, minpitch:20,
-			heatcap:262, heatdismin:2.30, heatdismax:42.68, fuelcost:50, hardness:55, masslock:15, crew:2,
+			heatcap:262, heatdismin:2.30, heatdismax:42.68, fuelcost:50, fuelreserve:0.79, hardness:55, masslock:15, crew:2,
 			slots:{
 				hardpoint:[3,2,2],
 				utility  :[0,0,0,0],
 				component:[1,5,6,5,6,5,4,5],
 				military :[],
-				internal :[6,5,5,5,4,3,2,2],
+				internal :[6,5,5,5,4,3,2,2,1],
 			},
-			reserved:{
-				internal :[{icr:1,ihrp:1,imahrp:1,imrp:1,ipc:1}, {icr:1,ihrp:1,imahrp:1,imrp:1,ipc:1}],
-			},
+		//	reserved:{
+		//		internal :[{icr:1,ihrp:1,isrp:1,imahrp:1,imrp:1,ipc:1}, {icr:1,ihrp:1,isrp:1,imahrp:1,imrp:1,ipc:1}],
+		//	},
 			stock:{
 				hardpoint:[0,62160,62160],
 				utility  :[0,0,0,0],
 				component:[40131,41550,42650,43550,44650,45550,46450,47530],
 				military :[],
-				internal :[6650,6450,450,30550,350,0,0,10150],
+				internal :[6650,6450,450,30550,350,0,0,0,3152], // verify positions
 			},
 			module:{
 				40131 : { cost:        0, mass: 0.00, fdid:128049328, fdname:'Orca_Armour_Grade1' }, // Lightweight Alloy
@@ -724,23 +838,23 @@ var eddb = {
 		},
 		24 : {
 			fdid:128049351, fdname:'FerDeLance',
-			id:24, stype:'co', name:'Fer-de-Lance', class:2, cost:51095490, retail:51567040,
+			id:24, stype:'co', name:'Fer-de-Lance', class:2, cost:51126980, retail:51567040,
 			topspd:260, bstspd:350, mnv:4, shields:300, armour:225, mass:250,
 			minthrust:84.615, boostcost:19, pitch:38, yaw:12, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
-			heatcap:224, heatdismin:2.05, heatdismax:41.63, fuelcost:50, hardness:70, masslock:12, crew:2,
+			heatcap:224, heatdismin:2.05, heatdismax:41.63, fuelcost:50, fuelreserve:0.67, hardness:70, masslock:12, crew:2,
 			slots:{
 				hardpoint:[4,2,2,2,2],
 				utility  :[0,0,0,0,0,0],
 				component:[1,6,5,4,4,6,4,3],
 				military :[],
-				internal :[5,4,4,2,1],
+				internal :[5,4,4,2,1,1],
 			},
 			stock:{
 				hardpoint:[0,62160,62160,0,0],
 				utility  :[0,0,0,0,0,0],
 				component:[40131,41650,42550,43450,44450,45650,46450,47330],
 				military :[],
-				internal :[450,30450,350,0,10150],
+				internal :[450,30450,350,0,0,3152], // verify positions
 			},
 			module:{
 				40131 : { cost:        0, mass: 0.00, fdid:128049352, fdname:'FerDeLance_Armour_Grade1' }, // Lightweight Alloy
@@ -750,25 +864,53 @@ var eddb = {
 				40115 : { cost:121543510, mass:38.00, fdid:128049356, fdname:'FerDeLance_Armour_Reactive' }, // Reactive Surface Composite // verify
 			},
 		},
+		12 : {
+			fdid:128915979, fdname:'Mamba',
+			id:12, stype:'co', name:'Mamba', class:2, cost:55434290, retail:55867040,
+			topspd:310, bstspd:380, mnv:3, shields:270, armour:230, mass:250,
+			minthrust:77.42, boostcost:17, pitch:30, yaw:10, roll:75, pitchacc:180, yawacc:90, rollacc:200, minpitch:27, // verify minthrust
+			heatcap:165, heatdismin:2.05, heatdismax:41.63, fuelcost:50, fuelreserve:0.50, hardness:65, masslock:12, crew:2, // verify hardness,masslock
+			slots:{ // verify
+				hardpoint:[4,3,3,1,1],
+				utility  :[0,0,0,0,0,0],
+				component:[1,6,5,4,4,6,4,3],
+				military :[],
+				internal :[5,4,3,2,2,1],
+			},
+			stock:{ // verify
+				hardpoint:[0,0,0,62160,62160],
+				utility  :[0,0,0,0,0,0],
+				component:[40131,41650,42550,43450,44450,45650,46450,47330],
+				military :[],
+				internal :[450,30450,250,0,0,3152], // verify positions
+			},
+			module:{
+				40131 : { cost:        0, mass: 0.00, fdid:128915981, fdname:'Mamba_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 20626820, mass:19.00, fdid:128915982, fdname:'Mamba_Armour_Grade2' }, // Reinforced Alloy // verify
+				40113 : { cost: 46410340, mass:38.00, fdid:128915983, fdname:'Mamba_Armour_Grade3' }, // Military Grade Composite // verify
+				40114 : { cost:109683090, mass:38.00, fdid:128915984, fdname:'Mamba_Armour_Mirrored' }, // Mirrored Surface Composite // verify
+				40115 : { cost:121543510, mass:38.00, fdid:128915985, fdname:'Mamba_Armour_Reactive' }, // Reactive Surface Composite // verify
+			},
+		},
 		 5 : {
 			fdid:128049339, fdname:'Python',
-			id:5, stype:'mp', name:'Python', class:2, cost:55171380, retail:56978180,
+			id:5, stype:'mp', name:'Python', class:2, cost:55316050, retail:56978180,
 			topspd:230, bstspd:300, mnv:2, shields:260, armour:260, mass:350,
 			minthrust:60.870, boostcost:23, pitch:29, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:24,
-			heatcap:300, heatdismin:2.68, heatdismax:52.05, fuelcost:50, hardness:65, masslock:17, crew:2,
+			heatcap:300, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.83, hardness:65, masslock:17, crew:2,
 			slots:{
 				hardpoint:[3,3,3,2,2],
 				utility  :[0,0,0,0],
 				component:[1,7,6,5,4,7,6,5],
 				military :[],
-				internal :[6,6,6,5,5,4,3,3,2],
+				internal :[6,6,6,5,5,4,3,3,2,1],
 			},
 			stock:{
 				hardpoint:[0,0,0,62160,62160],
 				utility  :[0,0,0,0],
 				component:[40131,41750,42650,43550,44450,45750,46650,47530],
 				military :[],
-				internal :[550,550,30650,450,0,0,0,10150,150],
+				internal :[550,550,30650,450,0,0,0,0,150,3152], // verify positions
 			},
 			module:{
 				40131 : { cost:        0, mass: 0.00, fdid:128049340, fdname:'Python_Armour_Grade1' }, // Lightweight Alloy
@@ -780,23 +922,23 @@ var eddb = {
 		},
 		34 : {
 			fdid:128049333, fdname:'Type9',
-			id:34, stype:'fr', name:'Type-9 Heavy', class:3, cost:72076730, retail:76555840,
+			id:34, stype:'fr', name:'Type-9 Heavy', class:3, cost:72108220, retail:76555840,
 			topspd:130, bstspd:200, mnv:0, shields:240, armour:480, mass:850,
 			minthrust:30.769, boostcost:19, pitch:20, yaw:8, roll:20, pitchacc:100, yawacc:50, rollacc:80, minpitch:15,
-			heatcap:289, heatdismin:3.10, heatdismax:48.35, fuelcost:50, hardness:65, masslock:16, crew:3,
+			heatcap:289, heatdismin:3.10, heatdismax:48.35, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:16, crew:3,
 			slots:{
 				hardpoint:[2,2,2,1,1],
 				utility  :[0,0,0,0],
 				component:[1,6,7,6,5,6,4,6],
 				military :[],
-				internal :[8,8,7,6,5,4,4,3,3,2],
+				internal :[8,8,7,6,5,4,4,3,3,2,1],
 			},
 			stock:{
 				hardpoint:[62160,62160,0,0,0],
 				utility  :[0,0,0,0],
 				component:[40131,41650,42750,43650,44550,45650,46450,47630],
 				military :[],
-				internal :[750,750,650,30650,450,350,0,250,0,10150],
+				internal :[750,750,650,30650,450,350,0,250,0,0,3152], // verify positions
 			},
 			module:{
 				40131 : { cost:        0, mass:  0.00, fdid:128049334, fdname:'Type9_Armour_Grade1' }, // Lightweight Alloy
@@ -808,26 +950,26 @@ var eddb = {
 		},
 		52 : {
 			fdid:128049345, fdname:'BelugaLiner',
-			id:52, stype:'pa', name:'Beluga Liner', class:3, cost:79654600, retail:84532760,
+			id:52, stype:'pa', name:'Beluga Liner', class:3, cost:79686090, retail:84532760,
 			topspd:200, bstspd:280, mnv:2, shields:280, armour:280, mass:950,
 			minthrust:55.0, boostcost:19, pitch:25, yaw:17, roll:60, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
-			heatcap:283, heatdismin:2.60, heatdismax:50.85, fuelcost:50, hardness:60, masslock:18, crew:3, // verify masslock
+			heatcap:283, heatdismin:2.60, heatdismax:50.85, fuelcost:50, fuelreserve:0.81, hardness:60, masslock:18, crew:3, // verify masslock
 			slots:{
 				hardpoint:[2,2,2,2,2],
 				utility  :[0,0,0,0,0,0],
 				component:[1,6,7,7,8,6,5,7],
 				military :[],
-				internal :[6,6,6,6,5,5,4,3,3,3,3],
+				internal :[6,6,6,6,5,5,4,3,3,3,3,1],
 			},
-			reserved:{
-				internal :[null, null, {icr:1,ihrp:1,imahrp:1,imrp:1,ipc:1}, {icr:1,ihrp:1,imahrp:1,imrp:1,ipc:1}, {icr:1,ihrp:1,imahrp:1,imrp:1,ipc:1}, {icr:1,ihrp:1,imahrp:1,imrp:1,ipc:1}],
-			},
+		//	reserved:{
+		//		internal :[null, null, {icr:1,ihrp:1,isrp:1,imahrp:1,imrp:1,ipc:1}, {icr:1,ihrp:1,isrp:1,imahrp:1,imrp:1,ipc:1}, {icr:1,ihrp:1,isrp:1,imahrp:1,imrp:1,ipc:1}, {icr:1,ihrp:1,isrp:1,imahrp:1,imrp:1,ipc:1}],
+		//	},
 			stock:{
 				hardpoint:[62160,62160,0,0,0],
 				utility  :[0,0,0,0,0,0],
 				component:[40131,41650,42750,43750,44850,45650,46550,47730],
 				military :[],
-				internal :[30650,550,6640,6640,6440,6440,350,250,0,0,10150],
+				internal :[30650,550,6640,6640,6440,6440,350,250,0,0,0,3152], // verify positions
 			},
 			module:{
 				40131 : { cost:        0, mass:  0.00, fdid:128049346, fdname:'BelugaLiner_Armour_Grade1' }, // Lightweight Alloy
@@ -839,23 +981,23 @@ var eddb = {
 		},
 		36 : {
 			fdid:128785619, fdname:'Type9_Military',
-			id:36, stype:'fr', name:'Type-10 Defender', class:3, cost:121454652, retail:124755342,
+			id:36, stype:'fr', name:'Type-10 Defender', class:3, cost:121486140, retail:124755340,
 			topspd:180, bstspd:220, mnv:0, shields:320, armour:580, mass:1200,
 			minthrust:83.333, boostcost:19, pitch:22, yaw:8, roll:40, pitchacc:100, yawacc:35, rollacc:80, minpitch:18,
-			heatcap:335, heatdismin:3.16, heatdismax:67.15, fuelcost:50, hardness:75, masslock:26, crew:3, // verify masslock
+			heatcap:335, heatdismin:3.16, heatdismax:67.15, fuelcost:50, fuelreserve:0.77, hardness:75, masslock:26, crew:3, // verify masslock
 			slots:{
-				hardpoint:[2,2,2,3,3,3,3,1,1], // TODO sorted by size now
+				hardpoint:[3,3,3,3,2,2,2,1,1],
 				utility  :[0,0,0,0,0,0,0,0],
 				component:[1,8,7,7,5,7,4,6],
 				military :[5,5],
-				internal :[8,7,6,5,4,4,3,3,2],
+				internal :[8,7,6,5,4,4,3,3,2,1],
 			},
 			stock:{
-				hardpoint:[62160,62160,0,0,0,0,0,0,0], // TODO stock still in first two mediums
+				hardpoint:[0,0,0,0,62160,62160,0,0,0],
 				utility  :[0,0,0,0,0,0,0,0],
 				component:[40131,41650,42750,43650,44550,45650,46450,47630],
 				military :[0,0],
-				internal :[750,650,30650,450,350,0,250,0,10150],
+				internal :[750,650,30650,450,350,0,250,0,0,3152], // verify positions
 			},
 			module:{
 				40131 : { cost:        0, mass:  0.00, fdid:128785621, fdname:'Type9_Military_Armour_Grade1' }, // Lightweight Alloy
@@ -867,23 +1009,23 @@ var eddb = {
 		},
 		 6 : {
 			fdid:128049363, fdname:'Anaconda',
-			id:6, stype:'mp', name:'Anaconda', class:3, cost:141889930, retail:146969450,
+			id:6, stype:'sh', name:'Anaconda', class:3, cost:142447820, retail:146969450,
 			topspd:180, bstspd:240, mnv:1, shields:350, armour:525, mass:400,
 			minthrust:44.444, boostcost:27, pitch:25, yaw:10, roll:60, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
-			heatcap:334, heatdismin:3.16, heatdismax:67.15, fuelcost:50, hardness:65, masslock:23, crew:3,
+			heatcap:334, heatdismin:3.16, heatdismax:67.15, fuelcost:50, fuelreserve:1.07, hardness:65, masslock:23, crew:3,
 			slots:{
 				hardpoint:[4,3,3,3,2,2,1,1],
 				utility  :[0,0,0,0,0,0,0,0],
 				component:[1,8,7,6,5,8,8,5],
 				military :[5],
-				internal :[7,6,6,6,5,5,5,4,4,4,2],
+				internal :[7,6,6,6,5,5,5,4,4,4,2,1],
 			},
 			stock:{
 				hardpoint:[0,0,0,0,0,0,62160,62160],
 				utility  :[0,0,0,0,0,0,0,0],
 				component:[40131,41850,42750,43650,44550,45850,46850,47530],
 				military :[0],
-				internal :[650,550,30650,0,450,0,0,0,0,10150,150],
+				internal :[650,550,30650,0,450,0,0,0,0,0,150,3152], // verify positions
 			},
 			module:{
 				40131 : { cost:        0, mass: 0.00, fdid:128049364, fdname:'Anaconda_Armour_Grade1' }, // Lightweight Alloy
@@ -895,24 +1037,24 @@ var eddb = {
 		},
 		61 : {
 			fdid:128049369, fdname:'Federation_Corvette',
-			id:61, stype:'sh', name:'Federal Corvette', class:3, cost:182589570, retail:187969450,
+			id:61, stype:'sh', name:'Federal Corvette', class:3, cost:183147460, retail:187969450,
 			faction:'Federation', rank:12,
 			topspd:200, bstspd:260, mnv:2, shields:555, armour:370, mass:900,
 			minthrust:50.0, boostcost:27, pitch:28, yaw:8, roll:75, pitchacc:100, yawacc:50, rollacc:80, minpitch:22,
-			heatcap:333, heatdismin:3.28, heatdismax:70.33, fuelcost:50, hardness:70, masslock:24, crew:3, // verify hardness, masslock
+			heatcap:333, heatdismin:3.28, heatdismax:70.33, fuelcost:50, fuelreserve:1.13, hardness:70, masslock:24, crew:3, // verify hardness, masslock
 			slots:{
 				hardpoint:[4,4,3,2,2,1,1],
 				utility  :[0,0,0,0,0,0,0,0],
 				component:[1,8,7,6,5,8,8,5],
 				military :[5,5],
-				internal :[7,7,7,6,6,5,5,4,4,3],
+				internal :[7,7,7,6,6,5,5,4,4,3,1],
 			},
 			stock:{
 				hardpoint:[0,0,0,62160,62160,0,0],
 				utility  :[0,0,0,0,0,0,0,0],
 				component:[40131,41850,42750,43650,44550,45850,46850,47530],
 				military :[0,0],
-				internal :[30750,650,0,0,0,0,0,350,10150,250],
+				internal :[30750,650,0,0,0,0,0,350,0,250,3152], // verify positions
 			},
 			module:{
 				40131 : { cost:        0, mass: 0.00, fdid:128049370, fdname:'Federation_Corvette_Armour_Grade1' }, // Lightweight Alloy
@@ -924,24 +1066,24 @@ var eddb = {
 		},
 		62 : {
 			fdid:128049375, fdname:'Cutter',
-			id:62, stype:'sh', name:'Imperial Cutter', class:3, cost:199926890, retail:208969450,
+			id:62, stype:'sh', name:'Imperial Cutter', class:3, cost:200484780, retail:208969450,
 			faction:'Empire', rank:12,
 			topspd:200, bstspd:320, mnv:0, shields:600, armour:400, mass:1100,
 			minthrust:80.0, boostcost:23, pitch:18, yaw:8, roll:45, pitchacc:100, yawacc:50, rollacc:80, minpitch:14,
-			heatcap:327, heatdismin:3.27, heatdismax:72.58, fuelcost:50, hardness:70, masslock:27, crew:3, // verify hardness, masslock
+			heatcap:327, heatdismin:3.27, heatdismax:72.58, fuelcost:50, fuelreserve:1.16, hardness:70, masslock:27, crew:3, // verify hardness, masslock
 			slots:{
-				hardpoint:[2,2,2,2,3,3,4],
+				hardpoint:[4,3,3,2,2,2,2],
 				utility  :[0,0,0,0,0,0,0,0],
 				component:[1,8,8,7,7,7,7,6],
 				military :[5,5],
-				internal :[8,8,6,6,6,5,5,4,3],
+				internal :[8,8,6,6,6,5,5,4,3,1],
 			},
 			stock:{
-				hardpoint:[62160,62160,0,0,0,0,0],
+				hardpoint:[0,0,0,62160,62160,0,0], // verify positions
 				utility  :[0,0,0,0,0,0,0,0],
 				component:[40131,41850,42850,43750,44750,45750,46750,47630],
 				military :[0,0],
-				internal :[30850,750,550,0,0,0,0,10150,250],
+				internal :[30850,750,550,0,0,0,0,0,250,3152], // verify positions
 			},
 			module:{
 				40131 : { cost:        0, mass: 0.00, fdid:128049376, fdname:'Cutter_Armour_Grade1' }, // Lightweight Alloy
@@ -1024,6 +1166,7 @@ var eddb = {
 		mass       : { order: 25, abbr:'Mass', name:'Mass',                 unit:'T',    bad:1, min:    0,                  default:  0, scale:2,           desc:'Mass (in tons)' }, // *
 		masslock   : { order: 26, abbr:'MLF',  name:'Mass Lock',                                min:    0,          step:1, default:  0, scale:0,           desc:'Mass lock factor' }, // ship
 		fuelcost   : { order: 27, abbr:'FCst', name:'Fuel Cost',            unit:'Cr/T', bad:1, min:    0,          step:1, default:  0, scale:0,           desc:'Cost of fuel (in credits per ton)' }, // ship
+		fuelreserve: { order: 27, abbr:'FRes', name:'Fuel Reserve',         unit:'T',           min:    0,                  default:  0, scale:2,           desc:'Reserve fuel tank size (in tons)' }, // ship
 		crew : { order: 28, abbr:'Crew', name:'Crew Seats',                               min:    1,          step:1, default:  1, scale:0,           desc:'Number of seats for multi-crew' }, // ship
 		integ      : { order: 28, abbr:'Int',  name:'Integrity',                                min:    0,                  default:  0, scale:0,           desc:'Integrity' }, // *
 		fuelcap    : { order: 29, abbr:'Cap',  name:'Fuel Capacity',        unit:'T',           min:    0,                  default:  0, scale:1,           desc:'Maximum fuel capacity (in tons)' }, // fueltank
@@ -1054,12 +1197,14 @@ var eddb = {
 		hullbst    : { order: 54, abbr:'HuB',  name:'Hull Boost',           unit:'%',           min: -100,                  default:  0, scale:1, modmod:100, desc:'Base hull strength bonus' }, // bulkhead
 		hullrnf    : { order: 55, abbr:'HuR',  name:'Hull Reinforcement',                       min:    0,                  default:  0, scale:0,           desc:'Additional hull strength' }, // hrp
 		shieldbst  : { order: 56, abbr:'ShB',  name:'Shield Boost',         unit:'%',           min: -100,                  default:  0, scale:1, modmod:100, desc:'Shield strength bonus' }, // shboost
-		shieldrnf  : { order: 57, abbr:'ShR',  name:'Shield Reinforcement', unit:'/s',          min:    0,                  default:  0, scale:1,           desc:'Shield recharge bonus (in units per second)' }, // scb
+		shieldrnf  :{ order: 57, abbr:'ShR',  name:'Shield Reinforcement',                     min:    0,                  default:  0, scale:1,           desc:'Shield strength bonus' }, // srp
+		shieldrnfps: { order: 57, abbr:'ShR',  name:'Shield Reinforcement', unit:'/s',          min:    0,                  default:  0, scale:1,           desc:'Shield recharge bonus (in units per second)' }, // scb
 		activerng  : { order: 58, abbr:'ARng', name:'Active Range',         unit:'LS',          min:    0,                  default:  0, scale:0,           desc:'Maximum active scan range (in light-seconds)' }, // dscan
 		passiverng : { order: 59, abbr:'PRng', name:'Passive Range',        unit:'LS',          min:    0,                  default:  0, scale:2,           desc:'Automatic passive scan range (in light-seconds)' }, // dscan
 		scanrng    : { order: 60, abbr:'Rng',  name:'Scanner Range',        unit:'M',           min:    0,                  default:  0, scale:0,           desc:'Maximum scan range (in meters)' }, // scanner
 		maxangle   : { order: 61, abbr:'Ang',  name:'Max Angle',            unit:'&deg;',       min:    0, max:360,         default:  0, scale:2,           desc:'Maximum scan angle (in degrees)' }, // scanner,sensor
 		scantime   : { order: 62, abbr:'Time', name:'Scan Time',            unit:'s',    bad:1, min:    0,          time:1, default:  0, scale:0,           desc:'Time to scan (in seconds)' }, // scanner
+		proberad   :{ order: 62, abbr:'PRad', name:'Probe Radius',         unit:'% ', /* kludgy but easy */                 default:  0, scale:1,             desc:'Modifies surface scan probe range' }, // dss
 		scanrngmod :{ order: 63, abbr:'RngM', name:'Scan Range Multiplier',unit:'%',                                       default:  0, scale:1, modmod:100, desc:'Modifies maximum range to scan stellar bodies' }, // dss
 		scanangmod :{ order: 64, abbr:'AngM', name:'Scan Angle Multiplier',unit:'%',                                       default:  0, scale:1, modmod:100, desc:'Modifies maximum angle to scan stellar bodies' }, // dss
 		scanratemod:{ order: 65, abbr:'RteM', name:'Scan Rate Multiplier', unit:'%',                                       default:  0, scale:1, modmod:100, desc:'Modifies time to scan stellar bodies' }, // dss
@@ -1074,7 +1219,7 @@ var eddb = {
 		repaircon  : { order: 71, abbr:'Cns',  name:'Consumption',          unit:'/s',          min:    0,                  default:  0, scale:1,           desc:'Rate of repair material consumption (in units per second)' }, // afmu
 		repairrtg  : { order: 72, abbr:'Rtg',  name:'Repair Rating',                            min:    0,                  default:  1, scale:3,           desc:'Module integrity repaired per material consumed' }, // afmu
 		maxlimpet  : { order: 73, abbr:'Max',  name:'Max Active Limpets',                       min:    0,          step:1, default:  0, scale:0, modadd:1, desc:'Maximum active limpets' }, // limpet
-		targetrng  : { order: 74, abbr:'Rng',  name:'Target Range',         unit:'M',           min:    0,                  default:  0, scale:0,           desc:'Maximum limpet target range (in meters)' }, // limpet
+		targetrng  : { order: 74, abbr:'Rng',  name:'Target Range',         unit:'M',           min:    0,                  default:'lpactrng', scale:0,   desc:'Maximum limpet target range (in meters)' }, // limpet
 		limpettime : { order: 75, abbr:'Time', name:'Limpet Life Time',     unit:'s',           min:    0,          time:1, default:  0, scale:0,           desc:'Maximum limpet life time (in seconds)' }, // limpet
 		maxspd     : { order: 76, abbr:'Spd',  name:'Maximum Speed',        unit:'M/s',         min:    0,                  default:  0, scale:0,           desc:'Maximum limpet speed (in meters per second)' }, // limpet
 		multispd   : { order: 77, abbr:'MSpd', name:'Multi-Target Speed',   unit:'M/s',         min:    0,                  default:  0, scale:0,           desc:'Multi-target limpet speed (in meters per second)' }, // limpet
@@ -1082,8 +1227,8 @@ var eddb = {
 		hacktime   : { order: 79, abbr:'Hack', name:'Hacking Time',         unit:'s',    bad:1, min:    0,          time:1, default:  0, scale:0,           desc:'Time to hack (in seconds)' }, // limpet
 		mincargo   : { order: 80, abbr:'NCgo', name:'Minimum Cargo',                            min:    0,          step:1, default:  0, scale:0, modadd:1, desc:'Minimum cargo yield' }, // limpet
 		maxcargo   : { order: 81, abbr:'XCgo', name:'Maximum Cargo',                            min:    0,          step:1, default:  0, scale:0, modadd:1, desc:'Maximum cargo yield' }, // limpet
-	//	lpactrng   : { order: 82, abbr:'ARng', name:'Active Range',         unit:'M',           min:    0,                  default:'targetrng',scale:0,    desc:'TODO' }, // limpet
-	//	minebonus  : { order: 82, abbr:'MnBn', name:'Mining Bonus',                             min:    0,                  default:  0, scale:1,           desc:'TODO' }, // limpet
+		lpactrng   : { order: 82, abbr:'ARng', name:'Active Range',         unit:'M',           min:    0,                  default:  0, scale:0,           desc:'Maximum limpet range (in meters)' }, // limpet
+	//	minebonus  : { order: 82, abbr:'MnBn', name:'Mining Bonus',                             min:    0,                  default:  0, scale:1,           desc:'' }, // limpet
 		timerng    : { order: 82, abbr:'Rng',  name:'Range',                unit:'s',           min:    0,          time:1, default:  0, scale:0,           desc:'Maximum target range (in seconds to intercept)' }, // fsdi
 		facinglim  : { order: 83, abbr:'Ang',  name:'Facing Limit',         unit:'&deg;',       min:    0, max:360,         default:  0, scale:2,           desc:'Maximum target angle (in degrees)' }, // fsdi
 		scooprate  : { order: 84, abbr:'Rate', name:'Scoop Rate',           unit:'T/s',         min:    0,                  default:  0, scale:3,           desc:'Fuel scroop rate (in tons per second)' }, // scoop
@@ -1103,11 +1248,12 @@ var eddb = {
 		shps       : { order: 94, abbr:'SHPS', name:'Sustained HPS',        unit:'/s',   bad:1, min:    0,                  default:  0, scale:1,           desc:'Waste heat generated per second, including reload time' }, // wpn
 		heateff    : { order: 94, abbr:'HEf',  name:'Heat Efficiency',      unit:'/MW',  bad:1, min:    0,                  default:  0, scale:2,           desc:'Waste heat generated per megawatt consumed' }, // power
 		maxfuel    : { order: 95, abbr:'Max',  name:'Max Fuel per Jump',    unit:'T',           min:    0,                  default:  0, scale:2,           desc:'Maximum fuel use per jump (in tons)' }, // fsd
+		jumpbst    : { order: 95, abbr:'JBst', name:'Jump Range Bonus',     unit:'LY',          min:    0,                  default:  0, scale:2,           desc:'Jump range bonus (in light-years)' }, // fsdb
 		kinres     : { order: 96, abbr:'KiR',  name:'Kinetic Resistance',   unit:'%',           min:-1000, max:100,         default:  0, scale:1, modmod:-100, desc:'Resistance to kinetic damage' }, // shboost,bulkhead,hrp,sg
 		thmres     : { order: 97, abbr:'ThR',  name:'Thermal Resistance',   unit:'%',           min:-1000, max:100,         default:  0, scale:1, modmod:-100, desc:'Resistance to thermal damage' }, // shboost,bulkhead,hrp,sg
 		expres     : { order: 98, abbr:'ExR',  name:'Explosive Resistance', unit:'%',           min:-1000, max:100,         default:  0, scale:1, modmod:-100, desc:'Resistance to explosive damage' }, // shboost,bulkhead,hrp,sg
 		caures     : { order: 99, abbr:'CaR',  name:'Caustic Resistance',   unit:'%',           min:-1000, max:100,         default:  0, scale:1, modmod:-100, desc:'Resistance to caustic damage' }, // mahrp
-		axeres     : { order: 99, abbr:'AXR',  name:'Anti-Xeno Resistance', unit:'%',           min:-1000, max:100,         default:  0, scale:1, modmod:-100, desc:'Resistance to anti-xeno damage' }, // TODO hulls 90%, shields 95%
+		axeres     : { order: 99, abbr:'AXR',  name:'Anti-Xeno Resistance', unit:'%',           min:-1000, max:100,         default:  0, scale:1, modmod:-100, desc:'Resistance to anti-xeno damage' },
 		pierce     : { order: 99, abbr:'Prc',  name:'Armour Piercing',                          min:    0,                  default:  0, scale:0,           desc:'Armour pierce rating (compare to target ship armour hardness)' }, // wpn
 		maxrng     : { order:100, abbr:'Rng',  name:'Maximum Range',        unit:'M',           min:    0,                  default:  0, scale:0,           desc:'Maximum range (in meters)' }, // wpn,sensor
 		typemis    : { order:101, abbr:'Typ',  name:'Typical Emission',     unit:'M',           min:    0,                  default:  0, scale:0,           desc:'Range to resolve a contact with typical emissions (in meters)' }, // sensor
@@ -1125,7 +1271,13 @@ var eddb = {
 		minbrc     : { order:112, abbr:'NBrc', name:'Min Breach Chance',    unit:'%',           min:    0, max:100,         default:  0, scale:1,           desc:'Chance to breach a hull at full integrity' }, // wpn
 		maxbrc     : { order:113, abbr:'XBrc', name:'Max Breach Chance',    unit:'%',           min:    0, max:100,         default:  0, scale:1,           desc:'Chance to breach a hull at zero integrity' }, // wpn
 		jitter     : { order:114, abbr:'Jtr',  name:'Jitter',               unit:'&deg;',bad:1, min:    0, max:360,         default:  0, scale:2, modadd:1, desc:'Maximum accuracy jitter (in degrees of error)'}, // wpn
-		dmgtype    : { order:115, abbr:'DTyp', name:'Damage Type',    values:['K','T','E','KT','KE','TK','TE','EK','ET','X'],default:'',                    desc:'Damage type (kinetic/thermal/explosive)' }, // wpn
+	//	dmgtype    : { order:115, abbr:'DTyp', name:'Damage Type',    values:['K','T','E','KT','KE','TK','TE','EK','ET','X'],default:'',                    desc:'Damage type (kinetic/thermal/explosive)' }, // wpn
+		kinwgt     : { order:115, abbr:'KinD', name:'Kinetic Damage',       unit:'%',           min:    0, max:100,         default:  0, scale:2, modset:1, desc:'Kinetic portion of total damage' }, // wpn
+		thmwgt     : { order:115, abbr:'ThmD', name:'Thermal Damage',       unit:'%',           min:    0, max:100,         default:  0, scale:2, modset:1, desc:'Thermal portion of total damage' }, // wpn
+		expwgt     : { order:115, abbr:'ExpD', name:'Explosive Damage',     unit:'%',           min:    0, max:100,         default:  0, scale:2, modset:1, desc:'Explosive portion of total damage' }, // wpn
+		abswgt     : { order:115, abbr:'AbsD', name:'Absolute Damage',      unit:'%',           min:    0, max:100,         default:  0, scale:2, modset:1, desc:'Absolute portion of total damage' }, // wpn
+		cauwgt     : { order:115, abbr:'CauD', name:'Caustic Damage',       unit:'%',           min:    0, max:100,         default:  0, scale:2, modset:1, desc:'Caustic portion of total damage' }, // wpn
+		axewgt     : { order:115, abbr:'AXeD', name:'Anti-Xeno Damage',     unit:'%',           min:    0, max:100,         default:  0, scale:2, modset:1, desc:'Anti-Xeno portion of total damage' }, // wpn
 		dmgfall    : { order:116, abbr:'FOff', name:'Damage Falloff',       unit:'M',           min:    0,                  default:  0, scale:0,           desc:'Range at which applied damage will begin to decrease' }, // wpn
 		cooldown   : { order:117, abbr:'Cool', name:'Cool Down',            unit:'s',    bad:1, min:    0,          time:1, default:  0, scale:0,           desc:'Time to cool down between uses (in seconds)' }, // ecm
 		jamdur     : { order:118, abbr:'Dur',  name:'Jam Duration',         unit:'s',           min:    0,          time:1, default:  0, scale:0,           desc:'Duration of jamming effect (in seconds)' }, // chaff
@@ -1134,82 +1286,142 @@ var eddb = {
 		dmgprot    : { order:121, abbr:'DmgP', name:'Damage Protection',    unit:'%',           min:    0, max:100,         default:  0, scale:0,           desc:'Portion of incoming module damage that is absorbed' }, // imrp
 	}, // eddb.attribute{}
 	fdfieldattr : {
+		OutfittingFieldType_AFMRepairCapacity               : 'repaircap',
+		OutfittingFieldType_AFMRepairConsumption            : 'repaircon',
+		OutfittingFieldType_AFMRepairPerAmmo                : 'repairrtg',
 		OutfittingFieldType_AmmoClipSize                    : 'ammoclip',
 		OutfittingFieldType_AmmoMaximum                     : 'ammomax',
 		OutfittingFieldType_ArmourPenetration               : 'pierce',
+	//	OutfittingFieldType_BoostAugmenterPowerUse          : null, // ?
+	//	OutfittingFieldType_BoostSpeedMultiplier            : null, // ?
 		OutfittingFieldType_BootTime                        : 'boottime',
+		OutfittingFieldType_BreachDamage                    : 'brcdmg',
 		OutfittingFieldType_BrokenRegenRate                 : 'bgenrate',
 		OutfittingFieldType_BurstRateOfFire                 : 'bstrof',
+		OutfittingFieldType_BurstRate                       : 'bstrof',
+		Override_BurstRate                                  : 'bstrof',
+		OutfittingFieldType_BurstSize                       : 'bstsize',
+		Override_BurstSize                                  : 'bstsize',
+		OutfittingFieldType_CabinCapacity                   : 'cabincap',
+		OutfittingFieldType_CabinClass                      : null, // ignore
+		OutfittingFieldType_CargoCapacity                   : 'cargocap',
 		OutfittingFieldType_CausticResistance               : 'caures',
+		OutfittingFieldType_ChaffJamDuration                : 'jamdur',
 		OutfittingFieldType_CollisionResistance             : null, // ignore
-		OutfittingFieldType_DSS_AngleMult                   : 'scanangmod',
-		OutfittingFieldType_DSS_RangeMult                   : 'scanrngmod',
-		OutfittingFieldType_DSS_RateMult                    : 'scanratemod',
 		OutfittingFieldType_Damage                          : 'damage',
 		OutfittingFieldType_DamageFalloffRange              : 'dmgfall',
 		OutfittingFieldType_DamagePerSecond                 : null, // ignore
+		OutfittingFieldType_DamageType                      : null, // ignore
 		OutfittingFieldType_DefenceModifierHealthAddition   : 'hullrnf',
 		OutfittingFieldType_DefenceModifierHealthMultiplier : 'hullbst',
-		OutfittingFieldType_DefenceModifierShieldAddition   : 'shieldrnf', // TODO verify
+		OutfittingFieldType_DefenceModifierShieldAddition   : 'shieldrnf', // verify
 		OutfittingFieldType_DefenceModifierShieldMultiplier : 'shieldbst',
+		OutfittingFieldType_DiscoveryScannerPassiveRange    : null, // ignore
+		OutfittingFieldType_DiscoveryScannerRange           : null, // ignore
+		OutfittingFieldType_DisruptionBarrierActivePower    : 'distdraw',
+		OutfittingFieldType_DisruptionBarrierChargeDuration : 'duration',
+		OutfittingFieldType_DisruptionBarrierCooldown       : 'cooldown',
+		OutfittingFieldType_DisruptionBarrierRange          : 'range', // verify
 		OutfittingFieldType_DistributorDraw                 : 'distdraw',
+		OutfittingFieldType_DroneFuelCapacity               : 'fuelxfer',
+		OutfittingFieldType_DroneHackingTime                : 'hacktime',
+		OutfittingFieldType_DroneLifeTime                   : 'limpettime',
+		OutfittingFieldType_DroneMaxJettisonedCargo         : 'maxcargo',
+		OutfittingFieldType_DroneMinJettisonedCargo         : 'mincargo',
+		OutfittingFieldType_DroneMultiTargetSpeed           : 'multispd',
+		OutfittingFieldType_DroneRepairCapacity             : 'repaircap',
+		OutfittingFieldType_DroneSpeed                      : 'maxspd',
+		OutfittingFieldType_DroneTargetRange                : 'targetrng',
+		OutfittingFieldType_DSS_AngleMult                   : null, // ignore
+		OutfittingFieldType_DSS_PatchRadius                 : 'proberad',
+		OutfittingFieldType_DSS_RangeMult                   : null, // ignore
+		OutfittingFieldType_DSS_RateMult                    : null, // ignore
+		OutfittingFieldType_ECMActivePowerConsumption       : 'distdraw',
+		OutfittingFieldType_ECMCooldown                     : 'cooldown',
+		OutfittingFieldType_ECMHeat                         : 'thmload',
+		OutfittingFieldType_ECMRange                        : 'range', // verify
+		OutfittingFieldType_ECMTimeToCharge                 : 'duration',
 		OutfittingFieldType_EnergyPerRegen                  : 'distdraw',
 		OutfittingFieldType_EngineHeatRate                  : 'thmload',
-		OutfittingFieldType_EngineOptPerformance            : 'optmul',
+		OutfittingFieldType_EngineMaxPerformance            : 'maxmul', // verify
+		OutfittingFieldType_EngineMinimumMass               : 'minmass',
+		OutfittingFieldType_EngineMinPerformance            : 'minmul', // verify
 		OutfittingFieldType_EngineOptimalMass               : 'optmass',
+		OutfittingFieldType_EngineOptPerformance            : 'optmul',
 		OutfittingFieldType_EnginesCapacity                 : 'engcap',
 		OutfittingFieldType_EnginesRecharge                 : 'engchg',
 		OutfittingFieldType_ExplosiveResistance             : 'expres',
-		OutfittingFieldType_FSDHeatRate                     : 'thmload', // TODO verify
-		OutfittingFieldType_FSDInterdictorFacingLimit       : 'facinglim', // TODO verify
-		OutfittingFieldType_FSDInterdictorRange             : 'timerng', // TODO verify
-		OutfittingFieldType_FSDOptimalMass                  : 'optmass',
 		OutfittingFieldType_FalloffRange                    : 'dmgfall',
+		OutfittingFieldType_FighterBoostSpeed               : null, // ignore
+		OutfittingFieldType_FighterDPS                      : null, // ignore
+		OutfittingFieldType_FighterMaxSpeed                 : null, // ignore
+		OutfittingFieldType_FighterPitchRate                : null, // ignore
+		OutfittingFieldType_FighterRollRage                 : null, // ignore
+		OutfittingFieldType_FighterYawRate                  : null, // ignore
+		OutfittingFieldType_FSDFuelUseIncrase               : null, // ignore
+		OutfittingFieldType_FSDHeatRate                     : 'thmload',
+		OutfittingFieldType_FSDInterdictorFacingLimit       : 'facinglim',
+		OutfittingFieldType_FSDInterdictorRange             : 'timerng',
+		OutfittingFieldType_FSDJumpRangeBoost               : 'jumpbst',
+		OutfittingFieldType_FSDOptimalMass                  : 'optmass',
+		OutfittingFieldType_FuelCapacity                    : 'fuelcap',
+		OutfittingFieldType_FuelScoopRate                   : 'scooprate',
 		OutfittingFieldType_HeatEfficiency                  : 'heateff',
+		OutfittingFieldType_HeatSinkDuration                : 'duration',
 		OutfittingFieldType_Integrity                       : 'integ',
-		OutfittingFieldType_Jitter                          : 'jitter', // TODO verify
+		OutfittingFieldType_Jitter                          : 'jitter',
 		OutfittingFieldType_KineticResistance               : 'kinres',
 		OutfittingFieldType_Mass                            : 'mass',
-		OutfittingFieldType_MaxAngle                        : 'maxangle', // TODO verify
-		OutfittingFieldType_MaxBreachChance                 : 'maxbrc', // TODO verify
+		OutfittingFieldType_MaxActiveDrones                 : 'maxlimpet',
+		OutfittingFieldType_MaxAngle                        : 'maxangle',
+		OutfittingFieldType_MaxBreachChance                 : 'maxbrc',
 		OutfittingFieldType_MaxFuelPerJump                  : 'maxfuel',
-		OutfittingFieldType_MaximumRange                    : 'maxrng', // TODO verify
-		OutfittingFieldType_MinBreachChance                 : 'minbrc', // TODO verify
+		OutfittingFieldType_MaximumRange                    : 'maxrng', // verify
+		OutfittingFieldType_MaxRange                        : 'maxrng', // verify
+		OutfittingFieldType_MinBreachChance                 : 'minbrc', // verify
+		OutfittingFieldType_ModuleDefenceAbsorption         : 'dmgprot', // verify
+		OutfittingFieldType_NumBuggySlots                   : 'vslots',
+		OutfittingFieldType_OxygenTimeCapacity              : 'emgcylife',
 		OutfittingFieldType_PowerCapacity                   : 'pwrcap',
 		OutfittingFieldType_PowerDraw                       : 'pwrdraw',
 		OutfittingFieldType_Range                           : 'typemis',
 		OutfittingFieldType_RateOfFire                      : 'rof',
+		OutfittingFieldType_RefineryBins                    : 'bins',
 		OutfittingFieldType_RegenRate                       : 'genrate',
-		OutfittingFieldType_ReloadTime                      : 'rldtime', // TODO verify
+		OutfittingFieldType_ReloadTime                      : 'rldtime',
+		OutfittingFieldType_RoundsPerShot                   : 'rounds',
 		OutfittingFieldType_ScannerRange                    : 'scanrng',
 		OutfittingFieldType_ScannerTimeToScan               : 'scantime',
 		OutfittingFieldType_SensorTargetScanAngle           : 'maxangle',
-		OutfittingFieldType_ShieldBankDuration              : 'duration', // TODO verify
-		OutfittingFieldType_ShieldBankHeat                  : 'thmload', // TODO verify
-		OutfittingFieldType_ShieldBankReinforcement         : 'shieldrnf', // TODO verify
-		OutfittingFieldType_ShieldBankSpinUp                : 'spinup', // TODO verify
+		OutfittingFieldType_ShieldBankDuration              : 'duration',
+		OutfittingFieldType_ShieldBankHeat                  : 'thmload',
+		OutfittingFieldType_ShieldBankReinforcement         : 'shieldrnfps',
+		OutfittingFieldType_ShieldBankSpinUp                : 'spinup',
+		OutfittingFieldType_ShieldGenMaximumMass            : 'maxmass',
+		OutfittingFieldType_ShieldGenMaxStrength            : 'maxmul',
+		OutfittingFieldType_ShieldGenMinimumMass            : 'minmass',
+		OutfittingFieldType_ShieldGenMinStrength            : 'minmul',
 		OutfittingFieldType_ShieldGenOptimalMass            : 'optmass',
 		OutfittingFieldType_ShieldGenStrength               : 'optmul',
-		OutfittingFieldType_ShotSpeed                       : 'shotspd', // TODO verify
+	//	OutfittingFieldType_ShieldSacrificeAmountGiven      : null, // ?
+	//	OutfittingFieldType_ShieldSacrificeAmountRemoved    : null, // ?
+		OutfittingFieldType_ShotSpeed                       : 'shotspd',
 		OutfittingFieldType_SystemsCapacity                 : 'syscap',
 		OutfittingFieldType_SystemsRecharge                 : 'syschg',
+		OutfittingFieldType_ThermalDrain                    : 'thmdrain',
 		OutfittingFieldType_ThermalLoad                     : 'thmload',
 		OutfittingFieldType_ThermicResistance               : 'thmres',
+		OutfittingFieldType_VehicleArmourHealth             : null, // ignore
+		OutfittingFieldType_VehicleCargoCapacity            : null, // ignore
+		OutfittingFieldType_VehicleFuelCapacity             : null, // ignore
+		OutfittingFieldType_VehicleHullMass                 : null, // ignore
+		OutfittingFieldType_VehicleShieldHealth             : null, // ignore
+	//	OutfittingFieldType_WeaponMode                      : null, // ?
 		OutfittingFieldType_WeaponsCapacity                 : 'wepcap',
 		OutfittingFieldType_WeaponsRecharge                 : 'wepchg',
-		Override_BurstRate                                  : 'bstrof',
-		Override_BurstSize                                  : 'bstsize',
-		OutfittingFieldType_BurstRate                       : 'bstrof',
-		OutfittingFieldType_BurstSize                       : 'bstsize',
-/* coming in 2.5/3.0 ?
-		WingDamageReduction,
-		WingMinDuration,
-		WingMaxDuration,
-		ShieldSacrificeAmountRemoved,
-		ShieldSacrificeAmountGiven,
-		FSDJumpRangeBoost,
-		FSDFuelUseIncrease
-*/
+	//	OutfittingFieldType_WingDamageReduction             : null, // ?
+	//	OutfittingFieldType_WingMinDuration                 : null, // ? 
+	//	OutfittingFieldType_WingMaxDuration                 : null, // ?
 	}, // eddb.fdfieldattr{}
 	fdattrmod : {
 		mod_boot_time                               : { boottime:1 },
@@ -1227,6 +1439,7 @@ var eddb = {
 		mod_dss_rate                                : { scanratemod:1 },
 		mod_dss_range                               : { scanrngmod:1 },
 		mod_dss_angle                               : { scanangmod:1 },
+		mod_dss_patchRadius                         : { proberad:1 },
 		mod_engine_heat                             : { thmload:1 },
 		mod_engine_mass_curve                       : { optmass:1 },
 		mod_engine_mass_curve_multiplier            : { optmul:1 },
@@ -1264,7 +1477,7 @@ var eddb = {
 		mod_shield_thermal_mult                     : { thmres:1 },
 		mod_shieldcell_charge_heat                  : { thmload:1 },
 		mod_shieldcell_duration                     : { duration:1 },
-		mod_shieldcell_shield_units                 : { shieldrnf:1 },
+		mod_shieldcell_shield_units                 : { shieldrnfps:1 },
 		mod_shieldcell_spin_up                      : { spinup:1 },
 		mod_weapon_active_heat                      : { thmload:1 },
 		mod_weapon_active_power                     : { distdraw:1 },
@@ -1281,27 +1494,27 @@ var eddb = {
 		mod_weapon_range                            : { maxrng:1 },
 		mod_weapon_reload_time                      : { rldtime:1 },
 		
-		special_auto_loader                         : {}, // TODO: figure out what 3.0 "rate increased 25%" means
+		special_auto_loader                         : {}, // no side effects
 		special_blinding_shell                      : {}, // no side effects
 		special_choke_canister                      : {}, // no side effects
 		special_concordant_sequence                 : { thmload:0.5 },
 		special_corrosive_shell                     : { ammomax:-0.2 },
-	//	special_deep_cut_payload                    : {}, // TODO: find an example of this
+		special_deep_cut_payload                    : {}, // no side effects // verify
 		special_dispersal_field                     : {}, // TODO: confirm damage:-0.1 removed in 2.2.03
-	//	special_distortion_field                    : {}, // TODO: find an example of this // TODO: burst +50% dmg/rof? +3 jitter?
+		special_distortion_field                    : { damage:0.5, jitter:3 }, // verify
 		special_drag_munitions                      : {}, // no side effects
 		special_emissive_munitions                  : { thmload:1 },
 		special_feedback_cascade                    : { damage:-0.2 },
-	//	special_force_shell                         : {}, // TODO: find an example of this // TODO -16.7% shotspd?
-	//	special_fsd_interrupt                       : {}, // TODO: find an example of this
+		special_force_shell                         : { shotspd:-0.166666666666667 }, // verify
+		special_fsd_interrupt                       : { damage:-0.3, bstint:0.5 }, // verify
 		special_high_yield_shell                    : { bstint:0.11111111111111111111111111111111 },
-		special_incendiary_rounds                   : { thmload:2, bstint:0.05263157894736842105263157894737 },
+		special_incendiary_rounds                   : { thmload:2, bstint:0.05263157894736842105263157894737, kinwgt:0.1, thmwgt:0.9 },
 		special_lock_breaker                        : {}, // no side effects
-	//	special_mass_lock                           : {}, // TODO: find an example of this
+		special_mass_lock                           : {}, // no side effects // verify
 		special_overload_munitions                  : {}, // no side effects
-		special_super_penetrator                    : { rldtime:0.5 },
 		special_phasing_sequence                    : { damage:-0.1 },
 		special_plasma_slug                         : { damage:-0.1, ammomax:-1 },
+		special_plasma_slug_cooled                  : { damage:-0.1, thmload:-0.4, ammomax:-1 },
 		special_radiant_canister                    : {},
 		special_regeneration_sequence               : { damage:-0.1 },
 		special_reverberating_cascade               : {}, // no side effects
@@ -1309,13 +1522,13 @@ var eddb = {
 		special_screening_shell                     : { rldtime:-0.5 },
 		special_shiftlock_canister                  : {},
 		special_smart_rounds                        : {}, // no side effects
-	//	special_super_penetrator                    : {}, // TODO: find an example of this // TODO: railgun +50% rldtime?
+		special_super_penetrator                    : { rldtime:0.5 },
 		special_thermalshock                        : { damage:-0.1 },
 		special_thermal_cascade                     : {}, // no side effects
 		special_thermal_conduit                     : {}, // TODO: try to find some way to model the range of effect by ship heat level
 		special_thermal_vent                        : {}, // TODO: verify if there might be a distdraw effect as well
 		
-		trade_cell_heat_cell_units                  : { shieldrnf:-1 , thmload:-1 },
+		trade_cell_heat_cell_units                  : { shieldrnfps:-1 , thmload:-1 },
 		trade_defence_health_add_defence_global_mult: { hullrnf:1, kinres:0.4, thmres:0.4, expres:0.4 },
 		trade_distributor_engine_charge_system_charge:{ engcap:1, syscap:-1 },
 		trade_distributor_global_charge_mass        : { mass:1, engcap:0.75, syscap:0.75, wepcap:0.75 },
@@ -1333,7 +1546,7 @@ var eddb = {
 		trade_passive_power_weapon_active           : { pwrdraw:1, distdraw:-0.6 },
 		trade_shield_curve_shield_curve_mult        : { optmass:-1, optmul:-0.8 },
 		trade_shield_global_mult_shield_broken_regen: { kinres:-0.5, thmres:-0.5, expres:-0.5, bgenrate:-1 },
-		trade_shield_kinetic_shield_thermic         : { kinres:1, thmres:-1 }, // TODO verify
+		trade_shield_kinetic_shield_thermic         : { kinres:1, thmres:-1 }, // verify
 		trade_weapon_active_passive_power           : { distdraw:-0.67, pwrdraw:1 }, // TODO: verify distdraw weight in absence of special_thermal_vent
 		trade_weapon_damage_weapon_active_power     : { damage:0.5, distdraw:1 },
 		trade_weapon_hardness_weapon_heat           : { pierce:0.4, thmload:1 },
@@ -1396,8 +1609,8 @@ var eddb = {
 		ihrp_kr : { name:'Kinetic Resistant', maxgrade:5, hullrnf:[3,6,9,12,15], kinres:[12,19,26,33,40], thmres:[-2,-4,-6,-8,-10], expres:[-2,-4,-6,-8,-10], fdname:'HullReinforcement_Kinetic' },
 		ihrp_lw : { name:'Light Weight', maxgrade:5, mass:[-8,-12,-16,-20,-24], hullbst:[8,12,16,20,24], hullrnf:[-4,-8,-12,-16,-20], fdname:'HullReinforcement_Advanced' },
 		ihrp_tr : { name:'Thermal Resistant', maxgrade:5, hullrnf:[3,6,9,12,15], kinres:[-2,-4,-6,-8,-10], thmres:[12,19,26,33,40], expres:[-2,-4,-6,-8,-10], fdname:'HullReinforcement_Thermic' },
-		iscb_rc : { name:'Rapid Charge', maxgrade:4, boottime:[10,15,20,25], spinup:[-10,-20,-30,-40], shieldrnf:[5,10,15,20], duration:[-6,-12,-18,-24], fdname:'ShieldCellBank_Rapid' },
-		iscb_sp : { name:'Specialised', maxgrade:4, integ:[-5,-10,-15,-20], pwrdraw:[10,15,20,25], boottime:[-8,-16,-24,-32], shieldrnf:[4,6,8,10], thmload:[-6,-12,-18,-24], fdname:'ShieldCellBank_Specialised' },
+		iscb_rc : { name:'Rapid Charge', maxgrade:4, boottime:[10,15,20,25], spinup:[-10,-20,-30,-40], shieldrnfps:[5,10,15,20], duration:[-6,-12,-18,-24], fdname:'ShieldCellBank_Rapid' },
+		iscb_sp : { name:'Specialised', maxgrade:4, integ:[-5,-10,-15,-20], pwrdraw:[10,15,20,25], boottime:[-8,-16,-24,-32], shieldrnfps:[4,6,8,10], thmload:[-6,-12,-18,-24], fdname:'ShieldCellBank_Specialised' },
 		isg_elp : { name:'Enhanced, Low Power', maxgrade:5, mass:[-18,-26,-34,-42,-50], integ:[-5,-10,-15,-20,-25], pwrdraw:[-20,-25,-30,-35,-40], optmass:[-2,-3,-4,-5,-6], optmul:[3,6,9,12,15], fdname:'ShieldGenerator_Optimised' },
 		isg_kr : { name:'Kinetic Resistant', maxgrade:5, integ:[20,25,30,35,40], kinres:[10,20,30,40,50], thmres:[-3,-6,-9,-12,-15], fdname:'ShieldGenerator_Kinetic' },
 		isg_rf : { name:'Reinforced', maxgrade:5, optmul:[14,20,26,32,38], bgenrate:[-10,-10,-10,-10,-10], distdraw:[4,6,8,10,12], kinres:[4.5,7.5,10.5,13.5,16.5], thmres:[4.5,7.5,10.5,13.5,16.5], expres:[4.5,7.5,10.5,13.5,16.5], fdname:'ShieldGenerator_Reinforced' },
@@ -1405,6 +1618,7 @@ var eddb = {
 		iss_fs : { name:'Fast Scan', maxgrade:5, mass:[20,40,60,80,100], pwrdraw:[10,20,30,40,50], scanratemod:[20,35,50,65,80], fdname:'Sensor_FastScan' },
 		iss_lr : { name:'Long Range', maxgrade:5, mass:[20,40,60,80,100], pwrdraw:[10,20,30,40,50], scanrngmod:[40,80,120,160,200], fdname:'Sensor_LongRange' },
 		iss_wa : { name:'Wide Angle', maxgrade:5, mass:[20,40,60,80,100], pwrdraw:[10,20,30,40,50], scanangmod:[40,80,120,160,200], fdname:'Sensor_WideAngle' },
+		iss_er : { name:'Expanded Radius', maxgrade:5, pwrdraw:[10,20,30,40,50], mass:[20,40,60,80,100], proberad:[10,20,30,40,50], fdname:'Sensor_Expanded' },
 	}, // eddb.blueprint{}
 	fdexpeffect : {
 		special_armour_chunky : 'cbhx_dp',
@@ -1492,7 +1706,7 @@ var eddb = {
 		special_weapon_lightweight : 'miscx_sd',
 		special_weapon_rateoffire : 'wpnx_muse',
 		special_weapon_toughened : 'miscx_db',
-	},
+	}, // eddb.fdexpeffect{}
 	expeffect : {
 		miscx_fc : { name:'Flow Control', pwrdraw:-10 },
 		miscx_db : { name:'Double Braced', integ:15 },
@@ -1503,22 +1717,22 @@ var eddb = {
 		wpnx_cosh : { name:'Corrosive Shell', ammomax:-20, special:'Target armor hardness reduced' },
 		wpnx_dash : { name:'Dazzle Shell', special:'Target sensor acuity reduced' },
 		wpnx_difi : { name:'Dispersal Field', special:'Target gimbal/turret tracking reduced' },
-		wpnx_drmu : { name:'Drag Munitions', special:'Target speed reduced' },
+		wpnx_drmu : { name:'Drag Munitions', special:'Target speed reduced and cannot boost' },
 		wpnx_emmu : { name:'Emissive Munitions', thmload:100, special:'Target signature increased' },
 		wpnx_feca : { name:'Feedback Cascade', damage:-20, thmload:-40, special:'Target shield cell disrupted' },
 		wpnx_fosh : { name:'Force Shell', shotspd:-16.6666666666667, special:'Target pushed off course' },
 		wpnx_fsin : { name:'FSD Interrupt', damage:-30, bstint:50, special:'Target FSD reboots' },
-		wpnx_hys : { name:'High Yield Shell', bstint:11.1111111111111, special:'Damage partly explosive; target module damage' }, // TODO: test damage type distribution; -50% damage mod?
-		wpnx_inro : { name:'Incendiary Rounds', bstint:5.263157894737, thmload:200, special:'Damage mostly thermal' },
-		wpnx_inim : { name:'Inertial Impact', damage:50, jitter:3, special:'Damage half kinetic' },
+		wpnx_hys : { name:'High Yield Shell', damage:-35, bstint:11.1111111111111, special:'Damage partly explosive; target module damage' }, // verify bstint // TODO: get expwgt/kinwgt modifiers
+		wpnx_inro : { name:'Incendiary Rounds', bstint:5.263157894737, thmload:200, kinwgt:10, thmwgt:90, special:'Damage mostly thermal' },
+		wpnx_inim : { name:'Inertial Impact', damage:50, kinwgt:50, thmwgt:50, jitter:3, special:'Damage half kinetic' },
 		wpnx_iodi : { name:'Ion Disruption', special:'Target thrusters reboot' },
 		wpnx_mlm : { name:'Mass Lock Munition', special:'Target FSD inhibited' },
 		wpnx_muse : { name:'Multi-Servos', pwrdraw:5, bstint:-2.912621359223 },
-		wpnx_ovmu : { name:'Overload Munitions', special:'Damage partly thermal' },
+		wpnx_ovmu : { name:'Overload Munitions', special:'Damage partly thermal' }, // TODO: get thmwgt/expwgt modifier
 		wpnx_os : { name:'Oversized', pwrdraw:5, damage:3 },
 		wpnx_pemu : { name:'Penetrator Munitions', special:'Target module damage' },
 		wpnx_pepa : { name:'Penetrator Payload', special:'Target module damage' },
-		wpnx_phse : { name:'Phasing Sequence', damage:-10, special:'Damage slightly bypasses shields' },
+		wpnx_phse : { name:'Phasing Sequence', damage:-10, special:'Damage slightly bypasses shields' }, // TODO: get exact mechanics
 		wpnx_plsl : { name:'Plasma Slug', damage:-10, ammomax:-100, special:'Reload from ship fuel' },
 		hrgx_plsl : { name:'Plasma Slug', damage:-10, thmload:-40, ammomax:-100, special:'Reload from ship fuel' },
 		wpnx_raca : { name:'Radiant Canister', special:'Area heat increased and sensors disrupted' },
@@ -1531,9 +1745,9 @@ var eddb = {
 		wpnx_supe : { name:'Super Penetrator', thmload:-40, rldtime:50, special:'Target module damage' },
 		wpnx_tlb : { name:'Target Lock Breaker', special:'Target loses target lock' },
 		wpnx_thca : { name:'Thermal Cascade', special:'Shielded target heat increased' },
-		wpnx_thco : { name:'Thermal Conduit', special:'Damage increases with heat level' },
+		wpnx_thco : { name:'Thermal Conduit', special:'Damage increases with heat level' }, // TODO: model this somehow? min-max dps spread?
 		wpnx_thsh : { name:'Thermal Shock', damage:-10, special:'Target heat increased' },
-		wpnx_thve : { name:'Thermal Vent', special:'Heat reduced when striking a target' },
+		wpnx_thve : { name:'Thermal Vent', special:'Heat reduced when striking a target' }, // TODO: model this?
 		
 		usbx_bb : { name:'Blast Block', shieldbst:-1, expres:2 },
 		usbx_fb : { name:'Force Block', shieldbst:-1, kinres:2 },
@@ -1565,8 +1779,8 @@ var eddb = {
 		ihrpx_lp : { name:'Layered Plating', hullrnf:-5, expres:2 },
 		ihrpx_rp : { name:'Reflective Plating', hullrnf:-5, thmres:2 },
 		
-		iscbx_bc : { name:'Boss Cells', spinup:20, shieldrnf:5 },
-		iscbx_rc : { name:'Recycling Cell', duration:10, shieldrnf:-5 },
+		iscbx_bc : { name:'Boss Cells', spinup:20, shieldrnfps:5 },
+		iscbx_rc : { name:'Recycling Cell', duration:10, shieldrnfps:-5 },
 		
 		isgx_fc : { name:'Fast Charge', genrate:15, bgenrate:15, kinres:-1.5, thmres:-1.5, expres:-1.5 },
 		isgx_fb : { name:'Force Block', optmul:-3, kinres:8 },
@@ -1576,8 +1790,8 @@ var eddb = {
 		isgx_tb : { name:'Thermo Block', optmul:-3, thmres:8 },
 	}, // eddb.expeffect{}
 	group : {
-		hardpoint : { mtypes:{hel:1, hul:1, hc:1, hex:1, hfc:1, hm:1, hml:1, hmr:1, hmc:1, hpa:1, hpl:1, hrg:1, htp:1} },
-		utility   : { mtypes:{ucl:1, uec:1, uex:1, uhsl:1, ukws:1, ucs:1, upd:1, usb:1, ufsws:1} },
+		hardpoint : { mtypes:{hel:1, hul:1, hc:1, hex:1, hexax:1, hexgg:1, hexgp:1, hexgs:1, hexsc:1, hfc:1, hm:1, hmtl:1, hmtm:1, hmr:1, hmc:1, hpa:1, hpl:1, hrg:1, htp:1} },
+		utility   : { mtypes:{ucl:1, uec:1, uex:1, uhsl:1, ukws:1, ucs:1, upd:1, upwa:1, usb:1, ufsws:1} },
 		component : [
 			{ mtypes:{cbh:1} },
 			{ mtypes:{cpp:1} },
@@ -1588,15 +1802,33 @@ var eddb = {
 			{ mtypes:{cs:1} },
 			{ mtypes:{cft:1} }
 		],
-		military  : { mtypes:{ihrp:1, imahrp:1, imrp:1, iscb:1} },
-		internal  : { mtypes:{iafmu:1, icr:1, iclc:1, idlc:1, idc:1, ifsdi:1, ifh:1, ifs:1, cft:1, iftlc:1, ihblc:1, ihrp:1, imahrp:1, imrp:1, ipc:1, ipvh:1, iplc:1, inlc:1, ir:1, irlc:1, islc:1, iscb:1, isg:1, isbs:1, iss:1} },
+		military  : { mtypes:{ihrp:1, isrp:1, imahrp:1, imrp:1, iscb:1} },
+		internal  : { mtypes:{iafmu:1, icr:1, iclc:1, idlc:1, ifh:1, ifa:1, ifsdb:1, ifsdi:1, ifs:1, cft:1, iftlc:1, ihblc:1, ihrp:1, isrp:1, imahrp:1, imrp:1, ipc:1, ipvh:1, iplc:1, inlc:1, ir:1, irlc:1, islc:1, iscb:1, isg:1, /*isbs:1,*/ iss:1} },
 	}, // eddb.group{}
+	limit : {
+		'hex'    : 4,
+		'uex'    : 1,
+		'ukws'   : 1,
+		'ucs'    : 1,
+		'upwa'   : 1,
+		'ufsws'  : 1,
+		'ifh'    : 1,
+		'ifa_dc' : 1,
+		'ifa_sc' : 1,
+		'ifsdb'  : 1,
+		'ifsdi'  : 1,
+		'ifs'    : 1,
+		'ir'     : 1,
+		'isg'    : 1,
+		'isbs'   : 1,
+		'iss'    : 1,
+	}, // eddb.limit{}
 	mtype : {
 		hel : {
 			name:'Beam Lasers',
 			modulenames:{'Beam Laser':1},
 			keyattrs:['damage','distdraw','thmload','maxrng'],
-			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','dmgfall','jitter'],
+			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','dmgfall','_X_ jitter'],
 			blueprints:['wpn_eff','wpn_lw','wpn_lr','wpn_oc','wpn_sr','wpn_stu'],
 			expeffects:['wpnx_cose','miscx_db','miscx_fc','wpnx_os','wpnx_rese','miscx_sd','wpnx_thco','wpnx_thsh','wpnx_thve'],
 		},
@@ -1605,7 +1837,7 @@ var eddb = {
 			name:'Burst Lasers',
 			modulenames:{'Burst Laser':1},
 			keyattrs:['damage','distdraw','thmload','maxrng'],
-			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','bstint','_bstsize','jitter','dmgfall'],
+			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','bstint','_X_ bstsize','jitter','dmgfall'],
 			blueprints:['wpn_eff','wpn_foc','wpn_lw','wpn_lr','wpn_oc','wpn_rf','wpn_sr','wpn_stu'],
 			expeffects:['wpnx_cose','miscx_db','miscx_fc','wpnx_inim','wpnx_muse','wpnx_os','wpnx_phse','wpnx_scsp','miscx_sd','wpnx_thsh'],
 		},
@@ -1613,9 +1845,8 @@ var eddb = {
 		hc : {
 			name:'Cannons',
 			modulenames:{'Cannon':1},
-			ammocost:20,
-			keyattrs:['damage','distdraw','thmload','maxrng'],
-			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','bstint','ammoclip','ammomax','rldtime','jitter','dmgfall'], // shotspd?
+			keyattrs:['damage','distdraw','thmload','maxrng','ammoclip'],
+			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','bstint','ammoclip','ammomax','rldtime','jitter','dmgfall'],
 			blueprints:['wpn_eff','wpn_hc','wpn_lw','wpn_lr','wpn_oc','wpn_rf','wpn_sr','wpn_stu'],
 			expeffects:['wpnx_aulo','wpnx_difi','miscx_db','miscx_fc','wpnx_fosh','wpnx_hys','wpnx_muse','wpnx_os','wpnx_smro','miscx_sd','wpnx_thca'],
 		},
@@ -1623,16 +1854,49 @@ var eddb = {
 		hex : {
 			name:'Experimental',
 			modulenames:{},
-			singleton:4,
-			keyattrs:['damage','distdraw','thmload','maxrng'],
+			keyattrs:['damage','distdraw','thmload','maxrng','ammoclip'],
+		},
+		
+		hexax : {
+			name:'Exp - Anti-Xeno',
+			sortname:'Experimental - AX',
+			modulenames:{'AX Missile Rack':true, 'AX Multi-Cannon':true},
+			keyattrs:['damage','distdraw','thmload','maxrng','ammoclip'],
+		},
+		
+		hexgg : {
+			name:'Exp - Guardian Gauss',
+			sortname:'Experimental - Guardian Gauss',
+			modulenames:{},
+			keyattrs:['damage','distdraw','thmload','maxrng','ammoclip'],
+		},
+		
+		hexgp : {
+			name:'Exp - Guardian Plasma',
+			sortname:'Experimental - Guardian Plasma',
+			modulenames:{'Guardian Plasma Charger':true},
+			keyattrs:['damage','distdraw','thmload','maxrng','ammoclip'],
+		},
+		
+		hexgs : {
+			name:'Exp - Guardian Shard',
+			sortname:'Experimental - Guardian Shard',
+			modulenames:{'Guardian Shard Cannon':true},
+			keyattrs:['damage','distdraw','thmload','maxrng','ammoclip'],
+		},
+		
+		hexsc : {
+			name:'Exp - Shock Cannons',
+			sortname:'Experimental - Shock',
+			modulenames:{'Shock Cannon':true},
+			keyattrs:['damage','distdraw','thmload','maxrng','ammoclip'],
 		},
 		
 		hfc : {
 			name:'Fragment Cannons',
 			modulenames:{'Fragment Cannon':1},
-			ammocost:17,
-			keyattrs:['damage','distdraw','thmload','maxrng'],
-			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','bstint','bstsize','ammoclip','ammomax','rldtime','jitter','bstrof'], // shotspd?
+			keyattrs:['damage','distdraw','thmload','maxrng','ammoclip'],
+			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','bstint','bstsize','ammoclip','ammomax','rldtime','jitter','bstrof'],
 			blueprints:['wpn_ds','wpn_eff','wpn_hc','wpn_lw','wpn_oc','wpn_rf','wpn_stu'],
 			expeffects:['wpnx_cosh','wpnx_dash','miscx_db','wpnx_drmu','miscx_fc','wpnx_inro','wpnx_muse','wpnx_os','wpnx_scsh','miscx_sd'],
 		},
@@ -1640,36 +1904,38 @@ var eddb = {
 		hm : {
 			name:'Mines',
 			modulenames:{},
-			ammocost:209,
-			keyattrs:['damage','distdraw','thmload'],
+			keyattrs:['damage','distdraw','thmload','ammoclip'],
 			modifiable:['mass','integ','pwrdraw','damage','thmload','pierce','bstint','ammoclip','ammomax','rldtime','jitter'],
 			blueprints:['wpn_hc','wpn_lw','wpn_rf','wpn_stu'],
 			expeffects:['miscx_db','wpnx_emmu','miscx_fc','wpnx_iodi','wpnx_ovmu','wpnx_os','wpnx_raca','wpnx_reca','wpnx_slc','miscx_sd'],
 		},
 		
-		hml : {
-			name:'Mining Lasers',
-			modulenames:{'Mining Laser':1},
+		hmtl : {
+			name:'Mining Tools - Lasers',
+			modulenames:{'Mining Laser':true, 'Abrasion Blaster':'Abrasion'},
 			keyattrs:['distdraw','thmload','maxrng'],
-		//	modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng'],
+		},
+		
+		hmtm : {
+			name:'Mining Tools - Launchers',
+			modulenames:{'Sub-surface Displacement Missile':true, 'Seismic Charge Launcher':'Seismic'},
+			keyattrs:['distdraw','thmload','maxrng','ammoclip'],
 		},
 		
 		hmr : {
 			name:'Missiles',
 			modulenames:{'Missile Rack':1, 'Seeker Missile Rack':1},
-			ammocost:500,
-			keyattrs:['damage','distdraw','thmload'],
-			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','bstint','ammoclip','ammomax','rldtime','jitter'], // shotspd?
+			keyattrs:['damage','distdraw','thmload','ammoclip'],
+			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','bstint','ammoclip','ammomax','rldtime','jitter'],
 			blueprints:['wpn_hc','wpn_lw','wpn_rf','wpn_stu'],
-			expeffects:['miscx_db','wpnx_emmu','miscx_fc','wpnx_fsin','wpnx_muse','wpnx_ovmu','wpnx_os','wpnx_pemu','miscx_sd','wpnx_thca'],
+			expeffects:['miscx_db','wpnx_emmu','miscx_fc','wpnx_fsin','wpnx_muse','wpnx_ovmu','wpnx_os','wpnx_pemu','miscx_sd','wpnx_thca','wpnx_drmu'],
 		},
 		
 		hmc : {
 			name:'Multi-Cannons',
 			modulenames:{'Multi-cannon':1},
-			ammocost:1,
-			keyattrs:['damage','distdraw','thmload','maxrng'],
-			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','bstint','ammoclip','ammomax','rldtime','jitter','dmgfall'], // shotspd?
+			keyattrs:['damage','distdraw','thmload','maxrng','ammoclip'],
+			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','bstint','ammoclip','ammomax','rldtime','jitter','dmgfall'],
 			blueprints:['wpn_eff','wpn_hc','wpn_lw','wpn_lr','wpn_oc','wpn_rf','wpn_sr','wpn_stu'],
 			expeffects:['wpnx_aulo','wpnx_cosh','miscx_db','wpnx_emmu','miscx_fc','wpnx_inro','wpnx_muse','wpnx_os','wpnx_smro','miscx_sd','wpnx_thsh'],
 		},
@@ -1677,9 +1943,8 @@ var eddb = {
 		hpa : {
 			name:'Plasma Accelerators',
 			modulenames:{},
-			ammocost:200,
 			keyattrs:['damage','distdraw','thmload','maxrng'],
-			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','bstint','ammoclip','ammomax','rldtime','jitter','dmgfall'], // shotspd?
+			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','bstint','ammoclip','_X_ ammomax','rldtime','jitter','dmgfall'],
 			blueprints:['wpn_eff','wpn_foc','wpn_lw','wpn_lr','wpn_oc','wpn_rf','wpn_sr','wpn_stu'],
 			expeffects:['wpnx_dash','wpnx_difi','miscx_db','miscx_fc','wpnx_muse','wpnx_os','wpnx_phse','wpnx_plsl','miscx_sd','wpnx_tlb','wpnx_thco'],
 		},
@@ -1696,9 +1961,8 @@ var eddb = {
 		hrg : {
 			name:'Rail Guns',
 			modulenames:{},
-			ammocost:75,
-			keyattrs:['damage','distdraw','thmload','maxrng'],
-			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','bstint','ammoclip','ammomax','rldtime','jitter','dmgfall'],
+			keyattrs:['damage','distdraw','thmload','maxrng','ammoclip'],
+			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maxrng','bstint','ammoclip','ammomax','_X_ rldtime','_X_ jitter','dmgfall'],
 			blueprints:['wpn_hc','wpn_lw','wpn_lr','wpn_sr','wpn_stu'],
 			expeffects:['miscx_db','wpnx_feca','miscx_fc','wpnx_muse','wpnx_os','hrgx_plsl','miscx_sd','wpnx_supe'],
 		},
@@ -1706,9 +1970,8 @@ var eddb = {
 		htp : {
 			name:'Torpedoes',
 			modulenames:{},
-			ammocost:15000,
-			keyattrs:['damage','distdraw','thmload'],
-			modifiable:['mass','integ','pwrdraw','damage','thmload','pierce','bstint','ammoclip','rldtime','jitter'], // shotspd?
+			keyattrs:['damage','distdraw','thmload','ammoclip'],
+			modifiable:['mass','integ','pwrdraw','_X_ damage','thmload','pierce','_X_ bstint','_X_ ammoclip','_X_ rldtime','_X_ jitter'],
 			blueprints:['wpn_lw','wpn_stu'],
 			expeffects:['miscx_db','miscx_fc','wpnx_mlm','wpnx_os','wpnx_pepa','wpnx_reca','miscx_sd'],
 		},
@@ -1717,9 +1980,8 @@ var eddb = {
 		ucl : {
 			name:'Chaff Launchers',
 			modulenames:{},
-			ammocost:30,
-			keyattrs:['ammomax','jamdur'],
-			modifiable:['mass','integ','pwrdraw','distdraw','thmload','bstint','ammoclip','ammomax','rldtime'], // jamdur?
+			keyattrs:['jamdur','ammomax'],
+			modifiable:['mass','integ','pwrdraw','_X_ distdraw','_X_ thmload','_X_ bstint','_X_ ammoclip','ammomax','rldtime'],
 			blueprints:['ucl_ammo','misc_lw','misc_rf','misc_sh'],
 		},
 		
@@ -1727,56 +1989,57 @@ var eddb = {
 			name:'ECMs',
 			modulenames:{},
 			keyattrs:['cooldown','duration'],
-			modifiable:['mass','integ','pwrdraw','distdraw','thmload'], // range? duration? cooldown?
+			modifiable:['mass','integ','pwrdraw','_X_ distdraw','_X_ thmload'],
 			blueprints:['misc_lw','misc_rf','misc_sh'],
 		},
 		
 		uex : {
 			name:'Experimental',
 			modulenames:{},
-			singleton:1,
 			keyattrs:['cooldown','duration','scanrng','scantime'],
 		},
 		
 		uhsl : {
 			name:'Heat Sink Launchers',
 			modulenames:{},
-			ammocost:25,
 			keyattrs:['thmdrain','ammomax'],
-			modifiable:['mass','integ','pwrdraw','distdraw','bstint','ammoclip','ammomax','rldtime'], // duration? thmdrain?
+			modifiable:['mass','integ','pwrdraw','_X_ distdraw','_X_ bstint','_X_ ammoclip','ammomax','rldtime'],
 			blueprints:['uhsl_ammo','misc_lw','misc_rf','misc_sh'],
 		},
 		
 		ukws : {
 			name:'Kill Warrant Scanners',
-			modulenames:{'Kill Warrant Scanner':1},
-			singleton:1,
+			modulenames:{'Kill Warrant Scanner':true},
 			keyattrs:['scanrng','scantime'],
-			modifiable:['mass','integ','pwrdraw','boottime','scanrng','maxangle','scantime'],
+			modifiable:['mass','integ','pwrdraw','_X_ boottime','scanrng','maxangle','scantime'],
 			blueprints:['scan_fs','misc_lw','scan_lr','misc_rf','misc_sh','scan_wa'],
 		},
 		
 		ucs : {
 			name:'Manifest Scanners',
-			modulenames:{'Manifest Scanner':1},
-			singleton:1,
+			modulenames:{'Manifest Scanner':true},
 			keyattrs:['scanrng','scantime'],
-			modifiable:['mass','integ','pwrdraw','boottime','scanrng','maxangle','scantime'],
+			modifiable:['mass','integ','pwrdraw','_X_ boottime','scanrng','maxangle','scantime'],
 			blueprints:['scan_fs','misc_lw','scan_lr','misc_rf','misc_sh','scan_wa'],
 		},
 		
 		upd : {
 			name:'Point Defence',
 			modulenames:{},
-			ammocost:1,
-			keyattrs:['maxrng'],
-			modifiable:['mass','integ','pwrdraw','damage','thmload','maxrng','bstint','ammoclip','ammomax','rldtime','jitter'], // shotspd?
+			keyattrs:['maxrng','ammomax'],
+			modifiable:['mass','integ','pwrdraw','_X_ damage','_X_ thmload','_X_ maxrng','_X_ bstint','_X_ ammoclip','ammomax','rldtime','_X_ jitter'],
 			blueprints:['upd_ammo','misc_lw','misc_rf','misc_sh'],
+		},
+		
+		upwa : {
+			name:'Pulse Wave Analyser',
+			modulenames:{'Pulse Wave Analyser':true},
+			keyattrs:['scanrng'],
 		},
 		
 		usb : {
 			name:'Shield Boosters',
-			modulenames:{'Shield Booster':1},
+			modulenames:{'Shield Booster':true},
 			keyattrs:['shieldbst','thmres'],
 			modifiable:['mass','integ','pwrdraw','shieldbst','kinres','thmres','expres'],
 			blueprints:['usb_br','usb_hd','usb_kr','usb_ra','usb_tr'],
@@ -1785,10 +2048,9 @@ var eddb = {
 		
 		ufsws : {
 			name:'Wake Scanners',
-			modulenames:{'Frame Shift Wake Scanner':1},
-			singleton:1,
+			modulenames:{'Frame Shift Wake Scanner':true},
 			keyattrs:['scanrng','scantime'],
-			modifiable:['mass','integ','pwrdraw','boottime','scanrng','maxangle','scantime'],
+			modifiable:['mass','integ','pwrdraw','_X_ boottime','scanrng','maxangle','scantime'],
 			blueprints:['scan_fs','misc_lw','scan_lr','misc_rf','misc_sh','scan_wa'],
 		},
 		
@@ -1809,7 +2071,7 @@ var eddb = {
 		
 		cpp : {
 			name:'Power Plants',
-			modulenames:{'Power Plant':1},
+			modulenames:{'Power Plant':true, 'Guardian Hybrid Power Plant':true},
 			keyattrs:['heateff'],
 			modifiable:['mass','integ','pwrcap','heateff'],
 			blueprints:['cpp_arm','cpp_le','cpp_oc'],
@@ -1818,7 +2080,7 @@ var eddb = {
 		
 		ct : {
 			name:'Thrusters',
-			modulenames:{'Thrusters':1},
+			modulenames:{'Thrusters':true, 'Enhanced Performance Thrusters':'Enhanced Performance'},
 			keyattrs:['optmass','optmul'],
 			modifiable:['mass','integ','pwrdraw','optmass','optmul','thmload'],
 			blueprints:['ct_ct','ct_dt','ct_str'],
@@ -1827,35 +2089,35 @@ var eddb = {
 		
 		cfsd : {
 			name:'Frame Shift Drives',
-			modulenames:{'Frame Shift Drive':1},
+			modulenames:{'Frame Shift Drive':true},
 			keyattrs:['optmass','maxfuel'],
-			modifiable:['mass','integ','pwrdraw','boottime','optmass','thmload','maxfuel'],
+			modifiable:['mass','integ','pwrdraw','boottime','optmass','thmload','_X_ maxfuel'],
 			blueprints:['cfsd_fb','cfsd_ir','cfsd_sh'],
 			expeffects:['cfsdx_dc','cfsdx_db','cfsdx_mm','miscx_sd','cfsdx_ts'],
 		},
 		
 		cls : {
 			name:'Life Supports',
-			modulenames:{'Life Support':1},
+			modulenames:{'Life Support':true},
 			keyattrs:['emgcylife'],
-			modifiable:['mass','integ','pwrdraw','boottime'], //emgcylife?
-			blueprints:['misc_lw4','misc_rf4','misc_sh4'],
+			modifiable:['mass','integ','pwrdraw','_X_ boottime'],
+			blueprints:['misc_lw','misc_rf','misc_sh'],
 		},
 		
 		cpd : {
 			name:'Power Distributors',
-			modulenames:{'Power Distributor':1},
+			modulenames:{'Power Distributor':true, 'Guardian Hybrid Power Distributor':true},
 			keyattrs:['engcap','engchg'],
-			modifiable:['mass','integ','pwrdraw','boottime','wepcap','wepchg','engcap','engchg','syscap','syschg'],
+			modifiable:['mass','integ','pwrdraw','_X_ boottime','wepcap','wepchg','engcap','engchg','syscap','syschg'],
 			blueprints:['cpd_ce','cpd_ef','cpd_hc','cpd_sh','cpd_sf','cpd_wf'],
 			expeffects:['cpdx_cc','miscx_db','miscx_fc','miscx_sd','cpdx_sc'],
 		},
 		
 		cs : {
 			name:'Sensors',
-			modulenames:{'Sensors':1},
+			modulenames:{'Sensors':true},
 			keyattrs:['typemis','maxrng'],
-			modifiable:['mass','integ','pwrdraw','boottime','maxangle','typemis'], // maxrng?
+			modifiable:['mass','integ','pwrdraw','_X_ boottime','maxangle','typemis'],
 			blueprints:['cs_lw','cs_lr','cs_wa'],
 		},
 		
@@ -1868,10 +2130,9 @@ var eddb = {
 		
 		iafmu : {
 			name:'Auto Field-Maintenance Units',
-			modulenames:{'Auto Field-Maintenance Unit':1},
-			ammocost:1,
+			modulenames:{'Auto Field-Maintenance Unit':true},
 			keyattrs:['repaircap'],
-			modifiable:['integ','pwrdraw','boottime'], // repaircap? repaircon? repairrtg?
+			modifiable:['integ','pwrdraw','_X_ boottime'],
 			blueprints:['misc_sh4'],
 		},
 		
@@ -1883,338 +2144,374 @@ var eddb = {
 		
 		iclc : {
 			name:'Collection Limpets',
-			modulenames:{'Collector Limpet Controller':1},
+			modulenames:{'Collector Limpet Controller':true},
 			keyattrs:['maxlimpet','limpettime'],
-			modifiable:['mass','integ','pwrdraw','boottime'], // maxlimpet? targetrng? limpettime? maxspd? multispd?
+			modifiable:['mass','integ','pwrdraw','_X_ boottime'],
 			blueprints:['misc_lw','misc_rf','misc_sh'],
 		},
 		
 		idlc : {
 			name:'Decontamination Limpets',
 			modulenames:{},
-			keyattrs:['maxlimpet','targetrng'],
-		//	modifiable:['mass','integ','pwrdraw','boottime'], // maxlimpet? targetrng? limpettime? maxspd? multispd?
-		},
-		
-		idc : {
-			name:'Docking Computers',
-			modulenames:{},
-		//	modifiable:['integ','pwrdraw','boottime'],
-		},
-		
-		ifsdi : {
-			name:'FSD Interdictors',
-			modulenames:{'Frame Shift Drive Interdictor':1},
-			keyattrs:['timerng','facinglim'],
-			modifiable:['mass','integ','pwrdraw','boottime','timerng','facinglim'],
-			blueprints:['ifsdi_eca','ifsdi_lr'],
+			keyattrs:['maxlimpet','lpactrng'],
+		//	modifiable:['mass','integ','pwrdraw','boottime'],
 		},
 		
 		ifh : {
 			name:'Fighter Hangars',
 			modulenames:{},
-			singleton:1,
-			ammocost: 1030,
 			keyattrs:['vslots','vcount'],
-		//	modifiable:['mass','integ','pwrdraw','boottime'], // vslots? vcount?
+		},
+		
+		ifa : {
+			name:'Flight Assists',
+			modulenames:{},
+		},
+		
+		ifsdb : {
+			name:'FSD Boosters',
+			modulenames:{'Guardian Frame Shift Drive Booster':'Guardian FSD Booster'},
+			keyattrs:['jumpbst'],
+		},
+		
+		ifsdi : {
+			name:'FSD Interdictors',
+			modulenames:{'Frame Shift Drive Interdictor':true},
+			keyattrs:['timerng','facinglim'],
+			modifiable:['mass','_X_ integ','pwrdraw','_X_ boottime','timerng','facinglim'],
+			blueprints:['ifsdi_eca','ifsdi_lr'],
 		},
 		
 		ifs : {
 			name:'Fuel Scoops',
-			modulenames:{'Fuel Scoop':1},
-			singleton:1,
+			modulenames:{'Fuel Scoop':true},
 			keyattrs:['scooprate'],
-			modifiable:['integ','pwrdraw','boottime'], // scooprate?
+			modifiable:['integ','pwrdraw','_X_ boottime'],
 			blueprints:['misc_sh4'],
 		},
 		
 		iftlc : {
 			name:'Fuel Transfer Limpets',
-			modulenames:{'Fuel Transfer Limpet Controller':1},
-			keyattrs:['maxlimpet','targetrng'],
-			modifiable:['mass','integ','pwrdraw','boottime'], // maxlimpet? targetrng? limpettime? maxspd? fuelxfer?
+			modulenames:{'Fuel Transfer Limpet Controller':true},
+			keyattrs:['maxlimpet','lpactrng'],
+			modifiable:['mass','integ','pwrdraw','_X_ boottime'],
 			blueprints:['misc_lw','misc_rf','misc_sh'],
 		},
 		
 		ihblc : {
 			name:'Hatch Breaker Limpets',
-			modulenames:{'Hatch Breaker Limpet Controller':1},
-			keyattrs:['maxlimpet','targetrng'],
-			modifiable:['mass','integ','pwrdraw','boottime'], // maxlimpet? targetrng? limpettime? maxspd? hacktime? mincargo? maxcargo?
+			modulenames:{'Hatch Breaker Limpet Controller':true},
+			keyattrs:['maxlimpet','lpactrng'],
+			modifiable:['mass','integ','pwrdraw','_X_ boottime'],
 			blueprints:['misc_lw','misc_rf','misc_sh'],
 		},
 		
 		ihrp : {
 			name:'Hull Reinforcements',
-			modulenames:{'Hull Reinforcement Package':1},
-			keyattrs:['hullrnf','kinres'],
+			modulenames:{'Hull Reinforcement Package':true, 'Guardian Hull Reinforcement Package':true},
+			keyattrs:['hullrnf','thmres'],
 			modifiable:['mass','hullrnf','kinres','thmres','expres','hullbst'],
 			blueprints:['ihrp_br','ihrp_hd','ihrp_kr','ihrp_lw','ihrp_tr'],
 			expeffects:['ihrpx_ap','ihrpx_dp','ihrpx_lp','ihrpx_rp'],
 		},
 		
+		isrp : {
+			name:'Shield Reinforcements',
+			sortname:'Hull Reinforcements - Shield',
+			modulenames:{'Guardian Shield Reinforcement Package':true},
+			keyattrs:['pwrdraw','shieldrnf'],
+		},
+		
 		imahrp : {
 			name:'Meta Alloy Hull Reinforcements',
-			modulenames:{'Meta Alloy Hull Reinforcement Package':1},
+			modulenames:{'Meta Alloy Hull Reinforcement Package':true},
 			keyattrs:['hullrnf','caures'],
 		},
 		
 		imrp : {
 			name:'Module Reinforcements',
-			modulenames:{'Module Reinforcement Package':1},
+			modulenames:{'Module Reinforcement Package':true, 'Guardian Module Reinforcement Package':true},
 			keyattrs:['integ','dmgprot'],
 		},
 		
 		ipc : {
 			name:'Passenger Cabins',
-			modulenames:{'Economy Class Passenger Cabin':1, 'Business Class Passenger Cabin':1, 'First Class Passenger Cabin':1, 'Luxury Class Passenger Cabin':1},
+			modulenames:{'Economy Class Passenger Cabin':true, 'Business Class Passenger Cabin':true, 'First Class Passenger Cabin':true, 'Luxury Class Passenger Cabin':true},
 			keyattrs:['cabincap'],
-		//	modifiable:['mass'], // cabincap?
 		},
 		
 		ipvh : {
 			name:'Planetary Vehicle Hangars',
-			modulenames:{'Planetary Vehicle Hangar':1},
-			ammocost: 1030,
+			modulenames:{'Planetary Vehicle Hangar':true},
 			keyattrs:['vslots'],
-		//	modifiable:['mass','integ','pwrdraw','boottime'], // vslots?
 		},
 		
 		iplc : {
 			name:'Prospecting Limpets',
-			modulenames:{'Prospector Limpet Controller':1},
+			modulenames:{'Prospector Limpet Controller':true},
 			keyattrs:['maxlimpet','limpettime'],
-			modifiable:['mass','integ','pwrdraw','boottime'], // maxlimpet? limpettime? maxspd?
+			modifiable:['mass','integ','pwrdraw','_X_ boottime'],
 			blueprints:['misc_lw','misc_rf','misc_sh'],
 		},
 		
 		inlc : {
 			name:'Recon Limpets',
 			modulenames:{},
-			keyattrs:['maxlimpet','targetrng'],
-		//	modifiable:['mass','integ','pwrdraw','boottime'], // maxlimpet? targetrng? maxspd?
+			keyattrs:['maxlimpet','lpactrng'],
+		//	modifiable:['mass','integ','pwrdraw','boottime'],
 		},
 		
 		ir : {
 			name:'Refineries',
-			modulenames:{'Refinery':1},
-			singleton:1,
+			modulenames:{'Refinery':true},
 			keyattrs:['bins'],
-			modifiable:['integ','pwrdraw','boottime'], // bins?
+			modifiable:['integ','pwrdraw','_X_ boottime'],
 			blueprints:['misc_sh4'],
 		},
 		
 		irlc : {
 			name:'Repair Limpets',
-			modulenames:{'Repair Limpet Controller':1},
+			modulenames:{'Repair Limpet Controller':true},
 			keyattrs:['maxlimpet','repaircap'],
-		//	modifiable:['mass','integ','pwrdraw','boottime'], // maxlimpet? limpettime? maxspd?
+		//	modifiable:['mass','integ','pwrdraw','boottime'],
 		},
 		
 		islc : {
 			name:'Research Limpets',
 			modulenames:{},
-			keyattrs:['maxlimpet','targetrng'],
+			keyattrs:['maxlimpet','lpactrng'],
+		//	modifiable:['mass','integ','pwrdraw','boottime'],
 		},
 		
 		iscb : {
 			name:'Shield Cell Banks',
-			modulenames:{'Shield Cell Bank':1},
-			ammocost:300,
-			keyattrs:['shieldrnf','ammomax'],
-			modifiable:['mass','integ','pwrdraw','boottime','spinup','duration','shieldrnf','thmload','ammomax'],
+			modulenames:{'Shield Cell Bank':true},
+			keyattrs:['shieldrnfps','ammomax'],
+			modifiable:['_X_ mass','integ','pwrdraw','boottime','spinup','duration','shieldrnfps','thmload','_X_ ammomax'],
 			blueprints:['iscb_rc','iscb_sp'],
 			expeffects:['iscbx_bc','miscx_db','miscx_fc','iscbx_rc','miscx_sd'],
 		},
 		
 		isg : {
 			name:'Shield Generators',
-			modulenames:{'Shield Generator':1},
-			singleton:1,
+			modulenames:{'Shield Generator':true, 'Bi-Weave Shield Generator':'Bi-Weave', 'Prismatic Shield Generator':'Prismatic'},
 			keyattrs:['optmul','thmres'],
-			modifiable:['mass','integ','pwrdraw','boottime','optmass','optmul','genrate','bgenrate','distdraw','kinres','thmres','expres'],
+			modifiable:['mass','integ','pwrdraw','_X_ boottime','optmass','optmul','_X_ genrate','bgenrate','distdraw','kinres','thmres','expres'],
 			blueprints:['isg_elp','isg_kr','isg_rf','isg_tr'],
 			expeffects:['miscx_db','isgx_fc','isgx_fb','isgx_hc','isgx_ld','isgx_mw','miscx_sd','isgx_tb'],
 		},
 		
+		/* removed, now built-in
 		isbs : {
 			name:'Stellar Body Scanners',
 			modulenames:{},
-			singleton:1,
 			keyattrs:['activerng','passiverng'],
-		//	modifiable:['mass','integ'], // activerng? passiverng? maxangle? scantime?
 		},
+		*/
 		
 		iss : {
 			name:'Surface Scanners',
 			modulenames:{},
-			singleton:1,
-			keyattrs:['scanrngmod','scanratemod'],
-			modifiable:['mass','boottime','pwrdraw','scanrngmod','scanangmod','scanratemod'],
-			blueprints:['iss_fs','iss_lr','iss_wa'],
+			keyattrs:['_X_ scanrngmod','_X_ scanratemod','proberad'],
+			modifiable:['_X_ mass','_X_ boottime','_X_ pwrdraw','_X_ scanrngmod','_X_ scanangmod','_X_ scanratemod','proberad'],
+			blueprints:['_X_ iss_fs','_X_ iss_lr','_X_ iss_wa','iss_er'],
 		},
 	}, // eddb.mtype{}
 	module : {
 		
 		// HARDPOINTS
 		
-		60150 : { mtype:'hel', cost:   37430, name:'Beam Laser',                  mount:'F',              class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.62, boottime:0, dps: 9.820, damage: 9.820, distdraw:1.940, thmload:3.53, pierce: 18, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 7.9, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 600, fdid:128049428, fdname:'Hpt_BeamLaser_Fixed_Small' },
-		60151 : { mtype:'hel', cost:   74650, name:'Beam Laser',                  mount:'G',              class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.60, boottime:0, dps: 7.680, damage: 7.680, distdraw:2.110, thmload:3.65, pierce: 18, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 6.1, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 600, fdid:128049432, fdname:'Hpt_BeamLaser_Gimbal_Small' },
-		60162 : { mtype:'hel', cost:  500000, name:'Beam Laser',                  mount:'T',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.57, boottime:0, dps: 5.400, damage: 5.400, distdraw:1.320, thmload:2.40, pierce: 18, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 4.3, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 600, fdid:128049435, fdname:'Hpt_BeamLaser_Turret_Small' },
-		60240 : { mtype:'hel', cost:  299520, name:'Beam Laser',                  mount:'F',              class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:1.01, boottime:0, dps:15.960, damage:15.960, distdraw:3.160, thmload:5.11, pierce: 35, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg:12.8, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 600, fdid:128049429, fdname:'Hpt_BeamLaser_Fixed_Medium' },
-		60241 : { mtype:'hel', cost:  500600, name:'Beam Laser',                  mount:'G',              class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:1.00, boottime:0, dps:12.520, damage:12.520, distdraw:3.440, thmload:5.32, pierce: 35, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg:10.0, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 600, fdid:128049433, fdname:'Hpt_BeamLaser_Gimbal_Medium' },
-		60252 : { mtype:'hel', cost: 2099900, name:'Beam Laser',                  mount:'T',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.93, boottime:0, dps: 8.830, damage: 8.830, distdraw:2.160, thmload:3.53, pierce: 35, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 7.1, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 600, fdid:128049436, fdname:'Hpt_BeamLaser_Turret_Medium' },
-		60330 : { mtype:'hel', cost: 1177600, name:'Beam Laser',                  mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.62, boottime:0, dps:25.780, damage:25.780, distdraw:5.100, thmload:7.22, pierce: 50, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg:20.6, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 600, fdid:128049430, fdname:'Hpt_BeamLaser_Fixed_Large' },
-		60331 : { mtype:'hel', cost: 2396160, name:'Beam Laser',                  mount:'G',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.60, boottime:0, dps:20.300, damage:20.300, distdraw:5.580, thmload:7.61, pierce: 50, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg:16.2, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 600, fdid:128049434, fdname:'Hpt_BeamLaser_Gimbal_Large' },
-		60332 : { mtype:'hel', cost:19399600, name:'Beam Laser',                  mount:'T',              class:3, rating:'D', mass: 8.00, integ:64, pwrdraw:1.51, boottime:0, dps:14.360, damage:14.360, distdraw:3.510, thmload:5.11, pierce: 50, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg:11.5, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 600, fdid:128049437, fdname:'Hpt_BeamLaser_Turret_Large' },
-		60410 : { mtype:'hel', cost: 2396160, name:'Beam Laser',                  mount:'F',              class:4, rating:'A', mass:16.00, integ:80, pwrdraw:2.61, boottime:0, dps:41.380, damage:41.380, distdraw:8.190, thmload:9.93, pierce: 60, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg:33.1, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 600, fdid:128049431, fdname:'Hpt_BeamLaser_Fixed_Huge' },
-		60411 : { mtype:'hel', cost: 8746160, name:'Beam Laser',                  mount:'G',              class:4, rating:'A', mass:16.00, integ:80, pwrdraw:2.57, boottime:0, dps:32.680, damage:32.680, distdraw:8.990,thmload:10.62, pierce: 60, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg:26.1, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 600, fdid:128681994, fdname:'Hpt_BeamLaser_Gimbal_Huge' },
-		60154 : { mtype:'hel', cost:   56150, name:'Retributor Beam Laser',       mount:'F',              class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.62, boottime:0, dps: 4.910, damage: 4.910, distdraw:2.520, thmload:2.70, pierce: 18, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 3.9, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 600, fdid:128671346, fdname:'Hpt_BeamLaser_Fixed_Small_Heat' }, // verify
+		60150 : { mtype:'hel', cost:   37430, name:'Beam Laser',                  mount:'F',              class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.62, boottime:0, dps: 9.820, damage: 9.820, distdraw:1.940, thmload:3.53, pierce: 18, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 7.9, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:600, fdid:128049428, fdname:'Hpt_BeamLaser_Fixed_Small' },
+		60151 : { mtype:'hel', cost:   74650, name:'Beam Laser',                  mount:'G',              class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.60, boottime:0, dps: 7.680, damage: 7.680, distdraw:2.110, thmload:3.65, pierce: 18, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 6.1, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:600, fdid:128049432, fdname:'Hpt_BeamLaser_Gimbal_Small' },
+		60162 : { mtype:'hel', cost:  500000, name:'Beam Laser',                  mount:'T',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.57, boottime:0, dps: 5.400, damage: 5.400, distdraw:1.320, thmload:2.40, pierce: 18, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 4.3, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:600, fdid:128049435, fdname:'Hpt_BeamLaser_Turret_Small' },
+		60240 : { mtype:'hel', cost:  299520, name:'Beam Laser',                  mount:'F',              class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:1.01, boottime:0, dps:15.960, damage:15.960, distdraw:3.160, thmload:5.11, pierce: 35, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg:12.8, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:600, fdid:128049429, fdname:'Hpt_BeamLaser_Fixed_Medium' },
+		60241 : { mtype:'hel', cost:  500600, name:'Beam Laser',                  mount:'G',              class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:1.00, boottime:0, dps:12.520, damage:12.520, distdraw:3.440, thmload:5.32, pierce: 35, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg:10.0, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:600, fdid:128049433, fdname:'Hpt_BeamLaser_Gimbal_Medium' },
+		60252 : { mtype:'hel', cost: 2099900, name:'Beam Laser',                  mount:'T',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.93, boottime:0, dps: 8.830, damage: 8.830, distdraw:2.160, thmload:3.53, pierce: 35, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 7.1, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:600, fdid:128049436, fdname:'Hpt_BeamLaser_Turret_Medium' },
+		60330 : { mtype:'hel', cost: 1177600, name:'Beam Laser',                  mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.62, boottime:0, dps:25.780, damage:25.780, distdraw:5.100, thmload:7.22, pierce: 50, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg:20.6, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:600, fdid:128049430, fdname:'Hpt_BeamLaser_Fixed_Large' },
+		60331 : { mtype:'hel', cost: 2396160, name:'Beam Laser',                  mount:'G',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.60, boottime:0, dps:20.300, damage:20.300, distdraw:5.580, thmload:7.61, pierce: 50, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg:16.2, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:600, fdid:128049434, fdname:'Hpt_BeamLaser_Gimbal_Large' },
+		60332 : { mtype:'hel', cost:19399600, name:'Beam Laser',                  mount:'T',              class:3, rating:'D', mass: 8.00, integ:64, pwrdraw:1.51, boottime:0, dps:14.360, damage:14.360, distdraw:3.510, thmload:5.11, pierce: 50, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg:11.5, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:600, fdid:128049437, fdname:'Hpt_BeamLaser_Turret_Large' },
+		60410 : { mtype:'hel', cost: 2396160, name:'Beam Laser',                  mount:'F',              class:4, rating:'A', mass:16.00, integ:80, pwrdraw:2.61, boottime:0, dps:41.380, damage:41.380, distdraw:8.190, thmload:9.93, pierce: 60, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg:33.1, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:600, fdid:128049431, fdname:'Hpt_BeamLaser_Fixed_Huge' },
+		60411 : { mtype:'hel', cost: 8746160, name:'Beam Laser',                  mount:'G',              class:4, rating:'A', mass:16.00, integ:80, pwrdraw:2.57, boottime:0, dps:32.680, damage:32.680, distdraw:8.990,thmload:10.62, pierce: 60, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg:26.1, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:600, fdid:128681994, fdname:'Hpt_BeamLaser_Gimbal_Huge' },
+		60154 : { mtype:'hel', cost:   56150, name:'Retributor Beam Laser',       mount:'F',              class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.62, boottime:0, dps: 4.910, damage: 4.910, distdraw:2.520, thmload:2.70, pierce: 18, maxrng:3000,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 3.9, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:600, fdid:128671346, fdname:'Hpt_BeamLaser_Fixed_Small_Heat' }, // powerplay // verify
 		
-		61160 : { mtype:'hul', cost:    4400, name:'Burst Laser',                 mount:'F',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.65, boottime:0, dps: 8.147, damage: 1.720, distdraw:0.250, thmload:0.38, pierce: 20, maxrng:3000,               rof:4.737, bstint:0.500, bstrof:15, bstsize:3,                                                   brcdmg: 1.5, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049400, fdname:'Hpt_PulseLaserBurst_Fixed_Small' },
-		61171 : { mtype:'hul', cost:    8600, name:'Burst Laser',                 mount:'G',              class:1, rating:'G', mass: 2.00, integ:40, pwrdraw:0.64, boottime:0, dps: 6.448, damage: 1.220, distdraw:0.240, thmload:0.34, pierce: 20, maxrng:3000,               rof:5.285, bstint:0.450, bstrof:17, bstsize:3,                                                   brcdmg: 1.0, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049404, fdname:'Hpt_PulseLaserBurst_Gimbal_Small' },
-		61172 : { mtype:'hul', cost:   52800, name:'Burst Laser',                 mount:'T',              class:1, rating:'G', mass: 2.00, integ:40, pwrdraw:0.60, boottime:0, dps: 4.174, damage: 0.870, distdraw:0.139, thmload:0.19, pierce: 20, maxrng:3000,               rof:4.798, bstint:0.520, bstrof:19, bstsize:3,                                                   brcdmg: 0.4, minbrc:60, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049407, fdname:'Hpt_PulseLaserBurst_Turret_Small' },
-		61250 : { mtype:'hul', cost:   23000, name:'Burst Laser',                 mount:'F',              class:2, rating:'E', mass: 4.00, integ:40, pwrdraw:1.05, boottime:0, dps:13.045, damage: 3.530, distdraw:0.500, thmload:0.78, pierce: 35, maxrng:3000,               rof:3.695, bstint:0.630, bstrof:11, bstsize:3,                                                   brcdmg: 3.0, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049401, fdname:'Hpt_PulseLaserBurst_Fixed_Medium' },
-		61261 : { mtype:'hul', cost:   48500, name:'Burst Laser',                 mount:'G',              class:2, rating:'F', mass: 4.00, integ:40, pwrdraw:1.04, boottime:0, dps:10.296, damage: 2.450, distdraw:0.490, thmload:0.67, pierce: 35, maxrng:3000,               rof:4.203, bstint:0.560, bstrof:13, bstsize:3,                                                   brcdmg: 2.1, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049405, fdname:'Hpt_PulseLaserBurst_Gimbal_Medium' },
-		61262 : { mtype:'hul', cost:  162800, name:'Burst Laser',                 mount:'T',              class:2, rating:'F', mass: 4.00, integ:40, pwrdraw:0.98, boottime:0, dps: 6.760, damage: 1.720, distdraw:0.275, thmload:0.38, pierce: 35, maxrng:3000,               rof:3.930, bstint:0.630, bstrof:15, bstsize:3,                                                   brcdmg: 0.9, minbrc:60, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049408, fdname:'Hpt_PulseLaserBurst_Turret_Medium' },
-		61340 : { mtype:'hul', cost:  140400, name:'Burst Laser',                 mount:'F',              class:3, rating:'D', mass: 8.00, integ:64, pwrdraw:1.66, boottime:0, dps:20.785, damage: 7.730, distdraw:1.110, thmload:1.70, pierce: 52, maxrng:3000,               rof:2.689, bstint:0.830, bstrof: 7, bstsize:3,                                                   brcdmg: 3.9, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049402, fdname:'Hpt_PulseLaserBurst_Fixed_Large' },
-		61351 : { mtype:'hul', cost:  281600, name:'Burst Laser',                 mount:'G',              class:3, rating:'E', mass: 8.00, integ:64, pwrdraw:1.65, boottime:0, dps:16.605, damage: 5.160, distdraw:1.030, thmload:1.42, pierce: 52, maxrng:3000,               rof:3.218, bstint:0.710, bstrof: 9, bstsize:3,                                                   brcdmg: 4.4, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049406, fdname:'Hpt_PulseLaserBurst_Gimbal_Large' },
-		61352 : { mtype:'hul', cost:  800400, name:'Burst Laser',                 mount:'T',              class:3, rating:'E', mass: 8.00, integ:64, pwrdraw:1.57, boottime:0, dps:11.010, damage: 3.530, distdraw:0.560, thmload:0.78, pierce: 52, maxrng:3000,               rof:3.119, bstint:0.780, bstrof:11, bstsize:3,                                                   brcdmg: 1.8, minbrc:60, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049409, fdname:'Hpt_PulseLaserBurst_Turret_Large' },
-		61450 : { mtype:'hul', cost:  281600, name:'Burst Laser',                 mount:'F',              class:4, rating:'E', mass:16.00, integ:80, pwrdraw:2.58, boottime:0, dps:32.259, damage:20.610, distdraw:2.980, thmload:4.53, pierce: 65, maxrng:3000,               rof:1.565, bstint:1.250, bstrof: 3, bstsize:3,                                                   brcdmg:17.5, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049403, fdname:'Hpt_PulseLaserBurst_Fixed_Huge' },
-		61451 : { mtype:'hul', cost: 1245600, name:'Burst Laser',                 mount:'G',              class:4, rating:'E', mass:16.00, integ:64, pwrdraw:2.59, boottime:0, dps:25.907, damage:12.090, distdraw:2.410, thmload:3.33, pierce: 65, maxrng:3000,               rof:2.143, bstint:1.000, bstrof: 5, bstsize:3,                                                   brcdmg:10.3, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128727920, fdname:'Hpt_PulseLaserBurst_Gimbal_Huge' },
-		61164 : { mtype:'hul', cost:    8800, name:'Cytoscrambler Burst Laser',   mount:'F',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.80, boottime:0, dps:27.429, damage: 3.600, distdraw:0.310, thmload:0.28, pierce:  1, maxrng:1000,               rof:7.619, bstint:0.700, bstrof:20, bstsize:8,                                                   brcdmg: 3.1, minbrc: 0, maxbrc: 0, jitter:3.5, dmgtype:'T', thmwgt:1, dmgfall: 600, fdid:128671449, fdname:'Hpt_PulseLaserBurst_Fixed_Small_Scatter' },
+		61160 : { mtype:'hul', cost:    4400, name:'Burst Laser',                 mount:'F',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.65, boottime:0, dps: 8.147, damage: 1.720, distdraw:0.250, thmload:0.38, pierce: 20, maxrng:3000,               rof:4.737, bstint:0.500, bstrof:15, bstsize:3,                                                   brcdmg: 1.5, minbrc:40, maxbrc:80,             thmwgt:100, kinwgt:0, dmgfall:500, fdid:128049400, fdname:'Hpt_PulseLaserBurst_Fixed_Small' },
+		61171 : { mtype:'hul', cost:    8600, name:'Burst Laser',                 mount:'G',              class:1, rating:'G', mass: 2.00, integ:40, pwrdraw:0.64, boottime:0, dps: 6.448, damage: 1.220, distdraw:0.240, thmload:0.34, pierce: 20, maxrng:3000,               rof:5.285, bstint:0.450, bstrof:17, bstsize:3,                                                   brcdmg: 1.0, minbrc:40, maxbrc:80,             thmwgt:100, kinwgt:0, dmgfall:500, fdid:128049404, fdname:'Hpt_PulseLaserBurst_Gimbal_Small' },
+		61172 : { mtype:'hul', cost:   52800, name:'Burst Laser',                 mount:'T',              class:1, rating:'G', mass: 2.00, integ:40, pwrdraw:0.60, boottime:0, dps: 4.174, damage: 0.870, distdraw:0.139, thmload:0.19, pierce: 20, maxrng:3000,               rof:4.798, bstint:0.520, bstrof:19, bstsize:3,                                                   brcdmg: 0.4, minbrc:60, maxbrc:80,             thmwgt:100, kinwgt:0, dmgfall:500, fdid:128049407, fdname:'Hpt_PulseLaserBurst_Turret_Small' },
+		61250 : { mtype:'hul', cost:   23000, name:'Burst Laser',                 mount:'F',              class:2, rating:'E', mass: 4.00, integ:40, pwrdraw:1.05, boottime:0, dps:13.045, damage: 3.530, distdraw:0.500, thmload:0.78, pierce: 35, maxrng:3000,               rof:3.695, bstint:0.630, bstrof:11, bstsize:3,                                                   brcdmg: 3.0, minbrc:40, maxbrc:80,             thmwgt:100, kinwgt:0, dmgfall:500, fdid:128049401, fdname:'Hpt_PulseLaserBurst_Fixed_Medium' },
+		61261 : { mtype:'hul', cost:   48500, name:'Burst Laser',                 mount:'G',              class:2, rating:'F', mass: 4.00, integ:40, pwrdraw:1.04, boottime:0, dps:10.296, damage: 2.450, distdraw:0.490, thmload:0.67, pierce: 35, maxrng:3000,               rof:4.203, bstint:0.560, bstrof:13, bstsize:3,                                                   brcdmg: 2.1, minbrc:40, maxbrc:80,             thmwgt:100, kinwgt:0, dmgfall:500, fdid:128049405, fdname:'Hpt_PulseLaserBurst_Gimbal_Medium' },
+		61262 : { mtype:'hul', cost:  162800, name:'Burst Laser',                 mount:'T',              class:2, rating:'F', mass: 4.00, integ:40, pwrdraw:0.98, boottime:0, dps: 6.760, damage: 1.720, distdraw:0.275, thmload:0.38, pierce: 35, maxrng:3000,               rof:3.930, bstint:0.630, bstrof:15, bstsize:3,                                                   brcdmg: 0.9, minbrc:60, maxbrc:80,             thmwgt:100, kinwgt:0, dmgfall:500, fdid:128049408, fdname:'Hpt_PulseLaserBurst_Turret_Medium' },
+		61340 : { mtype:'hul', cost:  140400, name:'Burst Laser',                 mount:'F',              class:3, rating:'D', mass: 8.00, integ:64, pwrdraw:1.66, boottime:0, dps:20.785, damage: 7.730, distdraw:1.110, thmload:1.70, pierce: 52, maxrng:3000,               rof:2.689, bstint:0.830, bstrof: 7, bstsize:3,                                                   brcdmg: 3.9, minbrc:40, maxbrc:80,             thmwgt:100, kinwgt:0, dmgfall:500, fdid:128049402, fdname:'Hpt_PulseLaserBurst_Fixed_Large' },
+		61351 : { mtype:'hul', cost:  281600, name:'Burst Laser',                 mount:'G',              class:3, rating:'E', mass: 8.00, integ:64, pwrdraw:1.65, boottime:0, dps:16.605, damage: 5.160, distdraw:1.030, thmload:1.42, pierce: 52, maxrng:3000,               rof:3.218, bstint:0.710, bstrof: 9, bstsize:3,                                                   brcdmg: 4.4, minbrc:40, maxbrc:80,             thmwgt:100, kinwgt:0, dmgfall:500, fdid:128049406, fdname:'Hpt_PulseLaserBurst_Gimbal_Large' },
+		61352 : { mtype:'hul', cost:  800400, name:'Burst Laser',                 mount:'T',              class:3, rating:'E', mass: 8.00, integ:64, pwrdraw:1.57, boottime:0, dps:11.010, damage: 3.530, distdraw:0.560, thmload:0.78, pierce: 52, maxrng:3000,               rof:3.119, bstint:0.780, bstrof:11, bstsize:3,                                                   brcdmg: 1.8, minbrc:60, maxbrc:80,             thmwgt:100, kinwgt:0, dmgfall:500, fdid:128049409, fdname:'Hpt_PulseLaserBurst_Turret_Large' },
+		61450 : { mtype:'hul', cost:  281600, name:'Burst Laser',                 mount:'F',              class:4, rating:'E', mass:16.00, integ:80, pwrdraw:2.58, boottime:0, dps:32.259, damage:20.610, distdraw:2.980, thmload:4.53, pierce: 65, maxrng:3000,               rof:1.565, bstint:1.250, bstrof: 3, bstsize:3,                                                   brcdmg:17.5, minbrc:40, maxbrc:80,             thmwgt:100, kinwgt:0, dmgfall:500, fdid:128049403, fdname:'Hpt_PulseLaserBurst_Fixed_Huge' },
+		61451 : { mtype:'hul', cost: 1245600, name:'Burst Laser',                 mount:'G',              class:4, rating:'E', mass:16.00, integ:64, pwrdraw:2.59, boottime:0, dps:25.907, damage:12.090, distdraw:2.410, thmload:3.33, pierce: 65, maxrng:3000,               rof:2.143, bstint:1.000, bstrof: 5, bstsize:3,                                                   brcdmg:10.3, minbrc:40, maxbrc:80,             thmwgt:100, kinwgt:0, dmgfall:500, fdid:128727920, fdname:'Hpt_PulseLaserBurst_Gimbal_Huge' },
+		61164 : { mtype:'hul', cost:    8800, name:'Cytoscrambler Burst Laser',   mount:'F',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.80, boottime:0, dps:27.429, damage: 3.600, distdraw:0.310, thmload:0.28, pierce:  1, maxrng:1000,               rof:7.619, bstint:0.700, bstrof:20, bstsize:8,                                                   brcdmg: 3.1, minbrc: 0, maxbrc: 0, jitter:3.5, thmwgt:100, kinwgt:0, dmgfall:600, fdid:128671449, fdname:'Hpt_PulseLaserBurst_Fixed_Small_Scatter' }, // powerplay
 		
-		70140 : { mtype:'hc',  cost:   21100, name:'Cannon',                      mount:'F',              class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:0.34, boottime:0, dps:11.250, damage:22.500, distdraw:0.460, thmload:1.38, pierce: 35, maxrng:3000, shotspd:1200, rof:0.500, bstint:2.000,                      ammoclip: 6, ammomax: 120,            rldtime:3.0, brcdmg:21.4, minbrc:60, maxbrc:90,             dmgtype:'K', kinwgt:1, dmgfall:3000, fdid:128049438, fdname:'Hpt_Cannon_Fixed_Small' },
-		70151 : { mtype:'hc',  cost:   42200, name:'Cannon',                      mount:'G',              class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.38, boottime:0, dps: 8.292, damage:15.920, distdraw:0.480, thmload:1.25, pierce: 35, maxrng:3000, shotspd:1000, rof:0.521, bstint:1.920,                      ammoclip: 5, ammomax: 100,            rldtime:4.0, brcdmg:15.1, minbrc:60, maxbrc:90,             dmgtype:'K', kinwgt:1, dmgfall:3000, fdid:128049442, fdname:'Hpt_Cannon_Gimbal_Small' },
-		70162 : { mtype:'hc',  cost:  506400, name:'Cannon',                      mount:'T',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.32, boottime:0, dps: 5.528, damage:12.770, distdraw:0.220, thmload:0.67, pierce: 35, maxrng:3000, shotspd:1000, rof:0.433, bstint:2.310,                      ammoclip: 5, ammomax: 100,            rldtime:4.0, brcdmg:12.1, minbrc:60, maxbrc:90,             dmgtype:'K', kinwgt:1, dmgfall:3000, fdid:128049445, fdname:'Hpt_Cannon_Turret_Small' },
-		70240 : { mtype:'hc',  cost:  168430, name:'Cannon',                      mount:'F',              class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:0.49, boottime:0, dps:16.993, damage:36.875, distdraw:0.700, thmload:2.11, pierce: 50, maxrng:3500, shotspd:1050, rof:0.461, bstint:2.170,                      ammoclip: 6, ammomax: 120,            rldtime:3.0, brcdmg:35.0, minbrc:60, maxbrc:90,             dmgtype:'K', kinwgt:1, dmgfall:3500, fdid:128049439, fdname:'Hpt_Cannon_Fixed_Medium' },
-		70241 : { mtype:'hc',  cost:  337600, name:'Cannon',                      mount:'G',              class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:0.54, boottime:0, dps:12.274, damage:25.530, distdraw:0.750, thmload:1.92, pierce: 50, maxrng:3500, shotspd: 875, rof:0.481, bstint:2.080,                      ammoclip: 5, ammomax: 100,            rldtime:4.0, brcdmg:24.3, minbrc:60, maxbrc:90,             dmgtype:'K', kinwgt:1, dmgfall:3500, fdid:128049443, fdname:'Hpt_Cannon_Gimbal_Medium' },
-		70252 : { mtype:'hc',  cost: 4051200, name:'Cannon',                      mount:'T',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.45, boottime:0, dps: 7.916, damage:19.790, distdraw:0.340, thmload:1.03, pierce: 50, maxrng:3500, shotspd: 875, rof:0.400, bstint:2.500,                      ammoclip: 5, ammomax: 100,            rldtime:4.0, brcdmg:18.8, minbrc:60, maxbrc:90,             dmgtype:'K', kinwgt:1, dmgfall:3500, fdid:128049446, fdname:'Hpt_Cannon_Turret_Medium' },
-		70330 : { mtype:'hc',  cost:  675200, name:'Cannon',                      mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:0.67, boottime:0, dps:23.372, damage:55.625, distdraw:1.070, thmload:3.20, pierce: 70, maxrng:4000, shotspd: 960, rof:0.420, bstint:2.380,                      ammoclip: 6, ammomax: 120,            rldtime:3.0, brcdmg:52.8, minbrc:60, maxbrc:90,             dmgtype:'K', kinwgt:1, dmgfall:4000, fdid:128049440, fdname:'Hpt_Cannon_Fixed_Large' },
-		70331 : { mtype:'hc',  cost: 1350400, name:'Cannon',                      mount:'G',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:0.75, boottime:0, dps:16.485, damage:37.421, distdraw:1.140, thmload:2.93, pierce: 70, maxrng:4000, shotspd: 800, rof:0.441, bstint:2.270,                      ammoclip: 5, ammomax: 100,            rldtime:4.0, brcdmg:35.5, minbrc:60, maxbrc:90,             dmgtype:'K', kinwgt:1, dmgfall:4000, fdid:128671120, fdname:'Hpt_Cannon_Gimbal_Large' },
-		70342 : { mtype:'hc',  cost:16204800, name:'Cannon',                      mount:'T',              class:3, rating:'D', mass: 8.00, integ:64, pwrdraw:0.64, boottime:0, dps:11.154, damage:30.340, distdraw:0.530, thmload:1.58, pierce: 70, maxrng:4000, shotspd: 800, rof:0.368, bstint:2.720,                      ammoclip: 5, ammomax: 100,            rldtime:4.0, brcdmg:28.8, minbrc:60, maxbrc:90,             dmgtype:'K', kinwgt:1, dmgfall:4000, fdid:128049447, fdname:'Hpt_Cannon_Turret_Large' },
-		70420 : { mtype:'hc',  cost: 2700800, name:'Cannon',                      mount:'F',              class:4, rating:'B', mass:16.00, integ:80, pwrdraw:0.92, boottime:0, dps:31.606, damage:83.125, distdraw:1.610, thmload:4.83, pierce: 90, maxrng:4500, shotspd: 900, rof:0.380, bstint:2.630,                      ammoclip: 6, ammomax: 120,            rldtime:3.0, brcdmg:79.0, minbrc:60, maxbrc:90,             dmgtype:'K', kinwgt:1, dmgfall:4500, fdid:128049441, fdname:'Hpt_Cannon_Fixed_Huge' },
-		70421 : { mtype:'hc',  cost: 5401600, name:'Cannon',                      mount:'G',              class:4, rating:'B', mass:16.00, integ:80, pwrdraw:1.03, boottime:0, dps:22.636, damage:56.590, distdraw:1.720, thmload:4.43, pierce: 90, maxrng:4500, shotspd: 750, rof:0.400, bstint:2.500,                      ammoclip: 5, ammomax: 100,            rldtime:4.0, brcdmg:53.8, minbrc:60, maxbrc:90,             dmgtype:'K', kinwgt:1, dmgfall:4500, fdid:128049444, fdname:'Hpt_Cannon_Gimbal_Huge' },
-	//	70422 : { mtype:'hc',  cost:     NaN, name:'Cannon',                      mount:'T',              class:4, rating:'?', mass:16.00, integ:80, pwrdraw:0.88, boottime:0, dps:15.456, damage:46.060, distdraw:0.800, thmload:2.40, pierce: 90, maxrng:4500, shotspd: 750, rof:0.336, bstint:2.980,                      ammoclip: 5, ammomax: 100,            rldtime:4.0, brcdmg: NaN, minbrc:60, maxbrc:90,             dmgtype:'K', kinwgt:1, dmgfall:4500, fdid:     null, fdname:'Hpt_Cannon_Turret_Huge' }, // TODO: cost,rating,brcdmg,fdid
+		70140 : { mtype:'hc',  cost:   21100, name:'Cannon',                      mount:'F',              class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:0.34, boottime:0, dps:11.250, damage:22.500, distdraw:0.460, thmload:1.38, pierce: 35, maxrng:3000, shotspd:1200, rof:0.500, bstint:2.000,                      ammoclip: 6, ammomax: 120,            rldtime:3.0, brcdmg:21.4, minbrc:60, maxbrc:90,             kinwgt:100, dmgfall:3000, ammocost:20, fdid:128049438, fdname:'Hpt_Cannon_Fixed_Small' },
+		70151 : { mtype:'hc',  cost:   42200, name:'Cannon',                      mount:'G',              class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.38, boottime:0, dps: 8.292, damage:15.920, distdraw:0.480, thmload:1.25, pierce: 35, maxrng:3000, shotspd:1000, rof:0.521, bstint:1.920,                      ammoclip: 5, ammomax: 100,            rldtime:4.0, brcdmg:15.1, minbrc:60, maxbrc:90,             kinwgt:100, dmgfall:3000, ammocost:20, fdid:128049442, fdname:'Hpt_Cannon_Gimbal_Small' },
+		70162 : { mtype:'hc',  cost:  506400, name:'Cannon',                      mount:'T',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.32, boottime:0, dps: 5.528, damage:12.770, distdraw:0.220, thmload:0.67, pierce: 35, maxrng:3000, shotspd:1000, rof:0.433, bstint:2.310,                      ammoclip: 5, ammomax: 100,            rldtime:4.0, brcdmg:12.1, minbrc:60, maxbrc:90,             kinwgt:100, dmgfall:3000, ammocost:20, fdid:128049445, fdname:'Hpt_Cannon_Turret_Small' },
+		70240 : { mtype:'hc',  cost:  168430, name:'Cannon',                      mount:'F',              class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:0.49, boottime:0, dps:16.993, damage:36.875, distdraw:0.700, thmload:2.11, pierce: 50, maxrng:3500, shotspd:1050, rof:0.461, bstint:2.170,                      ammoclip: 6, ammomax: 120,            rldtime:3.0, brcdmg:35.0, minbrc:60, maxbrc:90,             kinwgt:100, dmgfall:3500, ammocost:20, fdid:128049439, fdname:'Hpt_Cannon_Fixed_Medium' },
+		70241 : { mtype:'hc',  cost:  337600, name:'Cannon',                      mount:'G',              class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:0.54, boottime:0, dps:12.274, damage:25.530, distdraw:0.750, thmload:1.92, pierce: 50, maxrng:3500, shotspd: 875, rof:0.481, bstint:2.080,                      ammoclip: 5, ammomax: 100,            rldtime:4.0, brcdmg:24.3, minbrc:60, maxbrc:90,             kinwgt:100, dmgfall:3500, ammocost:20, fdid:128049443, fdname:'Hpt_Cannon_Gimbal_Medium' },
+		70252 : { mtype:'hc',  cost: 4051200, name:'Cannon',                      mount:'T',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.45, boottime:0, dps: 7.916, damage:19.790, distdraw:0.340, thmload:1.03, pierce: 50, maxrng:3500, shotspd: 875, rof:0.400, bstint:2.500,                      ammoclip: 5, ammomax: 100,            rldtime:4.0, brcdmg:18.8, minbrc:60, maxbrc:90,             kinwgt:100, dmgfall:3500, ammocost:20, fdid:128049446, fdname:'Hpt_Cannon_Turret_Medium' },
+		70330 : { mtype:'hc',  cost:  675200, name:'Cannon',                      mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:0.67, boottime:0, dps:23.372, damage:55.625, distdraw:1.070, thmload:3.20, pierce: 70, maxrng:4000, shotspd: 960, rof:0.420, bstint:2.380,                      ammoclip: 6, ammomax: 120,            rldtime:3.0, brcdmg:52.8, minbrc:60, maxbrc:90,             kinwgt:100, dmgfall:4000, ammocost:20, fdid:128049440, fdname:'Hpt_Cannon_Fixed_Large' },
+		70331 : { mtype:'hc',  cost: 1350400, name:'Cannon',                      mount:'G',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:0.75, boottime:0, dps:16.485, damage:37.421, distdraw:1.140, thmload:2.93, pierce: 70, maxrng:4000, shotspd: 800, rof:0.441, bstint:2.270,                      ammoclip: 5, ammomax: 100,            rldtime:4.0, brcdmg:35.5, minbrc:60, maxbrc:90,             kinwgt:100, dmgfall:4000, ammocost:20, fdid:128671120, fdname:'Hpt_Cannon_Gimbal_Large' },
+		70342 : { mtype:'hc',  cost:16204800, name:'Cannon',                      mount:'T',              class:3, rating:'D', mass: 8.00, integ:64, pwrdraw:0.64, boottime:0, dps:11.154, damage:30.340, distdraw:0.530, thmload:1.58, pierce: 70, maxrng:4000, shotspd: 800, rof:0.368, bstint:2.720,                      ammoclip: 5, ammomax: 100,            rldtime:4.0, brcdmg:28.8, minbrc:60, maxbrc:90,             kinwgt:100, dmgfall:4000, ammocost:20, fdid:128049447, fdname:'Hpt_Cannon_Turret_Large' },
+		70420 : { mtype:'hc',  cost: 2700800, name:'Cannon',                      mount:'F',              class:4, rating:'B', mass:16.00, integ:80, pwrdraw:0.92, boottime:0, dps:31.606, damage:83.125, distdraw:1.610, thmload:4.83, pierce: 90, maxrng:4500, shotspd: 900, rof:0.380, bstint:2.630,                      ammoclip: 6, ammomax: 120,            rldtime:3.0, brcdmg:79.0, minbrc:60, maxbrc:90,             kinwgt:100, dmgfall:4500, ammocost:20, fdid:128049441, fdname:'Hpt_Cannon_Fixed_Huge' },
+		70421 : { mtype:'hc',  cost: 5401600, name:'Cannon',                      mount:'G',              class:4, rating:'B', mass:16.00, integ:80, pwrdraw:1.03, boottime:0, dps:22.636, damage:56.590, distdraw:1.720, thmload:4.43, pierce: 90, maxrng:4500, shotspd: 750, rof:0.400, bstint:2.500,                      ammoclip: 5, ammomax: 100,            rldtime:4.0, brcdmg:53.8, minbrc:60, maxbrc:90,             kinwgt:100, dmgfall:4500, ammocost:20, fdid:128049444, fdname:'Hpt_Cannon_Gimbal_Huge' },
+	//	704 2 : { mtype:'hc',  cost:        , name:'Cannon',                      mount:'T',              class:4, rating:   , mass:16.00, integ:80, pwrdraw:0.88, boottime:0, dps:15.456, damage:46.060, distdraw:0.800, thmload:2.40, pierce: 90, maxrng:4500, shotspd: 750, rof:0.336, bstint:2.980,                      ammoclip: 5, ammomax: 100,            rldtime:4.0, brcdmg:    , minbrc:60, maxbrc:90,             kinwgt:100, dmgfall:4500, ammocost:20, fdid:null, fdname:'Hpt_Cannon_Turret_Huge' },
 		
-		71150 : { mtype:'hfc', cost:   36000, name:'Fragment Cannon',             mount:'F',              class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.45, boottime:0, dps:95.333, damage: 1.430, distdraw:0.210, thmload:0.41, pierce: 20, maxrng:2000, shotspd: 667, rof:5.556, bstint:0.180,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 1.3, minbrc:40, maxbrc:80, jitter:5.0, dmgtype:'K', kinwgt:1, dmgfall:1800, fdid:128049448, fdname:'Hpt_Slugshot_Fixed_Small' },
-		71151 : { mtype:'hfc', cost:   54720, name:'Fragment Cannon',             mount:'G',              class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.59, boottime:0, dps:71.294, damage: 1.010, distdraw:0.260, thmload:0.44, pierce: 20, maxrng:2000, shotspd: 667, rof:5.882, bstint:0.170,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 0.9, minbrc:40, maxbrc:80, jitter:5.0, dmgtype:'K', kinwgt:1, dmgfall:1800, fdid:128049451, fdname:'Hpt_Slugshot_Gimbal_Small' },
-		71152 : { mtype:'hfc', cost:  182400, name:'Fragment Cannon',             mount:'T',              class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.42, boottime:0, dps:39.429, damage: 0.690, distdraw:0.100, thmload:0.20, pierce: 20, maxrng:2000, shotspd: 667, rof:4.762, bstint:0.210,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 0.6, minbrc:40, maxbrc:80, jitter:5.0, dmgtype:'K', kinwgt:1, dmgfall:1800, fdid:128049453, fdname:'Hpt_Slugshot_Turret_Small' },
-		71210 : { mtype:'hfc', cost:  291840, name:'Fragment Cannon',             mount:'F',              class:2, rating:'A', mass: 4.00, integ:51, pwrdraw:0.74, boottime:0,dps:179.100, damage: 2.985, distdraw:0.370, thmload:0.74, pierce: 30, maxrng:2000, shotspd: 667, rof:5.000, bstint:0.200,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 2.7, minbrc:40, maxbrc:80, jitter:5.0, dmgtype:'K', kinwgt:1, dmgfall:1800, fdid:128049449, fdname:'Hpt_Slugshot_Fixed_Medium' },
-		71241 : { mtype:'hfc', cost:  437760, name:'Fragment Cannon',             mount:'G',              class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:1.03, boottime:0,dps:143.621, damage: 2.274, distdraw:0.490, thmload:0.84, pierce: 30, maxrng:2000, shotspd: 667, rof:5.263, bstint:0.190,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 2.0, minbrc:40, maxbrc:80, jitter:5.0, dmgtype:'K', kinwgt:1, dmgfall:1800, fdid:128049452, fdname:'Hpt_Slugshot_Gimbal_Medium' },
-		71242 : { mtype:'hfc', cost: 1459200, name:'Fragment Cannon',             mount:'T',              class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:0.79, boottime:0, dps:87.130, damage: 1.670, distdraw:0.210, thmload:0.41, pierce: 30, maxrng:2000, shotspd: 667, rof:4.348, bstint:0.230,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 1.5, minbrc:40, maxbrc:80, jitter:5.0, dmgtype:'K', kinwgt:1, dmgfall:1800, fdid:128049454, fdname:'Hpt_Slugshot_Turret_Medium' },
-		71330 : { mtype:'hfc', cost: 1167360, name:'Fragment Cannon',             mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.02, boottime:0,dps:249.273, damage: 4.570, distdraw:0.570, thmload:1.13, pierce: 45, maxrng:2000, shotspd: 667, rof:4.545, bstint:0.220,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 4.1, minbrc:40, maxbrc:80, jitter:5.0, dmgtype:'K', kinwgt:1, dmgfall:1800, fdid:128049450, fdname:'Hpt_Slugshot_Fixed_Large' },
-		71331 : { mtype:'hfc', cost: 1751040, name:'Fragment Cannon',             mount:'G',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.55, boottime:0,dps:215.429, damage: 3.770, distdraw:0.810, thmload:1.40, pierce: 45, maxrng:2000, shotspd: 667, rof:4.762, bstint:0.210,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 3.4, minbrc:40, maxbrc:80, jitter:5.0, dmgtype:'K', kinwgt:1, dmgfall:1800, fdid:128671321, fdname:'Hpt_Slugshot_Gimbal_Large' },
-		71332 : { mtype:'hfc', cost: 5836800, name:'Fragment Cannon',             mount:'T',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.29, boottime:0,dps:143.280, damage: 2.985, distdraw:0.370, thmload:0.74, pierce: 45, maxrng:2000, shotspd: 667, rof:4.000, bstint:0.250,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 2.7, minbrc:40, maxbrc:80, jitter:5.0, dmgtype:'K', kinwgt:1, dmgfall:1800, fdid:128671322, fdname:'Hpt_Slugshot_Turret_Large' },
-		71334 : { mtype:'hfc', cost: 1751040, name:'Pacifier Frag-Cannon',        mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.02, boottime:0,dps:216.000, damage: 3.960, distdraw:0.570, thmload:1.13, pierce: 45, maxrng:3000, shotspd:1000, rof:4.545, bstint:0.220,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 3.1, minbrc:40, maxbrc:80, jitter:1.7, dmgtype:'K', kinwgt:1, dmgfall:1800, fdid:128671343, fdname:'Hpt_Slugshot_Fixed_Large_Range' }, // verify
+		86226 : { mtype:'hex', cost:  261800, name:'Remote Release Flak Launcher',mount:'F',              class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:17.000, damage:34.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 550, rof:0.500, bstint:2.000,                      ammoclip: 1, ammomax:  32,            rldtime:2.0, brcdmg: 1.7,minbrc:100,maxbrc:100,             expwgt:100,                  ammocost:125,              fdid:128785626, fdname:'Hpt_FlakMortar_Fixed_Medium' },
+		86228 : { mtype:'hex', cost: 1259200, name:'Remote Release Flak Launcher',mount:'T',              class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:17.000, damage:34.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 550, rof:0.500, bstint:2.000,                      ammoclip: 1, ammomax:  32,            rldtime:2.0, brcdmg: 1.7,minbrc:100,maxbrc:100,             expwgt:100,                  ammocost:125,              fdid:128793058, fdname:'Hpt_FlakMortar_Turret_Medium' },
+		87223 : { mtype:'hex', cost:  353760, name:'Remote Release Flechette Launcher',mount:'F',         class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps: 6.5  , damage:13.0  , distdraw:0.240, thmload:3.60, pierce: 80,              shotspd: 550, rof:0.500, bstint:2.000,                      ammoclip: 1, ammomax:  72,            rldtime:2.0, brcdmg: 6.5,minbrc:100,maxbrc:100,             kinwgt:10/.13, expwgt:3/.13, ammocost: 56,              fdid:128833996, fdname:'Hpt_FlechetteLauncher_Fixed_Medium' }, // techbroker // TODO: get frag damage
+		87222 : { mtype:'hex', cost: 1279200, name:'Remote Release Flechette Launcher',mount:'T',         class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps: 6.5  , damage:13.0  , distdraw:0.240, thmload:3.60, pierce: 70,              shotspd: 550, rof:0.500, bstint:2.000,                      ammoclip: 1, ammomax:  72,            rldtime:2.0, brcdmg: 6.5,minbrc:100,maxbrc:100,             kinwgt:10/.13, expwgt:3/.13, ammocost: 56,              fdid:128833997, fdname:'Hpt_FlechetteLauncher_Turret_Medium' }, // techbroker // verify cost // TODO: get frag damage
+		87220 : { mtype:'hex', cost:  480500, name:'Enzyme Missile Rack',         mount:'F', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps: 2.5  , damage: 5.0  , distdraw:0.080, thmload:1.50, pierce: 60,              shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.0, minbrc:80,maxbrc:100,             expwgt: 4/.05, cauwgt:1/.05, ammocost:235, limit:'hex', fdid:128833995, fdname:'Hpt_CausticMissile_Fixed_Medium' }, // techbroker // TODO: get real caustic damage amount
 		
-		80190 : { mtype:'hm',  cost:   24260, name:'Mine Launcher',               mount:'F',              class:1, rating:'I', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0, dps:44.000, damage:44.000,                 thmload:5.00, pierce: 60,                            rof:1.000, bstint:1.000,                      ammoclip: 1, ammomax:  36,            rldtime:2.0,              minbrc: 0, maxbrc: 0,             dmgtype:'ET',expwgt:26/44, thmwgt:18/44, dmgfall:000000, fdid:128049500, fdname:'Hpt_MineLauncher_Fixed_Small' },
-		80191 : { mtype:'hm',  cost:   36390, name:'Shock Mine Launcher',         mount:'F',              class:1, rating:'I', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0, dps:32.000, damage:32.000,                 thmload:5.00, pierce: 60,                            rof:1.000, bstint:1.000,                      ammoclip: 1, ammomax:  36,            rldtime:2.0, brcdmg: 9.6, minbrc: 0, maxbrc: 0,             dmgtype:'ET',expwgt:20/32, thmwgt:12/32, dmgfall:000000, fdid:128671448, fdname:'Hpt_MineLauncher_Fixed_Small_Impulse' },
-		80290 : { mtype:'hm',  cost:  294080, name:'Mine Launcher',               mount:'F',              class:2, rating:'I', mass: 4.00, integ:51, pwrdraw:0.40, boottime:0, dps:44.000, damage:44.000,                 thmload:7.50, pierce: 60,                            rof:1.000, bstint:1.000,                      ammoclip: 3, ammomax:  72,            rldtime:6.6, brcdmg:13.2, minbrc: 0, maxbrc: 0,             dmgtype:'ET',expwgt:26/44, thmwgt:18/44, dmgfall:000000, fdid:128049501, fdname:'Hpt_MineLauncher_Fixed_Medium' },
+		86220 : {mtype:'hexax',cost:  540900, name:'AX Missile Rack',             mount:'F', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:32.000, damage:64.000, distdraw:0.140, thmload:2.40, pierce: 60,              shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             axewgt:37   /.64   , expwgt:27  /.64   ,               ammocost:235, limit:'hex', fdid:128788699, fdname:'Hpt_ATDumbfireMissile_Fixed_Medium' },
+		86222 : {mtype:'hexax',cost: 2022700, name:'AX Missile Rack',             mount:'T', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:25.000, damage:50.000, distdraw:0.080, thmload:1.50, pierce: 60, maxrng:5000, shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             axewgt:30   /.50   , expwgt:20  /.50   ,               ammocost:235, limit:'hex', fdid:128788704, fdname:'Hpt_ATDumbfireMissile_Turret_Medium' },
+		86310 : {mtype:'hexax',cost: 1352250, name:'AX Missile Rack',             mount:'F', missile:'D', class:3, rating:'A', mass: 8.00, integ:64, pwrdraw:1.62, boottime:0, dps:32.000, damage:64.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             axewgt:37   /.64   , expwgt:27  /.64   ,               ammocost:235, limit:'hex', fdid:128788700, fdname:'Hpt_ATDumbfireMissile_Fixed_Large' },
+		86312 : {mtype:'hexax',cost: 4056750, name:'AX Missile Rack',             mount:'T', missile:'D', class:3, rating:'A', mass: 8.00, integ:64, pwrdraw:1.75, boottime:0, dps:25.000, damage:50.000, distdraw:0.140, thmload:1.90, pierce: 60, maxrng:5000, shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             axewgt:30   /.50   , expwgt:20  /.50   ,               ammocost:235, limit:'hex', fdid:128788705, fdname:'Hpt_ATDumbfireMissile_Turret_Large' },
+		86253 : {mtype:'hexax',cost:  379000, name:'AX Multi-Cannon',             mount:'F',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.46, boottime:0, dps:23.643, damage: 3.310, distdraw:0.110, thmload:0.18, pierce: 17, maxrng:4000, shotspd:1600, rof:7.143, bstint:0.140,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 2.8, minbrc:50, maxbrc:80,             axewgt:2.190/.03310, kinwgt:1.12/.03310, dmgfall:2000, ammocost:  1, limit:'hex', fdid:128788701, fdname:'Hpt_ATMultiCannon_Fixed_Medium' },
+		86265 : {mtype:'hexax',cost: 1826500, name:'AX Multi-Cannon',             mount:'T',              class:2, rating:'F', mass: 4.00, integ:51, pwrdraw:0.50, boottime:0, dps:10.812, damage: 1.730, distdraw:0.060, thmload:0.09, pierce: 17, maxrng:4000, shotspd:1600, rof:6.250, bstint:0.160,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: 0.4, minbrc:50, maxbrc:50,             axewgt:1.170/.01730, kinwgt:0.56/.01730, dmgfall:2000, ammocost:  1, limit:'hex', fdid:128793059, fdname:'Hpt_ATMultiCannon_Turret_Medium' },
+		86333 : {mtype:'hexax',cost: 1181500, name:'AX Multi-Cannon',             mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:0.64, boottime:0, dps:35.971, damage: 6.115, distdraw:0.180, thmload:0.28, pierce: 33, maxrng:4000, shotspd:1600, rof:5.882, bstint:0.170,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 5.2, minbrc:50, maxbrc:80,             axewgt:3.925/.06115, kinwgt:2.19/.06115, dmgfall:2000, ammocost:  1, limit:'hex', fdid:128788702, fdname:'Hpt_ATMultiCannon_Fixed_Large' },
+		86355 : {mtype:'hexax',cost: 3821600, name:'AX Multi-Cannon',             mount:'T',              class:3, rating:'E', mass: 8.00, integ:64, pwrdraw:0.64, boottime:0, dps:20.688, damage: 3.310, distdraw:0.060, thmload:0.09, pierce: 33, maxrng:4000, shotspd:1600, rof:6.250, bstint:0.160,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: 0.8, minbrc:50, maxbrc:50,             axewgt:2.190/.03310, kinwgt:1.12/.03310, dmgfall:2000, ammocost:  1, limit:'hex', fdid:128793060, fdname:'Hpt_ATMultiCannon_Turret_Large' },
 		
-		81140 : { mtype:'hml', cost:    6800, name:'Mining Laser',                mount:'F',              class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:0.50, boottime:0, dps: 2.000, damage: 2.000, distdraw:1.500, thmload:2.00, pierce: 18, maxrng: 500,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 0.3, minbrc:10, maxbrc:20,             dmgtype:'T', thmwgt:1, dmgfall: 300, fdid:128049525, fdname:'Hpt_MiningLaser_Fixed_Small' },
-		81142 : { mtype:'hml', cost:    9400, name:'Mining Laser',                mount:'T',              class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:0.50, boottime:0, dps: 2.000, damage: 2.000, distdraw:1.500, thmload:2.00, pierce: 18, maxrng: 500,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 0.3, minbrc:10, maxbrc:20,             dmgtype:'T', thmwgt:1, dmgfall: 300, fdid:128740819, fdname:'Hpt_MiningLaser_Turret_Small' },
-		81240 : { mtype:'hml', cost:   22580, name:'Mining Laser',                mount:'F',              class:2, rating:'D', mass: 2.00, integ:51, pwrdraw:0.75, boottime:0, dps: 4.000, damage: 4.000, distdraw:3.000, thmload:4.00, pierce: 18, maxrng: 500,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 0.6, minbrc:10, maxbrc:20,             dmgtype:'T', thmwgt:1, dmgfall: 300, fdid:128049526, fdname:'Hpt_MiningLaser_Fixed_Medium' },
-		81242 : { mtype:'hml', cost:   32580, name:'Mining Laser',                mount:'T',              class:2, rating:'D', mass: 2.00, integ:51, pwrdraw:0.75, boottime:0, dps: 4.000, damage: 4.000, distdraw:3.000, thmload:4.00, pierce: 18, maxrng: 500,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 0.6, minbrc:10, maxbrc:20,             dmgtype:'T', thmwgt:1, dmgfall: 300, fdid:128740820, fdname:'Hpt_MiningLaser_Turret_Medium' },
-		81144 : { mtype:'hml', cost:   33860, name:'Mining Lance Beam Laser',     mount:'F',              class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:0.70, boottime:0, dps: 8.000, damage: 8.000, distdraw:1.750, thmload:6.00, pierce: 18, maxrng:2000,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 1.2, minbrc:10, maxbrc:20,             dmgtype:'T', thmwgt:1, dmgfall: NaN, fdid:     null, fdname:'Hpt_MiningLaser_Fixed_Small_Advanced' }, // TODO: dmgfall,fdid
+		87144 : {mtype:'hexsc',cost:   65940, name:'Shock Cannon',                mount:'F',              class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:0.41, boottime:0, dps:86.4  , damage: 8.640, distdraw:0.270, thmload:1.14, pierce: 25, maxrng:3000, shotspd:1200,rof:10.0  , bstint:0.1  ,                      ammoclip:16, ammomax: 240,            rldtime:6.0, brcdmg: 6.0, minbrc:40, maxbrc:60,             kinwgt:100, dmgfall:2500, ammocost:9, fdid:128891605, fdname:'Hpt_PlasmaShockCannon_Fixed_Small' }, // techbroker
+		87155 : {mtype:'hexsc',cost:  137500, name:'Shock Cannon',                mount:'G',              class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.47, boottime:0, dps:69.1  , damage: 6.910, distdraw:0.390, thmload:1.45, pierce: 25, maxrng:3000, shotspd:1200,rof:10.0  , bstint:0.1  ,                      ammoclip:16, ammomax: 240,            rldtime:6.0, brcdmg: 4.8, minbrc:40, maxbrc:80,             kinwgt:100, dmgfall:2500, ammocost:9, fdid:128891604, fdname:'Hpt_PlasmaShockCannon_Gimbal_Small' }, // techbroker
+		87166 : {mtype:'hexsc',cost:  364000, name:'Shock Cannon',                mount:'T',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.54, boottime:0, dps:44.7  , damage: 4.470, distdraw:0.210, thmload:0.69, pierce: 25, maxrng:3000, shotspd:1200,rof:10.0  , bstint:0.1  ,                      ammoclip:16, ammomax: 240,            rldtime:6.0, brcdmg: 3.1, minbrc:40, maxbrc:80,             kinwgt:100, dmgfall:2500, ammocost:9, fdid:128891603, fdname:'Hpt_PlasmaShockCannon_Turret_Small' }, // techbroker
+		87244 : {mtype:'hexsc',cost:  367500, name:'Shock Cannon',                mount:'F',              class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:0.57, boottime:0,dps:129.6  , damage:12.960, distdraw:0.470, thmload:1.80, pierce: 40, maxrng:3000, shotspd:1200,rof:10.0  , bstint:0.1  ,                      ammoclip:16, ammomax: 240,            rldtime:6.0, brcdmg: 9.1, minbrc:40, maxbrc:60,             kinwgt:100, dmgfall:2500, ammocost:9, fdid:128834002, fdname:'Hpt_PlasmaShockCannon_Fixed_Medium' }, // techbroker // verify cost
+		87245 : {mtype:'hexsc',cost:  565200, name:'Shock Cannon',                mount:'G',              class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:0.61, boottime:0,dps:102.1  , damage:10.210, distdraw:0.580, thmload:2.10, pierce: 40, maxrng:3000, shotspd:1200,rof:10.0  , bstint:0.1  ,                      ammoclip:16, ammomax: 240,            rldtime:6.0, brcdmg: 7.1, minbrc:40, maxbrc:80,             kinwgt:100, dmgfall:2500, ammocost:9, fdid:128834003, fdname:'Hpt_PlasmaShockCannon_Gimbal_Medium' }, // techbroker // verify cost
+		87256 : {mtype:'hexsc',cost: 1359200, name:'Shock Cannon',                mount:'T',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.50, boottime:0, dps:89.6  , damage: 8.960, distdraw:0.390, thmload:1.24, pierce: 40, maxrng:3000, shotspd:1200,rof:10.0  , bstint:0.1  ,                      ammoclip:16, ammomax: 240,            rldtime:6.0, brcdmg: 6.3, minbrc:40, maxbrc:80,             kinwgt:100, dmgfall:2500, ammocost:9, fdid:128834004, fdname:'Hpt_PlasmaShockCannon_Turret_Medium' }, // techbroker // verify cost
+		87334 : {mtype:'hexsc',cost: 1015750, name:'Shock Cannon',                mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:0.89, boottime:0,dps:181.4  , damage:18.140, distdraw:0.920, thmload:2.66, pierce: 60, maxrng:3000, shotspd:1200,rof:10.0  , bstint:0.1  ,                      ammoclip:16, ammomax: 240,            rldtime:6.0, brcdmg:12.7, minbrc:40, maxbrc:60,             kinwgt:100, dmgfall:2500, ammocost:9, fdid:128834780, fdname:'Hpt_PlasmaShockCannon_Fixed_Large' }, // techbroker // verify cost
+		87335 : {mtype:'hexsc',cost: 2249050, name:'Shock Cannon',                mount:'G',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:0.89, boottime:0,dps:148.7  , damage:14.870, distdraw:1.070, thmload:3.12, pierce: 60, maxrng:3000, shotspd:1200,rof:10.0  , bstint:0.1  ,                      ammoclip:16, ammomax: 240,            rldtime:6.0, brcdmg:10.4, minbrc:40, maxbrc:80,             kinwgt:100, dmgfall:2500, ammocost:9, fdid:128834781, fdname:'Hpt_PlasmaShockCannon_Gimbal_Large' }, // techbroker // verify cost
+		87346 : {mtype:'hexsc',cost: 6050200, name:'Shock Cannon',                mount:'T',              class:3, rating:'D', mass: 8.00, integ:64, pwrdraw:0.64, boottime:0,dps:122.6  , damage:12.260, distdraw:0.790, thmload:2.20, pierce: 60, maxrng:3000, shotspd:1200,rof:10.0  , bstint:0.1  ,                      ammoclip:16, ammomax: 240,            rldtime:6.0, brcdmg: 8.6, minbrc:40, maxbrc:80,             kinwgt:100, dmgfall:2500, ammocost:9, fdid:128834782, fdname:'Hpt_PlasmaShockCannon_Turret_Large' }, // techbroker // verify cost
 		
-		82120 : { mtype:'hmr', cost:   32180, name:'Missile Rack',                mount:'F', missile:'D', class:1, rating:'B', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0, dps:25.000, damage:50.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip: 8, ammomax:  16,            rldtime:5.0, brcdmg:20.0,minbrc:100,maxbrc:100,             dmgtype:'E', expwgt:1, dmgfall:000000, fdid:128666724, fdname:'Hpt_DumbfireMissileRack_Fixed_Small' },
-		82123 : { mtype:'hmr', cost:   72600, name:'Seeker Missile Rack',         mount:'F', missile:'S', class:1, rating:'B', mass: 2.00, integ:40, pwrdraw:0.60, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 625, rof:0.333, bstint:3.000,                      ammoclip: 6, ammomax:   6,           rldtime:12.0, brcdmg:16.0, minbrc: 0, maxbrc: 0,             dmgtype:'E', expwgt:1, dmgfall:000000, fdid:128049492, fdname:'Hpt_BasicMissileRack_Fixed_Small' },
-		82220 : { mtype:'hmr', cost:  240400, name:'Missile Rack',                mount:'F', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:25.000, damage:50.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip:12, ammomax:  48,            rldtime:5.0, brcdmg:20.0,minbrc:100,maxbrc:100,             dmgtype:'E', expwgt:1, dmgfall:000000, fdid:128666725, fdname:'Hpt_DumbfireMissileRack_Fixed_Medium' },
-		82223 : { mtype:'hmr', cost:  512400, name:'Seeker Missile Rack',         mount:'F', missile:'S', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 625, rof:0.333, bstint:3.000,                      ammoclip: 6, ammomax:  18,           rldtime:12.0, brcdmg:16.0, minbrc: 0, maxbrc: 0,             dmgtype:'E', expwgt:1, dmgfall:000000, fdid:128049493, fdname:'Hpt_BasicMissileRack_Fixed_Medium' },
-		82224 : { mtype:'hmr', cost:  768600, name:'Pack-Hound Missile Rack',     mount:'F', missile:'S', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:60.000, damage: 7.500, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 600, rof:2.000, bstint:0.500,                      ammoclip:12, ammomax: 120, rounds: 4, rldtime:5.0, brcdmg: 3.0, minbrc: 0, maxbrc: 0,             dmgtype:'E', expwgt:1, dmgfall:000000, fdid:128671344, fdname:'Hpt_DrunkMissileRack_Fixed_Medium' },
-		82225 : { mtype:'hmr', cost: 1951040, name:'Rocket Propelled FSD Disrupter',mount:'F',missile:'D',class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 750, rof:0.333, bstint:3.000,                      ammoclip:12, ammomax:  48,            rldtime:5.0, brcdmg:16.0,minbrc:100,maxbrc:100,             dmgtype:'E', expwgt:1, dmgfall:000000, fdid:128732552, fdname:'Hpt_DumbfireMissileRack_Fixed_Medium_Lasso' },
+		88140 : {mtype:'hexgg',cost:  167250, name:'Guardian Gauss Cannon',       mount:'F', tag:'G',     class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:1.91, boottime:0, dps:48.193, damage:40.000, distdraw:3.800,thmload:15.00, pierce:140, maxrng:3000,               rof:1.205, bstint:0.830,                      ammoclip: 1, ammomax:  80,            rldtime:1.0, brcdmg:11.0, minbrc:20, maxbrc:40,             thmwgt:20   /.40  , axewgt:20   /.40  , dmgfall:1500, ammocost: 75, limit:'hex', fdid:128891610, fdname:'Hpt_Guardian_GaussCannon_Fixed_Small' }, // techbroker
+		88220 : {mtype:'hexgg',cost:  543800, name:'Guardian Gauss Cannon',       mount:'F', tag:'G',     class:2, rating:'B', mass: 4.00, integ:42, pwrdraw:2.61, boottime:0, dps:84.337, damage:70.000, distdraw:7.200,thmload:25.00, pierce:140, maxrng:3000,               rof:1.205, bstint:0.830,                      ammoclip: 1, ammomax:  80,            rldtime:1.0, brcdmg:35.0, minbrc:20, maxbrc:40,             thmwgt:35   /.70  , axewgt:35   /.70  , dmgfall:1500, ammocost: 75, limit:'hex', fdid:128833687, fdname:'Hpt_Guardian_GaussCannon_Fixed_Medium' }, // techbroker // verify cost,integ
 		
-		86220 : { mtype:'hex', cost:  540900, name:'AX Missile Rack',             mount:'F', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:32.0  , damage:64.0  , distdraw:0.14 , thmload:2.4 , pierce: 60,              shotspd: 750, rof:0.5  , bstint:2    ,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             dmgtype:'XE', expwgt:27/64, axewgt:37/64, dmgfall:000000, fdid:128788699, fdname:'Hpt_ATDumbfireMissile_Fixed_Medium' },
-		86222 : { mtype:'hex', cost: 2022700, name:'AX Missile Rack',             mount:'T', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:25.0  , damage:50.0  , distdraw:0.08 , thmload:1.5 , pierce: 60, maxrng:5000, shotspd: 750, rof:0.5  , bstint:2    ,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             dmgtype:'XE', expwgt:20/50, axewgt:30/50, dmgfall:000000, fdid:128788704, fdname:'Hpt_ATDumbfireMissile_Turret_Medium' },
-		86310 : { mtype:'hex', cost: 1352250, name:'AX Missile Rack',             mount:'F', missile:'D', class:3, rating:'A', mass: 8.00, integ:64, pwrdraw:1.62, boottime:0, dps:32.0  , damage:64.0  , distdraw:0.24 , thmload:3.6 , pierce: 60,              shotspd: 750, rof:0.5  , bstint:2    ,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             dmgtype:'XE', expwgt:27/64, axewgt:37/64, dmgfall:000000, fdid:128788700, fdname:'Hpt_ATDumbfireMissile_Fixed_Large' },
-		86312 : { mtype:'hex', cost: 4056750, name:'AX Missile Rack',             mount:'T', missile:'D', class:3, rating:'A', mass: 8.00, integ:64, pwrdraw:1.75, boottime:0, dps:25.0  , damage:50.0  , distdraw:0.14 , thmload:1.9 , pierce: 60, maxrng:5000, shotspd: 750, rof:0.5  , bstint:2    ,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             dmgtype:'XE', expwgt:20/50, axewgt:30/50, dmgfall:000000, fdid:128788705, fdname:'Hpt_ATDumbfireMissile_Turret_Large' },
-		86253 : { mtype:'hex', cost:  379000, name:'AX Multi-Cannon',             mount:'F',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.46, boottime:0, dps:23.643, damage: 3.310, distdraw:0.11 , thmload:0.18, pierce: 17, maxrng:4000, shotspd:1600, rof:7.143, bstint:0.140,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 2.8, minbrc:50, maxbrc:80,             dmgtype:'XK', kinwgt:1.12/3.31 , axewgt:2.19 /3.31 , dmgfall:2000, fdid:128788701, fdname:'Hpt_ATMultiCannon_Fixed_Medium' },
-		86265 : { mtype:'hex', cost: 1826500, name:'AX Multi-Cannon',             mount:'T',              class:2, rating:'F', mass: 4.00, integ:51, pwrdraw:0.50, boottime:0, dps:10.812, damage: 1.730, distdraw:0.06 , thmload:0.09, pierce: 17, maxrng:4000, shotspd:1600, rof:6.250, bstint:0.160,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: 0.4, minbrc:50, maxbrc:50,             dmgtype:'XK', kinwgt:0.56/1.73 , axewgt:1.17 /1.73 , dmgfall:2000, fdid:128793059, fdname:'Hpt_ATMultiCannon_Turret_Medium' },
-		86333 : { mtype:'hex', cost: 1181500, name:'AX Multi-Cannon',             mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:0.64, boottime:0, dps:35.971, damage: 6.115, distdraw:0.18 , thmload:0.28, pierce: 33, maxrng:4000, shotspd:1600, rof:5.882, bstint:0.170,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 5.2, minbrc:50, maxbrc:80,             dmgtype:'XK', kinwgt:2.19/6.115, axewgt:3.925/6.115, dmgfall:2000, fdid:128788702, fdname:'Hpt_ATMultiCannon_Fixed_Large' },
-		86355 : { mtype:'hex', cost: 3821600, name:'AX Multi-Cannon',             mount:'T',              class:3, rating:'E', mass: 8.00, integ:64, pwrdraw:0.64, boottime:0, dps:20.688, damage: 3.310, distdraw:0.06 , thmload:0.09, pierce: 33, maxrng:4000, shotspd:1600, rof:6.250, bstint:0.160,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: 0.8, minbrc:50, maxbrc:50,             dmgtype:'XK', kinwgt:1.12/3.31 , axewgt:2.19 /3.31 , dmgfall:2000, fdid:128793060, fdname:'Hpt_ATMultiCannon_Turret_Large' },
-		86226 : { mtype:'hex', cost:  261800, name:'Remote Release Flak Launcher',mount:'F',              class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:17.0  , damage:34.0  , distdraw:0.24 , thmload:3.6 , pierce: 60,              shotspd: 550, rof:0.5  , bstint:2    ,                      ammoclip: 1, ammomax:  32,            rldtime:2.0, brcdmg: 1.7,minbrc:100,maxbrc:100,             dmgtype:'E', expwgt:1, dmgfall:000000, nosingleton:1, fdid:128785626, fdname:'Hpt_FlakMortar_Fixed_Medium' },
-		86228 : { mtype:'hex', cost: 1259200, name:'Remote Release Flak Launcher',mount:'T',              class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:17.0  , damage:34.0  , distdraw:0.24 , thmload:3.6 , pierce: 60,              shotspd: 550, rof:0.5  , bstint:2    ,                      ammoclip: 1, ammomax:  32,            rldtime:2.0, brcdmg: 1.7,minbrc:100,maxbrc:100,             dmgtype:'E', expwgt:1, dmgfall:000000, nosingleton:1, fdid:128793058, fdname:'Hpt_FlakMortar_Turret_Medium' },
+		88143 : {mtype:'hexgp',cost:  176500, name:'Guardian Plasma Charger',     mount:'F', tag:'G',     class:1, rating:'D', mass: 2.00, integ:34, pwrdraw:1.40, boottime:0, dps:15.0  , damage: 3.000, duration:1.8, dmgmul:17.0, distdraw:0.680, thmload:4.21, pierce:65, maxrng:3000, shotspd:1200, rof:5.0, bstint:0.2,ammoclip:15, ammomax: 200,            rldtime:3.0, brcdmg: 0.4, minbrc:50, maxbrc:80,             abswgt:1.5  /.03  , axewgt:1.5  /.03  , dmgfall:1000, ammocost:100, limit:'hex', fdid:128891607, fdname:'Hpt_Guardian_PlasmaLauncher_Fixed_Small' }, // techbroker // TODO: model duration,dmgmul for min-max dps
+		88165 : {mtype:'hexgp',cost:  484050, name:'Guardian Plasma Charger',     mount:'T', tag:'G',     class:1, rating:'F', mass: 2.00, integ:34, pwrdraw:1.60, boottime:0, dps:10.0  , damage: 2.000, duration:1.8, dmgmul:17.0, distdraw:0.800, thmload:5.01, pierce:65, maxrng:3000, shotspd:1200, rof:5.0, bstint:0.2,ammoclip:15, ammomax: 200,            rldtime:3.0, brcdmg: 0.3, minbrc:50, maxbrc:80,             abswgt:1.0  /.02  , axewgt:1.0  /.02  , dmgfall:1000, ammocost:100, limit:'hex', fdid:128891606, fdname:'Hpt_Guardian_PlasmaLauncher_Turret_Small' }, // techbroker
+		88223 : {mtype:'hexgp',cost:  567760, name:'Guardian Plasma Charger',     mount:'F', tag:'G',     class:2, rating:'B', mass: 4.00, integ:42, pwrdraw:2.13, boottime:0, dps:25.0  , damage: 5.000, duration:1.8, dmgmul:17.0, distdraw:1.250, thmload:5.21, pierce:80, maxrng:3000, shotspd:1200, rof:5.0, bstint:0.2,ammoclip:15, ammomax: 200,            rldtime:3.0, brcdmg: NaN, minbrc:50, maxbrc:80,             abswgt:2.5  /.05  , axewgt:2.5  /.05  , dmgfall:1000, ammocost:100, limit:'hex', fdid:128833998, fdname:'Hpt_Guardian_PlasmaLauncher_Fixed_Medium' }, // techbroker // verify cost // TODO: brcdmg
+		88255 : {mtype:'hexgp',cost: 1659200, name:'Guardian Plasma Charger',     mount:'T', tag:'G',     class:2, rating:'E', mass: 4.00, integ:42, pwrdraw:2.01, boottime:0, dps:20.0  , damage: 4.000, duration:1.8, dmgmul:17.0, distdraw:1.400, thmload:5.80, pierce:80, maxrng:3000, shotspd:1200, rof:5.0, bstint:0.2,ammoclip:15, ammomax: 200,            rldtime:3.0, brcdmg: NaN, minbrc:50, maxbrc:80,             abswgt:2.0  /.04  , axewgt:2.0  /.04  , dmgfall:1000, ammocost:100, limit:'hex', fdid:128833999, fdname:'Hpt_Guardian_PlasmaLauncher_Turret_Medium' }, // techbroker // verify cost // TODO: brcdmg
+		88333 : {mtype:'hexgp',cost: 1423300, name:'Guardian Plasma Charger',     mount:'F', tag:'G',     class:3, rating:'C', mass: 8.00, integ:51, pwrdraw:3.10, boottime:0, dps:35.0  , damage: 7.000, duration:1.8, dmgmul:17.0, distdraw:2.420, thmload:6.15, pierce:95, maxrng:3000, shotspd:1200, rof:5.0, bstint:0.2,ammoclip:15, ammomax: 200,            rldtime:3.0, brcdmg: 1.0, minbrc:50, maxbrc:80,             abswgt:3.5  /.07  , axewgt:3.5  /.07  , dmgfall:1000, ammocost:100, limit:'hex', fdid:128834783, fdname:'Hpt_Guardian_PlasmaLauncher_Fixed_Large' }, // techbroker // verify cost
+		88345 : {mtype:'hexgp',cost: 5495200, name:'Guardian Plasma Charger',     mount:'T', tag:'G',     class:3, rating:'D', mass: 8.00, integ:51, pwrdraw:2.53, boottime:0, dps:30.0  , damage: 6.000, duration:1.8, dmgmul:17.0, distdraw:2.600, thmload:6.40, pierce:95, maxrng:3000, shotspd:1200, rof:5.0, bstint:0.2,ammoclip:15, ammomax: 200,            rldtime:3.0, brcdmg: 0.8, minbrc:50, maxbrc:80,             abswgt:3.0  /.06  , axewgt:3.0  /.06  , dmgfall:1000, ammocost:100, limit:'hex', fdid:128834784, fdname:'Hpt_Guardian_PlasmaLauncher_Turret_Large' }, // techbroker // verify cost
 		
-		87220 : { mtype:'hex', cost:  580500, name:'Enzyme Missile Rack',         mount:'F', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps: 2.5  , damage: 5.0  , distdraw:0.08 , thmload:1.5 , pierce: 60,              shotspd: 750, rof:0.5  , bstint:2    ,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.0, minbrc:80,maxbrc:100,             dmgtype:'CE', expwgt:5/5, cauwgt:0/5, fdid:128833995, fdname:'Hpt_CausticMissile_Fixed_Medium' }, // TODO: verify damage,dps
-		87223 : { mtype:'hex', cost:  353760, name:'Remote Release Flechette Launcher',mount:'F',         class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps: 6.5  , damage:13.0  , distdraw:0.24 , thmload:3.6 , pierce: 80,              shotspd: 550, rof:0.5  , bstint:2    ,                      ammoclip: 1, ammomax:  72,            rldtime:2.0, brcdmg: 6.5,minbrc:100,maxbrc:100,             dmgtype:'KE', kinwgt:10/13, expwgt:3/13, nosingleton:1, fdid:128833996, fdname:'Hpt_FlechetteLauncher_Fixed_Medium' },
-		87222 : { mtype:'hex', cost: 1349200, name:'Remote Release Flechette Launcher',mount:'T',         class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps: 6.5  , damage:13.0  , distdraw:0.24 , thmload:3.6 , pierce: 70,              shotspd: 550, rof:0.5  , bstint:2    ,                      ammoclip: 1, ammomax:  72,            rldtime:2.0, brcdmg: 6.5,minbrc:100,maxbrc:100,             dmgtype:'KE', kinwgt:10/13, expwgt:3/13, nosingleton:1, fdid:128833997, fdname:'Hpt_FlechetteLauncher_Turret_Medium' },
-		87244 : { mtype:'hex', cost:  507510, name:'Shock Cannon',                mount:'F',              class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:0.57, boottime:0,dps:129.600, damage:12.960, distdraw:0.47 , thmload:1.80, pierce: 40, maxrng:3000, shotspd:1200,rof:10.0  , bstint:0.1  ,                      ammoclip:16, ammomax: 240,            rldtime:6.0, brcdmg: 9.1, minbrc:40, maxbrc:60,             dmgtype:'K', kinwgt:1, dmgfall:2500, nosingleton:1, fdid:128834002, fdname:'Hpt_PlasmaShockCannon_Fixed_Medium' },
-		87245 : { mtype:'hex', cost:  845200, name:'Shock Cannon',                mount:'G',              class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:0.61, boottime:0,dps:102.100, damage:10.210, distdraw:0.58 , thmload:2.10, pierce: 40, maxrng:3000, shotspd:1200,rof:10.0  , bstint:0.1  ,                      ammoclip:16, ammomax: 240,            rldtime:6.0, brcdmg: 7.1, minbrc:40, maxbrc:80,             dmgtype:'K', kinwgt:1, dmgfall:2500, nosingleton:1, fdid:128834003, fdname:'Hpt_PlasmaShockCannon_Gimbal_Medium' },
-		87256 : { mtype:'hex', cost: 1659200, name:'Shock Cannon',                mount:'T',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.50, boottime:0, dps:89.600, damage: 8.960, distdraw:0.39 , thmload:1.24, pierce: 40, maxrng:3000, shotspd:1200,rof:10.0  , bstint:0.1  ,                      ammoclip:16, ammomax: 240,            rldtime:6.0, brcdmg: 6.3, minbrc:40, maxbrc:80,             dmgtype:'K', kinwgt:1, dmgfall:2500, nosingleton:1, fdid:128834004, fdname:'Hpt_PlasmaShockCannon_Turret_Medium' },
+		88146 : {mtype:'hexgs',cost:  151650, name:'Guardian Shard Cannon',       mount:'F', tag:'G',     class:1, rating:'D', mass: 2.00, integ:34, pwrdraw:0.87, boottime:0, dps:72.800, damage: 3.640, distdraw:0.420, thmload:0.69, pierce: 30, maxrng:1700, shotspd:1133, rof:1.667, bstint:0.600,                      ammoclip: 5, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 1.6, minbrc:60, maxbrc:80, jitter:5.0, thmwgt:1.820/.0364, axewgt:1.820/.0364, dmgfall:1700, ammocost:  9, limit:'hex', fdid:128891609, fdname:'Hpt_Guardian_ShardCannon_Fixed_Small' }, // techbroker
+		88168 : {mtype:'hexgs',cost:  502000, name:'Guardian Shard Cannon',       mount:'T', tag:'G',     class:1, rating:'F', mass: 2.00, integ:34, pwrdraw:0.72, boottime:0, dps:40.400, damage: 2.020, distdraw:0.360, thmload:0.58, pierce: 30, maxrng:1700, shotspd:1133, rof:1.667, bstint:0.600,                      ammoclip: 5, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 0.9, minbrc:60, maxbrc:80, jitter:5.0, thmwgt:1.010/.0202, axewgt:1.010/.0202, dmgfall:1700, ammocost:  9, limit:'hex', fdid:128891608, fdname:'Hpt_Guardian_ShardCannon_Turret_Small' }, // techbroker
+		88216 : {mtype:'hexgs',cost:  507760, name:'Guardian Shard Cannon',       mount:'F', tag:'G',     class:2, rating:'A', mass: 4.00, integ:42, pwrdraw:1.21, boottime:0,dps:135.400, damage: 6.770, distdraw:0.650, thmload:1.20, pierce: 45, maxrng:1700, shotspd:1133, rof:1.667, bstint:0.600,                      ammoclip: 5, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 3.0, minbrc:60, maxbrc:80, jitter:5.0, thmwgt:3.385/.0677, axewgt:3.385/.0677, dmgfall:1700, ammocost:  9, limit:'hex', fdid:128834000, fdname:'Hpt_Guardian_ShardCannon_Fixed_Medium' }, // techbroker // verify cost
+		88218 : {mtype:'hexgs',cost: 1767000, name:'Guardian Shard Cannon',       mount:'T', tag:'G',     class:2, rating:'A', mass: 4.00, integ:42, pwrdraw:1.16, boottime:0,dps: 86.800, damage: 4.340, distdraw:0.570, thmload:1.09, pierce: 45, maxrng:1700, shotspd:1133, rof:1.667, bstint:0.600,                      ammoclip: 5, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 1.9, minbrc:60, maxbrc:80, jitter:5.0, thmwgt:2.170/.0434, axewgt:2.170/.0434, dmgfall:1700, ammocost:  9, limit:'hex', fdid:128834001, fdname:'Hpt_Guardian_ShardCannon_Turret_Medium' }, // techbroker // verify cost
+		88336 : {mtype:'hexgs',cost: 1461350, name:'Guardian Shard Cannon',       mount:'F', tag:'G',     class:3, rating:'C', mass: 8.00, integ:51, pwrdraw:1.68, boottime:0,dps:190.000, damage: 9.500, distdraw:1.400, thmload:2.20, pierce: 60, maxrng:1700, shotspd:1133, rof:1.667, bstint:0.600,                      ammoclip: 5, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 4.2, minbrc:60, maxbrc:80, jitter:5.0, thmwgt:4.750/.0950, axewgt:4.750/.0950, dmgfall:1700, ammocost:  9, limit:'hex', fdid:128834778, fdname:'Hpt_Guardian_ShardCannon_Fixed_Large' }, // techbroker // verify cost
+		88348 : {mtype:'hexgs',cost: 5865030, name:'Guardian Shard Cannon',       mount:'T', tag:'G',     class:3, rating:'D', mass: 8.00, integ:51, pwrdraw:1.39, boottime:0,dps:124.000, damage: 6.200, distdraw:1.200, thmload:1.98, pierce: 60, maxrng:1700, shotspd:1133, rof:1.667, bstint:0.600,                      ammoclip: 5, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 2.7, minbrc:60, maxbrc:80, jitter:5.0, thmwgt:3.100/.0620, axewgt:3.100/.0620, dmgfall:1700, ammocost:  9, limit:'hex', fdid:128834779, fdname:'Hpt_Guardian_ShardCannon_Turret_Large' }, // techbroker // verify cost
 		
-		88220 : { mtype:'hex', cost:     NaN, name:'Guardian Gauss Cannon',       mount:'F',              class:2, rating:'B', mass: 4.00, integ:42, pwrdraw:2.61, boottime:0, dps:84.337, damage:70.0  , distdraw:7.20 ,thmload:25.00, pierce:140, maxrng:3000,               rof:1.205, bstint:0.83 ,                      ammoclip: 1, ammomax:  80,            rldtime:1.0, brcdmg:35.0, minbrc:20, maxbrc:40,             dmgtype:'TX', thmwgt:35/70, axewgt:35/70, dmgfall:1500, fdid:128833687, fdname:'Hpt_Guardian_GaussCannon_Fixed_Medium' }, // TODO: verify
-		88223 : { mtype:'hex', cost:     NaN, name:'Guardian Plasma Charger',     mount:'F',              class:2, rating:'B', mass: 4.00, integ:42, pwrdraw:2.13, boottime:0, dps:42.5  , damage: 5.0  , distdraw:1.25 , thmload:5.21, pierce: 80, maxrng:3000, shotspd:1200, rof:0.5  , bstint:2.0  ,                      ammoclip:15, ammomax: 200, rounds:17, rldtime:3.0, brcdmg: 1.3, minbrc:50, maxbrc:80,             dmgtype:'AX', abswgt:2.5/5, axewgt:2.5/5, dmgfall:1000, fdid:128833998, fdname:'Hpt_Guardian_PlasmaLauncher_Fixed_Medium' }, // TODO: verify // TODO: model charge mechanic?
-		88255 : { mtype:'hex', cost:     NaN, name:'Guardian Plasma Charger',     mount:'T',              class:2, rating:'E', mass: 4.00, integ:42, pwrdraw:2.01, boottime:0, dps:34.0  , damage: 4.0  , distdraw:1.40 , thmload:5.80, pierce: 80, maxrng:3000, shotspd:1200, rof:0.5  , bstint:2.0  ,                      ammoclip:15, ammomax: 200, rounds:17, rldtime:3.0, brcdmg: 1.0, minbrc:50, maxbrc:80,             dmgtype:'AX', abswgt:2/4, axewgt:2/4, dmgfall:1000, fdid:128833999, fdname:'Hpt_Guardian_PlasmaLauncher_Turret_Medium' }, // TODO: verify // TODO: model charge mechanic?
-	//	88323 : { mtype:'hex', cost:     NaN, name:'Guardian Plasma Charger',     mount:'F',              class:3, rating:'?', mass: 8.00, integ:42, pwrdraw:2.13, boottime:0, dps:42.5  , damage: 5.0  , distdraw:1.25 , thmload:5.21, pierce: 80, maxrng:3000, shotspd:1200, rof:0.5  , bstint:2.0  ,                      ammoclip:15, ammomax: 200, rounds:17, rldtime:3.0, brcdmg: 1.3, minbrc:50, maxbrc:80,             dmgtype:'AX', abswgt:2.5/5, axewgt:2.5/5, dmgfall:1000, fdid:128834783, fdname:'Hpt_Guardian_PlasmaLauncher_Fixed_Large' }, // TODO: all stats // TODO: model charge mechanic?
-	//	88355 : { mtype:'hex', cost:     NaN, name:'Guardian Plasma Charger',     mount:'T',              class:3, rating:'?', mass: 8.00, integ:42, pwrdraw:2.01, boottime:0, dps:34.0  , damage: 4.0  , distdraw:1.40 , thmload:5.80, pierce: 80, maxrng:3000, shotspd:1200, rof:0.5  , bstint:2.0  ,                      ammoclip:15, ammomax: 200, rounds:17, rldtime:3.0, brcdmg: 1.0, minbrc:50, maxbrc:80,             dmgtype:'AX', abswgt:2/4, axewgt:2/4, dmgfall:1000, fdid:128834784, fdname:'Hpt_Guardian_PlasmaLauncher_Turret_Large' }, // TODO: all stats // TODO: model charge mechanic?
+		71150 : { mtype:'hfc', cost:   36000, name:'Fragment Cannon',             mount:'F',              class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.45, boottime:0, dps:95.333, damage: 1.430, distdraw:0.210, thmload:0.41, pierce: 20, maxrng:2000, shotspd: 667, rof:5.556, bstint:0.180,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 1.3, minbrc:40, maxbrc:80, jitter:5.0, kinwgt:100, thmwgt:0, dmgfall:1800, ammocost:17, fdid:128049448, fdname:'Hpt_Slugshot_Fixed_Small' },
+		71151 : { mtype:'hfc', cost:   54720, name:'Fragment Cannon',             mount:'G',              class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.59, boottime:0, dps:71.294, damage: 1.010, distdraw:0.260, thmload:0.44, pierce: 20, maxrng:2000, shotspd: 667, rof:5.882, bstint:0.170,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 0.9, minbrc:40, maxbrc:80, jitter:5.0, kinwgt:100, thmwgt:0, dmgfall:1800, ammocost:17, fdid:128049451, fdname:'Hpt_Slugshot_Gimbal_Small' },
+		71152 : { mtype:'hfc', cost:  182400, name:'Fragment Cannon',             mount:'T',              class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.42, boottime:0, dps:39.429, damage: 0.690, distdraw:0.100, thmload:0.20, pierce: 20, maxrng:2000, shotspd: 667, rof:4.762, bstint:0.210,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 0.6, minbrc:40, maxbrc:80, jitter:5.0, kinwgt:100, thmwgt:0, dmgfall:1800, ammocost:17, fdid:128049453, fdname:'Hpt_Slugshot_Turret_Small' },
+		71210 : { mtype:'hfc', cost:  291840, name:'Fragment Cannon',             mount:'F',              class:2, rating:'A', mass: 4.00, integ:51, pwrdraw:0.74, boottime:0,dps:179.100, damage: 2.985, distdraw:0.370, thmload:0.74, pierce: 30, maxrng:2000, shotspd: 667, rof:5.000, bstint:0.200,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 2.7, minbrc:40, maxbrc:80, jitter:5.0, kinwgt:100, thmwgt:0, dmgfall:1800, ammocost:17, fdid:128049449, fdname:'Hpt_Slugshot_Fixed_Medium' },
+		71241 : { mtype:'hfc', cost:  437760, name:'Fragment Cannon',             mount:'G',              class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:1.03, boottime:0,dps:143.621, damage: 2.274, distdraw:0.490, thmload:0.84, pierce: 30, maxrng:2000, shotspd: 667, rof:5.263, bstint:0.190,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 2.0, minbrc:40, maxbrc:80, jitter:5.0, kinwgt:100, thmwgt:0, dmgfall:1800, ammocost:17, fdid:128049452, fdname:'Hpt_Slugshot_Gimbal_Medium' },
+		71242 : { mtype:'hfc', cost: 1459200, name:'Fragment Cannon',             mount:'T',              class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:0.79, boottime:0, dps:87.130, damage: 1.670, distdraw:0.210, thmload:0.41, pierce: 30, maxrng:2000, shotspd: 667, rof:4.348, bstint:0.230,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 1.5, minbrc:40, maxbrc:80, jitter:5.0, kinwgt:100, thmwgt:0, dmgfall:1800, ammocost:17, fdid:128049454, fdname:'Hpt_Slugshot_Turret_Medium' },
+		71330 : { mtype:'hfc', cost: 1167360, name:'Fragment Cannon',             mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.02, boottime:0,dps:249.273, damage: 4.570, distdraw:0.570, thmload:1.13, pierce: 45, maxrng:2000, shotspd: 667, rof:4.545, bstint:0.220,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 4.1, minbrc:40, maxbrc:80, jitter:5.0, kinwgt:100, thmwgt:0, dmgfall:1800, ammocost:17, fdid:128049450, fdname:'Hpt_Slugshot_Fixed_Large' },
+		71331 : { mtype:'hfc', cost: 1751040, name:'Fragment Cannon',             mount:'G',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.55, boottime:0,dps:215.429, damage: 3.770, distdraw:0.810, thmload:1.40, pierce: 45, maxrng:2000, shotspd: 667, rof:4.762, bstint:0.210,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 3.4, minbrc:40, maxbrc:80, jitter:5.0, kinwgt:100, thmwgt:0, dmgfall:1800, ammocost:17, fdid:128671321, fdname:'Hpt_Slugshot_Gimbal_Large' },
+		71332 : { mtype:'hfc', cost: 5836800, name:'Fragment Cannon',             mount:'T',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.29, boottime:0,dps:143.280, damage: 2.985, distdraw:0.370, thmload:0.74, pierce: 45, maxrng:2000, shotspd: 667, rof:4.000, bstint:0.250,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 2.7, minbrc:40, maxbrc:80, jitter:5.0, kinwgt:100, thmwgt:0, dmgfall:1800, ammocost:17, fdid:128671322, fdname:'Hpt_Slugshot_Turret_Large' },
+		71334 : { mtype:'hfc', cost: 1751040, name:'Pacifier Frag-Cannon',        mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.02, boottime:0,dps:216.000, damage: 3.960, distdraw:0.570, thmload:1.13, pierce: 45, maxrng:3000, shotspd:1000, rof:4.545, bstint:0.220,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 3.1, minbrc:40, maxbrc:80, jitter:1.7, kinwgt:100, thmwgt:0, dmgfall:1800, ammocost:17, fdid:128671343, fdname:'Hpt_Slugshot_Fixed_Large_Range' }, // powerplay // verify
 		
-		72160 : { mtype:'hmc', cost:    9500, name:'Multi-cannon',                mount:'F',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.28, boottime:0, dps: 8.615, damage: 1.120, distdraw:0.060, thmload:0.09, pierce: 22, maxrng:4000, shotspd:1600, rof:7.692, bstint:0.130,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 1.0, minbrc:40, maxbrc:80,             dmgtype:'K', kinwgt:1, dmgfall:2000, fdid:128049455, fdname:'Hpt_MultiCannon_Fixed_Small' },
-		72171 : { mtype:'hmc', cost:   14250, name:'Multi-cannon',                mount:'G',              class:1, rating:'G', mass: 2.00, integ:40, pwrdraw:0.37, boottime:0, dps: 6.833, damage: 0.820, distdraw:0.070, thmload:0.10, pierce: 22, maxrng:4000, shotspd:1600, rof:8.333, bstint:0.120,                      ammoclip:90, ammomax:2100,            rldtime:5.0, brcdmg: 0.7, minbrc:40, maxbrc:80,             dmgtype:'K', kinwgt:1, dmgfall:2000, fdid:128049459, fdname:'Hpt_MultiCannon_Gimbal_Small' },
-		72172 : { mtype:'hmc', cost:   81600, name:'Multi-cannon',                mount:'T',              class:1, rating:'G', mass: 2.00, integ:40, pwrdraw:0.26, boottime:0, dps: 4.000, damage: 0.560, distdraw:0.030, thmload:0.04, pierce: 22, maxrng:4000, shotspd:1600, rof:7.143, bstint:0.140,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: 0.5, minbrc:40, maxbrc:80,             dmgtype:'K', kinwgt:1, dmgfall:2000, fdid:128049462, fdname:'Hpt_MultiCannon_Turret_Small' },
-		72250 : { mtype:'hmc', cost:   38000, name:'Multi-cannon',                mount:'F',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.46, boottime:0, dps:15.643, damage: 2.190, distdraw:0.110, thmload:0.18, pierce: 37, maxrng:4000, shotspd:1600, rof:7.143, bstint:0.140,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 2.0, minbrc:40, maxbrc:80,             dmgtype:'K', kinwgt:1, dmgfall:2000, fdid:128049456, fdname:'Hpt_MultiCannon_Fixed_Medium' },
-		72261 : { mtype:'hmc', cost:   57000, name:'Multi-cannon',                mount:'G',              class:2, rating:'F', mass: 4.00, integ:51, pwrdraw:0.64, boottime:0, dps:12.615, damage: 1.640, distdraw:0.140, thmload:0.20, pierce: 37, maxrng:4000, shotspd:1600, rof:7.692, bstint:0.130,                      ammoclip:90, ammomax:2100,            rldtime:5.0, brcdmg: 1.5, minbrc:40, maxbrc:80,             dmgtype:'K', kinwgt:1, dmgfall:2000, fdid:128049460, fdname:'Hpt_MultiCannon_Gimbal_Medium' },
-		72262 : { mtype:'hmc', cost: 1292800, name:'Multi-cannon',                mount:'T',              class:2, rating:'F', mass: 4.00, integ:51, pwrdraw:0.50, boottime:0, dps: 7.313, damage: 1.170, distdraw:0.060, thmload:0.09, pierce: 37, maxrng:4000, shotspd:1600, rof:6.250, bstint:0.160,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: 1.1, minbrc:40, maxbrc:80,             dmgtype:'K', kinwgt:1, dmgfall:2000, fdid:128049463, fdname:'Hpt_MultiCannon_Turret_Medium' },
-		72330 : { mtype:'hmc', cost:  140400, name:'Multi-cannon',                mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:0.64, boottime:0, dps:23.088, damage: 3.925, distdraw:0.180, thmload:0.28, pierce: 54, maxrng:4000, shotspd:1600, rof:5.882, bstint:0.170,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 3.5, minbrc:40, maxbrc:80,             dmgtype:'K', kinwgt:1, dmgfall:2000, fdid:128049457, fdname:'Hpt_MultiCannon_Fixed_Large' },
-		72331 : { mtype:'hmc', cost:  578440, name:'Multi-cannon',                mount:'G',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:0.97, boottime:0, dps:18.933, damage: 2.840, distdraw:0.250, thmload:0.34, pierce: 54, maxrng:4000, shotspd:1600, rof:6.667, bstint:0.150,                      ammoclip:90, ammomax:2100,            rldtime:5.0, brcdmg: 2.6, minbrc:40, maxbrc:80,             dmgtype:'K', kinwgt:1, dmgfall:2000, fdid:128049461, fdname:'Hpt_MultiCannon_Gimbal_Large' },
-		72410 : { mtype:'hmc', cost: 1177600, name:'Multi-cannon',                mount:'F',              class:4, rating:'A', mass:16.00, integ:80, pwrdraw:0.73, boottime:0, dps:28.030, damage: 4.625, distdraw:0.240, thmload:0.39, pierce: 68, maxrng:4000, shotspd:1600, rof:3.030, bstint:0.330,                     ammoclip:100, ammomax:2100, rounds: 2, rldtime:4.0, brcdmg: 4.2, minbrc:40, maxbrc:80,             dmgtype:'K', kinwgt:1, dmgfall:2000, fdid:128049458, fdname:'Hpt_MultiCannon_Fixed_Huge' },
-		72411 : { mtype:'hmc', cost: 6377600, name:'Multi-cannon',                mount:'G',              class:4, rating:'A', mass:16.00, integ:80, pwrdraw:1.22, boottime:0, dps:23.300, damage: 3.460, distdraw:0.370, thmload:0.51, pierce: 68, maxrng:4000, shotspd:1600, rof:3.367, bstint:0.297,                      ammoclip:90, ammomax:2100, rounds: 2, rldtime:5.0, brcdmg: 3.1, minbrc:40, maxbrc:80,             dmgtype:'K', kinwgt:1, dmgfall:2000, fdid:128681996, fdname:'Hpt_MultiCannon_Gimbal_Huge' },
-		72144 : { mtype:'hmc', cost:   14250, name:'Enforcer Cannon',             mount:'F',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.28, boottime:0, dps:12.391, damage: 2.850, distdraw:0.120, thmload:0.18, pierce: 30, maxrng:4500, shotspd:1800, rof:4.348, bstint:0.230,                      ammoclip:60, ammomax:1000,            rldtime:4.0, brcdmg: 2.6, minbrc:40, maxbrc:80,             dmgtype:'K', kinwgt:1, dmgfall: NaN, fdid:     null, fdname:'Hpt_MultiCannon_Fixed_Small_Strong' }, // TODO: dmgfall,fdid
+		80190 : { mtype:'hm',  cost:   24260, name:'Mine Launcher',               mount:'F',              class:1, rating:'I', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0, dps:44.000, damage:44.000,                 thmload:5.00, pierce: 60,                            rof:1.000, bstint:1.000,                      ammoclip: 1, ammomax:  36,            rldtime:2.0,              minbrc: 0, maxbrc: 0,             expwgt:26/.44, thmwgt:18/.44, ammocost:209, fdid:128049500, fdname:'Hpt_MineLauncher_Fixed_Small' },
+		80191 : { mtype:'hm',  cost:   36390, name:'Shock Mine Launcher',         mount:'F',              class:1, rating:'I', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0, dps:32.000, damage:32.000,                 thmload:5.00, pierce: 60,                            rof:1.000, bstint:1.000,                      ammoclip: 1, ammomax:  36,            rldtime:2.0, brcdmg: 9.6, minbrc: 0, maxbrc: 0,             expwgt:20/.32, thmwgt:12/.32, ammocost:209, fdid:128671448, fdname:'Hpt_MineLauncher_Fixed_Small_Impulse' },
+		80290 : { mtype:'hm',  cost:  294080, name:'Mine Launcher',               mount:'F',              class:2, rating:'I', mass: 4.00, integ:51, pwrdraw:0.40, boottime:0, dps:44.000, damage:44.000,                 thmload:7.50, pierce: 60,                            rof:1.000, bstint:1.000,                      ammoclip: 3, ammomax:  72,            rldtime:6.6, brcdmg:13.2, minbrc: 0, maxbrc: 0,             expwgt:26/.44, thmwgt:18/.44, ammocost:209, fdid:128049501, fdname:'Hpt_MineLauncher_Fixed_Medium' },
 		
-		83230 : { mtype:'hpa', cost:  834200, name:'Plasma Accelerator',          mount:'F',              class:2, rating:'C', mass: 4.00, integ:51, pwrdraw:1.43, boottime:0, dps:17.921, damage:54.300, distdraw:8.650,thmload:15.58, pierce:100, maxrng:3500, shotspd: 875, rof:0.330, bstint:3.030,                      ammoclip: 5, ammomax: 100,            rldtime:6.0, brcdmg:46.2, minbrc:40, maxbrc:80,             dmgtype:'AKT', abswgt:32.5 / 54.3 , kinwgt:10.9/ 54.3 , thmwgt:10.9/ 54.3 , dmgfall:2000, fdid:128049465, fdname:'Hpt_PlasmaAccelerator_Fixed_Medium' },
-		83320 : { mtype:'hpa', cost: 3051200, name:'Plasma Accelerator',          mount:'F',              class:3, rating:'B', mass: 8.00, integ:64, pwrdraw:1.97, boottime:0, dps:24.174, damage:83.400,distdraw:13.600,thmload:21.75, pierce:100, maxrng:3500, shotspd: 875, rof:0.290, bstint:3.450,                      ammoclip: 5, ammomax: 100,            rldtime:6.0, brcdmg:70.9, minbrc:40, maxbrc:80,             dmgtype:'AKT', abswgt:50   / 83.4 , kinwgt:16.7/ 83.4 , thmwgt:16.7/ 83.4 , dmgfall:2000, fdid:128049466, fdname:'Hpt_PlasmaAccelerator_Fixed_Large' },
-		83410 : { mtype:'hpa', cost:13793600, name:'Plasma Accelerator',          mount:'F',              class:4, rating:'A', mass:16.00, integ:80, pwrdraw:2.63, boottime:0, dps:31.313,damage:125.250,distdraw:21.040,thmload:29.46, pierce:100, maxrng:3500, shotspd: 875, rof:0.250, bstint:4.000,                      ammoclip: 5, ammomax: 100,            rldtime:6.0,brcdmg:106.5, minbrc:40, maxbrc:80,             dmgtype:'AKT', abswgt:75.25/125.25, kinwgt:25  /125.25, thmwgt:25  /125.25, dmgfall:2000, fdid:128049467, fdname:'Hpt_PlasmaAccelerator_Fixed_Huge' },
-		83324 : { mtype:'hpa', cost: 4576800, name:'Advanced Plasma Accelerator', mount:'F',              class:3, rating:'B', mass: 8.00, integ:64, pwrdraw:1.97, boottime:0, dps:28.667, damage:34.400, distdraw:5.500,thmload:11.00, pierce:100, maxrng:3500, shotspd: 875, rof:0.833, bstint:1.200,                      ammoclip:20, ammomax: 300,            rldtime:6.0, brcdmg:30.9, minbrc:40, maxbrc:80,             dmgtype:'AKT', abswgt:20.6 / 34.4 , kinwgt: 6.9/ 34.4 , thmwgt: 6.9/ 34.4 , dmgfall:2000, fdid:128671339, fdname:'Hpt_PlasmaAccelerator_Fixed_Large_Advanced' }, // verify
+		81141 : { mtype:'hmtl',cost:    9700, name:'Abrasion Blaster',            mount:'F',              class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:0.34, boottime:0, dps:20.000, damage: 4.000, distdraw:2.000, thmload:2.00, pierce: 18, maxrng:1000, shotspd: 667, rof:5.000, bstint:0.200,                                                                         brcdmg: 0.6, minbrc:10, maxbrc:20,             thmwgt:100, dmgfall:1000, fdid:128915458, fdname:'Hpt_Mining_AbrBlstr_Fixed_Small' },
+		81143 : { mtype:'hmtl',cost:   27480, name:'Abrasion Blaster',            mount:'T',              class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:0.47, boottime:0, dps:20.000, damage: 4.000, distdraw:2.000, thmload:1.80, pierce: 18, maxrng:1000, shotspd: 667, rof:5.000, bstint:0.200,                                                                         brcdmg: 0.6, minbrc:10, maxbrc:20,             thmwgt:100, dmgfall:1000, fdid:128915459, fdname:'Hpt_Mining_AbrBlstr_Turret_Small' },
+		81140 : { mtype:'hmtl',cost:    6800, name:'Mining Laser',                mount:'F',              class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:0.50, boottime:0, dps: 2.000, damage: 2.000, distdraw:1.500, thmload:2.00, pierce: 18, maxrng: 500,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 0.3, minbrc:10, maxbrc:20,             thmwgt:100, dmgfall: 300, fdid:128049525, fdname:'Hpt_MiningLaser_Fixed_Small' },
+		81142 : { mtype:'hmtl',cost:    9400, name:'Mining Laser',                mount:'T',              class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:0.50, boottime:0, dps: 2.000, damage: 2.000, distdraw:1.500, thmload:2.00, pierce: 18, maxrng: 500,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 0.3, minbrc:10, maxbrc:20,             thmwgt:100, dmgfall: 300, fdid:128740819, fdname:'Hpt_MiningLaser_Turret_Small' },
+		81240 : { mtype:'hmtl',cost:   22580, name:'Mining Laser',                mount:'F',              class:2, rating:'D', mass: 2.00, integ:51, pwrdraw:0.75, boottime:0, dps: 4.000, damage: 4.000, distdraw:3.000, thmload:4.00, pierce: 18, maxrng: 500,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 0.6, minbrc:10, maxbrc:20,             thmwgt:100, dmgfall: 300, fdid:128049526, fdname:'Hpt_MiningLaser_Fixed_Medium' },
+		81242 : { mtype:'hmtl',cost:   32580, name:'Mining Laser',                mount:'T',              class:2, rating:'D', mass: 2.00, integ:51, pwrdraw:0.75, boottime:0, dps: 4.000, damage: 4.000, distdraw:3.000, thmload:4.00, pierce: 18, maxrng: 500,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 0.6, minbrc:10, maxbrc:20,             thmwgt:100, dmgfall: 300, fdid:128740820, fdname:'Hpt_MiningLaser_Turret_Medium' },
+		81144 : { mtype:'hmtl',cost:   33860, name:'Mining Lance Beam Laser',     mount:'F',              class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:0.70, boottime:0, dps: 8.000, damage: 8.000, distdraw:1.750, thmload:6.00, pierce: 18, maxrng:2000,               rof:  1/0, bstint:0    ,                                                                         brcdmg: 1.2, minbrc:10, maxbrc:20,             thmwgt:100, dmgfall: NaN, fdid:128671340, fdname:'Hpt_MiningLaser_Fixed_Small_Advanced' }, // powerplay // TODO: dmgfall
 		
-		62160 : { mtype:'hpl', cost:    2200, name:'Pulse Laser',                 mount:'F',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.39, boottime:0, dps: 7.885, damage: 2.050, distdraw:0.300, thmload:0.33, pierce: 20, maxrng:3000,               rof:3.846, bstint:0.260,                                                                         brcdmg: 1.7, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049381, fdname:'Hpt_PulseLaser_Fixed_Small' },
-		62171 : { mtype:'hpl', cost:    6600, name:'Pulse Laser',                 mount:'G',              class:1, rating:'G', mass: 2.00, integ:40, pwrdraw:0.39, boottime:0, dps: 6.240, damage: 1.560, distdraw:0.310, thmload:0.31, pierce: 20, maxrng:3000,               rof:4.000, bstint:0.250,                                                                         brcdmg: 1.3, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049385, fdname:'Hpt_PulseLaser_Gimbal_Small' },
-		62172 : { mtype:'hpl', cost:   26000, name:'Pulse Laser',                 mount:'T',              class:1, rating:'G', mass: 2.00, integ:40, pwrdraw:0.38, boottime:0, dps: 3.967, damage: 1.190, distdraw:0.190, thmload:0.19, pierce: 20, maxrng:3000,               rof:3.333, bstint:0.300,                                                                         brcdmg: 1.0, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049388, fdname:'Hpt_PulseLaser_Turret_Small' },
-		62250 : { mtype:'hpl', cost:   17600, name:'Pulse Laser',                 mount:'F',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.60, boottime:0, dps:12.069, damage: 3.500, distdraw:0.500, thmload:0.56, pierce: 35, maxrng:3000,               rof:3.448, bstint:0.290,                                                                         brcdmg: 3.0, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049382, fdname:'Hpt_PulseLaser_Fixed_Medium' },
-		62261 : { mtype:'hpl', cost:   35400, name:'Pulse Laser',                 mount:'G',              class:2, rating:'F', mass: 4.00, integ:51, pwrdraw:0.60, boottime:0, dps: 9.571, damage: 2.680, distdraw:0.540, thmload:0.54, pierce: 35, maxrng:3000,               rof:3.571, bstint:0.280,                                                                         brcdmg: 2.3, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049386, fdname:'Hpt_PulseLaser_Gimbal_Medium' },
-		62262 : { mtype:'hpl', cost:  132800, name:'Pulse Laser',                 mount:'T',              class:2, rating:'F', mass: 4.00, integ:51, pwrdraw:0.58, boottime:0, dps: 6.212, damage: 2.050, distdraw:0.330, thmload:0.33, pierce: 35, maxrng:3000,               rof:3.030, bstint:0.330,                                                                         brcdmg: 1.7, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049389, fdname:'Hpt_PulseLaser_Turret_Medium' },
-		62350 : { mtype:'hpl', cost:   70400, name:'Pulse Laser',                 mount:'F',              class:3, rating:'D', mass: 8.00, integ:64, pwrdraw:0.90, boottime:0, dps:18.121, damage: 5.980, distdraw:0.860, thmload:0.96, pierce: 52, maxrng:3000,               rof:3.030, bstint:0.330,                                                                         brcdmg: 5.1, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049383, fdname:'Hpt_PulseLaser_Fixed_Large' },
-		62361 : { mtype:'hpl', cost:  140600, name:'Pulse Laser',                 mount:'G',              class:3, rating:'E', mass: 8.00, integ:64, pwrdraw:0.92, boottime:0, dps:14.774, damage: 4.580, distdraw:0.920, thmload:0.92, pierce: 52, maxrng:3000,               rof:3.226, bstint:0.310,                                                                         brcdmg: 3.9, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049387, fdname:'Hpt_PulseLaser_Gimbal_Large' },
-		62362 : { mtype:'hpl', cost:  400400, name:'Pulse Laser',                 mount:'T',              class:3, rating:'F', mass: 8.00, integ:64, pwrdraw:0.89, boottime:0, dps: 9.459, damage: 3.500, distdraw:0.560, thmload:0.56, pierce: 52, maxrng:3000,               rof:2.703, bstint:0.370,                                                                         brcdmg: 3.0, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049390, fdname:'Hpt_PulseLaser_Turret_Large' },
-		62410 : { mtype:'hpl', cost:  177600, name:'Pulse Laser',                 mount:'F',              class:4, rating:'A', mass:16.00, integ:80, pwrdraw:1.33, boottime:0, dps:26.947, damage:10.240, distdraw:1.480, thmload:1.64, pierce: 65, maxrng:3000,               rof:2.632, bstint:0.380,                                                                         brcdmg: 8.7, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128049384, fdname:'Hpt_PulseLaser_Fixed_Huge' },
-		62411 : { mtype:'hpl', cost:  877600, name:'Pulse Laser',                 mount:'G',              class:4, rating:'A', mass:16.00, integ:80, pwrdraw:1.37, boottime:0, dps:21.722, damage: 7.820, distdraw:1.560, thmload:1.56, pierce: 65, maxrng:3000,               rof:2.778, bstint:0.360,                                                                         brcdmg: 6.6, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128681995, fdname:'Hpt_PulseLaser_Gimbal_Huge' },
-		62254 : { mtype:'hpl', cost:   26400, name:'Pulse Disruptor Laser',       mount:'F',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.70, boottime:0, dps: 4.667, damage: 2.800, distdraw:0.900, thmload:1.00, pierce: 35, maxrng:3000,               rof:1.667, bstint:0.600,                                                                         brcdmg: 2.4, minbrc:40, maxbrc:80,             dmgtype:'T', thmwgt:1, dmgfall: 500, fdid:128671342, fdname:'Hpt_PulseLaser_Fixed_Medium_Disruptor' }, // verify
+		81225 : { mtype:'hmtm',cost:  153110, name:'Seismic Charge Launcher',     mount:'F',              class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:15.000, damage:15.000, duration:2.0, distdraw:0.240, thmload:3.60, pierce: 35, maxrng:1000, shotspd: 350, rof:1.000, bstint:1.000,        ammoclip: 1, ammomax:  72,            rldtime:1.0, brcdmg: 3.0, minbrc: 0, maxbrc: 0,             expwgt:100, fdid:128915460, fdname:'Hpt_Mining_SeismChrgWarhd_Fixed_Medium' },
+		81226 : { mtype:'hmtm',cost:  445570, name:'Seismic Charge Launcher',     mount:'T',              class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:15.000, damage:15.000, duration:2.0, distdraw:0.240, thmload:3.60, pierce: 35, maxrng:1000, shotspd: 350, rof:1.000, bstint:1.000,        ammoclip: 1, ammomax:  72,            rldtime:1.0, brcdmg: 3.0, minbrc: 0, maxbrc: 0,             expwgt:100, fdid:128915461, fdname:'Hpt_Mining_SeismChrgWarhd_Turret_Medium' },
+		81127 : { mtype:'hmtm',cost:   12600, name:'Sub-surface Displacement Missile',mount:'F',          class:1, rating:'B', mass: 2.00, integ:40, pwrdraw:0.42, boottime:0, dps: 2.500, damage: 5.000, distdraw:0.180, thmload:2.25, pierce: 25,              shotspd: 550, rof:0.500, bstint:2.000,                      ammoclip: 1, ammomax:  32,            rldtime:2.0, brcdmg: 0.5, minbrc:10, maxbrc:20,             expwgt:100, fdid:128915454, fdname:'Hpt_Mining_SubSurfDispMisle_Fixed_Small' },
+		81128 : { mtype:'hmtm',cost:   38750, name:'Sub-surface Displacement Missile',mount:'T',          class:1, rating:'B', mass: 2.00, integ:40, pwrdraw:0.53, boottime:0, dps: 2.500, damage: 5.000, distdraw:0.160, thmload:2.25, pierce: 25,              shotspd: 550, rof:0.500, bstint:2.000,                      ammoclip: 1, ammomax:  32,            rldtime:2.0, brcdmg: 0.5, minbrc:10, maxbrc:20,             expwgt:100, fdid:128915455, fdname:'Hpt_Mining_SubSurfDispMisle_Turret_Small' },
+		81227 : { mtype:'hmtm',cost:  122170, name:'Sub-surface Displacement Missile',mount:'F',          class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.01, boottime:0, dps: 2.500, damage: 5.000, distdraw:0.210, thmload:2.90, pierce: 25,              shotspd: 550, rof:0.500, bstint:2.000,                      ammoclip: 1, ammomax:  96,            rldtime:2.0, brcdmg: 0.5, minbrc:10, maxbrc:20,             expwgt:100, fdid:128915456, fdname:'Hpt_Mining_SubSurfDispMisle_Fixed_Medium' },
+		81228 : { mtype:'hmtm',cost:  381750, name:'Sub-surface Displacement Missile',mount:'T',          class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:0.93, boottime:0, dps: 2.500, damage: 5.000, distdraw:0.180, thmload:2.90, pierce: 25,              shotspd: 550, rof:0.500, bstint:2.000,                      ammoclip: 1, ammomax:  96,            rldtime:2.0, brcdmg: 0.5, minbrc:10, maxbrc:20,             expwgt:100, fdid:128915457, fdname:'Hpt_Mining_SubSurfDispMisle_Turret_Medium' },
 		
-		84140 : { mtype:'hrg', cost:   51600, name:'Rail Gun',                    mount:'F',              class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:1.15, boottime:0, dps:37.048, damage:23.340, distdraw:2.690,thmload:12.00, pierce:100, maxrng:3000,               rof:1.587, bstint:0.630,                      ammoclip: 1, ammomax:  80,            rldtime:1.0, brcdmg:22.2, minbrc:40, maxbrc:80,             dmgtype:'TK',thmwgt:15.56/23.34, kinwgt: 7.78/23.34, dmgfall:1000, fdid:128049488, fdname:'Hpt_Railgun_Fixed_Small' },
-		84220 : { mtype:'hrg', cost:  412800, name:'Rail Gun',                    mount:'F',              class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.63, boottime:0, dps:50.036, damage:41.530, distdraw:5.110,thmload:20.00, pierce:100, maxrng:3000,               rof:1.205, bstint:0.830,                      ammoclip: 1, ammomax:  80,            rldtime:1.0, brcdmg:39.5, minbrc:40, maxbrc:80,             dmgtype:'TK',thmwgt:27.69/41.53, kinwgt:13.84/41.53, dmgfall:1000, fdid:128049489, fdname:'Hpt_Railgun_Fixed_Medium' },
-		84224 : { mtype:'hrg', cost:  619200, name:'Imperial Hammer Rail Gun',    mount:'F',              class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.63, boottime:0, dps:61.364, damage:15.000, distdraw:2.000,thmload:11.00, pierce:100, maxrng:3000,               rof:4.091, bstint:0.400, bstrof:6, bstsize:3, ammoclip: 3, ammomax: 240,            rldtime:1.2, brcdmg:14.3, minbrc:40, maxbrc:80,             dmgtype:'TK',thmwgt:10   /15   , kinwgt: 5   /15   , dmgfall:1000, fdid:128671341, fdname:'Hpt_Railgun_Fixed_Medium_Burst' }, // verify
+		82120 : { mtype:'hmr', cost:   32180, name:'Missile Rack',                mount:'F', missile:'D', class:1, rating:'B', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0, dps:25.000, damage:50.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip: 8, ammomax:  16,            rldtime:5.0, brcdmg:20.0,minbrc:100,maxbrc:100,             expwgt:100, ammocost:500, noexpeffects:{'wpnx_drmu':1},               fdid:128666724, fdname:'Hpt_DumbfireMissileRack_Fixed_Small' },
+		82123 : { mtype:'hmr', cost:   72600, name:'Seeker Missile Rack',         mount:'F', missile:'S', class:1, rating:'B', mass: 2.00, integ:40, pwrdraw:0.60, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 625, rof:0.333, bstint:3.000,                      ammoclip: 6, ammomax:   6,           rldtime:12.0, brcdmg:16.0, minbrc: 0, maxbrc: 0,             expwgt:100, ammocost:500, noexpeffects:{'wpnx_fsin':1,'wpnx_pemu':1}, fdid:128049492, fdname:'Hpt_BasicMissileRack_Fixed_Small' },
+		82220 : { mtype:'hmr', cost:  240400, name:'Missile Rack',                mount:'F', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:25.000, damage:50.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip:12, ammomax:  48,            rldtime:5.0, brcdmg:20.0,minbrc:100,maxbrc:100,             expwgt:100, ammocost:500, noexpeffects:{'wpnx_drmu':1},               fdid:128666725, fdname:'Hpt_DumbfireMissileRack_Fixed_Medium' },
+		82223 : { mtype:'hmr', cost:  512400, name:'Seeker Missile Rack',         mount:'F', missile:'S', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 625, rof:0.333, bstint:3.000,                      ammoclip: 6, ammomax:  18,           rldtime:12.0, brcdmg:16.0, minbrc: 0, maxbrc: 0,             expwgt:100, ammocost:500, noexpeffects:{'wpnx_fsin':1,'wpnx_pemu':1}, fdid:128049493, fdname:'Hpt_BasicMissileRack_Fixed_Medium' },
+		82310 : { mtype:'hmr', cost: 1021500, name:'Missile Rack',                mount:'F', missile:'D', class:3, rating:'A', mass: 8.00, integ:64, pwrdraw:1.62, boottime:0, dps:25.000, damage:50.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip:12, ammomax:  96,            rldtime:5.0, brcdmg:20.0,minbrc:100,maxbrc:100,             expwgt:100, ammocost:500, noexpeffects:{'wpnx_drmu':1},               fdid:128891602, fdname:'Hpt_DumbfireMissileRack_Fixed_Large' },
+		82313 : { mtype:'hmr', cost: 1471030, name:'Seeker Missile Rack',         mount:'F', missile:'S', class:3, rating:'A', mass: 8.00, integ:64, pwrdraw:1.62, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 625, rof:0.333, bstint:3.000,                      ammoclip: 6, ammomax:  36,           rldtime:12.0, brcdmg:16.0, minbrc: 0, maxbrc: 0,             expwgt:100, ammocost:500, noexpeffects:{'wpnx_fsin':1,'wpnx_pemu':1}, fdid:128049494, fdname:'Hpt_BasicMissileRack_Fixed_Large' },
+		82224 : { mtype:'hmr', cost:  768600, name:'Pack-Hound Missile Rack',     mount:'F', missile:'S', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:60.000, damage: 7.500, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 600, rof:2.000, bstint:0.500,                      ammoclip:12, ammomax: 120, rounds: 4, rldtime:5.0, brcdmg: 3.0, minbrc: 0, maxbrc: 0,             expwgt:100, ammocost:500, noexpeffects:{'wpnx_fsin':1,'wpnx_pemu':1}, fdid:128671344, fdname:'Hpt_DrunkMissileRack_Fixed_Medium' }, // powerplay
+		82225 : { mtype:'hmr', cost: 1951040, name:'Rocket Propelled FSD Disrupter',mount:'F',missile:'D',class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 750, rof:0.333, bstint:3.000,                      ammoclip:12, ammomax:  48,            rldtime:5.0, brcdmg:16.0,minbrc:100,maxbrc:100,             expwgt:100, ammocost:500, noexpeffects:{'wpnx_drmu':1},               fdid:128732552, fdname:'Hpt_DumbfireMissileRack_Fixed_Medium_Lasso' }, // powerplay
 		
-		85193 : { mtype:'htp', cost:   11200, name:'Torpedo Pylon',               mount:'F', missile:'S', class:1, rating:'I', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0,dps:120.000,damage:120.000,                thmload:45.00, pierce:1e4,              shotspd: 250, rof:1.000, bstint:1.000,                      ammoclip: 1,                          rldtime:5.0, brcdmg:60.0, minbrc:100,maxbrc:100,            dmgtype:'E', expwgt:1, dmgfall:000000, fdid:128049509, fdname:'Hpt_AdvancedTorpPylon_Fixed_Small' },
-		85293 : { mtype:'htp', cost:   44800, name:'Torpedo Pylon',               mount:'F', missile:'S', class:2, rating:'I', mass: 4.00, integ:51, pwrdraw:0.40, boottime:0,dps:120.000,damage:120.000,                thmload:50.00, pierce:1e4,              shotspd: 250, rof:1.000, bstint:1.000,                      ammoclip: 2,                          rldtime:5.0, brcdmg:60.0, minbrc:100,maxbrc:100,            dmgtype:'E', expwgt:1, dmgfall:000000, fdid:128049510, fdname:'Hpt_AdvancedTorpPylon_Fixed_Medium' },
+		72160 : { mtype:'hmc', cost:    9500, name:'Multi-cannon',                mount:'F',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.28, boottime:0, dps: 8.615, damage: 1.120, distdraw:0.060, thmload:0.09, pierce: 22, maxrng:4000, shotspd:1600, rof:7.692, bstint:0.130,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 1.0, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128049455, fdname:'Hpt_MultiCannon_Fixed_Small' },
+		72171 : { mtype:'hmc', cost:   14250, name:'Multi-cannon',                mount:'G',              class:1, rating:'G', mass: 2.00, integ:40, pwrdraw:0.37, boottime:0, dps: 6.833, damage: 0.820, distdraw:0.070, thmload:0.10, pierce: 22, maxrng:4000, shotspd:1600, rof:8.333, bstint:0.120,                      ammoclip:90, ammomax:2100,            rldtime:5.0, brcdmg: 0.7, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128049459, fdname:'Hpt_MultiCannon_Gimbal_Small' },
+		72172 : { mtype:'hmc', cost:   81600, name:'Multi-cannon',                mount:'T',              class:1, rating:'G', mass: 2.00, integ:40, pwrdraw:0.26, boottime:0, dps: 4.000, damage: 0.560, distdraw:0.030, thmload:0.04, pierce: 22, maxrng:4000, shotspd:1600, rof:7.143, bstint:0.140,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: 0.5, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128049462, fdname:'Hpt_MultiCannon_Turret_Small' },
+		72250 : { mtype:'hmc', cost:   38000, name:'Multi-cannon',                mount:'F',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.46, boottime:0, dps:15.643, damage: 2.190, distdraw:0.110, thmload:0.18, pierce: 37, maxrng:4000, shotspd:1600, rof:7.143, bstint:0.140,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 2.0, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128049456, fdname:'Hpt_MultiCannon_Fixed_Medium' },
+		72261 : { mtype:'hmc', cost:   57000, name:'Multi-cannon',                mount:'G',              class:2, rating:'F', mass: 4.00, integ:51, pwrdraw:0.64, boottime:0, dps:12.615, damage: 1.640, distdraw:0.140, thmload:0.20, pierce: 37, maxrng:4000, shotspd:1600, rof:7.692, bstint:0.130,                      ammoclip:90, ammomax:2100,            rldtime:5.0, brcdmg: 1.5, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128049460, fdname:'Hpt_MultiCannon_Gimbal_Medium' },
+		72262 : { mtype:'hmc', cost: 1292800, name:'Multi-cannon',                mount:'T',              class:2, rating:'F', mass: 4.00, integ:51, pwrdraw:0.50, boottime:0, dps: 7.313, damage: 1.170, distdraw:0.060, thmload:0.09, pierce: 37, maxrng:4000, shotspd:1600, rof:6.250, bstint:0.160,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: 1.1, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128049463, fdname:'Hpt_MultiCannon_Turret_Medium' },
+		72330 : { mtype:'hmc', cost:  140400, name:'Multi-cannon',                mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:0.64, boottime:0, dps:23.088, damage: 3.925, distdraw:0.180, thmload:0.28, pierce: 54, maxrng:4000, shotspd:1600, rof:5.882, bstint:0.170,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 3.5, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128049457, fdname:'Hpt_MultiCannon_Fixed_Large' },
+		72331 : { mtype:'hmc', cost:  578440, name:'Multi-cannon',                mount:'G',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:0.97, boottime:0, dps:18.933, damage: 2.840, distdraw:0.250, thmload:0.34, pierce: 54, maxrng:4000, shotspd:1600, rof:6.667, bstint:0.150,                      ammoclip:90, ammomax:2100,            rldtime:5.0, brcdmg: 2.6, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128049461, fdname:'Hpt_MultiCannon_Gimbal_Large' },
+		72352 : { mtype:'hmc', cost: 3794600, name:'Multi-cannon',                mount:'T',              class:3, rating:'E', mass: 8.00, integ:64, pwrdraw:0.86, boottime:0, dps:11.737, damage: 2.230, distdraw:0.160, thmload:0.19, pierce: 54, maxrng:4000, shotspd:1600, rof:5.263, bstint:0.190,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: 2.0, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128049464, fdname:'Hpt_MultiCannon_Turret_Large' },
+		72410 : { mtype:'hmc', cost: 1177600, name:'Multi-cannon',                mount:'F',              class:4, rating:'A', mass:16.00, integ:80, pwrdraw:0.73, boottime:0, dps:28.030, damage: 4.625, distdraw:0.240, thmload:0.39, pierce: 68, maxrng:4000, shotspd:1600, rof:3.030, bstint:0.330,                     ammoclip:100, ammomax:2100, rounds: 2, rldtime:4.0, brcdmg: 4.2, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128049458, fdname:'Hpt_MultiCannon_Fixed_Huge' },
+		72411 : { mtype:'hmc', cost: 6377600, name:'Multi-cannon',                mount:'G',              class:4, rating:'A', mass:16.00, integ:80, pwrdraw:1.22, boottime:0, dps:23.300, damage: 3.460, distdraw:0.370, thmload:0.51, pierce: 68, maxrng:4000, shotspd:1600, rof:3.367, bstint:0.297,                      ammoclip:90, ammomax:2100, rounds: 2, rldtime:5.0, brcdmg: 3.1, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128681996, fdname:'Hpt_MultiCannon_Gimbal_Huge' },
+		72144 : { mtype:'hmc', cost:   14250, name:'Enforcer Cannon',             mount:'F',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.28, boottime:0, dps:12.391, damage: 2.850, distdraw:0.120, thmload:0.18, pierce: 30, maxrng:4500, shotspd:1800, rof:4.348, bstint:0.230,                      ammoclip:60, ammomax:1000,            rldtime:4.0, brcdmg: 2.6, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall: NaN, ammocost:1, fdid:128671345, fdname:'Hpt_MultiCannon_Fixed_Small_Strong' }, // powerplay // TODO: dmgfall
 		
-	//	TODO2 : { mtype:''   , cost:     NaN, name:'Plasma Burst Cannon',         mount:'F',              class:2, rating:'?', mass: 4.00, integ:NaN,pwrdraw:1.43, boottime:0, dps:15.750, damage:14.000, distdraw:3.000,thmload:15.00, pierce: 55, maxrng: NaN, shotspd: NaN, rof:1.125, bstint:2.000, bstrof:3, bstsize:3, ammoclip: 9, ammomax: NaN,            rldtime:8.0, brcdmg: NaN, minbrc:NaN,maxbrc:NaN,            dmgtype:'A', abswgt:3, kinwgt:1, thmwgt:1, dmgfall: NaN, fdid:     null, fdname:'Hpt_PlasmaBurstCannon_Fixed_Medium' },
-	//	TODO3 : { mtype:''   , cost:     NaN, name:'Stealth Laser',               mount:'F',              class:1, rating:'?', mass: 2.00, integ:NaN,pwrdraw:0.19, boottime:0, dps: 6.000, damage: 1.800, distdraw:0.330, thmload:0.01, pierce:1e4, maxrng: NaN,               rof:3.333, bstint:0.300,                                                                         brcdmg: NaN, minbrc:NaN,maxbrc:NaN,            dmgtype:'T', thmwgt:1, dmgfall: NaN, fdid:     null, fdname:'Hpt_PulseLaserStealth_Fixed_Small' },
+		83230 : { mtype:'hpa', cost:  834200, name:'Plasma Accelerator',          mount:'F',              class:2, rating:'C', mass: 4.00, integ:51, pwrdraw:1.43, boottime:0, dps:17.921, damage:54.300, distdraw:8.650,thmload:15.58, pierce:100, maxrng:3500, shotspd: 875, rof:0.330, bstint:3.030,                      ammoclip: 5, ammomax: 100,            rldtime:6.0, brcdmg:46.2, minbrc:40, maxbrc:80,             abswgt:60, kinwgt:20, thmwgt:20, dmgfall:2000, ammocost:200, fdid:128049465, fdname:'Hpt_PlasmaAccelerator_Fixed_Medium' },
+		83320 : { mtype:'hpa', cost: 3051200, name:'Plasma Accelerator',          mount:'F',              class:3, rating:'B', mass: 8.00, integ:64, pwrdraw:1.97, boottime:0, dps:24.174, damage:83.400,distdraw:13.600,thmload:21.75, pierce:100, maxrng:3500, shotspd: 875, rof:0.290, bstint:3.450,                      ammoclip: 5, ammomax: 100,            rldtime:6.0, brcdmg:70.9, minbrc:40, maxbrc:80,             abswgt:60, kinwgt:20, thmwgt:20, dmgfall:2000, ammocost:200, fdid:128049466, fdname:'Hpt_PlasmaAccelerator_Fixed_Large' },
+		83410 : { mtype:'hpa', cost:13793600, name:'Plasma Accelerator',          mount:'F',              class:4, rating:'A', mass:16.00, integ:80, pwrdraw:2.63, boottime:0, dps:31.313,damage:125.250,distdraw:21.040,thmload:29.46, pierce:100, maxrng:3500, shotspd: 875, rof:0.250, bstint:4.000,                      ammoclip: 5, ammomax: 100,            rldtime:6.0,brcdmg:106.5, minbrc:40, maxbrc:80,             abswgt:60, kinwgt:20, thmwgt:20, dmgfall:2000, ammocost:200, fdid:128049467, fdname:'Hpt_PlasmaAccelerator_Fixed_Huge' },
+		83324 : { mtype:'hpa', cost: 4576800, name:'Advanced Plasma Accelerator', mount:'F',              class:3, rating:'B', mass: 8.00, integ:64, pwrdraw:1.97, boottime:0, dps:28.667, damage:34.400, distdraw:5.500,thmload:11.00, pierce:100, maxrng:3500, shotspd: 875, rof:0.833, bstint:1.200,                      ammoclip:20, ammomax: 300,            rldtime:6.0, brcdmg:30.9, minbrc:40, maxbrc:80,             abswgt:60, kinwgt:20, thmwgt:20, dmgfall:2000, ammocost:200, fdid:128671339, fdname:'Hpt_PlasmaAccelerator_Fixed_Large_Advanced' }, // powerplay // verify
+		
+		62160 : { mtype:'hpl', cost:    2200, name:'Pulse Laser',                 mount:'F',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.39, boottime:0, dps: 7.885, damage: 2.050, distdraw:0.300, thmload:0.33, pierce: 20, maxrng:3000,               rof:3.846, bstint:0.260,                                                                         brcdmg: 1.7, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:500, fdid:128049381, fdname:'Hpt_PulseLaser_Fixed_Small' },
+		62171 : { mtype:'hpl', cost:    6600, name:'Pulse Laser',                 mount:'G',              class:1, rating:'G', mass: 2.00, integ:40, pwrdraw:0.39, boottime:0, dps: 6.240, damage: 1.560, distdraw:0.310, thmload:0.31, pierce: 20, maxrng:3000,               rof:4.000, bstint:0.250,                                                                         brcdmg: 1.3, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:500, fdid:128049385, fdname:'Hpt_PulseLaser_Gimbal_Small' },
+		62172 : { mtype:'hpl', cost:   26000, name:'Pulse Laser',                 mount:'T',              class:1, rating:'G', mass: 2.00, integ:40, pwrdraw:0.38, boottime:0, dps: 3.967, damage: 1.190, distdraw:0.190, thmload:0.19, pierce: 20, maxrng:3000,               rof:3.333, bstint:0.300,                                                                         brcdmg: 1.0, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:500, fdid:128049388, fdname:'Hpt_PulseLaser_Turret_Small' },
+		62250 : { mtype:'hpl', cost:   17600, name:'Pulse Laser',                 mount:'F',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.60, boottime:0, dps:12.069, damage: 3.500, distdraw:0.500, thmload:0.56, pierce: 35, maxrng:3000,               rof:3.448, bstint:0.290,                                                                         brcdmg: 3.0, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:500, fdid:128049382, fdname:'Hpt_PulseLaser_Fixed_Medium' },
+		62261 : { mtype:'hpl', cost:   35400, name:'Pulse Laser',                 mount:'G',              class:2, rating:'F', mass: 4.00, integ:51, pwrdraw:0.60, boottime:0, dps: 9.571, damage: 2.680, distdraw:0.540, thmload:0.54, pierce: 35, maxrng:3000,               rof:3.571, bstint:0.280,                                                                         brcdmg: 2.3, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:500, fdid:128049386, fdname:'Hpt_PulseLaser_Gimbal_Medium' },
+		62262 : { mtype:'hpl', cost:  132800, name:'Pulse Laser',                 mount:'T',              class:2, rating:'F', mass: 4.00, integ:51, pwrdraw:0.58, boottime:0, dps: 6.212, damage: 2.050, distdraw:0.330, thmload:0.33, pierce: 35, maxrng:3000,               rof:3.030, bstint:0.330,                                                                         brcdmg: 1.7, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:500, fdid:128049389, fdname:'Hpt_PulseLaser_Turret_Medium' },
+		62350 : { mtype:'hpl', cost:   70400, name:'Pulse Laser',                 mount:'F',              class:3, rating:'D', mass: 8.00, integ:64, pwrdraw:0.90, boottime:0, dps:18.121, damage: 5.980, distdraw:0.860, thmload:0.96, pierce: 52, maxrng:3000,               rof:3.030, bstint:0.330,                                                                         brcdmg: 5.1, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:500, fdid:128049383, fdname:'Hpt_PulseLaser_Fixed_Large' },
+		62361 : { mtype:'hpl', cost:  140600, name:'Pulse Laser',                 mount:'G',              class:3, rating:'E', mass: 8.00, integ:64, pwrdraw:0.92, boottime:0, dps:14.774, damage: 4.580, distdraw:0.920, thmload:0.92, pierce: 52, maxrng:3000,               rof:3.226, bstint:0.310,                                                                         brcdmg: 3.9, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:500, fdid:128049387, fdname:'Hpt_PulseLaser_Gimbal_Large' },
+		62362 : { mtype:'hpl', cost:  400400, name:'Pulse Laser',                 mount:'T',              class:3, rating:'F', mass: 8.00, integ:64, pwrdraw:0.89, boottime:0, dps: 9.459, damage: 3.500, distdraw:0.560, thmload:0.56, pierce: 52, maxrng:3000,               rof:2.703, bstint:0.370,                                                                         brcdmg: 3.0, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:500, fdid:128049390, fdname:'Hpt_PulseLaser_Turret_Large' },
+		62410 : { mtype:'hpl', cost:  177600, name:'Pulse Laser',                 mount:'F',              class:4, rating:'A', mass:16.00, integ:80, pwrdraw:1.33, boottime:0, dps:26.947, damage:10.240, distdraw:1.480, thmload:1.64, pierce: 65, maxrng:3000,               rof:2.632, bstint:0.380,                                                                         brcdmg: 8.7, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:500, fdid:128049384, fdname:'Hpt_PulseLaser_Fixed_Huge' },
+		62411 : { mtype:'hpl', cost:  877600, name:'Pulse Laser',                 mount:'G',              class:4, rating:'A', mass:16.00, integ:80, pwrdraw:1.37, boottime:0, dps:21.722, damage: 7.820, distdraw:1.560, thmload:1.56, pierce: 65, maxrng:3000,               rof:2.778, bstint:0.360,                                                                         brcdmg: 6.6, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:500, fdid:128681995, fdname:'Hpt_PulseLaser_Gimbal_Huge' },
+		62254 : { mtype:'hpl', cost:   26400, name:'Pulse Disruptor Laser',       mount:'F',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.70, boottime:0, dps: 4.667, damage: 2.800, distdraw:0.900, thmload:1.00, pierce: 35, maxrng:3000,               rof:1.667, bstint:0.600,                                                                         brcdmg: 2.4, minbrc:40, maxbrc:80,             thmwgt:100, dmgfall:500, fdid:128671342, fdname:'Hpt_PulseLaser_Fixed_Medium_Disruptor' }, // powerplay // verify
+		
+		84140 : { mtype:'hrg', cost:   51600, name:'Rail Gun',                    mount:'F',              class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:1.15, boottime:0, dps:37.048, damage:23.340, distdraw:2.690,thmload:12.00, pierce:100, maxrng:3000,               rof:1.587, bstint:0.630,                      ammoclip: 1, ammomax:  80,            rldtime:1.0, brcdmg:22.2, minbrc:40, maxbrc:80,             thmwgt:66.6667, kinwgt:33.3333, dmgfall:1000, ammocost:75, fdid:128049488, fdname:'Hpt_Railgun_Fixed_Small' },
+		84220 : { mtype:'hrg', cost:  412800, name:'Rail Gun',                    mount:'F',              class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.63, boottime:0, dps:50.036, damage:41.530, distdraw:5.110,thmload:20.00, pierce:100, maxrng:3000,               rof:1.205, bstint:0.830,                      ammoclip: 1, ammomax:  80,            rldtime:1.0, brcdmg:39.5, minbrc:40, maxbrc:80,             thmwgt:66.6667, kinwgt:33.3333, dmgfall:1000, ammocost:75, fdid:128049489, fdname:'Hpt_Railgun_Fixed_Medium' },
+		84224 : { mtype:'hrg', cost:  619200, name:'Imperial Hammer Rail Gun',    mount:'F',              class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.63, boottime:0, dps:61.364, damage:15.000, distdraw:2.000,thmload:11.00, pierce:100, maxrng:3000,               rof:4.091, bstint:0.400, bstrof:6, bstsize:3, ammoclip: 3, ammomax: 240,            rldtime:1.2, brcdmg:14.3, minbrc:40, maxbrc:80,             thmwgt:66.6667, kinwgt:33.3333, dmgfall:1000, ammocost:75, fdid:128671341, fdname:'Hpt_Railgun_Fixed_Medium_Burst' }, // powerplay // verify
+		
+		85193 : { mtype:'htp', cost:   11200, name:'Torpedo Pylon',               mount:'F', missile:'S', class:1, rating:'I', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0,dps:120.000,damage:120.000,                thmload:45.00, pierce:1e4,              shotspd: 250, rof:1.000, bstint:1.000,                      ammoclip: 1,                          rldtime:5.0, brcdmg:60.0, minbrc:100,maxbrc:100,            expwgt:100, ammocost:15000, fdid:128049509, fdname:'Hpt_AdvancedTorpPylon_Fixed_Small' },
+		85293 : { mtype:'htp', cost:   44800, name:'Torpedo Pylon',               mount:'F', missile:'S', class:2, rating:'I', mass: 4.00, integ:51, pwrdraw:0.40, boottime:0,dps:120.000,damage:120.000,                thmload:50.00, pierce:1e4,              shotspd: 250, rof:1.000, bstint:1.000,                      ammoclip: 2,                          rldtime:5.0, brcdmg:60.0, minbrc:100,maxbrc:100,            expwgt:100, ammocost:15000, fdid:128049510, fdname:'Hpt_AdvancedTorpPylon_Fixed_Medium' },
+		85393 : { mtype:'htp', cost:  157960, name:'Torpedo Pylon',               mount:'F', missile:'S', class:3, rating:'I', mass: 8.00, integ:64, pwrdraw:0.60, boottime:0,dps:120.000,damage:120.000,                thmload:55.00, pierce:1e4,              shotspd: 250, rof:1.000, bstint:1.000,                      ammoclip: 4,                          rldtime:5.0, brcdmg:60.0, minbrc:100,maxbrc:100,            expwgt:100, ammocost:15000, fdid:128049511, fdname:'Hpt_AdvancedTorpPylon_Fixed_Large' },
 		
 		
 		// UTILITY MOUNTS
 		
 		
-		50090 : { mtype:'ucl',  cost:   8500, name:'Chaff Launcher',            class:0, rating:'I', mass:1.30, integ:20, pwrdraw:0.20, passive:1, boottime:0,                         distdraw:4.00, thmload:4.0 ,                                        rof: 1.0, bstint:1.00,                       ammoclip: 1, ammomax:   10, rldtime:10.0, jamdur:20,                   fdid:128049513, fdname:'Hpt_ChaffLauncher_Tiny' },
+		50090 : { mtype:'ucl',  cost:   8500, name:'Chaff Launcher',            class:0, rating:'I', mass:1.30, integ:20, pwrdraw:0.20, passive:1, boottime:0, distdraw:4.00, thmload:4.0, rof:1.0, bstint:1.00, ammoclip:1, ammomax:10, rldtime:10.0, jamdur:20, ammocost:100, fdid:128049513, fdname:'Hpt_ChaffLauncher_Tiny' },
 		
-		51060 : { mtype:'uec',  cost:  12500, name:'Electronic Countermeasure', class:0, rating:'F', mass:1.30, integ:20, pwrdraw:0.20, passive:1, boottime:0, range:3000, duration:3, distdraw:4.00, thmload:4.0 , cooldown:10,                                                                                                                                               fdid:128049516, fdname:'Hpt_ElectronicCountermeasure_Tiny' },
+		51060 : { mtype:'uec',  cost:  12500, name:'Electronic Countermeasure', class:0, rating:'F', mass:1.30, integ:20, pwrdraw:0.20, passive:1, boottime:0, range:3000, duration:3, distdraw:4.00, thmload:4.0, cooldown:10, fdid:128049516, fdname:'Hpt_ElectronicCountermeasure_Tiny' },
 		
-		58061 : { mtype:'uex',  cost:  63000, name:'Shutdown Field Neutraliser',class:0, rating:'F', mass:1.30, integ:35, pwrdraw:0.20, passive:1, boottime:0, range:3000, duration:1, distdraw:0.25,               cooldown:10, nosingleton:1, fdid:128771884, fdname:'Hpt_AntiUnknownShutdown_Tiny' },
-		58050 : { mtype:'uex',  cost: 365700, name:'Xeno Scanner',              class:0, rating:'E', mass:1.30, integ:56, pwrdraw:0.20,            boottime:2, scanrng: 500, maxangle:23.00, scantime:10,                        fdid:128793115, fdname:'Hpt_XenoScanner_Basic_Tiny' },
+		58061 : { mtype:'uex',  cost:  63000, name:'Shutdown Field Neutraliser',class:0, rating:'F', mass:1.30, integ:35, pwrdraw:0.20, passive:1, boottime:0, range:3000, duration:1, distdraw:0.25, cooldown:10,     fdid:128771884, fdname:'Hpt_AntiUnknownShutdown_Tiny' },
+		58050 : { mtype:'uex',  cost: 365700, name:'Xeno Scanner',              class:0, rating:'E', mass:1.30, integ:56, pwrdraw:0.20,            boottime:2, scanrng: 500, maxangle:23.00, scantime:10, limit:'uex', fdid:128793115, fdname:'Hpt_XenoScanner_Basic_Tiny' },
 		
-		52090 : { mtype:'uhsl', cost:   3500, name:'Heat Sink Launcher',        class:0, rating:'I', mass:1.30, integ:20, pwrdraw:0.20, passive:1, boottime:0,                         distdraw:2.00,                                                      rof: 0.2, bstint:5.00,                       ammoclip: 1, ammomax:    2, rldtime:10.0, duration:10, thmdrain:100.0, fdid:128049519, fdname:'Hpt_HeatSinkLauncher_Turret_Tiny' },
+		52090 : { mtype:'uhsl', cost:   3500, name:'Heat Sink Launcher',        class:0, rating:'I', mass:1.30, integ:45, pwrdraw:0.20, passive:1, boottime:0, distdraw:2.00, rof:0.2, bstint:5.00, ammoclip:1, ammomax:2, rldtime:10.0, duration:10, thmdrain:100.0, ammocost:25, fdid:128049519, fdname:'Hpt_HeatSinkLauncher_Turret_Tiny' },
 		
-		57050 : { mtype:'ukws', cost:  13540, name:'Kill Warrant Scanner',      class:0, rating:'E', mass:1.30, integ:32, pwrdraw:0.20,            boottime:2, scanrng:2000, maxangle:15.00, scantime:10, fdid:128662530, fdname:'Hpt_CrimeScanner_Size0_Class1' },
-		57040 : { mtype:'ukws', cost:  40630, name:'Kill Warrant Scanner',      class:0, rating:'D', mass:1.30, integ:24, pwrdraw:0.40,            boottime:2, scanrng:2500, maxangle:15.00, scantime:10, fdid:128662531, fdname:'Hpt_CrimeScanner_Size0_Class2' },
-		57030 : { mtype:'ukws', cost: 121900, name:'Kill Warrant Scanner',      class:0, rating:'C', mass:1.30, integ:40, pwrdraw:0.80,            boottime:2, scanrng:3000, maxangle:15.00, scantime:10, fdid:128662532, fdname:'Hpt_CrimeScanner_Size0_Class3' },
-		57020 : { mtype:'ukws', cost: 365700, name:'Kill Warrant Scanner',      class:0, rating:'B', mass:1.30, integ:56, pwrdraw:1.60,            boottime:2, scanrng:3500, maxangle:15.00, scantime:10, fdid:128662533, fdname:'Hpt_CrimeScanner_Size0_Class4' },
-		57010 : { mtype:'ukws', cost:1097100, name:'Kill Warrant Scanner',      class:0, rating:'A', mass:1.30, integ:48, pwrdraw:3.20,            boottime:2, scanrng:4000, maxangle:15.00, scantime:10, fdid:128662534, fdname:'Hpt_CrimeScanner_Size0_Class5' },
+		57050 : { mtype:'ukws', cost:  13540, name:'Kill Warrant Scanner',      class:0, rating:'E', mass:1.30, integ:32, pwrdraw:0.20,            boottime:2, scanrng:2000, maxangle:15.00, scantime:10, limit:'ukws', fdid:128662530, fdname:'Hpt_CrimeScanner_Size0_Class1' },
+		57040 : { mtype:'ukws', cost:  40630, name:'Kill Warrant Scanner',      class:0, rating:'D', mass:1.30, integ:24, pwrdraw:0.40,            boottime:2, scanrng:2500, maxangle:15.00, scantime:10, limit:'ukws', fdid:128662531, fdname:'Hpt_CrimeScanner_Size0_Class2' },
+		57030 : { mtype:'ukws', cost: 121900, name:'Kill Warrant Scanner',      class:0, rating:'C', mass:1.30, integ:40, pwrdraw:0.80,            boottime:2, scanrng:3000, maxangle:15.00, scantime:10, limit:'ukws', fdid:128662532, fdname:'Hpt_CrimeScanner_Size0_Class3' },
+		57020 : { mtype:'ukws', cost: 365700, name:'Kill Warrant Scanner',      class:0, rating:'B', mass:1.30, integ:56, pwrdraw:1.60,            boottime:2, scanrng:3500, maxangle:15.00, scantime:10, limit:'ukws', fdid:128662533, fdname:'Hpt_CrimeScanner_Size0_Class4' },
+		57010 : { mtype:'ukws', cost:1097100, name:'Kill Warrant Scanner',      class:0, rating:'A', mass:1.30, integ:48, pwrdraw:3.20,            boottime:2, scanrng:4000, maxangle:15.00, scantime:10, limit:'ukws', fdid:128662534, fdname:'Hpt_CrimeScanner_Size0_Class5' },
 		
-		55050 : { mtype:'ucs',  cost:  13540, name:'Manifest Scanner',          class:0, rating:'E', mass:1.30, integ:32, pwrdraw:0.20,            boottime:3, scanrng:2000, maxangle:15.00, scantime:10, fdid:128662520, fdname:'Hpt_CargoScanner_Size0_Class1' },
-		55040 : { mtype:'ucs',  cost:  40630, name:'Manifest Scanner',          class:0, rating:'D', mass:1.30, integ:24, pwrdraw:0.40,            boottime:3, scanrng:2500, maxangle:15.00, scantime:10, fdid:128662521, fdname:'Hpt_CargoScanner_Size0_Class2' },
-		55030 : { mtype:'ucs',  cost: 121900, name:'Manifest Scanner',          class:0, rating:'C', mass:1.30, integ:40, pwrdraw:0.80,            boottime:3, scanrng:3000, maxangle:15.00, scantime:10, fdid:128662522, fdname:'Hpt_CargoScanner_Size0_Class3' },
-		55020 : { mtype:'ucs',  cost: 365700, name:'Manifest Scanner',          class:0, rating:'B', mass:1.30, integ:56, pwrdraw:1.60,            boottime:3, scanrng:3500, maxangle:15.00, scantime:10, fdid:128662523, fdname:'Hpt_CargoScanner_Size0_Class4' },
-		55010 : { mtype:'ucs',  cost:1097100, name:'Manifest Scanner',          class:0, rating:'A', mass:1.30, integ:48, pwrdraw:3.20,            boottime:3, scanrng:4000, maxangle:15.00, scantime:10, fdid:128662524, fdname:'Hpt_CargoScanner_Size0_Class5' },
+		55050 : { mtype:'ucs',  cost:  13540, name:'Manifest Scanner',          class:0, rating:'E', mass:1.30, integ:32, pwrdraw:0.20,            boottime:3, scanrng:2000, maxangle:15.00, scantime:10, limit:'ucs', fdid:128662520, fdname:'Hpt_CargoScanner_Size0_Class1' },
+		55040 : { mtype:'ucs',  cost:  40630, name:'Manifest Scanner',          class:0, rating:'D', mass:1.30, integ:24, pwrdraw:0.40,            boottime:3, scanrng:2500, maxangle:15.00, scantime:10, limit:'ucs', fdid:128662521, fdname:'Hpt_CargoScanner_Size0_Class2' },
+		55030 : { mtype:'ucs',  cost: 121900, name:'Manifest Scanner',          class:0, rating:'C', mass:1.30, integ:40, pwrdraw:0.80,            boottime:3, scanrng:3000, maxangle:15.00, scantime:10, limit:'ucs', fdid:128662522, fdname:'Hpt_CargoScanner_Size0_Class3' },
+		55020 : { mtype:'ucs',  cost: 365700, name:'Manifest Scanner',          class:0, rating:'B', mass:1.30, integ:56, pwrdraw:1.60,            boottime:3, scanrng:3500, maxangle:15.00, scantime:10, limit:'ucs', fdid:128662523, fdname:'Hpt_CargoScanner_Size0_Class4' },
+		55010 : { mtype:'ucs',  cost:1097100, name:'Manifest Scanner',          class:0, rating:'A', mass:1.30, integ:48, pwrdraw:3.20,            boottime:3, scanrng:4000, maxangle:15.00, scantime:10, limit:'ucs', fdid:128662524, fdname:'Hpt_CargoScanner_Size0_Class5' },
 		
-		53090 : { mtype:'upd',  cost:  18550, name:'Point Defence',  mount:'T', class:0, rating:'I', mass:0.50, integ:30, pwrdraw:0.20, passive:1, boottime:0, dps:2.0, damage:0.2,                   thmload:0.07,             maxrng:2500, shotspd:1000, rof:10.0, bstint:0.20, bstrof:15, bstsize:4, ammoclip:12, ammomax:10000, rldtime: 0.4, jitter:0.75, dmgtype:'K', dmgfall:000000, fdid:128049522, fdname:'Hpt_PlasmaPointDefence_Turret_Tiny' },
+		53090 : { mtype:'upd',  cost:  18550, name:'Point Defence',  mount:'T', class:0, rating:'I', mass:0.50, integ:30, pwrdraw:0.20, passive:1, boottime:0, dps:2.0, damage:0.2, thmload:0.07, maxrng:2500, shotspd:1000, rof:10.0, bstint:0.20, bstrof:15, bstsize:4, ammoclip:12, ammomax:10000, rldtime:0.4, jitter:0.75, kinwgt:100, ammocost:1, fdid:128049522, fdname:'Hpt_PlasmaPointDefence_Turret_Tiny' },
+		
+		59050 : { mtype:'upwa', cost:  13550, name:'Pulse Wave Analyser',       class:0, rating:'E', mass:1.30, integ:32, pwrdraw:0.20,            boottime:3, scanrng:12000,maxangle:15.00, scantime: 3, limit:'upwa', fdid:128915718, fdname:'Hpt_MRAScanner_Size0_Class1' },
+		59040 : { mtype:'upwa', cost:  40630, name:'Pulse Wave Analyser',       class:0, rating:'D', mass:1.30, integ:24, pwrdraw:0.40,            boottime:3, scanrng:15000,maxangle:15.00, scantime: 3, limit:'upwa', fdid:128915719, fdname:'Hpt_MRAScanner_Size0_Class2' },
+		59030 : { mtype:'upwa', cost: 121900, name:'Pulse Wave Analyser',       class:0, rating:'C', mass:1.30, integ:40, pwrdraw:0.80,            boottime:3, scanrng:18000,maxangle:15.00, scantime: 3, limit:'upwa', fdid:128915720, fdname:'Hpt_MRAScanner_Size0_Class3' },
+		59020 : { mtype:'upwa', cost: 365700, name:'Pulse Wave Analyser',       class:0, rating:'B', mass:1.30, integ:56, pwrdraw:1.60,            boottime:3, scanrng:21000,maxangle:15.00, scantime: 3, limit:'upwa', fdid:128915721, fdname:'Hpt_MRAScanner_Size0_Class4' },
+		59010 : { mtype:'upwa', cost:1097100, name:'Pulse Wave Analyser',       class:0, rating:'A', mass:1.30, integ:48, pwrdraw:3.20,            boottime:3, scanrng:24000,maxangle:15.00, scantime: 3, limit:'upwa', fdid:128915722, fdname:'Hpt_MRAScanner_Size0_Class5' },
 		
 		54050 : { mtype:'usb',  cost:  10000, name:'Shield Booster',            class:0, rating:'E', mass:0.50, integ:25, pwrdraw:0.20, passive:1, boottime:0, shieldbst: 4.0, kinres:0.0, thmres:0.0, expres:0.0, fdid:128668532, fdname:'Hpt_ShieldBooster_Size0_Class1' },
 		54040 : { mtype:'usb',  cost:  23000, name:'Shield Booster',            class:0, rating:'D', mass:1.00, integ:35, pwrdraw:0.50, passive:1, boottime:0, shieldbst: 8.0, kinres:0.0, thmres:0.0, expres:0.0, fdid:128668533, fdname:'Hpt_ShieldBooster_Size0_Class2' },
@@ -2222,74 +2519,75 @@ var eddb = {
 		54020 : { mtype:'usb',  cost: 122000, name:'Shield Booster',            class:0, rating:'B', mass:3.00, integ:45, pwrdraw:1.00, passive:1, boottime:0, shieldbst:16.0, kinres:0.0, thmres:0.0, expres:0.0, fdid:128668535, fdname:'Hpt_ShieldBooster_Size0_Class4' },
 		54010 : { mtype:'usb',  cost: 281000, name:'Shield Booster',            class:0, rating:'A', mass:3.50, integ:48, pwrdraw:1.20, passive:1, boottime:0, shieldbst:20.0, kinres:0.0, thmres:0.0, expres:0.0, fdid:128668536, fdname:'Hpt_ShieldBooster_Size0_Class5' },
 		
-		56050 : { mtype:'ufsws',cost:  13540, name:'Frame Shift Wake Scanner',  class:0, rating:'E', mass:1.30, integ:32, pwrdraw:0.20,            boottime:1, scanrng:2000, maxangle:15.00, scantime:10, fdid:128662525, fdname:'Hpt_CloudScanner_Size0_Class1' },
-		56040 : { mtype:'ufsws',cost:  40630, name:'Frame Shift Wake Scanner',  class:0, rating:'D', mass:1.30, integ:24, pwrdraw:0.40,            boottime:1, scanrng:2500, maxangle:15.00, scantime:10, fdid:128662526, fdname:'Hpt_CloudScanner_Size0_Class2' },
-		56030 : { mtype:'ufsws',cost: 121900, name:'Frame Shift Wake Scanner',  class:0, rating:'C', mass:1.30, integ:40, pwrdraw:0.80,            boottime:1, scanrng:3000, maxangle:15.00, scantime:10, fdid:128662527, fdname:'Hpt_CloudScanner_Size0_Class3' },
-		56020 : { mtype:'ufsws',cost: 365700, name:'Frame Shift Wake Scanner',  class:0, rating:'B', mass:1.30, integ:56, pwrdraw:1.60,            boottime:1, scanrng:3500, maxangle:15.00, scantime:10, fdid:128662528, fdname:'Hpt_CloudScanner_Size0_Class4' },
-		56010 : { mtype:'ufsws',cost:1097100, name:'Frame Shift Wake Scanner',  class:0, rating:'A', mass:1.30, integ:48, pwrdraw:3.20,            boottime:1, scanrng:4000, maxangle:15.00, scantime:10, fdid:128662529, fdname:'Hpt_CloudScanner_Size0_Class5' },
+		56050 : { mtype:'ufsws',cost:  13540, name:'Frame Shift Wake Scanner',  class:0, rating:'E', mass:1.30, integ:32, pwrdraw:0.20,            boottime:1, scanrng:2000, maxangle:15.00, scantime:10, limit:'ufsws', fdid:128662525, fdname:'Hpt_CloudScanner_Size0_Class1' },
+		56040 : { mtype:'ufsws',cost:  40630, name:'Frame Shift Wake Scanner',  class:0, rating:'D', mass:1.30, integ:24, pwrdraw:0.40,            boottime:1, scanrng:2500, maxangle:15.00, scantime:10, limit:'ufsws', fdid:128662526, fdname:'Hpt_CloudScanner_Size0_Class2' },
+		56030 : { mtype:'ufsws',cost: 121900, name:'Frame Shift Wake Scanner',  class:0, rating:'C', mass:1.30, integ:40, pwrdraw:0.80,            boottime:1, scanrng:3000, maxangle:15.00, scantime:10, limit:'ufsws', fdid:128662527, fdname:'Hpt_CloudScanner_Size0_Class3' },
+		56020 : { mtype:'ufsws',cost: 365700, name:'Frame Shift Wake Scanner',  class:0, rating:'B', mass:1.30, integ:56, pwrdraw:1.60,            boottime:1, scanrng:3500, maxangle:15.00, scantime:10, limit:'ufsws', fdid:128662528, fdname:'Hpt_CloudScanner_Size0_Class4' },
+		56010 : { mtype:'ufsws',cost:1097100, name:'Frame Shift Wake Scanner',  class:0, rating:'A', mass:1.30, integ:48, pwrdraw:3.20,            boottime:1, scanrng:4000, maxangle:15.00, scantime:10, limit:'ufsws', fdid:128662529, fdname:'Hpt_CloudScanner_Size0_Class5' },
 		
 		
 		// CORE COMPONENTS
 		
 		
-		49180 : { mtype:'cch', cost:0, name:'Cargo Hatch', class:1, rating:'H', pwrdraw:0.6 },
+		49180 : { mtype:'cch', cost:0, name:'Cargo Hatch', class:1, rating:'H', pwrdraw:0.6, fdid:null, fdname:'ModularCargoBayDoor' }, // TODO: fdid
 		
 		
-		40131 : { mtype:'cbh', cost:NaN, name:'Lightweight Alloy',          class:1, rating:'C', mass:NaN, hullbst: 80.0, kinres:-20.0, thmres:  0.0, expres:-40.0, fdid:null, fdname:null }, // placeholder
-		40122 : { mtype:'cbh', cost:NaN, name:'Reinforced Alloy',           class:1, rating:'B', mass:NaN, hullbst:152.0, kinres:-20.0, thmres:  0.0, expres:-40.0, fdid:null, fdname:null }, // placeholder
-		40113 : { mtype:'cbh', cost:NaN, name:'Military Grade Composite',   class:1, rating:'A', mass:NaN, hullbst:250.0, kinres:-20.0, thmres:  0.0, expres:-40.0, fdid:null, fdname:null }, // placeholder
-		40114 : { mtype:'cbh', cost:NaN, name:'Mirrored Surface Composite', class:1, rating:'A', mass:NaN, hullbst:250.0, kinres:-75.0, thmres: 50.0, expres:-50.0, fdid:null, fdname:null }, // placeholder
-		40115 : { mtype:'cbh', cost:NaN, name:'Reactive Surface Composite', class:1, rating:'A', mass:NaN, hullbst:250.0, kinres: 25.0, thmres:-40.0, expres: 20.0, fdid:null, fdname:null }, // placeholder
+		40131 : { mtype:'cbh', cost:NaN, name:'Lightweight Alloy',          class:1, rating:'C', mass:NaN, hullbst: 80.0, kinres:-20.0, thmres:  0.0, expres:-40.0, axeres:90.0, fdid:null, fdname:null }, // placeholder
+		40122 : { mtype:'cbh', cost:NaN, name:'Reinforced Alloy',           class:1, rating:'B', mass:NaN, hullbst:152.0, kinres:-20.0, thmres:  0.0, expres:-40.0, axeres:90.0, fdid:null, fdname:null }, // placeholder
+		40113 : { mtype:'cbh', cost:NaN, name:'Military Grade Composite',   class:1, rating:'A', mass:NaN, hullbst:250.0, kinres:-20.0, thmres:  0.0, expres:-40.0, axeres:90.0, fdid:null, fdname:null }, // placeholder
+		40114 : { mtype:'cbh', cost:NaN, name:'Mirrored Surface Composite', class:1, rating:'A', mass:NaN, hullbst:250.0, kinres:-75.0, thmres: 50.0, expres:-50.0, axeres:90.0, fdid:null, fdname:null }, // placeholder
+		40115 : { mtype:'cbh', cost:NaN, name:'Reactive Surface Composite', class:1, rating:'A', mass:NaN, hullbst:250.0, kinres: 25.0, thmres:-40.0, expres: 20.0, axeres:90.0, fdid:null, fdname:null }, // placeholder
 		
 		
 		41250 : { mtype:'cpp', cost:     1980, name:'Power Plant', class:2, rating:'E', mass:  2.50, integ: 46, pwrcap: 6.40, heateff:1.00, fdid:128064033, fdname:'Int_Powerplant_Size2_Class1' },
 		41240 : { mtype:'cpp', cost:     5930, name:'Power Plant', class:2, rating:'D', mass:  1.00, integ: 41, pwrcap: 7.20, heateff:0.75, fdid:128064034, fdname:'Int_Powerplant_Size2_Class2' },
-		41230 : { mtype:'cpp', cost:    17800, name:'Power Plant', class:2, rating:'C', mass:  1.30, integ: 51, pwrcap: 8.00, heateff:0.50, fdid:128064035, fdname:'Int_Powerplant_Size2_Class3' },
-		41220 : { mtype:'cpp', cost:    53410, name:'Power Plant', class:2, rating:'B', mass:  2.00, integ: 61, pwrcap: 8.80, heateff:0.45, fdid:128064036, fdname:'Int_Powerplant_Size2_Class4' },
-		41210 : { mtype:'cpp', cost:   160220, name:'Power Plant', class:2, rating:'A', mass:  1.30, integ: 56, pwrcap: 9.60, heateff:0.40, fdid:128064037, fdname:'Int_Powerplant_Size2_Class5' },
-		41211 : { mtype:'cpp', cost:   162000, name:'Guardian Hybrid Power Plant', class:2, rating:'A', mass: 1.50, integ: 56, pwrcap:12.70, heateff:0.5 , fdid:128833988, fdname:'Int_GuardianPowerplant_Size2' }, // TODO: verify
+		41230 : { mtype:'cpp', cost:    17790, name:'Power Plant', class:2, rating:'C', mass:  1.30, integ: 51, pwrcap: 8.00, heateff:0.50, fdid:128064035, fdname:'Int_Powerplant_Size2_Class3' },
+		41220 : { mtype:'cpp', cost:    53380, name:'Power Plant', class:2, rating:'B', mass:  2.00, integ: 61, pwrcap: 8.80, heateff:0.45, fdid:128064036, fdname:'Int_Powerplant_Size2_Class4' },
+		41210 : { mtype:'cpp', cost:   160140, name:'Power Plant', class:2, rating:'A', mass:  1.30, integ: 56, pwrcap: 9.60, heateff:0.40, fdid:128064037, fdname:'Int_Powerplant_Size2_Class5' },
 		
-		41350 : { mtype:'cpp', cost:     6270, name:'Power Plant', class:3, rating:'E', mass:  5.00, integ: 58, pwrcap: 8.00, heateff:1.00, fdid:128064038, fdname:'Int_Powerplant_Size3_Class1' },
-		41340 : { mtype:'cpp', cost:    18810, name:'Power Plant', class:3, rating:'D', mass:  2.00, integ: 51, pwrcap: 9.00, heateff:0.75, fdid:128064039, fdname:'Int_Powerplant_Size3_Class2' },
-		41330 : { mtype:'cpp', cost:    56440, name:'Power Plant', class:3, rating:'C', mass:  2.50, integ: 64, pwrcap:10.00, heateff:0.50, fdid:128064040, fdname:'Int_Powerplant_Size3_Class3' },
-		41320 : { mtype:'cpp', cost:   169300, name:'Power Plant', class:3, rating:'B', mass:  4.00, integ: 77, pwrcap:11.00, heateff:0.45, fdid:128064041, fdname:'Int_Powerplant_Size3_Class4' },
-		41310 : { mtype:'cpp', cost:   507910, name:'Power Plant', class:3, rating:'A', mass:  2.50, integ: 70, pwrcap:12.00, heateff:0.40, fdid:128064042, fdname:'Int_Powerplant_Size3_Class5' },
-		41311 : { mtype:'cpp', cost:   291600, name:'Guardian Hybrid Power Plant', class:3, rating:'A', mass: 2.90, integ: 70, pwrcap:15.80, heateff:0.5 , fdid:128833989, fdname:'Int_GuardianPowerplant_Size3' }, // TODO: verify
+		41350 : { mtype:'cpp', cost:     5930, name:'Power Plant', class:3, rating:'E', mass:  5.00, integ: 58, pwrcap: 8.00, heateff:1.00, fdid:128064038, fdname:'Int_Powerplant_Size3_Class1' },
+		41340 : { mtype:'cpp', cost:    17790, name:'Power Plant', class:3, rating:'D', mass:  2.00, integ: 51, pwrcap: 9.00, heateff:0.75, fdid:128064039, fdname:'Int_Powerplant_Size3_Class2' },
+		41330 : { mtype:'cpp', cost:    53380, name:'Power Plant', class:3, rating:'C', mass:  2.50, integ: 64, pwrcap:10.00, heateff:0.50, fdid:128064040, fdname:'Int_Powerplant_Size3_Class3' },
+		41320 : { mtype:'cpp', cost:   160140, name:'Power Plant', class:3, rating:'B', mass:  4.00, integ: 77, pwrcap:11.00, heateff:0.45, fdid:128064041, fdname:'Int_Powerplant_Size3_Class4' },
+		41310 : { mtype:'cpp', cost:   480410, name:'Power Plant', class:3, rating:'A', mass:  2.50, integ: 70, pwrcap:12.00, heateff:0.40, fdid:128064042, fdname:'Int_Powerplant_Size3_Class5' },
 		
-		41450 : { mtype:'cpp', cost:    19880, name:'Power Plant', class:4, rating:'E', mass: 10.00, integ: 72, pwrcap:10.40, heateff:1.00, fdid:128064043, fdname:'Int_Powerplant_Size4_Class1' },
-		41440 : { mtype:'cpp', cost:    59630, name:'Power Plant', class:4, rating:'D', mass:  4.00, integ: 64, pwrcap:11.70, heateff:0.75, fdid:128064044, fdname:'Int_Powerplant_Size4_Class2' },
-		41430 : { mtype:'cpp', cost:   178900, name:'Power Plant', class:4, rating:'C', mass:  5.00, integ: 80, pwrcap:13.00, heateff:0.50, fdid:128064045, fdname:'Int_Powerplant_Size4_Class3' },
-		41420 : { mtype:'cpp', cost:   536690, name:'Power Plant', class:4, rating:'B', mass:  8.00, integ: 96, pwrcap:14.30, heateff:0.45, fdid:128064046, fdname:'Int_Powerplant_Size4_Class4' },
-		41410 : { mtype:'cpp', cost:  1610080, name:'Power Plant', class:4, rating:'A', mass:  5.00, integ: 88, pwrcap:15.60, heateff:0.40, fdid:128064047, fdname:'Int_Powerplant_Size4_Class5' },
-		41411 : { mtype:'cpp', cost:   524880, name:'Guardian Hybrid Power Plant', class:4, rating:'A', mass: 5.90, integ: 88, pwrcap:20.60, heateff:0.5 , fdid:128833990, fdname:'Int_GuardianPowerplant_Size4' }, // TODO: verify
+		41450 : { mtype:'cpp', cost:    17790, name:'Power Plant', class:4, rating:'E', mass: 10.00, integ: 72, pwrcap:10.40, heateff:1.00, fdid:128064043, fdname:'Int_Powerplant_Size4_Class1' },
+		41440 : { mtype:'cpp', cost:    53380, name:'Power Plant', class:4, rating:'D', mass:  4.00, integ: 64, pwrcap:11.70, heateff:0.75, fdid:128064044, fdname:'Int_Powerplant_Size4_Class2' },
+		41430 : { mtype:'cpp', cost:   160140, name:'Power Plant', class:4, rating:'C', mass:  5.00, integ: 80, pwrcap:13.00, heateff:0.50, fdid:128064045, fdname:'Int_Powerplant_Size4_Class3' },
+		41420 : { mtype:'cpp', cost:   480410, name:'Power Plant', class:4, rating:'B', mass:  8.00, integ: 96, pwrcap:14.30, heateff:0.45, fdid:128064046, fdname:'Int_Powerplant_Size4_Class4' },
+		41410 : { mtype:'cpp', cost:  1441230, name:'Power Plant', class:4, rating:'A', mass:  5.00, integ: 88, pwrcap:15.60, heateff:0.40, fdid:128064047, fdname:'Int_Powerplant_Size4_Class5' },
 		
-		41550 : { mtype:'cpp', cost:    63010, name:'Power Plant', class:5, rating:'E', mass: 20.00, integ: 86, pwrcap:13.60, heateff:1.00, fdid:128064048, fdname:'Int_Powerplant_Size5_Class1' },
-		41540 : { mtype:'cpp', cost:   189040, name:'Power Plant', class:5, rating:'D', mass:  8.00, integ: 77, pwrcap:15.30, heateff:0.75, fdid:128064049, fdname:'Int_Powerplant_Size5_Class2' },
-		41530 : { mtype:'cpp', cost:   567110, name:'Power Plant', class:5, rating:'C', mass: 10.00, integ: 96, pwrcap:17.00, heateff:0.50, fdid:128064050, fdname:'Int_Powerplant_Size5_Class3' },
-		41520 : { mtype:'cpp', cost:  1701320, name:'Power Plant', class:5, rating:'B', mass: 16.00, integ:115, pwrcap:18.70, heateff:0.45, fdid:128064051, fdname:'Int_Powerplant_Size5_Class4' },
-		41510 : { mtype:'cpp', cost:  5103950, name:'Power Plant', class:5, rating:'A', mass: 10.00, integ:106, pwrcap:20.40, heateff:0.40, fdid:128064052, fdname:'Int_Powerplant_Size5_Class5' },
-		41511 : { mtype:'cpp', cost:   944790, name:'Guardian Hybrid Power Plant', class:5, rating:'A', mass:11.70, integ:106, pwrcap:26.90, heateff:0.5 , fdid:128833991, fdname:'Int_GuardianPowerplant_Size5' }, // TODO: verify
+		41550 : { mtype:'cpp', cost:    53380, name:'Power Plant', class:5, rating:'E', mass: 20.00, integ: 86, pwrcap:13.60, heateff:1.00, fdid:128064048, fdname:'Int_Powerplant_Size5_Class1' },
+		41540 : { mtype:'cpp', cost:   160140, name:'Power Plant', class:5, rating:'D', mass:  8.00, integ: 77, pwrcap:15.30, heateff:0.75, fdid:128064049, fdname:'Int_Powerplant_Size5_Class2' },
+		41530 : { mtype:'cpp', cost:   480410, name:'Power Plant', class:5, rating:'C', mass: 10.00, integ: 96, pwrcap:17.00, heateff:0.50, fdid:128064050, fdname:'Int_Powerplant_Size5_Class3' },
+		41520 : { mtype:'cpp', cost:  1441230, name:'Power Plant', class:5, rating:'B', mass: 16.00, integ:115, pwrcap:18.70, heateff:0.45, fdid:128064051, fdname:'Int_Powerplant_Size5_Class4' },
+		41510 : { mtype:'cpp', cost:  4323700, name:'Power Plant', class:5, rating:'A', mass: 10.00, integ:106, pwrcap:20.40, heateff:0.40, fdid:128064052, fdname:'Int_Powerplant_Size5_Class5' },
 		
-		41650 : { mtype:'cpp', cost:   199750, name:'Power Plant', class:6, rating:'E', mass: 40.00, integ:102, pwrcap:16.80, heateff:1.00, fdid:128064053, fdname:'Int_Powerplant_Size6_Class1' },
-		41640 : { mtype:'cpp', cost:   599240, name:'Power Plant', class:6, rating:'D', mass: 16.00, integ: 90, pwrcap:18.90, heateff:0.75, fdid:128064054, fdname:'Int_Powerplant_Size6_Class2' },
-		41630 : { mtype:'cpp', cost:  1797730, name:'Power Plant', class:6, rating:'C', mass: 20.00, integ:113, pwrcap:21.00, heateff:0.50, fdid:128064055, fdname:'Int_Powerplant_Size6_Class3' },
-		41620 : { mtype:'cpp', cost:  5393180, name:'Power Plant', class:6, rating:'B', mass: 32.00, integ:136, pwrcap:23.10, heateff:0.45, fdid:128064056, fdname:'Int_Powerplant_Size6_Class4' },
-		41610 : { mtype:'cpp', cost: 16179530, name:'Power Plant', class:6, rating:'A', mass: 20.00, integ:124, pwrcap:25.20, heateff:0.40, fdid:128064057, fdname:'Int_Powerplant_Size6_Class5' },
-		41611 : { mtype:'cpp', cost:  1700610, name:'Guardian Hybrid Power Plant', class:6, rating:'A', mass:23.40, integ:124, pwrcap:33.30, heateff:0.5 , fdid:128833992, fdname:'Int_GuardianPowerplant_Size6' }, // TODO: verify
+		41650 : { mtype:'cpp', cost:   160140, name:'Power Plant', class:6, rating:'E', mass: 40.00, integ:102, pwrcap:16.80, heateff:1.00, fdid:128064053, fdname:'Int_Powerplant_Size6_Class1' },
+		41640 : { mtype:'cpp', cost:   480410, name:'Power Plant', class:6, rating:'D', mass: 16.00, integ: 90, pwrcap:18.90, heateff:0.75, fdid:128064054, fdname:'Int_Powerplant_Size6_Class2' },
+		41630 : { mtype:'cpp', cost:  1441230, name:'Power Plant', class:6, rating:'C', mass: 20.00, integ:113, pwrcap:21.00, heateff:0.50, fdid:128064055, fdname:'Int_Powerplant_Size6_Class3' },
+		41620 : { mtype:'cpp', cost:  4323700, name:'Power Plant', class:6, rating:'B', mass: 32.00, integ:136, pwrcap:23.10, heateff:0.45, fdid:128064056, fdname:'Int_Powerplant_Size6_Class4' },
+		41610 : { mtype:'cpp', cost: 12971100, name:'Power Plant', class:6, rating:'A', mass: 20.00, integ:124, pwrcap:25.20, heateff:0.40, fdid:128064057, fdname:'Int_Powerplant_Size6_Class5' },
 		
-		41750 : { mtype:'cpp', cost:   633200, name:'Power Plant', class:7, rating:'E', mass: 80.00, integ:118, pwrcap:20.00, heateff:1.00, fdid:128064058, fdname:'Int_Powerplant_Size7_Class1' },
-		41740 : { mtype:'cpp', cost:  1899600, name:'Power Plant', class:7, rating:'D', mass: 32.00, integ:105, pwrcap:22.50, heateff:0.75, fdid:128064059, fdname:'Int_Powerplant_Size7_Class2' },
-		41730 : { mtype:'cpp', cost:  5698790, name:'Power Plant', class:7, rating:'C', mass: 40.00, integ:131, pwrcap:25.00, heateff:0.50, fdid:128064060, fdname:'Int_Powerplant_Size7_Class3' },
-		41720 : { mtype:'cpp', cost: 17096370, name:'Power Plant', class:7, rating:'B', mass: 64.00, integ:157, pwrcap:27.50, heateff:0.45, fdid:128064061, fdname:'Int_Powerplant_Size7_Class4' },
-		41710 : { mtype:'cpp', cost: 51289110, name:'Power Plant', class:7, rating:'A', mass: 40.00, integ:144, pwrcap:30.00, heateff:0.40, fdid:128064062, fdname:'Int_Powerplant_Size7_Class5' },
-		41711 : { mtype:'cpp', cost:  3061100, name:'Guardian Hybrid Power Plant', class:7, rating:'A', mass:46.80, integ:144, pwrcap:39.60, heateff:0.5 , fdid:128833993, fdname:'Int_GuardianPowerplant_Size7' }, // TODO: verify
+		41750 : { mtype:'cpp', cost:   480410, name:'Power Plant', class:7, rating:'E', mass: 80.00, integ:118, pwrcap:20.00, heateff:1.00, fdid:128064058, fdname:'Int_Powerplant_Size7_Class1' },
+		41740 : { mtype:'cpp', cost:  1441230, name:'Power Plant', class:7, rating:'D', mass: 32.00, integ:105, pwrcap:22.50, heateff:0.75, fdid:128064059, fdname:'Int_Powerplant_Size7_Class2' },
+		41730 : { mtype:'cpp', cost:  4323700, name:'Power Plant', class:7, rating:'C', mass: 40.00, integ:131, pwrcap:25.00, heateff:0.50, fdid:128064060, fdname:'Int_Powerplant_Size7_Class3' },
+		41720 : { mtype:'cpp', cost: 12971100, name:'Power Plant', class:7, rating:'B', mass: 64.00, integ:157, pwrcap:27.50, heateff:0.45, fdid:128064061, fdname:'Int_Powerplant_Size7_Class4' },
+		41710 : { mtype:'cpp', cost: 38913290, name:'Power Plant', class:7, rating:'A', mass: 40.00, integ:144, pwrcap:30.00, heateff:0.40, fdid:128064062, fdname:'Int_Powerplant_Size7_Class5' },
 		
-		41850 : { mtype:'cpp', cost:  2007240, name:'Power Plant', class:8, rating:'E', mass:160.00, integ:135, pwrcap:24.00, heateff:1.00, fdid:128064063, fdname:'Int_Powerplant_Size8_Class1' },
-		41840 : { mtype:'cpp', cost:  6021720, name:'Power Plant', class:8, rating:'D', mass: 64.00, integ:120, pwrcap:27.00, heateff:0.75, fdid:128064064, fdname:'Int_Powerplant_Size8_Class2' },
-		41830 : { mtype:'cpp', cost: 18065170, name:'Power Plant', class:8, rating:'C', mass: 80.00, integ:150, pwrcap:30.00, heateff:0.50, fdid:128064065, fdname:'Int_Powerplant_Size8_Class3' },
-		41820 : { mtype:'cpp', cost: 54195500, name:'Power Plant', class:8, rating:'B', mass:128.00, integ:180, pwrcap:33.00, heateff:0.45, fdid:128064066, fdname:'Int_Powerplant_Size8_Class4' },
-		41810 : { mtype:'cpp', cost:162586490, name:'Power Plant', class:8, rating:'A', mass: 80.00, integ:165, pwrcap:36.00, heateff:0.40, fdid:128064067, fdname:'Int_Powerplant_Size8_Class5' },
-		41811 : { mtype:'cpp', cost:  5509980, name:'Guardian Hybrid Power Plant', class:8, rating:'A', mass:93.60, integ:165, pwrcap:47.50, heateff:0.5 , fdid:128833994, fdname:'Int_GuardianPowerplant_Size8' }, // TODO: verify
+		41850 : { mtype:'cpp', cost:  1441230, name:'Power Plant', class:8, rating:'E', mass:160.00, integ:135, pwrcap:24.00, heateff:1.00, fdid:128064063, fdname:'Int_Powerplant_Size8_Class1' },
+		41840 : { mtype:'cpp', cost:  4323700, name:'Power Plant', class:8, rating:'D', mass: 64.00, integ:120, pwrcap:27.00, heateff:0.75, fdid:128064064, fdname:'Int_Powerplant_Size8_Class2' },
+		41830 : { mtype:'cpp', cost: 12971100, name:'Power Plant', class:8, rating:'C', mass: 80.00, integ:150, pwrcap:30.00, heateff:0.50, fdid:128064065, fdname:'Int_Powerplant_Size8_Class3' },
+		41820 : { mtype:'cpp', cost: 38913290, name:'Power Plant', class:8, rating:'B', mass:128.00, integ:180, pwrcap:33.00, heateff:0.45, fdid:128064066, fdname:'Int_Powerplant_Size8_Class4' },
+		41810 : { mtype:'cpp', cost:116739870, name:'Power Plant', class:8, rating:'A', mass: 80.00, integ:165, pwrcap:36.00, heateff:0.40, fdid:128064067, fdname:'Int_Powerplant_Size8_Class5' },
+		
+		41211 : { mtype:'cpp', cost:   192170, name:'Guardian Hybrid Power Plant', tag:'G', class:2, rating:'A', mass: 1.50, integ: 56, pwrcap:12.70, heateff:0.5 , noblueprints:{'*':1}, fdid:128833988, fdname:'Int_GuardianPowerplant_Size2' },
+		41311 : { mtype:'cpp', cost:   576490, name:'Guardian Hybrid Power Plant', tag:'G', class:3, rating:'A', mass: 2.90, integ: 70, pwrcap:15.80, heateff:0.5 , noblueprints:{'*':1}, fdid:128833989, fdname:'Int_GuardianPowerplant_Size3' },
+		41411 : { mtype:'cpp', cost:  1729480, name:'Guardian Hybrid Power Plant', tag:'G', class:4, rating:'A', mass: 5.90, integ: 88, pwrcap:20.60, heateff:0.5 , noblueprints:{'*':1}, fdid:128833990, fdname:'Int_GuardianPowerplant_Size4' },
+		41511 : { mtype:'cpp', cost:  5188440, name:'Guardian Hybrid Power Plant', tag:'G', class:5, rating:'A', mass:11.70, integ:106, pwrcap:26.90, heateff:0.5 , noblueprints:{'*':1}, fdid:128833991, fdname:'Int_GuardianPowerplant_Size5' },
+		41611 : { mtype:'cpp', cost: 15565320, name:'Guardian Hybrid Power Plant', tag:'G', class:6, rating:'A', mass:23.40, integ:124, pwrcap:33.30, heateff:0.5 , noblueprints:{'*':1}, fdid:128833992, fdname:'Int_GuardianPowerplant_Size6' },
+		41711 : { mtype:'cpp', cost: 46695950, name:'Guardian Hybrid Power Plant', tag:'G', class:7, rating:'A', mass:46.80, integ:144, pwrcap:39.60, heateff:0.5 , noblueprints:{'*':1}, fdid:128833993, fdname:'Int_GuardianPowerplant_Size7' },
+		41811 : { mtype:'cpp', cost:140087850, name:'Guardian Hybrid Power Plant', tag:'G', class:8, rating:'A', mass:93.60, integ:165, pwrcap:47.50, heateff:0.5 , noblueprints:{'*':1}, fdid:128833994, fdname:'Int_GuardianPowerplant_Size8' },
 		
 		
 		42250 : { mtype:'ct', cost:     1980, name:'Thrusters', class:2, rating:'E', mass:  2.50, integ: 46, pwrdraw: 2.00, boottime:0, minmass:  24, optmass:  48, maxmass:  72, minmul:83, optmul:100, maxmul:103, thmload:1.3, fdid:128064068, fdname:'Int_Engine_Size2_Class1' },
@@ -2374,11 +2672,11 @@ var eddb = {
 		43720 : { mtype:'cfsd', cost: 17096370, name:'Frame Shift Drive', class:7, rating:'B', mass:128.00, integ:197, pwrdraw:0.75, boottime:10, optmass:2250.0, thmload:43.0, maxfuel:10.60, fuelmul:0.010, fuelpower:2.75, fdid:128064131, fdname:'Int_Hyperdrive_Size7_Class4' },
 		43710 : { mtype:'cfsd', cost: 51289110, name:'Frame Shift Drive', class:7, rating:'A', mass: 80.00, integ:164, pwrdraw:0.90, boottime:10, optmass:2700.0, thmload:43.0, maxfuel:12.80, fuelmul:0.012, fuelpower:2.75, fdid:128064132, fdname:'Int_Hyperdrive_Size7_Class5' },
 		
-	//	43850 : { mtype:'cfsd', cost:      NaN, name:'Frame Shift Drive', class:8, rating:'E', mass:   NaN, integ:NaN, pwrdraw: NaN, boottime:10, optmass:   NaN, thmload: NaN, maxfuel:  NaN, fuelmul:0.011, fuelpower:2.90, fdid:128064133, fdname:'Int_Hyperdrive_Size8_Class1' }, // TODO
-	//	43840 : { mtype:'cfsd', cost:      NaN, name:'Frame Shift Drive', class:8, rating:'D', mass:   NaN, integ:NaN, pwrdraw: NaN, boottime:10, optmass:   NaN, thmload: NaN, maxfuel:  NaN, fuelmul:0.010, fuelpower:2.90, fdid:128064134, fdname:'Int_Hyperdrive_Size8_Class2' }, // TODO
-	//	43830 : { mtype:'cfsd', cost:      NaN, name:'Frame Shift Drive', class:8, rating:'C', mass:   NaN, integ:NaN, pwrdraw: NaN, boottime:10, optmass:   NaN, thmload: NaN, maxfuel:  NaN, fuelmul:0.008, fuelpower:2.90, fdid:128064135, fdname:'Int_Hyperdrive_Size8_Class3' }, // TODO
-	//	43820 : { mtype:'cfsd', cost:      NaN, name:'Frame Shift Drive', class:8, rating:'B', mass:   NaN, integ:NaN, pwrdraw: NaN, boottime:10, optmass:   NaN, thmload: NaN, maxfuel:  NaN, fuelmul:0.010, fuelpower:2.90, fdid:128064136, fdname:'Int_Hyperdrive_Size8_Class4' }, // TODO
-	//	43810 : { mtype:'cfsd', cost:      NaN, name:'Frame Shift Drive', class:8, rating:'A', mass:   NaN, integ:NaN, pwrdraw: NaN, boottime:10, optmass:   NaN, thmload: NaN, maxfuel:  NaN, fuelmul:0.012, fuelpower:2.90, fdid:128064137, fdname:'Int_Hyperdrive_Size8_Class5' }, // TODO
+	//	43850 : { mtype:'cfsd', cost:         , name:'Frame Shift Drive', class:8, rating:'E', mass:      , integ:   , pwrdraw:    , boottime:10, optmass:      , thmload:    , maxfuel:     , fuelmul:0.011, fuelpower:2.90, fdid:128064133, fdname:'Int_Hyperdrive_Size8_Class1' },
+	//	43840 : { mtype:'cfsd', cost:         , name:'Frame Shift Drive', class:8, rating:'D', mass:      , integ:   , pwrdraw:    , boottime:10, optmass:      , thmload:    , maxfuel:     , fuelmul:0.010, fuelpower:2.90, fdid:128064134, fdname:'Int_Hyperdrive_Size8_Class2' },
+	//	43830 : { mtype:'cfsd', cost:         , name:'Frame Shift Drive', class:8, rating:'C', mass:      , integ:   , pwrdraw:    , boottime:10, optmass:      , thmload:    , maxfuel:     , fuelmul:0.008, fuelpower:2.90, fdid:128064135, fdname:'Int_Hyperdrive_Size8_Class3' },
+	//	43820 : { mtype:'cfsd', cost:         , name:'Frame Shift Drive', class:8, rating:'B', mass:      , integ:   , pwrdraw:    , boottime:10, optmass:      , thmload:    , maxfuel:     , fuelmul:0.010, fuelpower:2.90, fdid:128064136, fdname:'Int_Hyperdrive_Size8_Class4' },
+	//	43810 : { mtype:'cfsd', cost:         , name:'Frame Shift Drive', class:8, rating:'A', mass:      , integ:   , pwrdraw:    , boottime:10, optmass:      , thmload:    , maxfuel:     , fuelmul:0.012, fuelpower:2.90, fdid:128064137, fdname:'Int_Hyperdrive_Size8_Class5' },
 		
 		
 		44150 : { mtype:'cls', cost:     520, name:'Life Support', class:1, rating:'E', mass:  1.30, integ: 32, pwrdraw:0.32, boottime:1, emgcylife: 300, fdid:128064138, fdname:'Int_LifeSupport_Size1_Class1' }, // verify price
@@ -2478,6 +2776,15 @@ var eddb = {
 		45820 : { mtype:'cpd', cost:10899760, name:'Power Distributor', class:8, rating:'B', mass:256.00, integ:180, pwrdraw:0.88, boottime:5, wepcap:66.00, wepchg:6.60, engcap:44.00, engchg:4.40, syscap:44.00, syschg:4.40, fdid:128064216, fdname:'Int_PowerDistributor_Size8_Class4' },
 		45810 : { mtype:'cpd', cost:27249390, name:'Power Distributor', class:8, rating:'A', mass:160.00, integ:165, pwrdraw:0.96, boottime:5, wepcap:72.00, wepchg:7.20, engcap:48.00, engchg:4.80, syscap:48.00, syschg:4.80, fdid:128064217, fdname:'Int_PowerDistributor_Size8_Class5' },
 		
+		45111 : { mtype:'cpd', cost:   40960, name:'Guardian Hybrid Power Distributor', tag:'G', class:1, rating:'A', mass:  1.40, integ: 35, pwrdraw:0.62, boottime:5, wepcap:10.00, wepchg: 2.50, engcap: 9.00, engchg:0.80, syscap:10.00, syschg:0.80, noblueprints:{'*':1}, fdid:128833980, fdname:'Int_GuardianPowerDistributor_Size1' },
+		45211 : { mtype:'cpd', cost:  111600, name:'Guardian Hybrid Power Distributor', tag:'G', class:2, rating:'A', mass:  2.60, integ: 45, pwrdraw:0.73, boottime:5, wepcap:13.00, wepchg: 3.10, engcap:11.00, engchg:1.00, syscap:11.00, syschg:1.00, noblueprints:{'*':1}, fdid:128833981, fdname:'Int_GuardianPowerDistributor_Size2' },
+		45311 : { mtype:'cpd', cost:  311370, name:'Guardian Hybrid Power Distributor', tag:'G', class:3, rating:'A', mass:  5.25, integ: 56, pwrdraw:0.78, boottime:5, wepcap:17.00, wepchg: 3.90, engcap:14.00, engchg:1.70, syscap:14.00, syschg:1.70, noblueprints:{'*':1}, fdid:128833982, fdname:'Int_GuardianPowerDistributor_Size3' },
+		45411 : { mtype:'cpd', cost:  868710, name:'Guardian Hybrid Power Distributor', tag:'G', class:4, rating:'A', mass: 10.50, integ: 70, pwrdraw:0.87, boottime:5, wepcap:22.00, wepchg: 4.90, engcap:17.00, engchg:2.50, syscap:17.00, syschg:2.50, noblueprints:{'*':1}, fdid:128833983, fdname:'Int_GuardianPowerDistributor_Size4' },
+		45511 : { mtype:'cpd', cost: 2423690, name:'Guardian Hybrid Power Distributor', tag:'G', class:5, rating:'A', mass: 21.00, integ: 99, pwrdraw:0.96, boottime:5, wepcap:29.00, wepchg: 6.00, engcap:22.00, engchg:3.30, syscap:22.00, syschg:3.30, noblueprints:{'*':1}, fdid:128833984, fdname:'Int_GuardianPowerDistributor_Size5' },
+		45611 : { mtype:'cpd', cost: 6762090, name:'Guardian Hybrid Power Distributor', tag:'G', class:6, rating:'A', mass: 42.00, integ: 99, pwrdraw:1.07, boottime:5, wepcap:35.00, wepchg: 7.30, engcap:26.00, engchg:4.20, syscap:26.00, syschg:4.20, noblueprints:{'*':1}, fdid:128833985, fdname:'Int_GuardianPowerDistributor_Size6' },
+		45711 : { mtype:'cpd', cost:18866230, name:'Guardian Hybrid Power Distributor', tag:'G', class:7, rating:'A', mass: 84.00, integ:115, pwrdraw:1.16, boottime:5, wepcap:43.00, wepchg: 8.50, engcap:31.00, engchg:5.20, syscap:31.00, syschg:5.20, noblueprints:{'*':1}, fdid:128833986, fdname:'Int_GuardianPowerDistributor_Size7' },
+		45811 : { mtype:'cpd', cost:52636790, name:'Guardian Hybrid Power Distributor', tag:'G', class:8, rating:'A', mass:168.00, integ:132, pwrdraw:1.25, boottime:5, wepcap:50.00, wepchg:10.10, engcap:36.00, engchg:6.20, syscap:36.00, syschg:6.20, noblueprints:{'*':1}, fdid:128833987, fdname:'Int_GuardianPowerDistributor_Size8' },
+		
 		
 		46150 : { mtype:'cs', cost:     520, name:'Sensors', class:1, rating:'E', mass:  1.30, integ: 36, pwrdraw:0.16, boottime:5, maxrng:8000, maxangle:30.00, typemis:4000, fdid:128064218, fdname:'Int_Sensors_Size1_Class1' }, // verify price
 		46140 : { mtype:'cs', cost:    1290, name:'Sensors', class:1, rating:'D', mass:  0.50, integ: 32, pwrdraw:0.18, boottime:5, maxrng:8000, maxangle:30.00, typemis:4500, fdid:128064219, fdname:'Int_Sensors_Size1_Class2' }, // verify price
@@ -2541,53 +2848,53 @@ var eddb = {
 		// OPTIONAL INTERNALS
 		
 		
-		 1150 : { mtype:'iafmu', cost:   10000, name:'Auto Field-Maintenance Unit', class:1, rating:'E', integ: 32, pwrdraw:0.54, boottime:9, repaircap: 1000, repaircon:10.0, repairrtg:0.012, fdid:128667598, fdname:'Int_Repairer_Size1_Class1' },
-		 1140 : { mtype:'iafmu', cost:   30000, name:'Auto Field-Maintenance Unit', class:1, rating:'D', integ: 24, pwrdraw:0.72, boottime:9, repaircap:  900, repaircon:10.0, repairrtg:0.016, fdid:128667606, fdname:'Int_Repairer_Size1_Class2' },
-		 1130 : { mtype:'iafmu', cost:   90000, name:'Auto Field-Maintenance Unit', class:1, rating:'C', integ: 40, pwrdraw:0.90, boottime:9, repaircap: 1000, repaircon:10.0, repairrtg:0.020, fdid:128667614, fdname:'Int_Repairer_Size1_Class3' },
-		 1120 : { mtype:'iafmu', cost:  270000, name:'Auto Field-Maintenance Unit', class:1, rating:'B', integ: 56, pwrdraw:1.04, boottime:9, repaircap: 1200, repaircon:10.0, repairrtg:0.023, fdid:128667622, fdname:'Int_Repairer_Size1_Class4' },
-		 1110 : { mtype:'iafmu', cost:  810000, name:'Auto Field-Maintenance Unit', class:1, rating:'A', integ: 46, pwrdraw:1.26, boottime:9, repaircap: 1100, repaircon:10.0, repairrtg:0.028, fdid:128667630, fdname:'Int_Repairer_Size1_Class5' },
+		 1150 : { mtype:'iafmu', cost:   10000, name:'Auto Field-Maintenance Unit', class:1, rating:'E', integ: 32, pwrdraw:0.54, boottime:9, repaircap: 1000, repaircon:10.0, repairrtg:0.012, ammocost:1, fdid:128667598, fdname:'Int_Repairer_Size1_Class1' },
+		 1140 : { mtype:'iafmu', cost:   30000, name:'Auto Field-Maintenance Unit', class:1, rating:'D', integ: 24, pwrdraw:0.72, boottime:9, repaircap:  900, repaircon:10.0, repairrtg:0.016, ammocost:1, fdid:128667606, fdname:'Int_Repairer_Size1_Class2' },
+		 1130 : { mtype:'iafmu', cost:   90000, name:'Auto Field-Maintenance Unit', class:1, rating:'C', integ: 40, pwrdraw:0.90, boottime:9, repaircap: 1000, repaircon:10.0, repairrtg:0.020, ammocost:1, fdid:128667614, fdname:'Int_Repairer_Size1_Class3' },
+		 1120 : { mtype:'iafmu', cost:  270000, name:'Auto Field-Maintenance Unit', class:1, rating:'B', integ: 56, pwrdraw:1.04, boottime:9, repaircap: 1200, repaircon:10.0, repairrtg:0.023, ammocost:1, fdid:128667622, fdname:'Int_Repairer_Size1_Class4' },
+		 1110 : { mtype:'iafmu', cost:  810000, name:'Auto Field-Maintenance Unit', class:1, rating:'A', integ: 46, pwrdraw:1.26, boottime:9, repaircap: 1100, repaircon:10.0, repairrtg:0.028, ammocost:1, fdid:128667630, fdname:'Int_Repairer_Size1_Class5' },
 		
-		 1250 : { mtype:'iafmu', cost:   18000, name:'Auto Field-Maintenance Unit', class:2, rating:'E', integ: 41, pwrdraw:0.68, boottime:9, repaircap: 2300, repaircon:10.0, repairrtg:0.012, fdid:128667599, fdname:'Int_Repairer_Size2_Class1' },
-		 1240 : { mtype:'iafmu', cost:   54000, name:'Auto Field-Maintenance Unit', class:2, rating:'D', integ: 31, pwrdraw:0.90, boottime:9, repaircap: 2100, repaircon:10.0, repairrtg:0.016, fdid:128667607, fdname:'Int_Repairer_Size2_Class2' },
-		 1230 : { mtype:'iafmu', cost:  162000, name:'Auto Field-Maintenance Unit', class:2, rating:'C', integ: 51, pwrdraw:1.13, boottime:9, repaircap: 2300, repaircon:10.0, repairrtg:0.020, fdid:128667615, fdname:'Int_Repairer_Size2_Class3' },
-		 1220 : { mtype:'iafmu', cost:  486000, name:'Auto Field-Maintenance Unit', class:2, rating:'B', integ: 71, pwrdraw:1.29, boottime:9, repaircap: 2800, repaircon:10.0, repairrtg:0.023, fdid:128667623, fdname:'Int_Repairer_Size2_Class4' },
-		 1210 : { mtype:'iafmu', cost: 1458000, name:'Auto Field-Maintenance Unit', class:2, rating:'A', integ: 59, pwrdraw:1.58, boottime:9, repaircap: 2500, repaircon:10.0, repairrtg:0.028, fdid:128667631, fdname:'Int_Repairer_Size2_Class5' },
+		 1250 : { mtype:'iafmu', cost:   18000, name:'Auto Field-Maintenance Unit', class:2, rating:'E', integ: 41, pwrdraw:0.68, boottime:9, repaircap: 2300, repaircon:10.0, repairrtg:0.012, ammocost:1, fdid:128667599, fdname:'Int_Repairer_Size2_Class1' },
+		 1240 : { mtype:'iafmu', cost:   54000, name:'Auto Field-Maintenance Unit', class:2, rating:'D', integ: 31, pwrdraw:0.90, boottime:9, repaircap: 2100, repaircon:10.0, repairrtg:0.016, ammocost:1, fdid:128667607, fdname:'Int_Repairer_Size2_Class2' },
+		 1230 : { mtype:'iafmu', cost:  162000, name:'Auto Field-Maintenance Unit', class:2, rating:'C', integ: 51, pwrdraw:1.13, boottime:9, repaircap: 2300, repaircon:10.0, repairrtg:0.020, ammocost:1, fdid:128667615, fdname:'Int_Repairer_Size2_Class3' },
+		 1220 : { mtype:'iafmu', cost:  486000, name:'Auto Field-Maintenance Unit', class:2, rating:'B', integ: 71, pwrdraw:1.29, boottime:9, repaircap: 2800, repaircon:10.0, repairrtg:0.023, ammocost:1, fdid:128667623, fdname:'Int_Repairer_Size2_Class4' },
+		 1210 : { mtype:'iafmu', cost: 1458000, name:'Auto Field-Maintenance Unit', class:2, rating:'A', integ: 59, pwrdraw:1.58, boottime:9, repaircap: 2500, repaircon:10.0, repairrtg:0.028, ammocost:1, fdid:128667631, fdname:'Int_Repairer_Size2_Class5' },
 		
-		 1350 : { mtype:'iafmu', cost:   32400, name:'Auto Field-Maintenance Unit', class:3, rating:'E', integ: 51, pwrdraw:0.81, boottime:9, repaircap: 3600, repaircon:10.0, repairrtg:0.012, fdid:128667600, fdname:'Int_Repairer_Size3_Class1' },
-		 1340 : { mtype:'iafmu', cost:   97200, name:'Auto Field-Maintenance Unit', class:3, rating:'D', integ: 38, pwrdraw:1.08, boottime:9, repaircap: 3200, repaircon:10.0, repairrtg:0.016, fdid:128667608, fdname:'Int_Repairer_Size3_Class2' },
-		 1330 : { mtype:'iafmu', cost:  291600, name:'Auto Field-Maintenance Unit', class:3, rating:'C', integ: 64, pwrdraw:1.35, boottime:9, repaircap: 3600, repaircon:10.0, repairrtg:0.020, fdid:128667616, fdname:'Int_Repairer_Size3_Class3' },
-		 1320 : { mtype:'iafmu', cost:  874800, name:'Auto Field-Maintenance Unit', class:3, rating:'B', integ: 90, pwrdraw:1.55, boottime:9, repaircap: 4300, repaircon:10.0, repairrtg:0.023, fdid:128667624, fdname:'Int_Repairer_Size3_Class4' },
-		 1310 : { mtype:'iafmu', cost: 2624400, name:'Auto Field-Maintenance Unit', class:3, rating:'A', integ: 74, pwrdraw:1.89, boottime:9, repaircap: 4000, repaircon:10.0, repairrtg:0.028, fdid:128667632, fdname:'Int_Repairer_Size3_Class5' },
+		 1350 : { mtype:'iafmu', cost:   32400, name:'Auto Field-Maintenance Unit', class:3, rating:'E', integ: 51, pwrdraw:0.81, boottime:9, repaircap: 3600, repaircon:10.0, repairrtg:0.012, ammocost:1, fdid:128667600, fdname:'Int_Repairer_Size3_Class1' },
+		 1340 : { mtype:'iafmu', cost:   97200, name:'Auto Field-Maintenance Unit', class:3, rating:'D', integ: 38, pwrdraw:1.08, boottime:9, repaircap: 3200, repaircon:10.0, repairrtg:0.016, ammocost:1, fdid:128667608, fdname:'Int_Repairer_Size3_Class2' },
+		 1330 : { mtype:'iafmu', cost:  291600, name:'Auto Field-Maintenance Unit', class:3, rating:'C', integ: 64, pwrdraw:1.35, boottime:9, repaircap: 3600, repaircon:10.0, repairrtg:0.020, ammocost:1, fdid:128667616, fdname:'Int_Repairer_Size3_Class3' },
+		 1320 : { mtype:'iafmu', cost:  874800, name:'Auto Field-Maintenance Unit', class:3, rating:'B', integ: 90, pwrdraw:1.55, boottime:9, repaircap: 4300, repaircon:10.0, repairrtg:0.023, ammocost:1, fdid:128667624, fdname:'Int_Repairer_Size3_Class4' },
+		 1310 : { mtype:'iafmu', cost: 2624400, name:'Auto Field-Maintenance Unit', class:3, rating:'A', integ: 74, pwrdraw:1.89, boottime:9, repaircap: 4000, repaircon:10.0, repairrtg:0.028, ammocost:1, fdid:128667632, fdname:'Int_Repairer_Size3_Class5' },
 		
-		 1450 : { mtype:'iafmu', cost:   58320, name:'Auto Field-Maintenance Unit', class:4, rating:'E', integ: 64, pwrdraw:0.99, boottime:9, repaircap: 4900, repaircon:10.0, repairrtg:0.012, fdid:128667601, fdname:'Int_Repairer_Size4_Class1' },
-		 1440 : { mtype:'iafmu', cost:  174960, name:'Auto Field-Maintenance Unit', class:4, rating:'D', integ: 48, pwrdraw:1.32, boottime:9, repaircap: 4400, repaircon:10.0, repairrtg:0.016, fdid:128667609, fdname:'Int_Repairer_Size4_Class2' },
-		 1430 : { mtype:'iafmu', cost:  524880, name:'Auto Field-Maintenance Unit', class:4, rating:'C', integ: 80, pwrdraw:1.65, boottime:9, repaircap: 4900, repaircon:10.0, repairrtg:0.020, fdid:128667617, fdname:'Int_Repairer_Size4_Class3' },
-		 1420 : { mtype:'iafmu', cost: 1574640, name:'Auto Field-Maintenance Unit', class:4, rating:'B', integ:112, pwrdraw:1.90, boottime:9, repaircap: 5900, repaircon:10.0, repairrtg:0.023, fdid:128667625, fdname:'Int_Repairer_Size4_Class4' },
-		 1410 : { mtype:'iafmu', cost: 4723920, name:'Auto Field-Maintenance Unit', class:4, rating:'A', integ: 92, pwrdraw:2.31, boottime:9, repaircap: 5400, repaircon:10.0, repairrtg:0.028, fdid:128667633, fdname:'Int_Repairer_Size4_Class5' },
+		 1450 : { mtype:'iafmu', cost:   58320, name:'Auto Field-Maintenance Unit', class:4, rating:'E', integ: 64, pwrdraw:0.99, boottime:9, repaircap: 4900, repaircon:10.0, repairrtg:0.012, ammocost:1, fdid:128667601, fdname:'Int_Repairer_Size4_Class1' },
+		 1440 : { mtype:'iafmu', cost:  174960, name:'Auto Field-Maintenance Unit', class:4, rating:'D', integ: 48, pwrdraw:1.32, boottime:9, repaircap: 4400, repaircon:10.0, repairrtg:0.016, ammocost:1, fdid:128667609, fdname:'Int_Repairer_Size4_Class2' },
+		 1430 : { mtype:'iafmu', cost:  524880, name:'Auto Field-Maintenance Unit', class:4, rating:'C', integ: 80, pwrdraw:1.65, boottime:9, repaircap: 4900, repaircon:10.0, repairrtg:0.020, ammocost:1, fdid:128667617, fdname:'Int_Repairer_Size4_Class3' },
+		 1420 : { mtype:'iafmu', cost: 1574640, name:'Auto Field-Maintenance Unit', class:4, rating:'B', integ:112, pwrdraw:1.90, boottime:9, repaircap: 5900, repaircon:10.0, repairrtg:0.023, ammocost:1, fdid:128667625, fdname:'Int_Repairer_Size4_Class4' },
+		 1410 : { mtype:'iafmu', cost: 4723920, name:'Auto Field-Maintenance Unit', class:4, rating:'A', integ: 92, pwrdraw:2.31, boottime:9, repaircap: 5400, repaircon:10.0, repairrtg:0.028, ammocost:1, fdid:128667633, fdname:'Int_Repairer_Size4_Class5' },
 		
-		 1550 : { mtype:'iafmu', cost:  104980, name:'Auto Field-Maintenance Unit', class:5, rating:'E', integ: 77, pwrdraw:1.17, boottime:9, repaircap: 6100, repaircon:10.0, repairrtg:0.012, fdid:128667602, fdname:'Int_Repairer_Size5_Class1' },
-		 1540 : { mtype:'iafmu', cost:  314930, name:'Auto Field-Maintenance Unit', class:5, rating:'D', integ: 58, pwrdraw:1.56, boottime:9, repaircap: 5500, repaircon:10.0, repairrtg:0.016, fdid:128667610, fdname:'Int_Repairer_Size5_Class2' },
-		 1530 : { mtype:'iafmu', cost:  944780, name:'Auto Field-Maintenance Unit', class:5, rating:'C', integ: 96, pwrdraw:1.95, boottime:9, repaircap: 6100, repaircon:10.0, repairrtg:0.020, fdid:128667618, fdname:'Int_Repairer_Size5_Class3' },
-		 1520 : { mtype:'iafmu', cost: 2834350, name:'Auto Field-Maintenance Unit', class:5, rating:'B', integ:134, pwrdraw:2.24, boottime:9, repaircap: 7300, repaircon:10.0, repairrtg:0.023, fdid:128667626, fdname:'Int_Repairer_Size5_Class4' },
-		 1510 : { mtype:'iafmu', cost: 8503060, name:'Auto Field-Maintenance Unit', class:5, rating:'A', integ:110, pwrdraw:2.73, boottime:9, repaircap: 6700, repaircon:10.0, repairrtg:0.028, fdid:128667634, fdname:'Int_Repairer_Size5_Class5' },
+		 1550 : { mtype:'iafmu', cost:  104980, name:'Auto Field-Maintenance Unit', class:5, rating:'E', integ: 77, pwrdraw:1.17, boottime:9, repaircap: 6100, repaircon:10.0, repairrtg:0.012, ammocost:1, fdid:128667602, fdname:'Int_Repairer_Size5_Class1' },
+		 1540 : { mtype:'iafmu', cost:  314930, name:'Auto Field-Maintenance Unit', class:5, rating:'D', integ: 58, pwrdraw:1.56, boottime:9, repaircap: 5500, repaircon:10.0, repairrtg:0.016, ammocost:1, fdid:128667610, fdname:'Int_Repairer_Size5_Class2' },
+		 1530 : { mtype:'iafmu', cost:  944780, name:'Auto Field-Maintenance Unit', class:5, rating:'C', integ: 96, pwrdraw:1.95, boottime:9, repaircap: 6100, repaircon:10.0, repairrtg:0.020, ammocost:1, fdid:128667618, fdname:'Int_Repairer_Size5_Class3' },
+		 1520 : { mtype:'iafmu', cost: 2834350, name:'Auto Field-Maintenance Unit', class:5, rating:'B', integ:134, pwrdraw:2.24, boottime:9, repaircap: 7300, repaircon:10.0, repairrtg:0.023, ammocost:1, fdid:128667626, fdname:'Int_Repairer_Size5_Class4' },
+		 1510 : { mtype:'iafmu', cost: 8503060, name:'Auto Field-Maintenance Unit', class:5, rating:'A', integ:110, pwrdraw:2.73, boottime:9, repaircap: 6700, repaircon:10.0, repairrtg:0.028, ammocost:1, fdid:128667634, fdname:'Int_Repairer_Size5_Class5' },
 		
-		 1650 : { mtype:'iafmu', cost:  188960, name:'Auto Field-Maintenance Unit', class:6, rating:'E', integ: 90, pwrdraw:1.40, boottime:9, repaircap: 7400, repaircon:10.0, repairrtg:0.012, fdid:128667603, fdname:'Int_Repairer_Size6_Class1' },
-		 1640 : { mtype:'iafmu', cost:  566870, name:'Auto Field-Maintenance Unit', class:6, rating:'D', integ: 68, pwrdraw:1.86, boottime:9, repaircap: 6700, repaircon:10.0, repairrtg:0.016, fdid:128667611, fdname:'Int_Repairer_Size6_Class2' },
-		 1630 : { mtype:'iafmu', cost: 1700610, name:'Auto Field-Maintenance Unit', class:6, rating:'C', integ:113, pwrdraw:2.33, boottime:9, repaircap: 7400, repaircon:10.0, repairrtg:0.020, fdid:128667619, fdname:'Int_Repairer_Size6_Class3' },
-		 1620 : { mtype:'iafmu', cost: 5101830, name:'Auto Field-Maintenance Unit', class:6, rating:'B', integ:158, pwrdraw:2.67, boottime:9, repaircap: 8900, repaircon:10.0, repairrtg:0.023, fdid:128667627, fdname:'Int_Repairer_Size6_Class4' },
-		 1610 : { mtype:'iafmu', cost:15305500, name:'Auto Field-Maintenance Unit', class:6, rating:'A', integ:130, pwrdraw:3.26, boottime:9, repaircap: 8100, repaircon:10.0, repairrtg:0.028, fdid:128667635, fdname:'Int_Repairer_Size6_Class5' },
+		 1650 : { mtype:'iafmu', cost:  188960, name:'Auto Field-Maintenance Unit', class:6, rating:'E', integ: 90, pwrdraw:1.40, boottime:9, repaircap: 7400, repaircon:10.0, repairrtg:0.012, ammocost:1, fdid:128667603, fdname:'Int_Repairer_Size6_Class1' },
+		 1640 : { mtype:'iafmu', cost:  566870, name:'Auto Field-Maintenance Unit', class:6, rating:'D', integ: 68, pwrdraw:1.86, boottime:9, repaircap: 6700, repaircon:10.0, repairrtg:0.016, ammocost:1, fdid:128667611, fdname:'Int_Repairer_Size6_Class2' },
+		 1630 : { mtype:'iafmu', cost: 1700610, name:'Auto Field-Maintenance Unit', class:6, rating:'C', integ:113, pwrdraw:2.33, boottime:9, repaircap: 7400, repaircon:10.0, repairrtg:0.020, ammocost:1, fdid:128667619, fdname:'Int_Repairer_Size6_Class3' },
+		 1620 : { mtype:'iafmu', cost: 5101830, name:'Auto Field-Maintenance Unit', class:6, rating:'B', integ:158, pwrdraw:2.67, boottime:9, repaircap: 8900, repaircon:10.0, repairrtg:0.023, ammocost:1, fdid:128667627, fdname:'Int_Repairer_Size6_Class4' },
+		 1610 : { mtype:'iafmu', cost:15305500, name:'Auto Field-Maintenance Unit', class:6, rating:'A', integ:130, pwrdraw:3.26, boottime:9, repaircap: 8100, repaircon:10.0, repairrtg:0.028, ammocost:1, fdid:128667635, fdname:'Int_Repairer_Size6_Class5' },
 		
-		 1750 : { mtype:'iafmu', cost:  340120, name:'Auto Field-Maintenance Unit', class:7, rating:'E', integ:105, pwrdraw:1.58, boottime:9, repaircap: 8700, repaircon:10.0, repairrtg:0.012, fdid:128667604, fdname:'Int_Repairer_Size7_Class1' },
-		 1740 : { mtype:'iafmu', cost: 1020370, name:'Auto Field-Maintenance Unit', class:7, rating:'D', integ: 79, pwrdraw:2.10, boottime:9, repaircap: 7800, repaircon:10.0, repairrtg:0.016, fdid:128667612, fdname:'Int_Repairer_Size7_Class2' },
-		 1730 : { mtype:'iafmu', cost: 3061100, name:'Auto Field-Maintenance Unit', class:7, rating:'C', integ:131, pwrdraw:2.63, boottime:9, repaircap: 8700, repaircon:10.0, repairrtg:0.020, fdid:128667620, fdname:'Int_Repairer_Size7_Class3' },
-		 1720 : { mtype:'iafmu', cost: 9183300, name:'Auto Field-Maintenance Unit', class:7, rating:'B', integ:183, pwrdraw:3.02, boottime:9, repaircap:10400, repaircon:10.0, repairrtg:0.023, fdid:128667628, fdname:'Int_Repairer_Size7_Class4' },
-		 1710 : { mtype:'iafmu', cost:27549900, name:'Auto Field-Maintenance Unit', class:7, rating:'A', integ:151, pwrdraw:3.68, boottime:9, repaircap: 9600, repaircon:10.0, repairrtg:0.028, fdid:128667636, fdname:'Int_Repairer_Size7_Class5' },
+		 1750 : { mtype:'iafmu', cost:  340120, name:'Auto Field-Maintenance Unit', class:7, rating:'E', integ:105, pwrdraw:1.58, boottime:9, repaircap: 8700, repaircon:10.0, repairrtg:0.012, ammocost:1, fdid:128667604, fdname:'Int_Repairer_Size7_Class1' },
+		 1740 : { mtype:'iafmu', cost: 1020370, name:'Auto Field-Maintenance Unit', class:7, rating:'D', integ: 79, pwrdraw:2.10, boottime:9, repaircap: 7800, repaircon:10.0, repairrtg:0.016, ammocost:1, fdid:128667612, fdname:'Int_Repairer_Size7_Class2' },
+		 1730 : { mtype:'iafmu', cost: 3061100, name:'Auto Field-Maintenance Unit', class:7, rating:'C', integ:131, pwrdraw:2.63, boottime:9, repaircap: 8700, repaircon:10.0, repairrtg:0.020, ammocost:1, fdid:128667620, fdname:'Int_Repairer_Size7_Class3' },
+		 1720 : { mtype:'iafmu', cost: 9183300, name:'Auto Field-Maintenance Unit', class:7, rating:'B', integ:183, pwrdraw:3.02, boottime:9, repaircap:10400, repaircon:10.0, repairrtg:0.023, ammocost:1, fdid:128667628, fdname:'Int_Repairer_Size7_Class4' },
+		 1710 : { mtype:'iafmu', cost:27549900, name:'Auto Field-Maintenance Unit', class:7, rating:'A', integ:151, pwrdraw:3.68, boottime:9, repaircap: 9600, repaircon:10.0, repairrtg:0.028, ammocost:1, fdid:128667636, fdname:'Int_Repairer_Size7_Class5' },
 		
-		 1850 : { mtype:'iafmu', cost:  612220, name:'Auto Field-Maintenance Unit', class:8, rating:'E', integ:120, pwrdraw:1.80, boottime:9, repaircap:10000, repaircon:10.0, repairrtg:0.012, fdid:128667605, fdname:'Int_Repairer_Size8_Class1' },
-		 1840 : { mtype:'iafmu', cost: 1836660, name:'Auto Field-Maintenance Unit', class:8, rating:'D', integ: 90, pwrdraw:2.40, boottime:9, repaircap: 9000, repaircon:10.0, repairrtg:0.016, fdid:128667613, fdname:'Int_Repairer_Size8_Class2' },
-		 1830 : { mtype:'iafmu', cost: 5509980, name:'Auto Field-Maintenance Unit', class:8, rating:'C', integ:150, pwrdraw:3.00, boottime:9, repaircap:10000, repaircon:10.0, repairrtg:0.020, fdid:128667621, fdname:'Int_Repairer_Size8_Class3' },
-		 1820 : { mtype:'iafmu', cost:16529940, name:'Auto Field-Maintenance Unit', class:8, rating:'B', integ:210, pwrdraw:3.45, boottime:9, repaircap:12000, repaircon:10.0, repairrtg:0.023, fdid:128667629, fdname:'Int_Repairer_Size8_Class4' },
-		 1810 : { mtype:'iafmu', cost:49589820, name:'Auto Field-Maintenance Unit', class:8, rating:'A', integ:173, pwrdraw:4.20, boottime:9, repaircap:11000, repaircon:10.0, repairrtg:0.028, fdid:128667637, fdname:'Int_Repairer_Size8_Class5' },
+		 1850 : { mtype:'iafmu', cost:  612220, name:'Auto Field-Maintenance Unit', class:8, rating:'E', integ:120, pwrdraw:1.80, boottime:9, repaircap:10000, repaircon:10.0, repairrtg:0.012, ammocost:1, fdid:128667605, fdname:'Int_Repairer_Size8_Class1' },
+		 1840 : { mtype:'iafmu', cost: 1836660, name:'Auto Field-Maintenance Unit', class:8, rating:'D', integ: 90, pwrdraw:2.40, boottime:9, repaircap: 9000, repaircon:10.0, repairrtg:0.016, ammocost:1, fdid:128667613, fdname:'Int_Repairer_Size8_Class2' },
+		 1830 : { mtype:'iafmu', cost: 5509980, name:'Auto Field-Maintenance Unit', class:8, rating:'C', integ:150, pwrdraw:3.00, boottime:9, repaircap:10000, repaircon:10.0, repairrtg:0.020, ammocost:1, fdid:128667621, fdname:'Int_Repairer_Size8_Class3' },
+		 1820 : { mtype:'iafmu', cost:16529940, name:'Auto Field-Maintenance Unit', class:8, rating:'B', integ:210, pwrdraw:3.45, boottime:9, repaircap:12000, repaircon:10.0, repairrtg:0.023, ammocost:1, fdid:128667629, fdname:'Int_Repairer_Size8_Class4' },
+		 1810 : { mtype:'iafmu', cost:49589820, name:'Auto Field-Maintenance Unit', class:8, rating:'A', integ:173, pwrdraw:4.20, boottime:9, repaircap:11000, repaircon:10.0, repairrtg:0.028, ammocost:1, fdid:128667637, fdname:'Int_Repairer_Size8_Class5' },
 		
 		
 		  150 : { mtype:'icr', cost:   1000, name:'Cargo Rack (Cap: 2)',   class:1, rating:'E', cargocap:  2, fdid:128064338, fdname:'Int_CargoRack_Size1_Class1' },
@@ -2598,151 +2905,159 @@ var eddb = {
 		  650 : { mtype:'icr', cost: 362590, name:'Cargo Rack (Cap: 64)',  class:6, rating:'E', cargocap: 64, fdid:128064343, fdname:'Int_CargoRack_Size6_Class1' },
 		  750 : { mtype:'icr', cost:1178420, name:'Cargo Rack (Cap: 128)', class:7, rating:'E', cargocap:128, fdid:128064344, fdname:'Int_CargoRack_Size7_Class1' },
 		  850 : { mtype:'icr', cost:3829870, name:'Cargo Rack (Cap: 256)', class:8, rating:'E', cargocap:256, fdid:128064345, fdname:'Int_CargoRack_Size8_Class1' },
-		  151 : { mtype:'icr', cost:   6250, name:'Corrosion Resistant Cargo Rack (Cap: 1)',  class:1, rating:'E', cargocap: 1, fdid:128681641, fdname:'Int_CorrosionProofCargoRack_Size1_Class1' },
-		  161 : { mtype:'icr', cost:  12560, name:'Corrosion Resistant Cargo Rack (Cap: 2)',  class:1, rating:'F', cargocap: 2, fdid:128681992, fdname:'Int_CorrosionProofCargoRack_Size1_Class2' },
-	//	  251 : { mtype:'icr', cost:    NaN, name:'Corrosion Resistant Cargo Rack (Cap: 4)',  class:2, rating:'E', cargocap: 4, fdid:     null, fdname:'Int_CorrosionProofCargoRack_Size2_Class1' }, // TODO: verify; cost,fdid
-		  451 : { mtype:'icr', cost:  94330, name:'Corrosion Resistant Cargo Rack (Cap: 16)', class:4, rating:'E', cargocap:16, fdid:128833944, fdname:'Int_CorrosionProofCargoRack_Size4_Class1' }, // TODO: verify; cost
+		  151 : { mtype:'icr', cost:   6250, name:'Corrosion Resistant Cargo Rack (Cap: 1)',  class:1, rating:'E', cargocap: 1, fdid:128681641, fdname:'Int_CorrosionProofCargoRack_Size1_Class1' }, // techbroker
+		  161 : { mtype:'icr', cost:  12560, name:'Corrosion Resistant Cargo Rack (Cap: 2)',  class:1, rating:'F', cargocap: 2, fdid:128681992, fdname:'Int_CorrosionProofCargoRack_Size1_Class2' }, // techbroker
+	//	  251 : { mtype:'icr', cost:       , name:'Corrosion Resistant Cargo Rack (Cap: 4)',  class:2, rating:'E', cargocap: 4, fdid:null, fdname:'Int_CorrosionProofCargoRack_Size2_Class1' }, // techbroker
+		  451 : { mtype:'icr', cost:  94330, name:'Corrosion Resistant Cargo Rack (Cap: 16)', class:4, rating:'E', cargocap:16, fdid:128833944, fdname:'Int_CorrosionProofCargoRack_Size4_Class1' }, // techbroker
 		
 		
-		22150 : { mtype:'iclc', cost:    600, name:'Collector Limpet Controller', class:1, rating:'E', mass:  0.50, integ: 24, pwrdraw:0.14, boottime:6, maxlimpet: 1, targetrng: 800, limpettime:300, maxspd:200, multispd:60, fdid:128671229, fdname:'Int_DroneControl_Collection_Size1_Class1' },
-		22140 : { mtype:'iclc', cost:   1200, name:'Collector Limpet Controller', class:1, rating:'D', mass:  0.50, integ: 32, pwrdraw:0.18, boottime:6, maxlimpet: 1, targetrng: 600, limpettime:600, maxspd:200, multispd:60, fdid:128671230, fdname:'Int_DroneControl_Collection_Size1_Class2' },
-		22130 : { mtype:'iclc', cost:   2400, name:'Collector Limpet Controller', class:1, rating:'C', mass:  1.30, integ: 40, pwrdraw:0.23, boottime:6, maxlimpet: 1, targetrng:1000, limpettime:510, maxspd:200, multispd:60, fdid:128671231, fdname:'Int_DroneControl_Collection_Size1_Class3' },
-		22120 : { mtype:'iclc', cost:   4800, name:'Collector Limpet Controller', class:1, rating:'B', mass:  2.00, integ: 48, pwrdraw:0.28, boottime:6, maxlimpet: 1, targetrng:1400, limpettime:420, maxspd:200, multispd:60, fdid:128671232, fdname:'Int_DroneControl_Collection_Size1_Class4' },
-		22110 : { mtype:'iclc', cost:   9600, name:'Collector Limpet Controller', class:1, rating:'A', mass:  2.00, integ: 56, pwrdraw:0.32, boottime:6, maxlimpet: 1, targetrng:1200, limpettime:720, maxspd:200, multispd:60, fdid:128671233, fdname:'Int_DroneControl_Collection_Size1_Class5' },
+		22150 : { mtype:'iclc', cost:    600, name:'Collector Limpet Controller', class:1, rating:'E', mass:  0.50, integ: 24, pwrdraw:0.14, boottime:6, maxlimpet: 1, lpactrng: 800, limpettime:300, maxspd:200, multispd:60, fdid:128671229, fdname:'Int_DroneControl_Collection_Size1_Class1' },
+		22140 : { mtype:'iclc', cost:   1200, name:'Collector Limpet Controller', class:1, rating:'D', mass:  0.50, integ: 32, pwrdraw:0.18, boottime:6, maxlimpet: 1, lpactrng: 600, limpettime:600, maxspd:200, multispd:60, fdid:128671230, fdname:'Int_DroneControl_Collection_Size1_Class2' },
+		22130 : { mtype:'iclc', cost:   2400, name:'Collector Limpet Controller', class:1, rating:'C', mass:  1.30, integ: 40, pwrdraw:0.23, boottime:6, maxlimpet: 1, lpactrng:1000, limpettime:510, maxspd:200, multispd:60, fdid:128671231, fdname:'Int_DroneControl_Collection_Size1_Class3' },
+		22120 : { mtype:'iclc', cost:   4800, name:'Collector Limpet Controller', class:1, rating:'B', mass:  2.00, integ: 48, pwrdraw:0.28, boottime:6, maxlimpet: 1, lpactrng:1400, limpettime:420, maxspd:200, multispd:60, fdid:128671232, fdname:'Int_DroneControl_Collection_Size1_Class4' },
+		22110 : { mtype:'iclc', cost:   9600, name:'Collector Limpet Controller', class:1, rating:'A', mass:  2.00, integ: 56, pwrdraw:0.32, boottime:6, maxlimpet: 1, lpactrng:1200, limpettime:720, maxspd:200, multispd:60, fdid:128671233, fdname:'Int_DroneControl_Collection_Size1_Class5' },
 		
-		22350 : { mtype:'iclc', cost:   5400, name:'Collector Limpet Controller', class:3, rating:'E', mass:  2.00, integ: 38, pwrdraw:0.20, boottime:6, maxlimpet: 2, targetrng: 880, limpettime:300, maxspd:200, multispd:60, fdid:128671234, fdname:'Int_DroneControl_Collection_Size3_Class1' },
-		22340 : { mtype:'iclc', cost:  10800, name:'Collector Limpet Controller', class:3, rating:'D', mass:  2.00, integ: 51, pwrdraw:0.27, boottime:6, maxlimpet: 2, targetrng: 660, limpettime:600, maxspd:200, multispd:60, fdid:128671235, fdname:'Int_DroneControl_Collection_Size3_Class2' },
-		22330 : { mtype:'iclc', cost:  21600, name:'Collector Limpet Controller', class:3, rating:'C', mass:  5.00, integ: 64, pwrdraw:0.34, boottime:6, maxlimpet: 2, targetrng:1100, limpettime:510, maxspd:200, multispd:60, fdid:128671236, fdname:'Int_DroneControl_Collection_Size3_Class3' },
-		22320 : { mtype:'iclc', cost:  43200, name:'Collector Limpet Controller', class:3, rating:'B', mass:  8.00, integ: 77, pwrdraw:0.41, boottime:6, maxlimpet: 2, targetrng:1540, limpettime:420, maxspd:200, multispd:60, fdid:128671237, fdname:'Int_DroneControl_Collection_Size3_Class4' },
-		22310 : { mtype:'iclc', cost:  86400, name:'Collector Limpet Controller', class:3, rating:'A', mass:  8.00, integ: 90, pwrdraw:0.48, boottime:6, maxlimpet: 2, targetrng:1320, limpettime:720, maxspd:200, multispd:60, fdid:128671238, fdname:'Int_DroneControl_Collection_Size3_Class5' },
+		22350 : { mtype:'iclc', cost:   5400, name:'Collector Limpet Controller', class:3, rating:'E', mass:  2.00, integ: 38, pwrdraw:0.20, boottime:6, maxlimpet: 2, lpactrng: 880, limpettime:300, maxspd:200, multispd:60, fdid:128671234, fdname:'Int_DroneControl_Collection_Size3_Class1' },
+		22340 : { mtype:'iclc', cost:  10800, name:'Collector Limpet Controller', class:3, rating:'D', mass:  2.00, integ: 51, pwrdraw:0.27, boottime:6, maxlimpet: 2, lpactrng: 660, limpettime:600, maxspd:200, multispd:60, fdid:128671235, fdname:'Int_DroneControl_Collection_Size3_Class2' },
+		22330 : { mtype:'iclc', cost:  21600, name:'Collector Limpet Controller', class:3, rating:'C', mass:  5.00, integ: 64, pwrdraw:0.34, boottime:6, maxlimpet: 2, lpactrng:1100, limpettime:510, maxspd:200, multispd:60, fdid:128671236, fdname:'Int_DroneControl_Collection_Size3_Class3' },
+		22320 : { mtype:'iclc', cost:  43200, name:'Collector Limpet Controller', class:3, rating:'B', mass:  8.00, integ: 77, pwrdraw:0.41, boottime:6, maxlimpet: 2, lpactrng:1540, limpettime:420, maxspd:200, multispd:60, fdid:128671237, fdname:'Int_DroneControl_Collection_Size3_Class4' },
+		22310 : { mtype:'iclc', cost:  86400, name:'Collector Limpet Controller', class:3, rating:'A', mass:  8.00, integ: 90, pwrdraw:0.48, boottime:6, maxlimpet: 2, lpactrng:1320, limpettime:720, maxspd:200, multispd:60, fdid:128671238, fdname:'Int_DroneControl_Collection_Size3_Class5' },
 		
-		22550 : { mtype:'iclc', cost:  48600, name:'Collector Limpet Controller', class:5, rating:'E', mass:  8.00, integ: 58, pwrdraw:0.30, boottime:6, maxlimpet: 3, targetrng:1040, limpettime:300, maxspd:200, multispd:60, fdid:128671239, fdname:'Int_DroneControl_Collection_Size5_Class1' },
-		22540 : { mtype:'iclc', cost:  97200, name:'Collector Limpet Controller', class:5, rating:'D', mass:  8.00, integ: 77, pwrdraw:0.40, boottime:6, maxlimpet: 3, targetrng: 780, limpettime:600, maxspd:200, multispd:60, fdid:128671240, fdname:'Int_DroneControl_Collection_Size5_Class2' },
-		22530 : { mtype:'iclc', cost: 194400, name:'Collector Limpet Controller', class:5, rating:'C', mass: 20.00, integ: 96, pwrdraw:0.50, boottime:6, maxlimpet: 3, targetrng:1300, limpettime:510, maxspd:200, multispd:60, fdid:128671241, fdname:'Int_DroneControl_Collection_Size5_Class3' },
-		22520 : { mtype:'iclc', cost: 388800, name:'Collector Limpet Controller', class:5, rating:'B', mass: 32.00, integ:115, pwrdraw:0.60, boottime:6, maxlimpet: 3, targetrng:1820, limpettime:420, maxspd:200, multispd:60, fdid:128671242, fdname:'Int_DroneControl_Collection_Size5_Class4' },
-		22510 : { mtype:'iclc', cost: 777600, name:'Collector Limpet Controller', class:5, rating:'A', mass: 32.00, integ:134, pwrdraw:0.70, boottime:6, maxlimpet: 3, targetrng:1560, limpettime:720, maxspd:200, multispd:60, fdid:128671243, fdname:'Int_DroneControl_Collection_Size5_Class5' },
+		22550 : { mtype:'iclc', cost:  48600, name:'Collector Limpet Controller', class:5, rating:'E', mass:  8.00, integ: 58, pwrdraw:0.30, boottime:6, maxlimpet: 3, lpactrng:1040, limpettime:300, maxspd:200, multispd:60, fdid:128671239, fdname:'Int_DroneControl_Collection_Size5_Class1' },
+		22540 : { mtype:'iclc', cost:  97200, name:'Collector Limpet Controller', class:5, rating:'D', mass:  8.00, integ: 77, pwrdraw:0.40, boottime:6, maxlimpet: 3, lpactrng: 780, limpettime:600, maxspd:200, multispd:60, fdid:128671240, fdname:'Int_DroneControl_Collection_Size5_Class2' },
+		22530 : { mtype:'iclc', cost: 194400, name:'Collector Limpet Controller', class:5, rating:'C', mass: 20.00, integ: 96, pwrdraw:0.50, boottime:6, maxlimpet: 3, lpactrng:1300, limpettime:510, maxspd:200, multispd:60, fdid:128671241, fdname:'Int_DroneControl_Collection_Size5_Class3' },
+		22520 : { mtype:'iclc', cost: 388800, name:'Collector Limpet Controller', class:5, rating:'B', mass: 32.00, integ:115, pwrdraw:0.60, boottime:6, maxlimpet: 3, lpactrng:1820, limpettime:420, maxspd:200, multispd:60, fdid:128671242, fdname:'Int_DroneControl_Collection_Size5_Class4' },
+		22510 : { mtype:'iclc', cost: 777600, name:'Collector Limpet Controller', class:5, rating:'A', mass: 32.00, integ:134, pwrdraw:0.70, boottime:6, maxlimpet: 3, lpactrng:1560, limpettime:720, maxspd:200, multispd:60, fdid:128671243, fdname:'Int_DroneControl_Collection_Size5_Class5' },
 		
-		22750 : { mtype:'iclc', cost: 437400, name:'Collector Limpet Controller', class:7, rating:'E', mass: 32.00, integ: 79, pwrdraw:0.41, boottime:6, maxlimpet: 4, targetrng:1360, limpettime:300, maxspd:200, multispd:60, fdid:128671244, fdname:'Int_DroneControl_Collection_Size7_Class1' },
-		22740 : { mtype:'iclc', cost: 874800, name:'Collector Limpet Controller', class:7, rating:'D', mass: 32.00, integ:105, pwrdraw:0.55, boottime:6, maxlimpet: 4, targetrng:1020, limpettime:600, maxspd:200, multispd:60, fdid:128671245, fdname:'Int_DroneControl_Collection_Size7_Class2' },
-		22730 : { mtype:'iclc', cost:1749600, name:'Collector Limpet Controller', class:7, rating:'C', mass: 80.00, integ:131, pwrdraw:0.69, boottime:6, maxlimpet: 4, targetrng:1700, limpettime:510, maxspd:200, multispd:60, fdid:128671246, fdname:'Int_DroneControl_Collection_Size7_Class3' },
-		22720 : { mtype:'iclc', cost:3499200, name:'Collector Limpet Controller', class:7, rating:'B', mass:128.00, integ:157, pwrdraw:0.83, boottime:6, maxlimpet: 4, targetrng:2380, limpettime:420, maxspd:200, multispd:60, fdid:128671247, fdname:'Int_DroneControl_Collection_Size7_Class4' },
-		22710 : { mtype:'iclc', cost:6998400, name:'Collector Limpet Controller', class:7, rating:'A', mass:128.00, integ:183, pwrdraw:0.97, boottime:6, maxlimpet: 4, targetrng:2040, limpettime:720, maxspd:200, multispd:60, fdid:128671248, fdname:'Int_DroneControl_Collection_Size7_Class5' },
-		
-		
-		29150 : { mtype:'idlc', cost:   3600, name:'Decontamination Limpet Controller', class:1, rating:'E', mass:  1.30, integ: 24, pwrdraw:0.18, boottime:10, maxlimpet: 1, targetrng: 600, limpettime:300, maxspd:200, repaircap: 30, fdid:128793941, fdname:'Int_DroneControl_Decontamination_Size1_Class1' },
-		29350 : { mtype:'idlc', cost:  16200, name:'Decontamination Limpet Controller', class:3, rating:'E', mass:  2.00, integ: 51, pwrdraw:0.20, boottime:10, maxlimpet: 2, targetrng: 880, limpettime:300, maxspd:200, repaircap: 70, fdid:128793942, fdname:'Int_DroneControl_Decontamination_Size3_Class1' },
-		29550 : { mtype:'idlc', cost: 145800, name:'Decontamination Limpet Controller', class:5, rating:'E', mass: 20.00, integ: 96, pwrdraw:0.50, boottime:10, maxlimpet: 3, targetrng:1300, limpettime:300, maxspd:200, repaircap:120, fdid:128793943, fdname:'Int_DroneControl_Decontamination_Size5_Class1' },
-		29750 : { mtype:'idlc', cost:1312200, name:'Decontamination Limpet Controller', class:7, rating:'E', mass:128.00, integ:157, pwrdraw:0.97, boottime:10, maxlimpet: 4, targetrng:2040, limpettime:300, maxspd:200, repaircap:180, fdid:128793944, fdname:'Int_DroneControl_Decontamination_Size7_Class1' },
+		22750 : { mtype:'iclc', cost: 437400, name:'Collector Limpet Controller', class:7, rating:'E', mass: 32.00, integ: 79, pwrdraw:0.41, boottime:6, maxlimpet: 4, lpactrng:1360, limpettime:300, maxspd:200, multispd:60, fdid:128671244, fdname:'Int_DroneControl_Collection_Size7_Class1' },
+		22740 : { mtype:'iclc', cost: 874800, name:'Collector Limpet Controller', class:7, rating:'D', mass: 32.00, integ:105, pwrdraw:0.55, boottime:6, maxlimpet: 4, lpactrng:1020, limpettime:600, maxspd:200, multispd:60, fdid:128671245, fdname:'Int_DroneControl_Collection_Size7_Class2' },
+		22730 : { mtype:'iclc', cost:1749600, name:'Collector Limpet Controller', class:7, rating:'C', mass: 80.00, integ:131, pwrdraw:0.69, boottime:6, maxlimpet: 4, lpactrng:1700, limpettime:510, maxspd:200, multispd:60, fdid:128671246, fdname:'Int_DroneControl_Collection_Size7_Class3' },
+		22720 : { mtype:'iclc', cost:3499200, name:'Collector Limpet Controller', class:7, rating:'B', mass:128.00, integ:157, pwrdraw:0.83, boottime:6, maxlimpet: 4, lpactrng:2380, limpettime:420, maxspd:200, multispd:60, fdid:128671247, fdname:'Int_DroneControl_Collection_Size7_Class4' },
+		22710 : { mtype:'iclc', cost:6998400, name:'Collector Limpet Controller', class:7, rating:'A', mass:128.00, integ:183, pwrdraw:0.97, boottime:6, maxlimpet: 4, lpactrng:2040, limpettime:720, maxspd:200, multispd:60, fdid:128671248, fdname:'Int_DroneControl_Collection_Size7_Class5' },
 		
 		
-		 3150 : { mtype:'idc', cost:4500, name:'Standard Docking Computer', class:1, rating:'E', integ:10, pwrdraw:0.39, boottime:3, fdid:128049549, fdname:'Int_DockingComputer_Standard' },
+		29150 : { mtype:'idlc', cost:   3600, name:'Decontamination Limpet Controller', class:1, rating:'E', mass:  1.30, integ: 24, pwrdraw:0.18, boottime:10, maxlimpet: 1, lpactrng: 600, limpettime:300, maxspd:200, repaircap: 30, fdid:128793941, fdname:'Int_DroneControl_Decontamination_Size1_Class1' },
+		29350 : { mtype:'idlc', cost:  16200, name:'Decontamination Limpet Controller', class:3, rating:'E', mass:  2.00, integ: 51, pwrdraw:0.20, boottime:10, maxlimpet: 2, lpactrng: 880, limpettime:300, maxspd:200, repaircap: 70, fdid:128793942, fdname:'Int_DroneControl_Decontamination_Size3_Class1' },
+		29550 : { mtype:'idlc', cost: 145800, name:'Decontamination Limpet Controller', class:5, rating:'E', mass: 20.00, integ: 96, pwrdraw:0.50, boottime:10, maxlimpet: 3, lpactrng:1300, limpettime:300, maxspd:200, repaircap:120, fdid:128793943, fdname:'Int_DroneControl_Decontamination_Size5_Class1' },
+		29750 : { mtype:'idlc', cost:1312200, name:'Decontamination Limpet Controller', class:7, rating:'E', mass:128.00, integ:157, pwrdraw:0.97, boottime:10, maxlimpet: 4, lpactrng:2040, limpettime:300, maxspd:200, repaircap:180, fdid:128793944, fdname:'Int_DroneControl_Decontamination_Size7_Class1' },
 		
 		
-		25150 : { mtype:'ifsdi', cost:   12000, name:'Frame Shift Drive Interdictor', class:1, rating:'E', mass: 1.30, integ: 32, pwrdraw:0.14, boottime:15, timerng: 3, facinglim:50, fdid:128666704, fdname:'Int_FSDInterdictor_Size1_Class1' },
-		25140 : { mtype:'ifsdi', cost:   36000, name:'Frame Shift Drive Interdictor', class:1, rating:'D', mass: 0.50, integ: 24, pwrdraw:0.18, boottime:15, timerng: 4, facinglim:50, fdid:128666708, fdname:'Int_FSDInterdictor_Size1_Class2' },
-		25130 : { mtype:'ifsdi', cost:  108000, name:'Frame Shift Drive Interdictor', class:1, rating:'C', mass: 1.30, integ: 40, pwrdraw:0.23, boottime:15, timerng: 5, facinglim:50, fdid:128666712, fdname:'Int_FSDInterdictor_Size1_Class3' },
-		25120 : { mtype:'ifsdi', cost:  324000, name:'Frame Shift Drive Interdictor', class:1, rating:'B', mass: 2.00, integ: 56, pwrdraw:0.28, boottime:15, timerng: 6, facinglim:50, fdid:128666716, fdname:'Int_FSDInterdictor_Size1_Class4' },
-		25110 : { mtype:'ifsdi', cost:  972000, name:'Frame Shift Drive Interdictor', class:1, rating:'A', mass: 1.30, integ: 48, pwrdraw:0.32, boottime:15, timerng: 7, facinglim:50, fdid:128666720, fdname:'Int_FSDInterdictor_Size1_Class5' },
-		
-		25250 : { mtype:'ifsdi', cost:   33600, name:'Frame Shift Drive Interdictor', class:2, rating:'E', mass: 2.50, integ: 41, pwrdraw:0.17, boottime:15, timerng: 6, facinglim:50, fdid:128666705, fdname:'Int_FSDInterdictor_Size2_Class1' },
-		25240 : { mtype:'ifsdi', cost:  100800, name:'Frame Shift Drive Interdictor', class:2, rating:'D', mass: 1.00, integ: 31, pwrdraw:0.22, boottime:15, timerng: 7, facinglim:50, fdid:128666709, fdname:'Int_FSDInterdictor_Size2_Class2' },
-		25230 : { mtype:'ifsdi', cost:  302400, name:'Frame Shift Drive Interdictor', class:2, rating:'C', mass: 2.50, integ: 51, pwrdraw:0.28, boottime:15, timerng: 8, facinglim:50, fdid:128666713, fdname:'Int_FSDInterdictor_Size2_Class3' },
-		25220 : { mtype:'ifsdi', cost:  907200, name:'Frame Shift Drive Interdictor', class:2, rating:'B', mass: 4.00, integ: 71, pwrdraw:0.34, boottime:15, timerng: 9, facinglim:50, fdid:128666717, fdname:'Int_FSDInterdictor_Size2_Class4' },
-		25210 : { mtype:'ifsdi', cost: 2721600, name:'Frame Shift Drive Interdictor', class:2, rating:'A', mass: 2.50, integ: 61, pwrdraw:0.39, boottime:15, timerng:10, facinglim:50, fdid:128666721, fdname:'Int_FSDInterdictor_Size2_Class5' },
-		
-		25350 : { mtype:'ifsdi', cost:   94080, name:'Frame Shift Drive Interdictor', class:3, rating:'E', mass: 5.00, integ: 51, pwrdraw:0.20, boottime:15, timerng: 9, facinglim:50, fdid:128666706, fdname:'Int_FSDInterdictor_Size3_Class1' },
-		25340 : { mtype:'ifsdi', cost:  282240, name:'Frame Shift Drive Interdictor', class:3, rating:'D', mass: 2.00, integ: 38, pwrdraw:0.27, boottime:15, timerng:10, facinglim:50, fdid:128666710, fdname:'Int_FSDInterdictor_Size3_Class2' },
-		25330 : { mtype:'ifsdi', cost:  846720, name:'Frame Shift Drive Interdictor', class:3, rating:'C', mass: 5.00, integ: 64, pwrdraw:0.34, boottime:15, timerng:11, facinglim:50, fdid:128666714, fdname:'Int_FSDInterdictor_Size3_Class3' },
-		25320 : { mtype:'ifsdi', cost: 2540160, name:'Frame Shift Drive Interdictor', class:3, rating:'B', mass: 8.00, integ: 90, pwrdraw:0.41, boottime:15, timerng:12, facinglim:50, fdid:128666718, fdname:'Int_FSDInterdictor_Size3_Class4' },
-		25310 : { mtype:'ifsdi', cost: 7620480, name:'Frame Shift Drive Interdictor', class:3, rating:'A', mass: 5.00, integ: 77, pwrdraw:0.48, boottime:15, timerng:13, facinglim:50, fdid:128666722, fdname:'Int_FSDInterdictor_Size3_Class5' },
-		
-		25450 : { mtype:'ifsdi', cost:  263420, name:'Frame Shift Drive Interdictor', class:4, rating:'E', mass:10.00, integ: 64, pwrdraw:0.25, boottime:15, timerng:12, facinglim:50, fdid:128666707, fdname:'Int_FSDInterdictor_Size4_Class1' },
-		25440 : { mtype:'ifsdi', cost:  790270, name:'Frame Shift Drive Interdictor', class:4, rating:'D', mass: 4.00, integ: 48, pwrdraw:0.33, boottime:15, timerng:13, facinglim:50, fdid:128666711, fdname:'Int_FSDInterdictor_Size4_Class2' },
-		25430 : { mtype:'ifsdi', cost: 2370820, name:'Frame Shift Drive Interdictor', class:4, rating:'C', mass:10.00, integ: 80, pwrdraw:0.41, boottime:15, timerng:14, facinglim:50, fdid:128666715, fdname:'Int_FSDInterdictor_Size4_Class3' },
-		25420 : { mtype:'ifsdi', cost: 7112450, name:'Frame Shift Drive Interdictor', class:4, rating:'B', mass:16.00, integ:112, pwrdraw:0.49, boottime:15, timerng:15, facinglim:50, fdid:128666719, fdname:'Int_FSDInterdictor_Size4_Class4' },
-		25410 : { mtype:'ifsdi', cost:21337340, name:'Frame Shift Drive Interdictor', class:4, rating:'A', mass:10.00, integ: 96, pwrdraw:0.57, boottime:15, timerng:16, facinglim:50, fdid:128666723, fdname:'Int_FSDInterdictor_Size4_Class5' },
+		 7540 : { mtype:'ifh', cost: 575660, name:'Fighter Hangar', class:5, rating:'D', mass:20.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1}, ammocost: 1030, limit:'ifh', fdid:128727930, fdname:'Int_FighterBay_Size5_Class1' },
+		 7640 : { mtype:'ifh', cost:1869350, name:'Fighter Hangar', class:6, rating:'D', mass:40.00, integ: 80, pwrdraw:0.35, boottime:5, vslots:2, vcount: 8, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1}, ammocost: 1030, limit:'ifh', fdid:128727931, fdname:'Int_FighterBay_Size6_Class1' },
+		 7740 : { mtype:'ifh', cost:2369330, name:'Fighter Hangar', class:7, rating:'D', mass:60.00, integ:120, pwrdraw:0.35, boottime:5, vslots:2, vcount:15, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1}, ammocost: 1030, limit:'ifh', fdid:128727932, fdname:'Int_FighterBay_Size7_Class1' },
 		
 		
-		 7540 : { mtype:'ifh', cost: 575660, name:'Fighter Hangar', class:5, rating:'D', mass:20.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1}, fdid:128727930, fdname:'Int_FighterBay_Size5_Class1' },
-		 7640 : { mtype:'ifh', cost:1869350, name:'Fighter Hangar', class:6, rating:'D', mass:40.00, integ: 80, pwrdraw:0.35, boottime:5, vslots:2, vcount: 8, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1}, fdid:128727931, fdname:'Int_FighterBay_Size6_Class1' },
-		 7740 : { mtype:'ifh', cost:2369330, name:'Fighter Hangar', class:7, rating:'D', mass:60.00, integ:120, pwrdraw:0.35, boottime:5, vslots:2, vcount:15, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1}, fdid:128727932, fdname:'Int_FighterBay_Size7_Class1' },
+		 3150 : { mtype:'ifa', cost: 4500, name:'Standard Docking Computer', class:1, rating:'E', integ:10, pwrdraw:0.39, boottime:3, limit:'ifa_dc', fdid:128049549, fdname:'Int_DockingComputer_Standard' },
+		 3151 : { mtype:'ifa', cost:13510, name:'Advanced Docking Computer', class:1, rating:'E', integ:10, pwrdraw:0.45, boottime:3, limit:'ifa_dc', fdid:128935155, fdname:'Int_DockingComputer_Advanced' },
+		 3152 : { mtype:'ifa', cost: 9120, name:'Supercruise Assist',        class:1, rating:'E', integ:10, pwrdraw:0.30, boottime:3, limit:'ifa_sc', fdid:128932273, fdname:'Int_SuperCruiseAssist' },
 		
 		
-		20150 : { mtype:'ifs', cost:      310, name:'Fuel Scoop', class:1, rating:'E', integ: 32, pwrdraw:0.14, boottime:4, scooprate:0.018, fdid:128666644, fdname:'Int_FuelScoop_Size1_Class1' },
-		20140 : { mtype:'ifs', cost:     1290, name:'Fuel Scoop', class:1, rating:'D', integ: 24, pwrdraw:0.18, boottime:4, scooprate:0.024, fdid:128666652, fdname:'Int_FuelScoop_Size1_Class2' },
-		20130 : { mtype:'ifs', cost:     5140, name:'Fuel Scoop', class:1, rating:'C', integ: 40, pwrdraw:0.23, boottime:4, scooprate:0.030, fdid:128666660, fdname:'Int_FuelScoop_Size1_Class3' },
-		20120 : { mtype:'ifs', cost:    20570, name:'Fuel Scoop', class:1, rating:'B', integ: 56, pwrdraw:0.28, boottime:4, scooprate:0.036, fdid:128666668, fdname:'Int_FuelScoop_Size1_Class4' },
-		20110 : { mtype:'ifs', cost:    82270, name:'Fuel Scoop', class:1, rating:'A', integ: 48, pwrdraw:0.32, boottime:4, scooprate:0.042, fdid:128666676, fdname:'Int_FuelScoop_Size1_Class5' },
-		
-		20250 : { mtype:'ifs', cost:     1070, name:'Fuel Scoop', class:2, rating:'E', integ: 41, pwrdraw:0.17, boottime:4, scooprate:0.032, fdid:128666645, fdname:'Int_FuelScoop_Size2_Class1' },
-		20240 : { mtype:'ifs', cost:     4450, name:'Fuel Scoop', class:2, rating:'D', integ: 31, pwrdraw:0.22, boottime:4, scooprate:0.043, fdid:128666653, fdname:'Int_FuelScoop_Size2_Class2' },
-		20230 : { mtype:'ifs', cost:    17800, name:'Fuel Scoop', class:2, rating:'C', integ: 51, pwrdraw:0.28, boottime:4, scooprate:0.054, fdid:128666661, fdname:'Int_FuelScoop_Size2_Class3' },
-		20220 : { mtype:'ifs', cost:    71210, name:'Fuel Scoop', class:2, rating:'B', integ: 70, pwrdraw:0.34, boottime:4, scooprate:0.065, fdid:128666669, fdname:'Int_FuelScoop_Size2_Class4' },
-		20210 : { mtype:'ifs', cost:   284840, name:'Fuel Scoop', class:2, rating:'A', integ: 61, pwrdraw:0.39, boottime:4, scooprate:0.075, fdid:128666677, fdname:'Int_FuelScoop_Size2_Class5' },
-		
-		20350 : { mtype:'ifs', cost:     3390, name:'Fuel Scoop', class:3, rating:'E', integ: 51, pwrdraw:0.20, boottime:4, scooprate:0.075, fdid:128666646, fdname:'Int_FuelScoop_Size3_Class1' },
-		20340 : { mtype:'ifs', cost:    14110, name:'Fuel Scoop', class:3, rating:'D', integ: 38, pwrdraw:0.27, boottime:4, scooprate:0.100, fdid:128666654, fdname:'Int_FuelScoop_Size3_Class2' },
-		20330 : { mtype:'ifs', cost:    56440, name:'Fuel Scoop', class:3, rating:'C', integ: 64, pwrdraw:0.34, boottime:4, scooprate:0.126, fdid:128666662, fdname:'Int_FuelScoop_Size3_Class3' },
-		20320 : { mtype:'ifs', cost:   225740, name:'Fuel Scoop', class:3, rating:'B', integ: 90, pwrdraw:0.41, boottime:4, scooprate:0.151, fdid:128666670, fdname:'Int_FuelScoop_Size3_Class4' },
-		20310 : { mtype:'ifs', cost:   902950, name:'Fuel Scoop', class:3, rating:'A', integ: 77, pwrdraw:0.48, boottime:4, scooprate:0.176, fdid:128666678, fdname:'Int_FuelScoop_Size3_Class5' },
-		
-		20450 : { mtype:'ifs', cost:    10730, name:'Fuel Scoop', class:4, rating:'E', integ: 64, pwrdraw:0.25, boottime:4, scooprate:0.147, fdid:128666647, fdname:'Int_FuelScoop_Size4_Class1' },
-		20440 : { mtype:'ifs', cost:    44720, name:'Fuel Scoop', class:4, rating:'D', integ: 48, pwrdraw:0.33, boottime:4, scooprate:0.196, fdid:128666655, fdname:'Int_FuelScoop_Size4_Class2' },
-		20430 : { mtype:'ifs', cost:   178900, name:'Fuel Scoop', class:4, rating:'C', integ: 80, pwrdraw:0.41, boottime:4, scooprate:0.245, fdid:128666663, fdname:'Int_FuelScoop_Size4_Class3' },
-		20420 : { mtype:'ifs', cost:   715590, name:'Fuel Scoop', class:4, rating:'B', integ:112, pwrdraw:0.49, boottime:4, scooprate:0.294, fdid:128666671, fdname:'Int_FuelScoop_Size4_Class4' },
-		20410 : { mtype:'ifs', cost:  2862360, name:'Fuel Scoop', class:4, rating:'A', integ: 96, pwrdraw:0.57, boottime:4, scooprate:0.342, fdid:128666679, fdname:'Int_FuelScoop_Size4_Class5' },
-		
-		20550 : { mtype:'ifs', cost:    34030, name:'Fuel Scoop', class:5, rating:'E', integ: 77, pwrdraw:0.30, boottime:4, scooprate:0.247, fdid:128666648, fdname:'Int_FuelScoop_Size5_Class1' },
-		20540 : { mtype:'ifs', cost:   141780, name:'Fuel Scoop', class:5, rating:'D', integ: 58, pwrdraw:0.40, boottime:4, scooprate:0.330, fdid:128666656, fdname:'Int_FuelScoop_Size5_Class2' },
-		20530 : { mtype:'ifs', cost:   567110, name:'Fuel Scoop', class:5, rating:'C', integ: 96, pwrdraw:0.50, boottime:4, scooprate:0.412, fdid:128666664, fdname:'Int_FuelScoop_Size5_Class3' },
-		20520 : { mtype:'ifs', cost:  2268420, name:'Fuel Scoop', class:5, rating:'B', integ:134, pwrdraw:0.60, boottime:4, scooprate:0.494, fdid:128666672, fdname:'Int_FuelScoop_Size5_Class4' },
-		20510 : { mtype:'ifs', cost:  9073690, name:'Fuel Scoop', class:5, rating:'A', integ:115, pwrdraw:0.70, boottime:4, scooprate:0.577, fdid:128666680, fdname:'Int_FuelScoop_Size5_Class5' },
-		
-		20650 : { mtype:'ifs', cost:   107860, name:'Fuel Scoop', class:6, rating:'E', integ: 90, pwrdraw:0.35, boottime:4, scooprate:0.376, fdid:128666649, fdname:'Int_FuelScoop_Size6_Class1' },
-		20640 : { mtype:'ifs', cost:   449430, name:'Fuel Scoop', class:6, rating:'D', integ: 68, pwrdraw:0.47, boottime:4, scooprate:0.502, fdid:128666657, fdname:'Int_FuelScoop_Size6_Class2' },
-		20630 : { mtype:'ifs', cost:  1797730, name:'Fuel Scoop', class:6, rating:'C', integ:113, pwrdraw:0.59, boottime:4, scooprate:0.627, fdid:128666665, fdname:'Int_FuelScoop_Size6_Class3' },
-		20620 : { mtype:'ifs', cost:  7190900, name:'Fuel Scoop', class:6, rating:'B', integ:158, pwrdraw:0.71, boottime:4, scooprate:0.752, fdid:128666673, fdname:'Int_FuelScoop_Size6_Class4' },
-		20610 : { mtype:'ifs', cost: 28763610, name:'Fuel Scoop', class:6, rating:'A', integ:136, pwrdraw:0.83, boottime:4, scooprate:0.878, fdid:128666681, fdname:'Int_FuelScoop_Size6_Class5' },
-		
-		20750 : { mtype:'ifs', cost:   341930, name:'Fuel Scoop', class:7, rating:'E', integ:105, pwrdraw:0.41, boottime:4, scooprate:0.534, fdid:128666650, fdname:'Int_FuelScoop_Size7_Class1' },
-		20740 : { mtype:'ifs', cost:  1424700, name:'Fuel Scoop', class:7, rating:'D', integ: 79, pwrdraw:0.55, boottime:4, scooprate:0.712, fdid:128666658, fdname:'Int_FuelScoop_Size7_Class2' },
-		20730 : { mtype:'ifs', cost:  5698790, name:'Fuel Scoop', class:7, rating:'C', integ:131, pwrdraw:0.69, boottime:4, scooprate:0.890, fdid:128666666, fdname:'Int_FuelScoop_Size7_Class3' },
-		20720 : { mtype:'ifs', cost: 22795160, name:'Fuel Scoop', class:7, rating:'B', integ:183, pwrdraw:0.83, boottime:4, scooprate:1.068, fdid:128666674, fdname:'Int_FuelScoop_Size7_Class4' },
-		20710 : { mtype:'ifs', cost: 91180640, name:'Fuel Scoop', class:7, rating:'A', integ:157, pwrdraw:0.97, boottime:4, scooprate:1.245, fdid:128666682, fdname:'Int_FuelScoop_Size7_Class5' },
-		
-		20850 : { mtype:'ifs', cost:  1083910, name:'Fuel Scoop', class:8, rating:'E', integ:120, pwrdraw:0.48, boottime:4, scooprate:0.720, fdid:128666651, fdname:'Int_FuelScoop_Size8_Class1' },
-		20840 : { mtype:'ifs', cost:  4516290, name:'Fuel Scoop', class:8, rating:'D', integ: 90, pwrdraw:0.64, boottime:4, scooprate:0.960, fdid:128666659, fdname:'Int_FuelScoop_Size8_Class2' },
-		20830 : { mtype:'ifs', cost: 18065170, name:'Fuel Scoop', class:8, rating:'C', integ:150, pwrdraw:0.80, boottime:4, scooprate:1.200, fdid:128666667, fdname:'Int_FuelScoop_Size8_Class3' },
-		20820 : { mtype:'ifs', cost: 72260660, name:'Fuel Scoop', class:8, rating:'B', integ:210, pwrdraw:0.96, boottime:4, scooprate:1.440, fdid:128666675, fdname:'Int_FuelScoop_Size8_Class4' },
-		20810 : { mtype:'ifs', cost:289042640, name:'Fuel Scoop', class:8, rating:'A', integ:180, pwrdraw:1.12, boottime:4, scooprate:1.680, fdid:128666683, fdname:'Int_FuelScoop_Size8_Class5' },
+		12180 : { mtype:'ifsdb', cost: 394896, name:'Guardian Frame Shift Drive Booster', tag:'G', class:1, rating:'H', mass:1.30, integ:32, pwrdraw:0.75, boottime:15, jumpbst: 4.00, limit:'ifsdb', fdid:128833975, fdname:'Int_GuardianFSDBooster_Size1' },
+		12280 : { mtype:'ifsdb', cost: 790257, name:'Guardian Frame Shift Drive Booster', tag:'G', class:2, rating:'H', mass:1.30, integ:32, pwrdraw:0.98, boottime:15, jumpbst: 6.00, limit:'ifsdb', fdid:128833976, fdname:'Int_GuardianFSDBooster_Size2' },
+		12380 : { mtype:'ifsdb', cost:1579920, name:'Guardian Frame Shift Drive Booster', tag:'G', class:3, rating:'H', mass:1.30, integ:32, pwrdraw:1.27, boottime:15, jumpbst: 7.75, limit:'ifsdb', fdid:128833977, fdname:'Int_GuardianFSDBooster_Size3' },
+		12480 : { mtype:'ifsdb', cost:3163887, name:'Guardian Frame Shift Drive Booster', tag:'G', class:4, rating:'H', mass:1.30, integ:32, pwrdraw:1.65, boottime:15, jumpbst: 9.25, limit:'ifsdb', fdid:128833978, fdname:'Int_GuardianFSDBooster_Size4' },
+		12580 : { mtype:'ifsdb', cost:6321023, name:'Guardian Frame Shift Drive Booster', tag:'G', class:5, rating:'H', mass:1.30, integ:32, pwrdraw:2.14, boottime:15, jumpbst:10.50, limit:'ifsdb', fdid:128833979, fdname:'Int_GuardianFSDBooster_Size5' },
 		
 		
-		23150 : { mtype:'iftlc', cost:    600, name:'Fuel Transfer Limpet Controller', class:1, rating:'E', mass:  1.30, integ: 24, pwrdraw:0.18, boottime:10, maxlimpet: 1, targetrng: 600, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671249, fdname:'Int_DroneControl_FuelTransfer_Size1_Class1' },
-		23140 : { mtype:'iftlc', cost:   1200, name:'Fuel Transfer Limpet Controller', class:1, rating:'D', mass:  0.50, integ: 32, pwrdraw:0.14, boottime:10, maxlimpet: 1, targetrng: 800, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671250, fdname:'Int_DroneControl_FuelTransfer_Size1_Class2' },
-		23130 : { mtype:'iftlc', cost:   2400, name:'Fuel Transfer Limpet Controller', class:1, rating:'C', mass:  1.30, integ: 40, pwrdraw:0.23, boottime:10, maxlimpet: 1, targetrng:1000, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671251, fdname:'Int_DroneControl_FuelTransfer_Size1_Class3' },
-		23120 : { mtype:'iftlc', cost:   4800, name:'Fuel Transfer Limpet Controller', class:1, rating:'B', mass:  2.00, integ: 48, pwrdraw:0.32, boottime:10, maxlimpet: 1, targetrng:1200, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671252, fdname:'Int_DroneControl_FuelTransfer_Size1_Class4' },
-		23110 : { mtype:'iftlc', cost:   9600, name:'Fuel Transfer Limpet Controller', class:1, rating:'A', mass:  1.30, integ: 56, pwrdraw:0.28, boottime:10, maxlimpet: 1, targetrng:1400, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671253, fdname:'Int_DroneControl_FuelTransfer_Size1_Class5' },
+		25150 : { mtype:'ifsdi', cost:   12000, name:'Frame Shift Drive Interdictor', class:1, rating:'E', mass: 1.30, integ: 32, pwrdraw:0.14, boottime:15, timerng: 3, facinglim:50, limit:'ifsdi', fdid:128666704, fdname:'Int_FSDInterdictor_Size1_Class1' },
+		25140 : { mtype:'ifsdi', cost:   36000, name:'Frame Shift Drive Interdictor', class:1, rating:'D', mass: 0.50, integ: 24, pwrdraw:0.18, boottime:15, timerng: 4, facinglim:50, limit:'ifsdi', fdid:128666708, fdname:'Int_FSDInterdictor_Size1_Class2' },
+		25130 : { mtype:'ifsdi', cost:  108000, name:'Frame Shift Drive Interdictor', class:1, rating:'C', mass: 1.30, integ: 40, pwrdraw:0.23, boottime:15, timerng: 5, facinglim:50, limit:'ifsdi', fdid:128666712, fdname:'Int_FSDInterdictor_Size1_Class3' },
+		25120 : { mtype:'ifsdi', cost:  324000, name:'Frame Shift Drive Interdictor', class:1, rating:'B', mass: 2.00, integ: 56, pwrdraw:0.28, boottime:15, timerng: 6, facinglim:50, limit:'ifsdi', fdid:128666716, fdname:'Int_FSDInterdictor_Size1_Class4' },
+		25110 : { mtype:'ifsdi', cost:  972000, name:'Frame Shift Drive Interdictor', class:1, rating:'A', mass: 1.30, integ: 48, pwrdraw:0.32, boottime:15, timerng: 7, facinglim:50, limit:'ifsdi', fdid:128666720, fdname:'Int_FSDInterdictor_Size1_Class5' },
 		
-		23350 : { mtype:'iftlc', cost:   5400, name:'Fuel Transfer Limpet Controller', class:3, rating:'E', mass:  5.00, integ: 38, pwrdraw:0.27, boottime:10, maxlimpet: 2, targetrng: 660, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671254, fdname:'Int_DroneControl_FuelTransfer_Size3_Class1' },
-		23340 : { mtype:'iftlc', cost:  10800, name:'Fuel Transfer Limpet Controller', class:3, rating:'D', mass:  2.00, integ: 51, pwrdraw:0.20, boottime:10, maxlimpet: 2, targetrng: 880, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671255, fdname:'Int_DroneControl_FuelTransfer_Size3_Class2' },
-		23330 : { mtype:'iftlc', cost:  21600, name:'Fuel Transfer Limpet Controller', class:3, rating:'C', mass:  5.00, integ: 64, pwrdraw:0.34, boottime:10, maxlimpet: 2, targetrng:1100, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671256, fdname:'Int_DroneControl_FuelTransfer_Size3_Class3' },
-		23320 : { mtype:'iftlc', cost:  43200, name:'Fuel Transfer Limpet Controller', class:3, rating:'B', mass:  8.00, integ: 77, pwrdraw:0.48, boottime:10, maxlimpet: 2, targetrng:1320, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671257, fdname:'Int_DroneControl_FuelTransfer_Size3_Class4' },
-		23310 : { mtype:'iftlc', cost:  86400, name:'Fuel Transfer Limpet Controller', class:3, rating:'A', mass:  5.00, integ: 90, pwrdraw:0.41, boottime:10, maxlimpet: 2, targetrng:1540, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671258, fdname:'Int_DroneControl_FuelTransfer_Size3_Class5' },
+		25250 : { mtype:'ifsdi', cost:   33600, name:'Frame Shift Drive Interdictor', class:2, rating:'E', mass: 2.50, integ: 41, pwrdraw:0.17, boottime:15, timerng: 6, facinglim:50, limit:'ifsdi', fdid:128666705, fdname:'Int_FSDInterdictor_Size2_Class1' },
+		25240 : { mtype:'ifsdi', cost:  100800, name:'Frame Shift Drive Interdictor', class:2, rating:'D', mass: 1.00, integ: 31, pwrdraw:0.22, boottime:15, timerng: 7, facinglim:50, limit:'ifsdi', fdid:128666709, fdname:'Int_FSDInterdictor_Size2_Class2' },
+		25230 : { mtype:'ifsdi', cost:  302400, name:'Frame Shift Drive Interdictor', class:2, rating:'C', mass: 2.50, integ: 51, pwrdraw:0.28, boottime:15, timerng: 8, facinglim:50, limit:'ifsdi', fdid:128666713, fdname:'Int_FSDInterdictor_Size2_Class3' },
+		25220 : { mtype:'ifsdi', cost:  907200, name:'Frame Shift Drive Interdictor', class:2, rating:'B', mass: 4.00, integ: 71, pwrdraw:0.34, boottime:15, timerng: 9, facinglim:50, limit:'ifsdi', fdid:128666717, fdname:'Int_FSDInterdictor_Size2_Class4' },
+		25210 : { mtype:'ifsdi', cost: 2721600, name:'Frame Shift Drive Interdictor', class:2, rating:'A', mass: 2.50, integ: 61, pwrdraw:0.39, boottime:15, timerng:10, facinglim:50, limit:'ifsdi', fdid:128666721, fdname:'Int_FSDInterdictor_Size2_Class5' },
 		
-		23550 : { mtype:'iftlc', cost:  48600, name:'Fuel Transfer Limpet Controller', class:5, rating:'E', mass: 20.00, integ: 58, pwrdraw:0.40, boottime:10, maxlimpet: 4, targetrng: 780, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671259, fdname:'Int_DroneControl_FuelTransfer_Size5_Class1' },
-		23540 : { mtype:'iftlc', cost:  97200, name:'Fuel Transfer Limpet Controller', class:5, rating:'D', mass:  8.00, integ: 77, pwrdraw:0.30, boottime:10, maxlimpet: 4, targetrng:1040, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671260, fdname:'Int_DroneControl_FuelTransfer_Size5_Class2' },
-		23530 : { mtype:'iftlc', cost: 194400, name:'Fuel Transfer Limpet Controller', class:5, rating:'C', mass: 20.00, integ: 96, pwrdraw:0.50, boottime:10, maxlimpet: 4, targetrng:1300, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671261, fdname:'Int_DroneControl_FuelTransfer_Size5_Class3' },
-		23520 : { mtype:'iftlc', cost: 388800, name:'Fuel Transfer Limpet Controller', class:5, rating:'B', mass: 32.00, integ:157, pwrdraw:0.97, boottime:10, maxlimpet: 4, targetrng:1560, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671262, fdname:'Int_DroneControl_FuelTransfer_Size5_Class4' }, // TODO BUG? pwrdraw:0.70
-		23510 : { mtype:'iftlc', cost: 777600, name:'Fuel Transfer Limpet Controller', class:5, rating:'A', mass: 20.00, integ:134, pwrdraw:0.60, boottime:10, maxlimpet: 4, targetrng:1820, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671263, fdname:'Int_DroneControl_FuelTransfer_Size5_Class5' },
+		25350 : { mtype:'ifsdi', cost:   94080, name:'Frame Shift Drive Interdictor', class:3, rating:'E', mass: 5.00, integ: 51, pwrdraw:0.20, boottime:15, timerng: 9, facinglim:50, limit:'ifsdi', fdid:128666706, fdname:'Int_FSDInterdictor_Size3_Class1' },
+		25340 : { mtype:'ifsdi', cost:  282240, name:'Frame Shift Drive Interdictor', class:3, rating:'D', mass: 2.00, integ: 38, pwrdraw:0.27, boottime:15, timerng:10, facinglim:50, limit:'ifsdi', fdid:128666710, fdname:'Int_FSDInterdictor_Size3_Class2' },
+		25330 : { mtype:'ifsdi', cost:  846720, name:'Frame Shift Drive Interdictor', class:3, rating:'C', mass: 5.00, integ: 64, pwrdraw:0.34, boottime:15, timerng:11, facinglim:50, limit:'ifsdi', fdid:128666714, fdname:'Int_FSDInterdictor_Size3_Class3' },
+		25320 : { mtype:'ifsdi', cost: 2540160, name:'Frame Shift Drive Interdictor', class:3, rating:'B', mass: 8.00, integ: 90, pwrdraw:0.41, boottime:15, timerng:12, facinglim:50, limit:'ifsdi', fdid:128666718, fdname:'Int_FSDInterdictor_Size3_Class4' },
+		25310 : { mtype:'ifsdi', cost: 7620480, name:'Frame Shift Drive Interdictor', class:3, rating:'A', mass: 5.00, integ: 77, pwrdraw:0.48, boottime:15, timerng:13, facinglim:50, limit:'ifsdi', fdid:128666722, fdname:'Int_FSDInterdictor_Size3_Class5' },
 		
-		23750 : { mtype:'iftlc', cost: 437400, name:'Fuel Transfer Limpet Controller', class:7, rating:'E', mass: 80.00, integ: 79, pwrdraw:0.55, boottime:10, maxlimpet: 8, targetrng:1020, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671264, fdname:'Int_DroneControl_FuelTransfer_Size7_Class1' },
-		23740 : { mtype:'iftlc', cost: 874800, name:'Fuel Transfer Limpet Controller', class:7, rating:'D', mass: 32.00, integ:105, pwrdraw:0.41, boottime:10, maxlimpet: 8, targetrng:1360, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671265, fdname:'Int_DroneControl_FuelTransfer_Size7_Class2' },
-		23730 : { mtype:'iftlc', cost:1749600, name:'Fuel Transfer Limpet Controller', class:7, rating:'C', mass: 80.00, integ:131, pwrdraw:0.69, boottime:10, maxlimpet: 8, targetrng:1700, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671266, fdname:'Int_DroneControl_FuelTransfer_Size7_Class3' },
-		23720 : { mtype:'iftlc', cost:3499200, name:'Fuel Transfer Limpet Controller', class:7, rating:'B', mass:128.00, integ:157, pwrdraw:0.97, boottime:10, maxlimpet: 8, targetrng:2040, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671267, fdname:'Int_DroneControl_FuelTransfer_Size7_Class4' },
-		23710 : { mtype:'iftlc', cost:6998400, name:'Fuel Transfer Limpet Controller', class:7, rating:'A', mass: 80.00, integ:183, pwrdraw:0.83, boottime:10, maxlimpet: 8, targetrng:2380, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671268, fdname:'Int_DroneControl_FuelTransfer_Size7_Class5' },
+		25450 : { mtype:'ifsdi', cost:  263420, name:'Frame Shift Drive Interdictor', class:4, rating:'E', mass:10.00, integ: 64, pwrdraw:0.25, boottime:15, timerng:12, facinglim:50, limit:'ifsdi', fdid:128666707, fdname:'Int_FSDInterdictor_Size4_Class1' },
+		25440 : { mtype:'ifsdi', cost:  790270, name:'Frame Shift Drive Interdictor', class:4, rating:'D', mass: 4.00, integ: 48, pwrdraw:0.33, boottime:15, timerng:13, facinglim:50, limit:'ifsdi', fdid:128666711, fdname:'Int_FSDInterdictor_Size4_Class2' },
+		25430 : { mtype:'ifsdi', cost: 2370820, name:'Frame Shift Drive Interdictor', class:4, rating:'C', mass:10.00, integ: 80, pwrdraw:0.41, boottime:15, timerng:14, facinglim:50, limit:'ifsdi', fdid:128666715, fdname:'Int_FSDInterdictor_Size4_Class3' },
+		25420 : { mtype:'ifsdi', cost: 7112450, name:'Frame Shift Drive Interdictor', class:4, rating:'B', mass:16.00, integ:112, pwrdraw:0.49, boottime:15, timerng:15, facinglim:50, limit:'ifsdi', fdid:128666719, fdname:'Int_FSDInterdictor_Size4_Class4' },
+		25410 : { mtype:'ifsdi', cost:21337340, name:'Frame Shift Drive Interdictor', class:4, rating:'A', mass:10.00, integ: 96, pwrdraw:0.57, boottime:15, timerng:16, facinglim:50, limit:'ifsdi', fdid:128666723, fdname:'Int_FSDInterdictor_Size4_Class5' },
 		
 		
-		// TODO: thmload added in 3.0?
+		20150 : { mtype:'ifs', cost:      310, name:'Fuel Scoop', class:1, rating:'E', integ: 32, pwrdraw:0.14, boottime:4, scooprate:0.018, limit:'ifs', fdid:128666644, fdname:'Int_FuelScoop_Size1_Class1' },
+		20140 : { mtype:'ifs', cost:     1290, name:'Fuel Scoop', class:1, rating:'D', integ: 24, pwrdraw:0.18, boottime:4, scooprate:0.024, limit:'ifs', fdid:128666652, fdname:'Int_FuelScoop_Size1_Class2' },
+		20130 : { mtype:'ifs', cost:     5140, name:'Fuel Scoop', class:1, rating:'C', integ: 40, pwrdraw:0.23, boottime:4, scooprate:0.030, limit:'ifs', fdid:128666660, fdname:'Int_FuelScoop_Size1_Class3' },
+		20120 : { mtype:'ifs', cost:    20570, name:'Fuel Scoop', class:1, rating:'B', integ: 56, pwrdraw:0.28, boottime:4, scooprate:0.036, limit:'ifs', fdid:128666668, fdname:'Int_FuelScoop_Size1_Class4' },
+		20110 : { mtype:'ifs', cost:    82270, name:'Fuel Scoop', class:1, rating:'A', integ: 48, pwrdraw:0.32, boottime:4, scooprate:0.042, limit:'ifs', fdid:128666676, fdname:'Int_FuelScoop_Size1_Class5' },
+		
+		20250 : { mtype:'ifs', cost:     1070, name:'Fuel Scoop', class:2, rating:'E', integ: 41, pwrdraw:0.17, boottime:4, scooprate:0.032, limit:'ifs', fdid:128666645, fdname:'Int_FuelScoop_Size2_Class1' },
+		20240 : { mtype:'ifs', cost:     4450, name:'Fuel Scoop', class:2, rating:'D', integ: 31, pwrdraw:0.22, boottime:4, scooprate:0.043, limit:'ifs', fdid:128666653, fdname:'Int_FuelScoop_Size2_Class2' },
+		20230 : { mtype:'ifs', cost:    17800, name:'Fuel Scoop', class:2, rating:'C', integ: 51, pwrdraw:0.28, boottime:4, scooprate:0.054, limit:'ifs', fdid:128666661, fdname:'Int_FuelScoop_Size2_Class3' },
+		20220 : { mtype:'ifs', cost:    71210, name:'Fuel Scoop', class:2, rating:'B', integ: 70, pwrdraw:0.34, boottime:4, scooprate:0.065, limit:'ifs', fdid:128666669, fdname:'Int_FuelScoop_Size2_Class4' },
+		20210 : { mtype:'ifs', cost:   284840, name:'Fuel Scoop', class:2, rating:'A', integ: 61, pwrdraw:0.39, boottime:4, scooprate:0.075, limit:'ifs', fdid:128666677, fdname:'Int_FuelScoop_Size2_Class5' },
+		
+		20350 : { mtype:'ifs', cost:     3390, name:'Fuel Scoop', class:3, rating:'E', integ: 51, pwrdraw:0.20, boottime:4, scooprate:0.075, limit:'ifs', fdid:128666646, fdname:'Int_FuelScoop_Size3_Class1' },
+		20340 : { mtype:'ifs', cost:    14110, name:'Fuel Scoop', class:3, rating:'D', integ: 38, pwrdraw:0.27, boottime:4, scooprate:0.100, limit:'ifs', fdid:128666654, fdname:'Int_FuelScoop_Size3_Class2' },
+		20330 : { mtype:'ifs', cost:    56440, name:'Fuel Scoop', class:3, rating:'C', integ: 64, pwrdraw:0.34, boottime:4, scooprate:0.126, limit:'ifs', fdid:128666662, fdname:'Int_FuelScoop_Size3_Class3' },
+		20320 : { mtype:'ifs', cost:   225740, name:'Fuel Scoop', class:3, rating:'B', integ: 90, pwrdraw:0.41, boottime:4, scooprate:0.151, limit:'ifs', fdid:128666670, fdname:'Int_FuelScoop_Size3_Class4' },
+		20310 : { mtype:'ifs', cost:   902950, name:'Fuel Scoop', class:3, rating:'A', integ: 77, pwrdraw:0.48, boottime:4, scooprate:0.176, limit:'ifs', fdid:128666678, fdname:'Int_FuelScoop_Size3_Class5' },
+		
+		20450 : { mtype:'ifs', cost:    10730, name:'Fuel Scoop', class:4, rating:'E', integ: 64, pwrdraw:0.25, boottime:4, scooprate:0.147, limit:'ifs', fdid:128666647, fdname:'Int_FuelScoop_Size4_Class1' },
+		20440 : { mtype:'ifs', cost:    44720, name:'Fuel Scoop', class:4, rating:'D', integ: 48, pwrdraw:0.33, boottime:4, scooprate:0.196, limit:'ifs', fdid:128666655, fdname:'Int_FuelScoop_Size4_Class2' },
+		20430 : { mtype:'ifs', cost:   178900, name:'Fuel Scoop', class:4, rating:'C', integ: 80, pwrdraw:0.41, boottime:4, scooprate:0.245, limit:'ifs', fdid:128666663, fdname:'Int_FuelScoop_Size4_Class3' },
+		20420 : { mtype:'ifs', cost:   715590, name:'Fuel Scoop', class:4, rating:'B', integ:112, pwrdraw:0.49, boottime:4, scooprate:0.294, limit:'ifs', fdid:128666671, fdname:'Int_FuelScoop_Size4_Class4' },
+		20410 : { mtype:'ifs', cost:  2862360, name:'Fuel Scoop', class:4, rating:'A', integ: 96, pwrdraw:0.57, boottime:4, scooprate:0.342, limit:'ifs', fdid:128666679, fdname:'Int_FuelScoop_Size4_Class5' },
+		
+		20550 : { mtype:'ifs', cost:    34030, name:'Fuel Scoop', class:5, rating:'E', integ: 77, pwrdraw:0.30, boottime:4, scooprate:0.247, limit:'ifs', fdid:128666648, fdname:'Int_FuelScoop_Size5_Class1' },
+		20540 : { mtype:'ifs', cost:   141780, name:'Fuel Scoop', class:5, rating:'D', integ: 58, pwrdraw:0.40, boottime:4, scooprate:0.330, limit:'ifs', fdid:128666656, fdname:'Int_FuelScoop_Size5_Class2' },
+		20530 : { mtype:'ifs', cost:   567110, name:'Fuel Scoop', class:5, rating:'C', integ: 96, pwrdraw:0.50, boottime:4, scooprate:0.412, limit:'ifs', fdid:128666664, fdname:'Int_FuelScoop_Size5_Class3' },
+		20520 : { mtype:'ifs', cost:  2268420, name:'Fuel Scoop', class:5, rating:'B', integ:134, pwrdraw:0.60, boottime:4, scooprate:0.494, limit:'ifs', fdid:128666672, fdname:'Int_FuelScoop_Size5_Class4' },
+		20510 : { mtype:'ifs', cost:  9073690, name:'Fuel Scoop', class:5, rating:'A', integ:115, pwrdraw:0.70, boottime:4, scooprate:0.577, limit:'ifs', fdid:128666680, fdname:'Int_FuelScoop_Size5_Class5' },
+		
+		20650 : { mtype:'ifs', cost:   107860, name:'Fuel Scoop', class:6, rating:'E', integ: 90, pwrdraw:0.35, boottime:4, scooprate:0.376, limit:'ifs', fdid:128666649, fdname:'Int_FuelScoop_Size6_Class1' },
+		20640 : { mtype:'ifs', cost:   449430, name:'Fuel Scoop', class:6, rating:'D', integ: 68, pwrdraw:0.47, boottime:4, scooprate:0.502, limit:'ifs', fdid:128666657, fdname:'Int_FuelScoop_Size6_Class2' },
+		20630 : { mtype:'ifs', cost:  1797730, name:'Fuel Scoop', class:6, rating:'C', integ:113, pwrdraw:0.59, boottime:4, scooprate:0.627, limit:'ifs', fdid:128666665, fdname:'Int_FuelScoop_Size6_Class3' },
+		20620 : { mtype:'ifs', cost:  7190900, name:'Fuel Scoop', class:6, rating:'B', integ:158, pwrdraw:0.71, boottime:4, scooprate:0.752, limit:'ifs', fdid:128666673, fdname:'Int_FuelScoop_Size6_Class4' },
+		20610 : { mtype:'ifs', cost: 28763610, name:'Fuel Scoop', class:6, rating:'A', integ:136, pwrdraw:0.83, boottime:4, scooprate:0.878, limit:'ifs', fdid:128666681, fdname:'Int_FuelScoop_Size6_Class5' },
+		
+		20750 : { mtype:'ifs', cost:   341930, name:'Fuel Scoop', class:7, rating:'E', integ:105, pwrdraw:0.41, boottime:4, scooprate:0.534, limit:'ifs', fdid:128666650, fdname:'Int_FuelScoop_Size7_Class1' },
+		20740 : { mtype:'ifs', cost:  1424700, name:'Fuel Scoop', class:7, rating:'D', integ: 79, pwrdraw:0.55, boottime:4, scooprate:0.712, limit:'ifs', fdid:128666658, fdname:'Int_FuelScoop_Size7_Class2' },
+		20730 : { mtype:'ifs', cost:  5698790, name:'Fuel Scoop', class:7, rating:'C', integ:131, pwrdraw:0.69, boottime:4, scooprate:0.890, limit:'ifs', fdid:128666666, fdname:'Int_FuelScoop_Size7_Class3' },
+		20720 : { mtype:'ifs', cost: 22795160, name:'Fuel Scoop', class:7, rating:'B', integ:183, pwrdraw:0.83, boottime:4, scooprate:1.068, limit:'ifs', fdid:128666674, fdname:'Int_FuelScoop_Size7_Class4' },
+		20710 : { mtype:'ifs', cost: 91180640, name:'Fuel Scoop', class:7, rating:'A', integ:157, pwrdraw:0.97, boottime:4, scooprate:1.245, limit:'ifs', fdid:128666682, fdname:'Int_FuelScoop_Size7_Class5' },
+		
+		20850 : { mtype:'ifs', cost:  1083910, name:'Fuel Scoop', class:8, rating:'E', integ:120, pwrdraw:0.48, boottime:4, scooprate:0.720, limit:'ifs', fdid:128666651, fdname:'Int_FuelScoop_Size8_Class1' },
+		20840 : { mtype:'ifs', cost:  4516290, name:'Fuel Scoop', class:8, rating:'D', integ: 90, pwrdraw:0.64, boottime:4, scooprate:0.960, limit:'ifs', fdid:128666659, fdname:'Int_FuelScoop_Size8_Class2' },
+		20830 : { mtype:'ifs', cost: 18065170, name:'Fuel Scoop', class:8, rating:'C', integ:150, pwrdraw:0.80, boottime:4, scooprate:1.200, limit:'ifs', fdid:128666667, fdname:'Int_FuelScoop_Size8_Class3' },
+		20820 : { mtype:'ifs', cost: 72260660, name:'Fuel Scoop', class:8, rating:'B', integ:210, pwrdraw:0.96, boottime:4, scooprate:1.440, limit:'ifs', fdid:128666675, fdname:'Int_FuelScoop_Size8_Class4' },
+		20810 : { mtype:'ifs', cost:289042640, name:'Fuel Scoop', class:8, rating:'A', integ:180, pwrdraw:1.12, boottime:4, scooprate:1.680, limit:'ifs', fdid:128666683, fdname:'Int_FuelScoop_Size8_Class5' },
+		
+		
+		23150 : { mtype:'iftlc', cost:    600, name:'Fuel Transfer Limpet Controller', class:1, rating:'E', mass:  1.30, integ: 24, pwrdraw:0.18, boottime:10, maxlimpet: 1, lpactrng: 600, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671249, fdname:'Int_DroneControl_FuelTransfer_Size1_Class1' },
+		23140 : { mtype:'iftlc', cost:   1200, name:'Fuel Transfer Limpet Controller', class:1, rating:'D', mass:  0.50, integ: 32, pwrdraw:0.14, boottime:10, maxlimpet: 1, lpactrng: 800, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671250, fdname:'Int_DroneControl_FuelTransfer_Size1_Class2' },
+		23130 : { mtype:'iftlc', cost:   2400, name:'Fuel Transfer Limpet Controller', class:1, rating:'C', mass:  1.30, integ: 40, pwrdraw:0.23, boottime:10, maxlimpet: 1, lpactrng:1000, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671251, fdname:'Int_DroneControl_FuelTransfer_Size1_Class3' },
+		23120 : { mtype:'iftlc', cost:   4800, name:'Fuel Transfer Limpet Controller', class:1, rating:'B', mass:  2.00, integ: 48, pwrdraw:0.32, boottime:10, maxlimpet: 1, lpactrng:1200, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671252, fdname:'Int_DroneControl_FuelTransfer_Size1_Class4' },
+		23110 : { mtype:'iftlc', cost:   9600, name:'Fuel Transfer Limpet Controller', class:1, rating:'A', mass:  1.30, integ: 56, pwrdraw:0.28, boottime:10, maxlimpet: 1, lpactrng:1400, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671253, fdname:'Int_DroneControl_FuelTransfer_Size1_Class5' },
+		
+		23350 : { mtype:'iftlc', cost:   5400, name:'Fuel Transfer Limpet Controller', class:3, rating:'E', mass:  5.00, integ: 38, pwrdraw:0.27, boottime:10, maxlimpet: 2, lpactrng: 660, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671254, fdname:'Int_DroneControl_FuelTransfer_Size3_Class1' },
+		23340 : { mtype:'iftlc', cost:  10800, name:'Fuel Transfer Limpet Controller', class:3, rating:'D', mass:  2.00, integ: 51, pwrdraw:0.20, boottime:10, maxlimpet: 2, lpactrng: 880, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671255, fdname:'Int_DroneControl_FuelTransfer_Size3_Class2' },
+		23330 : { mtype:'iftlc', cost:  21600, name:'Fuel Transfer Limpet Controller', class:3, rating:'C', mass:  5.00, integ: 64, pwrdraw:0.34, boottime:10, maxlimpet: 2, lpactrng:1100, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671256, fdname:'Int_DroneControl_FuelTransfer_Size3_Class3' },
+		23320 : { mtype:'iftlc', cost:  43200, name:'Fuel Transfer Limpet Controller', class:3, rating:'B', mass:  8.00, integ: 77, pwrdraw:0.48, boottime:10, maxlimpet: 2, lpactrng:1320, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671257, fdname:'Int_DroneControl_FuelTransfer_Size3_Class4' },
+		23310 : { mtype:'iftlc', cost:  86400, name:'Fuel Transfer Limpet Controller', class:3, rating:'A', mass:  5.00, integ: 90, pwrdraw:0.41, boottime:10, maxlimpet: 2, lpactrng:1540, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671258, fdname:'Int_DroneControl_FuelTransfer_Size3_Class5' },
+		
+		23550 : { mtype:'iftlc', cost:  48600, name:'Fuel Transfer Limpet Controller', class:5, rating:'E', mass: 20.00, integ: 58, pwrdraw:0.40, boottime:10, maxlimpet: 4, lpactrng: 780, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671259, fdname:'Int_DroneControl_FuelTransfer_Size5_Class1' },
+		23540 : { mtype:'iftlc', cost:  97200, name:'Fuel Transfer Limpet Controller', class:5, rating:'D', mass:  8.00, integ: 77, pwrdraw:0.30, boottime:10, maxlimpet: 4, lpactrng:1040, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671260, fdname:'Int_DroneControl_FuelTransfer_Size5_Class2' },
+		23530 : { mtype:'iftlc', cost: 194400, name:'Fuel Transfer Limpet Controller', class:5, rating:'C', mass: 20.00, integ: 96, pwrdraw:0.50, boottime:10, maxlimpet: 4, lpactrng:1300, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671261, fdname:'Int_DroneControl_FuelTransfer_Size5_Class3' },
+		23520 : { mtype:'iftlc', cost: 388800, name:'Fuel Transfer Limpet Controller', class:5, rating:'B', mass: 32.00, integ:115, pwrdraw:0.72, boottime:10, maxlimpet: 4, lpactrng:1560, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671262, fdname:'Int_DroneControl_FuelTransfer_Size5_Class4' },
+		23510 : { mtype:'iftlc', cost: 777600, name:'Fuel Transfer Limpet Controller', class:5, rating:'A', mass: 20.00, integ:134, pwrdraw:0.60, boottime:10, maxlimpet: 4, lpactrng:1820, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671263, fdname:'Int_DroneControl_FuelTransfer_Size5_Class5' },
+		
+		23750 : { mtype:'iftlc', cost: 437400, name:'Fuel Transfer Limpet Controller', class:7, rating:'E', mass: 80.00, integ: 79, pwrdraw:0.55, boottime:10, maxlimpet: 8, lpactrng:1020, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671264, fdname:'Int_DroneControl_FuelTransfer_Size7_Class1' },
+		23740 : { mtype:'iftlc', cost: 874800, name:'Fuel Transfer Limpet Controller', class:7, rating:'D', mass: 32.00, integ:105, pwrdraw:0.41, boottime:10, maxlimpet: 8, lpactrng:1360, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671265, fdname:'Int_DroneControl_FuelTransfer_Size7_Class2' },
+		23730 : { mtype:'iftlc', cost:1749600, name:'Fuel Transfer Limpet Controller', class:7, rating:'C', mass: 80.00, integ:131, pwrdraw:0.69, boottime:10, maxlimpet: 8, lpactrng:1700, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671266, fdname:'Int_DroneControl_FuelTransfer_Size7_Class3' },
+		23720 : { mtype:'iftlc', cost:3499200, name:'Fuel Transfer Limpet Controller', class:7, rating:'B', mass:128.00, integ:157, pwrdraw:0.97, boottime:10, maxlimpet: 8, lpactrng:2040, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671267, fdname:'Int_DroneControl_FuelTransfer_Size7_Class4' },
+		23710 : { mtype:'iftlc', cost:6998400, name:'Fuel Transfer Limpet Controller', class:7, rating:'A', mass: 80.00, integ:183, pwrdraw:0.83, boottime:10, maxlimpet: 8, lpactrng:2380, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671268, fdname:'Int_DroneControl_FuelTransfer_Size7_Class5' },
+		
+		
 		26150 : { mtype:'ihblc', cost:    600, name:'Hatch Breaker Limpet Controller', class:1, rating:'E', mass:  1.30, integ: 32, pwrdraw:0.12, boottime:3, maxlimpet: 2, targetrng:1500, lpactrng:1600, limpettime:120, maxspd:500, hacktime:22, mincargo:1, maxcargo: 6, fdid:128066532, fdname:'Int_DroneControl_ResourceSiphon_Size1_Class1' },
 		26140 : { mtype:'ihblc', cost:   1200, name:'Hatch Breaker Limpet Controller', class:1, rating:'D', mass:  0.50, integ: 24, pwrdraw:0.16, boottime:3, maxlimpet: 1, targetrng:2000, lpactrng:2100, limpettime:120, maxspd:500, hacktime:19, mincargo:2, maxcargo: 7, fdid:128066533, fdname:'Int_DroneControl_ResourceSiphon_Size1_Class2' },
 		26130 : { mtype:'ihblc', cost:   2400, name:'Hatch Breaker Limpet Controller', class:1, rating:'C', mass:  1.30, integ: 40, pwrdraw:0.20, boottime:3, maxlimpet: 1, targetrng:2500, lpactrng:2600, limpettime:120, maxspd:500, hacktime:16, mincargo:3, maxcargo: 8, fdid:128066534, fdname:'Int_DroneControl_ResourceSiphon_Size1_Class3' },
@@ -2779,17 +3094,39 @@ var eddb = {
 		 4550 : { mtype:'ihrp', cost:   150000, name:'Hull Reinforcement Package', class:5, rating:'E', mass:32.00, hullrnf:360, kinres:2.5, thmres:2.5, expres:2.5, fdid:128668545, fdname:'Int_HullReinforcement_Size5_Class1' },
 		 4540 : { mtype:'ihrp', cost:   450000, name:'Hull Reinforcement Package', class:5, rating:'D', mass:16.00, hullrnf:390, kinres:2.5, thmres:2.5, expres:2.5, fdid:128668546, fdname:'Int_HullReinforcement_Size5_Class2' },
 		
+		 4151 : { mtype:'ihrp', cost:    10000, name:'Guardian Hull Reinforcement Package', tag:'G', class:1, rating:'E', mass: 2.00, pwrdraw:0.45, hullrnf:100, thmres:2.0, caures:5.0, noblueprints:{'*':1}, fdid:128833945, fdname:'Int_GuardianHullReinforcement_Size1_Class1' }, // verify *res
+		 4141 : { mtype:'ihrp', cost:    30000, name:'Guardian Hull Reinforcement Package', tag:'G', class:1, rating:'D', mass: 1.00, pwrdraw:0.56, hullrnf:138, thmres:2.0, caures:5.0, noblueprints:{'*':1}, fdid:128833946, fdname:'Int_GuardianHullReinforcement_Size1_Class2' }, // verify *res
+		 4251 : { mtype:'ihrp', cost:    24000, name:'Guardian Hull Reinforcement Package', tag:'G', class:2, rating:'E', mass: 4.00, pwrdraw:0.68, hullrnf:188, thmres:2.0, caures:5.0, noblueprints:{'*':1}, fdid:128833947, fdname:'Int_GuardianHullReinforcement_Size2_Class1' }, // verify *res
+		 4241 : { mtype:'ihrp', cost:    72000, name:'Guardian Hull Reinforcement Package', tag:'G', class:2, rating:'D', mass: 2.00, pwrdraw:0.79, hullrnf:238, thmres:2.0, caures:5.0, noblueprints:{'*':1}, fdid:128833948, fdname:'Int_GuardianHullReinforcement_Size2_Class2' }, // verify *res
+		 4351 : { mtype:'ihrp', cost:    57600, name:'Guardian Hull Reinforcement Package', tag:'G', class:3, rating:'E', mass: 8.00, pwrdraw:0.90, hullrnf:288, thmres:2.0, caures:5.0, noblueprints:{'*':1}, fdid:128833949, fdname:'Int_GuardianHullReinforcement_Size3_Class1' }, // verify *res
+		 4341 : { mtype:'ihrp', cost:   172800, name:'Guardian Hull Reinforcement Package', tag:'G', class:3, rating:'D', mass: 4.00, pwrdraw:1.01, hullrnf:325, thmres:2.0, caures:5.0, noblueprints:{'*':1}, fdid:128833950, fdname:'Int_GuardianHullReinforcement_Size3_Class2' }, // verify *res
+		 4451 : { mtype:'ihrp', cost:   138240, name:'Guardian Hull Reinforcement Package', tag:'G', class:4, rating:'E', mass:16.00, pwrdraw:1.13, hullrnf:375, thmres:2.0, caures:5.0, noblueprints:{'*':1}, fdid:128833951, fdname:'Int_GuardianHullReinforcement_Size4_Class1' }, // verify *res
+		 4441 : { mtype:'ihrp', cost:   414720, name:'Guardian Hull Reinforcement Package', tag:'G', class:4, rating:'D', mass: 8.00, pwrdraw:1.24, hullrnf:413, thmres:2.0, caures:5.0, noblueprints:{'*':1}, fdid:128833952, fdname:'Int_GuardianHullReinforcement_Size4_Class2' }, // verify *res
+		 4551 : { mtype:'ihrp', cost:   331776, name:'Guardian Hull Reinforcement Package', tag:'G', class:5, rating:'E', mass:32.00, pwrdraw:1.35, hullrnf:450, thmres:2.0, caures:5.0, noblueprints:{'*':1}, fdid:128833953, fdname:'Int_GuardianHullReinforcement_Size5_Class1' }, // verify *res
+		 4541 : { mtype:'ihrp', cost:   995328, name:'Guardian Hull Reinforcement Package', tag:'G', class:5, rating:'D', mass:16.00, pwrdraw:1.46, hullrnf:488, thmres:2.0, caures:5.0, noblueprints:{'*':1}, fdid:128833954, fdname:'Int_GuardianHullReinforcement_Size5_Class2' }, // verify *res
 		
-		 9151 : { mtype:'imahrp', cost:  7500, name:'Meta Alloy Hull Reinforcement Package', class:1, rating:'E', mass:  2, hullrnf: 72, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size1_Class1' }, // TODO: fdid
-		 9141 : { mtype:'imahrp', cost: 22500, name:'Meta Alloy Hull Reinforcement Package', class:1, rating:'D', mass:  2, hullrnf: 99, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size1_Class2' }, // TODO: fdid
-		 9251 : { mtype:'imahrp', cost: 18000, name:'Meta Alloy Hull Reinforcement Package', class:2, rating:'E', mass:  4, hullrnf:135, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size2_Class1' }, // TODO: fdid
-		 9241 : { mtype:'imahrp', cost: 54000, name:'Meta Alloy Hull Reinforcement Package', class:2, rating:'D', mass:  2, hullrnf:171, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size2_Class2' }, // TODO: fdid
-		 9351 : { mtype:'imahrp', cost: 42000, name:'Meta Alloy Hull Reinforcement Package', class:3, rating:'E', mass:  8, hullrnf:207, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size3_Class1' }, // TODO: fdid
-		 9341 : { mtype:'imahrp', cost:126000, name:'Meta Alloy Hull Reinforcement Package', class:3, rating:'D', mass:  4, hullrnf:234, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size3_Class2' }, // TODO: fdid
-		 9451 : { mtype:'imahrp', cost: 97500, name:'Meta Alloy Hull Reinforcement Package', class:4, rating:'E', mass: 16, hullrnf:270, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size4_Class1' }, // TODO: fdid
-		 9441 : { mtype:'imahrp', cost:292500, name:'Meta Alloy Hull Reinforcement Package', class:4, rating:'D', mass:  8, hullrnf:297, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size4_Class2' }, // TODO: fdid
-		 9551 : { mtype:'imahrp', cost:225000, name:'Meta Alloy Hull Reinforcement Package', class:5, rating:'E', mass: 32, hullrnf:324, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size5_Class1' }, // TODO: fdid
-		 9541 : { mtype:'imahrp', cost:675000, name:'Meta Alloy Hull Reinforcement Package', class:5, rating:'D', mass: 16, hullrnf:351, caures:3.0, fdid:null, fdname:'Int_MetaAlloyHullReinforcement_Size5_Class2' }, // TODO: fdid
+		32151 : { mtype:'isrp', cost:   10000, name:'Guardian Shield Reinforcement Package', tag:'G', class:1, rating:'E', mass:  2.00, integ: 36, pwrdraw:0.35, shieldrnf: 44, noblueprints:{'*':1}, fdid:128833965, fdname:'Int_GuardianShieldReinforcement_Size1_Class1' },
+		32141 : { mtype:'isrp', cost:   30000, name:'Guardian Shield Reinforcement Package', tag:'G', class:1, rating:'D', mass:  1.00, integ: 36, pwrdraw:0.46, shieldrnf: 61, noblueprints:{'*':1}, fdid:128833966, fdname:'Int_GuardianShieldReinforcement_Size1_Class2' },
+		32251 : { mtype:'isrp', cost:   24000, name:'Guardian Shield Reinforcement Package', tag:'G', class:2, rating:'E', mass:  4.00, integ: 36, pwrdraw:0.56, shieldrnf: 83, noblueprints:{'*':1}, fdid:128833967, fdname:'Int_GuardianShieldReinforcement_Size2_Class1' },
+		32241 : { mtype:'isrp', cost:   72000, name:'Guardian Shield Reinforcement Package', tag:'G', class:2, rating:'D', mass:  2.00, integ: 36, pwrdraw:0.67, shieldrnf:105, noblueprints:{'*':1}, fdid:128833968, fdname:'Int_GuardianShieldReinforcement_Size2_Class2' },
+		32351 : { mtype:'isrp', cost:   57600, name:'Guardian Shield Reinforcement Package', tag:'G', class:3, rating:'E', mass:  8.00, integ: 36, pwrdraw:0.74, shieldrnf:127, noblueprints:{'*':1}, fdid:128833969, fdname:'Int_GuardianShieldReinforcement_Size3_Class1' },
+		32341 : { mtype:'isrp', cost:  172800, name:'Guardian Shield Reinforcement Package', tag:'G', class:3, rating:'D', mass:  4.00, integ: 36, pwrdraw:0.84, shieldrnf:143, noblueprints:{'*':1}, fdid:128833970, fdname:'Int_GuardianShieldReinforcement_Size3_Class2' },
+		32451 : { mtype:'isrp', cost:  138240, name:'Guardian Shield Reinforcement Package', tag:'G', class:4, rating:'E', mass: 16.00, integ: 36, pwrdraw:0.95, shieldrnf:165, noblueprints:{'*':1}, fdid:128833971, fdname:'Int_GuardianShieldReinforcement_Size4_Class1' },
+		32441 : { mtype:'isrp', cost:  414720, name:'Guardian Shield Reinforcement Package', tag:'G', class:4, rating:'D', mass:  8.00, integ: 36, pwrdraw:1.05, shieldrnf:182, noblueprints:{'*':1}, fdid:128833972, fdname:'Int_GuardianShieldReinforcement_Size4_Class2' },
+		32551 : { mtype:'isrp', cost:  331776, name:'Guardian Shield Reinforcement Package', tag:'G', class:5, rating:'E', mass: 32.00, integ: 36, pwrdraw:1.16, shieldrnf:198, noblueprints:{'*':1}, fdid:128833973, fdname:'Int_GuardianShieldReinforcement_Size5_Class1' },
+		32541 : { mtype:'isrp', cost:  995328, name:'Guardian Shield Reinforcement Package', tag:'G', class:5, rating:'D', mass: 16.00, integ: 36, pwrdraw:1.26, shieldrnf:215, noblueprints:{'*':1}, fdid:128833974, fdname:'Int_GuardianShieldReinforcement_Size5_Class2' },
+		
+		
+		 9151 : { mtype:'imahrp', cost:  7500, name:'Meta Alloy Hull Reinforcement Package', class:1, rating:'E', mass:  2, hullrnf: 72, caures:3.0, fdid:128793117, fdname:'Int_MetaAlloyHullReinforcement_Size1_Class1' }, // techbroker
+		 9141 : { mtype:'imahrp', cost: 22500, name:'Meta Alloy Hull Reinforcement Package', class:1, rating:'D', mass:  2, hullrnf: 99, caures:3.0, fdid:128793118, fdname:'Int_MetaAlloyHullReinforcement_Size1_Class2' }, // techbroker
+		 9251 : { mtype:'imahrp', cost: 18000, name:'Meta Alloy Hull Reinforcement Package', class:2, rating:'E', mass:  4, hullrnf:135, caures:3.0, fdid:128793119, fdname:'Int_MetaAlloyHullReinforcement_Size2_Class1' }, // techbroker
+		 9241 : { mtype:'imahrp', cost: 54000, name:'Meta Alloy Hull Reinforcement Package', class:2, rating:'D', mass:  2, hullrnf:171, caures:3.0, fdid:128793120, fdname:'Int_MetaAlloyHullReinforcement_Size2_Class2' }, // techbroker
+		 9351 : { mtype:'imahrp', cost: 42000, name:'Meta Alloy Hull Reinforcement Package', class:3, rating:'E', mass:  8, hullrnf:207, caures:3.0, fdid:128793121, fdname:'Int_MetaAlloyHullReinforcement_Size3_Class1' }, // techbroker
+		 9341 : { mtype:'imahrp', cost:126000, name:'Meta Alloy Hull Reinforcement Package', class:3, rating:'D', mass:  4, hullrnf:234, caures:3.0, fdid:128793122, fdname:'Int_MetaAlloyHullReinforcement_Size3_Class2' }, // techbroker
+		 9451 : { mtype:'imahrp', cost: 97500, name:'Meta Alloy Hull Reinforcement Package', class:4, rating:'E', mass: 16, hullrnf:270, caures:3.0, fdid:128793123, fdname:'Int_MetaAlloyHullReinforcement_Size4_Class1' }, // techbroker
+		 9441 : { mtype:'imahrp', cost:292500, name:'Meta Alloy Hull Reinforcement Package', class:4, rating:'D', mass:  8, hullrnf:297, caures:3.0, fdid:128793124, fdname:'Int_MetaAlloyHullReinforcement_Size4_Class2' }, // techbroker
+		 9551 : { mtype:'imahrp', cost:225000, name:'Meta Alloy Hull Reinforcement Package', class:5, rating:'E', mass: 32, hullrnf:324, caures:3.0, fdid:128793125, fdname:'Int_MetaAlloyHullReinforcement_Size5_Class1' }, // techbroker
+		 9541 : { mtype:'imahrp', cost:675000, name:'Meta Alloy Hull Reinforcement Package', class:5, rating:'D', mass: 16, hullrnf:351, caures:3.0, fdid:128793126, fdname:'Int_MetaAlloyHullReinforcement_Size5_Class2' }, // techbroker
 		
 		
 		 8150 : { mtype:'imrp', cost:     5000, name:'Module Reinforcement Package', class:1, rating:'E', mass: 2.00, integ: 77, dmgprot:30, fdid:128737270, fdname:'Int_ModuleReinforcement_Size1_Class1' },
@@ -2803,33 +3140,44 @@ var eddb = {
 		 8550 : { mtype:'imrp', cost:   150000, name:'Module Reinforcement Package', class:5, rating:'E', mass:32.00, integ:385, dmgprot:30, fdid:128737278, fdname:'Int_ModuleReinforcement_Size5_Class1' },
 		 8540 : { mtype:'imrp', cost:   450000, name:'Module Reinforcement Package', class:5, rating:'D', mass:16.00, integ:350, dmgprot:60, fdid:128737279, fdname:'Int_ModuleReinforcement_Size5_Class2' },
 		
+		 8151 : { mtype:'imrp', cost:    10000, name:'Guardian Module Reinforcement Package', tag:'G', class:1, rating:'E', mass: 2.00, integ: 85, pwrdraw:0.27, dmgprot:30, fdid:128833955, fdname:'Int_GuardianModuleReinforcement_Size1_Class1' },
+		 8141 : { mtype:'imrp', cost:    30000, name:'Guardian Module Reinforcement Package', tag:'G', class:1, rating:'D', mass: 1.00, integ: 77, pwrdraw:0.34, dmgprot:60, fdid:128833956, fdname:'Int_GuardianModuleReinforcement_Size1_Class2' },
+		 8251 : { mtype:'imrp', cost:    24000, name:'Guardian Module Reinforcement Package', tag:'G', class:2, rating:'E', mass: 4.00, integ:127, pwrdraw:0.41, dmgprot:30, fdid:128833957, fdname:'Int_GuardianModuleReinforcement_Size2_Class1' },
+		 8241 : { mtype:'imrp', cost:    72000, name:'Guardian Module Reinforcement Package', tag:'G', class:2, rating:'D', mass: 2.00, integ:116, pwrdraw:0.47, dmgprot:60, fdid:128833958, fdname:'Int_GuardianModuleReinforcement_Size2_Class2' },
+		 8351 : { mtype:'imrp', cost:    57600, name:'Guardian Module Reinforcement Package', tag:'G', class:3, rating:'E', mass: 8.00, integ:187, pwrdraw:0.54, dmgprot:30, fdid:128833959, fdname:'Int_GuardianModuleReinforcement_Size3_Class1' },
+		 8341 : { mtype:'imrp', cost:   172800, name:'Guardian Module Reinforcement Package', tag:'G', class:3, rating:'D', mass: 4.00, integ:171, pwrdraw:0.61, dmgprot:60, fdid:128833960, fdname:'Int_GuardianModuleReinforcement_Size3_Class2' },
+		 8451 : { mtype:'imrp', cost:   138240, name:'Guardian Module Reinforcement Package', tag:'G', class:4, rating:'E', mass:16.00, integ:286, pwrdraw:0.68, dmgprot:30, fdid:128833961, fdname:'Int_GuardianModuleReinforcement_Size4_Class1' },
+		 8441 : { mtype:'imrp', cost:   414720, name:'Guardian Module Reinforcement Package', tag:'G', class:4, rating:'D', mass: 8.00, integ:259, pwrdraw:0.74, dmgprot:60, fdid:128833962, fdname:'Int_GuardianModuleReinforcement_Size4_Class2' },
+		 8551 : { mtype:'imrp', cost:   331776, name:'Guardian Module Reinforcement Package', tag:'G', class:5, rating:'E', mass:32.00, integ:424, pwrdraw:0.81, dmgprot:30, fdid:128833963, fdname:'Int_GuardianModuleReinforcement_Size5_Class1' },
+		 8541 : { mtype:'imrp', cost:   995328, name:'Guardian Module Reinforcement Package', tag:'G', class:5, rating:'D', mass:16.00, integ:385, pwrdraw:0.88, dmgprot:60, fdid:128833964, fdname:'Int_GuardianModuleReinforcement_Size5_Class2' },
+		
 		
 		 6250 : { mtype:'ipc', cost:   4320, name:'Economy Class Passenger Cabin',  class:2, rating:'E', mass: 2.50, cabincap: 2, cabincls:'E', fdid:128734690, fdname:'Int_PassengerCabin_Size2_Class1' },
-	//	 6251 : { mtype:'ipc', cost:    NaN, name:'Prisoner Cells',                 class:2, rating:'E', mass: 2.50, cabincap: 2, cabincls:'P', fdid:null,      fdname:'Int_PassengerCabin_Size2_Class0' }, // TODO: cost,fdid
+	//	 6251 : { mtype:'ipc', cost:    NaN, name:'Prisoner Cells',                 class:2, rating:'E', mass: 2.50, cabincap: 2, cabincls:'P', fdid:null,      fdname:'Int_PassengerCabin_Size2_Class0' },
 		 6350 : { mtype:'ipc', cost:   8670, name:'Economy Class Passenger Cabin',  class:3, rating:'E', mass: 5.00, cabincap: 4, cabincls:'E', fdid:128734691, fdname:'Int_PassengerCabin_Size3_Class1' },
-	//	 6351 : { mtype:'ipc', cost:    NaN, name:'Prisoner Cells',                 class:3, rating:'E', mass: 5.00, cabincap: 4, cabincls:'P', fdid:null,      fdname:'Int_PassengerCabin_Size3_Class0' }, // TODO: cost,fdid
+	//	 6351 : { mtype:'ipc', cost:    NaN, name:'Prisoner Cells',                 class:3, rating:'E', mass: 5.00, cabincap: 4, cabincls:'P', fdid:null,      fdname:'Int_PassengerCabin_Size3_Class0' },
 		 6340 : { mtype:'ipc', cost:  26720, name:'Business Class Passenger Cabin', class:3, rating:'D', mass: 5.00, cabincap: 3, cabincls:'B', fdid:128734692, fdname:'Int_PassengerCabin_Size3_Class2' },
 		 6450 : { mtype:'ipc', cost:  18960, name:'Economy Class Passenger Cabin',  class:4, rating:'E', mass:10.00, cabincap: 8, cabincls:'E', fdid:128727922, fdname:'Int_PassengerCabin_Size4_Class1' },
-	//	 6451 : { mtype:'ipc', cost:    NaN, name:'Prisoner Cells',                 class:4, rating:'E', mass:10.00, cabincap: 8, cabincls:'P', fdid:null,      fdname:'Int_PassengerCabin_Size4_Class0' }, // TODO: cost,fdid
+	//	 6451 : { mtype:'ipc', cost:    NaN, name:'Prisoner Cells',                 class:4, rating:'E', mass:10.00, cabincap: 8, cabincls:'P', fdid:null,      fdname:'Int_PassengerCabin_Size4_Class0' },
 		 6440 : { mtype:'ipc', cost:  56870, name:'Business Class Passenger Cabin', class:4, rating:'D', mass:10.00, cabincap: 6, cabincls:'B', fdid:128727923, fdname:'Int_PassengerCabin_Size4_Class2' },
 		 6430 : { mtype:'ipc', cost: 170600, name:'First Class Passenger Cabin',    class:4, rating:'C', mass:10.00, cabincap: 3, cabincls:'F', fdid:128727924, fdname:'Int_PassengerCabin_Size4_Class3' },
 		 6550 : { mtype:'ipc', cost:  34960, name:'Economy Class Passenger Cabin',  class:5, rating:'E', mass:20.00, cabincap:16, cabincls:'E', fdid:128734693, fdname:'Int_PassengerCabin_Size5_Class1' },
-	//	 6551 : { mtype:'ipc', cost:    NaN, name:'Prisoner Cells',                 class:5, rating:'E', mass:20.00, cabincap:16, cabincls:'P', fdid:null,      fdname:'Int_PassengerCabin_Size5_Class0' }, // TODO: cost,fdid
+	//	 6551 : { mtype:'ipc', cost:    NaN, name:'Prisoner Cells',                 class:5, rating:'E', mass:20.00, cabincap:16, cabincls:'P', fdid:null,      fdname:'Int_PassengerCabin_Size5_Class0' },
 		 6540 : { mtype:'ipc', cost:  92370, name:'Business Class Passenger Cabin', class:5, rating:'D', mass:20.00, cabincap:10, cabincls:'B', fdid:128734694, fdname:'Int_PassengerCabin_Size5_Class2' },
 		 6530 : { mtype:'ipc', cost: 340540, name:'First Class Passenger Cabin',    class:5, rating:'C', mass:20.00, cabincap: 6, cabincls:'F', fdid:128734695, fdname:'Int_PassengerCabin_Size5_Class3' },
 		 6520 : { mtype:'ipc', cost:1658100, name:'Luxury Class Passenger Cabin',   class:5, rating:'B', mass:20.00, cabincap: 4, cabincls:'L', reserved:{51:1,52:1,53:1}, fdid:128727925, fdname:'Int_PassengerCabin_Size5_Class4' },
 		 6650 : { mtype:'ipc', cost:  61420, name:'Economy Class Passenger Cabin',  class:6, rating:'E', mass:40.00, cabincap:32, cabincls:'E', fdid:128727926, fdname:'Int_PassengerCabin_Size6_Class1' },
-	//	 6651 : { mtype:'ipc', cost:    NaN, name:'Prisoner Cells',                 class:6, rating:'E', mass:40.00, cabincap:32, cabincls:'P', fdid:null,      fdname:'Int_PassengerCabin_Size6_Class0' }, // TODO: cost,fdid
+	//	 6651 : { mtype:'ipc', cost:    NaN, name:'Prisoner Cells',                 class:6, rating:'E', mass:40.00, cabincap:32, cabincls:'P', fdid:null,      fdname:'Int_PassengerCabin_Size6_Class0' },
 		 6640 : { mtype:'ipc', cost: 184240, name:'Business Class Passenger Cabin', class:6, rating:'D', mass:40.00, cabincap:16, cabincls:'B', fdid:128727927, fdname:'Int_PassengerCabin_Size6_Class2' },
 		 6630 : { mtype:'ipc', cost: 552700, name:'First Class Passenger Cabin',    class:6, rating:'C', mass:40.00, cabincap:12, cabincls:'F', fdid:128727928, fdname:'Int_PassengerCabin_Size6_Class3' },
 		 6620 : { mtype:'ipc', cost:4974300, name:'Luxury Class Passenger Cabin',   class:6, rating:'B', mass:40.00, cabincap: 8, cabincls:'L', reserved:{51:1,52:1,53:1}, fdid:128727929, fdname:'Int_PassengerCabin_Size6_Class4' },
 		
-		 5280 : { mtype:'ipvh', cost: 18000, name:'Planetary Vehicle Hangar', class:2, rating:'H', mass:12.00, integ:30, pwrdraw:0.25, boottime:5, vslots:1, vcount:1, fdid:128672288, fdname:'Int_BuggyBay_Size2_Class1' },
-		 5270 : { mtype:'ipvh', cost: 21600, name:'Planetary Vehicle Hangar', class:2, rating:'G', mass: 6.00, integ:30, pwrdraw:0.75, boottime:5, vslots:1, vcount:1, fdid:128672289, fdname:'Int_BuggyBay_Size2_Class2' },
-		 5480 : { mtype:'ipvh', cost: 72000, name:'Planetary Vehicle Hangar', class:4, rating:'H', mass:20.00, integ:30, pwrdraw:0.40, boottime:5, vslots:2, vcount:1, fdid:128672290, fdname:'Int_BuggyBay_Size4_Class1' },
-		 5470 : { mtype:'ipvh', cost: 86400, name:'Planetary Vehicle Hangar', class:4, rating:'G', mass:10.00, integ:30, pwrdraw:1.20, boottime:5, vslots:2, vcount:1, fdid:128672291, fdname:'Int_BuggyBay_Size4_Class2' },
-		 5680 : { mtype:'ipvh', cost:576000, name:'Planetary Vehicle Hangar', class:6, rating:'H', mass:34.00, integ:30, pwrdraw:0.60, boottime:5, vslots:4, vcount:1, fdid:128672292, fdname:'Int_BuggyBay_Size6_Class1' },
-		 5670 : { mtype:'ipvh', cost:691200, name:'Planetary Vehicle Hangar', class:6, rating:'G', mass:17.00, integ:30, pwrdraw:1.80, boottime:5, vslots:4, vcount:1, fdid:128672293, fdname:'Int_BuggyBay_Size6_Class2' },
+		 5280 : { mtype:'ipvh', cost: 18000, name:'Planetary Vehicle Hangar', class:2, rating:'H', mass:12.00, integ:30, pwrdraw:0.25, boottime:5, vslots:1, vcount:1, ammocost: 1030, fdid:128672288, fdname:'Int_BuggyBay_Size2_Class1' },
+		 5270 : { mtype:'ipvh', cost: 21600, name:'Planetary Vehicle Hangar', class:2, rating:'G', mass: 6.00, integ:30, pwrdraw:0.75, boottime:5, vslots:1, vcount:1, ammocost: 1030, fdid:128672289, fdname:'Int_BuggyBay_Size2_Class2' },
+		 5480 : { mtype:'ipvh', cost: 72000, name:'Planetary Vehicle Hangar', class:4, rating:'H', mass:20.00, integ:30, pwrdraw:0.40, boottime:5, vslots:2, vcount:1, ammocost: 1030, fdid:128672290, fdname:'Int_BuggyBay_Size4_Class1' },
+		 5470 : { mtype:'ipvh', cost: 86400, name:'Planetary Vehicle Hangar', class:4, rating:'G', mass:10.00, integ:30, pwrdraw:1.20, boottime:5, vslots:2, vcount:1, ammocost: 1030, fdid:128672291, fdname:'Int_BuggyBay_Size4_Class2' },
+		 5680 : { mtype:'ipvh', cost:576000, name:'Planetary Vehicle Hangar', class:6, rating:'H', mass:34.00, integ:30, pwrdraw:0.60, boottime:5, vslots:4, vcount:1, ammocost: 1030, fdid:128672292, fdname:'Int_BuggyBay_Size6_Class1' },
+		 5670 : { mtype:'ipvh', cost:691200, name:'Planetary Vehicle Hangar', class:6, rating:'G', mass:17.00, integ:30, pwrdraw:1.80, boottime:5, vslots:4, vcount:1, ammocost: 1030, fdid:128672293, fdname:'Int_BuggyBay_Size6_Class2' },
 		
 		
 		24150 : { mtype:'iplc', cost:    600, name:'Prospector Limpet Controller', class:1, rating:'E', mass:  1.30, integ: 24, pwrdraw:0.18, boottime:4, maxlimpet: 1, lpactrng: 3000, limpettime:600, maxspd:200, minebonus:1.0, fdid:128671269, fdname:'Int_DroneControl_Prospector_Size1_Class1' },
@@ -2857,191 +3205,184 @@ var eddb = {
 		24710 : { mtype:'iplc', cost:6998400, name:'Prospector Limpet Controller', class:7, rating:'A', mass: 80.00, integ:183, pwrdraw:0.83, boottime:4, maxlimpet: 8, lpactrng:11900, limpettime:600, maxspd:200, minebonus:3.5, fdid:128671288, fdname:'Int_DroneControl_Prospector_Size7_Class5' },
 		
 		
-		// TODO: thmload added in 3.0?
-		21150 : { mtype:'inlc', cost:  2600, name:'Recon Limpet Controller', class:1, rating:'E', mass:  1.30, integ: 24, pwrdraw:0.18, boottime:10, maxlimpet: 1, targetrng:1200, maxspd:100, hacktime:22, fdid:128837858, fdname:'Int_DroneControl_Recon_Size1_Class1' },
-		21350 : { mtype:'inlc', cost:  8200, name:'Recon Limpet Controller', class:3, rating:'E', mass:  2.00, integ: 51, pwrdraw:0.20, boottime:10, maxlimpet: 1, targetrng:1400, maxspd:100, hacktime:17, fdid:128841592, fdname:'Int_DroneControl_Recon_Size3_Class1' },
-		21550 : { mtype:'inlc', cost: 75800, name:'Recon Limpet Controller', class:5, rating:'E', mass: 20.00, integ: 96, pwrdraw:0.50, boottime:10, maxlimpet: 1, targetrng:1700, maxspd:100, hacktime:13, fdid:128841593, fdname:'Int_DroneControl_Recon_Size5_Class1' },
-		21750 : { mtype:'inlc', cost:612200, name:'Recon Limpet Controller', class:7, rating:'E', mass:128.00, integ:157, pwrdraw:0.97, boottime:10, maxlimpet: 1, targetrng:2000, maxspd:100, hacktime:10, fdid:128841594, fdname:'Int_DroneControl_Recon_Size7_Class1' },
+		21150 : { mtype:'inlc', cost:  2600, name:'Recon Limpet Controller', class:1, rating:'E', mass:  1.30, integ: 24, pwrdraw:0.18, boottime:10, maxlimpet: 1, lpactrng:1200, maxspd:100, hacktime:22, fdid:128837858, fdname:'Int_DroneControl_Recon_Size1_Class1' },
+		21350 : { mtype:'inlc', cost:  8200, name:'Recon Limpet Controller', class:3, rating:'E', mass:  2.00, integ: 51, pwrdraw:0.20, boottime:10, maxlimpet: 1, lpactrng:1400, maxspd:100, hacktime:17, fdid:128841592, fdname:'Int_DroneControl_Recon_Size3_Class1' },
+		21550 : { mtype:'inlc', cost: 75800, name:'Recon Limpet Controller', class:5, rating:'E', mass: 20.00, integ: 96, pwrdraw:0.50, boottime:10, maxlimpet: 1, lpactrng:1700, maxspd:100, hacktime:13, fdid:128841593, fdname:'Int_DroneControl_Recon_Size5_Class1' },
+		21750 : { mtype:'inlc', cost:612200, name:'Recon Limpet Controller', class:7, rating:'E', mass:128.00, integ:157, pwrdraw:0.97, boottime:10, maxlimpet: 1, lpactrng:2000, maxspd:100, hacktime:10, fdid:128841594, fdname:'Int_DroneControl_Recon_Size7_Class1' },
 		
 		
-		 2150 : { mtype:'ir', cost:    6000, name:'Refinery', class:1, rating:'E', integ: 32, pwrdraw:0.14, boottime:10, bins: 1, fdid:128666684, fdname:'Int_Refinery_Size1_Class1' },
-		 2140 : { mtype:'ir', cost:   18000, name:'Refinery', class:1, rating:'D', integ: 24, pwrdraw:0.18, boottime:10, bins: 1, fdid:128666688, fdname:'Int_Refinery_Size1_Class2' },
-		 2130 : { mtype:'ir', cost:   54000, name:'Refinery', class:1, rating:'C', integ: 40, pwrdraw:0.23, boottime:10, bins: 2, fdid:128666692, fdname:'Int_Refinery_Size1_Class3' },
-		 2120 : { mtype:'ir', cost:  162000, name:'Refinery', class:1, rating:'B', integ: 56, pwrdraw:0.28, boottime:10, bins: 3, fdid:128666696, fdname:'Int_Refinery_Size1_Class4' },
-		 2110 : { mtype:'ir', cost:  486000, name:'Refinery', class:1, rating:'A', integ: 48, pwrdraw:0.32, boottime:10, bins: 4, fdid:128666700, fdname:'Int_Refinery_Size1_Class5' },
+		 2150 : { mtype:'ir', cost:    6000, name:'Refinery', class:1, rating:'E', integ: 32, pwrdraw:0.14, boottime:10, bins: 1, limit:'ir', fdid:128666684, fdname:'Int_Refinery_Size1_Class1' },
+		 2140 : { mtype:'ir', cost:   18000, name:'Refinery', class:1, rating:'D', integ: 24, pwrdraw:0.18, boottime:10, bins: 1, limit:'ir', fdid:128666688, fdname:'Int_Refinery_Size1_Class2' },
+		 2130 : { mtype:'ir', cost:   54000, name:'Refinery', class:1, rating:'C', integ: 40, pwrdraw:0.23, boottime:10, bins: 2, limit:'ir', fdid:128666692, fdname:'Int_Refinery_Size1_Class3' },
+		 2120 : { mtype:'ir', cost:  162000, name:'Refinery', class:1, rating:'B', integ: 56, pwrdraw:0.28, boottime:10, bins: 3, limit:'ir', fdid:128666696, fdname:'Int_Refinery_Size1_Class4' },
+		 2110 : { mtype:'ir', cost:  486000, name:'Refinery', class:1, rating:'A', integ: 48, pwrdraw:0.32, boottime:10, bins: 4, limit:'ir', fdid:128666700, fdname:'Int_Refinery_Size1_Class5' },
 		
-		 2250 : { mtype:'ir', cost:   12600, name:'Refinery', class:2, rating:'E', integ: 41, pwrdraw:0.17, boottime:10, bins: 2, fdid:128666685, fdname:'Int_Refinery_Size2_Class1' },
-		 2240 : { mtype:'ir', cost:   37800, name:'Refinery', class:2, rating:'D', integ: 31, pwrdraw:0.22, boottime:10, bins: 3, fdid:128666689, fdname:'Int_Refinery_Size2_Class2' },
-		 2230 : { mtype:'ir', cost:  113400, name:'Refinery', class:2, rating:'C', integ: 51, pwrdraw:0.28, boottime:10, bins: 4, fdid:128666693, fdname:'Int_Refinery_Size2_Class3' },
-		 2220 : { mtype:'ir', cost:  340200, name:'Refinery', class:2, rating:'B', integ: 71, pwrdraw:0.34, boottime:10, bins: 5, fdid:128666697, fdname:'Int_Refinery_Size2_Class4' },
-		 2210 : { mtype:'ir', cost: 1020600, name:'Refinery', class:2, rating:'A', integ: 61, pwrdraw:0.39, boottime:10, bins: 6, fdid:128666701, fdname:'Int_Refinery_Size2_Class5' },
+		 2250 : { mtype:'ir', cost:   12600, name:'Refinery', class:2, rating:'E', integ: 41, pwrdraw:0.17, boottime:10, bins: 2, limit:'ir', fdid:128666685, fdname:'Int_Refinery_Size2_Class1' },
+		 2240 : { mtype:'ir', cost:   37800, name:'Refinery', class:2, rating:'D', integ: 31, pwrdraw:0.22, boottime:10, bins: 3, limit:'ir', fdid:128666689, fdname:'Int_Refinery_Size2_Class2' },
+		 2230 : { mtype:'ir', cost:  113400, name:'Refinery', class:2, rating:'C', integ: 51, pwrdraw:0.28, boottime:10, bins: 4, limit:'ir', fdid:128666693, fdname:'Int_Refinery_Size2_Class3' },
+		 2220 : { mtype:'ir', cost:  340200, name:'Refinery', class:2, rating:'B', integ: 71, pwrdraw:0.34, boottime:10, bins: 5, limit:'ir', fdid:128666697, fdname:'Int_Refinery_Size2_Class4' },
+		 2210 : { mtype:'ir', cost: 1020600, name:'Refinery', class:2, rating:'A', integ: 61, pwrdraw:0.39, boottime:10, bins: 6, limit:'ir', fdid:128666701, fdname:'Int_Refinery_Size2_Class5' },
 		
-		 2350 : { mtype:'ir', cost:   26460, name:'Refinery', class:3, rating:'E', integ: 51, pwrdraw:0.20, boottime:10, bins: 3, fdid:128666686, fdname:'Int_Refinery_Size3_Class1' },
-		 2340 : { mtype:'ir', cost:   79380, name:'Refinery', class:3, rating:'D', integ: 38, pwrdraw:0.27, boottime:10, bins: 4, fdid:128666690, fdname:'Int_Refinery_Size3_Class2' },
-		 2330 : { mtype:'ir', cost:  238140, name:'Refinery', class:3, rating:'C', integ: 64, pwrdraw:0.34, boottime:10, bins: 6, fdid:128666694, fdname:'Int_Refinery_Size3_Class3' },
-		 2320 : { mtype:'ir', cost:  714420, name:'Refinery', class:3, rating:'B', integ: 90, pwrdraw:0.41, boottime:10, bins: 7, fdid:128666698, fdname:'Int_Refinery_Size3_Class4' },
-		 2310 : { mtype:'ir', cost: 2143260, name:'Refinery', class:3, rating:'A', integ: 77, pwrdraw:0.48, boottime:10, bins: 8, fdid:128666702, fdname:'Int_Refinery_Size3_Class5' },
+		 2350 : { mtype:'ir', cost:   26460, name:'Refinery', class:3, rating:'E', integ: 51, pwrdraw:0.20, boottime:10, bins: 3, limit:'ir', fdid:128666686, fdname:'Int_Refinery_Size3_Class1' },
+		 2340 : { mtype:'ir', cost:   79380, name:'Refinery', class:3, rating:'D', integ: 38, pwrdraw:0.27, boottime:10, bins: 4, limit:'ir', fdid:128666690, fdname:'Int_Refinery_Size3_Class2' },
+		 2330 : { mtype:'ir', cost:  238140, name:'Refinery', class:3, rating:'C', integ: 64, pwrdraw:0.34, boottime:10, bins: 6, limit:'ir', fdid:128666694, fdname:'Int_Refinery_Size3_Class3' },
+		 2320 : { mtype:'ir', cost:  714420, name:'Refinery', class:3, rating:'B', integ: 90, pwrdraw:0.41, boottime:10, bins: 7, limit:'ir', fdid:128666698, fdname:'Int_Refinery_Size3_Class4' },
+		 2310 : { mtype:'ir', cost: 2143260, name:'Refinery', class:3, rating:'A', integ: 77, pwrdraw:0.48, boottime:10, bins: 8, limit:'ir', fdid:128666702, fdname:'Int_Refinery_Size3_Class5' },
 		
-		 2450 : { mtype:'ir', cost:   55570, name:'Refinery', class:4, rating:'E', integ: 64, pwrdraw:0.25, boottime:10, bins: 4, fdid:128666687, fdname:'Int_Refinery_Size4_Class1' },
-		 2440 : { mtype:'ir', cost:  166700, name:'Refinery', class:4, rating:'D', integ: 48, pwrdraw:0.33, boottime:10, bins: 5, fdid:128666691, fdname:'Int_Refinery_Size4_Class2' },
-		 2430 : { mtype:'ir', cost:  500090, name:'Refinery', class:4, rating:'C', integ: 80, pwrdraw:0.41, boottime:10, bins: 7, fdid:128666695, fdname:'Int_Refinery_Size4_Class3' },
-		 2420 : { mtype:'ir', cost: 1500280, name:'Refinery', class:4, rating:'B', integ:112, pwrdraw:0.49, boottime:10, bins: 9, fdid:128666699, fdname:'Int_Refinery_Size4_Class4' },
-		 2410 : { mtype:'ir', cost: 4500850, name:'Refinery', class:4, rating:'A', integ: 96, pwrdraw:0.57, boottime:10, bins:10, fdid:128666703, fdname:'Int_Refinery_Size4_Class5' },
-		
-		
-		27150 : { mtype:'irlc', cost:    600, name:'Repair Limpet Controller', class:1, rating:'E', mass:  1.30, integ: 24, pwrdraw:0.18, boottime:10, maxlimpet: 1, targetrng: 600, limpettime:300, maxspd:200, repaircap: 60, fdid:128777327, fdname:'Int_DroneControl_Repair_Size1_Class1' },
-		27140 : { mtype:'irlc', cost:   1200, name:'Repair Limpet Controller', class:1, rating:'D', mass:  0.50, integ: 32, pwrdraw:0.14, boottime:10, maxlimpet: 1, targetrng: 800, limpettime:300, maxspd:200, repaircap: 60, fdid:128777328, fdname:'Int_DroneControl_Repair_Size1_Class2' },
-		27130 : { mtype:'irlc', cost:   2400, name:'Repair Limpet Controller', class:1, rating:'C', mass:  1.30, integ: 40, pwrdraw:0.23, boottime:10, maxlimpet: 1, targetrng:1000, limpettime:300, maxspd:200, repaircap: 60, fdid:128777329, fdname:'Int_DroneControl_Repair_Size1_Class3' },
-		27120 : { mtype:'irlc', cost:   4800, name:'Repair Limpet Controller', class:1, rating:'B', mass:  2.00, integ: 48, pwrdraw:0.32, boottime:10, maxlimpet: 1, targetrng:1200, limpettime:300, maxspd:200, repaircap: 60, fdid:128777330, fdname:'Int_DroneControl_Repair_Size1_Class4' },
-		27110 : { mtype:'irlc', cost:   9600, name:'Repair Limpet Controller', class:1, rating:'A', mass:  1.30, integ: 56, pwrdraw:0.28, boottime:10, maxlimpet: 1, targetrng:1400, limpettime:300, maxspd:200, repaircap: 60, fdid:128777331, fdname:'Int_DroneControl_Repair_Size1_Class5' },
-		
-		27350 : { mtype:'irlc', cost:   5400, name:'Repair Limpet Controller', class:3, rating:'E', mass:  5.00, integ: 38, pwrdraw:0.27, boottime:10, maxlimpet: 2, targetrng: 660, limpettime:300, maxspd:200, repaircap:180, fdid:128777332, fdname:'Int_DroneControl_Repair_Size3_Class1' },
-		27340 : { mtype:'irlc', cost:  10800, name:'Repair Limpet Controller', class:3, rating:'D', mass:  2.00, integ: 51, pwrdraw:0.20, boottime:10, maxlimpet: 2, targetrng: 880, limpettime:300, maxspd:200, repaircap:180, fdid:128777333, fdname:'Int_DroneControl_Repair_Size3_Class2' },
-		27330 : { mtype:'irlc', cost:  21600, name:'Repair Limpet Controller', class:3, rating:'C', mass:  5.00, integ: 64, pwrdraw:0.34, boottime:10, maxlimpet: 2, targetrng:1100, limpettime:300, maxspd:200, repaircap:180, fdid:128777334, fdname:'Int_DroneControl_Repair_Size3_Class3' },
-		27320 : { mtype:'irlc', cost:  43200, name:'Repair Limpet Controller', class:3, rating:'B', mass:  8.00, integ: 77, pwrdraw:0.48, boottime:10, maxlimpet: 2, targetrng:1320, limpettime:300, maxspd:200, repaircap:180, fdid:128777335, fdname:'Int_DroneControl_Repair_Size3_Class4' },
-		27310 : { mtype:'irlc', cost:  86400, name:'Repair Limpet Controller', class:3, rating:'A', mass:  5.00, integ: 90, pwrdraw:0.41, boottime:10, maxlimpet: 2, targetrng:1540, limpettime:300, maxspd:200, repaircap:180, fdid:128777336, fdname:'Int_DroneControl_Repair_Size3_Class5' },
-		
-		27550 : { mtype:'irlc', cost:  48600, name:'Repair Limpet Controller', class:5, rating:'E', mass: 20.00, integ: 58, pwrdraw:0.40, boottime:10, maxlimpet: 3, targetrng: 780, limpettime:300, maxspd:200, repaircap:310, fdid:128777337, fdname:'Int_DroneControl_Repair_Size5_Class1' },
-		27540 : { mtype:'irlc', cost:  97200, name:'Repair Limpet Controller', class:5, rating:'D', mass:  8.00, integ: 77, pwrdraw:0.30, boottime:10, maxlimpet: 3, targetrng:1040, limpettime:300, maxspd:200, repaircap:310, fdid:128777338, fdname:'Int_DroneControl_Repair_Size5_Class2' },
-		27530 : { mtype:'irlc', cost: 194400, name:'Repair Limpet Controller', class:5, rating:'C', mass: 20.00, integ: 96, pwrdraw:0.50, boottime:10, maxlimpet: 3, targetrng:1300, limpettime:300, maxspd:200, repaircap:310, fdid:128777339, fdname:'Int_DroneControl_Repair_Size5_Class3' },
-		27520 : { mtype:'irlc', cost: 388800, name:'Repair Limpet Controller', class:5, rating:'B', mass: 32.00, integ:157, pwrdraw:0.97, boottime:10, maxlimpet: 3, targetrng:1560, limpettime:300, maxspd:200, repaircap:310, fdid:128777340, fdname:'Int_DroneControl_Repair_Size5_Class4' }, // TODO BUG? pwrdraw:0.70
-		27510 : { mtype:'irlc', cost: 777600, name:'Repair Limpet Controller', class:5, rating:'A', mass: 20.00, integ:134, pwrdraw:0.60, boottime:10, maxlimpet: 3, targetrng:1820, limpettime:300, maxspd:200, repaircap:310, fdid:128777341, fdname:'Int_DroneControl_Repair_Size5_Class5' },
-		
-		27750 : { mtype:'irlc', cost: 437400, name:'Repair Limpet Controller', class:7, rating:'E', mass: 80.00, integ: 79, pwrdraw:0.55, boottime:10, maxlimpet: 4, targetrng:1020, limpettime:300, maxspd:200, repaircap:450, fdid:128777342, fdname:'Int_DroneControl_Repair_Size7_Class1' },
-		27740 : { mtype:'irlc', cost: 874800, name:'Repair Limpet Controller', class:7, rating:'D', mass: 32.00, integ:105, pwrdraw:0.41, boottime:10, maxlimpet: 4, targetrng:1360, limpettime:300, maxspd:200, repaircap:450, fdid:128777343, fdname:'Int_DroneControl_Repair_Size7_Class2' },
-		27730 : { mtype:'irlc', cost:1749600, name:'Repair Limpet Controller', class:7, rating:'C', mass: 80.00, integ:131, pwrdraw:0.69, boottime:10, maxlimpet: 4, targetrng:1700, limpettime:300, maxspd:200, repaircap:450, fdid:128777344, fdname:'Int_DroneControl_Repair_Size7_Class3' },
-		27720 : { mtype:'irlc', cost:3499200, name:'Repair Limpet Controller', class:7, rating:'B', mass:128.00, integ:157, pwrdraw:0.97, boottime:10, maxlimpet: 4, targetrng:2040, limpettime:300, maxspd:200, repaircap:450, fdid:128777345, fdname:'Int_DroneControl_Repair_Size7_Class4' },
-		27710 : { mtype:'irlc', cost:6998400, name:'Repair Limpet Controller', class:7, rating:'A', mass: 80.00, integ:183, pwrdraw:0.83, boottime:10, maxlimpet: 4, targetrng:2380, limpettime:300, maxspd:200, repaircap:450, fdid:128777346, fdname:'Int_DroneControl_Repair_Size7_Class5' },
+		 2450 : { mtype:'ir', cost:   55570, name:'Refinery', class:4, rating:'E', integ: 64, pwrdraw:0.25, boottime:10, bins: 4, limit:'ir', fdid:128666687, fdname:'Int_Refinery_Size4_Class1' },
+		 2440 : { mtype:'ir', cost:  166700, name:'Refinery', class:4, rating:'D', integ: 48, pwrdraw:0.33, boottime:10, bins: 5, limit:'ir', fdid:128666691, fdname:'Int_Refinery_Size4_Class2' },
+		 2430 : { mtype:'ir', cost:  500090, name:'Refinery', class:4, rating:'C', integ: 80, pwrdraw:0.41, boottime:10, bins: 7, limit:'ir', fdid:128666695, fdname:'Int_Refinery_Size4_Class3' },
+		 2420 : { mtype:'ir', cost: 1500280, name:'Refinery', class:4, rating:'B', integ:112, pwrdraw:0.49, boottime:10, bins: 9, limit:'ir', fdid:128666699, fdname:'Int_Refinery_Size4_Class4' },
+		 2410 : { mtype:'ir', cost: 4500850, name:'Refinery', class:4, rating:'A', integ: 96, pwrdraw:0.57, boottime:10, bins:10, limit:'ir', fdid:128666703, fdname:'Int_Refinery_Size4_Class5' },
 		
 		
-		28150 : { mtype:'islc', cost:1749600, name:'Research Limpet Controller', class:1, rating:'E', mass:  1.30, integ: 20, pwrdraw:0.40, boottime:0, maxlimpet: 1, targetrng:2000, limpettime:300, maxspd:200, fdid:128793116, fdname:'Int_DroneControl_UnkVesselResearch' },
+		27150 : { mtype:'irlc', cost:    600, name:'Repair Limpet Controller', class:1, rating:'E', mass:  1.30, integ: 24, pwrdraw:0.18, boottime:10, maxlimpet: 1, lpactrng: 600, limpettime:300, maxspd:200, repaircap: 60, fdid:128777327, fdname:'Int_DroneControl_Repair_Size1_Class1' },
+		27140 : { mtype:'irlc', cost:   1200, name:'Repair Limpet Controller', class:1, rating:'D', mass:  0.50, integ: 32, pwrdraw:0.14, boottime:10, maxlimpet: 1, lpactrng: 800, limpettime:300, maxspd:200, repaircap: 60, fdid:128777328, fdname:'Int_DroneControl_Repair_Size1_Class2' },
+		27130 : { mtype:'irlc', cost:   2400, name:'Repair Limpet Controller', class:1, rating:'C', mass:  1.30, integ: 40, pwrdraw:0.23, boottime:10, maxlimpet: 1, lpactrng:1000, limpettime:300, maxspd:200, repaircap: 60, fdid:128777329, fdname:'Int_DroneControl_Repair_Size1_Class3' },
+		27120 : { mtype:'irlc', cost:   4800, name:'Repair Limpet Controller', class:1, rating:'B', mass:  2.00, integ: 48, pwrdraw:0.32, boottime:10, maxlimpet: 1, lpactrng:1200, limpettime:300, maxspd:200, repaircap: 60, fdid:128777330, fdname:'Int_DroneControl_Repair_Size1_Class4' },
+		27110 : { mtype:'irlc', cost:   9600, name:'Repair Limpet Controller', class:1, rating:'A', mass:  1.30, integ: 56, pwrdraw:0.28, boottime:10, maxlimpet: 1, lpactrng:1400, limpettime:300, maxspd:200, repaircap: 60, fdid:128777331, fdname:'Int_DroneControl_Repair_Size1_Class5' },
+		
+		27350 : { mtype:'irlc', cost:   5400, name:'Repair Limpet Controller', class:3, rating:'E', mass:  5.00, integ: 38, pwrdraw:0.27, boottime:10, maxlimpet: 2, lpactrng: 660, limpettime:300, maxspd:200, repaircap:180, fdid:128777332, fdname:'Int_DroneControl_Repair_Size3_Class1' },
+		27340 : { mtype:'irlc', cost:  10800, name:'Repair Limpet Controller', class:3, rating:'D', mass:  2.00, integ: 51, pwrdraw:0.20, boottime:10, maxlimpet: 2, lpactrng: 880, limpettime:300, maxspd:200, repaircap:180, fdid:128777333, fdname:'Int_DroneControl_Repair_Size3_Class2' },
+		27330 : { mtype:'irlc', cost:  21600, name:'Repair Limpet Controller', class:3, rating:'C', mass:  5.00, integ: 64, pwrdraw:0.34, boottime:10, maxlimpet: 2, lpactrng:1100, limpettime:300, maxspd:200, repaircap:180, fdid:128777334, fdname:'Int_DroneControl_Repair_Size3_Class3' },
+		27320 : { mtype:'irlc', cost:  43200, name:'Repair Limpet Controller', class:3, rating:'B', mass:  8.00, integ: 77, pwrdraw:0.48, boottime:10, maxlimpet: 2, lpactrng:1320, limpettime:300, maxspd:200, repaircap:180, fdid:128777335, fdname:'Int_DroneControl_Repair_Size3_Class4' },
+		27310 : { mtype:'irlc', cost:  86400, name:'Repair Limpet Controller', class:3, rating:'A', mass:  5.00, integ: 90, pwrdraw:0.41, boottime:10, maxlimpet: 2, lpactrng:1540, limpettime:300, maxspd:200, repaircap:180, fdid:128777336, fdname:'Int_DroneControl_Repair_Size3_Class5' },
+		
+		27550 : { mtype:'irlc', cost:  48600, name:'Repair Limpet Controller', class:5, rating:'E', mass: 20.00, integ: 58, pwrdraw:0.40, boottime:10, maxlimpet: 3, lpactrng: 780, limpettime:300, maxspd:200, repaircap:310, fdid:128777337, fdname:'Int_DroneControl_Repair_Size5_Class1' },
+		27540 : { mtype:'irlc', cost:  97200, name:'Repair Limpet Controller', class:5, rating:'D', mass:  8.00, integ: 77, pwrdraw:0.30, boottime:10, maxlimpet: 3, lpactrng:1040, limpettime:300, maxspd:200, repaircap:310, fdid:128777338, fdname:'Int_DroneControl_Repair_Size5_Class2' },
+		27530 : { mtype:'irlc', cost: 194400, name:'Repair Limpet Controller', class:5, rating:'C', mass: 20.00, integ: 96, pwrdraw:0.50, boottime:10, maxlimpet: 3, lpactrng:1300, limpettime:300, maxspd:200, repaircap:310, fdid:128777339, fdname:'Int_DroneControl_Repair_Size5_Class3' },
+		27520 : { mtype:'irlc', cost: 388800, name:'Repair Limpet Controller', class:5, rating:'B', mass: 32.00, integ:157, pwrdraw:0.97, boottime:10, maxlimpet: 3, lpactrng:1560, limpettime:300, maxspd:200, repaircap:310, fdid:128777340, fdname:'Int_DroneControl_Repair_Size5_Class4' }, // TODO BUG? pwrdraw:0.70
+		27510 : { mtype:'irlc', cost: 777600, name:'Repair Limpet Controller', class:5, rating:'A', mass: 20.00, integ:134, pwrdraw:0.60, boottime:10, maxlimpet: 3, lpactrng:1820, limpettime:300, maxspd:200, repaircap:310, fdid:128777341, fdname:'Int_DroneControl_Repair_Size5_Class5' },
+		
+		27750 : { mtype:'irlc', cost: 437400, name:'Repair Limpet Controller', class:7, rating:'E', mass: 80.00, integ: 79, pwrdraw:0.55, boottime:10, maxlimpet: 4, lpactrng:1020, limpettime:300, maxspd:200, repaircap:450, fdid:128777342, fdname:'Int_DroneControl_Repair_Size7_Class1' },
+		27740 : { mtype:'irlc', cost: 874800, name:'Repair Limpet Controller', class:7, rating:'D', mass: 32.00, integ:105, pwrdraw:0.41, boottime:10, maxlimpet: 4, lpactrng:1360, limpettime:300, maxspd:200, repaircap:450, fdid:128777343, fdname:'Int_DroneControl_Repair_Size7_Class2' },
+		27730 : { mtype:'irlc', cost:1749600, name:'Repair Limpet Controller', class:7, rating:'C', mass: 80.00, integ:131, pwrdraw:0.69, boottime:10, maxlimpet: 4, lpactrng:1700, limpettime:300, maxspd:200, repaircap:450, fdid:128777344, fdname:'Int_DroneControl_Repair_Size7_Class3' },
+		27720 : { mtype:'irlc', cost:3499200, name:'Repair Limpet Controller', class:7, rating:'B', mass:128.00, integ:157, pwrdraw:0.97, boottime:10, maxlimpet: 4, lpactrng:2040, limpettime:300, maxspd:200, repaircap:450, fdid:128777345, fdname:'Int_DroneControl_Repair_Size7_Class4' },
+		27710 : { mtype:'irlc', cost:6998400, name:'Repair Limpet Controller', class:7, rating:'A', mass: 80.00, integ:183, pwrdraw:0.83, boottime:10, maxlimpet: 4, lpactrng:2380, limpettime:300, maxspd:200, repaircap:450, fdid:128777346, fdname:'Int_DroneControl_Repair_Size7_Class5' },
 		
 		
-		31150 : { mtype:'iscb', cost:     520, name:'Shield Cell Bank', class:1, rating:'E', mass:  1.30, integ: 32, pwrdraw:0.41, boottime:25, spinup:5, duration: 1.0, shieldrnf:12.0, thmload:170.0, ammoclip:1, ammomax:3, fdid:128064298, fdname:'Int_ShieldCellBank_Size1_Class1' },
-		31140 : { mtype:'iscb', cost:    1290, name:'Shield Cell Bank', class:1, rating:'D', mass:  0.50, integ: 24, pwrdraw:0.55, boottime:25, spinup:5, duration: 1.0, shieldrnf:16.0, thmload:170.0, ammoclip:1, ammomax:1, fdid:128064299, fdname:'Int_ShieldCellBank_Size1_Class2' },
-		31130 : { mtype:'iscb', cost:    3230, name:'Shield Cell Bank', class:1, rating:'C', mass:  1.30, integ: 40, pwrdraw:0.69, boottime:25, spinup:5, duration: 1.0, shieldrnf:20.0, thmload:170.0, ammoclip:1, ammomax:2, fdid:128064300, fdname:'Int_ShieldCellBank_Size1_Class3' },
-		31120 : { mtype:'iscb', cost:    8080, name:'Shield Cell Bank', class:1, rating:'B', mass:  2.00, integ: 56, pwrdraw:0.83, boottime:25, spinup:5, duration: 1.0, shieldrnf:24.0, thmload:170.0, ammoclip:1, ammomax:3, fdid:128064301, fdname:'Int_ShieldCellBank_Size1_Class4' },
-		31110 : { mtype:'iscb', cost:   20200, name:'Shield Cell Bank', class:1, rating:'A', mass:  1.30, integ: 48, pwrdraw:0.97, boottime:25, spinup:5, duration: 1.0, shieldrnf:28.0, thmload:170.0, ammoclip:1, ammomax:2, fdid:128064302, fdname:'Int_ShieldCellBank_Size1_Class5' },
-		
-		31250 : { mtype:'iscb', cost:    1450, name:'Shield Cell Bank', class:2, rating:'E', mass:  2.50, integ: 41, pwrdraw:0.50, boottime:25, spinup:5, duration: 1.5, shieldrnf:14.0, thmload:240.0, ammoclip:1, ammomax:4, fdid:128064303, fdname:'Int_ShieldCellBank_Size2_Class1' },
-		31240 : { mtype:'iscb', cost:    3620, name:'Shield Cell Bank', class:2, rating:'D', mass:  1.00, integ: 31, pwrdraw:0.67, boottime:25, spinup:5, duration: 1.5, shieldrnf:18.0, thmload:240.0, ammoclip:1, ammomax:2, fdid:128064304, fdname:'Int_ShieldCellBank_Size2_Class2' },
-		31230 : { mtype:'iscb', cost:    9050, name:'Shield Cell Bank', class:2, rating:'C', mass:  2.50, integ: 51, pwrdraw:0.84, boottime:25, spinup:5, duration: 1.5, shieldrnf:23.0, thmload:240.0, ammoclip:1, ammomax:3, fdid:128064305, fdname:'Int_ShieldCellBank_Size2_Class3' },
-		31220 : { mtype:'iscb', cost:   22620, name:'Shield Cell Bank', class:2, rating:'B', mass:  4.00, integ: 71, pwrdraw:1.01, boottime:25, spinup:5, duration: 1.5, shieldrnf:28.0, thmload:240.0, ammoclip:1, ammomax:4, fdid:128064306, fdname:'Int_ShieldCellBank_Size2_Class4' },
-		31210 : { mtype:'iscb', cost:   56550, name:'Shield Cell Bank', class:2, rating:'A', mass:  2.50, integ: 61, pwrdraw:1.18, boottime:25, spinup:5, duration: 1.5, shieldrnf:32.0, thmload:240.0, ammoclip:1, ammomax:3, fdid:128064307, fdname:'Int_ShieldCellBank_Size2_Class5' },
-		
-		31350 : { mtype:'iscb', cost:    4050, name:'Shield Cell Bank', class:3, rating:'E', mass:  5.00, integ: 51, pwrdraw:0.61, boottime:25, spinup:5, duration: 2.3, shieldrnf:17.0, thmload:340.0, ammoclip:1, ammomax:4, fdid:128064308, fdname:'Int_ShieldCellBank_Size3_Class1' },
-		31340 : { mtype:'iscb', cost:   10130, name:'Shield Cell Bank', class:3, rating:'D', mass:  2.00, integ: 38, pwrdraw:0.82, boottime:25, spinup:5, duration: 2.3, shieldrnf:23.0, thmload:340.0, ammoclip:1, ammomax:2, fdid:128064309, fdname:'Int_ShieldCellBank_Size3_Class2' },
-		31330 : { mtype:'iscb', cost:   25330, name:'Shield Cell Bank', class:3, rating:'C', mass:  5.00, integ: 64, pwrdraw:1.02, boottime:25, spinup:5, duration: 2.3, shieldrnf:29.0, thmload:340.0, ammoclip:1, ammomax:3, fdid:128064310, fdname:'Int_ShieldCellBank_Size3_Class3' },
-		31320 : { mtype:'iscb', cost:   63330, name:'Shield Cell Bank', class:3, rating:'B', mass:  8.00, integ: 90, pwrdraw:1.22, boottime:25, spinup:5, duration: 2.3, shieldrnf:35.0, thmload:340.0, ammoclip:1, ammomax:4, fdid:128064311, fdname:'Int_ShieldCellBank_Size3_Class4' },
-		31310 : { mtype:'iscb', cost:  158330, name:'Shield Cell Bank', class:3, rating:'A', mass:  5.00, integ: 77, pwrdraw:1.43, boottime:25, spinup:5, duration: 2.3, shieldrnf:41.0, thmload:340.0, ammoclip:1, ammomax:3, fdid:128064312, fdname:'Int_ShieldCellBank_Size3_Class5' },
-		
-		31450 : { mtype:'iscb', cost:   11350, name:'Shield Cell Bank', class:4, rating:'E', mass: 10.00, integ: 64, pwrdraw:0.74, boottime:25, spinup:5, duration: 3.4, shieldrnf:20.0, thmload:410.0, ammoclip:1, ammomax:4, fdid:128064313, fdname:'Int_ShieldCellBank_Size4_Class1' },
-		31440 : { mtype:'iscb', cost:   28370, name:'Shield Cell Bank', class:4, rating:'D', mass:  4.00, integ: 48, pwrdraw:0.98, boottime:25, spinup:5, duration: 3.4, shieldrnf:26.0, thmload:410.0, ammoclip:1, ammomax:2, fdid:128064314, fdname:'Int_ShieldCellBank_Size4_Class2' },
-		31430 : { mtype:'iscb', cost:   70930, name:'Shield Cell Bank', class:4, rating:'C', mass: 10.00, integ: 80, pwrdraw:1.23, boottime:25, spinup:5, duration: 3.4, shieldrnf:33.0, thmload:410.0, ammoclip:1, ammomax:3, fdid:128064315, fdname:'Int_ShieldCellBank_Size4_Class3' },
-		31420 : { mtype:'iscb', cost:  177330, name:'Shield Cell Bank', class:4, rating:'B', mass: 16.00, integ:112, pwrdraw:1.48, boottime:25, spinup:5, duration: 3.4, shieldrnf:39.0, thmload:410.0, ammoclip:1, ammomax:4, fdid:128064316, fdname:'Int_ShieldCellBank_Size4_Class4' },
-		31410 : { mtype:'iscb', cost:  443330, name:'Shield Cell Bank', class:4, rating:'A', mass: 10.00, integ: 96, pwrdraw:1.72, boottime:25, spinup:5, duration: 3.4, shieldrnf:46.0, thmload:410.0, ammoclip:1, ammomax:3, fdid:128064317, fdname:'Int_ShieldCellBank_Size4_Class5' },
-		
-		31550 : { mtype:'iscb', cost:   31780, name:'Shield Cell Bank', class:5, rating:'E', mass: 20.00, integ: 77, pwrdraw:0.90, boottime:25, spinup:5, duration: 5.1, shieldrnf:21.0, thmload:540.0, ammoclip:1, ammomax:4, fdid:128064318, fdname:'Int_ShieldCellBank_Size5_Class1' },
-		31540 : { mtype:'iscb', cost:   79440, name:'Shield Cell Bank', class:5, rating:'D', mass:  8.00, integ: 58, pwrdraw:1.20, boottime:25, spinup:5, duration: 5.1, shieldrnf:28.0, thmload:540.0, ammoclip:1, ammomax:2, fdid:128064319, fdname:'Int_ShieldCellBank_Size5_Class2' },
-		31530 : { mtype:'iscb', cost:  198610, name:'Shield Cell Bank', class:5, rating:'C', mass: 20.00, integ: 96, pwrdraw:1.50, boottime:25, spinup:5, duration: 5.1, shieldrnf:35.0, thmload:540.0, ammoclip:1, ammomax:3, fdid:128064320, fdname:'Int_ShieldCellBank_Size5_Class3' },
-		31520 : { mtype:'iscb', cost:  496530, name:'Shield Cell Bank', class:5, rating:'B', mass: 32.00, integ:134, pwrdraw:1.80, boottime:25, spinup:5, duration: 5.1, shieldrnf:41.0, thmload:540.0, ammoclip:1, ammomax:4, fdid:128064321, fdname:'Int_ShieldCellBank_Size5_Class4' },
-		31510 : { mtype:'iscb', cost: 1241320, name:'Shield Cell Bank', class:5, rating:'A', mass: 20.00, integ:115, pwrdraw:2.10, boottime:25, spinup:5, duration: 5.1, shieldrnf:48.0, thmload:540.0, ammoclip:1, ammomax:3, fdid:128064322, fdname:'Int_ShieldCellBank_Size5_Class5' },
-		
-		31650 : { mtype:'iscb', cost:   88980, name:'Shield Cell Bank', class:6, rating:'E', mass: 40.00, integ: 90, pwrdraw:1.06, boottime:25, spinup:5, duration: 7.6, shieldrnf:20.0, thmload:640.0, ammoclip:1, ammomax:5, fdid:128064323, fdname:'Int_ShieldCellBank_Size6_Class1' },
-		31640 : { mtype:'iscb', cost:  222440, name:'Shield Cell Bank', class:6, rating:'D', mass: 16.00, integ: 68, pwrdraw:1.42, boottime:25, spinup:5, duration: 7.6, shieldrnf:26.0, thmload:640.0, ammoclip:1, ammomax:3, fdid:128064324, fdname:'Int_ShieldCellBank_Size6_Class2' },
-		31630 : { mtype:'iscb', cost:  556110, name:'Shield Cell Bank', class:6, rating:'C', mass: 40.00, integ:113, pwrdraw:1.77, boottime:25, spinup:5, duration: 7.6, shieldrnf:33.0, thmload:640.0, ammoclip:1, ammomax:4, fdid:128064325, fdname:'Int_ShieldCellBank_Size6_Class3' },
-		31620 : { mtype:'iscb', cost: 1390280, name:'Shield Cell Bank', class:6, rating:'B', mass: 64.00, integ:158, pwrdraw:2.12, boottime:25, spinup:5, duration: 7.6, shieldrnf:39.0, thmload:640.0, ammoclip:1, ammomax:5, fdid:128064326, fdname:'Int_ShieldCellBank_Size6_Class4' },
-		31610 : { mtype:'iscb', cost: 3475690, name:'Shield Cell Bank', class:6, rating:'A', mass: 40.00, integ:136, pwrdraw:2.48, boottime:25, spinup:5, duration: 7.6, shieldrnf:46.0, thmload:640.0, ammoclip:1, ammomax:4, fdid:128064327, fdname:'Int_ShieldCellBank_Size6_Class5' },
-		
-		31750 : { mtype:'iscb', cost:  249140, name:'Shield Cell Bank', class:7, rating:'E', mass: 80.00, integ:105, pwrdraw:1.24, boottime:25, spinup:5, duration:11.4, shieldrnf:24.0, thmload:720.0, ammoclip:1, ammomax:5, fdid:128064328, fdname:'Int_ShieldCellBank_Size7_Class1' },
-		31740 : { mtype:'iscb', cost:  622840, name:'Shield Cell Bank', class:7, rating:'D', mass: 32.00, integ: 79, pwrdraw:1.66, boottime:25, spinup:5, duration:11.4, shieldrnf:32.0, thmload:720.0, ammoclip:1, ammomax:3, fdid:128064329, fdname:'Int_ShieldCellBank_Size7_Class2' },
-		31730 : { mtype:'iscb', cost: 1557110, name:'Shield Cell Bank', class:7, rating:'C', mass: 80.00, integ:131, pwrdraw:2.07, boottime:25, spinup:5, duration:11.4, shieldrnf:41.0, thmload:720.0, ammoclip:1, ammomax:4, fdid:128064330, fdname:'Int_ShieldCellBank_Size7_Class3' },
-		31720 : { mtype:'iscb', cost: 3892770, name:'Shield Cell Bank', class:7, rating:'B', mass:128.00, integ:183, pwrdraw:2.48, boottime:25, spinup:5, duration:11.4, shieldrnf:49.0, thmload:720.0, ammoclip:1, ammomax:5, fdid:128064331, fdname:'Int_ShieldCellBank_Size7_Class4' },
-		31710 : { mtype:'iscb', cost: 9731930, name:'Shield Cell Bank', class:7, rating:'A', mass: 80.00, integ:157, pwrdraw:2.90, boottime:25, spinup:5, duration:11.4, shieldrnf:57.0, thmload:720.0, ammoclip:1, ammomax:4, fdid:128064332, fdname:'Int_ShieldCellBank_Size7_Class5' },
-		
-		31850 : { mtype:'iscb', cost:  697580, name:'Shield Cell Bank', class:8, rating:'E', mass:160.00, integ:120, pwrdraw:1.44, boottime:25, spinup:5, duration:17.1, shieldrnf:28.0, thmload:800.0, ammoclip:1, ammomax:5, fdid:128064333, fdname:'Int_ShieldCellBank_Size8_Class1' },
-		31840 : { mtype:'iscb', cost: 1743960, name:'Shield Cell Bank', class:8, rating:'D', mass: 64.00, integ: 90, pwrdraw:1.92, boottime:25, spinup:5, duration:17.1, shieldrnf:37.0, thmload:800.0, ammoclip:1, ammomax:3, fdid:128064334, fdname:'Int_ShieldCellBank_Size8_Class2' },
-		31830 : { mtype:'iscb', cost: 4359900, name:'Shield Cell Bank', class:8, rating:'C', mass:160.00, integ:150, pwrdraw:2.40, boottime:25, spinup:5, duration:17.1, shieldrnf:47.0, thmload:800.0, ammoclip:1, ammomax:4, fdid:128064335, fdname:'Int_ShieldCellBank_Size8_Class3' },
-		31820 : { mtype:'iscb', cost:10899760, name:'Shield Cell Bank', class:8, rating:'B', mass:256.00, integ:210, pwrdraw:2.88, boottime:25, spinup:5, duration:17.1, shieldrnf:56.0, thmload:800.0, ammoclip:1, ammomax:5, fdid:128064336, fdname:'Int_ShieldCellBank_Size8_Class4' },
-		31810 : { mtype:'iscb', cost:27249390, name:'Shield Cell Bank', class:8, rating:'A', mass:160.00, integ:180, pwrdraw:3.36, boottime:25, spinup:5, duration:17.1, shieldrnf:65.0, thmload:800.0, ammoclip:1, ammomax:4, fdid:128064337, fdname:'Int_ShieldCellBank_Size8_Class5' },
+		28150 : { mtype:'islc', cost:1749600, name:'Research Limpet Controller', class:1, rating:'E', mass:  1.30, integ: 20, pwrdraw:0.40, boottime:0, maxlimpet: 1, lpactrng:2000, limpettime:300, maxspd:200, fdid:128793116, fdname:'Int_DroneControl_UnkVesselResearch' },
 		
 		
-	//	30150 : { mtype:'isg', cost:      NaN, name:'Shield Generator', class:1, rating:'E', mass:   NaN, integ:NaN, pwrdraw: NaN, boottime:1, minmass: 13.0, optmass:  25.0, maxmass:  63.0, minmul:30, optmul: 80, maxmul:130, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:null, fdname:null }, // TODO
-	//	30140 : { mtype:'isg', cost:      NaN, name:'Shield Generator', class:1, rating:'D', mass:   NaN, integ:NaN, pwrdraw: NaN, boottime:1, minmass: 13.0, optmass:  25.0, maxmass:  63.0, minmul:40, optmul: 90, maxmul:140, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:null, fdname:null }, // TODO
-	//	30130 : { mtype:'isg', cost:      NaN, name:'Shield Generator', class:1, rating:'C', mass:   NaN, integ:NaN, pwrdraw: NaN, boottime:1, minmass: 13.0, optmass:  25.0, maxmass:  63.0, minmul:50, optmul:100, maxmul:150, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:null, fdname:null }, // TODO
-	//	30120 : { mtype:'isg', cost:      NaN, name:'Shield Generator', class:1, rating:'B', mass:   NaN, integ:NaN, pwrdraw: NaN, boottime:1, minmass: 13.0, optmass:  25.0, maxmass:  63.0, minmul:60, optmul:110, maxmul:160, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:null, fdname:null }, // TODO
-		30110 : { mtype:'isg', cost:    88075, name:'Shield Generator', class:1, rating:'A', mass:  1.30, integ: 48, pwrdraw:1.68, boottime:1, minmass: 13.0, optmass:  25.0, maxmass:  63.0, minmul:70, optmul:120, maxmul:170, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064262, fdname:'Int_ShieldGenerator_Size1_Class5' },
+		31150 : { mtype:'iscb', cost:     520, name:'Shield Cell Bank', class:1, rating:'E', mass:  1.30, integ: 32, pwrdraw:0.41, boottime:25, spinup:5, duration: 1.0, shieldrnfps:12.0, thmload:170.0, ammoclip:1, ammomax:3, ammocost:300, fdid:128064298, fdname:'Int_ShieldCellBank_Size1_Class1' },
+		31140 : { mtype:'iscb', cost:    1290, name:'Shield Cell Bank', class:1, rating:'D', mass:  0.50, integ: 24, pwrdraw:0.55, boottime:25, spinup:5, duration: 1.0, shieldrnfps:16.0, thmload:170.0, ammoclip:1, ammomax:1, ammocost:300, fdid:128064299, fdname:'Int_ShieldCellBank_Size1_Class2' },
+		31130 : { mtype:'iscb', cost:    3230, name:'Shield Cell Bank', class:1, rating:'C', mass:  1.30, integ: 40, pwrdraw:0.69, boottime:25, spinup:5, duration: 1.0, shieldrnfps:20.0, thmload:170.0, ammoclip:1, ammomax:2, ammocost:300, fdid:128064300, fdname:'Int_ShieldCellBank_Size1_Class3' },
+		31120 : { mtype:'iscb', cost:    8080, name:'Shield Cell Bank', class:1, rating:'B', mass:  2.00, integ: 56, pwrdraw:0.83, boottime:25, spinup:5, duration: 1.0, shieldrnfps:24.0, thmload:170.0, ammoclip:1, ammomax:3, ammocost:300, fdid:128064301, fdname:'Int_ShieldCellBank_Size1_Class4' },
+		31110 : { mtype:'iscb', cost:   20200, name:'Shield Cell Bank', class:1, rating:'A', mass:  1.30, integ: 48, pwrdraw:0.97, boottime:25, spinup:5, duration: 1.0, shieldrnfps:28.0, thmload:170.0, ammoclip:1, ammomax:2, ammocost:300, fdid:128064302, fdname:'Int_ShieldCellBank_Size1_Class5' },
 		
-		30250 : { mtype:'isg', cost:     1980, name:'Shield Generator', class:2, rating:'E', mass:  2.50, integ: 41, pwrdraw:0.90, boottime:1, minmass: 28.0, optmass:  55.0, maxmass: 138.0, minmul:30, optmul: 80, maxmul:130, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064263, fdname:'Int_ShieldGenerator_Size2_Class1' },
-		30240 : { mtype:'isg', cost:     5930, name:'Shield Generator', class:2, rating:'D', mass:  1.00, integ: 31, pwrdraw:1.20, boottime:1, minmass: 28.0, optmass:  55.0, maxmass: 138.0, minmul:40, optmul: 90, maxmul:140, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064264, fdname:'Int_ShieldGenerator_Size2_Class2' },
-		30230 : { mtype:'isg', cost:    17800, name:'Shield Generator', class:2, rating:'C', mass:  2.50, integ: 51, pwrdraw:1.50, boottime:1, minmass: 28.0, optmass:  55.0, maxmass: 138.0, minmul:50, optmul:100, maxmul:150, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064265, fdname:'Int_ShieldGenerator_Size2_Class3' },
-		30220 : { mtype:'isg', cost:    53410, name:'Shield Generator', class:2, rating:'B', mass:  4.00, integ: 71, pwrdraw:1.80, boottime:1, minmass: 28.0, optmass:  55.0, maxmass: 138.0, minmul:60, optmul:110, maxmul:160, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064266, fdname:'Int_ShieldGenerator_Size2_Class4' },
-		30210 : { mtype:'isg', cost:   160220, name:'Shield Generator', class:2, rating:'A', mass:  2.50, integ: 61, pwrdraw:2.10, boottime:1, minmass: 28.0, optmass:  55.0, maxmass: 138.0, minmul:70, optmul:120, maxmul:170, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064267, fdname:'Int_ShieldGenerator_Size2_Class5' },
+		31250 : { mtype:'iscb', cost:    1450, name:'Shield Cell Bank', class:2, rating:'E', mass:  2.50, integ: 41, pwrdraw:0.50, boottime:25, spinup:5, duration: 1.5, shieldrnfps:14.0, thmload:240.0, ammoclip:1, ammomax:4, ammocost:300, fdid:128064303, fdname:'Int_ShieldCellBank_Size2_Class1' },
+		31240 : { mtype:'iscb', cost:    3620, name:'Shield Cell Bank', class:2, rating:'D', mass:  1.00, integ: 31, pwrdraw:0.67, boottime:25, spinup:5, duration: 1.5, shieldrnfps:18.0, thmload:240.0, ammoclip:1, ammomax:2, ammocost:300, fdid:128064304, fdname:'Int_ShieldCellBank_Size2_Class2' },
+		31230 : { mtype:'iscb', cost:    9050, name:'Shield Cell Bank', class:2, rating:'C', mass:  2.50, integ: 51, pwrdraw:0.84, boottime:25, spinup:5, duration: 1.5, shieldrnfps:23.0, thmload:240.0, ammoclip:1, ammomax:3, ammocost:300, fdid:128064305, fdname:'Int_ShieldCellBank_Size2_Class3' },
+		31220 : { mtype:'iscb', cost:   22620, name:'Shield Cell Bank', class:2, rating:'B', mass:  4.00, integ: 71, pwrdraw:1.01, boottime:25, spinup:5, duration: 1.5, shieldrnfps:28.0, thmload:240.0, ammoclip:1, ammomax:4, ammocost:300, fdid:128064306, fdname:'Int_ShieldCellBank_Size2_Class4' },
+		31210 : { mtype:'iscb', cost:   56550, name:'Shield Cell Bank', class:2, rating:'A', mass:  2.50, integ: 61, pwrdraw:1.18, boottime:25, spinup:5, duration: 1.5, shieldrnfps:32.0, thmload:240.0, ammoclip:1, ammomax:3, ammocost:300, fdid:128064307, fdname:'Int_ShieldCellBank_Size2_Class5' },
 		
-		30350 : { mtype:'isg', cost:     6270, name:'Shield Generator', class:3, rating:'E', mass:  5.00, integ: 51, pwrdraw:1.08, boottime:1, minmass: 83.0, optmass: 165.0, maxmass: 413.0, minmul:30, optmul: 80, maxmul:130, genrate:1.0, bgenrate:1.87, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064268, fdname:'Int_ShieldGenerator_Size3_Class1' },
-		30340 : { mtype:'isg', cost:    18810, name:'Shield Generator', class:3, rating:'D', mass:  2.00, integ: 38, pwrdraw:1.44, boottime:1, minmass: 83.0, optmass: 165.0, maxmass: 413.0, minmul:40, optmul: 90, maxmul:140, genrate:1.0, bgenrate:1.87, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064269, fdname:'Int_ShieldGenerator_Size3_Class2' },
-		30330 : { mtype:'isg', cost:    56440, name:'Shield Generator', class:3, rating:'C', mass:  5.00, integ: 64, pwrdraw:1.80, boottime:1, minmass: 83.0, optmass: 165.0, maxmass: 413.0, minmul:50, optmul:100, maxmul:150, genrate:1.0, bgenrate:1.87, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064270, fdname:'Int_ShieldGenerator_Size3_Class3' },
-		30320 : { mtype:'isg', cost:   169300, name:'Shield Generator', class:3, rating:'B', mass:  8.00, integ: 90, pwrdraw:2.16, boottime:1, minmass: 83.0, optmass: 165.0, maxmass: 413.0, minmul:60, optmul:110, maxmul:160, genrate:1.0, bgenrate:1.87, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064271, fdname:'Int_ShieldGenerator_Size3_Class4' },
-		30310 : { mtype:'isg', cost:   507910, name:'Shield Generator', class:3, rating:'A', mass:  5.00, integ: 77, pwrdraw:2.52, boottime:1, minmass: 83.0, optmass: 165.0, maxmass: 413.0, minmul:70, optmul:120, maxmul:170, genrate:1.0, bgenrate:1.87, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064272, fdname:'Int_ShieldGenerator_Size3_Class5' },
+		31350 : { mtype:'iscb', cost:    4050, name:'Shield Cell Bank', class:3, rating:'E', mass:  5.00, integ: 51, pwrdraw:0.61, boottime:25, spinup:5, duration: 2.3, shieldrnfps:17.0, thmload:340.0, ammoclip:1, ammomax:4, ammocost:300, fdid:128064308, fdname:'Int_ShieldCellBank_Size3_Class1' },
+		31340 : { mtype:'iscb', cost:   10130, name:'Shield Cell Bank', class:3, rating:'D', mass:  2.00, integ: 38, pwrdraw:0.82, boottime:25, spinup:5, duration: 2.3, shieldrnfps:23.0, thmload:340.0, ammoclip:1, ammomax:2, ammocost:300, fdid:128064309, fdname:'Int_ShieldCellBank_Size3_Class2' },
+		31330 : { mtype:'iscb', cost:   25330, name:'Shield Cell Bank', class:3, rating:'C', mass:  5.00, integ: 64, pwrdraw:1.02, boottime:25, spinup:5, duration: 2.3, shieldrnfps:29.0, thmload:340.0, ammoclip:1, ammomax:3, ammocost:300, fdid:128064310, fdname:'Int_ShieldCellBank_Size3_Class3' },
+		31320 : { mtype:'iscb', cost:   63330, name:'Shield Cell Bank', class:3, rating:'B', mass:  8.00, integ: 90, pwrdraw:1.22, boottime:25, spinup:5, duration: 2.3, shieldrnfps:35.0, thmload:340.0, ammoclip:1, ammomax:4, ammocost:300, fdid:128064311, fdname:'Int_ShieldCellBank_Size3_Class4' },
+		31310 : { mtype:'iscb', cost:  158330, name:'Shield Cell Bank', class:3, rating:'A', mass:  5.00, integ: 77, pwrdraw:1.43, boottime:25, spinup:5, duration: 2.3, shieldrnfps:41.0, thmload:340.0, ammoclip:1, ammomax:3, ammocost:300, fdid:128064312, fdname:'Int_ShieldCellBank_Size3_Class5' },
 		
-		30450 : { mtype:'isg', cost:    19880, name:'Shield Generator', class:4, rating:'E', mass: 10.00, integ: 64, pwrdraw:1.32, boottime:1, minmass:143.0, optmass: 285.0, maxmass: 713.0, minmul:30, optmul: 80, maxmul:130, genrate:1.0, bgenrate:2.53, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064273, fdname:'Int_ShieldGenerator_Size4_Class1' },
-		30440 : { mtype:'isg', cost:    59630, name:'Shield Generator', class:4, rating:'D', mass:  4.00, integ: 48, pwrdraw:1.76, boottime:1, minmass:143.0, optmass: 285.0, maxmass: 713.0, minmul:40, optmul: 90, maxmul:140, genrate:1.0, bgenrate:2.53, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064274, fdname:'Int_ShieldGenerator_Size4_Class2' },
-		30430 : { mtype:'isg', cost:   178900, name:'Shield Generator', class:4, rating:'C', mass: 10.00, integ: 80, pwrdraw:2.20, boottime:1, minmass:143.0, optmass: 285.0, maxmass: 713.0, minmul:50, optmul:100, maxmul:150, genrate:1.0, bgenrate:2.53, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064275, fdname:'Int_ShieldGenerator_Size4_Class3' },
-		30420 : { mtype:'isg', cost:   536690, name:'Shield Generator', class:4, rating:'B', mass: 16.00, integ:112, pwrdraw:2.64, boottime:1, minmass:143.0, optmass: 285.0, maxmass: 713.0, minmul:60, optmul:110, maxmul:160, genrate:1.0, bgenrate:2.53, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064276, fdname:'Int_ShieldGenerator_Size4_Class4' },
-		30410 : { mtype:'isg', cost:  1610080, name:'Shield Generator', class:4, rating:'A', mass: 10.00, integ: 96, pwrdraw:3.08, boottime:1, minmass:143.0, optmass: 285.0, maxmass: 713.0, minmul:70, optmul:120, maxmul:170, genrate:1.0, bgenrate:2.53, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064277, fdname:'Int_ShieldGenerator_Size4_Class5' },
+		31450 : { mtype:'iscb', cost:   11350, name:'Shield Cell Bank', class:4, rating:'E', mass: 10.00, integ: 64, pwrdraw:0.74, boottime:25, spinup:5, duration: 3.4, shieldrnfps:20.0, thmload:410.0, ammoclip:1, ammomax:4, ammocost:300, fdid:128064313, fdname:'Int_ShieldCellBank_Size4_Class1' },
+		31440 : { mtype:'iscb', cost:   28370, name:'Shield Cell Bank', class:4, rating:'D', mass:  4.00, integ: 48, pwrdraw:0.98, boottime:25, spinup:5, duration: 3.4, shieldrnfps:26.0, thmload:410.0, ammoclip:1, ammomax:2, ammocost:300, fdid:128064314, fdname:'Int_ShieldCellBank_Size4_Class2' },
+		31430 : { mtype:'iscb', cost:   70930, name:'Shield Cell Bank', class:4, rating:'C', mass: 10.00, integ: 80, pwrdraw:1.23, boottime:25, spinup:5, duration: 3.4, shieldrnfps:33.0, thmload:410.0, ammoclip:1, ammomax:3, ammocost:300, fdid:128064315, fdname:'Int_ShieldCellBank_Size4_Class3' },
+		31420 : { mtype:'iscb', cost:  177330, name:'Shield Cell Bank', class:4, rating:'B', mass: 16.00, integ:112, pwrdraw:1.48, boottime:25, spinup:5, duration: 3.4, shieldrnfps:39.0, thmload:410.0, ammoclip:1, ammomax:4, ammocost:300, fdid:128064316, fdname:'Int_ShieldCellBank_Size4_Class4' },
+		31410 : { mtype:'iscb', cost:  443330, name:'Shield Cell Bank', class:4, rating:'A', mass: 10.00, integ: 96, pwrdraw:1.72, boottime:25, spinup:5, duration: 3.4, shieldrnfps:46.0, thmload:410.0, ammoclip:1, ammomax:3, ammocost:300, fdid:128064317, fdname:'Int_ShieldCellBank_Size4_Class5' },
 		
-		30550 : { mtype:'isg', cost:    63010, name:'Shield Generator', class:5, rating:'E', mass: 20.00, integ: 77, pwrdraw:1.56, boottime:1, minmass:203.0, optmass: 405.0, maxmass:1013.0, minmul:30, optmul: 80, maxmul:130, genrate:1.0, bgenrate:3.75, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064278, fdname:'Int_ShieldGenerator_Size5_Class1' },
-		30540 : { mtype:'isg', cost:   189040, name:'Shield Generator', class:5, rating:'D', mass:  8.00, integ: 58, pwrdraw:2.08, boottime:1, minmass:203.0, optmass: 405.0, maxmass:1013.0, minmul:40, optmul: 90, maxmul:140, genrate:1.0, bgenrate:3.75, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064279, fdname:'Int_ShieldGenerator_Size5_Class2' },
-		30530 : { mtype:'isg', cost:   567110, name:'Shield Generator', class:5, rating:'C', mass: 20.00, integ: 96, pwrdraw:2.60, boottime:1, minmass:203.0, optmass: 405.0, maxmass:1013.0, minmul:50, optmul:100, maxmul:150, genrate:1.0, bgenrate:3.75, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064280, fdname:'Int_ShieldGenerator_Size5_Class3' },
-		30520 : { mtype:'isg', cost:  1701320, name:'Shield Generator', class:5, rating:'B', mass: 32.00, integ:134, pwrdraw:3.12, boottime:1, minmass:203.0, optmass: 405.0, maxmass:1013.0, minmul:60, optmul:110, maxmul:160, genrate:1.0, bgenrate:3.75, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064281, fdname:'Int_ShieldGenerator_Size5_Class4' },
-		30510 : { mtype:'isg', cost:  5103950, name:'Shield Generator', class:5, rating:'A', mass: 20.00, integ:115, pwrdraw:3.64, boottime:1, minmass:203.0, optmass: 405.0, maxmass:1013.0, minmul:70, optmul:120, maxmul:170, genrate:1.0, bgenrate:3.75, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064282, fdname:'Int_ShieldGenerator_Size5_Class5' },
+		31550 : { mtype:'iscb', cost:   31780, name:'Shield Cell Bank', class:5, rating:'E', mass: 20.00, integ: 77, pwrdraw:0.90, boottime:25, spinup:5, duration: 5.1, shieldrnfps:21.0, thmload:540.0, ammoclip:1, ammomax:4, ammocost:300, fdid:128064318, fdname:'Int_ShieldCellBank_Size5_Class1' },
+		31540 : { mtype:'iscb', cost:   79440, name:'Shield Cell Bank', class:5, rating:'D', mass:  8.00, integ: 58, pwrdraw:1.20, boottime:25, spinup:5, duration: 5.1, shieldrnfps:28.0, thmload:540.0, ammoclip:1, ammomax:2, ammocost:300, fdid:128064319, fdname:'Int_ShieldCellBank_Size5_Class2' },
+		31530 : { mtype:'iscb', cost:  198610, name:'Shield Cell Bank', class:5, rating:'C', mass: 20.00, integ: 96, pwrdraw:1.50, boottime:25, spinup:5, duration: 5.1, shieldrnfps:35.0, thmload:540.0, ammoclip:1, ammomax:3, ammocost:300, fdid:128064320, fdname:'Int_ShieldCellBank_Size5_Class3' },
+		31520 : { mtype:'iscb', cost:  496530, name:'Shield Cell Bank', class:5, rating:'B', mass: 32.00, integ:134, pwrdraw:1.80, boottime:25, spinup:5, duration: 5.1, shieldrnfps:41.0, thmload:540.0, ammoclip:1, ammomax:4, ammocost:300, fdid:128064321, fdname:'Int_ShieldCellBank_Size5_Class4' },
+		31510 : { mtype:'iscb', cost: 1241320, name:'Shield Cell Bank', class:5, rating:'A', mass: 20.00, integ:115, pwrdraw:2.10, boottime:25, spinup:5, duration: 5.1, shieldrnfps:48.0, thmload:540.0, ammoclip:1, ammomax:3, ammocost:300, fdid:128064322, fdname:'Int_ShieldCellBank_Size5_Class5' },
 		
-		30650 : { mtype:'isg', cost:   199750, name:'Shield Generator', class:6, rating:'E', mass: 40.00, integ: 90, pwrdraw:1.86, boottime:1, minmass:270.0, optmass: 540.0, maxmass:1350.0, minmul:30, optmul: 80, maxmul:130, genrate:1.3, bgenrate:5.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064283, fdname:'Int_ShieldGenerator_Size6_Class1' },
-		30640 : { mtype:'isg', cost:   599240, name:'Shield Generator', class:6, rating:'D', mass: 16.00, integ: 68, pwrdraw:2.48, boottime:1, minmass:270.0, optmass: 540.0, maxmass:1350.0, minmul:40, optmul: 90, maxmul:140, genrate:1.3, bgenrate:5.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064284, fdname:'Int_ShieldGenerator_Size6_Class2' },
-		30630 : { mtype:'isg', cost:  1797730, name:'Shield Generator', class:6, rating:'C', mass: 40.00, integ:113, pwrdraw:3.10, boottime:1, minmass:270.0, optmass: 540.0, maxmass:1350.0, minmul:50, optmul:100, maxmul:150, genrate:1.3, bgenrate:5.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064285, fdname:'Int_ShieldGenerator_Size6_Class3' },
-		30620 : { mtype:'isg', cost:  5393180, name:'Shield Generator', class:6, rating:'B', mass: 64.00, integ:158, pwrdraw:3.72, boottime:1, minmass:270.0, optmass: 540.0, maxmass:1350.0, minmul:60, optmul:110, maxmul:160, genrate:1.3, bgenrate:5.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064286, fdname:'Int_ShieldGenerator_Size6_Class4' },
-		30610 : { mtype:'isg', cost: 16179530, name:'Shield Generator', class:6, rating:'A', mass: 40.00, integ:136, pwrdraw:4.34, boottime:1, minmass:270.0, optmass: 540.0, maxmass:1350.0, minmul:70, optmul:120, maxmul:170, genrate:1.3, bgenrate:5.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064287, fdname:'Int_ShieldGenerator_Size6_Class5' },
+		31650 : { mtype:'iscb', cost:   88980, name:'Shield Cell Bank', class:6, rating:'E', mass: 40.00, integ: 90, pwrdraw:1.06, boottime:25, spinup:5, duration: 7.6, shieldrnfps:20.0, thmload:640.0, ammoclip:1, ammomax:5, ammocost:300, fdid:128064323, fdname:'Int_ShieldCellBank_Size6_Class1' },
+		31640 : { mtype:'iscb', cost:  222440, name:'Shield Cell Bank', class:6, rating:'D', mass: 16.00, integ: 68, pwrdraw:1.42, boottime:25, spinup:5, duration: 7.6, shieldrnfps:26.0, thmload:640.0, ammoclip:1, ammomax:3, ammocost:300, fdid:128064324, fdname:'Int_ShieldCellBank_Size6_Class2' },
+		31630 : { mtype:'iscb', cost:  556110, name:'Shield Cell Bank', class:6, rating:'C', mass: 40.00, integ:113, pwrdraw:1.77, boottime:25, spinup:5, duration: 7.6, shieldrnfps:33.0, thmload:640.0, ammoclip:1, ammomax:4, ammocost:300, fdid:128064325, fdname:'Int_ShieldCellBank_Size6_Class3' },
+		31620 : { mtype:'iscb', cost: 1390280, name:'Shield Cell Bank', class:6, rating:'B', mass: 64.00, integ:158, pwrdraw:2.12, boottime:25, spinup:5, duration: 7.6, shieldrnfps:39.0, thmload:640.0, ammoclip:1, ammomax:5, ammocost:300, fdid:128064326, fdname:'Int_ShieldCellBank_Size6_Class4' },
+		31610 : { mtype:'iscb', cost: 3475690, name:'Shield Cell Bank', class:6, rating:'A', mass: 40.00, integ:136, pwrdraw:2.48, boottime:25, spinup:5, duration: 7.6, shieldrnfps:46.0, thmload:640.0, ammoclip:1, ammomax:4, ammocost:300, fdid:128064327, fdname:'Int_ShieldCellBank_Size6_Class5' },
 		
-		30750 : { mtype:'isg', cost:   633200, name:'Shield Generator', class:7, rating:'E', mass: 80.00, integ:105, pwrdraw:2.10, boottime:1, minmass:530.0, optmass:1060.0, maxmass:2650.0, minmul:30, optmul: 80, maxmul:130, genrate:1.8, bgenrate:7.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064288, fdname:'Int_ShieldGenerator_Size7_Class1' },
-		30740 : { mtype:'isg', cost:  1899600, name:'Shield Generator', class:7, rating:'D', mass: 32.00, integ: 79, pwrdraw:2.80, boottime:1, minmass:530.0, optmass:1060.0, maxmass:2650.0, minmul:40, optmul: 90, maxmul:140, genrate:1.8, bgenrate:7.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064289, fdname:'Int_ShieldGenerator_Size7_Class2' },
-		30730 : { mtype:'isg', cost:  5698790, name:'Shield Generator', class:7, rating:'C', mass: 80.00, integ:131, pwrdraw:3.50, boottime:1, minmass:530.0, optmass:1060.0, maxmass:2650.0, minmul:50, optmul:100, maxmul:150, genrate:1.8, bgenrate:7.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064290, fdname:'Int_ShieldGenerator_Size7_Class3' },
-		30720 : { mtype:'isg', cost: 17096370, name:'Shield Generator', class:7, rating:'B', mass:128.00, integ:183, pwrdraw:4.20, boottime:1, minmass:530.0, optmass:1060.0, maxmass:2650.0, minmul:60, optmul:110, maxmul:160, genrate:1.8, bgenrate:7.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064291, fdname:'Int_ShieldGenerator_Size7_Class4' },
-		30710 : { mtype:'isg', cost: 51289110, name:'Shield Generator', class:7, rating:'A', mass: 80.00, integ:157, pwrdraw:4.90, boottime:1, minmass:530.0, optmass:1060.0, maxmass:2650.0, minmul:70, optmul:120, maxmul:170, genrate:1.8, bgenrate:7.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064292, fdname:'Int_ShieldGenerator_Size7_Class5' },
+		31750 : { mtype:'iscb', cost:  249140, name:'Shield Cell Bank', class:7, rating:'E', mass: 80.00, integ:105, pwrdraw:1.24, boottime:25, spinup:5, duration:11.4, shieldrnfps:24.0, thmload:720.0, ammoclip:1, ammomax:5, ammocost:300, fdid:128064328, fdname:'Int_ShieldCellBank_Size7_Class1' },
+		31740 : { mtype:'iscb', cost:  622840, name:'Shield Cell Bank', class:7, rating:'D', mass: 32.00, integ: 79, pwrdraw:1.66, boottime:25, spinup:5, duration:11.4, shieldrnfps:32.0, thmload:720.0, ammoclip:1, ammomax:3, ammocost:300, fdid:128064329, fdname:'Int_ShieldCellBank_Size7_Class2' },
+		31730 : { mtype:'iscb', cost: 1557110, name:'Shield Cell Bank', class:7, rating:'C', mass: 80.00, integ:131, pwrdraw:2.07, boottime:25, spinup:5, duration:11.4, shieldrnfps:41.0, thmload:720.0, ammoclip:1, ammomax:4, ammocost:300, fdid:128064330, fdname:'Int_ShieldCellBank_Size7_Class3' },
+		31720 : { mtype:'iscb', cost: 3892770, name:'Shield Cell Bank', class:7, rating:'B', mass:128.00, integ:183, pwrdraw:2.48, boottime:25, spinup:5, duration:11.4, shieldrnfps:49.0, thmload:720.0, ammoclip:1, ammomax:5, ammocost:300, fdid:128064331, fdname:'Int_ShieldCellBank_Size7_Class4' },
+		31710 : { mtype:'iscb', cost: 9731930, name:'Shield Cell Bank', class:7, rating:'A', mass: 80.00, integ:157, pwrdraw:2.90, boottime:25, spinup:5, duration:11.4, shieldrnfps:57.0, thmload:720.0, ammoclip:1, ammomax:4, ammocost:300, fdid:128064332, fdname:'Int_ShieldCellBank_Size7_Class5' },
 		
-		30850 : { mtype:'isg', cost:  2007240, name:'Shield Generator', class:8, rating:'E', mass:160.00, integ:120, pwrdraw:2.40, boottime:1, minmass:900.0, optmass:1800.0, maxmass:4500.0, minmul:30, optmul: 80, maxmul:130, genrate:2.4, bgenrate:9.6 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064293, fdname:'Int_ShieldGenerator_Size8_Class1' },
-		30840 : { mtype:'isg', cost:  6021720, name:'Shield Generator', class:8, rating:'D', mass: 64.00, integ: 90, pwrdraw:3.20, boottime:1, minmass:900.0, optmass:1800.0, maxmass:4500.0, minmul:40, optmul: 90, maxmul:140, genrate:2.4, bgenrate:9.6 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064294, fdname:'Int_ShieldGenerator_Size8_Class2' },
-		30830 : { mtype:'isg', cost: 18065170, name:'Shield Generator', class:8, rating:'C', mass:160.00, integ:150, pwrdraw:4.00, boottime:1, minmass:900.0, optmass:1800.0, maxmass:4500.0, minmul:50, optmul:100, maxmul:150, genrate:2.4, bgenrate:9.6 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064295, fdname:'Int_ShieldGenerator_Size8_Class3' },
-		30820 : { mtype:'isg', cost: 54195500, name:'Shield Generator', class:8, rating:'B', mass:256.00, integ:210, pwrdraw:4.80, boottime:1, minmass:900.0, optmass:1800.0, maxmass:4500.0, minmul:60, optmul:110, maxmul:160, genrate:2.4, bgenrate:9.6 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064296, fdname:'Int_ShieldGenerator_Size8_Class4' },
-		30810 : { mtype:'isg', cost:162586490, name:'Shield Generator', class:8, rating:'A', mass:160.00, integ:180, pwrdraw:5.60, boottime:1, minmass:900.0, optmass:1800.0, maxmass:4500.0, minmul:70, optmul:120, maxmul:170, genrate:2.4, bgenrate:9.6 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128064297, fdname:'Int_ShieldGenerator_Size8_Class5' },
-		
-		30132 : { mtype:'isg', cost:     7710, name:'Bi-Weave Shield Generator',  class:1, rating:'C', mass:  1.30, integ: 40, pwrdraw:1.20, boottime:1, minmass: 13.0, optmass:  25.0, maxmass:  63.0, minmul: 40, optmul: 90, maxmul:140, genrate: 1.8, bgenrate: 2.400, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128671331, fdname:'Int_ShieldGenerator_Size1_Class3_Fast' }, // TODO: verify bgenrate
-		30232 : { mtype:'isg', cost:    26710, name:'Bi-Weave Shield Generator',  class:2, rating:'C', mass:  2.50, integ: 51, pwrdraw:1.50, boottime:1, minmass: 28.0, optmass:  55.0, maxmass: 138.0, minmul: 40, optmul: 90, maxmul:140, genrate: 1.8, bgenrate: 2.400, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128671332, fdname:'Int_ShieldGenerator_Size2_Class3_Fast' }, // TODO: verify bgenrate
-		30332 : { mtype:'isg', cost:    84650, name:'Bi-Weave Shield Generator',  class:3, rating:'C', mass:  5.00, integ: 64, pwrdraw:1.80, boottime:1, minmass: 83.0, optmass: 165.0, maxmass: 413.0, minmul: 40, optmul: 90, maxmul:140, genrate: 1.8, bgenrate: 2.805, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128671333, fdname:'Int_ShieldGenerator_Size3_Class3_Fast' }, // TODO: verify bgenrate
-		30432 : { mtype:'isg', cost:   268350, name:'Bi-Weave Shield Generator',  class:4, rating:'C', mass: 10.00, integ: 80, pwrdraw:2.20, boottime:1, minmass:143.0, optmass: 285.0, maxmass: 713.0, minmul: 40, optmul: 90, maxmul:140, genrate: 1.8, bgenrate: 3.795, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128671334, fdname:'Int_ShieldGenerator_Size4_Class3_Fast' }, // TODO: verify bgenrate
-		30532 : { mtype:'isg', cost:   850660, name:'Bi-Weave Shield Generator',  class:5, rating:'C', mass: 20.00, integ: 96, pwrdraw:2.60, boottime:1, minmass:203.0, optmass: 405.0, maxmass:1013.0, minmul: 40, optmul: 90, maxmul:140, genrate: 2.2, bgenrate: 5.625, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128671335, fdname:'Int_ShieldGenerator_Size5_Class3_Fast' }, // TODO: verify bgenrate
-		30632 : { mtype:'isg', cost:  2696590, name:'Bi-Weave Shield Generator',  class:6, rating:'C', mass: 40.00, integ:113, pwrdraw:3.10, boottime:1, minmass:270.0, optmass: 540.0, maxmass:1350.0, minmul: 40, optmul: 90, maxmul:140, genrate: 3.2, bgenrate: 7.995, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128671336, fdname:'Int_ShieldGenerator_Size6_Class3_Fast' }, // TODO: verify bgenrate
-		30732 : { mtype:'isg', cost:  8548190, name:'Bi-Weave Shield Generator',  class:7, rating:'C', mass: 80.00, integ:131, pwrdraw:3.50, boottime:1, minmass:530.0, optmass:1060.0, maxmass:2650.0, minmul: 40, optmul: 90, maxmul:140, genrate: 4.4, bgenrate:10.995, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128671337, fdname:'Int_ShieldGenerator_Size7_Class3_Fast' }, // TODO: verify bgenrate
-		30832 : { mtype:'isg', cost: 27097750, name:'Bi-Weave Shield Generator',  class:8, rating:'C', mass:160.00, integ:150, pwrdraw:4.00, boottime:1, minmass:900.0, optmass:1800.0, maxmass:4500.0, minmul: 40, optmul: 90, maxmul:140, genrate: 5.8, bgenrate:14.400, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128671338, fdname:'Int_ShieldGenerator_Size8_Class3_Fast' }, // TODO: verify bgenrate
-		
-		30111 : { mtype:'isg', cost:   132200, name:'Prismatic Shield Generator', class:1, rating:'A', mass:  2.60, integ: 48, pwrdraw:2.52, boottime:1, minmass: 13.0, optmass:  25.0, maxmass:  63.0, minmul:100, optmul:150, maxmul:200, genrate: 1.0, bgenrate: 1.2 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128671323, fdname:'Int_ShieldGenerator_Size1_Class5_Strong' }, // TODO: verify bgenrate
-		30211 : { mtype:'isg', cost:   240340, name:'Prismatic Shield Generator', class:2, rating:'A', mass:  5.00, integ: 61, pwrdraw:3.15, boottime:1, minmass: 28.0, optmass:  55.0, maxmass: 138.0, minmul:100, optmul:150, maxmul:200, genrate: 1.0, bgenrate: 1.2 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128671324, fdname:'Int_ShieldGenerator_Size2_Class5_Strong' }, // TODO: verify bgenrate
-		30311 : { mtype:'isg', cost:   761870, name:'Prismatic Shield Generator', class:3, rating:'A', mass: 10.00, integ: 77, pwrdraw:3.78, boottime:1, minmass: 83.0, optmass: 165.0, maxmass: 413.0, minmul:100, optmul:150, maxmul:200, genrate: 1.0, bgenrate: 1.3 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128671325, fdname:'Int_ShieldGenerator_Size3_Class5_Strong' }, // TODO: verify bgenrate
-		30411 : { mtype:'isg', cost:  2415120, name:'Prismatic Shield Generator', class:4, rating:'A', mass: 20.00, integ: 96, pwrdraw:4.62, boottime:1, minmass:143.0, optmass: 285.0, maxmass: 713.0, minmul:100, optmul:150, maxmul:200, genrate: 1.0, bgenrate: 1.66, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128671326, fdname:'Int_ShieldGenerator_Size4_Class5_Strong' },
-		30511 : { mtype:'isg', cost:  7655930, name:'Prismatic Shield Generator', class:5, rating:'A', mass: 40.00, integ:115, pwrdraw:5.46, boottime:1, minmass:203.0, optmass: 405.0, maxmass:1013.0, minmul:100, optmul:150, maxmul:200, genrate: 1.0, bgenrate: 2.34, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128671327, fdname:'Int_ShieldGenerator_Size5_Class5_Strong' }, // TODO: verify bgenrate
-		30611 : { mtype:'isg', cost: 24269300, name:'Prismatic Shield Generator', class:6, rating:'A', mass: 80.00, integ:136, pwrdraw:6.51, boottime:1, minmass:270.0, optmass: 540.0, maxmass:1350.0, minmul:100, optmul:150, maxmul:200, genrate: 1.0, bgenrate: 3.2 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128671328, fdname:'Int_ShieldGenerator_Size6_Class5_Strong' }, // TODO: verify bgenrate
-		30711 : { mtype:'isg', cost: 76933670, name:'Prismatic Shield Generator', class:7, rating:'A', mass:160.00, integ:157, pwrdraw:7.35, boottime:1, minmass:530.0, optmass:1060.0, maxmass:2650.0, minmul:100, optmul:150, maxmul:200, genrate: 1.1, bgenrate: 4.25, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128671329, fdname:'Int_ShieldGenerator_Size7_Class5_Strong' }, // TODO: verify bgenrate
-		30811 : { mtype:'isg', cost:243879730, name:'Prismatic Shield Generator', class:8, rating:'A', mass:320.00, integ:180, pwrdraw:8.40, boottime:1, minmass:900.0, optmass:1800.0, maxmass:4500.0, minmul:100, optmul:150, maxmul:200, genrate: 1.4, bgenrate: 5.4 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, fdid:128671330, fdname:'Int_ShieldGenerator_Size8_Class5_Strong' }, // TODO: verify bgenrate
+		31850 : { mtype:'iscb', cost:  697580, name:'Shield Cell Bank', class:8, rating:'E', mass:160.00, integ:120, pwrdraw:1.44, boottime:25, spinup:5, duration:17.1, shieldrnfps:28.0, thmload:800.0, ammoclip:1, ammomax:5, ammocost:300, fdid:128064333, fdname:'Int_ShieldCellBank_Size8_Class1' },
+		31840 : { mtype:'iscb', cost: 1743960, name:'Shield Cell Bank', class:8, rating:'D', mass: 64.00, integ: 90, pwrdraw:1.92, boottime:25, spinup:5, duration:17.1, shieldrnfps:37.0, thmload:800.0, ammoclip:1, ammomax:3, ammocost:300, fdid:128064334, fdname:'Int_ShieldCellBank_Size8_Class2' },
+		31830 : { mtype:'iscb', cost: 4359900, name:'Shield Cell Bank', class:8, rating:'C', mass:160.00, integ:150, pwrdraw:2.40, boottime:25, spinup:5, duration:17.1, shieldrnfps:47.0, thmload:800.0, ammoclip:1, ammomax:4, ammocost:300, fdid:128064335, fdname:'Int_ShieldCellBank_Size8_Class3' },
+		31820 : { mtype:'iscb', cost:10899760, name:'Shield Cell Bank', class:8, rating:'B', mass:256.00, integ:210, pwrdraw:2.88, boottime:25, spinup:5, duration:17.1, shieldrnfps:56.0, thmload:800.0, ammoclip:1, ammomax:5, ammocost:300, fdid:128064336, fdname:'Int_ShieldCellBank_Size8_Class4' },
+		31810 : { mtype:'iscb', cost:27249390, name:'Shield Cell Bank', class:8, rating:'A', mass:160.00, integ:180, pwrdraw:3.36, boottime:25, spinup:5, duration:17.1, shieldrnfps:65.0, thmload:800.0, ammoclip:1, ammomax:4, ammocost:300, fdid:128064337, fdname:'Int_ShieldCellBank_Size8_Class5' },
 		
 		
-		10150 : { mtype:'isbs', cost:   1000, name:'Basic Discovery Scanner',        class:1, rating:'E', mass:2.00, integ:40, activerng: 500, passiverng: 0.33, maxangle:10.00, scantime:5, fdid:128662535, fdname:'Int_StellarBodyDiscoveryScanner_Standard' },
-		10140 : { mtype:'isbs', cost: 505000, name:'Intermediate Discovery Scanner', class:1, rating:'D', mass:2.00, integ:40, activerng:1000, passiverng: 3.34, maxangle:10.00, scantime:5, fdid:128663560, fdname:'Int_StellarBodyDiscoveryScanner_Intermediate' },
-		10130 : { mtype:'isbs', cost:1545000, name:'Advanced Discovery Scanner',     class:1, rating:'C', mass:2.00, integ:40, activerng: 1/0, passiverng:33.36, maxangle:10.00, scantime:5, fdid:128663561, fdname:'Int_StellarBodyDiscoveryScanner_Advanced' },
+		30110 : { mtype:'isg', cost:    88075, name:'Shield Generator', class:1, rating:'A', mass:  1.30, integ: 48, pwrdraw:1.68, boottime:1, minmass: 13.0, optmass:  25.0, maxmass:  63.0, minmul:70, optmul:120, maxmul:170, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064262, fdname:'Int_ShieldGenerator_Size1_Class5' },
+		
+		30250 : { mtype:'isg', cost:     1980, name:'Shield Generator', class:2, rating:'E', mass:  2.50, integ: 41, pwrdraw:0.90, boottime:1, minmass: 28.0, optmass:  55.0, maxmass: 138.0, minmul:30, optmul: 80, maxmul:130, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064263, fdname:'Int_ShieldGenerator_Size2_Class1' },
+		30240 : { mtype:'isg', cost:     5930, name:'Shield Generator', class:2, rating:'D', mass:  1.00, integ: 31, pwrdraw:1.20, boottime:1, minmass: 28.0, optmass:  55.0, maxmass: 138.0, minmul:40, optmul: 90, maxmul:140, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064264, fdname:'Int_ShieldGenerator_Size2_Class2' },
+		30230 : { mtype:'isg', cost:    17800, name:'Shield Generator', class:2, rating:'C', mass:  2.50, integ: 51, pwrdraw:1.50, boottime:1, minmass: 28.0, optmass:  55.0, maxmass: 138.0, minmul:50, optmul:100, maxmul:150, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064265, fdname:'Int_ShieldGenerator_Size2_Class3' },
+		30220 : { mtype:'isg', cost:    53410, name:'Shield Generator', class:2, rating:'B', mass:  4.00, integ: 71, pwrdraw:1.80, boottime:1, minmass: 28.0, optmass:  55.0, maxmass: 138.0, minmul:60, optmul:110, maxmul:160, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064266, fdname:'Int_ShieldGenerator_Size2_Class4' },
+		30210 : { mtype:'isg', cost:   160220, name:'Shield Generator', class:2, rating:'A', mass:  2.50, integ: 61, pwrdraw:2.10, boottime:1, minmass: 28.0, optmass:  55.0, maxmass: 138.0, minmul:70, optmul:120, maxmul:170, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064267, fdname:'Int_ShieldGenerator_Size2_Class5' },
+		
+		30350 : { mtype:'isg', cost:     6270, name:'Shield Generator', class:3, rating:'E', mass:  5.00, integ: 51, pwrdraw:1.08, boottime:1, minmass: 83.0, optmass: 165.0, maxmass: 413.0, minmul:30, optmul: 80, maxmul:130, genrate:1.0, bgenrate:1.87, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064268, fdname:'Int_ShieldGenerator_Size3_Class1' },
+		30340 : { mtype:'isg', cost:    18810, name:'Shield Generator', class:3, rating:'D', mass:  2.00, integ: 38, pwrdraw:1.44, boottime:1, minmass: 83.0, optmass: 165.0, maxmass: 413.0, minmul:40, optmul: 90, maxmul:140, genrate:1.0, bgenrate:1.87, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064269, fdname:'Int_ShieldGenerator_Size3_Class2' },
+		30330 : { mtype:'isg', cost:    56440, name:'Shield Generator', class:3, rating:'C', mass:  5.00, integ: 64, pwrdraw:1.80, boottime:1, minmass: 83.0, optmass: 165.0, maxmass: 413.0, minmul:50, optmul:100, maxmul:150, genrate:1.0, bgenrate:1.87, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064270, fdname:'Int_ShieldGenerator_Size3_Class3' },
+		30320 : { mtype:'isg', cost:   169300, name:'Shield Generator', class:3, rating:'B', mass:  8.00, integ: 90, pwrdraw:2.16, boottime:1, minmass: 83.0, optmass: 165.0, maxmass: 413.0, minmul:60, optmul:110, maxmul:160, genrate:1.0, bgenrate:1.87, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064271, fdname:'Int_ShieldGenerator_Size3_Class4' },
+		30310 : { mtype:'isg', cost:   507910, name:'Shield Generator', class:3, rating:'A', mass:  5.00, integ: 77, pwrdraw:2.52, boottime:1, minmass: 83.0, optmass: 165.0, maxmass: 413.0, minmul:70, optmul:120, maxmul:170, genrate:1.0, bgenrate:1.87, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064272, fdname:'Int_ShieldGenerator_Size3_Class5' },
+		
+		30450 : { mtype:'isg', cost:    19880, name:'Shield Generator', class:4, rating:'E', mass: 10.00, integ: 64, pwrdraw:1.32, boottime:1, minmass:143.0, optmass: 285.0, maxmass: 713.0, minmul:30, optmul: 80, maxmul:130, genrate:1.0, bgenrate:2.53, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064273, fdname:'Int_ShieldGenerator_Size4_Class1' },
+		30440 : { mtype:'isg', cost:    59630, name:'Shield Generator', class:4, rating:'D', mass:  4.00, integ: 48, pwrdraw:1.76, boottime:1, minmass:143.0, optmass: 285.0, maxmass: 713.0, minmul:40, optmul: 90, maxmul:140, genrate:1.0, bgenrate:2.53, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064274, fdname:'Int_ShieldGenerator_Size4_Class2' },
+		30430 : { mtype:'isg', cost:   178900, name:'Shield Generator', class:4, rating:'C', mass: 10.00, integ: 80, pwrdraw:2.20, boottime:1, minmass:143.0, optmass: 285.0, maxmass: 713.0, minmul:50, optmul:100, maxmul:150, genrate:1.0, bgenrate:2.53, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064275, fdname:'Int_ShieldGenerator_Size4_Class3' },
+		30420 : { mtype:'isg', cost:   536690, name:'Shield Generator', class:4, rating:'B', mass: 16.00, integ:112, pwrdraw:2.64, boottime:1, minmass:143.0, optmass: 285.0, maxmass: 713.0, minmul:60, optmul:110, maxmul:160, genrate:1.0, bgenrate:2.53, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064276, fdname:'Int_ShieldGenerator_Size4_Class4' },
+		30410 : { mtype:'isg', cost:  1610080, name:'Shield Generator', class:4, rating:'A', mass: 10.00, integ: 96, pwrdraw:3.08, boottime:1, minmass:143.0, optmass: 285.0, maxmass: 713.0, minmul:70, optmul:120, maxmul:170, genrate:1.0, bgenrate:2.53, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064277, fdname:'Int_ShieldGenerator_Size4_Class5' },
+		
+		30550 : { mtype:'isg', cost:    63010, name:'Shield Generator', class:5, rating:'E', mass: 20.00, integ: 77, pwrdraw:1.56, boottime:1, minmass:203.0, optmass: 405.0, maxmass:1013.0, minmul:30, optmul: 80, maxmul:130, genrate:1.0, bgenrate:3.75, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064278, fdname:'Int_ShieldGenerator_Size5_Class1' },
+		30540 : { mtype:'isg', cost:   189040, name:'Shield Generator', class:5, rating:'D', mass:  8.00, integ: 58, pwrdraw:2.08, boottime:1, minmass:203.0, optmass: 405.0, maxmass:1013.0, minmul:40, optmul: 90, maxmul:140, genrate:1.0, bgenrate:3.75, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064279, fdname:'Int_ShieldGenerator_Size5_Class2' },
+		30530 : { mtype:'isg', cost:   567110, name:'Shield Generator', class:5, rating:'C', mass: 20.00, integ: 96, pwrdraw:2.60, boottime:1, minmass:203.0, optmass: 405.0, maxmass:1013.0, minmul:50, optmul:100, maxmul:150, genrate:1.0, bgenrate:3.75, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064280, fdname:'Int_ShieldGenerator_Size5_Class3' },
+		30520 : { mtype:'isg', cost:  1701320, name:'Shield Generator', class:5, rating:'B', mass: 32.00, integ:134, pwrdraw:3.12, boottime:1, minmass:203.0, optmass: 405.0, maxmass:1013.0, minmul:60, optmul:110, maxmul:160, genrate:1.0, bgenrate:3.75, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064281, fdname:'Int_ShieldGenerator_Size5_Class4' },
+		30510 : { mtype:'isg', cost:  5103950, name:'Shield Generator', class:5, rating:'A', mass: 20.00, integ:115, pwrdraw:3.64, boottime:1, minmass:203.0, optmass: 405.0, maxmass:1013.0, minmul:70, optmul:120, maxmul:170, genrate:1.0, bgenrate:3.75, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064282, fdname:'Int_ShieldGenerator_Size5_Class5' },
+		
+		30650 : { mtype:'isg', cost:   199750, name:'Shield Generator', class:6, rating:'E', mass: 40.00, integ: 90, pwrdraw:1.86, boottime:1, minmass:270.0, optmass: 540.0, maxmass:1350.0, minmul:30, optmul: 80, maxmul:130, genrate:1.3, bgenrate:5.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064283, fdname:'Int_ShieldGenerator_Size6_Class1' },
+		30640 : { mtype:'isg', cost:   599240, name:'Shield Generator', class:6, rating:'D', mass: 16.00, integ: 68, pwrdraw:2.48, boottime:1, minmass:270.0, optmass: 540.0, maxmass:1350.0, minmul:40, optmul: 90, maxmul:140, genrate:1.3, bgenrate:5.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064284, fdname:'Int_ShieldGenerator_Size6_Class2' },
+		30630 : { mtype:'isg', cost:  1797730, name:'Shield Generator', class:6, rating:'C', mass: 40.00, integ:113, pwrdraw:3.10, boottime:1, minmass:270.0, optmass: 540.0, maxmass:1350.0, minmul:50, optmul:100, maxmul:150, genrate:1.3, bgenrate:5.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064285, fdname:'Int_ShieldGenerator_Size6_Class3' },
+		30620 : { mtype:'isg', cost:  5393180, name:'Shield Generator', class:6, rating:'B', mass: 64.00, integ:158, pwrdraw:3.72, boottime:1, minmass:270.0, optmass: 540.0, maxmass:1350.0, minmul:60, optmul:110, maxmul:160, genrate:1.3, bgenrate:5.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064286, fdname:'Int_ShieldGenerator_Size6_Class4' },
+		30610 : { mtype:'isg', cost: 16179530, name:'Shield Generator', class:6, rating:'A', mass: 40.00, integ:136, pwrdraw:4.34, boottime:1, minmass:270.0, optmass: 540.0, maxmass:1350.0, minmul:70, optmul:120, maxmul:170, genrate:1.3, bgenrate:5.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064287, fdname:'Int_ShieldGenerator_Size6_Class5' },
+		
+		30750 : { mtype:'isg', cost:   633200, name:'Shield Generator', class:7, rating:'E', mass: 80.00, integ:105, pwrdraw:2.10, boottime:1, minmass:530.0, optmass:1060.0, maxmass:2650.0, minmul:30, optmul: 80, maxmul:130, genrate:1.8, bgenrate:7.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064288, fdname:'Int_ShieldGenerator_Size7_Class1' },
+		30740 : { mtype:'isg', cost:  1899600, name:'Shield Generator', class:7, rating:'D', mass: 32.00, integ: 79, pwrdraw:2.80, boottime:1, minmass:530.0, optmass:1060.0, maxmass:2650.0, minmul:40, optmul: 90, maxmul:140, genrate:1.8, bgenrate:7.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064289, fdname:'Int_ShieldGenerator_Size7_Class2' },
+		30730 : { mtype:'isg', cost:  5698790, name:'Shield Generator', class:7, rating:'C', mass: 80.00, integ:131, pwrdraw:3.50, boottime:1, minmass:530.0, optmass:1060.0, maxmass:2650.0, minmul:50, optmul:100, maxmul:150, genrate:1.8, bgenrate:7.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064290, fdname:'Int_ShieldGenerator_Size7_Class3' },
+		30720 : { mtype:'isg', cost: 17096370, name:'Shield Generator', class:7, rating:'B', mass:128.00, integ:183, pwrdraw:4.20, boottime:1, minmass:530.0, optmass:1060.0, maxmass:2650.0, minmul:60, optmul:110, maxmul:160, genrate:1.8, bgenrate:7.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064291, fdname:'Int_ShieldGenerator_Size7_Class4' },
+		30710 : { mtype:'isg', cost: 51289110, name:'Shield Generator', class:7, rating:'A', mass: 80.00, integ:157, pwrdraw:4.90, boottime:1, minmass:530.0, optmass:1060.0, maxmass:2650.0, minmul:70, optmul:120, maxmul:170, genrate:1.8, bgenrate:7.33, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064292, fdname:'Int_ShieldGenerator_Size7_Class5' },
+		
+		30850 : { mtype:'isg', cost:  2007240, name:'Shield Generator', class:8, rating:'E', mass:160.00, integ:120, pwrdraw:2.40, boottime:1, minmass:900.0, optmass:1800.0, maxmass:4500.0, minmul:30, optmul: 80, maxmul:130, genrate:2.4, bgenrate:9.6 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064293, fdname:'Int_ShieldGenerator_Size8_Class1' },
+		30840 : { mtype:'isg', cost:  6021720, name:'Shield Generator', class:8, rating:'D', mass: 64.00, integ: 90, pwrdraw:3.20, boottime:1, minmass:900.0, optmass:1800.0, maxmass:4500.0, minmul:40, optmul: 90, maxmul:140, genrate:2.4, bgenrate:9.6 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064294, fdname:'Int_ShieldGenerator_Size8_Class2' },
+		30830 : { mtype:'isg', cost: 18065170, name:'Shield Generator', class:8, rating:'C', mass:160.00, integ:150, pwrdraw:4.00, boottime:1, minmass:900.0, optmass:1800.0, maxmass:4500.0, minmul:50, optmul:100, maxmul:150, genrate:2.4, bgenrate:9.6 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064295, fdname:'Int_ShieldGenerator_Size8_Class3' },
+		30820 : { mtype:'isg', cost: 54195500, name:'Shield Generator', class:8, rating:'B', mass:256.00, integ:210, pwrdraw:4.80, boottime:1, minmass:900.0, optmass:1800.0, maxmass:4500.0, minmul:60, optmul:110, maxmul:160, genrate:2.4, bgenrate:9.6 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064296, fdname:'Int_ShieldGenerator_Size8_Class4' },
+		30810 : { mtype:'isg', cost:162586490, name:'Shield Generator', class:8, rating:'A', mass:160.00, integ:180, pwrdraw:5.60, boottime:1, minmass:900.0, optmass:1800.0, maxmass:4500.0, minmul:70, optmul:120, maxmul:170, genrate:2.4, bgenrate:9.6 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064297, fdname:'Int_ShieldGenerator_Size8_Class5' },
+		
+		30132 : { mtype:'isg', cost:     7710, name:'Bi-Weave Shield Generator',  class:1, rating:'C', mass:  1.30, integ: 40, pwrdraw:1.20, boottime:1, minmass: 13.0, optmass:  25.0, maxmass:  63.0, minmul: 40, optmul: 90, maxmul:140, genrate: 1.8, bgenrate: 2.400, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128671331, fdname:'Int_ShieldGenerator_Size1_Class3_Fast' },
+		30232 : { mtype:'isg', cost:    26710, name:'Bi-Weave Shield Generator',  class:2, rating:'C', mass:  2.50, integ: 51, pwrdraw:1.50, boottime:1, minmass: 28.0, optmass:  55.0, maxmass: 138.0, minmul: 40, optmul: 90, maxmul:140, genrate: 1.8, bgenrate: 2.400, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128671332, fdname:'Int_ShieldGenerator_Size2_Class3_Fast' },
+		30332 : { mtype:'isg', cost:    84650, name:'Bi-Weave Shield Generator',  class:3, rating:'C', mass:  5.00, integ: 64, pwrdraw:1.80, boottime:1, minmass: 83.0, optmass: 165.0, maxmass: 413.0, minmul: 40, optmul: 90, maxmul:140, genrate: 1.8, bgenrate: 2.805, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128671333, fdname:'Int_ShieldGenerator_Size3_Class3_Fast' },
+		30432 : { mtype:'isg', cost:   268350, name:'Bi-Weave Shield Generator',  class:4, rating:'C', mass: 10.00, integ: 80, pwrdraw:2.20, boottime:1, minmass:143.0, optmass: 285.0, maxmass: 713.0, minmul: 40, optmul: 90, maxmul:140, genrate: 1.8, bgenrate: 3.795, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128671334, fdname:'Int_ShieldGenerator_Size4_Class3_Fast' },
+		30532 : { mtype:'isg', cost:   850660, name:'Bi-Weave Shield Generator',  class:5, rating:'C', mass: 20.00, integ: 96, pwrdraw:2.60, boottime:1, minmass:203.0, optmass: 405.0, maxmass:1013.0, minmul: 40, optmul: 90, maxmul:140, genrate: 2.2, bgenrate: 5.625, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128671335, fdname:'Int_ShieldGenerator_Size5_Class3_Fast' },
+		30632 : { mtype:'isg', cost:  2696590, name:'Bi-Weave Shield Generator',  class:6, rating:'C', mass: 40.00, integ:113, pwrdraw:3.10, boottime:1, minmass:270.0, optmass: 540.0, maxmass:1350.0, minmul: 40, optmul: 90, maxmul:140, genrate: 3.2, bgenrate: 7.995, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128671336, fdname:'Int_ShieldGenerator_Size6_Class3_Fast' },
+		30732 : { mtype:'isg', cost:  8548190, name:'Bi-Weave Shield Generator',  class:7, rating:'C', mass: 80.00, integ:131, pwrdraw:3.50, boottime:1, minmass:530.0, optmass:1060.0, maxmass:2650.0, minmul: 40, optmul: 90, maxmul:140, genrate: 4.4, bgenrate:10.995, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128671337, fdname:'Int_ShieldGenerator_Size7_Class3_Fast' },
+		30832 : { mtype:'isg', cost: 27097750, name:'Bi-Weave Shield Generator',  class:8, rating:'C', mass:160.00, integ:150, pwrdraw:4.00, boottime:1, minmass:900.0, optmass:1800.0, maxmass:4500.0, minmul: 40, optmul: 90, maxmul:140, genrate: 5.8, bgenrate:14.400, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128671338, fdname:'Int_ShieldGenerator_Size8_Class3_Fast' },
+		
+		30111 : { mtype:'isg', cost:   132200, name:'Prismatic Shield Generator', class:1, rating:'A', mass:  2.60, integ: 48, pwrdraw:2.52, boottime:1, minmass: 13.0, optmass:  25.0, maxmass:  63.0, minmul:100, optmul:150, maxmul:200, genrate: 1.0, bgenrate: 1.2 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128671323, fdname:'Int_ShieldGenerator_Size1_Class5_Strong' }, // powerplay
+		30211 : { mtype:'isg', cost:   240340, name:'Prismatic Shield Generator', class:2, rating:'A', mass:  5.00, integ: 61, pwrdraw:3.15, boottime:1, minmass: 28.0, optmass:  55.0, maxmass: 138.0, minmul:100, optmul:150, maxmul:200, genrate: 1.0, bgenrate: 1.2 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128671324, fdname:'Int_ShieldGenerator_Size2_Class5_Strong' }, // powerplay
+		30311 : { mtype:'isg', cost:   761870, name:'Prismatic Shield Generator', class:3, rating:'A', mass: 10.00, integ: 77, pwrdraw:3.78, boottime:1, minmass: 83.0, optmass: 165.0, maxmass: 413.0, minmul:100, optmul:150, maxmul:200, genrate: 1.0, bgenrate: 1.3 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128671325, fdname:'Int_ShieldGenerator_Size3_Class5_Strong' }, // powerplay // TODO: verify bgenrate
+		30411 : { mtype:'isg', cost:  2415120, name:'Prismatic Shield Generator', class:4, rating:'A', mass: 20.00, integ: 96, pwrdraw:4.62, boottime:1, minmass:143.0, optmass: 285.0, maxmass: 713.0, minmul:100, optmul:150, maxmul:200, genrate: 1.0, bgenrate: 1.66, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128671326, fdname:'Int_ShieldGenerator_Size4_Class5_Strong' }, // powerplay
+		30511 : { mtype:'isg', cost:  7655930, name:'Prismatic Shield Generator', class:5, rating:'A', mass: 40.00, integ:115, pwrdraw:5.46, boottime:1, minmass:203.0, optmass: 405.0, maxmass:1013.0, minmul:100, optmul:150, maxmul:200, genrate: 1.0, bgenrate: 2.34, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128671327, fdname:'Int_ShieldGenerator_Size5_Class5_Strong' }, // powerplay
+		30611 : { mtype:'isg', cost: 24269300, name:'Prismatic Shield Generator', class:6, rating:'A', mass: 80.00, integ:136, pwrdraw:6.51, boottime:1, minmass:270.0, optmass: 540.0, maxmass:1350.0, minmul:100, optmul:150, maxmul:200, genrate: 1.0, bgenrate: 3.2 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128671328, fdname:'Int_ShieldGenerator_Size6_Class5_Strong' }, // powerplay
+		30711 : { mtype:'isg', cost: 76933670, name:'Prismatic Shield Generator', class:7, rating:'A', mass:160.00, integ:157, pwrdraw:7.35, boottime:1, minmass:530.0, optmass:1060.0, maxmass:2650.0, minmul:100, optmul:150, maxmul:200, genrate: 1.1, bgenrate: 4.25, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128671329, fdname:'Int_ShieldGenerator_Size7_Class5_Strong' }, // powerplay
+		30811 : { mtype:'isg', cost:243879730, name:'Prismatic Shield Generator', class:8, rating:'A', mass:320.00, integ:180, pwrdraw:8.40, boottime:1, minmass:900.0, optmass:1800.0, maxmass:4500.0, minmul:100, optmul:150, maxmul:200, genrate: 1.4, bgenrate: 5.4 , thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128671330, fdname:'Int_ShieldGenerator_Size8_Class5_Strong' }, // powerplay // TODO: verify bgenrate
 		
 		
-		11130 : { mtype:'iss', cost: 250000, name:'Detailed Surface Scanner',       class:1, rating:'C', mass:1.30, fdid:128666634, fdname:'Int_DetailedSurfaceScanner_Tiny' },
+		/* removed, now built-in
+		10150 : { mtype:'isbs', cost:   1000, name:'Basic Discovery Scanner',        class:1, rating:'E', mass:2.00, integ:40, activerng: 500, passiverng: 0.33, maxangle:10.00, scantime:5, limit:'isbs', fdid:128662535, fdname:'Int_StellarBodyDiscoveryScanner_Standard' },
+		10140 : { mtype:'isbs', cost: 505000, name:'Intermediate Discovery Scanner', class:1, rating:'D', mass:2.00, integ:40, activerng:1000, passiverng: 3.34, maxangle:10.00, scantime:5, limit:'isbs', fdid:128663560, fdname:'Int_StellarBodyDiscoveryScanner_Intermediate' },
+		10130 : { mtype:'isbs', cost:1545000, name:'Advanced Discovery Scanner',     class:1, rating:'C', mass:2.00, integ:40, activerng: 1/0, passiverng:33.36, maxangle:10.00, scantime:5, limit:'isbs', fdid:128663561, fdname:'Int_StellarBodyDiscoveryScanner_Advanced' },
+		*/
 		
-/* TODO
-Size 4 Meta Alloy Hull Reinforcement Package
-*/
+		11130 : { mtype:'iss', cost: 250000, name:'Detailed Surface Scanner',       class:1, rating:'I', integ:20, ammoclip:3, proberad:20, limit:'iss', fdid:128666634, fdname:'Int_DetailedSurfaceScanner_Tiny' }, // TODO: verify fdid
+		
 	}, // eddb.module{}
 }; // eddb{}

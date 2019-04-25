@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<meta charset="utf-8">
 <!--
 E:D Shipyard (EDSY) was created using assets and imagery from Elite: Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
 It is not endorsed by nor reflects the views or opinions of Frontier Developments and no employee of Frontier Developments was involved in the making of it.
 
-Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2018 taleden
+Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2019 taleden
 and is provided under a Creative Commons Attribution-NonCommercial 4.0 International License (http://creativecommons.org/licenses/by-nc/4.0/).
 
 The Elite: Dangerous game logic and data in this file remains the property of Frontier Developments plc,
 and is used here as authorized by Frontier Customer Services (https://forums.frontier.co.uk/showthread.php?t=5349).
 -->
-		<meta charset="utf-8">
 		<title>EDSY</title>
+		<meta name="application-name" content="EDSY">
+		<meta name="edsy-versions-html" id="edsy_versions_html" content="34015,34015,34015,34015"><!-- HTML,CSS,DB,JS -->
+		<meta name="author" content="taleden">
+		<meta name="description" content="E:D Shipyard (EDSY) is a ship outfitting tool for Elite: Dangerous">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" type="text/css" href="edsy.css">
 	</head>
 	<body class="">
@@ -28,7 +33,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 					<label class="togglebutton"><input name="tab" type="radio" value="options"><div><span class="icon help"></span><span class="icon repair"></span>Help</div></label>
 				</form>
 				<div id="header_right">
-					<span id="header_version">v3.0.0 alpha 4</span>
+					<span id="header_version">v3.4.0 alpha 5</span>
 					<div id="header_donate"></div>
 				</div>
 			</div>
@@ -59,10 +64,8 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 						</form>
 						<form id="outfitting_fit" name="fit" class="">
 							<div id="outfitting_fit_settings">
-								<!-- TODO
 								<button id="outfitting_fit_import"><span class="icon fileImport"></span></button>
 								<button id="outfitting_fit_export"><span class="icon fileExport"></span></button>
-								-->
 								<select id="outfitting_fit_stored" name="outfitting_fit_stored">
 									<option value="">(Stock)</option>
 								</select>
@@ -144,7 +147,8 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 						</form>
 					</div>
 					<div id="outfitting_bottom">
-						<form id="outfitting_stats" name="stats">
+						<div id="outfitting_stats">
+						<form name="stats">
 							<!-- TODO old: prices in totals --
 							<input type="checkbox" id="toggle_stats_ttl" name="stats_ttl" value="1" class="toggleinput" checked>
 							<div id="outfitting_stats_ttl" class="outfitting_stats_panel">
@@ -270,8 +274,9 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 											<td colspan=1 id="outfitting_stats_power_ret"></td>
 											<td colspan=3 class="nopad"
 												><div class="outfitting_stats_powerbar"
-													><span class="marker"></span
-													><span class="marker"></span
+													><span class="marker marker40"></span
+													><span class="marker marker50"></span
+													><span class="marker marker100"></span
 													><div
 														><span class="overload"></span
 														><abbr id="outfitting_stats_power_ret_1"><span>1</span></abbr
@@ -288,8 +293,9 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 											<td colspan=1 id="outfitting_stats_power_dep"></td>
 											<td colspan=3 class="nopad"
 												><div class="outfitting_stats_powerbar"
-													><span class="marker"></span
-													><span class="marker"></span
+													><span class="marker marker40"></span
+													><span class="marker marker50"></span
+													><span class="marker marker100"></span
 													><div
 														><span class="overload"></span
 														><abbr id="outfitting_stats_power_dep_1"><span>1</span></abbr
@@ -652,10 +658,11 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 							</div>
 							<!--  -->
 						</form>
+						</div>
 					</div>
 				</div>
-				<div id="page_body_options">
-					<form name="options">
+				<form id="page_body_options" name="options">
+					<div id="options_container">
 						<section>
 							<header>About</header>
 							<p>
@@ -675,13 +682,13 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 							<header>Options</header>
 							<div>
 								<label class="checkbox left"><input type="checkbox" name="onlybest"><div><div class="check"></div><span>Hide Small Modules</span></div></label>
-								&mdash; When enabled, the SLOT view of the module browser will display only the largest size class of each available module type.
+								&mdash; Display only the largest size class of each available module type in the SLOT view of the module browser.
 							</div>
 							<div>
 								<label class="checkbox left"><input type="checkbox" name="experimental"><div><div class="check"></div><span>Experimental Mode</span></div></label>
-								&mdash; When enabled, the SLOT view of the module browser will display and allow you to fit modules that are too large for the
-								current slot, or are of a type not allowed by the ship or the slot. This option can be used to experiment with theoretical
-								"what-if" builds, but disallowed modules will be shown in red to signify that it will not be possible to actually fit them in-game.
+								&mdash; Allow fitting modules that are too large for the slot, of a type not allowed by the ship or the slot, or
+								over the limit for modules of that type. This allows for theoretical "what-if" builds, but disallowed modules will
+								be shown in red to signify that it will not be possible to actually fit them in-game.
 							</div>
 						</section>
 						<section>
@@ -699,40 +706,72 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 							It is not endorsed by nor reflects the views or opinions of Frontier Developments
 							and no employee of Frontier Developments was involved in the making of it.
 						</footer>
-					</form>
+					</div>
+				</form>
+				<div id="page_body_loading">
+					<img src="loading.svg" width="2em" height="2em">
 				</div>
 			</div>
 		</div>
-		<svg class="filter">
-			<filter id="tint_orange_5" color-interpolation-filters="sRGB">
-				<feColorMatrix type="matrix" 
-					values="0 0 0 0 1.000
-							0 0 0 0 0.561
-							0 0 0 0 0.200
-							0 0 0 1 0" />
-			</filter>
-			<filter id="tint_orange_3" color-interpolation-filters="sRGB">
-				<feColorMatrix type="matrix" 
-					values="0 0 0 0 0.722
-							0 0 0 0 0.325
-							0 0 0 0 0.000
-							0 0 0 1 0" />
-			</filter>
-			<filter id="tint_red_5" color-interpolation-filters="sRGB">
-				<feColorMatrix type="matrix" 
-					values="0 0 0 0 1.000
-							0 0 0 0 0.200
-							0 0 0 0 0.200
-							0 0 0 1 0" />
-			</filter>
-			<filter id="tint_red_3" color-interpolation-filters="sRGB">
-				<feColorMatrix type="matrix" 
-					values="0 0 0 0 0.722
-							0 0 0 0 0.000
-							0 0 0 0 0.000
-							0 0 0 1 0" />
-			</filter>
+		<div id="popup_modal">
+			<form id="popup_form" name="popup">
+				<div id="popup_box">
+					<div id="popup_desc"></div>
+					<textarea name="textbox"></textarea>
+					<div id="popup_controls">
+						<button id="popup_cancel" name="cancel" value="cancel">Cancel</button>
+						<button id="popup_okay" name="okay" value="okay">Okay</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="0" height="0" style="position:absolute">
+			<defs>
+				<filter id="tint_orange_5" color-interpolation-filters="sRGB">
+					<feColorMatrix type="matrix" 
+						values="0 0 0 0 1.000
+								0 0 0 0 0.561
+								0 0 0 0 0.200
+								0 0 0 1 0" />
+				</filter>
+				<filter id="tint_orange_3" color-interpolation-filters="sRGB">
+					<feColorMatrix type="matrix" 
+						values="0 0 0 0 0.722
+								0 0 0 0 0.325
+								0 0 0 0 0.000
+								0 0 0 1 0" />
+				</filter>
+				<filter id="tint_red_5" color-interpolation-filters="sRGB">
+					<feColorMatrix type="matrix" 
+						values="0 0 0 0 1.000
+								0 0 0 0 0.200
+								0 0 0 0 0.200
+								0 0 0 1 0" />
+				</filter>
+				<filter id="tint_red_3" color-interpolation-filters="sRGB">
+					<feColorMatrix type="matrix" 
+						values="0 0 0 0 0.722
+								0 0 0 0 0.000
+								0 0 0 0 0.000
+								0 0 0 1 0" />
+				</filter>
+				<filter id="tint_blue_5" color-interpolation-filters="sRGB">
+					<feColorMatrix type="matrix" 
+						values="0 0 0 0 0.200
+								0 0 0 0 0.773
+								0 0 0 0 1.000
+								0 0 0 1 0" />
+				</filter>
+				<filter id="tint_yellow_5" color-interpolation-filters="sRGB">
+					<feColorMatrix type="matrix" 
+						values="0 0 0 0 1.000
+								0 0 0 0 0.761
+								0 0 0 0 0.200
+								0 0 0 1 0" />
+				</filter>
+			</defs>
 		</svg>
+		<script type="application/javascript" src="pako.min.js"></script>
 		<script type="application/javascript" src="eddb.js"></script>
 		<script type="application/javascript" src="edsy.js"></script>
 	</body>

@@ -1,0 +1,78 @@
+<svg viewbox="0 0 120 110" width="120" height="110" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<!-- based on https://gist.github.com/rspeed/4846a8bd15af3ed70f53efebf09155db by Rob Speed; modified by taleden -->
+	<defs>
+		<filter id="glow" x="-12" y="-11" width="48" height="44">
+			<feGaussianBlur stdDeviation="10"/>
+			<feComponentTransfer>
+				<feFuncA type="linear" slope="1"/>
+			</feComponentTransfer>
+			<feMerge>
+				<feMergeNode/>
+				<feMergeNode in="SourceGraphic"/>
+			</feMerge>
+		</filter>
+		<polygon id="dn" points="0 0 24 0 12 22 " fill="#ff7f00" stroke="#ff7f00" stroke-width="3" filter="url(#glow)"/>
+		<polygon id="up" points="0 22 24 22 12 0" fill="#ff7f00" stroke="#ff7f00" stroke-width="3" filter="url(#glow)"/>
+		<style type="text/css">
+			<![CDATA[
+			use { animation: blink 1s infinite; }
+			@keyframes blink {
+				0% { opacity: 0.0; }
+				15% { opacity: 1.0; }
+				67% { opacity: 0.0; }
+				100% { opacity: 0.0; }
+			}
+			#c1  { animation-delay: -958ms; }
+			#a2  { animation-delay: -917ms; }
+			#b1  { animation-delay: -875ms; }
+			#c3  { animation-delay: -833ms; }
+			#c4  { animation-delay: -792ms; }
+			#c5  { animation-delay: -750ms; }
+			#b2  { animation-delay: -708ms; }
+			#c6  { animation-delay: -667ms; }
+			#a3  { animation-delay: -625ms; }
+			#c8  { animation-delay: -583ms; }
+			#b3  { animation-delay: -542ms; }
+			#a4  { animation-delay: -500ms; }
+			#c7  { animation-delay: -458ms; }
+			#a5  { animation-delay: -417ms; }
+			#b4  { animation-delay: -375ms; }
+			#c9  { animation-delay: -333ms; }
+			#c10 { animation-delay: -292ms; }
+			#c11 { animation-delay: -250ms; }
+			#b5  { animation-delay: -208ms; }
+			#c12 { animation-delay: -167ms; }
+			#a6  { animation-delay: -125ms; }
+			#c2  { animation-delay:  -83ms; }
+			#b6  { animation-delay:  -42ms; }
+			#a1  { animation-delay:    0ms; }
+			]]>
+		</style>
+	</defs>
+	<g>
+		<use x="36" y="33" xlink:href="#up" id="a1"/>
+		<use x="48" y="33" xlink:href="#dn" id="a2"/>
+		<use x="60" y="33" xlink:href="#up" id="a3"/>
+		<use x="60" y="55" xlink:href="#dn" id="a4"/>
+		<use x="48" y="55" xlink:href="#up" id="a5"/>
+		<use x="36" y="55" xlink:href="#dn" id="a6"/>
+		<use x="24" y="33" xlink:href="#dn" id="b1"/>
+		<use x="48" y="11" xlink:href="#up" id="b2"/>
+		<use x="72" y="33" xlink:href="#dn" id="b3"/>
+		<use x="72" y="55" xlink:href="#up" id="b4"/>
+		<use x="48" y="77" xlink:href="#dn" id="b5"/>
+		<use x="24" y="55" xlink:href="#up" id="b6"/>
+		<use x="12" y="33" xlink:href="#up" id="c1"/>
+		<use x="24" y="11" xlink:href="#up" id="c2"/>
+		<use x="36" y="11" xlink:href="#dn" id="c3"/>
+		<use x="60" y="11" xlink:href="#dn" id="c4"/>
+		<use x="72" y="11" xlink:href="#up" id="c5"/>
+		<use x="84" y="33" xlink:href="#up" id="c6"/>
+		<use x="84" y="55" xlink:href="#dn" id="c7"/>
+		<use x="72" y="77" xlink:href="#dn" id="c8"/>
+		<use x="60" y="77" xlink:href="#up" id="c9"/>
+		<use x="36" y="77" xlink:href="#up" id="c10"/>
+		<use x="24" y="77" xlink:href="#dn" id="c11"/>
+		<use x="12" y="55" xlink:href="#dn" id="c12"/>
+	</g>
+</svg>
