@@ -14,7 +14,7 @@
 		<polygon id="dn" points="0 0 24 0 12 22 " fill="#ff7f00" stroke="#ff7f00" stroke-width="3" filter="url(#glow)"/>
 		<polygon id="up" points="0 22 24 22 12 0" fill="#ff7f00" stroke="#ff7f00" stroke-width="3" filter="url(#glow)"/>
 		<style type="text/css">
-			<![CDATA[
+			/* <![CDATA[ */
 			use { animation: blink 1s infinite; }
 			@keyframes blink {
 				0% { opacity: 0.0; }
@@ -46,7 +46,7 @@
 			#c2  { animation-delay:  -83ms; }
 			#b6  { animation-delay:  -42ms; }
 			#a1  { animation-delay:    0ms; }
-			]]>
+			/* ]]> */
 		</style>
 	</defs>
 	<g>
