@@ -10,8 +10,8 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 */
 'use strict';
 var eddb = {
-	version : 34016,
-	edsy_versions_db : [34016,34016,34016,34016], /* HTML,CSS,DB,JS */
+	version : 34117,
+	edsy_versions_db : [34117,34117,34117,34117], /* HTML,CSS,DB,JS */
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder',
@@ -1717,7 +1717,7 @@ var eddb = {
 		wpnx_cosh : { name:'Corrosive Shell', ammomax:-20, special:'Target armor hardness reduced' },
 		wpnx_dash : { name:'Dazzle Shell', special:'Target sensor acuity reduced' },
 		wpnx_difi : { name:'Dispersal Field', special:'Target gimbal/turret tracking reduced' },
-		wpnx_drmu : { name:'Drag Munitions', special:'Target speed reduced and cannot boost' },
+		wpnx_drmu : { name:'Drag Munitions', special:'Target speed reduced' },
 		wpnx_emmu : { name:'Emissive Munitions', thmload:100, special:'Target signature increased' },
 		wpnx_feca : { name:'Feedback Cascade', damage:-20, thmload:-40, special:'Target shield cell disrupted' },
 		wpnx_fosh : { name:'Force Shell', shotspd:-16.6666666666667, special:'Target pushed off course' },
@@ -3313,6 +3313,10 @@ var eddb = {
 		31810 : { mtype:'iscb', cost:27249390, name:'Shield Cell Bank', class:8, rating:'A', mass:160.00, integ:180, pwrdraw:3.36, boottime:25, spinup:5, duration:17.1, shieldrnfps:65.0, thmload:800.0, ammoclip:1, ammomax:4, ammocost:300, fdid:128064337, fdname:'Int_ShieldCellBank_Size8_Class5' },
 		
 		
+	//	30150 : { mtype:'isg', cost:    88075, name:'Shield Generator', class:1, rating:'E', mass:      , integ:   , pwrdraw:    , boottime:1, minmass: 13.0, optmass:  25.0, maxmass:  63.0, minmul:30, optmul: 80, maxmul:130, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064258, fdname:'Int_ShieldGenerator_Size1_Class1' }, // TODO
+	//	30140 : { mtype:'isg', cost:    88075, name:'Shield Generator', class:1, rating:'D', mass:      , integ:   , pwrdraw:    , boottime:1, minmass: 13.0, optmass:  25.0, maxmass:  63.0, minmul:40, optmul: 90, maxmul:140, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064259, fdname:'Int_ShieldGenerator_Size1_Class2' }, // TODO
+	//	30130 : { mtype:'isg', cost:    88075, name:'Shield Generator', class:1, rating:'C', mass:      , integ:   , pwrdraw:    , boottime:1, minmass: 13.0, optmass:  25.0, maxmass:  63.0, minmul:50, optmul:100, maxmul:150, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064260, fdname:'Int_ShieldGenerator_Size1_Class3' }, // TODO
+	//	30120 : { mtype:'isg', cost:    88075, name:'Shield Generator', class:1, rating:'B', mass:      , integ:   , pwrdraw:    , boottime:1, minmass: 13.0, optmass:  25.0, maxmass:  63.0, minmul:60, optmul:110, maxmul:160, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064261, fdname:'Int_ShieldGenerator_Size1_Class4' }, // verify fdid // TODO
 		30110 : { mtype:'isg', cost:    88075, name:'Shield Generator', class:1, rating:'A', mass:  1.30, integ: 48, pwrdraw:1.68, boottime:1, minmass: 13.0, optmass:  25.0, maxmass:  63.0, minmul:70, optmul:120, maxmul:170, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064262, fdname:'Int_ShieldGenerator_Size1_Class5' },
 		
 		30250 : { mtype:'isg', cost:     1980, name:'Shield Generator', class:2, rating:'E', mass:  2.50, integ: 41, pwrdraw:0.90, boottime:1, minmass: 28.0, optmass:  55.0, maxmass: 138.0, minmul:30, optmul: 80, maxmul:130, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064263, fdname:'Int_ShieldGenerator_Size2_Class1' },
@@ -3320,6 +3324,7 @@ var eddb = {
 		30230 : { mtype:'isg', cost:    17800, name:'Shield Generator', class:2, rating:'C', mass:  2.50, integ: 51, pwrdraw:1.50, boottime:1, minmass: 28.0, optmass:  55.0, maxmass: 138.0, minmul:50, optmul:100, maxmul:150, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064265, fdname:'Int_ShieldGenerator_Size2_Class3' },
 		30220 : { mtype:'isg', cost:    53410, name:'Shield Generator', class:2, rating:'B', mass:  4.00, integ: 71, pwrdraw:1.80, boottime:1, minmass: 28.0, optmass:  55.0, maxmass: 138.0, minmul:60, optmul:110, maxmul:160, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064266, fdname:'Int_ShieldGenerator_Size2_Class4' },
 		30210 : { mtype:'isg', cost:   160220, name:'Shield Generator', class:2, rating:'A', mass:  2.50, integ: 61, pwrdraw:2.10, boottime:1, minmass: 28.0, optmass:  55.0, maxmass: 138.0, minmul:70, optmul:120, maxmul:170, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064267, fdname:'Int_ShieldGenerator_Size2_Class5' },
+	//	30253 : { mtype:'isg', cost:        0, name:'Shield Generator', class:2, rating:'E', mass:  2.50, integ: 41, pwrdraw:0.90, boottime:1, minmass: 28.0, optmass:  55.0, maxmass: 138.0, minmul:30, optmul: 80, maxmul:130, genrate:1.0, bgenrate:1.60, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128666641, fdname:'Int_ShieldGenerator_Size2_Class1_free' }, // TODO?
 		
 		30350 : { mtype:'isg', cost:     6270, name:'Shield Generator', class:3, rating:'E', mass:  5.00, integ: 51, pwrdraw:1.08, boottime:1, minmass: 83.0, optmass: 165.0, maxmass: 413.0, minmul:30, optmul: 80, maxmul:130, genrate:1.0, bgenrate:1.87, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064268, fdname:'Int_ShieldGenerator_Size3_Class1' },
 		30340 : { mtype:'isg', cost:    18810, name:'Shield Generator', class:3, rating:'D', mass:  2.00, integ: 38, pwrdraw:1.44, boottime:1, minmass: 83.0, optmass: 165.0, maxmass: 413.0, minmul:40, optmul: 90, maxmul:140, genrate:1.0, bgenrate:1.87, thmload:1.2, distdraw:0.6, kinres:40.0, thmres:-20.0, expres:50.0, axeres:95.0, limit:'isg', fdid:128064269, fdname:'Int_ShieldGenerator_Size3_Class2' },

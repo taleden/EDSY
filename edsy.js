@@ -10,10 +10,12 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 */
 'use strict';
 window.edshipyard = new (function() {
-	var VERSIONS = [34016,34016,34016,34016]; /* HTML,CSS,DB,JS */
+	var VERSIONS = [34117,34117,34117,34117]; /* HTML,CSS,DB,JS */
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
+	var TIMEOUT_RESIZE = 300;
+	var TIMEOUT_DBLCLICK = 300;
 	var TIMEOUT_LONGPRESS = 500;
 	var GROUPS = ['hardpoint','utility','component','military','internal'];
 	var GROUP_LABEL = { hardpoint:'Hardpoints', utility:'Utility Mounts', component:'Core Internal', military:'Military', internal:'Optional Internal' };
@@ -84,8 +86,11 @@ window.edshipyard = new (function() {
 			onCancel: null,
 		},
 		drag: null,
+		resize: null,
 		touchPicker: {},
+		clickPicker: {},
 		touchSlots: {},
+		clickSlots: {},
 		storedbuild: { 0:{} },
 		storedmodule: { 0:{} },
 		option: {
@@ -98,6 +103,10 @@ window.edshipyard = new (function() {
 		fit: null,
 		outfitting_onecol: false,
 		outfitting_focus: null,
+		outfitting_mode: null,
+		outfitting_show1: null,
+		outfitting_show2a: null,
+		outfitting_show2b: null,
 		pickerSlot: null,
 		tempSlot: null,
 		group: null,
@@ -164,7 +173,7 @@ window.edshipyard = new (function() {
 	
 	
 	var encodeHTML = function(text) {
-		return text.replace(/\&/g, '&amp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/\"/g, '&quot;').replace(/\'/g, '&#x27').replace(/\//g, '&#x2F');
+		return text.replace(/\&/g, '&amp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/\"/g, '&quot;').replace(/\'/g, '&apos;').replace(/\//g, '&sol;');
 	}; // encodeHTML()
 	
 	
@@ -668,6 +677,7 @@ window.edshipyard = new (function() {
 				return false;
 			this.modid = (modid | 0);
 			this.module =  ((this.slotgroup === 'ship' && this.slotnum === 'hull') ? eddb.ship[modid] : this.build.getModule(modid));
+			this.discounts = 0;
 			this.bpid = 0;
 			this.bpgrade = 0;
 			this.bproll = -1;
@@ -913,10 +923,8 @@ window.edshipyard = new (function() {
 				return max(0, this.getEffectiveAttrModifier('maxrng'));
 				
 			case 'minmass':
-				return this.getEffectiveAttrModifier('optmass'); // TODO: verify negative optmass still affects minmass for shields
-				
 			case 'maxmass':
-				return this.getEffectiveAttrModifier('optmass');
+				return (this.getModuleMtype() === 'isg') ? 0 : this.getEffectiveAttrModifier('optmass');
 				
 			case 'minmul':
 			case 'maxmul':
@@ -1238,11 +1246,10 @@ window.edshipyard = new (function() {
 		
 		setStoredHash: function(modulehash, errors) {
 			var version = hashDecode(modulehash.slice(0,1));
-			var discounts = this.getDiscounts();
 			var powered = this.getPowered();
 			var priority = this.getPriority();
 			var ok = this.setHash(modulehash.slice(1), version, errors);
-			this.setDiscounts(discounts);
+			// this.setDiscounts(0); // TODO: save discounts in storedhash?
 			this.setPowered(powered);
 			this.setPriority(priority);
 			return ok;
@@ -2718,44 +2725,6 @@ window.edshipyard = new (function() {
 	}; // setUIPageTab()
 	
 	
-	var setCurrentDrag = function(modid, namehash, fromgroup, fromslot) {
-		current.drag = (modid ? { id:modid, namehash:namehash, group:fromgroup, slot:fromslot } : null);
-		if (modid && fromgroup) {
-			document.getElementById('outfitting_modules_container').addEventListener('dragenter', onUIModulePickerDragEnter);
-			document.getElementById('outfitting_modules_container').addEventListener('dragover', onUIModulePickerDragOver);
-			document.getElementById('outfitting_modules_container').addEventListener('dragleave', onUIModulePickerDragLeave);
-		} else {
-			document.getElementById('outfitting_modules_container').removeEventListener('dragenter', onUIModulePickerDragEnter);
-			document.getElementById('outfitting_modules_container').removeEventListener('dragover', onUIModulePickerDragOver);
-			document.getElementById('outfitting_modules_container').removeEventListener('dragleave', onUIModulePickerDragLeave);
-		}
-		document.getElementById('outfitting_fit_ship_hull').className = (modid ? 'dragerror' : '');
-		document.getElementById('outfitting_fit_ship_hatch').className = (modid ? 'dragerror' : '');
-		for (var slotgroup in GROUP_LABEL) {
-			var slot;
-			for (var slotnum = 0;  slot = current.fit.getSlot(slotgroup, slotnum);  slotnum++) {
-				var tr = document.getElementById('outfitting_fit_slot_' + slotgroup + '_' + slotnum);
-				if (!modid) {
-					tr.className = '';
-					tr.removeEventListener('dragenter', onUIFitSlotsDragEnter);
-					tr.removeEventListener('dragover', onUIFitSlotsDragOver);
-					tr.removeEventListener('dragleave', onUIFitSlotsDragLeave);
-				} else if (!(current.option.experimental ? slot.isModuleIDValid(modid) : slot.isModuleIDAllowed(modid))) {
-					tr.className = 'dragerror';
-					tr.removeEventListener('dragenter', onUIFitSlotsDragEnter);
-					tr.removeEventListener('dragover', onUIFitSlotsDragOver);
-					tr.removeEventListener('dragleave', onUIFitSlotsDragLeave);
-				} else {
-					tr.className = 'dragok';
-					tr.addEventListener('dragenter', onUIFitSlotsDragEnter);
-					tr.addEventListener('dragover', onUIFitSlotsDragOver);
-					tr.addEventListener('dragleave', onUIFitSlotsDragLeave);
-				}
-			}
-		}
-	}; // setCurrentDrag()
-	
-	
 	var showUIPopup = function(element, trigger, refocus, sticky, onOkay, onCancel) {
 		if (trigger && current.popup.trigger === trigger) {
 			return hideUIPopup();
@@ -2831,6 +2800,348 @@ window.edshipyard = new (function() {
 	}; // hideUIPopup()
 	
 	
+	/*
+	* SHIPYARD UI
+	*/
+	
+	
+	var formatShipyardSlots = function(build, slotgroup, map) {
+		var sizes = eddb.ship[build.getShipID()].slots[slotgroup].slice(0);
+		sizes.sort(sortNumbersDesc);
+		if (map) {
+			var i = sizes.length;
+			while (i-- > 0)
+				sizes[i] = (map[sizes[i] || 0] || '?');
+		}
+		return sizes.join(' ');
+	}; // formatShipyardSlots()
+	
+	
+	var UI_SHIPYARD_COL = {
+		label     : { header:'Build', css:'text', nochange:1, render:function(build) { return build.getName(); } },
+		name_ship : { header:'Ship',  css:'text', nochange:1, shipattr:'name' },
+		cost      : { header:'Price', css:'tar', attr:'cost', scale:0, buildstat:'cost' },
+		szcls     : { header:'Sz',    css:'tac', render:function(build) { return '?SML'[(eddb.ship[build.getShipID()] || EMPTY_OBJ).class || 0]; } },
+		crew      : { header:'Crw',   css:'tar', attr:'crew', shipattr:'crew' },
+		masslock  : { header:'MLF',   css:'tar', attr:'masslock', shipattr:'masslock' },
+		mass_hull : { header:'Hull',  colgroup:'Mass', css:'tar', attr:'mass', scale:0, buildstat:'mass_hull' },
+		mass_unl  : { header:'Unl',   colgroup:'Mass', css:'tar', attr:'mass', scale:0, buildstat:'mass_unladen' },
+		mass_ldn  : { header:'Ldn',   colgroup:'Mass', css:'tar', attr:'mass', scale:0, buildstat:'mass_laden' },
+		jump_unl  : { header:'Unl',   colgroup:'Jump', css:'tar', scale:1, buildstat:'_jump_unladen' },
+		jump_ldn  : { header:'Ldn',   colgroup:'Jump', css:'tar', scale:1, buildstat:'_jump_laden' },
+		range_unl : { header:'Unl',   colgroup:'Range', css:'tar', scale:1, buildstat:'_range_unladen' },
+		range_ldn : { header:'Ldn',   colgroup:'Range', css:'tar', scale:1, buildstat:'_range_laden' },
+		topspd    : { header:'Spd',   colgroup:' ', css:'tar', attr:'topspd', buildstat:'_speed' },
+		bstspd    : { header:'Bst',   colgroup:' ', css:'tar', attr:'bstspd', buildstat:'_boost' },
+		shields   : { header:'Shd',   colgroup:'  ', css:'tar', attr:'shields', buildstat:'_shields' },
+		armour    : { header:'Arm',   colgroup:'  ', css:'tar', attr:'armour', buildstat:'_armour' },
+		hardness  : { header:'Hrd',   colgroup:'  ', css:'tar', attr:'hardness', shipattr:'hardness' },
+		fuelcap   : { header:'Fuel',  colgroup:' ', css:'tar', attr:'fuelcap', scale:0, buildstat:'fuelcap' },
+		cargocap  : { header:'Crgo',  colgroup:' ', css:'tar', attr:'cargocap', buildstat:'cargocap' },
+		cabincap  : { header:'Psgr',  colgroup:' ', css:'tar', attr:'cabincap', buildstat:'cabincap' },
+		slots_hardpoint : { header:'Hardpoints',      colgroup:'Module Slots', css:'tal', render:function(build) { return formatShipyardSlots(build, 'hardpoint', 'USMLH'); } },
+		slots_utility   : { header:'Utl',             colgroup:'Module Slots ', css:'tac', render:function(build) { return eddb.ship[build.getShipID()].slots.utility.length; } },
+		slots_core_0    : { header:CORE_SLOT_ABBR[0], colgroup:'Module Slots', css:'tac', render:function(build) { return eddb.ship[build.getShipID()].slots.component[0]; } },
+		slots_core_1    : { header:CORE_SLOT_ABBR[1], colgroup:'Module Slots', css:'tac', render:function(build) { return eddb.ship[build.getShipID()].slots.component[1]; } },
+		slots_core_2    : { header:CORE_SLOT_ABBR[2], colgroup:'Module Slots', css:'tac', render:function(build) { return eddb.ship[build.getShipID()].slots.component[2]; } },
+		slots_core_3    : { header:CORE_SLOT_ABBR[3], colgroup:'Module Slots', css:'tac', render:function(build) { return eddb.ship[build.getShipID()].slots.component[3]; } },
+		slots_core_4    : { header:CORE_SLOT_ABBR[4], colgroup:'Module Slots', css:'tac', render:function(build) { return eddb.ship[build.getShipID()].slots.component[4]; } },
+		slots_core_5    : { header:CORE_SLOT_ABBR[5], colgroup:'Module Slots', css:'tac', render:function(build) { return eddb.ship[build.getShipID()].slots.component[5]; } },
+		slots_core_6    : { header:CORE_SLOT_ABBR[6], colgroup:'Module Slots', css:'tac', render:function(build) { return eddb.ship[build.getShipID()].slots.component[6]; } },
+		slots_core_7    : { header:CORE_SLOT_ABBR[7], colgroup:'Module Slots', css:'tac', render:function(build) { return eddb.ship[build.getShipID()].slots.component[7]; } },
+		slots_military  : { header:'Mil',             colgroup:'Module Slots ', css:'tal', render:function(build) { return formatShipyardSlots(build, 'military');} },
+		slots_internal  : { header:'Opt Internal',    colgroup:'Module Slots', css:'tal', render:function(build) { return formatShipyardSlots(build, 'internal');} },
+		dps       : { header:'DPS',   colgroup:'Weapons', css:'tar', attr:'dps', scale:1, buildstat:'dps' },
+		dps_abs   : { header:'Abs',   colgroup:'Weapons', css:'tar', render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_abs') / dps, 0) : ''); } },
+		dps_kin   : { header:'Kin',   colgroup:'Weapons', css:'tar', render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_kin') / dps, 0) : ''); } },
+		dps_thm   : { header:'Thm',   colgroup:'Weapons', css:'tar', render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_thm') / dps, 0) : ''); } },
+		dps_exp   : { header:'Exp',   colgroup:'Weapons', css:'tar', render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_exp') / dps, 0) : ''); } },
+		dps_axe   : { header:'AXe',   colgroup:'Weapons', css:'tar', render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_axe') / dps, 0) : ''); } },
+		dps_cau   : { header:'Cau',   colgroup:'Weapons', css:'tar', render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_cau') / dps, 0) : ''); } },
+	}; // UI_SHIPYARD_COL{}
+	
+	var UI_SHIPYARD_SHIPS_COLS = [
+		'name_ship','cost','szcls','crew','masslock',
+		'mass_unl','jump_unl',
+		'topspd','bstspd','shields','armour','hardness','fuelcap','cargocap','cabincap',
+		'slots_hardpoint','slots_utility',
+		'slots_core_1','slots_core_2','slots_core_3','slots_core_4','slots_core_5','slots_core_6','slots_core_7',
+		'slots_military','slots_internal',
+	]; // UI_SHIPYARD_SHIPS_COLS[]
+	
+	var UI_SHIPYARD_STOREDBUILD_COLS = [
+		'label','_BUTTONS_','name_ship','cost',
+		'mass_unl','mass_ldn','jump_unl','jump_ldn','range_unl','range_ldn',
+		'topspd','bstspd','shields','armour','fuelcap','cargocap','cabincap',
+		'dps','dps_abs','dps_kin','dps_thm','dps_exp','dps_axe'
+	]; // UI_SHIPYARD_STOREDBUILD_COLS[]
+	
+	
+	var initUIShipyardShips = function() {
+		var div = document.createElement('div');
+		div.id = 'shipyard_ships_container';
+		
+		var table = document.createElement('table');
+		table.id = 'shipyard_ships_table';
+		var thead = createUIShipyardHeader(UI_SHIPYARD_SHIPS_COLS);
+		table.appendChild(thead);
+		var tbody = document.createElement('tbody');
+		for (var s = 0;  s < cache.ships.length;  s++) {
+			var shipid = cache.ships[s];
+			var tr = createUIShipyardRow(UI_SHIPYARD_SHIPS_COLS);
+			tr.id = 'shipyard_ship_' + shipid;
+			tr.cells[0].innerHTML = '<button name="shipyard_ship" value="' + shipid + '" class="label">' + eddb.ship[shipid].name + '</button>';
+			updateUIShipyardRow(UI_SHIPYARD_SHIPS_COLS, tr, cache.shipBuild[shipid]);
+			tbody.appendChild(tr);
+		}
+		table.appendChild(tbody);
+		
+		div.appendChild(table);
+		document.getElementById('shipyard_container').appendChild(div);
+	}; // initUIShipyardShips()
+	
+	
+	var initUIShipyardStoredBuilds = function() {
+		var div = document.createElement('div');
+		div.id = 'shipyard_storedbuilds_container';
+		
+		var table = document.createElement('table');
+		table.id = 'shipyard_storedbuilds_table';
+		var thead = createUIShipyardHeader(UI_SHIPYARD_STOREDBUILD_COLS);
+		table.appendChild(thead);
+		var tbody = document.createElement('tbody');
+		tbody.id = 'shipyard_storedbuilds_tbody';
+		table.appendChild(tbody);
+		
+		div.appendChild(table);
+		document.getElementById('shipyard_container').appendChild(div);
+		
+		// TODO: stored build notice
+		var div2 = document.createElement('div');
+		div2.style.marginTop = '2em';
+		div2.style.color = 'red';
+		div2.innerHTML = 'Stored builds are re-copied from the live site on each visit; changes made here will not affect live site builds.';
+		div.appendChild(div2);
+	}; // initUIShipyardStoredBuilds()
+	
+	
+	var createUIShipyardHeader = function(columns) {
+		var thead = document.createElement('thead');
+		
+		var tr = document.createElement('tr');
+		tr.className = 'colgroup';
+		var colgroup = '';
+		var colspan = 0;
+		for (var c = 0;  c <= columns.length;  c++) {
+			var col = (UI_SHIPYARD_COL[columns[c]] || EMPTY_OBJ);
+			if (!columns[c] || (col.colgroup || '').trim() != colgroup) {
+				if (colspan > 0) {
+					var th = document.createElement('th');
+					th.colSpan = colspan;
+					th.className = (colgroup ? 'colgroup' : '');
+					th.innerHTML = (colgroup || '');
+					tr.appendChild(th);
+				}
+				colgroup = (col.colgroup || '').trim();
+				colspan = 0;
+			}
+			colspan++;
+		}
+		thead.appendChild(tr);
+		
+		var tr = document.createElement('tr');
+		var colgroup = '';
+		for (var c = 0;  c < columns.length;  c++) {
+			var col = (UI_SHIPYARD_COL[columns[c]] || EMPTY_OBJ);
+			var th = document.createElement('th');
+			th.className = ((col.colgroup ? 'colgroup ': '') + ((col.colgroup != colgroup) ? 'first ' : '') + (col.css || ''));
+			colgroup = col.colgroup;
+			if (col.header) {
+				var abbr = document.createElement('abbr');
+				abbr.innerHTML = col.header;
+				th.appendChild(abbr);
+			}
+			tr.appendChild(th);
+		}
+		thead.appendChild(tr);
+		
+		return thead;
+	}; // createUIShipyardHeader()
+	
+	
+	var createUIShipyardRow = function(columns) {
+		var tr = document.createElement('tr');
+		var colgroup = '';
+		for (var c = 0;  c < columns.length;  c++) {
+			var col = (UI_SHIPYARD_COL[columns[c]] || EMPTY_OBJ);
+			var td = document.createElement('td');
+			td.className = ((col.colgroup ? 'colgroup ': '') + ((col.colgroup != colgroup) ? 'first ' : '') + (col.css || ''));
+			colgroup = col.colgroup;
+			tr.appendChild(td);
+		}
+		return tr;
+	}; // createUIShipyardRow()
+	
+	
+	var updateUIShipyardRow = function(columns, tr, build) {
+		var shipslot = (build ? build.getSlot('ship', 'hull') : null);
+		var html, value;
+		for (var c = 0;  c < columns.length;  c++) {
+			var col = UI_SHIPYARD_COL[columns[c]];
+			if (col && !col.nochange) {
+				if (!build) {
+					html = '';
+				} else if (col.render) {
+					html = col.render(build);
+				} else {
+					if (col.buildstat) {
+						value = build.getStat(col.buildstat);
+					} else if (col.shipattr && shipslot) {
+						value = shipslot.getEffectiveAttrValue(col.shipattr);
+					} else {
+						value = '';
+					}
+					html = formatAttrHTML(col.attr, value, col.scale);
+				}
+				tr.cells[c].innerHTML = html;
+			}
+		}
+		return true;
+	}; // updateUIShipyardRow()
+	
+	
+	var updateUIShipyardStoredBuilds = function() {
+		var tbody = document.getElementById('shipyard_storedbuilds_tbody');
+		
+		// remove all that were deleted
+		var r = tbody.rows.length;
+		while (r-- > 0) {
+			var namehash = tbody.rows[r].id.split('.')[1];
+			if (namehash && !current.storedbuild[0][namehash])
+				tbody.removeChild(tbody.rows[r]);
+		}
+		
+		// add or update all that currently exist
+		var names = [];
+		var nameNamehash = {};
+		for (namehash in current.storedbuild[0]) {
+			var name = hashDecodeS(namehash);
+			names.push(name);
+			nameNamehash[name] = namehash;
+		}
+		names.sort();
+		for (var n = 0;  n < names.length;  n++) {
+			updateUIShipyardStoredBuild(nameNamehash[names[n]], null, true);
+		}
+		
+		return true;
+	}; // updateUIShipyardStoredBuilds()
+	
+	
+	var updateUIShipyardStoredBuild = function(namehash, build, sorted) {
+		if (!namehash)
+			return false;
+		var buildhash = current.storedbuild[0][namehash];
+		var tbody = document.getElementById('shipyard_storedbuilds_tbody');
+		var tr = document.getElementById('shipyard_storedbuild.' + namehash);
+		if (buildhash) {
+			if (!build)
+				build = Build.fromHash(buildhash);
+			if (!tr) {
+				tr = createUIShipyardRow(UI_SHIPYARD_STOREDBUILD_COLS);
+				tr.id = 'shipyard_storedbuild.' + namehash;
+				tr.cells[0].innerHTML = '<button name="storedbuild_reload" value="'+namehash+'" class="label">'+encodeHTML(hashDecodeS(namehash))+'</button>';
+				tr.cells[1].innerHTML = '<button name="storedbuild_rename" value="'+namehash+'">' + HTML_ICON['rename'] + '</button><button name="storedbuild_delete" value="'+namehash+'">'+ HTML_ICON['delete'] + '</button>';
+				tr.cells[2].innerHTML = eddb.ship[build.getShipID()].name;
+				tbody.appendChild(tr);
+			} else if (sorted) {
+				tbody.appendChild(tr);
+			}
+			updateUIShipyardRow(UI_SHIPYARD_STOREDBUILD_COLS, tr, build);
+		} else {
+			if (tr)
+				tr.parentNode.removeChild(tr);
+		}
+		return true;
+	}; // updateUIShipyardStoredBuild()
+	
+	
+	var setUIShipyardTab = function(tab) {
+		current.shipyard_tab = tab;
+		document.forms.shipyard.elements.tab.value = tab;
+		document.forms.shipyard.className = tab;
+	}; // setUIShipyardTab()
+	
+	
+	/*
+	* OUTFITTING UI
+	*/
+	
+	
+	var updateUILayout = function() {
+		var divBody = document.getElementById('outfitting_fit_body');
+		var colWidth = max(document.getElementById('slots_column_left').offsetWidth, document.getElementById('slots_column_right').offsetWidth);
+		var nameWidth = min(document.getElementById('outfitting_fit_module_ship_hull').offsetWidth, document.getElementById('outfitting_fit_module_ship_hatch').offsetWidth);
+		var onecol = (current.outfitting_onecol ? (colWidth - nameWidth + 120 > 0.5 * divBody.clientWidth) : (divBody.scrollWidth > divBody.clientWidth));
+		if (current.outfitting_onecol != onecol) {
+			current.outfitting_onecol = onecol;
+			var tableLeft = document.getElementById('slots_table_left');
+			var tableRight = document.getElementById('slots_table_right');
+			var tr = document.getElementById('outfitting_fit_slot_ship_hatch');
+			(onecol ? tableLeft : tableRight).tBodies[0].appendChild(tr);
+			for (var g = 0;  g < GROUPS.length;  g++) {
+				var slotgroup = GROUPS[g];
+				var tbody = document.getElementById('outfitting_fit_' + slotgroup);
+				((onecol || slotgroup === 'hardpoint' || slotgroup === 'component') ? tableLeft : tableRight).appendChild(tbody);
+			}
+			document.getElementById('slots_column_right').style.display = (onecol ? 'none' : '');
+		}
+		return true;
+	}; // updateUILayout()
+	
+	
+	var getUIOutfittingSlot = function() {
+		switch (current.outfitting_focus) {
+		case 'module':  return current.pickerSlot;
+		case 'slot':    return current.fit.getSlot(current.group, current.slot);
+		}
+		return null;
+	}; // getUIOutfittingSlot()
+	
+	
+	var setUIOutfittingFocus = function(focus) {
+		if (focus !== 'module' && focus !== 'slot')
+			return false;
+		current.outfitting_focus = focus;
+		document.getElementById('page_body_outfitting').className = 'focus' + focus;
+		document.getElementById('outfitting_details_button_replace').innerHTML = ((focus === 'module') ? 'Install' : 'Replace');
+		return true;
+	}; // setUIOutfittingFocus()
+	
+	
+	var setUIOutfittingPanels = function(show1, show2a, show2b) {
+		if (show1) {
+			current.outfitting_show1 = show1;
+		}
+		if (show2a) {
+			if (show2b) {
+				current.outfitting_show2b = show2b;
+				current.outfitting_show2a = show2a;
+			} else {
+				if (current.outfitting_show2a !== show2a)
+					current.outfitting_show2b = current.outfitting_show2a;
+				current.outfitting_show2a = show2a;
+			}
+		}
+		document.getElementById('outfitting_top').className = (
+			'show1' + current.outfitting_show1 +
+			' show2' + current.outfitting_show2a +
+			' show2' + current.outfitting_show2b
+		);
+		return true;
+	}; // setUIOutfittingPanels()
+	
+	
 	var importBuild = function(text) {
 		// if it's valid (optionally URI-encoded) base64, assume it's also gzipped
 		var b64text = null;
@@ -2899,7 +3210,6 @@ window.edshipyard = new (function() {
 					var shipidIndex = {};
 					for (var i = 0;  i < json.length;  i++) {
 						if (json[i]['event'] === 'Loadout') {
-							console.log(json[i]['ShipID']);
 							if (json[i]['ShipID']) {
 								index = shipidIndex[json[i]['ShipID']] || errors.length;
 								shipidIndex[json[i]['ShipID']] = index;
@@ -3418,279 +3728,46 @@ window.edshipyard = new (function() {
 	}; // decodeJournalBuild()
 	
 	
-	/*
-	* SHIPYARD UI
-	*/
-	
-	
-	var formatShipyardSlots = function(build, slotgroup, map) {
-		var sizes = eddb.ship[build.getShipID()].slots[slotgroup].slice(0);
-		sizes.sort(sortNumbersDesc);
-		if (map) {
-			var i = sizes.length;
-			while (i-- > 0)
-				sizes[i] = (map[sizes[i] || 0] || '?');
-		}
-		return sizes.join(' ');
-	}; // formatShipyardSlots()
-	
-	
-	var UI_SHIPYARD_COL = {
-		label     : { header:'Build', css:'text', nochange:1, render:function(build) { return build.getName(); } },
-		name_ship : { header:'Ship',  css:'text', nochange:1, shipattr:'name' },
-		cost      : { header:'Price', css:'tar', attr:'cost', scale:0, buildstat:'cost' },
-		szcls     : { header:'Sz',    css:'tac', render:function(build) { return '?SML'[(eddb.ship[build.getShipID()] || EMPTY_OBJ).class || 0]; } },
-		crew      : { header:'Crw',   css:'tar', attr:'crew', shipattr:'crew' },
-		masslock  : { header:'MLF',   css:'tar', attr:'masslock', shipattr:'masslock' },
-		mass_hull : { header:'Hull',  colgroup:'Mass', css:'tar', attr:'mass', scale:0, buildstat:'mass_hull' },
-		mass_unl  : { header:'Unl',   colgroup:'Mass', css:'tar', attr:'mass', scale:0, buildstat:'mass_unladen' },
-		mass_ldn  : { header:'Ldn',   colgroup:'Mass', css:'tar', attr:'mass', scale:0, buildstat:'mass_laden' },
-		jump_unl  : { header:'Unl',   colgroup:'Jump', css:'tar', scale:1, buildstat:'_jump_unladen' },
-		jump_ldn  : { header:'Ldn',   colgroup:'Jump', css:'tar', scale:1, buildstat:'_jump_laden' },
-		range_unl : { header:'Unl',   colgroup:'Range', css:'tar', scale:1, buildstat:'_range_unladen' },
-		range_ldn : { header:'Ldn',   colgroup:'Range', css:'tar', scale:1, buildstat:'_range_laden' },
-		topspd    : { header:'Spd',   css:'tar', attr:'topspd', buildstat:'_speed' },
-		bstspd    : { header:'Bst',   css:'tar', attr:'bstspd', buildstat:'_boost' },
-		shields   : { header:'Shd',   css:'tar', attr:'shields', buildstat:'_shields' },
-		armour    : { header:'Arm',   css:'tar', attr:'armour', buildstat:'_armour' },
-		hardness  : { header:'Hrd',   css:'tar', attr:'hardness', shipattr:'hardness' },
-		fuelcap   : { header:'Fuel',  css:'tar', attr:'fuelcap', scale:0, buildstat:'fuelcap' },
-		cargocap  : { header:'Crgo',  css:'tar', attr:'cargocap', buildstat:'cargocap' },
-		cabincap  : { header:'Psgr',  css:'tar', attr:'cabincap', buildstat:'cabincap' },
-		slots_hardpoint : { header:'Hardpoints',      colgroup:'Module Slots', css:'tal', render:function(build) { return formatShipyardSlots(build, 'hardpoint', 'USMLH'); } },
-		slots_utility   : { header:'Utl',             colgroup:'Module Slots', css:'tac', render:function(build) { return eddb.ship[build.getShipID()].slots.utility.length; } },
-		slots_core_0    : { header:CORE_SLOT_ABBR[0], colgroup:'Module Slots', css:'tac', render:function(build) { return eddb.ship[build.getShipID()].slots.component[0]; } },
-		slots_core_1    : { header:CORE_SLOT_ABBR[1], colgroup:'Module Slots', css:'tac', render:function(build) { return eddb.ship[build.getShipID()].slots.component[1]; } },
-		slots_core_2    : { header:CORE_SLOT_ABBR[2], colgroup:'Module Slots', css:'tac', render:function(build) { return eddb.ship[build.getShipID()].slots.component[2]; } },
-		slots_core_3    : { header:CORE_SLOT_ABBR[3], colgroup:'Module Slots', css:'tac', render:function(build) { return eddb.ship[build.getShipID()].slots.component[3]; } },
-		slots_core_4    : { header:CORE_SLOT_ABBR[4], colgroup:'Module Slots', css:'tac', render:function(build) { return eddb.ship[build.getShipID()].slots.component[4]; } },
-		slots_core_5    : { header:CORE_SLOT_ABBR[5], colgroup:'Module Slots', css:'tac', render:function(build) { return eddb.ship[build.getShipID()].slots.component[5]; } },
-		slots_core_6    : { header:CORE_SLOT_ABBR[6], colgroup:'Module Slots', css:'tac', render:function(build) { return eddb.ship[build.getShipID()].slots.component[6]; } },
-		slots_core_7    : { header:CORE_SLOT_ABBR[7], colgroup:'Module Slots', css:'tac', render:function(build) { return eddb.ship[build.getShipID()].slots.component[7]; } },
-		slots_military  : { header:'Mil',             colgroup:'Module Slots', css:'tal', render:function(build) { return formatShipyardSlots(build, 'military');} },
-		slots_internal  : { header:'Opt Internal',    colgroup:'Module Slots', css:'tal', render:function(build) { return formatShipyardSlots(build, 'internal');} },
-		dps       : { header:'DPS',   colgroup:'Weapons', css:'tar', attr:'dps', scale:1, buildstat:'dps' },
-		dps_abs   : { header:'Abs',   colgroup:'Weapons', css:'tar', render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_abs') / dps, 0) : ''); } },
-		dps_kin   : { header:'Kin',   colgroup:'Weapons', css:'tar', render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_kin') / dps, 0) : ''); } },
-		dps_thm   : { header:'Thm',   colgroup:'Weapons', css:'tar', render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_thm') / dps, 0) : ''); } },
-		dps_exp   : { header:'Exp',   colgroup:'Weapons', css:'tar', render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_exp') / dps, 0) : ''); } },
-		dps_axe   : { header:'AXe',   colgroup:'Weapons', css:'tar', render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_axe') / dps, 0) : ''); } },
-		dps_cau   : { header:'Cau',   colgroup:'Weapons', css:'tar', render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_cau') / dps, 0) : ''); } },
-	}; // UI_SHIPYARD_COL{}
-	
-	var UI_SHIPYARD_SHIPS_COLS = [
-		'name_ship','cost','szcls','crew','masslock',
-		'mass_unl','jump_unl',
-		'topspd','bstspd','shields','armour','hardness','fuelcap','cargocap','cabincap',
-		'slots_hardpoint','slots_utility',
-		'slots_core_1','slots_core_2','slots_core_3','slots_core_4','slots_core_5','slots_core_6','slots_core_7',
-		'slots_military','slots_internal',
-	]; // UI_SHIPYARD_SHIPS_COLS[]
-	
-	var UI_SHIPYARD_STOREDBUILD_COLS = [
-		'label','_BUTTONS_','name_ship','cost',
-		'mass_unl','mass_ldn','jump_unl','jump_ldn','range_unl','range_ldn',
-		'topspd','bstspd','shields','armour','fuelcap','cargocap','cabincap',
-		'dps','dps_abs','dps_kin','dps_thm','dps_exp','dps_axe'
-	]; // UI_SHIPYARD_STOREDBUILD_COLS[]
-	
-	
-	var initUIShipyardShips = function() {
-		var div = document.createElement('div');
-		div.id = 'shipyard_ships_container';
-		
-		var table = document.createElement('table');
-		table.id = 'shipyard_ships_table';
-		var thead = createUIShipyardHeader(UI_SHIPYARD_SHIPS_COLS);
-		table.appendChild(thead);
-		var tbody = document.createElement('tbody');
-		for (var s = 0;  s < cache.ships.length;  s++) {
-			var shipid = cache.ships[s];
-			var tr = createUIShipyardRow(UI_SHIPYARD_SHIPS_COLS);
-			tr.id = 'shipyard_ship_' + shipid;
-			tr.cells[0].innerHTML = '<button name="shipyard_ship" value="' + shipid + '" class="label">' + eddb.ship[shipid].name + '</button>';
-			updateUIShipyardRow(UI_SHIPYARD_SHIPS_COLS, tr, cache.shipBuild[shipid]);
-			tbody.appendChild(tr);
-		}
-		table.appendChild(tbody);
-		
-		div.appendChild(table);
-		document.getElementById('shipyard_container').appendChild(div);
-	}; // initUIShipyardShips()
-	
-	
-	var initUIShipyardStoredBuilds = function() {
-		var div = document.createElement('div');
-		div.id = 'shipyard_storedbuilds_container';
-		
-		var table = document.createElement('table');
-		table.id = 'shipyard_storedbuilds_table';
-		var thead = createUIShipyardHeader(UI_SHIPYARD_STOREDBUILD_COLS);
-		table.appendChild(thead);
-		var tbody = document.createElement('tbody');
-		tbody.id = 'shipyard_storedbuilds_tbody';
-		table.appendChild(tbody);
-		
-		div.appendChild(table);
-		document.getElementById('shipyard_container').appendChild(div);
-		
-		// TODO: stored build notice
-		var div2 = document.createElement('div');
-		div2.style.marginTop = '2em';
-		div2.style.color = 'red';
-		div2.innerHTML = 'Stored builds are re-copied from the live site on each visit; changes made here will not affect live site builds.';
-		div.appendChild(div2);
-	}; // initUIShipyardStoredBuilds()
-	
-	
-	var createUIShipyardHeader = function(columns) {
-		var thead = document.createElement('thead');
-		
-		var tr = document.createElement('tr');
-		tr.className = 'colgroup';
-		var colgroup = '';
-		var colspan = 0;
-		for (var c = 0;  c <= columns.length;  c++) {
-			var col = (UI_SHIPYARD_COL[columns[c]] || EMPTY_OBJ);
-			if (!columns[c] || col.colgroup != colgroup) {
-				if (colspan > 0) {
-					var th = document.createElement('th');
-					th.colSpan = colspan;
-					th.className = (colgroup ? 'colgroup' : '');
-					th.innerHTML = (colgroup || '');
-					tr.appendChild(th);
-				}
-				colgroup = col.colgroup;
-				colspan = 0;
-			}
-			colspan++;
-		}
-		thead.appendChild(tr);
-		
-		var tr = document.createElement('tr');
-		var colgroup = '';
-		for (var c = 0;  c < columns.length;  c++) {
-			var col = (UI_SHIPYARD_COL[columns[c]] || EMPTY_OBJ);
-			var th = document.createElement('th');
-			th.className = ((col.colgroup ? 'colgroup ': '') + ((col.colgroup != colgroup) ? 'first ' : '') + (col.css || ''));
-			colgroup = col.colgroup;
-			if (col.header) {
-				var abbr = document.createElement('abbr');
-				abbr.innerHTML = col.header;
-				th.appendChild(abbr);
-			}
-			tr.appendChild(th);
-		}
-		thead.appendChild(tr);
-		
-		return thead;
-	}; // createUIShipyardHeader()
-	
-	
-	var createUIShipyardRow = function(columns) {
-		var tr = document.createElement('tr');
-		for (var c = 0;  c < columns.length;  c++) {
-			var col = (UI_SHIPYARD_COL[columns[c]] || EMPTY_OBJ);
-			var td = document.createElement('td');
-			td.className = (col.css || '');
-			tr.appendChild(td);
-		}
-		return tr;
-	}; // createUIShipyardRow()
-	
-	
-	var updateUIShipyardRow = function(columns, tr, build) {
-		var shipslot = (build ? build.getSlot('ship', 'hull') : null);
-		var html, value;
-		for (var c = 0;  c < columns.length;  c++) {
-			var col = UI_SHIPYARD_COL[columns[c]];
-			if (col && !col.nochange) {
-				if (!build) {
-					html = '';
-				} else if (col.render) {
-					html = col.render(build);
-				} else {
-					if (col.buildstat) {
-						value = build.getStat(col.buildstat);
-					} else if (col.shipattr && shipslot) {
-						value = shipslot.getEffectiveAttrValue(col.shipattr);
-					} else {
-						value = '';
-					}
-					html = formatAttrHTML(col.attr, value, col.scale);
-				}
-				tr.cells[c].innerHTML = html;
-			}
-		}
-		return true;
-	}; // updateUIShipyardRow()
-	
-	
-	var updateUIShipyardStoredBuilds = function() {
-		var tbody = document.getElementById('shipyard_storedbuilds_tbody');
-		
-		// remove all that were deleted
-		var r = tbody.rows.length;
-		while (r-- > 0) {
-			var namehash = tbody.rows[r].id.split('.')[1];
-			if (namehash && !current.storedbuild[0][namehash])
-				tbody.removeChild(tbody.rows[r]);
-		}
-		
-		// add or update all that currently exist
-		var names = [];
-		var nameNamehash = {};
-		for (namehash in current.storedbuild[0]) {
-			var name = hashDecodeS(namehash);
-			names.push(name);
-			nameNamehash[name] = namehash;
-		}
-		names.sort();
-		for (var n = 0;  n < names.length;  n++) {
-			updateUIShipyardStoredBuild(nameNamehash[names[n]], null, true);
-		}
-		
-		return true;
-	}; // updateUIShipyardStoredBuilds()
-	
-	
-	var updateUIShipyardStoredBuild = function(namehash, build, sorted) {
-		if (!namehash)
-			return false;
-		var buildhash = current.storedbuild[0][namehash];
-		var tbody = document.getElementById('shipyard_storedbuilds_tbody');
-		var tr = document.getElementById('shipyard_storedbuild.' + namehash);
-		if (buildhash) {
-			if (!build)
-				build = Build.fromHash(buildhash);
-			if (!tr) {
-				tr = createUIShipyardRow(UI_SHIPYARD_STOREDBUILD_COLS);
-				tr.id = 'shipyard_storedbuild.' + namehash;
-				tr.cells[0].innerHTML = '<button name="storedbuild_reload" value="'+namehash+'" class="label">'+hashDecodeS(namehash)+'</button>';
-				tr.cells[1].innerHTML = '<button name="storedbuild_rename" value="'+namehash+'">' + HTML_ICON['rename'] + '</button><button name="storedbuild_delete" value="'+namehash+'">'+ HTML_ICON['delete'] + '</button>';
-				tr.cells[2].innerHTML = eddb.ship[build.getShipID()].name;
-				tbody.appendChild(tr);
-			} else if (sorted) {
-				tbody.appendChild(tr);
-			}
-			updateUIShipyardRow(UI_SHIPYARD_STOREDBUILD_COLS, tr, build);
+	var setCurrentDrag = function(modid, namehash, fromgroup, fromslot) {
+		current.drag = (isNaN(modid) ? null : { id:modid, namehash:namehash, group:fromgroup, slot:fromslot });
+		if (!isNaN(modid) && fromgroup) {
+			document.getElementById('outfitting_modules_container').addEventListener('dragenter', onUIModulePickerDragEnter);
+			document.getElementById('outfitting_modules_container').addEventListener('dragover', onUIModulePickerDragOver);
+			document.getElementById('outfitting_modules_container').addEventListener('dragleave', onUIModulePickerDragLeave);
 		} else {
-			if (tr)
-				tr.parentNode.removeChild(tr);
+			document.getElementById('outfitting_modules_container').removeEventListener('dragenter', onUIModulePickerDragEnter);
+			document.getElementById('outfitting_modules_container').removeEventListener('dragover', onUIModulePickerDragOver);
+			document.getElementById('outfitting_modules_container').removeEventListener('dragleave', onUIModulePickerDragLeave);
 		}
-		return true;
-	}; // updateUIShipyardStoredBuild()
-	
-	
-	var setUIShipyardTab = function(tab) {
-		current.shipyard_tab = tab;
-		document.forms.shipyard.elements.tab.value = tab;
-		document.forms.shipyard.className = tab;
-	}; // setUIShipyardTab()
+		document.getElementById('outfitting_fit_ship_hull').className = (isNaN(modid) ? '' : 'dragerror');
+		document.getElementById('outfitting_fit_ship_hatch').className = (isNaN(modid) ? '' : 'dragerror');
+		for (var slotgroup in GROUP_LABEL) {
+			var slot;
+			for (var slotnum = 0;  slot = current.fit.getSlot(slotgroup, slotnum);  slotnum++) {
+				var tr = document.getElementById('outfitting_fit_slot_' + slotgroup + '_' + slotnum);
+				if (isNaN(modid)) {
+					tr.className = '';
+					tr.removeEventListener('dragenter', onUIFitSlotsDragEnter);
+					tr.removeEventListener('dragover', onUIFitSlotsDragOver);
+					tr.removeEventListener('dragleave', onUIFitSlotsDragLeave);
+				} else if (!(current.option.experimental ? slot.isModuleIDValid(modid) : slot.isModuleIDAllowed(modid))) {
+					tr.className = 'dragerror';
+					tr.removeEventListener('dragenter', onUIFitSlotsDragEnter);
+					tr.removeEventListener('dragover', onUIFitSlotsDragOver);
+					tr.removeEventListener('dragleave', onUIFitSlotsDragLeave);
+				} else {
+					tr.className = 'dragok';
+					tr.addEventListener('dragenter', onUIFitSlotsDragEnter);
+					tr.addEventListener('dragover', onUIFitSlotsDragOver);
+					tr.addEventListener('dragleave', onUIFitSlotsDragLeave);
+				}
+			}
+		}
+	}; // setCurrentDrag()
 	
 	
 	/*
-	* PICKER UI
+	* OUTFITTING PICKER UI
 	*/
 	
 	
@@ -3698,6 +3775,25 @@ window.edshipyard = new (function() {
 		// build picker DOM
 		var divPicker = document.createElement('div');
 		divPicker.id = 'outfitting_modules_picker';
+		
+		var divRow = document.createElement('div');
+		divRow.className = 'row empty';
+		var label = document.createElement('label');
+		label.className = 'togglebutton';
+		label.draggable = true;
+		var input = document.createElement('input');
+		input.type = 'radio';
+		input.id = 'outfitting_module.0';
+		input.name = 'module';
+		input.value = 0;
+		var div = document.createElement('div');
+		div.innerHTML = '';
+		label.appendChild(input);
+		label.appendChild(div);
+		divRow.appendChild(label);
+		divPicker.appendChild(divRow);
+		divRow = null;
+		
 		for (var g = 0;  g < GROUPS.length;  g++) {
 			var group = GROUPS[g];
 			if (!cache.groupMtypes[group] || cache.groupMtypes[group].length < 1)
@@ -3843,7 +3939,7 @@ window.edshipyard = new (function() {
 				input.name = 'module';
 				input.value = modid + '.' + namehash;
 				var div = document.createElement('div');
-				div.innerHTML = HTML_ICON['warning'] + HTML_ICON['engineer'] + hashDecodeS(namehash);
+				div.innerHTML = HTML_ICON['warning'] + HTML_ICON['engineer'] + encodeHTML(hashDecodeS(namehash));
 				label.appendChild(input);
 				label.appendChild(div);
 				divRow.appendChild(label);
@@ -3869,7 +3965,15 @@ window.edshipyard = new (function() {
 	
 	
 	var setUIPickerModule = function(modid, namehash, scroll) {
-		if (modid) {
+		if (isNaN(modid)) {
+			var tokens = document.forms.modules.elements.module.value.split('.');
+			modid = tokens[0];
+			namehash = tokens[1];
+			var input = document.getElementById('outfitting_module.' + (namehash || modid));
+			if (input)
+				input.checked = false;
+			current.pickerSlot.setModuleID(0);
+		} else {
 			var input = document.getElementById('outfitting_module.' + (namehash || modid));
 			input.checked = true;
 			if (namehash) {
@@ -3889,14 +3993,6 @@ window.edshipyard = new (function() {
 					container.scrollTop += (min(0, labelR.top - margin - containerR.top) + max(0, labelR.bottom + margin - containerR.bottom));
 				}
 			}
-		} else {
-			var tokens = document.forms.modules.elements.module.value.split('.');
-			modid = tokens[0];
-			namehash = tokens[1];
-			var input = document.getElementById('outfitting_module.' + (namehash || modid));
-			if (input)
-				input.checked = false;
-			current.pickerSlot.setModuleID(0);
 		}
 		return true;
 	}; // setUIPickerModule()
@@ -4018,7 +4114,7 @@ window.edshipyard = new (function() {
 			var th = document.createElement('th');
 			th.className = 'outfitting_fit_pwrdraw';
 			var abbr = document.createElement('abbr');
-			abbr.innerHTML = 'Power';
+			abbr.innerHTML = 'P<span class="outfitting_fit_pwrdraw">o</span>w<span class="outfitting_fit_pwrdraw">e</span>r';
 			abbr.title = 'Module power output or draw (in megawatts), powered status, and power priority group';
 			th.appendChild(abbr);
 			tr.appendChild(th);
@@ -4055,7 +4151,7 @@ window.edshipyard = new (function() {
 		
 		var td = document.createElement('td');
 		td.id = 'outfitting_fit_module_' + group_slot;
-		td.className = 'outfitting_fit_module'; // dynamic 'notallowed', 'notenough'
+		td.className = 'outfitting_fit_module'; // dynamic 'notallowed', 'notenough', 'overlimit'
 		var label = document.createElement('label');
 		label.className = 'togglebutton';
 		label.draggable = true;
@@ -4066,7 +4162,6 @@ window.edshipyard = new (function() {
 		var div = document.createElement('div');
 		var span = document.createElement('span');
 		span.id = 'outfitting_fit_name_' + group_slot;
-		span.className = ''; // dynamic 'overlimit'
 		div.appendChild(span);
 		div.insertAdjacentHTML('afterbegin', HTML_ICON['warning']); // dynamically hidden
 		label.appendChild(input);
@@ -4131,25 +4226,6 @@ window.edshipyard = new (function() {
 	}; // createUIFitSlotRow()
 	
 	
-	var updateUIFitLayout = function() {
-		var onecol = document.forms.fit.elements.outfitting_show_attrs.checked;
-		if (current.outfitting_onecol != onecol) {
-			current.outfitting_onecol = onecol;
-			var tableLeft = document.getElementById('slots_table_left');
-			var tableRight = document.getElementById('slots_table_right');
-			var tr = document.getElementById('outfitting_fit_slot_ship_hatch');
-			(onecol ? tableLeft : tableRight).tBodies[0].appendChild(tr);
-			for (var g = 0;  g < GROUPS.length;  g++) {
-				var slotgroup = GROUPS[g];
-				var tbody = document.getElementById('outfitting_fit_' + slotgroup);
-				((onecol || slotgroup === 'hardpoint' || slotgroup === 'component') ? tableLeft : tableRight).appendChild(tbody);
-			}
-			document.getElementById('slots_column_right').style.display = (onecol ? 'none' : '');
-		}
-		return true;
-	}; // updateUIFitLayout()
-	
-	
 	var updateUIFitColumns = function() {
 		document.getElementById('outfitting_fit').className = (
 			(document.forms.fit.elements.outfitting_show_mass.checked ? '' : 'no') + 'mass ' +
@@ -4180,7 +4256,7 @@ window.edshipyard = new (function() {
 		current.pickerSlot = fit.getDetachedSlot();
 		current.tempSlot = fit.getDetachedSlot();
 		
-		setUIPickerModule(0);
+		setUIPickerModule();
 		updateUIFitStoredBuilds();
 		updateUIFitStoredBuildControls(true, namehash);
 		document.forms.fit.elements.shipname.value = fit.getName();
@@ -4549,6 +4625,28 @@ window.edshipyard = new (function() {
 	}; // updateUIFitPowerDist()
 	
 	
+	var emptyUIFitLimitedSlots = function(slotgroup, slotnum) {
+		var slot = current.fit.getSlot(slotgroup, slotnum);
+		var limit = slot ? (slot.getModule() || EMPTY_OBJ).limit : null;
+		var limitSlots = current.fit.getLimitedSlots();
+		if (eddb.limit[limit]) {
+			if (limitSlots[limit] && !current.option.experimental) {
+				for (var s = limitSlots[limit].length - 1;  s >= 0 && limitSlots[limit].length > eddb.limit[limit];  s--) {
+					var slotlim = limitSlots[limit][s];
+					if (slotlim.getSlotGroup() != slotgroup || slotlim.getSlotNum() != slotnum) {
+						if (slotlim.setModuleID(0)) {
+							updateUIFitSlot(slotlim.getSlotGroup(), slotlim.getSlotNum());
+							limitSlots[limit].splice(s, 1);
+						}
+					}
+				}
+			}
+		}
+		updateUIFitLimitedSlots(limitSlots);
+		return true;
+	}; // emptyUIFitLimitedSlots()
+	
+	
 	var updateUIFitLimitedSlots = function(limitSlots) {
 		if (!limitSlots)
 			limitSlots = current.fit.getLimitedSlots();
@@ -4556,7 +4654,7 @@ window.edshipyard = new (function() {
 		for (var slotgroup in GROUP_LABEL) {
 			for (var slotnum = 0;  slot = current.fit.getSlot(slotgroup, slotnum);  slotnum++) {
 				var limit = (slot.getModule() || EMPTY_OBJ).limit;
-				document.getElementById('outfitting_fit_name_' + slotgroup + '_' + slotnum).classList.toggle('overlimit', (limitSlots[limit] || EMPTY_ARR).length > (eddb.limit[limit] || 99));
+				document.getElementById('outfitting_fit_module_' + slotgroup + '_' + slotnum).classList.toggle('overlimit', (limitSlots[limit] || EMPTY_ARR).length > (eddb.limit[limit] || 99));
 			}
 		}
 	}; // updateUIFitLimitedSlots()
@@ -4800,13 +4898,12 @@ window.edshipyard = new (function() {
 	
 	
 	var setCurrentSlot = function(slotgroup, slotnum) {
-		current.outfitting_focus = 'slot';
 		current.group = slotgroup;
 		current.slot = slotnum;
 		var shipid = current.fit.getShipID();
 		var ship = eddb.ship[shipid];
 		var reserved = ((ship.reserved || EMPTY_OBJ)[slotgroup] || EMPTY_OBJ)[slotnum];
-		document.getElementById('page_body_outfitting').className = current.outfitting_focus;
+		setUIOutfittingFocus('slot');
 		document.getElementById('outfitting_modules_picker').className = (
 			slotgroup +
 			((slotgroup === 'component') ? (' component_' + CORE_SLOT_ABBR[slotnum]) : '') +
@@ -4821,9 +4918,9 @@ window.edshipyard = new (function() {
 		var slot = current.fit.getSlot(slotgroup, slotnum);
 		var modid = slot.getModuleID();
 		if (GROUP_LABEL[slotgroup]) {
-			setUIPickerModule(modid, '', current.tab === 'SLOT');
+			setUIPickerModule(modid, '', modid && (current.tab === 'SLOT'));
 		} else {
-			setUIPickerModule(0);
+			setUIPickerModule();
 		}
 		document.forms.fit.elements.slot.value = slotgroup + '_' + slotnum;
 		updateUIDetailsStoredModules();
@@ -4832,12 +4929,12 @@ window.edshipyard = new (function() {
 	}; // setCurrentSlot()
 	
 	
-	var setCurrentFitSlotModule = function(slotgroup, slotnum, modid, namehash) {
+	var setCurrentFitSlotModule = function(slotgroup, slotnum, modid, namehash, storedhash) {
 		var slot = current.fit.getSlot(slotgroup, slotnum);
 		var limitOld = (slot.getModule() || EMPTY_OBJ).limit;
 		var ok;
-		if (namehash) {
-			ok = slot.setStoredHash(current.storedmodule[0][namehash]);
+		if (namehash || storedhash) {
+			ok = slot.setStoredHash(storedhash || current.storedmodule[0][namehash]);
 			modid = slot.getModuleID();
 		} else {
 			ok = slot.setModuleID(modid);
@@ -4848,19 +4945,7 @@ window.edshipyard = new (function() {
 		updateUIFitStoredBuildControls();
 		updateUIFitSlot(slotgroup, slotnum);
 		if (eddb.limit[limitNew]) {
-			var limitSlots = current.fit.getLimitedSlots();
-			if (limitSlots[limitNew] && !current.option.experimental) {
-				for (var s = limitSlots[limitNew].length - 1;  s >= 0 && limitSlots[limitNew].length > eddb.limit[limitNew];  s--) {
-					var slotlim = limitSlots[limitNew][s];
-					if (slotlim.getSlotGroup() != slotgroup || slotlim.getSlotNum() != slotnum) {
-						if (slotlim.setModuleID(0)) {
-							updateUIFitSlot(slotlim.getSlotGroup(), slotlim.getSlotNum());
-							limitSlots[limitNew].splice(s, 1);
-						}
-					}
-				}
-			}
-			updateUIFitLimitedSlots(limitSlots);
+			emptyUIFitLimitedSlots(slotgroup, slotnum);
 		} else if (eddb.limit[limitOld]) {
 			updateUIFitLimitedSlots();
 		}
@@ -4891,11 +4976,17 @@ window.edshipyard = new (function() {
 	
 	
 	var copyCurrentFitSlotModule = function(slotgroup1, slotnum1, slotgroup2, slotnum2) {
+		var limitOld = (current.fit.getSlot(slotgroup2, slotnum2).getModule() || EMPTY_OBJ).limit;
 		if (!current.fit.copySlot(slotgroup1, slotnum1, slotgroup2, slotnum2))
 			return false;
+		var limitNew = (current.fit.getSlot(slotgroup2, slotnum2).getModule() || EMPTY_OBJ).limit;
 		updateUIFitStoredBuildControls();
 		updateUIFitSlot(slotgroup2, slotnum2);
-		updateUIFitLimitedSlots();
+		if (eddb.limit[limitNew]) {
+			emptyUIFitLimitedSlots(slotgroup2, slotnum2);
+		} else if (eddb.limit[limitOld]) {
+			updateUIFitLimitedSlots();
+		}
 		updateUIStats();
 		setCurrentSlot(slotgroup2, slotnum2);
 		return true;
@@ -5113,6 +5204,8 @@ window.edshipyard = new (function() {
 				curnamehash = select.value;
 				selectedIndex = ((slot.getStoredHash() === cache.moduleHash[modid]) ? 0 : -1);
 			}
+		} else {
+			return false;
 		}
 		
 		setDOMSelectLength(select, 1 + names.length);
@@ -5130,12 +5223,9 @@ window.edshipyard = new (function() {
 	
 	var updateUIDetailsStoredModuleControls = function(setmodule, namehash) {
 		var select = document.forms.details.elements.outfitting_details_stored;
-		var slot;
-		if (current.outfitting_focus === 'module') {
-			slot = current.pickerSlot;
-		} else if (current.outfitting_focus === 'slot') {
-			slot = current.fit.getSlot(current.group, current.slot);
-		}
+		var slot = getUIOutfittingSlot();
+		if (!slot)
+			return false;
 		var modid = slot.getModuleID();
 		var modulehash = slot.getStoredHash();
 		var stockhash = cache.moduleHash[modid] || '';
@@ -5158,12 +5248,9 @@ window.edshipyard = new (function() {
 	
 	
 	var saveCurrentStoredModule = function(saveas) {
-		var slot;
-		if (current.outfitting_focus === 'module') {
-			slot = current.pickerSlot;
-		} else if (current.outfitting_focus === 'slot') {
-			slot = current.fit.getSlot(current.group, current.slot);
-		}
+		var slot = getUIOutfittingSlot();
+		if (!slot)
+			return false;
 		var modid = slot.getModuleID();
 		var modulehash = slot.getStoredHash();
 		if (!modid || !modulehash)
@@ -5194,6 +5281,7 @@ window.edshipyard = new (function() {
 			updateUIDetailsStoredModules();
 		}
 		updateUIDetailsStoredModuleControls(true, namehash);
+		return true;
 	}; // saveCurrentStoredModule()
 	
 	
@@ -5278,18 +5366,15 @@ window.edshipyard = new (function() {
 	
 	
 	var updateUIDetailsModule = function() {
-		var slot;
-		if (current.outfitting_focus === 'module') {
-			slot = current.pickerSlot;
-		} else if (current.outfitting_focus === 'slot') {
-			slot = current.fit.getSlot(current.group, current.slot);
-		}
+		var slot = getUIOutfittingSlot();
+		if (!slot)
+			return false;
 		var modid = slot.getModuleID();
 		var module = slot.getModule();
 		
 		document.getElementById('outfitting_details_module').style.visibility = (module ? 'visible' : 'hidden');
 		if (!module)
-			return;
+			return true;
 		
 		// set displayed label
 		document.getElementById('outfitting_details_label').innerHTML = (module.mtype ? getModuleLabel(module, false, true) : module.name);
@@ -5358,6 +5443,7 @@ window.edshipyard = new (function() {
 		// set displayed discounts and modification data
 		updateUIDetailsDiscounts();
 		updateUIDetailsModifications();
+		return true;
 	}; // updateUIDetailsModule()
 	
 	
@@ -5395,12 +5481,9 @@ window.edshipyard = new (function() {
 	
 	
 	var updateUIDetailsModifications = function() {
-		var slot;
-		if (current.outfitting_focus === 'module') {
-			slot = current.pickerSlot;
-		} else if (current.outfitting_focus === 'slot') {
-			slot = current.fit.getSlot(current.group, current.slot);
-		}
+		var slot = getUIOutfittingSlot();
+		if (!slot)
+			return false;
 		var mtypeid = slot.getModuleMtype();
 		var modifiable = slot.isModifiable();
 		var modified = slot.isModified();
@@ -5459,16 +5542,14 @@ window.edshipyard = new (function() {
 				moddisplay.innerHTML = getModuleAttrModifierText(module, attr, modifier);
 			}
 		}
+		return true;
 	}; // updateUIDetailsModifications()
 	
 	
 	var setUIDetailsBlueprintID = function(bpid) {
-		var slot;
-		if (current.outfitting_focus === 'module') {
-			slot = current.pickerSlot;
-		} else if (current.outfitting_focus === 'slot') {
-			slot = current.fit.getSlot(current.group, current.slot);
-		}
+		var slot = getUIOutfittingSlot();
+		if (!slot)
+			return false;
 		if (!((slot.getBlueprintID() && bpid) ? slot.setBlueprintID(bpid) : slot.setBlueprint(bpid, MAX_BLUEPRINT_GRADE, (bpid || !current.option.experimental) ? 1.0 : null)))
 			return false;
 		if (!bpid && !current.option.experimental)
@@ -5485,12 +5566,9 @@ window.edshipyard = new (function() {
 	
 	
 	var setUIDetailsBlueprintGrade = function(bpgrade) {
-		var slot;
-		if (current.outfitting_focus === 'module') {
-			slot = current.pickerSlot;
-		} else if (current.outfitting_focus === 'slot') {
-			slot = current.fit.getSlot(current.group, current.slot);
-		}
+		var slot = getUIOutfittingSlot();
+		if (!slot)
+			return false;
 		if (!slot.setBlueprintGrade(bpgrade))
 			return false;
 		if (current.outfitting_focus === 'slot') {
@@ -5505,12 +5583,9 @@ window.edshipyard = new (function() {
 	
 	
 	var setUIDetailsBlueprintRoll = function(bproll) {
-		var slot;
-		if (current.outfitting_focus === 'module') {
-			slot = current.pickerSlot;
-		} else if (current.outfitting_focus === 'slot') {
-			slot = current.fit.getSlot(current.group, current.slot);
-		}
+		var slot = getUIOutfittingSlot();
+		if (!slot)
+			return false;
 		if (!slot.setBlueprintRoll(bproll))
 			return false;
 		if (current.outfitting_focus === 'slot') {
@@ -5525,12 +5600,9 @@ window.edshipyard = new (function() {
 	
 	
 	var setUIDetailsExpeffect = function(expid) {
-		var slot;
-		if (current.outfitting_focus === 'module') {
-			slot = current.pickerSlot;
-		} else if (current.outfitting_focus === 'slot') {
-			slot = current.fit.getSlot(current.group, current.slot);
-		}
+		var slot = getUIOutfittingSlot();
+		if (!slot)
+			return false;
 		if (!slot.setExpeffectID(expid))
 			return false;
 		if (current.outfitting_focus === 'slot') {
@@ -5545,12 +5617,9 @@ window.edshipyard = new (function() {
 	
 	
 	var setUIDetailsAttrText = function(attr, text) {
-		var slot;
-		if (current.outfitting_focus === 'module') {
-			slot = current.pickerSlot;
-		} else if (current.outfitting_focus === 'slot') {
-			slot = current.fit.getSlot(current.group, current.slot);
-		}
+		var slot = getUIOutfittingSlot();
+		if (!slot)
+			return false;
 		var module = slot.getModule();
 		var attribute = eddb.attribute[attr];
 		if (!module || !attribute)
@@ -5597,6 +5666,38 @@ window.edshipyard = new (function() {
 		document.forms.stats.elements.stats_cur_cargo.value = value;
 		updateUIStats();
 	}; // setStatsCurCargo()
+	
+	
+	var updateUIStatsPanels = function(enabledPanel) {
+		var space = document.getElementById('outfitting_stats_wrapper').clientWidth * 0.95;
+		var next = 0;
+		var panels = [];
+		var panelOrder = {};
+		var panelWidth = {};
+		var input, panel;
+		for (var p = 1;  (input = document.getElementById('toggle_stats_' + p)) && (panel = document.getElementById('outfitting_stats_' + p));  p++) {
+			if (input.checked) {
+				panels.push(p);
+				panelOrder[p] = parseInt(input.value);
+				panelWidth[p] = panel.offsetWidth;
+				next = max(next, panelOrder[p]);
+			}
+			space -= panel.offsetWidth;
+		}
+		if (enabledPanel) {
+			next++;
+			panelOrder[enabledPanel] = next;
+			document.getElementById('toggle_stats_' + enabledPanel).value = next;
+		}
+		if (space < 0) {
+			panels.sort(function(p1,p2) { return panelOrder[p2] - panelOrder[p1]; });
+			while (space < 0 && panels.length > 1) {
+				var p = panels.pop();
+				document.getElementById('toggle_stats_' + p).checked = false;
+				space += panelWidth[p];
+			}
+		}
+	}; // updateUIStatsPanels()
 	
 	
 	var updateUIStats = function() {
@@ -6067,6 +6168,23 @@ window.edshipyard = new (function() {
 	*/
 	
 	
+	var onWindowResize = function(e) {
+		if (current.resize)
+			clearTimeout(current.resize);
+		current.resize = setTimeout(onWindowResizeTimeout, TIMEOUT_RESIZE);
+	}; // onWindowResize()
+	
+	
+	var onWindowResizeTimeout = function() {
+		if (current.resize) {
+			clearTimeout(current.resize);
+			current.resize = null;
+		}
+		updateUILayout();
+		updateUIStatsPanels();
+	}; // onWindowResizeTimeout()
+	
+	
 	var onDocumentClickFocus = function(e) {
 		if (!current.popup.element)
 			return;
@@ -6180,6 +6298,13 @@ window.edshipyard = new (function() {
 	}; // onUIPageHeaderChange()
 	
 	
+	var onUIContextMenu = function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		return false;
+	}; // onUIContextMenu()
+	
+	
 	var onUIShipyardTabChange = function(e) {
 		if (e.target.name === 'tab' && e.target.checked) {
 			setUIShipyardTab(e.target.value);
@@ -6238,12 +6363,11 @@ window.edshipyard = new (function() {
 	
 	var onUIModulePickerChange = function(e) {
 		if (e.target.name === 'module' && e.target.checked) {
-			current.outfitting_focus = 'module';
-			document.getElementById('page_body_outfitting').className = current.outfitting_focus;
 			var tokens = e.target.value.split('.');
-			var modid = tokens[0];
+			var modid = tokens[0] | 0;
 			var namehash = tokens[1];
-			setUIPickerModule(modid, namehash);
+			setUIOutfittingFocus('module');
+			setUIPickerModule(modid, namehash, false);
 			updateUIDetailsStoredModules();
 			updateUIDetailsStoredModuleControls(true, namehash);
 			updateUIDetailsModule();
@@ -6259,17 +6383,42 @@ window.edshipyard = new (function() {
 		if (!el) {
 		} else if (el.tagName === 'LABEL') {
 			var inputs = el.getElementsByTagName('INPUT');
-			if (inputs.length > 0 && inputs[0].checked && inputs[0].name === 'module' && current.outfitting_focus !== 'module') {
-				current.outfitting_focus = 'module';
-				document.getElementById('page_body_outfitting').className = current.outfitting_focus;
-				var tokens = inputs[0].value.split('.');
+			if (inputs.length > 0 && inputs[0].name === 'module') {
+				var modtag = inputs[0].value;
+				var tokens = modtag.split('.');
+				var modid = tokens[0] | 0;
 				var namehash = tokens[1];
-				updateUIDetailsStoredModules();
-				updateUIDetailsStoredModuleControls(true, namehash);
-				updateUIDetailsModule();
+				if (!current.clickPicker[modtag]) { // single
+					current.clickPicker[modtag] = setTimeout(onUIModulePickerClickTimeout, TIMEOUT_DBLCLICK, modtag);
+					if (inputs[0].checked && current.outfitting_focus !== 'module') {
+						setUIOutfittingFocus('module');
+						updateUIDetailsStoredModules();
+						updateUIDetailsStoredModuleControls(true, namehash);
+						updateUIDetailsModule();
+					}
+				} else { // double
+					clearTimeout(current.clickPicker[modtag]);
+					delete current.clickPicker[modtag];
+					setCurrentFitSlotModule(current.group, current.slot, modid, namehash);
+					setUIOutfittingPanels('slots',  'modules', 'slots');
+				}
 			}
 		}
 	}; // onUIModulePickerClick()
+	
+	
+	var onUIModulePickerClickTimeout = function(modtag) {
+		if (current.clickPicker[modtag]) {
+			clearTimeout(current.clickPicker[modtag]);
+			delete current.clickPicker[modtag];
+			var tokens = modtag.split('.');
+			var modid = tokens[0] | 0;
+			var namehash = tokens[1];
+			if (modid || namehash) {
+				setUIOutfittingPanels('details');
+			}
+		}
+	}; // onUIModulePickerClickTimeout()
 	
 	
 	var onUIModulePickerDblClick = function(e) {
@@ -6279,13 +6428,8 @@ window.edshipyard = new (function() {
 		}
 		if (!el) {
 		} else if (el.tagName === 'LABEL') {
-			var inputs = el.getElementsByTagName('INPUT');
-			if (inputs.length > 0 && inputs[0].name === 'module') {
-				var tokens = inputs[0].value.split('.');
-				var modid = tokens[0];
-				var namehash = tokens[1];
-				setCurrentFitSlotModule(current.group, current.slot, modid, namehash);
-			}
+			e.preventDefault();
+			return false;
 		}
 	}; // onUIModulePickerDblClick()
 	
@@ -6299,14 +6443,31 @@ window.edshipyard = new (function() {
 		} else if (el.tagName === 'LABEL') {
 			var inputs = el.getElementsByTagName('INPUT');
 			if (inputs.length > 0 && inputs[0].name === 'module') {
+				e.preventDefault();
+				e.stopPropagation();
 				var modtag = inputs[0].value;
+				var tokens = modtag.split('.');
+				var modid = tokens[0] | 0;
+				var namehash = tokens[1];
 				if (current.touchPicker[modtag]) {
 					clearTimeout(current.touchPicker[modtag]);
 					delete current.touchPicker[modtag];
+					if (e.type === 'touchend' && (modid || namehash)) {
+						setUIOutfittingPanels('details');
+					}
 				}
 				if (e.type === 'touchstart') {
 					current.touchPicker[modtag] = setTimeout(onUIModulePickerTouchTimeout, TIMEOUT_LONGPRESS, modtag);
+					if (!inputs[0].checked || current.outfitting_focus !== 'module') {
+						setUIOutfittingFocus('module');
+						if (!inputs[0].checked)
+							setUIPickerModule(modid, namehash, false);
+						updateUIDetailsStoredModules();
+						updateUIDetailsStoredModuleControls(true, namehash);
+						updateUIDetailsModule();
+					}
 				}
+				return false;
 			}
 		}
 	}; // onUIModulePickerTouch()
@@ -6317,18 +6478,40 @@ window.edshipyard = new (function() {
 			clearTimeout(current.touchPicker[modtag]);
 			delete current.touchPicker[modtag];
 			var tokens = modtag.split('.');
-			var modid = tokens[0];
+			var modid = tokens[0] | 0;
 			var namehash = tokens[1];
 			setCurrentFitSlotModule(current.group, current.slot, modid, namehash);
+			setUIOutfittingPanels('slots',  'modules', 'slots');
 		}
 	}; // onUIModulePickerTouchTimeout()
+	
+	
+	var onUIModuleButtonsClick = function(e) {
+		var el = e.target;
+		while (el && el.tagName !== 'BUTTON')
+			el = el.parentNode;
+		if (!el || el.disabled) {
+		} else if (el.name === 'back') {
+			if (current.outfitting_focus === 'slot') {
+				setUIOutfittingPanels('details',  'modules', 'slots');
+			} else if (current.outfitting_focus === 'module') {
+				setUIOutfittingPanels('slots',  'modules', 'slots');
+			}
+		} else if (el.name === 'details') {
+			if (current.outfitting_focus === 'slot') {
+				setUIOutfittingPanels('details',  'slots', 'details');
+			} else if (current.outfitting_focus === 'module') {
+				setUIOutfittingPanels('details',  'modules', 'details');
+			}
+		}
+	}; // onUIModuleButtonsClick()
 	
 	
 	var onUIModulePickerDragStart = function(e) {
 		if (e.target && e.target.tagName === 'LABEL') {
 			var inputs = e.target.getElementsByTagName('INPUT');
 			var tokens = inputs[0].value.split('.');
-			var modid = tokens[0];
+			var modid = tokens[0] | 0;
 			var namehash = tokens[1];
 			// TODO: ghost bug in chrome
 			e.dataTransfer.setData('edsy/mid', modid | 0);
@@ -6340,7 +6523,7 @@ window.edshipyard = new (function() {
 	
 	
 	var onUIModulePickerDragEnd = function(e) {
-		setCurrentDrag(0);
+		setCurrentDrag();
 	}; // onUIModulePickerDragEnd()
 	
 	
@@ -6381,8 +6564,8 @@ window.edshipyard = new (function() {
 		if (e.target.name === 'outfitting_fit_stored') {
 			setCurrentFitNameHash(e.target.value);
 		} else {
-			updateUIFitLayout();
 			updateUIFitColumns();
+			updateUILayout();
 		}
 	}; // onUIFitSettingsChange()
 	
@@ -6443,6 +6626,31 @@ window.edshipyard = new (function() {
 	}; // onUIFitSettingsClick()
 	
 	
+	var onUIFitSlotsMouseDown = function(e) {
+		if (e.button != 2 && e.which != 3)
+			return true;
+		var el = e.target;
+		while (el && el.tagName !== 'LABEL' && el.tagName !== 'INPUT') {
+			el = el.parentNode;
+		}
+		if (!el) {
+		} else if (el.tagName === 'LABEL') {
+			var inputs = el.getElementsByTagName('INPUT');
+			if (inputs.length > 0 && inputs[0].name === 'slot') {
+				e.preventDefault();
+				var slottag =inputs[0].value; 
+				var tokens = slottag.split('_');
+				var slotgroup = tokens[0];
+				var slotnum = tokens[1];
+				if (!setCurrentFitSlotModule(slotgroup, slotnum, 0))
+					setCurrentSlot(slotgroup, slotnum);
+				return false;
+			}
+		}
+		return true;
+	}; // onUIFitSlotsMouseDown()
+	
+	
 	var onUIFitSlotsChange = function(e) {
 		if (e.target.name === 'slot') {
 			var tokens = e.target.value.split('_');
@@ -6476,11 +6684,25 @@ window.edshipyard = new (function() {
 		if (!el) {
 		} else if (el.tagName === 'LABEL') {
 			var inputs = el.getElementsByTagName('INPUT');
-			if (inputs.length > 0 && inputs[0].checked && inputs[0].name === 'slot') {
-				var tokens = inputs[0].value.split('_');
-				var slotgroup = tokens[0];
-				var slotnum = tokens[1];
-				setCurrentSlot(slotgroup, slotnum);
+			if (inputs.length > 0 && inputs[0].name === 'slot') {
+				var slottag = inputs[0].value;
+				if (!current.clickSlots[slottag]) { // single
+					current.clickSlots[slottag] = setTimeout(onUIFitSlotsClickTimeout, TIMEOUT_DBLCLICK, slottag);
+					if (inputs[0].checked && current.outfitting_focus !== 'slot') {
+						var tokens = slottag.split('_');
+						var slotgroup = tokens[0];
+						var slotnum = tokens[1];
+						setCurrentSlot(slotgroup, slotnum);
+					}
+				} else { // double
+					clearTimeout(current.clickSlots[slottag]);
+					delete current.clickSlots[slottag];
+					setUIOutfittingFocus('module');
+					updateUIDetailsStoredModules();
+					updateUIDetailsStoredModuleControls(true);
+					updateUIDetailsModule();
+					setUIOutfittingPanels('modules',  'modules', 'slots');
+				}
 			}
 		} else if (el.tagName === 'BUTTON') {
 			e.preventDefault();
@@ -6499,6 +6721,17 @@ window.edshipyard = new (function() {
 			}
 		}
 	}; // onUIFitSlotsClick()
+	
+	
+	var onUIFitSlotsClickTimeout = function(slottag) {
+		if (current.clickSlots[slottag]) {
+			clearTimeout(current.clickSlots[slottag]);
+			delete current.clickSlots[slottag];
+			if (getUIOutfittingSlot().getModuleID()) {
+				setUIOutfittingPanels('details');
+			}
+		}
+	}; // onUIFitSlotsClickTimeout()
 	
 	
 	var onUIPowerDistClick = function(e) {
@@ -6526,17 +6759,8 @@ window.edshipyard = new (function() {
 	
 	
 	var onUIFitSlotsDblClick = function(e) {
-		var el = e.target;
-		while (el && el.tagName !== 'LABEL' && el.tagName !== 'INPUT') {
-			el = el.parentNode;
-		}
-		if (!el) {
-		} else if (el.tagName === 'LABEL') {
-			var inputs = el.getElementsByTagName('INPUT');
-			if (inputs.length > 0 && inputs[0].name === 'slot') {
-				setCurrentFitSlotModule(current.group, current.slot, 0);
-			}
-		}
+		e.preventDefault();
+		return false;
 	}; // onUIFitSlotsDblClick()
 	
 	
@@ -6549,14 +6773,26 @@ window.edshipyard = new (function() {
 		} else if (el.tagName === 'LABEL') {
 			var inputs = el.getElementsByTagName('INPUT');
 			if (inputs.length > 0 && inputs[0].name === 'slot') {
+				e.preventDefault();
+				e.stopPropagation();
 				var slottag = inputs[0].value;
 				if (current.touchSlots[slottag]) {
 					clearTimeout(current.touchSlots[slottag]);
 					delete current.touchSlots[slottag];
+					if (e.type === 'touchend' && getUIOutfittingSlot().getModuleID()) {
+						setUIOutfittingPanels('details');
+					}
 				}
 				if (e.type === 'touchstart') {
 					current.touchSlots[slottag] = setTimeout(onUIFitSlotsTouchTimeout, TIMEOUT_LONGPRESS, slottag);
+					if (!inputs[0].checked || current.outfitting_focus !== 'slot') {
+						var tokens = slottag.split('_');
+						var slotgroup = tokens[0];
+						var slotnum = tokens[1];
+						setCurrentSlot(slotgroup, slotnum);
+					}
 				}
+				return false;
 			}
 		}
 	}; // onUIFitSlotsTouch()
@@ -6566,10 +6802,17 @@ window.edshipyard = new (function() {
 		if (current.touchSlots[slottag]) {
 			clearTimeout(current.touchSlots[slottag]);
 			delete current.touchSlots[slottag];
+			/* TODO delete, should have already happened in touchstart
 			var tokens = slottag.split('_');
 			var slotgroup = tokens[0];
 			var slotnum = tokens[1];
-			setCurrentFitSlotModule(slotgroup, slotnum, 0);
+			setCurrentSlot(slotgroup, slotnum);
+			*/
+			setUIOutfittingFocus('module');
+			updateUIDetailsStoredModules();
+			updateUIDetailsStoredModuleControls(true);
+			updateUIDetailsModule();
+			setUIOutfittingPanels('modules',  'modules', 'slots');
 		}
 	}; // onUIFitSlotsTouchTimeout()
 	
@@ -6596,7 +6839,7 @@ window.edshipyard = new (function() {
 	
 	
 	var onUIFitSlotsDragEnd = function(e) {
-		setCurrentDrag(0);
+		setCurrentDrag();
 	}; // onUIFitSlotsDragEnd()
 	
 	
@@ -6626,7 +6869,7 @@ window.edshipyard = new (function() {
 			tr = tr.parentNode;
 		if (!tr)
 			return;
-		var modid = e.dataTransfer.getData('edsy/mid');
+		var modid = parseInt(e.dataTransfer.getData('edsy/mid'));
 		var namehash = e.dataTransfer.getData('edsy/namehash');
 		var group1 = e.dataTransfer.getData('edsy/group');
 		var slot1 = e.dataTransfer.getData('edsy/slot');
@@ -6641,7 +6884,7 @@ window.edshipyard = new (function() {
 			} else {
 				swapCurrentFitSlotModules(group1, slot1, group2, slot2);
 			}
-		} else if (modid) {
+		} else {
 			e.preventDefault();
 			e.stopPropagation();
 			setCurrentFitSlotModule(group2, slot2, modid, namehash);
@@ -6711,6 +6954,40 @@ window.edshipyard = new (function() {
 	}; // onUIDetailsModuleChange()
 	
 	
+	var onUIDetailsButtonsClick = function(e) {
+		var el = e.target;
+		while (el && el.tagName !== 'BUTTON')
+			el = el.parentNode;
+		if (!el || el.disabled) {
+		} else if (el.name === 'back') {
+			if (current.outfitting_focus === 'slot') {
+				setUIOutfittingPanels('slots',  'modules', 'slots');
+			} else if (current.outfitting_focus === 'module') {
+				setUIOutfittingPanels('modules',  'modules', 'slots');
+			}
+		} else if (el.name === 'replace') {
+			if (current.outfitting_focus === 'slot') {
+				setUIOutfittingFocus('module');
+				updateUIDetailsStoredModules();
+				updateUIDetailsStoredModuleControls(true);
+				updateUIDetailsModule();
+				setUIOutfittingPanels('modules',  'modules', 'slots');
+			} else if (current.outfitting_focus === 'module') {
+				setCurrentFitSlotModule(current.group, current.slot, null, null, current.pickerSlot.getStoredHash());
+				setUIOutfittingPanels('slots',  'slots', 'details');
+			}
+		}
+	}; // onUIDetailsButtonsClick()
+	
+	
+	var onUIBottomChange = function(e) {
+		var tokens = e.target.id.split('_'); // toggle_stats_(#)
+		if (tokens[0] === 'toggle' && tokens[1] === 'stats' && e.target.checked) {
+			updateUIStatsPanels(tokens[2]);
+		}
+	}; // onUIBottomChange()
+	
+	
 	var onUIStatsInputWheel = function(e) {
 		e.preventDefault();
 		var mod;
@@ -6736,6 +7013,7 @@ window.edshipyard = new (function() {
 	
 	
 	var onUIStatsInputChange = function(e) {
+		e.stopPropagation();
 		switch (e.target.name) {
 		case 'stats_cur_fuel':   setStatsCurFuel(parseFloat(e.target.value) || 0);   break;
 		case 'stats_cur_cargo':  setStatsCurCargo(parseFloat(e.target.value) || 0);  break;
@@ -6843,7 +7121,7 @@ window.edshipyard = new (function() {
 					"<h1>A new version is available!</h1><h3>Click Okay to update, or force-refresh in your browser (ctrl+F5, Apple+r, Command+r, etc)</h3>",
 					"",
 					null, true,
-					function() { console.log('reloading');window.location.reload(true); }, null
+					function() { window.location.reload(true); }, null
 			);
 			return false;
 		}
@@ -6876,10 +7154,10 @@ window.edshipyard = new (function() {
 		setUIPageTab('shipyard');
 		setUIShipyardTab('ships');
 		setUIModuleTab('SLOT');
-		updateUIFitLayout();
 		updateUIFitColumns();
 		
 		// register event handlers
+		window.addEventListener('resize', onWindowResize);
 		if (cache.feature.history)
 			window.addEventListener('hashchange', onWindowHashChange);
 		document.body.addEventListener('focus', onBodyFocus);
@@ -6891,9 +7169,11 @@ window.edshipyard = new (function() {
 		for (var f = 0;  f < document.forms.length;  f++)
 			document.forms[f].addEventListener('submit', onFormSubmit);
 		document.getElementById('page_header').addEventListener('change', onUIPageHeaderChange);
+		document.getElementById('page_body_shipyard').addEventListener('contextmenu', onUIContextMenu);
 		document.getElementById('shipyard_tabs').addEventListener('change', onUIShipyardTabChange);
 		document.getElementById('shipyard_ships_container').addEventListener('click', onUIShipyardShipsClick);
 		document.getElementById('shipyard_storedbuilds_container').addEventListener('click', onUIShipyardStoredBuildsClick);
+		document.getElementById('page_body_outfitting').addEventListener('contextmenu', onUIContextMenu);
 		document.getElementById('outfitting_modules_tabs').addEventListener('change', onUIModuleTabChange);
 		document.getElementById('outfitting_modules_container').addEventListener('change', onUIModulePickerChange);
 		document.getElementById('outfitting_modules_container').addEventListener('click', onUIModulePickerClick);
@@ -6904,6 +7184,7 @@ window.edshipyard = new (function() {
 		document.getElementById('outfitting_modules_container').addEventListener('dragstart', onUIModulePickerDragStart);
 		document.getElementById('outfitting_modules_container').addEventListener('dragend', onUIModulePickerDragEnd);
 		document.getElementById('outfitting_modules_container').addEventListener('drop', onUIModulePickerDrop);
+		document.getElementById('outfitting_modules_buttons').addEventListener('click', onUIModuleButtonsClick);
 		if (cache.feature.storage) {
 			readStoredBuilds();
 			updateUIShipyardStoredBuilds();
@@ -6913,6 +7194,7 @@ window.edshipyard = new (function() {
 		}
 		document.getElementById('outfitting_fit_settings').addEventListener('change', onUIFitSettingsChange);
 		document.getElementById('outfitting_fit_settings').addEventListener('click', onUIFitSettingsClick);
+		document.getElementById('outfitting_fit_slots').addEventListener('mousedown', onUIFitSlotsMouseDown);
 		document.getElementById('outfitting_fit_slots').addEventListener('change', onUIFitSlotsChange);
 		document.getElementById('outfitting_fit_slots').addEventListener('click', onUIFitSlotsClick);
 		document.getElementById('outfitting_fit_slots').addEventListener('dblclick', onUIFitSlotsDblClick);
@@ -6925,6 +7207,8 @@ window.edshipyard = new (function() {
 		document.getElementById('outfitting_details_settings').addEventListener('change', onUIDetailsSettingsChange);
 		document.getElementById('outfitting_details_settings').addEventListener('click', onUIDetailsSettingsClick);
 		document.getElementById('outfitting_details_module').addEventListener('change', onUIDetailsModuleChange);
+		document.getElementById('outfitting_details_buttons').addEventListener('click', onUIDetailsButtonsClick);
+		document.getElementById('outfitting_bottom').addEventListener('change', onUIBottomChange);
 		document.forms.stats.elements.stats_cur_fuel.addEventListener('wheel', onUIStatsInputWheel);
 		document.forms.stats.elements.stats_cur_fuel.addEventListener('change', onUIStatsInputChange);
 		document.forms.stats.elements.stats_cur_cargo.addEventListener('wheel', onUIStatsInputWheel);
@@ -6941,6 +7225,11 @@ window.edshipyard = new (function() {
 			current.hashlock = false;
 		}
 		updateUIOptions();
+		setUIOutfittingPanels('slots',  'slots', 'details');
+		
+		// after all the current content is finished rendering, check the layout
+		setTimeout(updateUILayout, 1);
+		setTimeout(updateUIStatsPanels, 1);
 	}; // onDOMContentLoaded()
 	
 	window.addEventListener('DOMContentLoaded', onDOMContentLoaded);

@@ -9,7 +9,7 @@ The Elite: Dangerous game logic and data in this file remains the property of Fr
 and is used here as authorized by Frontier Customer Services (https://forums.frontier.co.uk/showthread.php?t=5349).
 */
 
-:root { --edsy-versions-css:34016,34016,34016,34016; /* HTML,CSS,DB,JS */ }
+:root { --edsy-versions-css:34117,34117,34117,34117; /* HTML,CSS,DB,JS */ }
 
 @font-face {
 	font-family: 'Euro Caps';
@@ -281,7 +281,8 @@ TEXTAREA::-webkit-scrollbar-thumb {
 	cursor: pointer;
 }
 
-.togglebutton INPUT {
+.togglebutton INPUT,
+INPUT.toggleinput {
 	position: absolute;
 	margin: -1px;
 	border: 0;
@@ -407,7 +408,7 @@ TEXTAREA::-webkit-scrollbar-thumb {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-	padding: 0.5em;
+	padding: 0.25em;
 }
 
 
@@ -426,6 +427,7 @@ TEXTAREA::-webkit-scrollbar-thumb {
 	min-width: 0;
 	display: flex;
 	flex-direction: column;
+	margin: 0.25em;
 }
 
 #shipyard_tabs {
@@ -463,9 +465,6 @@ TEXTAREA::-webkit-scrollbar-thumb {
 #outfitting_bottom {
 	flex: 0 0 auto;
 	min-width: 0;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
 }
 
 #outfitting_modules {
@@ -475,6 +474,7 @@ TEXTAREA::-webkit-scrollbar-thumb {
 	max-width: 26em;
 	display: flex;
 	flex-direction: column;
+	margin: 0.25em;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
@@ -485,11 +485,11 @@ TEXTAREA::-webkit-scrollbar-thumb {
 #outfitting_fit {
 	flex: 0 2 70em;
 	width: 50%;
-	min-width: 28em;
+	min-width: 25em;
 	max-width: 70em;
 	display: flex;
 	flex-direction: column;
-	margin: 0 0.5em;
+	margin: 0.25em;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
@@ -504,22 +504,16 @@ TEXTAREA::-webkit-scrollbar-thumb {
 	max-width: 26em;
 	display: flex;
 	flex-direction: column;
+	margin: 0.25em;
 }
 
 #outfitting_stats {
-	flex: 0 1 auto;
-	min-width: 0;
-	max-width: auto;
-	margin-top: 0.5em;
-	border: 2px solid var(--color-orange-5);
-	background-color: black;
-	overflow-x: auto;
-}
-#outfitting_stats > FORM {
 	display: flex;
 	flex-direction: row;
+	justify-content: space-between;
+	min-width: 0;
+	max-width: auto;
 }
-
 
 #page_body_options {
 	flex: 0 1 auto;
@@ -527,6 +521,7 @@ TEXTAREA::-webkit-scrollbar-thumb {
 	max-width: 60em;
 	display: flex;
 	flex-direction: column;
+	margin: 0.25em;
 }
 
 #options_container {
@@ -565,14 +560,13 @@ TEXTAREA::-webkit-scrollbar-thumb {
 #page_header {
 	display: flex;
 	flex-direction: row;
+	justify-content: space-between;
 	align-items: center;
-	justify-content: flex-start;
 	background-color: var(--color-red-2);
 }
 
 #header_title {
-	flex: 0 0 auto;
-	display: inline-block;
+	flex: 1 0 10px;
 	padding: 0 0.5em;
 	font-family: var(--font-text);
 	font-size: 112.5%;
@@ -584,28 +578,18 @@ TEXTAREA::-webkit-scrollbar-thumb {
 	text-decoration: none;
 }
 
-#header_temp {
-	flex: 1 1 10px;
-	display: inline-block;
-	position: relative;
-	align-self: flex-start;
-}
-
-#header_temp A {
-	position: absolute;
-	border-radius: 1em;
-	padding: 0 0.5em;
-	background-color: var(--color-grey-1);
-}
-
 #page_tabs {
 	flex: 0 0 auto;
 	align-self: flex-end;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: flex-end;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-	cursor: arrow;
+	white-space: nowrap;
 }
 
 #page_tabs .togglebutton INPUT + DIV {
@@ -620,26 +604,29 @@ TEXTAREA::-webkit-scrollbar-thumb {
 	color: black;
 }
 
-#page_tabs .togglebutton INPUT + DIV .iconsvg:last-of-type {
-	margin-right: 0.25em;
+#page_tabs .togglebutton INPUT + DIV SPAN {
+	margin-left: 0.25em;
 }
 
 #header_version {
-	flex: 1 1 10px;
-	display: inline-block;
+	flex: 1 0 10px;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap-reverse;
+	justify-content: flex-end;
+	align-items: center;
+	align-content: space-between;
 	padding: 0 0.5em;
-	text-align: right;
 	font-family: var(--font-text);
 	font-size: 75%;
-	text-align: right;
 }
 
-#header_donate {
-	flex: 0 0 auto;
-	display: inline-block;
-	align-self: flex-start;
-	margin: 1px;
-	line-height: 0;
+#header_version ABBR {
+	border: none;
+}
+
+#header_version IMG {
+	margin-left: 0.5em;
 }
 
 
@@ -673,9 +660,9 @@ TEXTAREA::-webkit-scrollbar-thumb {
 #shipyard_tabs .togglebutton INPUT + DIV {
 	border: 1px solid var(--color-orange-3);
 	border-bottom: none;
-	padding: 0 0.2em;
+	padding: 0 0.5em;
 	background-color: var(--color-orange-1);
-	color: var(--color-orange-3);
+	color: var(--color-orange-4);
 }
 #shipyard_tabs .togglebutton INPUT:checked + DIV {
 	border-color: var(--color-orange-5);
@@ -694,12 +681,13 @@ TEXTAREA::-webkit-scrollbar-thumb {
 }
 
 #shipyard_container {
-	padding: 0.5em;
+	padding: 0;
 }
 
 #shipyard_container TABLE {
 	border-collapse: separate;
 	border-spacing: 0;
+	border: 0.5em solid black;
 }
 
 #shipyard_container TH,
@@ -717,20 +705,37 @@ TEXTAREA::-webkit-scrollbar-thumb {
 	cursor: arrow;
 }
 #shipyard_container THEAD TR:not(.colgroup) TH {
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+	z-index: 1;
 	border-top: 2px solid var(--color-orange-3);
+	background-color: black;
+}
+#shipyard_container THEAD TR:not(.colgroup) TH:first-child {
+	border-right: 2px solid var(--color-orange-3);
+	left: 0;
+	z-index: 2;
 }
 #shipyard_container THEAD TR:last-child TH {
 	border-bottom: 2px solid var(--color-orange-3);
 }
 #shipyard_container THEAD TR.colgroup TH.colgroup {
-	border: 0 solid var(--color-orange-3);
-	border-width: 2px 0 0 2px;
 	text-align: center;
 }
-#shipyard_container THEAD TR.colgroup TH.colgroup + TH {
+#shipyard_container THEAD TH.colgroup {
+	border: 0 solid var(--color-orange-3);
+	border-width: 2px 0 0 2px;
+}
+#shipyard_container TBODY TD.colgroup.first {
 	border-left: 2px solid var(--color-orange-3);
 }
-#shipyard_container THEAD TR.colgroup TH.colgroup:last-child {
+#shipyard_container THEAD TH.colgroup + TH,
+#shipyard_container TBODY TD.colgroup + TD:not(.colgroup) {
+	border-left: 2px solid var(--color-orange-3);
+}
+#shipyard_container THEAD TH.colgroup:last-child,
+#shipyard_container TBODY TD.colgroup:last-child {
 	border-right: 2px solid var(--color-orange-3);
 }
 /* TODO sortable?
@@ -751,10 +756,19 @@ TEXTAREA::-webkit-scrollbar-thumb {
 	border-color: var(--color-orange-5);
 }
 
-#shipyard_container TBODY TR:nth-child(even) {
+#shipyard_container TBODY TD:first-child {
+	position: -webkit-sticky;
+	position: sticky;
+	left: 0;
+	z-index: 1;
+	max-width: 15em;
+	border-right: 2px solid var(--color-orange-3);
+	background-color: black;
+}
+#shipyard_container TBODY TR:nth-child(even) TD {
 	background-color: var(--color-orange-1);
 }
-#shipyard_container TBODY TR:hover {
+#shipyard_container TBODY TR:hover TD {
 	background-color: var(--color-orange-2);
 }
 
@@ -776,10 +790,14 @@ TEXTAREA::-webkit-scrollbar-thumb {
 }
 #shipyard_container BUTTON.label {
 	width: 100%;
+	max-width: 100%;
 	color: var(--color-yellow-5);
 	text-align: left;
 	font-family: var(--font-text);
 	font-size: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 #shipyard_container BUTTON:active {
 	background-color: white;
@@ -820,7 +838,7 @@ TEXTAREA::-webkit-scrollbar-thumb {
 	border-bottom: none;
 	padding: 0 0.2em;
 	background-color: var(--color-orange-1);
-	color: var(--color-orange-3);
+	color: var(--color-orange-4);
 	font-family: var(--font-caps);
 	font-size: 87.5%;
 }
@@ -849,6 +867,34 @@ TEXTAREA::-webkit-scrollbar-thumb {
 	border-color: var(--color-blue-5);
 }
 
+
+#outfitting_modules_buttons {
+	flex: 0 0 auto;
+	min-width: 0;
+	display: flex;
+	flex-direction: row;
+	margin: 0 -0.25em;
+}
+
+#outfitting_modules_buttons BUTTON {
+	flex: 1 0 10px;
+	margin: 0.25em 0.25em 0 0.25em;
+	border: none;
+	background-color: var(--color-orange-1);
+	color: var(--color-orange-5);
+	font-family: var(--font-caps);
+	font-size: 100%;
+}
+#outfitting_modules_buttons BUTTON:active {
+	background-color: white;
+	color: black;
+}
+#outfitting_modules_buttons BUTTON:disabled {
+	background-color: var(--color-grey-1);
+	color: var(--color-grey-5);
+}
+
+
 #outfitting_modules_picker {
 	flex: 1 1 auto;
 	width: 10px;
@@ -872,7 +918,7 @@ TEXTAREA::-webkit-scrollbar-thumb {
 
 #outfitting_modules.STORED .group:not(.stored),
 #outfitting_modules.STORED .mtype:not(.stored),
-#outfitting_modules.STORED .row:not(.stored),
+#outfitting_modules.STORED .row:not(.stored):not(.empty),
 #outfitting_modules.hardpoint .group:not(.hardpoint),
 #outfitting_modules.hardpoint .group > HEADER,
 #outfitting_modules.hardpoint .row.stored,
@@ -883,6 +929,7 @@ TEXTAREA::-webkit-scrollbar-thumb {
 #outfitting_modules.component .group > HEADER,
 #outfitting_modules.component .mtype.internal:not(.cft),
 #outfitting_modules.component .row.stored,
+#outfitting_modules.component .row.empty,
 #outfitting_modules.military .group:not(.internal),
 #outfitting_modules.military .group > HEADER,
 #outfitting_modules.military .mtype:not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb),
@@ -901,6 +948,7 @@ TEXTAREA::-webkit-scrollbar-thumb {
 #outfitting_modules.SLOT #outfitting_modules_picker.hardpoint .group:not(.hardpoint),
 #outfitting_modules.SLOT #outfitting_modules_picker.utility .group:not(.utility),
 #outfitting_modules.SLOT #outfitting_modules_picker.component .group:not(.component):not(.internal),
+#outfitting_modules.SLOT #outfitting_modules_picker.component .row.empty,
 #outfitting_modules.SLOT #outfitting_modules_picker.component_BH .mtype:not(.cbh),
 #outfitting_modules.SLOT #outfitting_modules_picker.component_PP .mtype:not(.cpp),
 #outfitting_modules.SLOT #outfitting_modules_picker.component_TH .mtype:not(.ct),
@@ -956,6 +1004,9 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	font-family: var(--font-text);
 	font-size: 87.5%;
 }
+#outfitting_modules_picker .row.empty {
+	margin: 0.5em;
+}
 
 #outfitting_modules_picker .togglebutton {
 	flex: 1 0 10px;
@@ -977,10 +1028,14 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_modules_picker .togglebutton.fullname INPUT + DIV {
 	text-align: left;
 }
+#outfitting_modules_picker .togglebutton INPUT + DIV:empty::after {
+	display: inline;
+	content: '(empty)';
+}
 #outfitting_modules_picker .togglebutton INPUT:checked + DIV {
 	border-color: var(--color-orange-5);
 }
-#page_body_outfitting.module #outfitting_modules_picker .togglebutton INPUT:checked + DIV {
+#page_body_outfitting.focusmodule #outfitting_modules_picker .togglebutton INPUT:checked + DIV {
 	background-color: var(--color-orange-5);
 	color: black;
 }
@@ -1008,7 +1063,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	float: right;
 	margin: 3px 0;
 }
-#page_body_outfitting.module #outfitting_modules_picker .togglebutton INPUT:checked + DIV .iconsvg.tinted,
+#page_body_outfitting.focusmodule #outfitting_modules_picker .togglebutton INPUT:checked + DIV .iconsvg.tinted,
 #outfitting_modules_picker .togglebutton INPUT:active + DIV .iconsvg.tinted {
 	color: inherit;
 }
@@ -1038,16 +1093,16 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_modules_picker.reserved .mtype:not(.reserved) .togglebutton INPUT:checked + DIV {
 	border-color: var(--color-red-5);
 }
-#page_body_outfitting.module #outfitting_modules_picker .togglebutton INPUT.notallowed:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.size1 .sized:not(.fitsize1) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.size2 .sized:not(.fitsize2) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.size3 .sized:not(.fitsize3) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.size4 .sized:not(.fitsize4) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.size5 .sized:not(.fitsize5) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.size6 .sized:not(.fitsize6) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.size7 .sized:not(.fitsize7) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.size8 .sized:not(.fitsize8) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.reserved .mtype:not(.reserved) .togglebutton INPUT:checked + DIV {
+#page_body_outfitting.focusmodule #outfitting_modules_picker .togglebutton INPUT.notallowed:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.size1 .sized:not(.fitsize1) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.size2 .sized:not(.fitsize2) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.size3 .sized:not(.fitsize3) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.size4 .sized:not(.fitsize4) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.size5 .sized:not(.fitsize5) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.size6 .sized:not(.fitsize6) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.size7 .sized:not(.fitsize7) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.size8 .sized:not(.fitsize8) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.reserved .mtype:not(.reserved) .togglebutton INPUT:checked + DIV {
 	background-color: var(--color-red-5);
 	color: black;
 }
@@ -1099,21 +1154,21 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_modules_picker.internal .group:not(.internal) .togglebutton INPUT:checked + DIV {
 	border-color: var(--color-grey-5);
 }
-#page_body_outfitting.module #outfitting_modules_picker.hardpoint .group:not(.hardpoint) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.utility .group:not(.utility) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.component:not(.component_FT) .group:not(.component) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.component_BH .mtype:not(.cbh) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.component_PP .mtype:not(.cpp) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.component_TH .mtype:not(.ct) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.component_FD .mtype:not(.cfsd) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.component_LS .mtype:not(.cls) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.component_PD .mtype:not(.cpd) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.component_SS .mtype:not(.cs) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.component_FT .group:not(.internal) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.component_FT .mtype:not(.cft) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.military .group:not(.internal) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.military .mtype:not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.module #outfitting_modules_picker.internal .group:not(.internal) .togglebutton INPUT:checked + DIV {
+#page_body_outfitting.focusmodule #outfitting_modules_picker.hardpoint .group:not(.hardpoint) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.utility .group:not(.utility) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.component:not(.component_FT) .group:not(.component) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.component_BH .mtype:not(.cbh) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.component_PP .mtype:not(.cpp) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.component_TH .mtype:not(.ct) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.component_FD .mtype:not(.cfsd) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.component_LS .mtype:not(.cls) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.component_PD .mtype:not(.cpd) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.component_SS .mtype:not(.cs) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.component_FT .group:not(.internal) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.component_FT .mtype:not(.cft) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.military .group:not(.internal) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.military .mtype:not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.internal .group:not(.internal) .togglebutton INPUT:checked + DIV {
 	background-color: var(--color-grey-5);
 	color: black;
 }
@@ -1200,7 +1255,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	border: 1px solid var(--color-orange-3);
 	background-color: var(--color-orange-1);
 	padding: 0 0.2em;
-	color: var(--color-orange-3);
+	color: var(--color-orange-4);
 }
 #outfitting_fit_settings .togglebutton INPUT:checked + DIV {
 	border-color: var(--color-orange-5);
@@ -1408,7 +1463,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	margin: 0.25em;
 }
 
-#outfitting_fit_slot TABLE {
+#outfitting_fit_slots TABLE {
 	border-collapse: separate;
 	border-spacing: 0;
 }
@@ -1421,9 +1476,14 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	white-space: nowrap;
 }
 #outfitting_fit_slots THEAD TH {
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
 	border: 0 solid var(--color-orange-3);
 	border-width: 2px 0;
+	background-color: black;
 	color: var(--color-grey-5);
+	z-index: 1;
 }
 #outfitting_fit_slots TBODY TH {
 	border-top: 0.5em solid black;
@@ -1437,13 +1497,14 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 
 #outfitting_fit_slots TD {
 	width: 0%;
-	padding: 1px 0.25em;
+	border-top: 2px solid black;
+	padding: 0 0.25em;
 	text-align: right;
 	white-space: nowrap;
 }
 #outfitting_fit_slots #outfitting_fit_ship_hull TR:first-child TD,
 #outfitting_fit_slots #outfitting_fit_ship_hatch TR:first-child TD {
-	padding-top: 0.5em;
+	border-top-width: 0.5em;
 }
 
 #outfitting_fit_slots .outfitting_fit_class {
@@ -1543,7 +1604,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots .togglebutton INPUT:checked + DIV {
 	border-color: var(--color-orange-5);
 }
-#page_body_outfitting.slot #outfitting_fit_slots .togglebutton INPUT:checked + DIV {
+#page_body_outfitting.focusslot #outfitting_fit_slots .togglebutton INPUT:checked + DIV {
 	background-color: var(--color-orange-5);
 	color: black;
 }
@@ -1555,16 +1616,16 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 
 #outfitting_fit_slots .notallowed .togglebutton INPUT + DIV,
-#outfitting_fit_slots .togglebutton INPUT + DIV.overlimit {
+#outfitting_fit_slots .overlimit .togglebutton INPUT + DIV {
 	background-color: var(--color-red-1);
 	color: var(--color-red-5);
 }
 #outfitting_fit_slots .notallowed .togglebutton INPUT:checked + DIV,
-#outfitting_fit_slots .togglebutton INPUT:checked + DIV.overlimit {
+#outfitting_fit_slots .overlimit .togglebutton INPUT:checked + DIV {
 	border-color: var(--color-red-5);
 }
-#page_body_outfitting.slot #outfitting_fit_slots .notallowed .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.slot #outfitting_fit_slots .togglebutton INPUT:checked + DIV.overlimit {
+#page_body_outfitting.focusslot #outfitting_fit_slots .notallowed .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusslot #outfitting_fit_slots .overlimit .togglebutton INPUT:checked + DIV {
 	background-color: var(--color-red-5);
 	color: black;
 }
@@ -1583,19 +1644,19 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots .dragerror .togglebutton INPUT:checked + DIV {
 	border-color: var(--color-grey-5);
 }
-#page_body_outfitting.slot #outfitting_fit_slots .dragerror .togglebutton INPUT:checked + DIV {
+#page_body_outfitting.focusslot #outfitting_fit_slots .dragerror .togglebutton INPUT:checked + DIV {
 	background-color: var(--color-grey-5);
 	color: black;
 }
 
-#page_body_outfitting.slot #outfitting_fit_slots .togglebutton INPUT:checked + DIV SPAN:empty::after,
-#page_body_outfitting.slot #outfitting_fit_slots .togglebutton INPUT:checked + DIV .iconsvg.tinted,
+#page_body_outfitting.focusslot #outfitting_fit_slots .togglebutton INPUT:checked + DIV SPAN:empty::after,
+#page_body_outfitting.focusslot #outfitting_fit_slots .togglebutton INPUT:checked + DIV .iconsvg.tinted,
 #outfitting_fit_slots .togglebutton INPUT:active + DIV SPAN:empty::after,
 #outfitting_fit_slots .togglebutton INPUT:active + DIV .iconsvg.tinted,
 #outfitting_fit_slots .notallowed .togglebutton INPUT + DIV SPAN:empty::after,
 #outfitting_fit_slots .notallowed .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_fit_slots .togglebutton INPUT + DIV.overlimit SPAN:empty::after,
-#outfitting_fit_slots .togglebutton INPUT + DIV.overlimit .iconsvg.tinted,
+#outfitting_fit_slots .overlimit .togglebutton INPUT + DIV SPAN:empty::after,
+#outfitting_fit_slots .overlimit .togglebutton INPUT + DIV .iconsvg.tinted,
 #outfitting_fit_slots .dragerror .togglebutton INPUT + DIV .iconsvg.tinted {
 	color: inherit;
 }
@@ -1844,6 +1905,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	color: var(--color-grey-4);
 }
 
+
 #outfitting_details_container {
 	flex: 1 0 10px;
 	border: 2px solid var(--color-orange-5);
@@ -1852,10 +1914,43 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	overflow-y: auto;
 }
 
+
+#outfitting_details_buttons {
+	flex: 0 0 auto;
+	min-width: 0;
+	display: flex;
+	flex-direction: row;
+	margin: 0 -0.25em;
+}
+
+#outfitting_details_buttons BUTTON {
+	flex: 1 0 10px;
+	margin: 0.25em 0.25em 0 0.25em;
+	border: none;
+	background-color: var(--color-orange-1);
+	color: var(--color-orange-5);
+	font-family: var(--font-caps);
+	font-size: 100%;
+}
+#outfitting_details_buttons BUTTON:active {
+	background-color: white;
+	color: black;
+}
+#outfitting_details_buttons BUTTON:disabled {
+	background-color: var(--color-grey-1);
+	color: var(--color-grey-5);
+}
+
+
 #outfitting_details_module HEADER {
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+	z-index: 1;
 	margin-bottom: 0.25em;
 	border-bottom: 2px solid var(--color-orange-3);
 	padding: 0 0.25em;
+	background-color: black;
 	color: var(--color-grey-5);
 	font-weight: bold;
 }
@@ -2070,23 +2165,93 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 */
 
 
-#outfitting_stats INPUT.toggleinput {
-	position: absolute;
-	margin: -1px;
-	border: 0;
-	padding: 0;
-	width: 1px;
-	height: 1px;
-	clip: rect(0 0 0 0);
-	overflow: hidden;
+#toggle_stats_handle {
+	display: block;
+	margin: 0.25em;
+	background-color: var(--color-orange-1);
+	color: var(--color-orange-5);
+	text-align: center;
+	font-family: var(--font-caps);
+	font-size: 87.5%;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+#toggle_stats_handle DIV.show {
+	display: block;
+}
+#toggle_stats_handle DIV.hide {
+	display: none;
+}
+#toggle_stats:checked + #toggle_stats_handle DIV.show {
+	display: none;
+}
+#toggle_stats:checked + #toggle_stats_handle DIV.hide {
+	display: block;
+}
+#toggle_stats:active + #toggle_stats_handle DIV {
+	background-color: white;
+	color: black;
+}
+
+.outfitting_stats_toggles {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	margin: 0.25em;
+}
+
+.outfitting_stats_toggles LABEL {
+	margin-top: 0.25em;
+	padding: 0.1em 0.5em;
+	border: 1px solid var(--color-orange-5);
+	background-color: var(--color-orange-5);
+	color: black;
+	font-weight: bold;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.outfitting_stats_toggles LABEL:first-child {
+	margin-top: 0;
+}
+.outfitting_stats_toggles:last-child LABEL {
+	text-align: right;
+}
+
+.outfitting_stats_toggles LABEL ABBR {
+	border-color: black;
+	cursor: pointer;
+}
+
+#outfitting_stats_wrapper {
+	flex: 1 0 10px;
+	min-width: 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin: 0.25em;
+}
+
+#outfitting_stats_container {
+	flex: 0 1 auto;
+	min-width: 0;
+	max-width: auto;
+	display: flex;
+	flex-direction: row;
+	margin-right: -2px;
+	border: 2px solid var(--color-orange-5);
+	background-color: var(--color-orange-3);
+	overflow-x: auto;
 }
 
 .outfitting_stats_panel {
-	flex: 1 0 auto;
-	border-right: 2px solid var(--color-orange-3);
-}
-.outfitting_stats_panel:last-child {
-	border-right: none;
+	flex: 0 0 auto;
+	margin-right: 2px;
+	background-color: black;
 }
 
 .outfitting_stats_panel .error {
@@ -2112,39 +2277,33 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	padding: 0 0.25em;
 	text-align: right;
 }
-#outfitting_stats INPUT.toggleinput:not(:checked) + .outfitting_stats_panel TH:not(:first-child),
-#outfitting_stats INPUT.toggleinput:not(:checked) + .outfitting_stats_panel TD:not(:first-child),
-#outfitting_stats INPUT.toggleinput:not(:checked) + .outfitting_stats_panel TBODY ABBR,
-#outfitting_stats INPUT.toggleinput:not(:checked) + .outfitting_stats_panel .outfitting_stats_powerbar DIV,
-#outfitting_stats INPUT.toggleinput:not(:checked) + .outfitting_stats_panel .outfitting_stats_powerbar SPAN {
-	display: none;
+
+.outfitting_stats_panel THEAD TH ABBR {
+	border-color: black;
+	cursor: arrow;
 }
 
-.outfitting_stats_panel THEAD TH {
+.outfitting_stats_panel THEAD TH:first-child {
+	position: relative;
+	padding: 0;
+}
+
+.outfitting_stats_panel THEAD TH LABEL {
+	display: block;
+	height: 100%;
+	padding: 0 0.25em;
 	background-color: var(--color-orange-5);
 	color: black;
 	text-align: right;
 	font-weight: bold;
-}
-#outfitting_stats INPUT.toggleinput:not(:checked) + .outfitting_stats_panel THEAD TH:first-child {
-	background-color: var(--color-orange-1);
-	color: var(--color-orange-3);
-}
-#outfitting_stats INPUT.toggleinput:active + .outfitting_stats_panel THEAD TH:first-child {
-	background-color: white;
-	color: black;
-}
-
-.outfitting_stats_panel THEAD TH ABBR {
-	border-color: black;
+	cursor: pointer;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-	cursor: arrow;
 }
 
-.outfitting_stats_panel THEAD TH:first-child LABEL ABBR {
+.outfitting_stats_panel THEAD TH LABEL ABBR {
 	cursor: pointer;
 }
 
@@ -2178,6 +2337,57 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	text-align: right;
 	font-family: var(--font-caps);
 	font-size: 87.5%;
+}
+
+#toggle_stats_1:not(:checked) ~ #outfitting_stats #outfitting_stats_1 TH:not(:first-child),
+#toggle_stats_1:not(:checked) ~ #outfitting_stats #outfitting_stats_1 TD:not(:first-child),
+#toggle_stats_1:not(:checked) ~ #outfitting_stats #outfitting_stats_1 TBODY ABBR,
+#toggle_stats_2:not(:checked) ~ #outfitting_stats #outfitting_stats_2 TH:not(:first-child),
+#toggle_stats_2:not(:checked) ~ #outfitting_stats #outfitting_stats_2 TD:not(:first-child),
+#toggle_stats_2:not(:checked) ~ #outfitting_stats #outfitting_stats_2 TBODY ABBR,
+#toggle_stats_3:not(:checked) ~ #outfitting_stats #outfitting_stats_3 TH:not(:first-child),
+#toggle_stats_3:not(:checked) ~ #outfitting_stats #outfitting_stats_3 TD:not(:first-child),
+#toggle_stats_3:not(:checked) ~ #outfitting_stats #outfitting_stats_3 TBODY ABBR,
+#toggle_stats_4:not(:checked) ~ #outfitting_stats #outfitting_stats_4 TH:not(:first-child),
+#toggle_stats_4:not(:checked) ~ #outfitting_stats #outfitting_stats_4 TD:not(:first-child),
+#toggle_stats_4:not(:checked) ~ #outfitting_stats #outfitting_stats_4 TBODY ABBR,
+#toggle_stats_5:not(:checked) ~ #outfitting_stats #outfitting_stats_5 TH:not(:first-child),
+#toggle_stats_5:not(:checked) ~ #outfitting_stats #outfitting_stats_5 TD:not(:first-child),
+#toggle_stats_5:not(:checked) ~ #outfitting_stats #outfitting_stats_5 TBODY ABBR,
+#toggle_stats_6:not(:checked) ~ #outfitting_stats #outfitting_stats_6 TH:not(:first-child),
+#toggle_stats_6:not(:checked) ~ #outfitting_stats #outfitting_stats_6 TD:not(:first-child),
+#toggle_stats_6:not(:checked) ~ #outfitting_stats #outfitting_stats_6 TBODY ABBR,
+#toggle_stats_7:not(:checked) ~ #outfitting_stats #outfitting_stats_7 TH:not(:first-child),
+#toggle_stats_7:not(:checked) ~ #outfitting_stats #outfitting_stats_7 TD:not(:first-child),
+#toggle_stats_7:not(:checked) ~ #outfitting_stats #outfitting_stats_7 TBODY ABBR,
+#toggle_stats_8:not(:checked) ~ #outfitting_stats #outfitting_stats_8 TH:not(:first-child),
+#toggle_stats_8:not(:checked) ~ #outfitting_stats #outfitting_stats_8 TD:not(:first-child),
+#toggle_stats_8:not(:checked) ~ #outfitting_stats #outfitting_stats_8 TBODY ABBR {
+	display: none;
+}
+#toggle_stats_1:not(:checked) ~ #outfitting_stats LABEL.label_stats_1,
+#toggle_stats_2:not(:checked) ~ #outfitting_stats LABEL.label_stats_2,
+#toggle_stats_3:not(:checked) ~ #outfitting_stats LABEL.label_stats_3,
+#toggle_stats_4:not(:checked) ~ #outfitting_stats LABEL.label_stats_4,
+#toggle_stats_5:not(:checked) ~ #outfitting_stats LABEL.label_stats_5,
+#toggle_stats_6:not(:checked) ~ #outfitting_stats LABEL.label_stats_6,
+#toggle_stats_7:not(:checked) ~ #outfitting_stats LABEL.label_stats_7,
+#toggle_stats_8:not(:checked) ~ #outfitting_stats LABEL.label_stats_8 {
+	border-color: var(--color-orange-3);
+	background-color: var(--color-orange-1);
+	color: var(--color-orange-4);
+}
+#toggle_stats_1:active ~ #outfitting_stats LABEL.label_stats_1,
+#toggle_stats_2:active ~ #outfitting_stats LABEL.label_stats_2,
+#toggle_stats_3:active ~ #outfitting_stats LABEL.label_stats_3,
+#toggle_stats_4:active ~ #outfitting_stats LABEL.label_stats_4,
+#toggle_stats_5:active ~ #outfitting_stats LABEL.label_stats_5,
+#toggle_stats_6:active ~ #outfitting_stats LABEL.label_stats_6,
+#toggle_stats_7:active ~ #outfitting_stats LABEL.label_stats_7,
+#toggle_stats_8:active ~ #outfitting_stats LABEL.label_stats_8 {
+	border-color: white;
+	background-color: white;
+	color: black;
 }
 
 .outfitting_stats_panel .outfitting_stats_powerbar {
@@ -2268,6 +2478,142 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	right: 0;
 	top: 50%;
 	margin-top: -0.4em;
+}
+
+
+/*
+* RESPONSIVE LAYOUT
+*/
+
+
+@media only screen {
+	#page_tabs SPAN {
+		display: none;
+	}
+	
+	#outfitting_modules,
+	#outfitting_details {
+		flex: 0 2 32em;
+		max-width: 32em;
+	}
+	
+	#outfitting_modules,
+	#outfitting_fit,
+	#outfitting_details {
+		display: none;
+	}
+	
+	#outfitting_top.show1modules #outfitting_modules,
+	#outfitting_top.show1slots #outfitting_fit,
+	#outfitting_top.show1details #outfitting_details {
+		display: flex;
+	}
+	
+	#outfitting_modules_button_details {
+		display: none;
+	}
+	
+	#outfitting_stats {
+		display: none;
+	}
+	#toggle_stats:checked ~ #outfitting_stats {
+		display: flex;
+	}
+	
+	#toggle_stats_1:not(:checked) ~ #outfitting_stats #outfitting_stats_1,
+	#toggle_stats_2:not(:checked) ~ #outfitting_stats #outfitting_stats_2,
+	#toggle_stats_3:not(:checked) ~ #outfitting_stats #outfitting_stats_3,
+	#toggle_stats_4:not(:checked) ~ #outfitting_stats #outfitting_stats_4,
+	#toggle_stats_5:not(:checked) ~ #outfitting_stats #outfitting_stats_5,
+	#toggle_stats_6:not(:checked) ~ #outfitting_stats #outfitting_stats_6,
+	#toggle_stats_7:not(:checked) ~ #outfitting_stats #outfitting_stats_7,
+	#toggle_stats_8:not(:checked) ~ #outfitting_stats #outfitting_stats_8 {
+		display: none;
+	}
+}
+
+@media only screen and (min-height: 35em) {
+	#toggle_stats_handle {
+		display: none;
+	}
+	
+	#outfitting_stats {
+		display: flex;
+	}
+}
+
+@media only screen and (min-width: 38em) {
+	#page_tabs SPAN {
+		display: inline;
+	}
+}
+
+@media only screen and (min-width: 45em) {
+	#outfitting_top.show1modules #outfitting_modules,
+	#outfitting_top.show1slots #outfitting_fit,
+	#outfitting_top.show1details #outfitting_details {
+		display: none;
+	}
+	
+	#outfitting_top.show2modules #outfitting_modules,
+	#outfitting_top.show2slots #outfitting_fit,
+	#outfitting_top.show2details #outfitting_details {
+		display: flex;
+	}
+	
+	#outfitting_modules_button_back,
+	#outfitting_modules_button_details,
+	#outfitting_details_button_back {
+		display: none;
+	}
+	#outfitting_top.show2details #outfitting_modules_button_back,
+	#outfitting_top.show2slots #outfitting_modules_button_details {
+		display: block;
+	}
+}
+
+@media only screen and (min-width: 64em) {
+	#outfitting_modules,
+	#outfitting_details {
+		flex: 0 1 26em;
+		max-width: 26em;
+	}
+	
+	#outfitting_modules,
+	#outfitting_fit,
+	#outfitting_details,
+	#outfitting_top.show1modules #outfitting_modules,
+	#outfitting_top.show1slots #outfitting_fit,
+	#outfitting_top.show1details #outfitting_details,
+	#outfitting_top.show2modules #outfitting_modules,
+	#outfitting_top.show2slots #outfitting_fit,
+	#outfitting_top.show2details #outfitting_details {
+		display: flex;
+	}
+	
+	#outfitting_modules_buttons,
+	#outfitting_details_buttons {
+		display: none;
+	}
+	
+	#outfitting_stats {
+		justify-content: center;
+	}
+	
+	.outfitting_stats_toggles {
+		display: none;
+	}
+	
+	#toggle_stats_1:not(:checked) ~ #outfitting_stats #outfitting_stats_1,
+	#toggle_stats_2:not(:checked) ~ #outfitting_stats #outfitting_stats_2,
+	#toggle_stats_3:not(:checked) ~ #outfitting_stats #outfitting_stats_3,
+	#toggle_stats_4:not(:checked) ~ #outfitting_stats #outfitting_stats_4,
+	#toggle_stats_5:not(:checked) ~ #outfitting_stats #outfitting_stats_5,
+	#toggle_stats_6:not(:checked) ~ #outfitting_stats #outfitting_stats_6,
+	#toggle_stats_7:not(:checked) ~ #outfitting_stats #outfitting_stats_7,
+	#toggle_stats_8:not(:checked) ~ #outfitting_stats #outfitting_stats_8 {
+		display: block;
+	}
 }
 
 
