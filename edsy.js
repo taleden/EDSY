@@ -10,13 +10,14 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 */
 'use strict';
 window.edshipyard = new (function() {
-	var VERSIONS = [34117,34117,34117,34117]; /* HTML,CSS,DB,JS */
+	var VERSIONS = [34118,34118,34117,34118]; /* HTML,CSS,DB,JS */
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
 	var TIMEOUT_RESIZE = 300;
 	var TIMEOUT_DBLCLICK = 300;
 	var TIMEOUT_LONGPRESS = 500;
+	var TOLERANCE_TOUCH = 10;
 	var GROUPS = ['hardpoint','utility','component','military','internal'];
 	var GROUP_LABEL = { hardpoint:'Hardpoints', utility:'Utility Mounts', component:'Core Internal', military:'Military', internal:'Optional Internal' };
 	var CORE_SLOT_NAME = ['Bulkhead', 'Power Plant', 'Thruster', 'Frame Shift Drive', 'Life Support', 'Power Distributor', 'Sensors', 'Fuel Tank'];
@@ -87,10 +88,10 @@ window.edshipyard = new (function() {
 		},
 		drag: null,
 		resize: null,
-		touchPicker: {},
-		clickPicker: {},
-		touchSlots: {},
-		clickSlots: {},
+		pickerClick: {},
+		pickerTouch: {},
+		slotsClick: {},
+		slotsTouch: {},
 		storedbuild: { 0:{} },
 		storedmodule: { 0:{} },
 		option: {
@@ -3078,6 +3079,15 @@ window.edshipyard = new (function() {
 	*/
 	
 	
+	var updateUIFullscreen = function() {
+		var doc = window.document;
+		var supported = (cache.feature.requestFullscreen && cache.feature.cancelFullscreen);
+		var active = (doc.fullscreenElement || doc.mozFullScreenElement || doc.webkitFullscreenElement || doc.msFullscreenElement);
+		document.getElementById('window_maximize').style.display = ((active || !supported) ? 'none' : 'inline-block');
+		document.getElementById('window_minimize').style.display = ((active &&  supported) ? 'inline-block' : 'none');
+	}; // updateUIFullscreen()
+	
+	
 	var updateUILayout = function() {
 		var divBody = document.getElementById('outfitting_fit_body');
 		var colWidth = max(document.getElementById('slots_column_left').offsetWidth, document.getElementById('slots_column_right').offsetWidth);
@@ -3783,13 +3793,15 @@ window.edshipyard = new (function() {
 		label.draggable = true;
 		var input = document.createElement('input');
 		input.type = 'radio';
-		input.id = 'outfitting_module.0';
+		input.id = 'outfitting_module.0.';
 		input.name = 'module';
-		input.value = 0;
+		input.value = '0.';
 		var div = document.createElement('div');
 		div.innerHTML = '';
 		label.appendChild(input);
 		label.appendChild(div);
+		label.htmlFor = input.id;
+		label.addEventListener('touchstart', onUIModulePickerLabelTouchStart);
 		divRow.appendChild(label);
 		divPicker.appendChild(divRow);
 		divRow = null;
@@ -3849,14 +3861,15 @@ window.edshipyard = new (function() {
 						label.draggable = true;
 						var input = document.createElement('input');
 						input.type = 'radio';
-						input.id = 'outfitting_module.' + mID;
+						input.id = 'outfitting_module.' + mID + '.';
 						input.name = 'module';
-						input.value = mID;
+						input.value = mID + '.';
 						var div = document.createElement('div');
 						div.innerHTML = HTML_ICON['warning'] + getModuleLabel(module, true, true);
-						
 						label.appendChild(input);
 						label.appendChild(div);
+						label.htmlFor = input.id;
+						label.addEventListener('touchstart', onUIModulePickerLabelTouchStart);
 						divRow.appendChild(label);
 						typeSizeMin = min(typeSizeMin, moduleSize);
 						typeSizeMax = max(typeSizeMax, moduleSize);
@@ -3935,13 +3948,15 @@ window.edshipyard = new (function() {
 				label.draggable = true;
 				var input = document.createElement('input');
 				input.type = 'radio';
-				input.id = 'outfitting_module.' + namehash;
+				input.id = 'outfitting_module.' + modid + '.' + namehash;
 				input.name = 'module';
 				input.value = modid + '.' + namehash;
 				var div = document.createElement('div');
 				div.innerHTML = HTML_ICON['warning'] + HTML_ICON['engineer'] + encodeHTML(hashDecodeS(namehash));
 				label.appendChild(input);
 				label.appendChild(div);
+				label.htmlFor = input.id;
+				label.addEventListener('touchstart', onUIModulePickerLabelTouchStart);
 				divRow.appendChild(label);
 				divType.appendChild(divRow);
 			} else if (sorted) {
@@ -3969,12 +3984,12 @@ window.edshipyard = new (function() {
 			var tokens = document.forms.modules.elements.module.value.split('.');
 			modid = tokens[0];
 			namehash = tokens[1];
-			var input = document.getElementById('outfitting_module.' + (namehash || modid));
+			var input = document.getElementById('outfitting_module.' + modid + '.' + namehash);
 			if (input)
 				input.checked = false;
 			current.pickerSlot.setModuleID(0);
 		} else {
-			var input = document.getElementById('outfitting_module.' + (namehash || modid));
+			var input = document.getElementById('outfitting_module.' + modid + '.' + namehash);
 			input.checked = true;
 			if (namehash) {
 				current.pickerSlot.setStoredHash(current.storedmodule[0][namehash]);
@@ -4157,6 +4172,7 @@ window.edshipyard = new (function() {
 		label.draggable = true;
 		var input = document.createElement('input');
 		input.type = 'radio';
+		input.id = 'outfitting_slot.' + group + '.' + slot;
 		input.name = 'slot';
 		input.value = group_slot;
 		var div = document.createElement('div');
@@ -4166,6 +4182,8 @@ window.edshipyard = new (function() {
 		div.insertAdjacentHTML('afterbegin', HTML_ICON['warning']); // dynamically hidden
 		label.appendChild(input);
 		label.appendChild(div);
+		label.htmlFor = input.id;
+		label.addEventListener('touchstart', onUIFitSlotsTouchStart);
 		td.appendChild(label);
 		tr.appendChild(td);
 		
@@ -4576,7 +4594,7 @@ window.edshipyard = new (function() {
 							classname = 'notallowed';
 						break;
 					}
-					document.getElementById('outfitting_module.' + (namehash || modid)).className = classname;
+					document.getElementById('outfitting_module.' + modid + '.' + namehash).className = classname;
 				}
 			}
 		}
@@ -5675,7 +5693,7 @@ window.edshipyard = new (function() {
 		var panelOrder = {};
 		var panelWidth = {};
 		var input, panel;
-		for (var p = 1;  (input = document.getElementById('toggle_stats_' + p)) && (panel = document.getElementById('outfitting_stats_' + p));  p++) {
+		for (var p = 1;  (input = document.getElementById('stats_toggle_' + p)) && (panel = document.getElementById('outfitting_stats_' + p));  p++) {
 			if (input.checked) {
 				panels.push(p);
 				panelOrder[p] = parseInt(input.value);
@@ -5687,13 +5705,13 @@ window.edshipyard = new (function() {
 		if (enabledPanel) {
 			next++;
 			panelOrder[enabledPanel] = next;
-			document.getElementById('toggle_stats_' + enabledPanel).value = next;
+			document.getElementById('stats_toggle_' + enabledPanel).value = next;
 		}
 		if (space < 0) {
 			panels.sort(function(p1,p2) { return panelOrder[p2] - panelOrder[p1]; });
 			while (space < 0 && panels.length > 1) {
 				var p = panels.pop();
-				document.getElementById('toggle_stats_' + p).checked = false;
+				document.getElementById('stats_toggle_' + p).checked = false;
 				space += panelWidth[p];
 			}
 		}
@@ -5725,7 +5743,7 @@ window.edshipyard = new (function() {
 				var classname = '';
 				if (current.tempSlot.getEffectiveAttrValue('maxmass') < (massBase + current.tempSlot.getEffectiveAttrValue('mass')))
 					classname = 'notenough';
-				document.getElementById('outfitting_module.' + (namehash || modid)).className = classname;
+				document.getElementById('outfitting_module.' + modid + '.' + namehash).className = classname;
 			}
 		}
 		
@@ -6172,6 +6190,7 @@ window.edshipyard = new (function() {
 		if (current.resize)
 			clearTimeout(current.resize);
 		current.resize = setTimeout(onWindowResizeTimeout, TIMEOUT_RESIZE);
+		updateUIFullscreen();
 	}; // onWindowResize()
 	
 	
@@ -6293,6 +6312,20 @@ window.edshipyard = new (function() {
 	}; // onUIPopupButtonClick()
 	
 	
+	var onUIMaximizeButtonClick = function(e) {
+		if (cache.feature.requestFullscreen && cache.feature.cancelFullscreen) {
+			cache.feature.requestFullscreen.call(window.document.documentElement);
+		}
+	}; // onUIMaximizeButtonClick()
+	
+	
+	var onUIMinimizeButtonClick = function(e) {
+		if (cache.feature.cancelFullscreen) {
+			cache.feature.cancelFullscreen.call(window.document);
+		}
+	}; // onUIMinimizeButtonClick()
+	
+	
 	var onUIPageHeaderChange = function(e) {
 		setUIPageTab(e.target.value);
 	}; // onUIPageHeaderChange()
@@ -6388,8 +6421,8 @@ window.edshipyard = new (function() {
 				var tokens = modtag.split('.');
 				var modid = tokens[0] | 0;
 				var namehash = tokens[1];
-				if (!current.clickPicker[modtag]) { // single
-					current.clickPicker[modtag] = setTimeout(onUIModulePickerClickTimeout, TIMEOUT_DBLCLICK, modtag);
+				if (!current.pickerClick[modtag]) { // single
+					current.pickerClick[modtag] = setTimeout(onUIModulePickerClickTimeout, TIMEOUT_DBLCLICK, modtag);
 					if (inputs[0].checked && current.outfitting_focus !== 'module') {
 						setUIOutfittingFocus('module');
 						updateUIDetailsStoredModules();
@@ -6397,8 +6430,8 @@ window.edshipyard = new (function() {
 						updateUIDetailsModule();
 					}
 				} else { // double
-					clearTimeout(current.clickPicker[modtag]);
-					delete current.clickPicker[modtag];
+					clearTimeout(current.pickerClick[modtag]);
+					delete current.pickerClick[modtag];
 					setCurrentFitSlotModule(current.group, current.slot, modid, namehash);
 					setUIOutfittingPanels('slots',  'modules', 'slots');
 				}
@@ -6408,9 +6441,9 @@ window.edshipyard = new (function() {
 	
 	
 	var onUIModulePickerClickTimeout = function(modtag) {
-		if (current.clickPicker[modtag]) {
-			clearTimeout(current.clickPicker[modtag]);
-			delete current.clickPicker[modtag];
+		if (current.pickerClick[modtag]) {
+			clearTimeout(current.pickerClick[modtag]);
+			delete current.pickerClick[modtag];
 			var tokens = modtag.split('.');
 			var modid = tokens[0] | 0;
 			var namehash = tokens[1];
@@ -6434,56 +6467,107 @@ window.edshipyard = new (function() {
 	}; // onUIModulePickerDblClick()
 	
 	
-	var onUIModulePickerTouch = function(e) {
-		var el = e.target;
-		while (el && el.tagName !== 'LABEL') {
-			el = el.parentNode;
-		}
-		if (!el) {
-		} else if (el.tagName === 'LABEL') {
-			var inputs = el.getElementsByTagName('INPUT');
-			if (inputs.length > 0 && inputs[0].name === 'module') {
-				e.preventDefault();
-				e.stopPropagation();
-				var modtag = inputs[0].value;
-				var tokens = modtag.split('.');
-				var modid = tokens[0] | 0;
-				var namehash = tokens[1];
-				if (current.touchPicker[modtag]) {
-					clearTimeout(current.touchPicker[modtag]);
-					delete current.touchPicker[modtag];
-					if (e.type === 'touchend' && (modid || namehash)) {
-						setUIOutfittingPanels('details');
-					}
-				}
-				if (e.type === 'touchstart') {
-					current.touchPicker[modtag] = setTimeout(onUIModulePickerTouchTimeout, TIMEOUT_LONGPRESS, modtag);
-					if (!inputs[0].checked || current.outfitting_focus !== 'module') {
-						setUIOutfittingFocus('module');
-						if (!inputs[0].checked)
-							setUIPickerModule(modid, namehash, false);
-						updateUIDetailsStoredModules();
-						updateUIDetailsStoredModuleControls(true, namehash);
-						updateUIDetailsModule();
-					}
-				}
-				return false;
+	var onUIModulePickerLabelTouchStart = function(e) {
+		e.stopPropagation();
+		var label = e.currentTarget;
+		var inputID = label.htmlFor;
+		var touchdata = current.pickerTouch[inputID];
+		if (e.touches.length !== 1) {
+			if (touchdata) {
+				clearTimeout(touchdata.timeout);
+				delete current.pickerTouch[inputID];
 			}
+			label.removeEventListener('touchmove', onUIModulePickerLabelTouchMove);
+			label.removeEventListener('touchend', onUIModulePickerLabelTouchEnd);
+			return true;
 		}
-	}; // onUIModulePickerTouch()
+		if (touchdata) {
+			clearTimeout(touchdata.timeout);
+		} else {
+			current.pickerTouch[inputID] = touchdata = { timeout:null, x:0, y:0 };
+		}
+		touchdata.timeout = setTimeout(onUIModulePickerLabelTouchTimeout, TIMEOUT_LONGPRESS, inputID);
+		touchdata.x = e.touches[0].screenX;
+		touchdata.y = e.touches[0].screenY;
+		label.addEventListener('touchmove', onUIModulePickerLabelTouchMove);
+		label.addEventListener('touchend', onUIModulePickerLabelTouchEnd);
+		return true;
+	}; // onUIModulePickerLabelTouchStart()
 	
 	
-	var onUIModulePickerTouchTimeout = function(modtag) {
-		if (current.touchPicker[modtag]) {
-			clearTimeout(current.touchPicker[modtag]);
-			delete current.touchPicker[modtag];
-			var tokens = modtag.split('.');
+	var onUIModulePickerLabelTouchMove = function(e) {
+		e.stopPropagation();
+		var label = e.currentTarget;
+		var inputID = label.htmlFor;
+		var touchdata = current.pickerTouch[inputID];
+		if (!touchdata || e.touches.length !== 1 || abs(e.touches[0].screenX - touchdata.x) > TOLERANCE_TOUCH || abs(e.touches[0].screenY - touchdata.y) > TOLERANCE_TOUCH) {
+			if (touchdata) {
+				clearTimeout(touchdata.timeout);
+				delete current.pickerTouch[inputID];
+			}
+			label.removeEventListener('touchmove', onUIModulePickerLabelTouchMove);
+			label.removeEventListener('touchend', onUIModulePickerLabelTouchEnd);
+			return true;
+		}
+		if (e.cancelable)
+			e.preventDefault();
+		return false;
+	}; // onUIModulePickerLabelTouchMove()
+	
+	
+	var onUIModulePickerLabelTouchEnd = function(e) {
+		e.stopPropagation();
+		var label = e.currentTarget;
+		var inputID = label.htmlFor;
+		var touchdata = current.pickerTouch[inputID];
+		if (touchdata) {
+			clearTimeout(touchdata.timeout);
+			delete current.pickerTouch[inputID];
+		}
+		label.removeEventListener('touchmove', onUIModulePickerLabelTouchMove);
+		label.removeEventListener('touchend', onUIModulePickerLabelTouchEnd);
+		if (!touchdata || e.touches.length > 0 || e.changedTouches.length !== 1 || abs(e.changedTouches[0].screenX - touchdata.x) > TOLERANCE_TOUCH || abs(e.changedTouches[0].screenY - touchdata.y) > TOLERANCE_TOUCH) {
+			return true;
+		}
+		var input = document.getElementById(inputID);
+		if ((input && !input.checked) || current.outfitting_focus !== 'module') {
+			var tokens = input.value.split('.');
 			var modid = tokens[0] | 0;
 			var namehash = tokens[1];
-			setCurrentFitSlotModule(current.group, current.slot, modid, namehash);
-			setUIOutfittingPanels('slots',  'modules', 'slots');
+			setUIOutfittingFocus('module');
+			if (input && !input.checked)
+				setUIPickerModule(modid, namehash, false);
+			updateUIDetailsStoredModules();
+			updateUIDetailsStoredModuleControls(true, namehash);
+			updateUIDetailsModule();
 		}
-	}; // onUIModulePickerTouchTimeout()
+		setUIOutfittingPanels('details');
+		if (e.cancelable)
+			e.preventDefault();
+		return false;
+	}; // onUIModulePickerLabelTouchEnd()
+	
+	
+	var onUIModulePickerLabelTouchTimeout = function(inputID) {
+		var input = document.getElementById(inputID);
+		var label = input.parentNode;
+		var touchdata = current.pickerTouch[inputID];
+		if (touchdata) {
+			clearTimeout(touchdata.timeout);
+			delete current.pickerTouch[inputID];
+		}
+		label.removeEventListener('touchmove', onUIModulePickerLabelTouchMove);
+		label.removeEventListener('touchend', onUIModulePickerLabelTouchEnd);
+		if (!touchdata) {
+			return true;
+		}
+		var tokens = input.value.split('.');
+		var modid = tokens[0] | 0;
+		var namehash = tokens[1];
+		setCurrentFitSlotModule(current.group, current.slot, modid, namehash);
+		setUIOutfittingPanels('slots',  'modules', 'slots');
+		return false;
+	}; // onUIModulePickerLabelTouchTimeout()
 	
 	
 	var onUIModuleButtonsClick = function(e) {
@@ -6565,7 +6649,8 @@ window.edshipyard = new (function() {
 			setCurrentFitNameHash(e.target.value);
 		} else {
 			updateUIFitColumns();
-			updateUILayout();
+			// let the changes finish rendering
+			setTimeout(updateUILayout, 1);
 		}
 	}; // onUIFitSettingsChange()
 	
@@ -6686,8 +6771,8 @@ window.edshipyard = new (function() {
 			var inputs = el.getElementsByTagName('INPUT');
 			if (inputs.length > 0 && inputs[0].name === 'slot') {
 				var slottag = inputs[0].value;
-				if (!current.clickSlots[slottag]) { // single
-					current.clickSlots[slottag] = setTimeout(onUIFitSlotsClickTimeout, TIMEOUT_DBLCLICK, slottag);
+				if (!current.slotsClick[slottag]) { // single
+					current.slotsClick[slottag] = setTimeout(onUIFitSlotsClickTimeout, TIMEOUT_DBLCLICK, slottag);
 					if (inputs[0].checked && current.outfitting_focus !== 'slot') {
 						var tokens = slottag.split('_');
 						var slotgroup = tokens[0];
@@ -6695,8 +6780,8 @@ window.edshipyard = new (function() {
 						setCurrentSlot(slotgroup, slotnum);
 					}
 				} else { // double
-					clearTimeout(current.clickSlots[slottag]);
-					delete current.clickSlots[slottag];
+					clearTimeout(current.slotsClick[slottag]);
+					delete current.slotsClick[slottag];
 					setUIOutfittingFocus('module');
 					updateUIDetailsStoredModules();
 					updateUIDetailsStoredModuleControls(true);
@@ -6724,12 +6809,10 @@ window.edshipyard = new (function() {
 	
 	
 	var onUIFitSlotsClickTimeout = function(slottag) {
-		if (current.clickSlots[slottag]) {
-			clearTimeout(current.clickSlots[slottag]);
-			delete current.clickSlots[slottag];
-			if (getUIOutfittingSlot().getModuleID()) {
-				setUIOutfittingPanels('details');
-			}
+		if (current.slotsClick[slottag]) {
+			clearTimeout(current.slotsClick[slottag]);
+			delete current.slotsClick[slottag];
+			setUIOutfittingPanels('details');
 		}
 	}; // onUIFitSlotsClickTimeout()
 	
@@ -6764,56 +6847,105 @@ window.edshipyard = new (function() {
 	}; // onUIFitSlotsDblClick()
 	
 	
-	var onUIFitSlotsTouch = function(e) {
-		var el = e.target;
-		while (el && el.tagName !== 'LABEL') {
-			el = el.parentNode;
-		}
-		if (!el) {
-		} else if (el.tagName === 'LABEL') {
-			var inputs = el.getElementsByTagName('INPUT');
-			if (inputs.length > 0 && inputs[0].name === 'slot') {
-				e.preventDefault();
-				e.stopPropagation();
-				var slottag = inputs[0].value;
-				if (current.touchSlots[slottag]) {
-					clearTimeout(current.touchSlots[slottag]);
-					delete current.touchSlots[slottag];
-					if (e.type === 'touchend' && getUIOutfittingSlot().getModuleID()) {
-						setUIOutfittingPanels('details');
-					}
-				}
-				if (e.type === 'touchstart') {
-					current.touchSlots[slottag] = setTimeout(onUIFitSlotsTouchTimeout, TIMEOUT_LONGPRESS, slottag);
-					if (!inputs[0].checked || current.outfitting_focus !== 'slot') {
-						var tokens = slottag.split('_');
-						var slotgroup = tokens[0];
-						var slotnum = tokens[1];
-						setCurrentSlot(slotgroup, slotnum);
-					}
-				}
-				return false;
+	var onUIFitSlotsTouchStart = function(e) {
+		e.stopPropagation();
+		var label = e.currentTarget;
+		var inputID = label.htmlFor;
+		var touchdata = current.slotsTouch[inputID];
+		if (e.touches.length !== 1) {
+			if (touchdata) {
+				clearTimeout(touchdata.timeout);
+				delete current.slotsTouch[inputID];
 			}
+			label.removeEventListener('touchmove', onUIFitSlotsTouchMove);
+			label.removeEventListener('touchend', onUIFitSlotsTouchEnd);
+			return true;
 		}
-	}; // onUIFitSlotsTouch()
+		if (touchdata) {
+			clearTimeout(touchdata.timeout);
+		} else {
+			current.slotsTouch[inputID] = touchdata = { timeout:null, x:0, y:0 };
+		}
+		touchdata.timeout = setTimeout(onUIFitSlotsTouchTimeout, TIMEOUT_LONGPRESS, inputID);
+		touchdata.x = e.touches[0].screenX;
+		touchdata.y = e.touches[0].screenY;
+		label.addEventListener('touchmove', onUIFitSlotsTouchMove);
+		label.addEventListener('touchend', onUIFitSlotsTouchEnd);
+		return true;
+	}; // onUIFitSlotsTouchStart()
 	
 	
-	var onUIFitSlotsTouchTimeout = function(slottag) {
-		if (current.touchSlots[slottag]) {
-			clearTimeout(current.touchSlots[slottag]);
-			delete current.touchSlots[slottag];
-			/* TODO delete, should have already happened in touchstart
-			var tokens = slottag.split('_');
+	var onUIFitSlotsTouchMove = function(e) {
+		e.stopPropagation();
+		var label = e.currentTarget;
+		var inputID = label.htmlFor;
+		var touchdata = current.slotsTouch[inputID];
+		if (!touchdata || e.touches.length !== 1 || abs(e.touches[0].screenX - touchdata.x) > TOLERANCE_TOUCH || abs(e.touches[0].screenY - touchdata.y) > TOLERANCE_TOUCH) {
+			if (touchdata) {
+				clearTimeout(touchdata.timeout);
+				delete current.slotsTouch[inputID];
+			}
+			label.removeEventListener('touchmove', onUIFitSlotsTouchMove);
+			label.removeEventListener('touchend', onUIFitSlotsTouchEnd);
+			return true;
+		}
+		if (e.cancelable)
+			e.preventDefault();
+		return false;
+	}; // onUIFitSlotsTouchMove()
+	
+	
+	var onUIFitSlotsTouchEnd = function(e) {
+		e.stopPropagation();
+		var label = e.currentTarget;
+		var inputID = label.htmlFor;
+		var touchdata = current.slotsTouch[inputID];
+		if (touchdata) {
+			clearTimeout(touchdata.timeout);
+			delete current.slotsTouch[inputID];
+		}
+		label.removeEventListener('touchmove', onUIFitSlotsTouchMove);
+		label.removeEventListener('touchend', onUIFitSlotsTouchEnd);
+		if (!touchdata || e.touches.length > 0 || e.changedTouches.length !== 1 || abs(e.changedTouches[0].screenX - touchdata.x) > TOLERANCE_TOUCH || abs(e.changedTouches[0].screenY - touchdata.y) > TOLERANCE_TOUCH) {
+			return true;
+		}
+		var input = document.getElementById(inputID);
+		if ((input && !input.checked) || current.outfitting_focus !== 'slot') {
+			var tokens = input.value.split('_');
 			var slotgroup = tokens[0];
 			var slotnum = tokens[1];
 			setCurrentSlot(slotgroup, slotnum);
-			*/
-			setUIOutfittingFocus('module');
-			updateUIDetailsStoredModules();
-			updateUIDetailsStoredModuleControls(true);
-			updateUIDetailsModule();
-			setUIOutfittingPanels('modules',  'modules', 'slots');
 		}
+		setUIOutfittingPanels('details');
+		if (e.cancelable)
+			e.preventDefault();
+		return false;
+	}; // onUIFitSlotsTouchEnd()
+	
+	
+	var onUIFitSlotsTouchTimeout = function(inputID) {
+		var input = document.getElementById(inputID);
+		var label = input.parentNode;
+		var touchdata = current.slotsTouch[inputID];
+		if (touchdata) {
+			clearTimeout(touchdata.timeout);
+			delete current.slotsTouch[inputID];
+		}
+		label.removeEventListener('touchmove', onUIFitSlotsTouchMove);
+		label.removeEventListener('touchend', onUIFitSlotsTouchEnd);
+		if (!touchdata) {
+			return true;
+		}
+		var tokens = input.value.split('_');
+		var slotgroup = tokens[0];
+		var slotnum = tokens[1];
+		setCurrentSlot(slotgroup, slotnum);
+		setUIOutfittingFocus('module');
+		updateUIDetailsStoredModules();
+		updateUIDetailsStoredModuleControls(true);
+		updateUIDetailsModule();
+		setUIOutfittingPanels('modules',  'modules', 'slots');
+		return false;
 	}; // onUIFitSlotsTouchTimeout()
 	
 	
@@ -6981,9 +7113,10 @@ window.edshipyard = new (function() {
 	
 	
 	var onUIBottomChange = function(e) {
-		var tokens = e.target.id.split('_'); // toggle_stats_(#)
-		if (tokens[0] === 'toggle' && tokens[1] === 'stats' && e.target.checked) {
-			updateUIStatsPanels(tokens[2]);
+		var tokens = e.target.id.split('_'); // stats_toggle_(#)
+		if (tokens[0] === 'stats' && tokens[1] === 'toggle' && e.target.checked) {
+			// let the changes finish rendering
+			setTimeout(updateUIStatsPanels, 1, tokens[2]);
 		}
 	}; // onUIBottomChange()
 	
@@ -7140,6 +7273,10 @@ window.edshipyard = new (function() {
 				cache.feature.storage = false;
 			}
 		}
+		var doc = window.document;
+		var docEl = doc.documentElement;
+		cache.feature.requestFullscreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+		cache.feature.cancelFullscreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
 		
 		// initialize cache and UI
 		current.beta = true; // TODO: (window.location.pathname.indexOf('/beta/') >= 0);
@@ -7168,7 +7305,9 @@ window.edshipyard = new (function() {
 		}
 		for (var f = 0;  f < document.forms.length;  f++)
 			document.forms[f].addEventListener('submit', onFormSubmit);
-		document.getElementById('page_header').addEventListener('change', onUIPageHeaderChange);
+		document.getElementById('window_maximize').addEventListener('click', onUIMaximizeButtonClick);
+		document.getElementById('window_minimize').addEventListener('click', onUIMinimizeButtonClick);
+		document.getElementById('page_tabs').addEventListener('change', onUIPageHeaderChange);
 		document.getElementById('page_body_shipyard').addEventListener('contextmenu', onUIContextMenu);
 		document.getElementById('shipyard_tabs').addEventListener('change', onUIShipyardTabChange);
 		document.getElementById('shipyard_ships_container').addEventListener('click', onUIShipyardShipsClick);
@@ -7178,9 +7317,9 @@ window.edshipyard = new (function() {
 		document.getElementById('outfitting_modules_container').addEventListener('change', onUIModulePickerChange);
 		document.getElementById('outfitting_modules_container').addEventListener('click', onUIModulePickerClick);
 		document.getElementById('outfitting_modules_container').addEventListener('dblclick', onUIModulePickerDblClick);
-		document.getElementById('outfitting_modules_container').addEventListener('touchstart', onUIModulePickerTouch);
-		document.getElementById('outfitting_modules_container').addEventListener('touchmove', onUIModulePickerTouch);
-		document.getElementById('outfitting_modules_container').addEventListener('touchend', onUIModulePickerTouch);
+		//TODO delete document.getElementById('outfitting_modules_container').addEventListener('touchstart', onUIModulePickerTouch);
+		//TODO delete document.getElementById('outfitting_modules_container').addEventListener('touchmove', onUIModulePickerTouch);
+		//TODO delete document.getElementById('outfitting_modules_container').addEventListener('touchend', onUIModulePickerTouch);
 		document.getElementById('outfitting_modules_container').addEventListener('dragstart', onUIModulePickerDragStart);
 		document.getElementById('outfitting_modules_container').addEventListener('dragend', onUIModulePickerDragEnd);
 		document.getElementById('outfitting_modules_container').addEventListener('drop', onUIModulePickerDrop);
@@ -7198,9 +7337,9 @@ window.edshipyard = new (function() {
 		document.getElementById('outfitting_fit_slots').addEventListener('change', onUIFitSlotsChange);
 		document.getElementById('outfitting_fit_slots').addEventListener('click', onUIFitSlotsClick);
 		document.getElementById('outfitting_fit_slots').addEventListener('dblclick', onUIFitSlotsDblClick);
-		document.getElementById('outfitting_fit_slots').addEventListener('touchstart', onUIFitSlotsTouch);
-		document.getElementById('outfitting_fit_slots').addEventListener('touchmove', onUIFitSlotsTouch);
-		document.getElementById('outfitting_fit_slots').addEventListener('touchend', onUIFitSlotsTouch);
+		//TODO delete document.getElementById('outfitting_fit_slots').addEventListener('touchstart', onUIFitSlotsTouch);
+		//TODO delete document.getElementById('outfitting_fit_slots').addEventListener('touchmove', onUIFitSlotsTouch);
+		//TODO delete document.getElementById('outfitting_fit_slots').addEventListener('touchend', onUIFitSlotsTouch);
 		document.getElementById('outfitting_fit_slots').addEventListener('dragstart', onUIFitSlotsDragStart);
 		document.getElementById('outfitting_fit_slots').addEventListener('dragend', onUIFitSlotsDragEnd);
 		document.getElementById('outfitting_fit_slots').addEventListener('drop', onUIFitSlotsDrop);
@@ -7228,6 +7367,7 @@ window.edshipyard = new (function() {
 		setUIOutfittingPanels('slots',  'slots', 'details');
 		
 		// after all the current content is finished rendering, check the layout
+		updateUIFullscreen();
 		setTimeout(updateUILayout, 1);
 		setTimeout(updateUIStatsPanels, 1);
 	}; // onDOMContentLoaded()

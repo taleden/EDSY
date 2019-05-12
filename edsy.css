@@ -9,7 +9,7 @@ The Elite: Dangerous game logic and data in this file remains the property of Fr
 and is used here as authorized by Frontier Customer Services (https://forums.frontier.co.uk/showthread.php?t=5349).
 */
 
-:root { --edsy-versions-css:34117,34117,34117,34117; /* HTML,CSS,DB,JS */ }
+:root { --edsy-versions-css:34118,34118,34117,34118; /* HTML,CSS,DB,JS */ }
 
 @font-face {
 	font-family: 'Euro Caps';
@@ -68,6 +68,7 @@ HTML,
 BODY {
 	margin: 0;
 	padding: 0;
+	width: 100%;
 	height: 100%;
 	background-color: #222;
 	color: white;
@@ -464,6 +465,7 @@ INPUT.toggleinput {
 
 #outfitting_bottom {
 	flex: 0 0 auto;
+	display: block;
 	min-width: 0;
 }
 
@@ -485,7 +487,7 @@ INPUT.toggleinput {
 #outfitting_fit {
 	flex: 0 2 70em;
 	width: 50%;
-	min-width: 25em;
+	min-width: 18em;
 	max-width: 70em;
 	display: flex;
 	flex-direction: column;
@@ -505,14 +507,6 @@ INPUT.toggleinput {
 	display: flex;
 	flex-direction: column;
 	margin: 0.25em;
-}
-
-#outfitting_stats {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	min-width: 0;
-	max-width: auto;
 }
 
 #page_body_options {
@@ -571,6 +565,19 @@ INPUT.toggleinput {
 	font-family: var(--font-text);
 	font-size: 112.5%;
 	font-weight: bold;
+}
+
+#header_title BUTTON {
+	margin-left: 1em;
+	border: none;
+	padding: 0;
+	background-color: transparent;
+	color: white;
+	vertical-align: middle;
+}
+#window_maximize,
+#window_minimize {
+	display: none;
 }
 
 #header_title A {
@@ -1248,6 +1255,31 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	font-family: var(--font-text);
 	font-size: 90%;
 	text-align: right;
+}
+
+#outfitting_cols_container {
+	position: relative;
+	align-self: stretch;
+}
+
+#outfitting_cols_label {
+	display: none;
+	margin-bottom: 2px;
+	border: 1px solid var(--color-orange-3);
+	background-color: var(--color-orange-1);
+	padding: 0 0.2em;
+	color: var(--color-orange-4);
+	cursor: pointer;
+}
+#outfitting_cols_focus:checked + #outfitting_cols_label {
+	border-color: var(--color-orange-5);
+	background-color: var(--color-orange-5);
+	color: black;
+}
+
+#outfitting_show_popout {
+	display: flex;
+	flex-direction: row;
 }
 
 #outfitting_fit_settings .togglebutton INPUT + DIV {
@@ -2164,94 +2196,168 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 * OUTFITTING STATS BLOCK
 */
 
+#outfitting_bottom {
+	padding-top: 0.125em;
+}
 
-#toggle_stats_handle {
+#stats_show_handle {
+	padding: 0 0.25em;
+}
+
+.stats_show_label {
 	display: block;
-	margin: 0.25em;
 	background-color: var(--color-orange-1);
 	color: var(--color-orange-5);
 	text-align: center;
-	font-family: var(--font-caps);
 	font-size: 87.5%;
+	white-space: nowrap;
+	overflow: hidden;
+	cursor: pointer;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
 }
-#toggle_stats_handle DIV.show {
-	display: block;
-}
-#toggle_stats_handle DIV.hide {
+
+#stats_show_handle DIV.hide,
+#stats_show:checked ~ #stats_show_handle DIV.show {
 	display: none;
 }
-#toggle_stats:checked + #toggle_stats_handle DIV.show {
-	display: none;
-}
-#toggle_stats:checked + #toggle_stats_handle DIV.hide {
+#stats_show:checked ~ #stats_show_handle DIV.hide {
 	display: block;
 }
-#toggle_stats:active + #toggle_stats_handle DIV {
+
+#outfitting_stats {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	padding: 0.125em;
+}
+
+.stats_toggles {
+	flex: 1 0 10px;
+	order: 10;
+	min-width: 40%;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.stats_toggle_label {
+	display: block;
+	padding: 0 0.25em;
+	background-color: var(--color-orange-1);
+	color: var(--color-orange-4);
+	text-align: right;
+	white-space: nowrap;
+	overflow: hidden;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.stats_toggles .stats_toggle_label {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-width: 0;
+	margin: 0.125em;
+	border: 1px solid var(--color-orange-3);
+	padding: 0.125em 0.25em;
+	text-align: center;
+}
+#stats_toggle_1:checked ~ DIV .stats_toggle_label_1,
+#stats_toggle_2:checked ~ DIV .stats_toggle_label_2,
+#stats_toggle_3:checked ~ DIV .stats_toggle_label_3,
+#stats_toggle_4:checked ~ DIV .stats_toggle_label_4,
+#stats_toggle_5:checked ~ DIV .stats_toggle_label_5,
+#stats_toggle_6:checked ~ DIV .stats_toggle_label_6,
+#stats_toggle_7:checked ~ DIV .stats_toggle_label_7,
+#stats_toggle_8:checked ~ DIV .stats_toggle_label_8 {
+	border-color: var(--color-orange-5);
+	background-color: var(--color-orange-5);
+	color: black;
+}
+#stats_show:active ~ DIV .stats_show_label,
+#stats_toggle_1:active ~ DIV .stats_toggle_label_1,
+#stats_toggle_2:active ~ DIV .stats_toggle_label_2,
+#stats_toggle_3:active ~ DIV .stats_toggle_label_3,
+#stats_toggle_4:active ~ DIV .stats_toggle_label_4,
+#stats_toggle_5:active ~ DIV .stats_toggle_label_5,
+#stats_toggle_6:active ~ DIV .stats_toggle_label_6,
+#stats_toggle_7:active ~ DIV .stats_toggle_label_7,
+#stats_toggle_8:active ~ DIV .stats_toggle_label_8 {
+	border-color: white;
 	background-color: white;
 	color: black;
 }
 
-.outfitting_stats_toggles {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	margin: 0.25em;
-}
-
-.outfitting_stats_toggles LABEL {
-	margin-top: 0.25em;
-	padding: 0.1em 0.5em;
-	border: 1px solid var(--color-orange-5);
-	background-color: var(--color-orange-5);
-	color: black;
-	font-weight: bold;
+.stats_toggles .stats_toggle_label ABBR {
+	border-color: var(--color-orange-4);
 	cursor: pointer;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
 }
-.outfitting_stats_toggles LABEL:first-child {
-	margin-top: 0;
-}
-.outfitting_stats_toggles:last-child LABEL {
-	text-align: right;
-}
-
-.outfitting_stats_toggles LABEL ABBR {
+#stats_toggle_1:checked ~ DIV .stats_toggle_label_1 ABBR,
+#stats_toggle_2:checked ~ DIV .stats_toggle_label_2 ABBR,
+#stats_toggle_3:checked ~ DIV .stats_toggle_label_3 ABBR,
+#stats_toggle_4:checked ~ DIV .stats_toggle_label_4 ABBR,
+#stats_toggle_5:checked ~ DIV .stats_toggle_label_5 ABBR,
+#stats_toggle_6:checked ~ DIV .stats_toggle_label_6 ABBR,
+#stats_toggle_7:checked ~ DIV .stats_toggle_label_7 ABBR,
+#stats_toggle_8:checked ~ DIV .stats_toggle_label_8 ABBR,
+#stats_show:active ~ DIV .stats_show_label ABBR,
+#stats_toggle_1:active ~ DIV .stats_toggle_label_1 ABBR,
+#stats_toggle_2:active ~ DIV .stats_toggle_label_2 ABBR,
+#stats_toggle_3:active ~ DIV .stats_toggle_label_3 ABBR,
+#stats_toggle_4:active ~ DIV .stats_toggle_label_4 ABBR,
+#stats_toggle_5:active ~ DIV .stats_toggle_label_5 ABBR,
+#stats_toggle_6:active ~ DIV .stats_toggle_label_6 ABBR,
+#stats_toggle_7:active ~ DIV .stats_toggle_label_7 ABBR,
+#stats_toggle_8:active ~ DIV .stats_toggle_label_8 ABBR {
 	border-color: black;
-	cursor: pointer;
 }
 
 #outfitting_stats_wrapper {
 	flex: 1 0 10px;
-	min-width: 0;
+	order: 5;
+	min-width: 70%;
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-	margin: 0.25em;
 }
 
 #outfitting_stats_container {
 	flex: 0 1 auto;
 	min-width: 0;
-	max-width: auto;
-	display: flex;
+	display: none;
 	flex-direction: row;
-	margin-right: -2px;
-	border: 2px solid var(--color-orange-5);
-	background-color: var(--color-orange-3);
+	margin: 0.125em;
+	border: 0 solid var(--color-orange-5);
+	border-width: 2px 1px;
+	background-color: black;
 	overflow-x: auto;
+}
+#outfitting_bottom .stats_toggle:checked ~ DIV #outfitting_stats_container {
+	display: flex;
 }
 
 .outfitting_stats_panel {
 	flex: 0 0 auto;
-	margin-right: 2px;
-	background-color: black;
+	display: none;
+	border: 0 solid var(--color-orange-5);
+	border-width: 0 1px;
+}
+#stats_toggle_1:checked ~ DIV #outfitting_stats_1,
+#stats_toggle_2:checked ~ DIV #outfitting_stats_2,
+#stats_toggle_3:checked ~ DIV #outfitting_stats_3,
+#stats_toggle_4:checked ~ DIV #outfitting_stats_4,
+#stats_toggle_5:checked ~ DIV #outfitting_stats_5,
+#stats_toggle_6:checked ~ DIV #outfitting_stats_6,
+#stats_toggle_7:checked ~ DIV #outfitting_stats_7,
+#stats_toggle_8:checked ~ DIV #outfitting_stats_8 {
+	display: block;
 }
 
 .outfitting_stats_panel .error {
@@ -2278,32 +2384,16 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	text-align: right;
 }
 
-.outfitting_stats_panel THEAD TH ABBR {
-	border-color: black;
-	cursor: arrow;
-}
-
 .outfitting_stats_panel THEAD TH:first-child {
-	position: relative;
 	padding: 0;
-}
-
-.outfitting_stats_panel THEAD TH LABEL {
-	display: block;
-	height: 100%;
-	padding: 0 0.25em;
-	background-color: var(--color-orange-5);
-	color: black;
-	text-align: right;
 	font-weight: bold;
-	cursor: pointer;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
 }
 
-.outfitting_stats_panel THEAD TH LABEL ABBR {
+.outfitting_stats_panel .stats_toggle_label {
+}
+
+.outfitting_stats_panel .stats_toggle_label ABBR {
+	border: none;
 	cursor: pointer;
 }
 
@@ -2337,57 +2427,6 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	text-align: right;
 	font-family: var(--font-caps);
 	font-size: 87.5%;
-}
-
-#toggle_stats_1:not(:checked) ~ #outfitting_stats #outfitting_stats_1 TH:not(:first-child),
-#toggle_stats_1:not(:checked) ~ #outfitting_stats #outfitting_stats_1 TD:not(:first-child),
-#toggle_stats_1:not(:checked) ~ #outfitting_stats #outfitting_stats_1 TBODY ABBR,
-#toggle_stats_2:not(:checked) ~ #outfitting_stats #outfitting_stats_2 TH:not(:first-child),
-#toggle_stats_2:not(:checked) ~ #outfitting_stats #outfitting_stats_2 TD:not(:first-child),
-#toggle_stats_2:not(:checked) ~ #outfitting_stats #outfitting_stats_2 TBODY ABBR,
-#toggle_stats_3:not(:checked) ~ #outfitting_stats #outfitting_stats_3 TH:not(:first-child),
-#toggle_stats_3:not(:checked) ~ #outfitting_stats #outfitting_stats_3 TD:not(:first-child),
-#toggle_stats_3:not(:checked) ~ #outfitting_stats #outfitting_stats_3 TBODY ABBR,
-#toggle_stats_4:not(:checked) ~ #outfitting_stats #outfitting_stats_4 TH:not(:first-child),
-#toggle_stats_4:not(:checked) ~ #outfitting_stats #outfitting_stats_4 TD:not(:first-child),
-#toggle_stats_4:not(:checked) ~ #outfitting_stats #outfitting_stats_4 TBODY ABBR,
-#toggle_stats_5:not(:checked) ~ #outfitting_stats #outfitting_stats_5 TH:not(:first-child),
-#toggle_stats_5:not(:checked) ~ #outfitting_stats #outfitting_stats_5 TD:not(:first-child),
-#toggle_stats_5:not(:checked) ~ #outfitting_stats #outfitting_stats_5 TBODY ABBR,
-#toggle_stats_6:not(:checked) ~ #outfitting_stats #outfitting_stats_6 TH:not(:first-child),
-#toggle_stats_6:not(:checked) ~ #outfitting_stats #outfitting_stats_6 TD:not(:first-child),
-#toggle_stats_6:not(:checked) ~ #outfitting_stats #outfitting_stats_6 TBODY ABBR,
-#toggle_stats_7:not(:checked) ~ #outfitting_stats #outfitting_stats_7 TH:not(:first-child),
-#toggle_stats_7:not(:checked) ~ #outfitting_stats #outfitting_stats_7 TD:not(:first-child),
-#toggle_stats_7:not(:checked) ~ #outfitting_stats #outfitting_stats_7 TBODY ABBR,
-#toggle_stats_8:not(:checked) ~ #outfitting_stats #outfitting_stats_8 TH:not(:first-child),
-#toggle_stats_8:not(:checked) ~ #outfitting_stats #outfitting_stats_8 TD:not(:first-child),
-#toggle_stats_8:not(:checked) ~ #outfitting_stats #outfitting_stats_8 TBODY ABBR {
-	display: none;
-}
-#toggle_stats_1:not(:checked) ~ #outfitting_stats LABEL.label_stats_1,
-#toggle_stats_2:not(:checked) ~ #outfitting_stats LABEL.label_stats_2,
-#toggle_stats_3:not(:checked) ~ #outfitting_stats LABEL.label_stats_3,
-#toggle_stats_4:not(:checked) ~ #outfitting_stats LABEL.label_stats_4,
-#toggle_stats_5:not(:checked) ~ #outfitting_stats LABEL.label_stats_5,
-#toggle_stats_6:not(:checked) ~ #outfitting_stats LABEL.label_stats_6,
-#toggle_stats_7:not(:checked) ~ #outfitting_stats LABEL.label_stats_7,
-#toggle_stats_8:not(:checked) ~ #outfitting_stats LABEL.label_stats_8 {
-	border-color: var(--color-orange-3);
-	background-color: var(--color-orange-1);
-	color: var(--color-orange-4);
-}
-#toggle_stats_1:active ~ #outfitting_stats LABEL.label_stats_1,
-#toggle_stats_2:active ~ #outfitting_stats LABEL.label_stats_2,
-#toggle_stats_3:active ~ #outfitting_stats LABEL.label_stats_3,
-#toggle_stats_4:active ~ #outfitting_stats LABEL.label_stats_4,
-#toggle_stats_5:active ~ #outfitting_stats LABEL.label_stats_5,
-#toggle_stats_6:active ~ #outfitting_stats LABEL.label_stats_6,
-#toggle_stats_7:active ~ #outfitting_stats LABEL.label_stats_7,
-#toggle_stats_8:active ~ #outfitting_stats LABEL.label_stats_8 {
-	border-color: white;
-	background-color: white;
-	color: black;
 }
 
 .outfitting_stats_panel .outfitting_stats_powerbar {
@@ -2513,36 +2552,56 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 		display: none;
 	}
 	
-	#outfitting_stats {
-		display: none;
+	#outfitting_cols_label {
+		display: inline-block;
 	}
-	#toggle_stats:checked ~ #outfitting_stats {
+	
+	#outfitting_show_popout {
+		display: none;
+		position: absolute;
+		bottom: -2px;
+		right: 100%;
+		margin-right: 2px;
+		border: 2px solid var(--color-orange-5);
+		padding: 2px 0.5em;
+		background-color: black;
+		z-index: 2;
+	}
+	
+	#outfitting_cols_focus:checked ~ #outfitting_show_popout {
 		display: flex;
 	}
 	
-	#toggle_stats_1:not(:checked) ~ #outfitting_stats #outfitting_stats_1,
-	#toggle_stats_2:not(:checked) ~ #outfitting_stats #outfitting_stats_2,
-	#toggle_stats_3:not(:checked) ~ #outfitting_stats #outfitting_stats_3,
-	#toggle_stats_4:not(:checked) ~ #outfitting_stats #outfitting_stats_4,
-	#toggle_stats_5:not(:checked) ~ #outfitting_stats #outfitting_stats_5,
-	#toggle_stats_6:not(:checked) ~ #outfitting_stats #outfitting_stats_6,
-	#toggle_stats_7:not(:checked) ~ #outfitting_stats #outfitting_stats_7,
-	#toggle_stats_8:not(:checked) ~ #outfitting_stats #outfitting_stats_8 {
+	#outfitting_fit_settings .togglebutton INPUT + DIV {
+		margin: 1px;
+	}
+	
+	#outfitting_bottom .stats_show_label {
 		display: none;
 	}
 }
 
-@media only screen and (min-height: 35em) {
-	#toggle_stats_handle {
+@media only screen and (min-width: 30em) {
+	#outfitting_cols_label {
 		display: none;
 	}
 	
-	#outfitting_stats {
+	#outfitting_show_popout {
 		display: flex;
+		position: static;
+		margin: 0;
+		border: none;
+		padding: 0;
+		background-color: transparent;
+		z-index: 0;
+	}
+	
+	#outfitting_fit_settings .togglebutton INPUT + DIV {
+		margin: 0 0 2px 2px;
 	}
 }
 
-@media only screen and (min-width: 38em) {
+@media only screen and (min-width: 35em) {
 	#page_tabs SPAN {
 		display: inline;
 	}
@@ -2572,6 +2631,28 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	}
 }
 
+@media only screen and (min-width: 45em) and (orientation:landscape) {
+	#outfitting_bottom .stats_toggle:checked ~ DIV .stats_toggles {
+		flex: 0 0 auto;
+		min-width: 0;
+		flex-direction: column;
+	}
+	#outfitting_bottom .stats_toggle:checked ~ DIV #stats_toggles_left {
+		order: 1;
+	}
+}
+
+@media only screen and (min-width: 45em) and (max-height: 30em) {
+	#outfitting_bottom .stats_show_label {
+		display: block;
+	}
+	
+	#outfitting_bottom #stats_show:not(:checked) ~ DIV .stats_toggles,
+	#outfitting_bottom #stats_show:not(:checked) ~ DIV #outfitting_stats_container {
+		display: none;
+	}
+}
+
 @media only screen and (min-width: 64em) {
 	#outfitting_modules,
 	#outfitting_details {
@@ -2594,25 +2675,6 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	#outfitting_modules_buttons,
 	#outfitting_details_buttons {
 		display: none;
-	}
-	
-	#outfitting_stats {
-		justify-content: center;
-	}
-	
-	.outfitting_stats_toggles {
-		display: none;
-	}
-	
-	#toggle_stats_1:not(:checked) ~ #outfitting_stats #outfitting_stats_1,
-	#toggle_stats_2:not(:checked) ~ #outfitting_stats #outfitting_stats_2,
-	#toggle_stats_3:not(:checked) ~ #outfitting_stats #outfitting_stats_3,
-	#toggle_stats_4:not(:checked) ~ #outfitting_stats #outfitting_stats_4,
-	#toggle_stats_5:not(:checked) ~ #outfitting_stats #outfitting_stats_5,
-	#toggle_stats_6:not(:checked) ~ #outfitting_stats #outfitting_stats_6,
-	#toggle_stats_7:not(:checked) ~ #outfitting_stats #outfitting_stats_7,
-	#toggle_stats_8:not(:checked) ~ #outfitting_stats #outfitting_stats_8 {
-		display: block;
 	}
 }
 

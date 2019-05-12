@@ -14,7 +14,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 -->
 		<title>EDSY</title>
 		<meta name="application-name" content="EDSY">
-		<meta name="edsy-versions-html" id="edsy_versions_html" content="34117,34117,34117,34117"><!-- HTML,CSS,DB,JS -->
+		<meta name="edsy-versions-html" id="edsy_versions_html" content="34118,34118,34117,34118"><!-- HTML,CSS,DB,JS -->
 		<meta name="author" content="taleden">
 		<meta name="description" content="E:D Shipyard (EDSY) is a ship outfitting tool for Elite: Dangerous">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -126,6 +126,12 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 					<symbol id="icon_blueprint_max" viewbox="0 0 13 13" stroke="none" fill="currentColor" shape-rendering="geometricPrecision">
 						<path d="M 6.5,0 a 6.5,6.5 0 0 1 0,13 a 6.5,6.5 0 0 1 0,-13 z M 6.5,2.5 a 4,4 0 0 0 0,8 a 4,4 0 0 0 0,-8 z"/>
 					</symbol>
+					<symbol id="icon_maximize" viewbox="0 0 13 13" stroke="none" fill="currentColor" shape-rendering="geometricPrecision">
+						<path d="M 0,0 h 3 v 1 h -1.25 l 2,2 -0.75,0.75 -2,-2 v 1.25 h -1 z M 13,0 v 3 h -1 v -1.25 l -2,2 -0.75,-0.75 2,-2 h -1.25 v -1 z M 0,13 v -3 h 1 v 1.25 l 2,-2 0.75,0.75 -2,2 h 1.25 v 1 z M 13,13 h -3 v -1 h 1.25 l -2,-2 0.75,-0.75 2,2 v -1.25 h 1 z M 4,4 h 5 v 5 h -5 z M 5,5 v 3 h 3 v -3 z"/>
+					</symbol>
+					<symbol id="icon_minimize" viewbox="0 0 13 13" stroke="none" fill="currentColor" shape-rendering="geometricPrecision">
+						<path d="M 8,8 h 3 v 1 h -1.25 l 2,2 -0.75,0.75 -2,-2 v 1.25 h -1 z M 5,8 v 3 h -1 v -1.25 l -2,2 -0.75,-0.75 2,-2 h -1.25 v -1 z M 8,5 v -3 h 1 v 1.25 l 2,-2 0.75,0.75 -2,2 h 1.25 v 1 z M 5,5 h -3 v -1 h 1.25 l -2,-2 0.75,-0.75 2,2 v -1.25 h 1 z M 0,0 h 13 v 13 h -13 z M 1,1 v 11 h 11 v -11 z"/>
+					</symbol>
 				</defs>
 			</svg>
 		</div>
@@ -133,6 +139,8 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 			<div id="page_header">
 				<header id="header_title">
 					<a href="http://www.edshipyard.com/new/">EDSY</a>
+					<button id="window_maximize"><svg class="iconsvg maximize"><use xlink:href="#icon_maximize"/></svg></button>
+					<button id="window_minimize"><svg class="iconsvg minimize"><use xlink:href="#icon_minimize"/></svg></button>
 				</header>
 				<form id="page_tabs" name="header">
 					<label class="togglebutton"><input name="tab" type="radio" value="shipyard"><div><svg class="iconsvg shipyard"><use xlink:href="#icon_shipyard"/></svg><span>Shipyard</span></div></label>
@@ -140,7 +148,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 					<label class="togglebutton"><input name="tab" type="radio" value="options"><div><svg class="iconsvg unknown"><use xlink:href="#icon_unknown"/></svg><svg class="iconsvg repair"><use xlink:href="#icon_repair"/></svg><span>Help</span></div></label>
 				</form>
 				<div id="header_version">
-					<abbr title="updated 2019-05-08">v3.4.1a7</abbr>
+					<abbr title="updated 2019-05-12">v3.4.1a8</abbr>
 					<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X76V6PNF8CAV4&source=url"><img src="btn_donate_TN.gif" width="56" height="21"></a>
 				</div>
 			</div>
@@ -188,10 +196,16 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 								<button id="outfitting_fit_stored_rename"><svg class="iconsvg rename"><use xlink:href="#icon_rename"/></svg></button>
 								<button id="outfitting_fit_stored_delete"><svg class="iconsvg delete"><use xlink:href="#icon_delete"/></svg></button>
 								<span><!-- Show: --></span>
-								<label class="togglebutton"><input name="outfitting_show_mass" type="checkbox" value="1"><div>Mass</div></label>
-								<label class="togglebutton"><input name="outfitting_show_power" type="checkbox" value="1"><div>Power</div></label>
-								<label class="togglebutton"><input name="outfitting_show_attrs" type="checkbox" value="1"><div>Attrs</div></label>
-								<label class="togglebutton"><input name="outfitting_show_price" type="checkbox" value="1"><div>Price</div></label>
+								<div id="outfitting_cols_container">
+									<input type="checkbox" id="outfitting_cols_focus" class="toggleinput">
+									<label id="outfitting_cols_label" for="outfitting_cols_focus">COLS</label>
+									<div id="outfitting_show_popout">
+										<label class="togglebutton"><input name="outfitting_show_mass" type="checkbox" value="1"><div>Mass</div></label>
+										<label class="togglebutton"><input name="outfitting_show_power" type="checkbox" value="1"><div>Power</div></label>
+										<label class="togglebutton"><input name="outfitting_show_attrs" type="checkbox" value="1"><div>Attrs</div></label>
+										<label class="togglebutton"><input name="outfitting_show_price" type="checkbox" value="1"><div>Price</div></label>
+									</div>
+								</div>
 							</div>
 							<div id="outfitting_fit_slots" class="">
 								<div id="outfitting_fit_header">
@@ -272,25 +286,33 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 						</form>
 					</div>
 					<form id="outfitting_bottom" name="stats">
-						<input type="checkbox" id="toggle_stats" name="stats" value="1" class="toggleinput" checked>
-						<label id="toggle_stats_handle" for="toggle_stats" class="togglebutton">
-							<div class="show">&#9650; &#9650; &#9650;  SHOW STATS  &#9650; &#9650; &#9650;</div>
-							<div class="hide">&#9660; &#9660; &#9660;  HIDE STATS  &#9660; &#9660; &#9660;</div>
-						</label>
-						<input type="checkbox" id="toggle_stats_1" name="stats_1" value="8" class="toggleinput" checked>
-						<input type="checkbox" id="toggle_stats_2" name="stats_2" value="7" class="toggleinput" checked>
-						<input type="checkbox" id="toggle_stats_3" name="stats_3" value="6" class="toggleinput" checked>
-						<input type="checkbox" id="toggle_stats_4" name="stats_4" value="5" class="toggleinput" checked>
-						<input type="checkbox" id="toggle_stats_5" name="stats_5" value="4" class="toggleinput" checked>
-						<input type="checkbox" id="toggle_stats_6" name="stats_6" value="3" class="toggleinput" checked>
-						<input type="checkbox" id="toggle_stats_7" name="stats_7" value="2" class="toggleinput" checked>
-						<input type="checkbox" id="toggle_stats_8" name="stats_8" value="1" class="toggleinput" checked>
+						<input type="checkbox" id="stats_show" class="toggleinput" value="1" checked>
+						<input type="checkbox" id="stats_toggle_1" class="toggleinput stats_toggle" value="8" checked>
+						<input type="checkbox" id="stats_toggle_2" class="toggleinput stats_toggle" value="7" checked>
+						<input type="checkbox" id="stats_toggle_3" class="toggleinput stats_toggle" value="6" checked>
+						<input type="checkbox" id="stats_toggle_4" class="toggleinput stats_toggle" value="5" checked>
+						<input type="checkbox" id="stats_toggle_5" class="toggleinput stats_toggle" value="4" checked>
+						<input type="checkbox" id="stats_toggle_6" class="toggleinput stats_toggle" value="3" checked>
+						<input type="checkbox" id="stats_toggle_7" class="toggleinput stats_toggle" value="2" checked>
+						<input type="checkbox" id="stats_toggle_8" class="toggleinput stats_toggle" value="1" checked>
+						<div id="stats_show_handle">
+							<label for="stats_show" class="stats_show_label">
+								<div class="show">&#9650; &#9650; &#9650;  SHOW STATS  &#9650; &#9650; &#9650;</div>
+								<div class="hide">&#9660; &#9660; &#9660;  HIDE STATS  &#9660; &#9660; &#9660;</div>
+							</label>
+						</div>
 						<div id="outfitting_stats">
-							<div class="outfitting_stats_toggles">
-								<label for="toggle_stats_1" class="label_stats_1"><abbr title="Totals and capacities">TTL</abbr></label>
-								<label for="toggle_stats_2" class="label_stats_2"><abbr title="Navigational (FSD and Thruster) statistics">NAV</abbr></label>
-								<label for="toggle_stats_3" class="label_stats_3"><abbr title="Handling statistics">HND</abbr></label>
-								<label for="toggle_stats_4" class="label_stats_4"><abbr title="Thermal statistics">THM</abbr></label>
+							<div id="stats_toggles_left" class="stats_toggles">
+								<label for="stats_toggle_1" class="stats_toggle_label stats_toggle_label_1"><abbr title="Totals and capacities">TTL</abbr></label>
+								<label for="stats_toggle_2" class="stats_toggle_label stats_toggle_label_2"><abbr title="Navigational (FSD and Thruster) statistics">NAV</abbr></label>
+								<label for="stats_toggle_3" class="stats_toggle_label stats_toggle_label_3"><abbr title="Handling statistics">HND</abbr></label>
+								<label for="stats_toggle_4" class="stats_toggle_label stats_toggle_label_4"><abbr title="Thermal statistics">THM</abbr></label>
+							</div>
+							<div id="stats_toggles_right" class="stats_toggles">
+								<label for="stats_toggle_5" class="stats_toggle_label stats_toggle_label_5"><abbr title="Shield statistics">SHD</abbr></label>
+								<label for="stats_toggle_6" class="stats_toggle_label stats_toggle_label_6"><abbr title="Armour statistics">ARM</abbr></label>
+								<label for="stats_toggle_7" class="stats_toggle_label stats_toggle_label_7"><abbr title="Weapon statistics">WPN</abbr></label>
+								<label for="stats_toggle_8" class="stats_toggle_label stats_toggle_label_8"><abbr title="Prices">PRC</abbr></label>
 							</div>
 							<div id="outfitting_stats_wrapper">
 								<div id="outfitting_stats_container">
@@ -332,7 +354,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										<table>
 											<thead>
 												<tr>
-													<th><label for="toggle_stats_1" class="label_stats_1"><abbr title="Totals and capacities">TTL</abbr></label></th>
+													<th><label for="stats_toggle_1" class="stats_toggle_label stats_toggle_label_1"><abbr title="Totals and capacities">TTL</abbr></label></th>
 													<td><abbr title="Current mass and maximum laden mass (in tons)">MASS</abbr></td>
 													<td><abbr title="Current fuel and total capacity (in tons)">FUEL</abbr></td>
 													<td><abbr title="Current cargo and total capacity (in tons)">CRGO</abbr></td>
@@ -421,7 +443,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										<table>
 											<thead>
 												<tr>
-													<th><label for="toggle_stats_2" class="label_stats_2"><abbr title="Navigational (FSD and Thruster) statistics">NAV</abbr></label></th>
+													<th><label for="stats_toggle_2" class="stats_toggle_label stats_toggle_label_2"><abbr title="Navigational (FSD and Thruster) statistics">NAV</abbr></label></th>
 													<td><abbr title="Single jump range (in light-years) and fuel scoop time to refuel per max-range jump">JMP</abbr></td>
 													<td><abbr title="Total jump range (in light-years) of max-range jumps on a full fuel tank, and fuel scoop time to refuel per tank">RNG</abbr></td>
 													<td><abbr title="Thruster speed (in meters per second) and fuel scoop rate (in tons per second)">SPD</abbr></td>
@@ -485,7 +507,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										<table>
 											<thead>
 												<tr>
-													<th><label for="toggle_stats_3" class="label_stats_3"><abbr title="Handling statistics">HND</abbr></label></th>
+													<th><label for="stats_toggle_3" class="stats_toggle_label stats_toggle_label_3"><abbr title="Handling statistics">HND</abbr></label></th>
 													<td><abbr title="Pitch (nose up/down) speed (in degrees per second) and 180-degree flip time">PIT</abbr></td>
 													<td><abbr title="Roll (tilt left/right) speed (in degrees per second) and 180-degree flip time">ROL</abbr></td>
 													<td><abbr title="Yaw (nose left/right) speed (in degrees per second) and 180-degree flip time">YAW</abbr></td>
@@ -535,7 +557,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										<table>
 											<thead>
 												<tr>
-													<th><label for="toggle_stats_4" class="label_stats_4"><abbr title="Thermal statistics">THM</abbr></label></th>
+													<th><label for="stats_toggle_4" class="stats_toggle_label stats_toggle_label_4"><abbr title="Thermal statistics">THM</abbr></label></th>
 													<td><abbr title="Heat level at equilibrium, or time from 66% to 100% heat if overheating">LVL</abbr></td>
 												</tr>
 											</thead>
@@ -571,7 +593,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										<table>
 											<thead>
 												<tr>
-													<th><label for="toggle_stats_5" class="label_stats_5"><abbr title="Shield statistics">SHD</abbr></label></th>
+													<th><label for="stats_toggle_5" class="stats_toggle_label stats_toggle_label_5"><abbr title="Shield statistics">SHD</abbr></label></th>
 													<td><abbr title="Damage resistance (in %)">RES</abbr></td>
 													<td><abbr title="Raw and effective maximum strength (in megajoules)">STR</abbr></td>
 													<!-- <td><abbr title="Raw and effective regeneration rate (in megajoules per second)">RGN</abbr></td> -->
@@ -628,7 +650,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										<table>
 											<thead>
 												<tr>
-													<th><label for="toggle_stats_6" class="label_stats_6"><abbr title="Armour statistics">ARM</abbr></label></th>
+													<th><label for="stats_toggle_6" class="stats_toggle_label stats_toggle_label_6"><abbr title="Armour statistics">ARM</abbr></label></th>
 													<td><abbr title="Hull hardness and damage resistance (in %)">RES</abbr></td>
 													<td><abbr title="Raw and effective integrity">INT</abbr></td>
 												</tr>
@@ -671,7 +693,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										<table>
 											<thead>
 												<tr>
-													<th><label for="toggle_stats_7" class="label_stats_7"><abbr title="Weapon statistics">WPN</abbr></label></th>
+													<th><label for="stats_toggle_7" class="stats_toggle_label stats_toggle_label_7"><abbr title="Weapon statistics">WPN</abbr></label></th>
 													<td><abbr title="Burst damage per second from all weapons, while WEP capacitor and ammo last">BST</abbr></td>
 													<td></td>
 													<td><abbr title="Burst damage duration until WEP capacitor or ammo are exhausted">DUR</abbr></td>
@@ -721,7 +743,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										<table>
 											<thead>
 												<tr>
-													<th><label for="toggle_stats_8" class="label_stats_8"><abbr title="Prices">PRC</abbr></label></th>
+													<th><label for="stats_toggle_8" class="stats_toggle_label stats_toggle_label_8"><abbr title="Prices">PRC</abbr></label></th>
 													<td><abbr title="Price (in credits)">CR</abbr></td>
 												</tr>
 											</thead>
@@ -754,12 +776,6 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										</table>
 									</div>
 								</div>
-							</div>
-							<div class="outfitting_stats_toggles">
-								<label for="toggle_stats_5" class="label_stats_5"><abbr title="Shield statistics">SHD</abbr></label>
-								<label for="toggle_stats_6" class="label_stats_6"><abbr title="Armour statistics">ARM</abbr></label>
-								<label for="toggle_stats_7" class="label_stats_7"><abbr title="Weapon statistics">WPN</abbr></label>
-								<label for="toggle_stats_8" class="label_stats_8"><abbr title="Prices">PRC</abbr></label>
 							</div>
 						</div>
 					</form>
