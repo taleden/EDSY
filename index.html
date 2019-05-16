@@ -14,7 +14,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 -->
 		<title>EDSY</title>
 		<meta name="application-name" content="EDSY">
-		<meta name="edsy-versions-html" id="edsy_versions_html" content="34118,34118,34117,34118"><!-- HTML,CSS,DB,JS -->
+		<meta name="edsy-versions-html" id="edsy_versions_html" content="34219,34219,34219,34219"><!-- HTML,CSS,DB,JS -->
 		<meta name="author" content="taleden">
 		<meta name="description" content="E:D Shipyard (EDSY) is a ship outfitting tool for Elite: Dangerous">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -148,7 +148,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 					<label class="togglebutton"><input name="tab" type="radio" value="options"><div><svg class="iconsvg unknown"><use xlink:href="#icon_unknown"/></svg><svg class="iconsvg repair"><use xlink:href="#icon_repair"/></svg><span>Help</span></div></label>
 				</form>
 				<div id="header_version">
-					<abbr title="updated 2019-05-12">v3.4.1a8</abbr>
+					<abbr title="updated 2019-05-16">v3.4.2a9</abbr>
 					<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X76V6PNF8CAV4&source=url"><img src="btn_donate_TN.gif" width="56" height="21"></a>
 				</div>
 			</div>
@@ -515,37 +515,37 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 											</thead>
 											<tbody>
 												<tr>
-													<th><abbr title="Current values using configured ENG pips, fuel and cargo settings">CUR</abbr></th>
+													<th rowspan=2 class="vam"><abbr title="Current values using configured ENG pips, fuel and cargo settings">CUR</abbr></th>
 													<td id="outfitting_stats_cur_pitch"></td>
 													<td id="outfitting_stats_cur_roll"></td>
 													<td id="outfitting_stats_cur_yaw"></td>
 												</tr>
 												<tr>
-													<th>&nbsp;</th>
+													<!-- th>&nbsp;</th -->
 													<td id="outfitting_stats_cur_pitchtime"></td>
 													<td id="outfitting_stats_cur_rolltime"></td>
 													<td id="outfitting_stats_cur_yawtime"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Maximum values with 4 ENG pips, minimal or no fuel, and no cargo">MAX</abbr></th>
+													<th rowspan=2 class="vam"><abbr title="Maximum values with 4 ENG pips, minimal or no fuel, and no cargo">MAX</abbr></th>
 													<td id="outfitting_stats_max_pitch"></td>
 													<td id="outfitting_stats_max_roll"></td>
 													<td id="outfitting_stats_max_yaw"></td>
 												</tr>
 												<tr>
-													<th>&nbsp;</th>
+													<!-- th>&nbsp;</th -->
 													<td id="outfitting_stats_max_pitchtime"></td>
 													<td id="outfitting_stats_max_rolltime"></td>
 													<td id="outfitting_stats_max_yawtime"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Values during engine boost"><!-- TODO boost --></abbr></th>
+													<th rowspan=2 class="vam"><abbr title="Values during engine boost"><!-- TODO boost --></abbr></th>
 													<td id="outfitting_stats_bst_pitch"></td>
 													<td id="outfitting_stats_bst_roll"></td>
 													<td id="outfitting_stats_bst_yaw"></td>
 												</tr>
 												<tr>
-													<th>&nbsp;</th>
+													<!-- th>&nbsp;</th -->
 													<td id="outfitting_stats_bst_pitchtime"></td>
 													<td id="outfitting_stats_bst_rolltime"></td>
 													<td id="outfitting_stats_bst_yawtime"></td>
@@ -575,11 +575,11 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 													<td id="outfitting_stats_fsd_heat"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Values under maximum thrust with all weapons firing, with a full and a nearly empty WEP capacitor">WEP</abbr></th>
+													<th rowspan=2 class="vam"><abbr title="Values under maximum thrust with all weapons firing, with a full and a nearly empty WEP capacitor">WEP</abbr></th>
 													<td id="outfitting_stats_wpnfull_heat"></td>
 												</tr>
 												<tr>
-													<th></th>
+													<!-- th>&nbsp;</th -->
 													<td id="outfitting_stats_wpnempty_heat"></td>
 												</tr>
 												<tr>
@@ -637,9 +637,9 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 													<td id="outfitting_stats_exp_shield_reinf"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Time to rebuild from 0% to 50%">BLD</abbr></th>
+													<th><abbr title="Time to rebuild from 0% to 50%, including SYS pips and 16s delay, from a full SYS capacitor">BLD</abbr></th>
 													<td id="outfitting_stats_shield_build" class="other"></td>
-													<th><abbr title="Time to regenerate from 50% to 100%">RGN</abbr></th>
+													<th><abbr title="Time to regenerate from 50% to 100%, including SYS pips, from an empty SYS capacitor">RGN</abbr></th>
 													<!-- <td></td> -->
 													<td id="outfitting_stats_shield_regen" class="other"></td>
 												</tr>

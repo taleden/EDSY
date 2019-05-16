@@ -10,14 +10,16 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 */
 'use strict';
 window.edshipyard = new (function() {
-	var VERSIONS = [34118,34118,34117,34118]; /* HTML,CSS,DB,JS */
+	var VERSIONS = [34219,34219,34219,34219]; /* HTML,CSS,DB,JS */
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
+	var EXPERIMENTAL_IMPORT = {};
 	var TIMEOUT_RESIZE = 300;
 	var TIMEOUT_DBLCLICK = 300;
 	var TIMEOUT_LONGPRESS = 500;
 	var TOLERANCE_TOUCH = 10;
+	var WEAPON_CHARGE = 0.0;
 	var GROUPS = ['hardpoint','utility','component','military','internal'];
 	var GROUP_LABEL = { hardpoint:'Hardpoints', utility:'Utility Mounts', component:'Core Internal', military:'Military', internal:'Optional Internal' };
 	var CORE_SLOT_NAME = ['Bulkhead', 'Power Plant', 'Thruster', 'Frame Shift Drive', 'Life Support', 'Power Distributor', 'Sensors', 'Fuel Tank'];
@@ -673,8 +675,8 @@ window.edshipyard = new (function() {
 		}, // getModuleMtype()
 		
 		
-		setModuleID: function(modid) {
-			if (!(current.option.experimental ? this.isModuleIDValid(modid) : this.isModuleIDAllowed(modid)))
+		setModuleID: function(modid, experimental) {
+			if (!(experimental ? this.isModuleIDValid(modid) : this.isModuleIDAllowed(modid)))
 				return false;
 			this.modid = (modid | 0);
 			this.module =  ((this.slotgroup === 'ship' && this.slotnum === 'hull') ? eddb.ship[modid] : this.build.getModule(modid));
@@ -750,43 +752,38 @@ window.edshipyard = new (function() {
 				} else {
 					bpgrade = min(max(bpgrade, 1), eddb.blueprint[bpid].maxgrade);
 				}
-				if (bproll === null) {
-					bproll = this.bproll;
-				}
-				var modifier = this.modifier;
+				this.bpid = bpid;
+				this.bpgrade = bpgrade;
 				if (bproll === null || bproll < 0) {
-					bproll = -1;
+					this.bproll = bproll = -1;
 					this.clearHash();
 				} else {
-					bproll = min(max(bproll, 0), 1);
-					modifier = {};
+					this.bproll = bproll = min(max(bproll, 0), 1);
+					this.modifier = {};
 					for (var a = 0;  a < mtype.modifiable.length;  a++) {
 						var attr = mtype.modifiable[a];
 						var attribute = eddb.attribute[attr];
-						if (attribute && blueprint[attr] && (attribute.modset || attribute.modadd || attribute.modmod || getModuleAttrValue(this.module, attr))) {
+						if (attribute && blueprint[attr] && (attribute.modset || attribute.modadd || attribute.modmod || this.getBaseAttrValue(attr))) {
 							var himod = blueprint[attr][bpgrade - 1];
 							var lomod = ((bpgrade > 1) ? blueprint[attr][bpgrade - 2] : ((himod && blueprint[attr][1]) ? (himod - (blueprint[attr][1] - himod)) : 0));
-							modifier[attr] = (((himod < 0) === !attribute.bad) ? himod : (lomod + bproll * (himod - lomod))) / (attribute.modmod || ((attribute.modadd || attribute.modset) ? 1 : 100));
+							this.modifier[attr] = (((himod < 0) === !attribute.bad) ? himod : (lomod + bproll * (himod - lomod))) / (attribute.modmod || ((attribute.modadd || attribute.modset) ? 1 : 100));
 						}
 					}
 					// when modifying clip size, round up to a multiple of burst size
-					if (modifier['ammoclip']) {
-						var ammoclip = getModuleAttrValue(this.module, 'ammoclip') * (1 + modifier['ammoclip']);
-						var bstsize = getModuleAttrValue(this.module, 'bstsize', modifier['bstsize']);
-						modifier['ammoclip'] = getModuleAttrModifier(this.module, 'ammoclip', ceil(ammoclip / bstsize) * bstsize);
+					// (this requires applying the ammoclip modifier manually to avoid rounding to step first)
+					if (this.modifier['ammoclip']) {
+						var ammoclip = this.getBaseAttrValue('ammoclip') * (1 + this.modifier['ammoclip']);
+						var bstsize = this.getEffectiveAttrValue('bstsize');
+						this.modifier['ammoclip'] = getModuleAttrModifier(this.module, 'ammoclip', ceil(ammoclip / bstsize) * bstsize);
 					}
 					// when modifying damage falloff, cap at maximum range
-					if (modifier['dmgfall']) {
-						var maxrng = getModuleAttrValue(this.module, 'maxrng', modifier['maxrng']);
-						var dmgfall = getModuleAttrValue(this.module, 'dmgfall', modifier['dmgfall']);
-						modifier['dmgfall'] = getModuleAttrModifier(this.module, 'dmgfall', min(maxrng, dmgfall));
+					if (this.modifier['dmgfall']) {
+						var maxrng = this.getEffectiveAttrValue('maxrng');
+						var dmgfall = this.getEffectiveAttrValue('dmgfall');
+						this.modifier['dmgfall'] = getModuleAttrModifier(this.module, 'dmgfall', min(maxrng, dmgfall));
 					}
 					this.clearStats();
 				}
-				this.bpid = bpid;
-				this.bpgrade = bpgrade;
-				this.bproll = bproll;
-				this.modifier = modifier;
 			} else {
 				this.bpid = 0;
 				this.bpgrade = 0;
@@ -867,57 +864,134 @@ window.edshipyard = new (function() {
 		}, // isModified()
 		
 		
+		getAttrValue: function(attr, modified) {
+			switch (attr) {
+			case 'fpc':
+			case 'sfpc':
+				var ammoclip = this.getAttrValue('ammoclip', modified);
+				if (ammoclip) {
+					// Auto Loader adds 1 round per 2 shots for an almost-but-not-quite +100% effective clip size
+					if (modified && this.expid === 'wpnx_aulo')
+						ammoclip += ammoclip - 1;
+					return ammoclip;
+				}
+				return this.getAttrValue('bstsize', modified);
+				
+			case 'spc':
+			case 'sspc':
+				var dmgmul = this.getAttrValue('dmgmul', modified);
+				var duration = this.getAttrValue('duration', modified) * (dmgmul ? WEAPON_CHARGE : 1.0);
+				if (this.modid == 84224 && attr === 'sspc') // TODO: bug? Imperial Hammer Rail Gun can keep firing through reloads without re-charging
+					duration = 0;
+				var bstsize = this.getAttrValue('bstsize', modified);
+				var bstrof = this.getAttrValue('bstrof', modified);
+				var bstint = this.getAttrValue('bstint', modified);
+				var spc = (duration + (bstsize - 1) / bstrof + bstint);
+				var ammoclip = this.getAttrValue('ammoclip', modified);
+				var rldtime = (attr === 'sspc') ? this.getAttrValue('rldtime', modified) : 0;
+				if (ammoclip) {
+					// Auto Loader adds 1 round per 2 shots for an almost-but-not-quite +100% effective clip size
+					if (modified && this.expid === 'wpnx_aulo')
+						ammoclip += ammoclip - 1;
+					spc *= ceil(ammoclip / bstsize);
+				}
+				return spc + max(0, rldtime - duration - bstint);
+				
+			case 'rof':
+				return (this.getAttrValue('fpc', modified) / this.getAttrValue('spc', modified));
+				
+			case 'srof':
+				return (this.getAttrValue('sfpc', modified) / this.getAttrValue('sspc', modified));
+				
+			case 'dps':
+			case 'sdps':
+				var damage = this.getAttrValue('damage', modified);
+				var dmgmul = (1 + WEAPON_CHARGE * ((this.getAttrValue('dmgmul', modified) || 1) - 1));
+				var rounds = this.getAttrValue('rounds', modified);
+				var rof = this.getAttrValue((attr === 'sdps') ? 'srof' : 'rof', modified);
+				return (damage * dmgmul * rounds * (isFinite(rof) ? rof : 1));
+				
+			case 'eps':
+			case 'seps':
+				var distdraw = this.getAttrValue('distdraw', modified);
+				var rof = this.getAttrValue((attr === 'seps') ? 'srof' : 'rof', modified);
+				return (distdraw * (isFinite(rof) ? rof : 1));
+				
+			case 'hps':
+			case 'shps':
+				var thmload = this.getAttrValue('thmload', modified);
+				var rof = this.getAttrValue((attr === 'shps') ? 'srof' : 'rof', modified);
+				return (thmload * (isFinite(rof) ? rof : 1));
+				
+			case 'minmul':
+			case 'optmul':
+			case 'maxmul':
+				var spd = this.getAttrValue(attr+'spd', modified);
+				var acc = this.getAttrValue(attr+'acc', modified);
+				var rot = this.getAttrValue(attr+'rot', modified);
+				return (spd + acc + rot) / 3.0;
+			}
+			
+			return getModuleAttrValue(this.module, attr, modified ? this.getEffectiveAttrModifier(attr) : undefined);
+		}, // getAttrValue()
+		
+		
+		getBaseAttrValue: function(attr) {
+			return this.getAttrValue(attr, false);
+		}, // getBaseAttrValue()
+		
+		
+		getEffectiveAttrValue: function(attr) {
+			return this.getAttrValue(attr, true);
+		}, // getEffectiveAttrValue()
+		
+		
+		getBaseAttrModifier: function(attr) {
+			return ((this.modifier || EMPTY_OBJ)[attr] || 0);
+		}, // getBaseAttrModifier()
+		
+		
 		getRelatedAttrModifier: function(attr) {
 			switch (attr) {
 			case 'cost':
 				return (cache.discountMod[this.discounts] - 1);
 				
 			case 'rof':
-				var rofBase = getModuleAttrValue(this.module, 'rof');
-				if (!this.module || !isFinite(rofBase))
-					return 0;
-				var bstsize = this.getEffectiveAttrValue('bstsize');
-				var bstrof = this.getEffectiveAttrValue('bstrof') || 1;
-				var bstint = this.getEffectiveAttrValue('bstint');
-				return (((bstsize / (((bstsize - 1) / bstrof) + bstint)) / rofBase) - 1);
-				
 			case 'srof':
-				var srofBase = getModuleAttrValue(this.module, 'srof');
-				if (!this.module || !isFinite(srofBase))
+				// can't just combine modifiers, they're too interrelated
+				// instead, compare the derived values with and without modifiers
+				var base = this.getAttrValue(attr, false);
+				var value = this.getAttrValue(attr, true);
+				if (!isFinite(base) || !isFinite(value))
 					return 0;
-				var ammoclip = this.getEffectiveAttrValue('ammoclip');
-				if (!ammoclip)
-					return this.getRelatedAttrModifier('rof');
-				if (this.expid === 'wpnx_aulo') // Auto Loader adds 1 round per 2 shots for an almost-but-not-quite +100% effective clip size
-					ammoclip += ammoclip - 1;
-				var bstsize = this.getEffectiveAttrValue('bstsize');
-				var bstrof = this.getEffectiveAttrValue('bstrof');
-				var bstint = this.getEffectiveAttrValue('bstint');
-				var rldtime = this.getEffectiveAttrValue('rldtime');
-				return (((ammoclip / ((ammoclip / bstrof) + (ceil(ammoclip / bstsize) * (bstint - (1 / bstrof))) - bstint + rldtime)) / srofBase) - 1);
+				var modifier = (value / base) - 1;
+				return (abs(modifier) < MIN_MODIFIER) ? 0 : modifier;
 				
 			case 'dps':
 			case 'sdps':
 				return getAttrModifierSum(attr,
 					getAttrModifierSum(attr,
-						this.getEffectiveAttrModifier('damage'),
-						this.getEffectiveAttrModifier(attr === 'dps' ? 'rof' : 'srof')
+						getAttrModifierSum(attr,
+							this.getEffectiveAttrModifier('damage'),
+							this.getEffectiveAttrModifier('dmgmul') * WEAPON_CHARGE
+						),
+						this.getEffectiveAttrModifier('rounds')
 					),
-					this.getEffectiveAttrModifier('rounds')
+					this.getEffectiveAttrModifier(attr === 'sdps' ? 'srof' : 'rof')
 				);
 				
 			case 'eps':
 			case 'seps':
 				return getAttrModifierSum(attr,
 					this.getEffectiveAttrModifier('distdraw'),
-					this.getEffectiveAttrModifier(attr === 'eps' ? 'rof' : 'srof')
+					this.getEffectiveAttrModifier(attr === 'seps' ? 'srof' : 'rof')
 				);
 				
 			case 'hps':
 			case 'shps':
 				return getAttrModifierSum(attr,
 					this.getEffectiveAttrModifier('thmload'),
-					this.getEffectiveAttrModifier(attr === 'hps' ? 'rof' : 'srof')
+					this.getEffectiveAttrModifier(attr === 'shps' ? 'srof' : 'rof')
 				);
 				
 			case 'shotspd':
@@ -940,23 +1014,14 @@ window.edshipyard = new (function() {
 			case 'maxmulrot':
 				return this.getEffectiveAttrModifier('optmul');
 			}
+			
 			return 0;
 		}, // getRelatedAttrModifier()
 		
 		
-		getBaseAttrValue: function(attr) {
-			return getModuleAttrValue(this.module, attr);
-		}, // getBaseAttrValue()
-		
-		
-		getEffectiveAttrValue: function(attr) {
-			return getModuleAttrValue(this.module, attr, this.getEffectiveAttrModifier(attr));
-		}, // getEffectiveAttrValue()
-		
-		
 		getEffectiveAttrModifier: function(attr) {
 			// get base, related and experimental modifiers
-			var modBase = ((this.modifier || EMPTY_OBJ)[attr] || 0);
+			var modBase = this.getBaseAttrModifier(attr);
 			var modRel = this.getRelatedAttrModifier(attr);
 			var modExp = ((eddb.expeffect[this.expid] || EMPTY_OBJ)[attr] || 0);
 			if (modExp) {
@@ -973,15 +1038,23 @@ window.edshipyard = new (function() {
 			if (attr === 'cost') {
 				return this.setDiscounts(getClosestDiscount(1 + (modifier || 0)));
 			} else if (attr === 'rof' || attr === 'srof') {
-				// rof * (1 + rofmod) = bstsize / ((bstsize - 1) / bstrof + bstint * (1 + bstintmod))
-				// (bstsize / (rof * (1 + rofmod)) - (bstsize - 1) / bstrof) / bstint - 1 = bstintmod
-				var rof = getModuleAttrValue(this.module, 'rof');
+				var dmgmul = this.getEffectiveAttrValue('dmgmul');
+				var duration = this.getEffectiveAttrValue('duration') * (dmgmul ? WEAPON_CHARGE : 1.0);
+				if (this.modid == 84224 && attr === 'srof') // TODO: bug? Imperial Hammer Rail Gun can keep firing through reloads without re-charging
+					duration = 0;
 				var bstsize = this.getEffectiveAttrValue('bstsize');
 				var bstrof = this.getEffectiveAttrValue('bstrof');
-				var bstint = getModuleAttrValue(this.module, 'bstint');
-				// TODO: does this actually work for srof?
+				var bstint = this.getBaseAttrValue('bstint');
+				var ammoclip = this.getEffectiveAttrValue('ammoclip');
+				if (this.expid === 'wpnx_aulo') // Auto Loader adds 1 round per 2 shots for an almost-but-not-quite +100% effective clip size
+					ammoclip += max(0, ammoclip - 1);
+				var rldtime = (attr === 'srof') ? this.getEffectiveAttrValue('rldtime') : 0;
+				var rof = this.getBaseAttrValue('rof');
+				// rof * (1 + rofmod) = (ammoclip || bstsize) / ((duration + (bstsize - 1) / bstrof + bstint * (1 + bstintmod)) * ceil((ammoclip || bstsize) / bstsize) + max(0, rldtime - duration - bstint * (1 + bstintmod)))
+				// (((ammoclip || bstsize) / (rof * (1 + rofmod)) - max(0, rldtime - duration - bstint * (1 + bstintmod))) / ceil((ammoclip || bstsize) / bstsize) - duration - (bstsize - 1) / bstrof) / bstint - 1 = bstintmod
 				attr = 'bstint';
-				modifier = (bstsize / (rof * (1 + (modifier || 0))) - (bstsize - 1) / bstrof) / bstint - 1;
+				modifier = (((ammoclip || bstsize) / (rof * (1 + (modifier || 0))) - max(0, rldtime - duration - bstint)) / ceil((ammoclip || bstsize) / bstsize) - duration - (bstsize - 1) / bstrof) / bstint - 1;
+				// TODO: how to handle bstint also appearing inside the max() when setting srof?
 			}
 			
 			// get related and experimental modifiers
@@ -992,10 +1065,8 @@ window.edshipyard = new (function() {
 				modExp /= ((attribute.modset || attribute.modadd) ? 1 : (attribute.modmod || 100));
 			}
 			
-			// set the base modifier (or clear if it's tiny, probably just a rounding error)
+			// set the base modifier
 			var basemodifier = getAttrModifierDifference(attr, modifier, getAttrModifierSum(attr, modExp, modRel));
-			if (abs(basemodifier) < MIN_MODIFIER)
-				basemodifier = 0;
 			return this.setAttrModifier(attr, basemodifier);
 		}, // setEffectiveAttrModifier()
 		
@@ -1008,17 +1079,24 @@ window.edshipyard = new (function() {
 			if (this.slotgroup === 'ship')
 				return false;
 			if (attr === 'rof' || attr === 'srof') {
-				// rof * (1 + rofmod) = bstsize / ((bstsize - 1) / bstrof + bstint * (1 + bstintmod))
-				// (bstsize / (rof * (1 + rofmod)) - (bstsize - 1) / bstrof) / bstint - 1 = bstintmod
-				var rof = getModuleAttrValue(this.module, 'rof');
-				var bstsize = getModuleAttrValue(this.module, 'bstsize');
-				var bstrof = getModuleAttrValue(this.module, 'bstrof');
-				var bstint = getModuleAttrValue(this.module, 'bstint');
-				// TODO: does this actually work for srof?
+				var dmgmul = this.getBaseAttrValue('dmgmul');
+				var duration = this.getBaseAttrValue('duration') * (dmgmul ? WEAPON_CHARGE : 1.0);
+				if (this.modid == 84224 && attr === 'srof') // TODO: bug? Imperial Hammer Rail Gun can keep firing through reloads without re-charging
+					duration = 0;
+				var bstsize = this.getBaseAttrValue('bstsize');
+				var bstrof = this.getBaseAttrValue('bstrof');
+				var bstint = this.getBaseAttrValue('bstint');
+				var ammoclip = this.getBaseAttrValue('ammoclip');
+				var rldtime = (attr === 'srof') ? this.getBaseAttrValue('rldtime') : 0;
+				var rof = this.getBaseAttrValue('rof');
+				// rof * (1 + rofmod) = (ammoclip || bstsize) / ((duration + (bstsize - 1) / bstrof + bstint * (1 + bstintmod)) * ceil((ammoclip || bstsize) / bstsize) + max(0, rldtime - duration - bstint * (1 + bstintmod)))
+				// (((ammoclip || bstsize) / (rof * (1 + rofmod)) - max(0, rldtime - duration - bstint * (1 + bstintmod))) / ceil((ammoclip || bstsize) / bstsize) - duration - (bstsize - 1) / bstrof) / bstint - 1 = bstintmod
 				attr = 'bstint';
-				modifier = (bstsize / (rof * (1 + (modifier || 0))) - (bstsize - 1) / bstrof) / bstint - 1;
+				modifier = (((ammoclip || bstsize) / (rof * (1 + (modifier || 0))) - max(0, rldtime - duration - bstint)) / ceil((ammoclip || bstsize) / bstsize) - duration - (bstsize - 1) / bstrof) / bstint - 1;
+				// TODO: how to handle bstint also appearing inside the max() when setting srof?
 			}
-			if (!modifier) {
+			// set the modifier (or clear if it's tiny, probably just a rounding error)
+			if (!modifier || abs(modifier) < MIN_MODIFIER) {
 				if (this.modifier) {
 					delete this.modifier[attr];
 					var empty = true;
@@ -1101,7 +1179,7 @@ window.edshipyard = new (function() {
 		}, // getStoredHash()
 		
 		
-		setHash: function(hash, version, errors) {
+		setHash: function(hash, version, errors, experimental) {
 			var errortag;
 			if (errors) errortag = (this.slotgroup ? ('Slot ' + this.slotgroup + ' ' + ((this.slotgroup === 'component') ? CORE_SLOT_ABBR[this.slotnum].toLowerCase() : (isNaN(this.slotnum) ? this.slotnum : (this.slotnum + 1))) + ': ') : '');
 			if (this.slotgroup === 'ship' && this.slotnum === 'hull') {
@@ -1121,9 +1199,11 @@ window.edshipyard = new (function() {
 				modid = idmap[this.slotgroup][modid] || modid;
 			}
 			modid = max(0, (idmap.module[modid] || modid)) & 0x1FFFF;
-			if (!this.setModuleID(modid)) {
+			if (!this.setModuleID(modid, experimental)) {
 				if (errors) errors.push(errortag + 'Invalid module id: ' + modid);
 				return false;
+			} else if (experimental === EXPERIMENTAL_IMPORT && !this.setModuleID(modid)) {
+				if (errors) errors.push(errortag + getModuleLabel(this.getModule()) + ' requires Experimental Mode');
 			}
 			
 			// discounted, modified, powered and priority
@@ -1245,11 +1325,11 @@ window.edshipyard = new (function() {
 		}, // setHash()
 		
 		
-		setStoredHash: function(modulehash, errors) {
+		setStoredHash: function(modulehash, errors, experimental) {
 			var version = hashDecode(modulehash.slice(0,1));
 			var powered = this.getPowered();
 			var priority = this.getPriority();
-			var ok = this.setHash(modulehash.slice(1), version, errors);
+			var ok = this.setHash(modulehash.slice(1), version, errors, experimental);
 			// this.setDiscounts(0); // TODO: save discounts in storedhash?
 			this.setPowered(powered);
 			this.setPriority(priority);
@@ -1502,8 +1582,7 @@ window.edshipyard = new (function() {
 			if (!slot1 || !slot2)
 				return false;
 			slot2 = new Slot(this, slotgroup2, slotnum2, slot2.getModuleID());
-			var errors = [];
-			if (!slot2.setHash(slot1.getHash(), HASH_VERSION, errors))
+			if (!slot2.setHash(slot1.getHash(), HASH_VERSION, null, current.option.experimental))
 				return false;
 			this.slots[slotgroup2][slotnum2] = slot2;
 			this.clearStats();
@@ -1664,15 +1743,13 @@ window.edshipyard = new (function() {
 							var thmload = slot.getEffectiveAttrValue('thmload');
 							if (slotgroup === 'hardpoint') {
 								var distdraw = slot.getEffectiveAttrValue('distdraw');
-								var rof = slot.getEffectiveAttrValue('rof');
 								var ammoclip = slot.getEffectiveAttrValue('ammoclip');
 								var ammomax = slot.getEffectiveAttrValue('ammomax');
-								var rldtime = slot.getEffectiveAttrValue('rldtime');
-								var cycletime = isFinite(rof) ? (rldtime ? (((ammoclip || 1) - 1) / rof + rldtime) : ((ammoclip || 1) / rof)) : 1;
-								var ammotime = cycletime - rldtime + (ammoclip ? (cycletime * ammomax / ammoclip) : 1/0);
-								var dps = slot.getEffectiveAttrValue('damage') * slot.getEffectiveAttrValue('rounds') * (ammoclip || 1) / cycletime;
-								thmload *= (ammoclip || 1) / cycletime;
+								var fpc = slot.getEffectiveAttrValue('sfpc');
+								var spc = slot.getEffectiveAttrValue('sspc') || 1;
+								var dps = slot.getEffectiveAttrValue('sdps');
 								
+								thmload *= fpc / spc;
 								stats.thmload_hardpoint_wepfull += getEffectiveWeaponThermalLoad(thmload, distdraw, wepcap, 1.0);
 								stats.thmload_hardpoint_wepempty += getEffectiveWeaponThermalLoad(thmload, distdraw, wepcap, 0.0);
 								
@@ -1683,9 +1760,11 @@ window.edshipyard = new (function() {
 								stats.dps_exp += dps * (slot.getEffectiveAttrValue('expwgt') / 100.0);
 								stats.dps_axe += dps * (slot.getEffectiveAttrValue('axewgt') / 100.0);
 								stats.dps_cau += dps * (slot.getEffectiveAttrValue('cauwgt') / 100.0);
+								
+								var ammotime = ammoclip ? (spc * ((ammoclip + ammomax) / fpc)) : 1/0;
 								if (distdraw) {
 									stats.dps_distdraw += dps;
-									stats.distdraw_second += distdraw * (ammoclip || 1) / cycletime;
+									stats.distdraw_second += distdraw * fpc / spc;
 									stats.duration_wepcap = min(stats.duration_wepcap, ammotime);
 								} else {
 									stats.dps_nodistdraw += dps;
@@ -1895,7 +1974,7 @@ window.edshipyard = new (function() {
 		*/
 		var slot = build.getSlot('ship', 'hatch');
 		if (slot) {
-			slot.setHash(hashgroup.ship.slice(i), version, errors);
+			slot.setHash(hashgroup.ship.slice(i), version, errors, current.option.experimental || EXPERIMENTAL_IMPORT);
 		} else if (errors) errors.push('Invalid slot: ship hatch');
 		
 		for (var g = 0;  g < GROUPS.length;  g++) {
@@ -1940,7 +2019,7 @@ window.edshipyard = new (function() {
 					}
 					slot = build.getSlot(tgtslotgroup, tgtslotnum);
 					if (slot) {
-						slot.setHash(hashgroup[slotgroup].slice(i, j), version, errors);
+						slot.setHash(hashgroup[slotgroup].slice(i, j), version, errors, current.option.experimental || EXPERIMENTAL_IMPORT);
 					} else if (errors) errors.push('Invalid slot: ' + tgtslotgroup + ' ' + (isNaN(tgtslotnum) ? tgtslotnum : (tgtslotnum+1)));
 				}
 			}
@@ -2179,6 +2258,38 @@ window.edshipyard = new (function() {
 	*/
 	
 	
+	var getAttrValue = function(attr, value, modifier) {
+		var attribute = eddb.attribute[attr];
+		if (attribute) {
+			// fall back on attribute default value
+			if (value === undefined && !isNaN(attribute.default))
+				value = attribute.default;
+			
+			// apply modifier?
+			if (modifier && !isNaN(value) && (value || attribute.modset || attribute.modadd || attribute.modmod)) {
+				if (attribute.modset) {
+					value = modifier;
+				} else if (attribute.modadd) {
+					value = value + modifier;
+				} else if (attribute.modmod) {
+					value = ((1 + (value / attribute.modmod)) * (1 + modifier) - 1) * attribute.modmod;
+				} else {
+					value = value * (1 + modifier);
+				}
+				
+				// apply constraints
+				if (attribute.step)
+					value = round(value / attribute.step) * attribute.step;
+				if (attribute.min !== undefined)
+					value = max(value, attribute.min);
+				if (attribute.max !== undefined)
+					value = min(value, attribute.max);
+			}
+		}
+		return value;
+	}; // getAttrValue()
+	
+	
 	var getAttrModifier = function(attr, base, value) {
 		var attribute = eddb.attribute[attr];
 		if (!attribute || isNaN(value) || value == base)
@@ -2293,100 +2404,74 @@ window.edshipyard = new (function() {
 	
 	
 	var getModuleAttrValue = function(module, attr, modifier) {
-		var attribute = eddb.attribute[attr];
 		if (!module)
 			return undefined;
-		
-		// fetch or calculate the base value
 		var value = module[attr];
 		switch (attr) {
-		case 'rof':
+		case 'fpc':
+		case 'sfpc':
+			value = getModuleAttrValue(module, 'ammoclip') || getModuleAttrValue(module, 'bstsize');
+			break;
+			
+		case 'spc':
+		case 'sspc':
+			var dmgmul = getModuleAttrValue(module, 'dmgmul');
+			var duration = getModuleAttrValue(module, 'duration') * (dmgmul ? WEAPON_CHARGE : 1.0);
+			if (module.name === eddb.module[84224].name && attr === 'sspc') // TODO: bug? Imperial Hammer Rail Gun can keep firing through reloads without re-charging
+				duration = 0;
 			var bstsize = getModuleAttrValue(module, 'bstsize');
 			var bstrof = getModuleAttrValue(module, 'bstrof');
 			var bstint = getModuleAttrValue(module, 'bstint');
-			value = bstsize / ((bstsize - 1) / bstrof + bstint);
+			value = (duration + (bstsize - 1) / bstrof + bstint);
+			var ammoclip = getModuleAttrValue(module, 'ammoclip');
+			var rldtime = (attr === 'sspc') ? getModuleAttrValue(module, 'rldtime') : 0;
+			if (ammoclip) {
+				value *= ceil(ammoclip / bstsize);
+			}
+			value += max(0, rldtime - duration - bstint);
 			break;
 			
+		case 'rof':
 		case 'srof':
-			var ammoclip = getModuleAttrValue(module, 'ammoclip');
-			if (ammoclip) {
-				var bstsize = getModuleAttrValue(module, 'bstsize');
-				var bstrof = getModuleAttrValue(module, 'bstrof');
-				var bstint = getModuleAttrValue(module, 'bstint');
-				var rldtime = getModuleAttrValue(module, 'rldtime');
-				value = ammoclip / ((ammoclip / bstrof) + (ceil(ammoclip / bstsize) * (bstint - (1 / bstrof))) - bstint + rldtime);
-			} else {
-				value = getModuleAttrValue(module, 'rof');
-			}
+			value = (getModuleAttrValue(module, (attr === 'srof') ? 'sfpc' : 'fpc') / getModuleAttrValue(module, (attr === 'srof') ? 'sspc' : 'spc'));
 			break;
 			
 		case 'dps':
 		case 'sdps':
 			var damage = getModuleAttrValue(module, 'damage');
-			var rof = getModuleAttrValue(module, (attr === 'dps' ? 'rof' : 'srof'));
+			var dmgmul = (1 + WEAPON_CHARGE * ((getModuleAttrValue(module, 'dmgmul') || 1) - 1));
 			var rounds = getModuleAttrValue(module, 'rounds');
-			value = (damage * (isFinite(rof) ? rof : 1) * rounds);
+			var rof = getModuleAttrValue(module, (attr === 'sdps') ? 'srof' : 'rof');
+			value = (damage * dmgmul * rounds * (isFinite(rof) ? rof : 1));
 			break;
 			
 		case 'eps':
 		case 'seps':
 			var distdraw = getModuleAttrValue(module, 'distdraw');
-			var rof = getModuleAttrValue(module, (attr === 'eps' ? 'rof' : 'srof'));
+			var rof = getModuleAttrValue(module, (attr === 'seps') ? 'srof' : 'rof');
 			value = (distdraw * (isFinite(rof) ? rof : 1));
 			break;
 			
 		case 'hps':
 		case 'shps':
 			var thmload = getModuleAttrValue(module, 'thmload');
-			var rof = getModuleAttrValue(module, (attr === 'hps' ? 'rof' : 'srof'));
+			var rof = getModuleAttrValue(module, (attr === 'shps') ? 'srof' : 'rof');
 			value = (thmload * (isFinite(rof) ? rof : 1));
 			break;
 			
 		case 'minmul':
-			if (('minmulspd' in module) || ('minmulacc' in module) || ('minmulrot' in module)) {
-				value = ((getModuleAttrValue(module, 'minmulspd') + getModuleAttrValue(module, 'minmulacc') + getModuleAttrValue(module, 'minmulrot')) / 3.0);
-			}
-			break;
-			
 		case 'optmul':
-			if (('optmulspd' in module) || ('optmulacc' in module) || ('optmulrot' in module)) {
-				value = ((getModuleAttrValue(module, 'optmulspd') + getModuleAttrValue(module, 'optmulacc') + getModuleAttrValue(module, 'optmulrot')) / 3.0);
-			}
-			break;
-			
 		case 'maxmul':
-			if (('maxmulspd' in module) || ('maxmulacc' in module) || ('maxmulrot' in module)) {
-				value = ((getModuleAttrValue(module, 'maxmulspd') + getModuleAttrValue(module, 'maxmulacc') + getModuleAttrValue(module, 'maxmulrot')) / 3.0);
+			var attrspd = attr+'spd', attracc = attr+'acc', attrrot = attr+'rot';
+			if (attrspd in module || attracc in module || attrrot in module) {
+				value = (getModuleAttrValue(module, attrspd) + getModuleAttrValue(module, attracc) + getModuleAttrValue(module, attrrot)) / 3.0;
 			}
 			break;
 		}
-		
-		if (attribute) {
-			// fall back on attribute default value
-			if (value === undefined)
-				value = ((isNaN(attribute.default) && !isNaN(attribute.scale)) ? getModuleAttrValue(module, attribute.default) : attribute.default);
-			
-			// apply modifier
-			if (modifier && !isNaN(value) && (value || attribute.modset || attribute.modadd || attribute.modmod)) {
-				if (attribute.modset) {
-					value = modifier;
-				} else if (attribute.modadd) {
-					value = value + modifier;
-				} else if (attribute.modmod) {
-					value = ((1 + (value / attribute.modmod)) * (1 + modifier) - 1) * attribute.modmod;
-				} else {
-					value = value * (1 + modifier);
-				}
-				if (attribute.step)
-					value = round(value / attribute.step) * attribute.step;
-				if (attribute.min !== undefined)
-					value = max(value, attribute.min);
-				if (attribute.max !== undefined)
-					value = min(value, attribute.max);
-			}
-		}
-		
-		return value;
+		var attribute = eddb.attribute[attr];
+		if (value === undefined && attribute && isNaN(attribute.default) && !isNaN(attribute.scale))
+			value = getModuleAttrValue(module, attribute.default);
+		return getAttrValue(attr, value, modifier);
 	}; // getModuleAttrValue()
 	
 	
@@ -3530,10 +3615,12 @@ window.edshipyard = new (function() {
 					}
 					if (modifiers['bstint']) {
 						// translate bstint back to rof, considering modified bstsize/bstrof
+						var duration = 0; // TODO: verify that CAPI bstint modifier assumes 0 charge time for variable charge (dmgmul) weapons
 						var bstsize = getModuleAttrValue(module, 'bstsize', modifiers['bstsize']);
 						var bstrof = getModuleAttrValue(module, 'bstrof', modifiers['bstrof']);
 						var bstint = getModuleAttrValue(module, 'bstint', modifiers['bstint']);
-						modifiers['rof'] = getModuleAttrModifier(module, 'rof', (bstsize / ((bstsize - 1) / bstrof + bstint)) * (1 + (modifiers['rof'] || 0)));
+						var rof = (bstsize / ((bstsize / bstrof) + max(0, bstint - 1 / bstrof) + duration)) * (1 + (modifiers['rof'] || 0));
+						modifiers['rof'] = getModuleAttrModifier(module, 'rof', rof);
 						delete modifiers['bstint'];
 					}
 					
@@ -3667,7 +3754,10 @@ window.edshipyard = new (function() {
 						var fdname = (modulejson.Item || '').trim().toUpperCase();
 						var modid = fdevmap.shipModule[shipid][fdname] || fdevmap.module[fdname];
 						if (modid) {
-							if (slot.setModuleID(modid)) {
+							if (slot.setModuleID(modid, true)) {
+								if (!current.option.experimental && !this.setModuleID(modid)) {
+									if (errors) errors.push(modulejson.Slot + getModuleLabel(this.getModule()) + ' requires Experimental Mode');
+								}
 								var modvalue = modulejson.Value || 0;
 								var basecost = build.getModule(modid).cost;
 								if (!slot.setDiscounts(basecost ? getClosestDiscount(modvalue / basecost) : 0)) {
@@ -4836,8 +4926,7 @@ window.edshipyard = new (function() {
 			case 'shieldrnfps':
 			case 'thmdrain':
 				var value = slot.getEffectiveAttrValue(attr) * slot.getEffectiveAttrValue('duration');
-				var module = slot.getModule();
-				var value2 = getModuleAttrValue(module, attr) * getModuleAttrValue(module, 'duration');
+				var value2 = slot.getBaseAttrValue(attr) * slot.getBaseAttrValue('duration');
 				var direction = value - value2;
 				if (value) {
 					attrhtml.push(formatAttrLabelHTML(attr, null, (attr === 'shieldrnfps' ? 'Total shield recharge' : 'Total thermal drain')) + ' <span class="' + (direction > 0 ? 'modgood' : (direction < 0 ? 'modbad' : '')) + '">' + formatNumHTML(value, 0) + '</span>');
@@ -4847,8 +4936,7 @@ window.edshipyard = new (function() {
 				
 			case 'repaircap':
 				var value = slot.getEffectiveAttrValue(attr) * slot.getEffectiveAttrValue('repairrtg');
-				var module = slot.getModule();
-				var value2 = getModuleAttrValue(module, attr) * getModuleAttrValue(module, 'repairrtg');
+				var value2 = slot.getBaseAttrValue(attr) * slot.getBaseAttrValue('repairrtg');
 				var direction = value - value2;
 				if (value) {
 					attrhtml.push(formatAttrLabelHTML(attr, 'Rep', 'Total repair capacity') + ' <span class="' + (direction > 0 ? 'modgood' : (direction < 0 ? 'modbad' : '')) + '">' + formatAttrHTML(attr, value) + '</span>');
@@ -4952,10 +5040,10 @@ window.edshipyard = new (function() {
 		var limitOld = (slot.getModule() || EMPTY_OBJ).limit;
 		var ok;
 		if (namehash || storedhash) {
-			ok = slot.setStoredHash(storedhash || current.storedmodule[0][namehash]);
+			ok = slot.setStoredHash(storedhash || current.storedmodule[0][namehash], null, current.option.experimental);
 			modid = slot.getModuleID();
 		} else {
-			ok = slot.setModuleID(modid);
+			ok = slot.setModuleID(modid, current.option.experimental);
 		}
 		if (!ok)
 			return false;
@@ -5546,7 +5634,7 @@ window.edshipyard = new (function() {
 				var attr = input.name;
 				var modifier = slot.getEffectiveAttrModifier(attr);
 				var direction = getAttrModifierDirection(attr, modifier);
-				var value = getModuleAttrValue(module, attr, modifier);
+				var value = slot.getEffectiveAttrValue(attr);
 				/* TODO: ship rank? the Fed names are too long :/
 				if (attr === 'rank' && value < (eddb.rank[module.faction] || EMPTY_ARR).length) {
 					value = eddb.rank[module.faction][value];
@@ -5554,7 +5642,7 @@ window.edshipyard = new (function() {
 				*/
 				input.value = getModuleAttrValueText(module, attr, value);
 				input.size = max(input.value.length, 3);
-				input.disabled = !((modifiable && (isModuleAttrModifiable(module, attr) || ((attr === 'rof') && isModuleAttrModifiable(module, 'bstint')) || (attr === 'cost' && slot.getBaseAttrValue('cost'))) && (bpid || current.option.experimental)) || modifier);
+				input.disabled = !((modifiable && (isModuleAttrModifiable(module, attr) || ((attr === 'rof') && isModuleAttrModifiable(module, 'bstint')) || (attr === 'cost' && slot.getBaseAttrValue('cost'))) && (bpid || current.option.experimental)) || slot.getBaseAttrModifier(attr));
 				var moddisplay = document.getElementById('outfitting_details_mod_' + r);
 				moddisplay.className = (direction ? ((direction < 0) ? 'modbad' : 'modgood') : '');
 				moddisplay.innerHTML = getModuleAttrModifierText(module, attr, modifier);
@@ -6053,6 +6141,9 @@ window.edshipyard = new (function() {
 		var powerdist_sys = current.fit.getEffectivePowerDist('sys');
 		var slot = current.fit.getSlot('ship', 'hull');
 		var mass_hull = slot.getEffectiveAttrValue('mass');
+		var slot = current.fit.getSlot('component', CORE_ABBR_SLOT.PD);
+		var syscap = slot.getEffectiveAttrValue('syscap');
+		var syschg = slot.getEffectiveAttrValue('syschg');
 		for (var slotnum = 0;  slot = current.fit.getSlot('internal', slotnum);  slotnum++) {
 			if ((slot.getModule() || EMPTY_OBJ).mtype === 'isg' && slot.getPowered())
 				break;
@@ -6060,6 +6151,7 @@ window.edshipyard = new (function() {
 		var maxmass = slot ? slot.getEffectiveAttrValue('maxmass') : 0;
 		var bgenrate = slot ? slot.getEffectiveAttrValue('bgenrate') : 0;
 		var genrate = slot ? slot.getEffectiveAttrValue('genrate') : 0;
+		var distdraw_mj = slot ? slot.getEffectiveAttrValue('distdraw') : 0;
 		
 		// get or compute derived stats
 		var hasSG = !!slot;
@@ -6071,6 +6163,14 @@ window.edshipyard = new (function() {
 		var cauShdRes = current.fit.getStat('_scaures') / 100;
 		var rawShdStr = current.fit.getStat('_shields');
 		var ammomaxText = (shieldrnfps_ammomax / shieldrnfps).toFixed((shieldrnfps_ammomax % shieldrnfps) ? 1 : 0);
+		var powerdistSysMul = pow(powerdist_sys / MAX_POWER_DIST, 1.1);
+		var bgenFastTime = min((rawShdStr / 2 / bgenrate), (syscap / max(0, bgenrate * distdraw_mj - syschg * powerdistSysMul)));
+		var bgenSlowTime = (rawShdStr / 2 - bgenrate * bgenFastTime) / min(bgenrate, (syschg * powerdistSysMul) / distdraw_mj);
+		// TODO: does it really make sense to assume a full cap to start regen from 50-100%?
+		//var genFastTime = min((rawShdStr / 2 / genrate), (syscap / max(0, genrate * distdraw_mj - syschg * powerdistSysMul)));
+		//var genSlowTime = (rawShdStr / 2 - genrate * genFastTime) / min(genrate, (syschg * powerdistSysMul) / distdraw_mj);
+		var genFastTime = 0;
+		var genSlowTime = (rawShdStr / 2) / min(genrate, (syschg * powerdistSysMul) / distdraw_mj);
 		
 		// update displays
 		var htmlNA = '<small class="semantic">N/A</small>';
@@ -6094,8 +6194,8 @@ window.edshipyard = new (function() {
 		document.getElementById('outfitting_stats_kin_shield_reinf').innerHTML = (!(hasSG && shieldrnfps) ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('shieldrnfps', shieldrnfps_ammomax / (1 - absShdRes) / (1 - kinShdRes))));
 		document.getElementById('outfitting_stats_thm_shield_reinf').innerHTML = (!(hasSG && shieldrnfps) ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('shieldrnfps', shieldrnfps_ammomax / (1 - absShdRes) / (1 - thmShdRes))));
 		document.getElementById('outfitting_stats_exp_shield_reinf').innerHTML = (!(hasSG && shieldrnfps) ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('shieldrnfps', shieldrnfps_ammomax / (1 - absShdRes) / (1 - expShdRes))));
-		document.getElementById('outfitting_stats_shield_build').innerHTML = (!hasSG ? htmlNA : (!isEnough ? htmlErrorSG : formatTimeHTML(rawShdStr / 2 / bgenrate)));
-		document.getElementById('outfitting_stats_shield_regen').innerHTML = (!hasSG ? htmlNA : (!isEnough ? htmlErrorSG : formatTimeHTML(rawShdStr / 2 / genrate)));
+		document.getElementById('outfitting_stats_shield_build').innerHTML = (!hasSG ? htmlNA : (!isEnough ? htmlErrorSG : formatTimeHTML(16 + bgenFastTime + bgenSlowTime)));
+		document.getElementById('outfitting_stats_shield_regen').innerHTML = (!hasSG ? htmlNA : (!isEnough ? htmlErrorSG : formatTimeHTML(genFastTime + genSlowTime)));
 	}; // updateUIStatsShd();
 	
 	
@@ -6473,13 +6573,7 @@ window.edshipyard = new (function() {
 		var inputID = label.htmlFor;
 		var touchdata = current.pickerTouch[inputID];
 		if (e.touches.length !== 1) {
-			if (touchdata) {
-				clearTimeout(touchdata.timeout);
-				delete current.pickerTouch[inputID];
-			}
-			label.removeEventListener('touchmove', onUIModulePickerLabelTouchMove);
-			label.removeEventListener('touchend', onUIModulePickerLabelTouchEnd);
-			return true;
+			return onUIModulePickerLabelTouchCancel(e);
 		}
 		if (touchdata) {
 			clearTimeout(touchdata.timeout);
@@ -6489,8 +6583,10 @@ window.edshipyard = new (function() {
 		touchdata.timeout = setTimeout(onUIModulePickerLabelTouchTimeout, TIMEOUT_LONGPRESS, inputID);
 		touchdata.x = e.touches[0].screenX;
 		touchdata.y = e.touches[0].screenY;
+		label.classList.add('active');
 		label.addEventListener('touchmove', onUIModulePickerLabelTouchMove);
 		label.addEventListener('touchend', onUIModulePickerLabelTouchEnd);
+		label.addEventListener('touchcancel', onUIModulePickerLabelTouchCancel);
 		return true;
 	}; // onUIModulePickerLabelTouchStart()
 	
@@ -6501,13 +6597,7 @@ window.edshipyard = new (function() {
 		var inputID = label.htmlFor;
 		var touchdata = current.pickerTouch[inputID];
 		if (!touchdata || e.touches.length !== 1 || abs(e.touches[0].screenX - touchdata.x) > TOLERANCE_TOUCH || abs(e.touches[0].screenY - touchdata.y) > TOLERANCE_TOUCH) {
-			if (touchdata) {
-				clearTimeout(touchdata.timeout);
-				delete current.pickerTouch[inputID];
-			}
-			label.removeEventListener('touchmove', onUIModulePickerLabelTouchMove);
-			label.removeEventListener('touchend', onUIModulePickerLabelTouchEnd);
-			return true;
+			return onUIModulePickerLabelTouchCancel(e);
 		}
 		if (e.cancelable)
 			e.preventDefault();
@@ -6516,16 +6606,10 @@ window.edshipyard = new (function() {
 	
 	
 	var onUIModulePickerLabelTouchEnd = function(e) {
-		e.stopPropagation();
 		var label = e.currentTarget;
 		var inputID = label.htmlFor;
 		var touchdata = current.pickerTouch[inputID];
-		if (touchdata) {
-			clearTimeout(touchdata.timeout);
-			delete current.pickerTouch[inputID];
-		}
-		label.removeEventListener('touchmove', onUIModulePickerLabelTouchMove);
-		label.removeEventListener('touchend', onUIModulePickerLabelTouchEnd);
+		onUIModulePickerLabelTouchCancel(e);
 		if (!touchdata || e.touches.length > 0 || e.changedTouches.length !== 1 || abs(e.changedTouches[0].screenX - touchdata.x) > TOLERANCE_TOUCH || abs(e.changedTouches[0].screenY - touchdata.y) > TOLERANCE_TOUCH) {
 			return true;
 		}
@@ -6548,16 +6632,30 @@ window.edshipyard = new (function() {
 	}; // onUIModulePickerLabelTouchEnd()
 	
 	
-	var onUIModulePickerLabelTouchTimeout = function(inputID) {
-		var input = document.getElementById(inputID);
-		var label = input.parentNode;
+	var onUIModulePickerLabelTouchCancel = function(e, label) {
+		if (e) {
+			e.stopPropagation();
+			label = e.currentTarget;
+		}
+		var inputID = label.htmlFor;
 		var touchdata = current.pickerTouch[inputID];
 		if (touchdata) {
 			clearTimeout(touchdata.timeout);
 			delete current.pickerTouch[inputID];
 		}
+		label.classList.remove('active');
 		label.removeEventListener('touchmove', onUIModulePickerLabelTouchMove);
 		label.removeEventListener('touchend', onUIModulePickerLabelTouchEnd);
+		label.removeEventListener('touchcancel', onUIModulePickerLabelTouchCancel);
+		return true;
+	}; // onUIModulePickerLabelTouchCancel()
+	
+	
+	var onUIModulePickerLabelTouchTimeout = function(inputID) {
+		var input = document.getElementById(inputID);
+		var label = input.parentNode;
+		var touchdata = current.pickerTouch[inputID];
+		onUIModulePickerLabelTouchCancel(null, label);
 		if (!touchdata) {
 			return true;
 		}
@@ -6853,13 +6951,7 @@ window.edshipyard = new (function() {
 		var inputID = label.htmlFor;
 		var touchdata = current.slotsTouch[inputID];
 		if (e.touches.length !== 1) {
-			if (touchdata) {
-				clearTimeout(touchdata.timeout);
-				delete current.slotsTouch[inputID];
-			}
-			label.removeEventListener('touchmove', onUIFitSlotsTouchMove);
-			label.removeEventListener('touchend', onUIFitSlotsTouchEnd);
-			return true;
+			return onUIFitSlotsTouchCancel(e);
 		}
 		if (touchdata) {
 			clearTimeout(touchdata.timeout);
@@ -6869,8 +6961,10 @@ window.edshipyard = new (function() {
 		touchdata.timeout = setTimeout(onUIFitSlotsTouchTimeout, TIMEOUT_LONGPRESS, inputID);
 		touchdata.x = e.touches[0].screenX;
 		touchdata.y = e.touches[0].screenY;
+		label.classList.add('active');
 		label.addEventListener('touchmove', onUIFitSlotsTouchMove);
 		label.addEventListener('touchend', onUIFitSlotsTouchEnd);
+		label.addEventListener('touchcancel', onUIFitSlotsTouchCancel);
 		return true;
 	}; // onUIFitSlotsTouchStart()
 	
@@ -6881,13 +6975,7 @@ window.edshipyard = new (function() {
 		var inputID = label.htmlFor;
 		var touchdata = current.slotsTouch[inputID];
 		if (!touchdata || e.touches.length !== 1 || abs(e.touches[0].screenX - touchdata.x) > TOLERANCE_TOUCH || abs(e.touches[0].screenY - touchdata.y) > TOLERANCE_TOUCH) {
-			if (touchdata) {
-				clearTimeout(touchdata.timeout);
-				delete current.slotsTouch[inputID];
-			}
-			label.removeEventListener('touchmove', onUIFitSlotsTouchMove);
-			label.removeEventListener('touchend', onUIFitSlotsTouchEnd);
-			return true;
+			return onUIFitSlotsTouchCancel(e);
 		}
 		if (e.cancelable)
 			e.preventDefault();
@@ -6896,16 +6984,10 @@ window.edshipyard = new (function() {
 	
 	
 	var onUIFitSlotsTouchEnd = function(e) {
-		e.stopPropagation();
 		var label = e.currentTarget;
 		var inputID = label.htmlFor;
 		var touchdata = current.slotsTouch[inputID];
-		if (touchdata) {
-			clearTimeout(touchdata.timeout);
-			delete current.slotsTouch[inputID];
-		}
-		label.removeEventListener('touchmove', onUIFitSlotsTouchMove);
-		label.removeEventListener('touchend', onUIFitSlotsTouchEnd);
+		onUIFitSlotsTouchCancel(e);
 		if (!touchdata || e.touches.length > 0 || e.changedTouches.length !== 1 || abs(e.changedTouches[0].screenX - touchdata.x) > TOLERANCE_TOUCH || abs(e.changedTouches[0].screenY - touchdata.y) > TOLERANCE_TOUCH) {
 			return true;
 		}
@@ -6923,16 +7005,30 @@ window.edshipyard = new (function() {
 	}; // onUIFitSlotsTouchEnd()
 	
 	
-	var onUIFitSlotsTouchTimeout = function(inputID) {
-		var input = document.getElementById(inputID);
-		var label = input.parentNode;
+	var onUIFitSlotsTouchCancel = function(e, label) {
+		if (e) {
+			e.stopPropagation();
+			label = e.currentTarget;
+		}
+		var inputID = label.htmlFor;
 		var touchdata = current.slotsTouch[inputID];
 		if (touchdata) {
 			clearTimeout(touchdata.timeout);
 			delete current.slotsTouch[inputID];
 		}
+		label.classList.remove('active');
 		label.removeEventListener('touchmove', onUIFitSlotsTouchMove);
 		label.removeEventListener('touchend', onUIFitSlotsTouchEnd);
+		label.removeEventListener('touchcancel', onUIFitSlotsTouchCancel);
+		return true;
+	}; // onUIFitSlotsTouchCancel()
+	
+	
+	var onUIFitSlotsTouchTimeout = function(inputID) {
+		var input = document.getElementById(inputID);
+		var label = input.parentNode;
+		var touchdata = current.slotsTouch[inputID];
+		onUIFitSlotsTouchCancel(null, label);
 		if (!touchdata) {
 			return true;
 		}
@@ -7358,12 +7454,12 @@ window.edshipyard = new (function() {
 		document.getElementById('contact_email').addEventListener('click', onLinkEmailClick);
 		
 		// check for initial build hash
+		updateUIOptions();
 		if (window.location.hash.length <= 0 || !processURLHash(window.location.hash, true)) {
 			current.hashlock = true;
 			setCurrentFit(new Build(1, true), '');
 			current.hashlock = false;
 		}
-		updateUIOptions();
 		setUIOutfittingPanels('slots',  'slots', 'details');
 		
 		// after all the current content is finished rendering, check the layout

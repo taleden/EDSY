@@ -9,7 +9,7 @@ The Elite: Dangerous game logic and data in this file remains the property of Fr
 and is used here as authorized by Frontier Customer Services (https://forums.frontier.co.uk/showthread.php?t=5349).
 */
 
-:root { --edsy-versions-css:34118,34118,34117,34118; /* HTML,CSS,DB,JS */ }
+:root { --edsy-versions-css:34219,34219,34219,34219; /* HTML,CSS,DB,JS */ }
 
 @font-face {
 	font-family: 'Euro Caps';
@@ -23,11 +23,6 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 	font-family: 'Telegrama';
 	src: local('Telegrama'), url('Telegrama.woff2') format('woff2'), url('Telegrama.woff') format('woff'), url('Telegrama.ttf') format('truetype');
 }
-
-
-.tal { text-align: left; }
-.tac { text-align: center; }
-.tar { text-align: right; }
 
 * {
 	box-sizing: border-box;
@@ -245,6 +240,11 @@ TEXTAREA::-webkit-scrollbar-thumb {
 	background-color: white;
 }
 
+
+.tal { text-align: left; }
+.tac { text-align: center; }
+.tar { text-align: right; }
+.vam { vertical-align: middle; }
 
 .dropok {
 	border-color: var(--color-blue-5) !important;
@@ -1046,7 +1046,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	background-color: var(--color-orange-5);
 	color: black;
 }
-#outfitting_modules_picker .togglebutton INPUT:active + DIV {
+#outfitting_modules_picker .togglebutton INPUT:active + DIV,
+#outfitting_modules_picker .togglebutton.active INPUT + DIV {
 	border-color: white !important;
 	background-color: white !important;
 	color: black !important;
@@ -1071,7 +1072,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	margin: 3px 0;
 }
 #page_body_outfitting.focusmodule #outfitting_modules_picker .togglebutton INPUT:checked + DIV .iconsvg.tinted,
-#outfitting_modules_picker .togglebutton INPUT:active + DIV .iconsvg.tinted {
+#outfitting_modules_picker .togglebutton INPUT:active + DIV .iconsvg.tinted,
+#outfitting_modules_picker .togglebutton.active INPUT + DIV .iconsvg.tinted {
 	color: inherit;
 }
 
@@ -1641,7 +1643,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	color: black;
 }
 
-#outfitting_fit_slots .togglebutton INPUT:active + DIV {
+#outfitting_fit_slots .togglebutton INPUT:active + DIV,
+#outfitting_fit_slots .togglebutton.active INPUT + DIV {
 	border-color: white !important;
 	background-color: white !important;
 	color: black !important;
@@ -1684,7 +1687,9 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #page_body_outfitting.focusslot #outfitting_fit_slots .togglebutton INPUT:checked + DIV SPAN:empty::after,
 #page_body_outfitting.focusslot #outfitting_fit_slots .togglebutton INPUT:checked + DIV .iconsvg.tinted,
 #outfitting_fit_slots .togglebutton INPUT:active + DIV SPAN:empty::after,
+#outfitting_fit_slots .togglebutton.active INPUT + DIV SPAN:empty::after,
 #outfitting_fit_slots .togglebutton INPUT:active + DIV .iconsvg.tinted,
+#outfitting_fit_slots .togglebutton.active INPUT + DIV .iconsvg.tinted,
 #outfitting_fit_slots .notallowed .togglebutton INPUT + DIV SPAN:empty::after,
 #outfitting_fit_slots .notallowed .togglebutton INPUT + DIV .iconsvg.tinted,
 #outfitting_fit_slots .overlimit .togglebutton INPUT + DIV SPAN:empty::after,
