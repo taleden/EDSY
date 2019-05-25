@@ -10,8 +10,8 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 */
 'use strict';
 var eddb = {
-	version : 34219,
-	edsy_versions_db : [34219,34219,34219,34219], /* HTML,CSS,DB,JS */
+	version : 34221,
+	edsy_versions_db : [34221,34221,34221,34221], /* HTML,CSS,DB,JS */
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder',
@@ -3059,6 +3059,7 @@ var eddb = {
 		23710 : { mtype:'iftlc', cost:6998400, name:'Fuel Transfer Limpet Controller', class:7, rating:'A', mass: 80.00, integ:183, pwrdraw:0.83, boottime:10, maxlimpet: 8, lpactrng:2380, limpettime: 60, maxspd:200, fuelxfer:1.0, fdid:128671268, fdname:'Int_DroneControl_FuelTransfer_Size7_Class5' },
 		
 		
+		26191 : { mtype:'ihblc', cost:  18040, name:'Limpet Control', hidden:1,        class:1, rating:'I',              integ: 20, pwrdraw:0.40, boottime:0, maxlimpet: 2,                 lpactrng:1000, limpettime: 60, maxspd:200, hacktime: 5, mincargo:1, maxcargo: 2, fdid:128066402, fdname:'Int_DroneControl_ResourceSiphon' },
 		26150 : { mtype:'ihblc', cost:    600, name:'Hatch Breaker Limpet Controller', class:1, rating:'E', mass:  1.30, integ: 32, pwrdraw:0.12, boottime:3, maxlimpet: 2, targetrng:1500, lpactrng:1600, limpettime:120, maxspd:500, hacktime:22, mincargo:1, maxcargo: 6, fdid:128066532, fdname:'Int_DroneControl_ResourceSiphon_Size1_Class1' },
 		26140 : { mtype:'ihblc', cost:   1200, name:'Hatch Breaker Limpet Controller', class:1, rating:'D', mass:  0.50, integ: 24, pwrdraw:0.16, boottime:3, maxlimpet: 1, targetrng:2000, lpactrng:2100, limpettime:120, maxspd:500, hacktime:19, mincargo:2, maxcargo: 7, fdid:128066533, fdname:'Int_DroneControl_ResourceSiphon_Size1_Class2' },
 		26130 : { mtype:'ihblc', cost:   2400, name:'Hatch Breaker Limpet Controller', class:1, rating:'C', mass:  1.30, integ: 40, pwrdraw:0.20, boottime:3, maxlimpet: 1, targetrng:2500, lpactrng:2600, limpettime:120, maxspd:500, hacktime:16, mincargo:3, maxcargo: 8, fdid:128066534, fdname:'Int_DroneControl_ResourceSiphon_Size1_Class3' },

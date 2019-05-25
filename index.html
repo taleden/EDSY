@@ -14,7 +14,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 -->
 		<title>EDSY</title>
 		<meta name="application-name" content="EDSY">
-		<meta name="edsy-versions-html" id="edsy_versions_html" content="34219,34219,34219,34219"><!-- HTML,CSS,DB,JS -->
+		<meta name="edsy-versions-html" id="edsy_versions_html" content="34221,34221,34221,34221"><!-- HTML,CSS,DB,JS -->
 		<meta name="author" content="taleden">
 		<meta name="description" content="E:D Shipyard (EDSY) is a ship outfitting tool for Elite: Dangerous">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,6 +28,9 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 					<symbol id="icon_unknown" viewbox="0 0 13 13" stroke="none" fill="currentColor" shape-rendering="geometricPrecision">
 						<path d="M 2,4 a 4.5,4 0 1 1 7.75,2.75 l -2.25,2.25 h -2.5 v -1.5 l 2.5,-2.5 a 1.75,1.25 0 1 0 -2.75,-1 z"/>
 						<circle cx="6.5" cy="11.5" r="1.75"/>
+					</symbol>
+					<symbol id="icon_ignore" viewbox="0 0 13 13" stroke="none" fill="currentColor" shape-rendering="geometricPrecision">
+						<path d="M 6.5,0.75 a 5.75,5.75 0 1 1 0,11.5 a 5.75,5.75 0 1 1 0,-11.5 M 6.5,2.25 a 4.25,4.25 0 1 0 0,8.5 a 4.25,4.25 0 1 0 0,-8.5 z M 11.25,0.5 l 1.25,1.25 -10.75,10.75 -1.25,-1.25 z"/>
 					</symbol>
 					<symbol id="icon_save" viewbox="0 0 13 13" stroke="none" fill="currentColor" shape-rendering="geometricPrecision">
 						<path d="M 0,0 h 3 v 4 h 7 v -4 h 1.5 l 1.5,1.5 v 11.5 h -13 z M 7,0 h 2 v 3 h -2 z M 1,5 v 7 h 11 v -7 z"/>
@@ -148,7 +151,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 					<label class="togglebutton"><input name="tab" type="radio" value="options"><div><svg class="iconsvg unknown"><use xlink:href="#icon_unknown"/></svg><svg class="iconsvg repair"><use xlink:href="#icon_repair"/></svg><span>Help</span></div></label>
 				</form>
 				<div id="header_version">
-					<abbr title="updated 2019-05-16">v3.4.2a9</abbr>
+					<abbr title="updated 2019-05-24">v3.4.2b1</abbr>
 					<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X76V6PNF8CAV4&source=url"><img src="btn_donate_TN.gif" width="56" height="21"></a>
 				</div>
 			</div>
@@ -184,7 +187,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 						<form id="outfitting_fit" name="fit" class="">
 							<div id="outfitting_fit_settings">
 								<button id="outfitting_fit_import"><svg class="iconsvg import"><use xlink:href="#icon_import"/></svg></button>
-								<!-- TODO
+								<!-- TODO?
 								<button id="outfitting_fit_export"><svg class="iconsvg export"><use xlink:href="#icon_export"/></svg></button>
 								-->
 								<select id="outfitting_fit_stored" name="outfitting_fit_stored">
@@ -215,7 +218,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										<span>ID:</span>
 										<input name="shipnametag" type="text" maxlength=6>
 									</div>
-									<!-- powerdist in fit --
+									<!-- TODO? powerdist in fit --
 									<div id="outfitting_fit_powerdist" class="slots_header_row">
 										<span>Crew:</span>
 										<button id="outfitting_fit_crewdist_avl" class="" name="crewdist_avl"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div>AVL</div></button>
@@ -228,7 +231,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 										<button id="outfitting_fit_powerdist_eng" class="" name="powerdist_eng"><div class="powerpips"><span></span><span></span><span></span><span></span></div><div>ENG</div></button>
 										<button id="outfitting_fit_powerdist_wep" class="" name="powerdist_wep"><div class="powerpips"><span></span><span></span><span></span><span></span></div><div>WEP</div></button>
 									</div>
-									<!-- TODO -->
+									<!-- TODO? -->
 								</div>
 								<div id="outfitting_fit_body">
 									<div id="slots_column_left" class="slots_body_column">
@@ -785,11 +788,6 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 						<section>
 							<header>About</header>
 							<p>
-								This is a preview of EDSY's new design and layout. It is not yet complete! Some features (such as stored modules and
-								API/Journal imports) have not yet been re-implemented, and there is plenty of polish and fine-tuning still to do.
-								Please give it a spin and report any problems or suggestions using the contact links below.
-							</p>
-							<p>
 								Note that although stored builds are now supported on this preview site, they are still being kept separate from your
 								live builds from the old design of the site, to avoid the chance of corrupting those builds in case there are bugs.
 								Whenever you access this preview all of your live builds will be copied over for you to experiment with, but any
@@ -808,6 +806,10 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 								&mdash; Allow fitting modules that are too large for the slot, of a type not allowed by the ship or the slot, or
 								over the limit for modules of that type. This allows for theoretical "what-if" builds, but disallowed modules will
 								be shown in red to signify that it will not be possible to actually fit them in-game.
+							</div>
+							<div>
+								<button id="options_backup" name="backup">Backup All Builds</button>
+								&mdash; Export all stored builds in a structured format suitable for backup or transfer to another device or browser.
 							</div>
 						</section>
 						<section>
@@ -836,8 +838,10 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 			<form id="popup_form" name="popup">
 				<div id="popup_box">
 					<div id="popup_desc"></div>
-					<textarea name="textbox"></textarea>
-					<!-- TODO <table id="popup_table"></table> -->
+					<textarea id="popup_textarea" name="textbox"></textarea>
+					<div id="popup_table_container">
+						<table id="popup_table"></table>
+					</div>
 					<div id="popup_controls">
 						<button id="popup_cancel" name="cancel" value="cancel">Cancel</button>
 						<button id="popup_okay" name="okay" value="okay">Okay</button>

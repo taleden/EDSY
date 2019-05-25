@@ -10,7 +10,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 */
 'use strict';
 window.edshipyard = new (function() {
-	var VERSIONS = [34219,34219,34219,34219]; /* HTML,CSS,DB,JS */
+	var VERSIONS = [34221,34221,34221,34221]; /* HTML,CSS,DB,JS */
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -39,12 +39,15 @@ window.edshipyard = new (function() {
 	var HASH_VERSION = 14;
 	var HTML_ICON = {
 		'unknown'    : '<svg class="iconsvg unknown"><use xlink:href="#icon_unknown"/></svg>',
+		'ignore'     : '<svg class="iconsvg ignore"><use xlink:href="#icon_ignore"/></svg>',
 		'warning'    : '<svg class="iconsvg warning tinted"><use xlink:href="#icon_warning"/></svg>',
 		'save'       : '<svg class="iconsvg save"><use xlink:href="#icon_save"/></svg>',
 		'saveas'     : '<svg class="iconsvg saveas"><use xlink:href="#icon_saveas"/></svg>',
 		'reload'     : '<svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg>',
 		'rename'     : '<svg class="iconsvg rename"><use xlink:href="#icon_rename"/></svg>',
 		'delete'     : '<svg class="iconsvg delete"><use xlink:href="#icon_delete"/></svg>',
+		'import'     : '<svg class="iconsvg import"><use xlink:href="#icon_import"/></svg>',
+		'export'     : '<svg class="iconsvg export"><use xlink:href="#icon_export"/></svg>',
 		'engineer'   : '<svg class="iconsvg engineer"><use xlink:href="#icon_engineer"/></svg>',
 		'fixed'      : '<svg class="iconsvg fixed"><use xlink:href="#icon_fixed"/></svg>',
 		'gimballed'  : '<svg class="iconsvg gimballed"><use xlink:href="#icon_gimballed"/></svg>',
@@ -88,12 +91,15 @@ window.edshipyard = new (function() {
 			onOkay: null,
 			onCancel: null,
 		},
+		imports: null,
 		drag: null,
 		resize: null,
 		pickerClick: {},
 		pickerTouch: {},
 		slotsClick: {},
 		slotsTouch: {},
+		importLabel: {},
+		labelImports: {},
 		storedbuild: { 0:{} },
 		storedmodule: { 0:{} },
 		option: {
@@ -173,6 +179,30 @@ window.edshipyard = new (function() {
 		while (select.length > length)
 			select.options.remove(select.options.length - 1);
 	}; // setDOMSelectLength()
+	
+	
+	var populateDOMSelectStoredBuilds = function(select, shipid, curnamehash) {
+		var names = [];
+		var nameNamehash = {};
+		for (var namehash in current.storedbuild[shipid]) {
+			var name = hashDecodeS(namehash);
+			names.push(name);
+			nameNamehash[name] = namehash;
+		}
+		names.sort();
+		
+		var curindex = (select.selectedIndex ? -1 : 0);
+		setDOMSelectLength(select, 1 + names.length);
+		for (var i = 0;  i < names.length;  i++) {
+			select.options[i+1].value = nameNamehash[names[i]];
+			select.options[i+1].text = names[i];
+			if (nameNamehash[names[i]] === curnamehash)
+				curindex = i+1;
+		}
+		select.selectedIndex = curindex;
+		
+		return true;
+	}; // populateDOMSelectStoredBuilds()
 	
 	
 	var encodeHTML = function(text) {
@@ -482,12 +512,13 @@ window.edshipyard = new (function() {
 	}; // getMassCurveMultiplier()
 	
 	
-	var getEffectiveDamageResistance = function(baseres, extrares) {
+	var getEffectiveDamageResistance = function(baseres, extrares, threshold, curve) {
 		// https://forums.frontier.co.uk/showthread.php/266235-Kinetic-Resistance-Calculation?p=4230114&viewfull=1#post4230114
 		// https://forums.frontier.co.uk/showthread.php/286097-Shield-Booster-Mod-Calculator?p=4998592&viewfull=1#post4998592
-		var res = 1 - ((1 - baseres / 100) * (1 - extrares / 100));
-		var softcap = 1 - ((1 - baseres / 100) * (1 - 0.3));
-		return 100 * (res - max(0, (res - softcap) / 2));
+		threshold = threshold || 30;
+		var rawres = 1 - ((1 - baseres / 100) * (1 - extrares / 100));
+		var maxres = 1 - ((1 - baseres / 100) * (1 - threshold / 100));
+		return 100 * (rawres - max(0, pow((rawres - maxres) / 2, curve || 1)));
 	}; // getEffectiveDamageResistance()
 	
 	
@@ -1412,24 +1443,24 @@ window.edshipyard = new (function() {
 		
 		
 		getName: function() {
-			return this.name;
+			return this.name || '';
 		}, // getName()
 		
 		
 		setName: function(name) {
-			this.name = name.slice(0,22).toUpperCase();
+			this.name = (name || '').slice(0,22).toUpperCase();
 			this.clearHash();
 			return true;
 		}, // setName()
 		
 		
 		getNameTag: function() {
-			return this.nametag;
+			return this.nametag || '';
 		}, // getNameTag()
 		
 		
 		setNameTag: function(nametag) {
-			this.nametag = nametag.slice(0,6).toUpperCase();
+			this.nametag = (nametag || '').slice(0,6).toUpperCase();
 			this.clearHash();
 			return true;
 		}, // setNameTag()
@@ -1870,6 +1901,18 @@ window.edshipyard = new (function() {
 			stats._athmres = getEffectiveDamageResistance(0, (1 - (1 - thmres / 100) * thmmod_ihrp) * 100);
 			stats._aexpres = getEffectiveDamageResistance(0, (1 - (1 - expres / 100) * expmod_ihrp) * 100);
 			stats._acaures = getEffectiveDamageResistance(0, (1 - (1 - caures / 100) * caumod_ihrp) * 100);
+			
+			/* TODO: figure out new armor resist stacking
+			https://github.com/EDCD/coriolis/issues/483
+			https://issues.frontierstore.net/issue-detail/1215
+			https://www.edshipyard.com/new/#/L=E400H4C0S0,,,9opGbHKAAo0AQQ0AeU0Au61B9I1BLo1Bb60,,mpT16yGbHK16yGbHKmpV12GGhHq = kinres:36.4, thmres:41.1, expres:35.2
+			stats._athmres = getEffectiveDamageResistance(0, (1 - (1 - thmres / 100) * thmmod_ihrp) * 100); // 35.9
+			stats._athmres = getEffectiveDamageResistance(0, (1 - (1 - thmres / 100) * thmmod_ihrp) * 100, 40.4); // 41.1
+			stats._athmres = getEffectiveDamageResistance(thmres, (1 - thmmod_ihrp) * 100); // 23.0
+			stats._athmres = getEffectiveDamageResistance(thmres, (1 - thmmod_ihrp) * 100, 56.5); // 41.1
+			stats._athmres = getEffectiveDamageResistance((1 - thmmod_ihrp) * 100, thmres); // 41.9
+			stats._athmres = getEffectiveDamageResistance((1 - thmmod_ihrp) * 100, thmres, 0); // -
+			*/
 			
 			// derived Weapon stats
 			var powerdist_wep = this.getEffectivePowerDist('wep');
@@ -2557,6 +2600,11 @@ window.edshipyard = new (function() {
 	*/
 	
 	
+	var sortNumbers = function(num1, num2) {
+		return num1 - num2;
+	}; // sortNumbers()
+	
+	
 	var sortNumbersDesc = function(num1, num2) {
 		return num2 - num1;
 	}; // sortNumbersDesc()
@@ -2737,7 +2785,7 @@ window.edshipyard = new (function() {
 		for (var modid in eddb.module) {
 			cache.moduleHash[modid] = Slot.getModuleIDStoredHash(modid);
 			var mtype = eddb.module[modid].mtype;
-			if (cache.mtypeModules[mtype]) {
+			if (cache.mtypeModules[mtype] && !eddb.module[modid].hidden) {
 				cache.mtypeModules[mtype].push(modid);
 			}
 		}
@@ -2835,10 +2883,12 @@ window.edshipyard = new (function() {
 		var popup = document.getElementById('popup_modal');
 		var labelarea = document.getElementById('popup_desc');
 		var textarea = document.forms.popup.elements.textbox;
+		var table = document.getElementById('popup_table');
 		var okay = document.forms.popup.elements.okay;
 		var cancel = document.forms.popup.elements.cancel;
 		labelarea.innerHTML = html || '';
 		textarea.removeAttribute('style');
+		table.style.display = 'none';
 		okay.style.display = (onOkay ? '' : 'none');
 		cancel.style.display = (onCancel ? '' : 'none');
 		if (text) {
@@ -2868,6 +2918,30 @@ window.edshipyard = new (function() {
 		}
 		return true;
 	}; // showUITextPopup()
+	
+	
+	var showUITablePopup = function(html, trigger, sticky, onOkay, onCancel) {
+		var popup = document.getElementById('popup_modal');
+		var labelarea = document.getElementById('popup_desc');
+		var textarea = document.forms.popup.elements.textbox;
+		var table = document.getElementById('popup_table');
+		var okay = document.forms.popup.elements.okay;
+		var cancel = document.forms.popup.elements.cancel;
+		labelarea.innerHTML = html || '';
+		textarea.style.display = 'none';
+		table.style.display = '';
+		okay.style.display = (onOkay ? '' : 'none');
+		cancel.style.display = (onCancel ? '' : 'none');
+		var refocus = (sticky ? ((onOkay && okay) || (onCancel && cancel)) : null);
+		if (!showUIPopup(popup, trigger, refocus, sticky, onOkay, onCancel))
+			return false;
+		if (onOkay) {
+			okay.focus();
+		} else if (onCancel) {
+			cancel.focus();
+		}
+		return table;
+	}; // showUITablePopup()
 	
 	
 	var hideUIPopup = function() {
@@ -2969,6 +3043,7 @@ window.edshipyard = new (function() {
 		
 		var table = document.createElement('table');
 		table.id = 'shipyard_ships_table';
+		table.className = 'striped';
 		var thead = createUIShipyardHeader(UI_SHIPYARD_SHIPS_COLS);
 		table.appendChild(thead);
 		var tbody = document.createElement('tbody');
@@ -2993,6 +3068,7 @@ window.edshipyard = new (function() {
 		
 		var table = document.createElement('table');
 		table.id = 'shipyard_storedbuilds_table';
+		table.className = 'striped';
 		var thead = createUIShipyardHeader(UI_SHIPYARD_STOREDBUILD_COLS);
 		table.appendChild(thead);
 		var tbody = document.createElement('tbody');
@@ -3001,13 +3077,6 @@ window.edshipyard = new (function() {
 		
 		div.appendChild(table);
 		document.getElementById('shipyard_container').appendChild(div);
-		
-		// TODO: stored build notice
-		var div2 = document.createElement('div');
-		div2.style.marginTop = '2em';
-		div2.style.color = 'red';
-		div2.innerHTML = 'Stored builds are re-copied from the live site on each visit; changes made here will not affect live site builds.';
-		div.appendChild(div2);
 	}; // initUIShipyardStoredBuilds()
 	
 	
@@ -3040,7 +3109,7 @@ window.edshipyard = new (function() {
 		for (var c = 0;  c < columns.length;  c++) {
 			var col = (UI_SHIPYARD_COL[columns[c]] || EMPTY_OBJ);
 			var th = document.createElement('th');
-			th.className = ((col.colgroup ? 'colgroup ': '') + ((col.colgroup != colgroup) ? 'first ' : '') + (col.css || ''));
+			th.className = ((col.colgroup ? 'colgroup ': '') + ((col.colgroup != colgroup) ? 'first ' : '') + (col.css || '') + (c ? ' stickytop' : ' stickytopleft'));
 			colgroup = col.colgroup;
 			if (col.header) {
 				var abbr = document.createElement('abbr');
@@ -3061,7 +3130,7 @@ window.edshipyard = new (function() {
 		for (var c = 0;  c < columns.length;  c++) {
 			var col = (UI_SHIPYARD_COL[columns[c]] || EMPTY_OBJ);
 			var td = document.createElement('td');
-			td.className = ((col.colgroup ? 'colgroup ': '') + ((col.colgroup != colgroup) ? 'first ' : '') + (col.css || ''));
+			td.className = ((col.colgroup ? 'colgroup ': '') + ((col.colgroup != colgroup) ? 'first ' : '') + (col.css || '') + (c ? '' : ' stickyleft'));
 			colgroup = col.colgroup;
 			tr.appendChild(td);
 		}
@@ -3237,6 +3306,200 @@ window.edshipyard = new (function() {
 	}; // setUIOutfittingPanels()
 	
 	
+	var createUIImportedBuildHeader = function() {
+		var thead = document.createElement('thead');
+		var tr = document.createElement('tr');
+		
+		var th = document.createElement('th');
+		th.className = 'colgroup stickytopleft';
+		var abbr = document.createElement('abbr');
+		abbr.innerHTML = 'Ship';
+		abbr.title = 'Ship type';
+		th.appendChild(abbr);
+		tr.appendChild(th);
+		
+		var th = document.createElement('th');
+		th.className = 'colgroup tac stickytop';
+		var abbr = document.createElement('abbr');
+		abbr.innerHTML = '#';
+		abbr.title = 'Ship purchase number';
+		th.appendChild(abbr);
+		tr.appendChild(th);
+		
+		var th = document.createElement('th');
+		th.className = 'colgroup stickytop';
+		var abbr = document.createElement('abbr');
+		abbr.innerHTML = 'Name';
+		abbr.title = 'Ship name';
+		th.appendChild(abbr);
+		tr.appendChild(th);
+		
+		var th = document.createElement('th');
+		th.className = 'colgroup stickytop';
+		var abbr = document.createElement('abbr');
+		abbr.innerHTML = 'ID';
+		abbr.title = 'Ship ID tag';
+		th.appendChild(abbr);
+		tr.appendChild(th);
+		
+		var th = document.createElement('th');
+		th.className = 'colgroup stickytop tac';
+		var abbr = document.createElement('abbr');
+		abbr.innerHTML = 'Err';
+		abbr.title = 'Import errors';
+		th.appendChild(abbr);
+		tr.appendChild(th);
+		
+		var th = document.createElement('th');
+		th.className = 'colgroup first stickytop';
+		var actions = ['ignore','save','saveas'];
+		for (var a = 0;  a < actions.length;  a++) {
+			var button = document.createElement('button');
+			button.className = 'import_' + actions[a];
+			button.name = 'import_' + actions[a];
+			button.innerHTML = HTML_ICON[actions[a]];
+			button.addEventListener('click', onUIPopupImportButtonClick);
+			th.appendChild(button);
+		}
+		var abbr = document.createElement('abbr');
+		abbr.innerHTML = 'Label';
+		abbr.title = 'Stored build label';
+		th.appendChild(abbr);
+		tr.appendChild(th);
+		
+		var th = document.createElement('th');
+		th.className = 'colgroup first stickytop';
+		var button = document.createElement('button');
+		button.name = 'import_load_none';
+		button.innerHTML = HTML_ICON['import'];
+		button.addEventListener('click', onUIPopupImportButtonClick);
+		th.appendChild(button);
+		tr.appendChild(th);
+		
+		thead.appendChild(tr);
+		return thead;
+	}; // createUIImportedBuildHeader()
+	
+	
+	var createUIImportedBuildRow = function(importobj) {
+		var index = importobj.index;
+		var fleetid = importobj.fleetid;
+		var build = importobj.build;
+		var shipid = (build ? build.getShipID() : -1);
+		var builderrors = importobj.builderrors;
+		var namehash = importobj.namehash || '';
+		var defaultaction = ((build && namehash) ? ((current.storedbuild[shipid] || EMPTY_OBJ)[namehash] ? 'save' : 'saveas') : 'ignore');
+		
+		var tr = document.createElement('tr');
+		
+		var td = document.createElement('td');
+		td.className = 'colgroup text stickyleft';
+		td.innerHTML = (build ? eddb.ship[shipid].name : '');
+		tr.appendChild(td);
+		
+		var td = document.createElement('td');
+		td.className = 'colgroup tac';
+		td.innerHTML = (fleetid || '');
+		tr.appendChild(td);
+		
+		var td = document.createElement('td');
+		td.className = 'colgroup';
+		td.innerHTML = (build ? encodeHTML(build.getName()) : '');
+		tr.appendChild(td);
+		
+		var td = document.createElement('td');
+		td.className = 'colgroup';
+		td.innerHTML = (build ? encodeHTML(build.getNameTag()) : '');
+		tr.appendChild(td);
+		
+		var td = document.createElement('td');
+		td.className = 'colgroup tac';
+		if (builderrors.length > 0) {
+			var abbr = document.createElement('abbr');
+			abbr.innerHTML = builderrors.length;
+			abbr.title = builderrors.join('\n');
+			td.appendChild(abbr);
+		} else {
+			td.innerHTML = '0';
+		}
+		tr.appendChild(td);
+		
+		// prepare the select now, so we can make sure it has entries
+		var select = document.createElement('select');
+		select.className = 'import_save_label';
+		select.name = 'import_save_label_' + index;
+		var option = document.createElement('option');
+		option.value = '';
+		option.text = '';
+		select.appendChild(option);
+		populateDOMSelectStoredBuilds(select, shipid, namehash);
+		if (select.options.length < 2) {
+			if (defaultaction === 'save')
+				defaultaction = 'saveas';
+		}
+		
+		var td = document.createElement('td');
+		td.className = 'colgroup first import_store';
+		var div = document.createElement('div');
+		div.className = 'import_store';
+		var actions = ['ignore','save','saveas'];
+		for (var a = 0;  a < actions.length;  a++) {
+			var input = document.createElement('input');
+			input.id = 'import_store_' + index + '_' + actions[a];
+			input.className = 'toggleinput import_' + actions[a];
+			input.type = 'radio';
+			input.name = 'import_store_' + index;
+			input.value = actions[a];
+			input.checked = (actions[a] == defaultaction);
+			input.disabled = (actions[a] === 'save' && select.options.length < 2) || (actions[a] !== 'ignore' && !build);
+			div.appendChild(input);
+			var label = document.createElement('label');
+			label.className = 'togglebutton';
+			label.htmlFor = input.id;
+			label.innerHTML = HTML_ICON[actions[a]];
+			div.appendChild(label);
+		}
+		var span = document.createElement('span');
+		span.className = 'import_ignore_label';
+		span.innerHTML = 'Not saved';
+		div.appendChild(span);
+		div.appendChild(select);
+		var input = document.createElement('input');
+		input.className = 'import_saveas_label';
+		input.type = 'text';
+		input.name = 'import_saveas_label_' + index;
+		input.value = hashDecodeS(namehash);
+		div.appendChild(input);
+		var abbr = document.createElement('abbr');
+		abbr.id = 'import_warning_' + index;
+		abbr.style.display = 'none';
+		abbr.innerHTML = HTML_ICON['warning'];
+		abbr.title = '';
+		div.appendChild(abbr);
+		td.appendChild(div);
+		tr.appendChild(td);
+		
+		var td = document.createElement('td');
+		td.className = 'colgroup first';
+		var input = document.createElement('input');
+		input.id = 'import_load_' + index;
+		input.className = 'toggleinput';
+		input.type = 'radio';
+		input.name = 'import_load';
+		input.value = index;
+		input.disabled = !build;
+		td.appendChild(input);
+		var label = document.createElement('label');
+		label.className = 'togglebutton';
+		label.htmlFor = input.id;
+		label.innerHTML = HTML_ICON['import'];
+		td.appendChild(label);
+		tr.appendChild(td);
+		
+		return tr;
+	}; // createUIImportedBuildRow()
+	
+	
 	var importBuild = function(text) {
 		// if it's valid (optionally URI-encoded) base64, assume it's also gzipped
 		var b64text = null;
@@ -3249,9 +3512,10 @@ window.edshipyard = new (function() {
 			b64text = null;
 		}
 		
-		// initialize storage for possibly decoding multiple builds; index 0 is for container-level errors
-		var errors = [ [] ];
-		var builds = [ null ];
+		// initialize storage for possibly decoding multiple builds
+		var errors = [];
+		var imports = [];
+		var curindex = -1;
 		
 		// identify the format by the first line
 		text = text.trim();
@@ -3264,14 +3528,19 @@ window.edshipyard = new (function() {
 				if (parts[0] === '#') {
 					for (var p = 1;  p < parts.length;  p++) {
 						if (parts[p].slice(0,2) === 'L=') {
-							errors.push([]);
-							builds.push(Build.fromHash(parts[p].slice(2), errors[errors.length - 1]));
+							var index = imports.length;
+							var builderrors = [];
+							var build = Build.fromHash(parts[p].slice(2), builderrors);
+							var importhash = build ? ('url|' + build.getShipID() + '|' + hashEncodeS(build.getName()) + '|' + hashEncodeS(build.getNameTag())) : null;
+							imports[index] = { index:index, importhash:importhash, fleetid:null, namehash:null, build:build, builderrors:builderrors };
+							if (build)
+								curindex = index;
 						} else if (parts[p].slice(0,2) === 'I=') {
-							errors[0].push('Nested import URL hash: ' + urlhash.slice(0,8) + (urlhash.length > 8 ? '...' : ''));
+							errors.push('Nested import URL hash: ' + urlhash.slice(0,8) + (urlhash.length > 8 ? '...' : ''));
 						}
 					}
 				} else {
-					errors[0].push('Invalid URL hash: ' + urlhash.slice(0,8) + (urlhash.length > 8 ? '...' : ''));
+					errors.push('Invalid URL hash: ' + urlhash.slice(0,8) + (urlhash.length > 8 ? '...' : ''));
 				}
 			}
 		} else if (line1.match(/^\[[ a-z0-9_-]+(,[^\[\]]+)?\] *(\[[^\[\]]+\])?$/i)) { // plain text
@@ -3285,77 +3554,121 @@ window.edshipyard = new (function() {
 			}
 			if (!json) {
 				try {
-					// maybe it's a full Journal file
+					// maybe it's line-delimited (i.e. a full Journal file)
 					text = '[ '+text.replace(/\}[ \t]*[\r\n]+[ \t]*\{/g,'}, {')+' ]';
 					json = JSON.parse(text);
 				} catch (exc) {
-					console.log(exc);
 					json = null;
 				}
 			}
 			if (json) {
-				if (((json['$schema'] || ((json[0] || EMPTY_OBJ)['$schema'])) || '').indexOf('coriolis.io') >= 0) { // Coriolis detailed export
+				if (json['format'] === 'edsy') { // EDSY backup
+					for (var namehash in (json['builds'] || EMPTY_OBJ)) {
+						var index = imports.length;
+						var builderrors = [];
+						var build = Build.fromHash(json['builds'][namehash], builderrors);
+						imports[index] = { index:index, importhash:null, fleetid:null, namehash:namehash, build:build, builderrors:builderrors };
+					}
+					curindex = -1;
+				} else if (((json['$schema'] || ((json[0] || EMPTY_OBJ)['$schema'])) || '').indexOf('coriolis.io') >= 0) { // Coriolis detailed export
 					// TODO: coriolis import
-					errors[0].push('Coriolis import is not yet implemented');
+					errors.push('Coriolis import is not yet implemented');
 				} else if (json['event'] || (json[0] || EMPTY_OBJ)['event']) { // journal event(s)
 					if (isNaN(json.length)) {
 						json = [ json ];
 					}
-					var index;
-					var shipidIndex = {};
-					for (var i = 0;  i < json.length;  i++) {
+					// scan it backwards so that the order reflects the most recent event for each ship
+					var fleetids = {};
+					var i = json.length;
+					while (i-- > 0) {
 						if (json[i]['event'] === 'Loadout') {
-							if (json[i]['ShipID']) {
-								index = shipidIndex[json[i]['ShipID']] || errors.length;
-								shipidIndex[json[i]['ShipID']] = index;
-								errors[index] = [];
+							var fleetid = json[i]['ShipID'] || -i;
+							if (!fleetids[fleetid]) {
+								var index = imports.length;
+								var builderrors = [];
+								var build = decodeJournalBuild(json[i], builderrors);
+								var importhash = build ? ('journal|' + build.getShipID() + '|' + max(0,fleetid) + '|' + hashEncodeS(build.getName()) + '|' + hashEncodeS(build.getNameTag())) : null;
+								imports[index] = { index:index, importhash:importhash, fleetid:fleetid, namehash:null, build:build, builderrors:builderrors };
+								fleetids[fleetid] = true;
 							}
-							builds[index] = decodeJournalBuild(json[i], errors[index]);
 						}
 					}
-				} else if ((json.name && json.modules) || json.ship || json.ships) { // CAPI /profile endpoint
-					var shiplist = [];
-					if (json.name && json.modules) {
-						shiplist.push(json);
-					} else {
-						var activeid = (json.ship || EMPTY_OBJ).id;
-						if (json.ship && json.ship.name && json.ship.modules)
-							shiplist.push(json.ship);
-						for (var otherid in (json.ships || EMPTY_OBJ)) {
-							if (json.ships[otherid].id != activeid && json.ships[otherid].name && json.ships[otherid].modules)
-								shiplist.push(json.ships[otherid]);
-						}
+					// now reverse the imports to restore the original journal order
+					imports.reverse();
+					for (var i = 0;  i < imports.length;  i++) {
+						imports[i].index = i;
+						if (imports[i].build)
+							curindex = i;
 					}
-					for (var i = 0;  i < shiplist.length;  i++) {
-						errors.push([]);
-						builds.push(decodeCAPIBuild(shiplist[i], errors[errors.length - 1]));
+				} else if ((json['name'] && json['modules']) || json['ship'] || json['ships']) { // FDAPI /profile endpoint
+					var fleetid = (json['id'] || (json['ship'] || EMPTY_OBJ)['id']);
+					if (json['name'] && json['modules']) {
+						var shipobj = json;
+						json = { ships:{} };
+						json['ships'][fleetid] = shipobj;
+					} else if (json['ship']) {
+						json['ships'] = json['ships'] || {};
+						json['ships'][fleetid] = json['ship'];
+					}
+					var fleetids = Object.keys(json['ships']);
+					fleetids.sort(sortNumbers);
+					for (var i = 0;  i < fleetids.length;  i++) {
+						var index = imports.length;
+						var builderrors = [];
+						var build = decodeCAPIBuild(json['ships'][fleetids[i]], builderrors);
+						var importhash = build ? ('fdapi|' + build.getShipID() + '|' + max(0,fleetids[i]) + '|' + hashEncodeS(build.getName()) + '|' + hashEncodeS(build.getNameTag())) : null;
+						imports[index] = { index:index, importhash:importhash, fleetid:fleetids[i], namehash:null, build:build, builderrors:builderrors };
+						if (build && fleetids[i] == fleetid)
+							curindex = index;
 					}
 				} else {
-					errors[0].push('Unrecognized JSON format');
+					errors.push('Unrecognized JSON format');
 				}
 			} else {
-				errors[0].push('Invalid JSON encoding');
+				errors.push('Invalid JSON encoding');
 			}
 		} else {
-			errors[0].push('Unrecognized format');
+			errors.push('Unrecognized format');
 		}
 		
-		// see what we got (remember builds[0] is a placeholder)
-		if (builds.length < 2) {
-			errors[0].push('No builds found');
-			alert('Import failed:\n\n' + errors[0].join('\n'));
-		} else if (builds.length == 2) {
-			if (builds[1]) {
-				setCurrentFit(builds[1]);
-				if (errors[1].length > 0) {
-					alert('Build imported with errors:\n\n' + errors[1].join('\n'))
+		// see what we got
+		if (imports.length < 1) {
+			errors.push('No builds found');
+			alert('Import failed:\n\n' + errors.join('\n'));
+		} else if (imports.length == 1) {
+			if (imports[0].build) {
+				setCurrentFit(imports[0].build);
+				if (imports[0].builderrors.length > 0) {
+					alert('Build imported with errors:\n\n' + imports[0].builderrors.join('\n'))
 				}
 			} else {
-				alert('Import failed:\n\n' + errors[1].join('\n'));
+				alert('Import failed:\n\n' + imports[0].builderrors.join('\n'));
 			}
 		} else {
-			alert('Found '+(builds.length - 1)+' builds');
-			// TODO: multiple builds
+			current.imports = imports;
+			var html = 'Imported ' + imports.length + ' builds. Choose which to save to your stored builds, and which to load now, if any.';
+			var trigger = document.getElementById('outfitting_fit_import');
+			var table = showUITablePopup(html, trigger, true, importBuildOkay, importBuildCancel);
+			table.className = 'striped';
+			while (table.lastChild)
+				table.removeChild(table.lastChild);
+			table.appendChild(createUIImportedBuildHeader());
+			var tbody = document.createElement('tbody');
+			for (var i = 0;  i < imports.length;  i++) {
+				// if a namehash wasn't provided, try the importhash history or generate a default label
+				if (!imports[i].namehash) {
+					if (imports[i].importhash && (imports[i].importhash in current.importLabel)) {
+						imports[i].namehash = current.importLabel[imports[i].importhash];
+					} else if (imports[i].build) {
+						imports[i].namehash = hashEncodeS(eddb.ship[imports[i].build.getShipID()].name + (imports[i].fleetid ? (' #' + imports[i].fleetid) : ''));
+					}
+				}
+				tbody.appendChild(createUIImportedBuildRow(imports[i]));
+			}
+			table.appendChild(tbody);
+			var el = document.getElementById('import_load_' + curindex);
+			if (el && !el.disabled)
+				el.checked = true;
 		}
 		
 		/*
@@ -3373,6 +3686,92 @@ window.edshipyard = new (function() {
 				}
 		*/
 	}; // importBuild()
+	
+	
+	var importBuildOkay = function() {
+		var ok = true;
+		var namehashIndex = {};
+		for (var i = 0;  i < current.imports.length;  i++) {
+			var importobj = current.imports[i];
+			var message = '';
+			var input_action = document.forms.popup.elements['import_store_' + i];
+			var label_save = document.forms.popup.elements['import_save_label_' + i];
+			var label_saveas = document.forms.popup.elements['import_saveas_label_' + i];
+			var namehash = '';
+			if (!importobj.build) {
+				// no build to store
+			} else if (input_action.value === 'save') {
+				namehash = label_save.value.trim();
+				if (!namehash) {
+					message = 'Select a label for the stored build.';
+				}
+			} else if (input_action.value === 'saveas') {
+				namehash = hashEncodeS(label_saveas.value.trim());
+				if (!namehash) {
+					message = 'Specify a label for the stored build.';
+				} else if (current.storedbuild[0][namehash]) {
+					message = 'The specified stored build label already exists; it will be overwritten.';
+					input_action.value = 'save';
+					label_save.value = namehash;
+					if (label_save.selectedIndex < 1) {
+						var option = document.createElement('option');
+						option.value = namehash;
+						option.text = label_saveas.value.trim();
+						option.selected = true;
+						label_save.appendChild(option);
+					}
+				}
+			}
+			if (!namehash) {
+				// don't store this build
+				importobj.namehash = namehash;
+			} else if (namehashIndex[namehash]) {
+				message = 'Cannot import multiple builds with the same label.';
+			} else {
+				namehashIndex[namehash] = i;
+				importobj.namehash = namehash;
+			}
+			var warning = document.getElementById('import_warning_' + i);
+			warning.title = message;
+			warning.style.display = message ? 'block' : 'none';
+			ok = ok && !message;
+		}
+		if (ok) {
+			for (var i = 0;  i < current.imports.length;  i++) {
+				var importobj = current.imports[i];
+				if (importobj.importhash) {
+					setStoredImport(importobj.importhash, importobj.namehash);
+				}
+				if (importobj.build && importobj.namehash) {
+					var shipid = importobj.build.getShipID();
+					var buildhash = importobj.build.getHash();
+					if (!current.storedbuild[shipid])
+						current.storedbuild[shipid] = {};
+					current.storedbuild[0][importobj.namehash] = buildhash;
+					current.storedbuild[shipid][importobj.namehash] = buildhash;
+				}
+			}
+			writeStoredImports();
+			writeStoredBuilds();
+			updateUIShipyardStoredBuilds();
+			var build = (current.imports[document.forms.popup.elements.import_load.value] || EMPTY_OBJ).build;
+			if (build) {
+				setCurrentFit(build);
+			} else {
+				updateUIFitStoredBuilds();
+			}
+			current.imports = null;
+		} else {
+			var html = 'Some choices were invalid; hover over the warning icon for details.';
+			var trigger = document.getElementById('outfitting_fit_import');
+			showUITablePopup(html, trigger, true, importBuildOkay, importBuildCancel);
+		}
+	}; // importBuildOkay()
+	
+	
+	var importBuildCancel = function() {
+		current.imports = null;
+	}; // importBuildCancel()
 	
 	
 	var getFdevImportMap = function() {
@@ -3443,6 +3842,11 @@ window.edshipyard = new (function() {
 				if (fdname)
 					fdevmap.module[fdname] = modid;
 			}
+			
+			// obsolete modules
+			fdevmap.module['INT_STELLARBODYDISCOVERYSCANNER_STANDARD'] = -1;
+			fdevmap.module['INT_STELLARBODYDISCOVERYSCANNER_INTERMEDIATE'] = -1;
+			fdevmap.module['INT_STELLARBODYDISCOVERYSCANNER_ADVANCED'] = -1;
 			
 			// blueprint mappings are per-mtype
 			for (var mtypeid in eddb.mtype) {
@@ -3710,8 +4114,10 @@ window.edshipyard = new (function() {
 		
 		// apply the hull discount
 		var slot = build.getSlot('ship', 'hull');
-		if (!slot.setDiscounts(getClosestDiscount(((json.HullValue || 0) + extravalue) / ship.cost))) {
-			if (errors) errors.push('Failed to calculate discounted hull value: ' + json.HullValue + '+' + extravalue + ' vs base ' + ship.cost);
+		if ('HullValue' in json) {
+			if (!slot.setDiscounts(getClosestDiscount(((json.HullValue || 0) + extravalue) / ship.cost))) {
+				if (errors) errors.push('Failed to calculate discounted hull value: ' + json.HullValue + '+' + extravalue + ' vs base ' + ship.cost);
+			}
 		}
 		
 		for (var slotgroup in eddb.group) {
@@ -3753,15 +4159,17 @@ window.edshipyard = new (function() {
 					if (slot) {
 						var fdname = (modulejson.Item || '').trim().toUpperCase();
 						var modid = fdevmap.shipModule[shipid][fdname] || fdevmap.module[fdname];
-						if (modid) {
+						if (modid > 0) {
 							if (slot.setModuleID(modid, true)) {
-								if (!current.option.experimental && !this.setModuleID(modid)) {
+								if (!current.option.experimental && !slot.setModuleID(modid)) {
 									if (errors) errors.push(modulejson.Slot + getModuleLabel(this.getModule()) + ' requires Experimental Mode');
 								}
-								var modvalue = modulejson.Value || 0;
-								var basecost = build.getModule(modid).cost;
-								if (!slot.setDiscounts(basecost ? getClosestDiscount(modvalue / basecost) : 0)) {
-									if (errors) errors.push(modulejson.Slot + ': Failed to calculate discounted value: ' + modulejson.Value + ' vs base ' + basecost);
+								if ('Value' in modulejson) {
+									var modvalue = modulejson.Value || 0;
+									var basecost = build.getModule(modid).cost;
+									if (!slot.setDiscounts(basecost ? getClosestDiscount(modvalue / basecost) : 0)) {
+										if (errors) errors.push(modulejson.Slot + ': Failed to calculate discounted value: ' + modulejson.Value + ' vs base ' + basecost);
+									}
 								}
 								var mtypeid = slot.getModule().mtype;
 								if (modulejson.Engineering) {
@@ -3810,7 +4218,7 @@ window.edshipyard = new (function() {
 									}
 								}
 							} else if (errors) errors.push(modulejson.Slot + ': Invalid module: ' + modulejson.Item);
-						} else if (modulejson.Item && errors) errors.push(modulejson.Slot + ': Unknown module: ' + modulejson.Item);
+						} else if (!modid && modulejson.Item && errors) errors.push(modulejson.Slot + ': Unknown module: ' + modulejson.Item);
 						
 						if (!slot.setPowered(modulejson.On)) {
 							if (errors) errors.push(modulejson.Slot + ': Invalid powered setting: ' + modulejson.On);
@@ -4080,7 +4488,9 @@ window.edshipyard = new (function() {
 			current.pickerSlot.setModuleID(0);
 		} else {
 			var input = document.getElementById('outfitting_module.' + modid + '.' + namehash);
-			input.checked = true;
+			if (input) {
+				input.checked = true;
+			}
 			if (namehash) {
 				current.pickerSlot.setStoredHash(current.storedmodule[0][namehash]);
 			} else {
@@ -4446,20 +4856,10 @@ window.edshipyard = new (function() {
 	
 	
 	var readStoredBuilds = function() {
-		if (!cache.feature.storage)
-			return false;
-		
 		current.storedbuild = { 0:{} };
 		
-		// read non-beta builds first, to copy them into the beta storage; TODO: remove this!
-		var item = 'edshipyard_loadouts';
-		var data = (window.localStorage.getItem(item) || '').split('/');
-		for (var i = 0;  i < data.length;  i++) {
-			var entry = data[i].split('=');
-			if (entry.length === 2)
-				current.storedbuild[0][entry[0]] = entry[1];
-		}
-		//TODO
+		if (!cache.feature.storage)
+			return false;
 		
 		var item = 'edshipyard_loadouts' + (current.beta ? '_beta' : '');
 		var data = (window.localStorage.getItem(item) || '').split('/');
@@ -4485,6 +4885,7 @@ window.edshipyard = new (function() {
 	var writeStoredBuilds = function() {
 		if (!cache.feature.storage)
 			return false;
+		
 		var data = [];
 		for (var namehash in current.storedbuild[0]) {
 			data.push(namehash + '=' + current.storedbuild[0][namehash]);
@@ -4495,33 +4896,63 @@ window.edshipyard = new (function() {
 	}; // writeStoredBuilds()
 	
 	
-	var updateUIFitStoredBuilds = function() {
+	var setStoredImport = function(importhash, namehash) {
+		var namehashOld = current.importLabel[importhash];
+		if (namehashOld) {
+			delete current.labelImports[namehashOld][importhash];
+			var empty = true;
+			for (var importhashOld in current.labelImports[namehashOld]) {
+				empty = false;
+				break;
+			}
+			if (empty)
+				delete current.labelImports[namehashOld];
+		}
+		current.importLabel[importhash] = namehash;
+		if (!current.labelImports[namehash])
+			current.labelImports[namehash] = {};
+		current.labelImports[namehash][importhash] = true;
+		return true;
+	}; // setStoredImport()
+	
+	
+	var readStoredImports = function() {
+		current.importLabel = {};
+		current.labelImports = {};
+		
 		if (!cache.feature.storage)
 			return false;
 		
-		var shipid = (current.fit ? current.fit.getShipID() : -1);
-		var names = [];
-		var nameNamehash = {};
-		for (var namehash in current.storedbuild[shipid]) {
-			var name = hashDecodeS(namehash);
-			names.push(name);
-			nameNamehash[name] = namehash;
+		var item = 'edshipyard_imports' + (current.beta ? '_beta' : '');
+		var data = (window.localStorage.getItem(item) || '').split('/');
+		for (var i = 0;  i < data.length;  i++) {
+			var entry = data[i].split('=');
+			if (entry.length === 2)
+				setStoredImport(entry[0], entry[1]);
 		}
-		names.sort();
-		
-		var select = document.forms.fit.elements.outfitting_fit_stored;
-		var curnamehash = select.value;
-		var curindex = select.selectedIndex && -1;
-		setDOMSelectLength(select, 1 + names.length);
-		for (var i = 0;  i < names.length;  i++) {
-			select.options[i+1].value = nameNamehash[names[i]];
-			select.options[i+1].text = names[i];
-			if (nameNamehash[names[i]] === curnamehash)
-				curindex = i+1;
-		}
-		select.selectedIndex = curindex;
-		
 		return true;
+	}; // readStoredImports()
+	
+	
+	var writeStoredImports = function() {
+		if (!cache.feature.storage)
+			return false;
+		
+		var data = [];
+		for (var importhash in current.importLabel) {
+			data.push(importhash + '=' + current.importLabel[importhash]);
+		}
+		var item = 'edshipyard_imports' + (current.beta ? '_beta' : '');
+		window.localStorage.setItem(item, data.join('/'));
+		return true;
+	}; // writeStoredImports()
+	
+	
+	var updateUIFitStoredBuilds = function() {
+		var select = document.forms.fit.elements.outfitting_fit_stored;
+		var shipid = (current.fit ? current.fit.getShipID() : -1);
+		var curnamehash = select.value;
+		return populateDOMSelectStoredBuilds(select, shipid, curnamehash);
 	}; // updateUIFitStoredBuilds()
 	
 	
@@ -4538,10 +4969,10 @@ window.edshipyard = new (function() {
 				select.selectedIndex = -1;
 		}
 		namehash = select.value;
-		var storedbuild = (cache.feature.storage && namehash && current.storedbuild[0][namehash]);
+		var storedbuild = (namehash && current.storedbuild[0][namehash]);
 		document.getElementById('outfitting_fit_stored_reload').disabled = (setfit || !storedbuild);
 		document.getElementById('outfitting_fit_stored_save').disabled = (setfit || !storedbuild);
-		document.getElementById('outfitting_fit_stored_saveas').disabled = (!cache.feature.storage);
+		document.getElementById('outfitting_fit_stored_saveas').disabled = false;
 		document.getElementById('outfitting_fit_stored_rename').disabled = (!storedbuild);
 		document.getElementById('outfitting_fit_stored_delete').disabled = (!storedbuild);
 		return true;
@@ -4549,7 +4980,7 @@ window.edshipyard = new (function() {
 	
 	
 	var saveCurrentStoredBuild = function(saveas) {
-		if (!cache.feature.storage || !current.fit)
+		if (!current.fit)
 			return false;
 		var select = document.forms.fit.elements.outfitting_fit_stored;
 		var namehash = select.value;
@@ -4580,7 +5011,7 @@ window.edshipyard = new (function() {
 	
 	
 	var renameStoredBuild = function(namehash) {
-		if (!cache.feature.storage || !namehash || !current.storedbuild[0][namehash])
+		if (!namehash || !current.storedbuild[0][namehash])
 			return false;
 		var oldnamehash = namehash;
 		var name = hashDecodeS(namehash);
@@ -4612,7 +5043,7 @@ window.edshipyard = new (function() {
 	
 	
 	var deleteStoredBuild = function(namehash) {
-		if (!cache.feature.storage || !namehash || !current.storedbuild[0][namehash])
+		if (!namehash || !current.storedbuild[0][namehash])
 			return false;
 		var name = hashDecodeS(namehash);
 		if (!confirm("The stored build labeled\n\n    "+name+"\n\nwill be deleted. Are you sure?"))
@@ -4664,27 +5095,27 @@ window.edshipyard = new (function() {
 					} else {
 						current.tempSlot.setModuleID(modid);
 					}
-					var classname = '';
-					switch ((current.tempSlot.getModule() || EMPTY_OBJ).mtype) {
+					var notenough = false;
+					var notallowed = false;
+					switch (mtype) {
 					case 'cpd':
-						if (current.tempSlot.getEffectiveAttrValue('engcap') < (boostcost + BOOST_MARGIN))
-							classname = 'notenough';
+						notenough = (current.tempSlot.getEffectiveAttrValue('engcap') < (boostcost + BOOST_MARGIN));
 						break;
 						
 					case 'ct':
 					case 'isg':
-						if (current.tempSlot.getEffectiveAttrValue('maxmass') < mass)
-							classname = 'notenough';
+						notenough = (current.tempSlot.getEffectiveAttrValue('maxmass') < mass);
 						break;
 						
 					case 'ifh':
 					case 'ipc':
 						var module = eddb.module[modid];
-						if (module.reserved && !module.reserved[shipid])
-							classname = 'notallowed';
+						notallowed = (module.reserved && !module.reserved[shipid]);
 						break;
 					}
-					document.getElementById('outfitting_module.' + modid + '.' + namehash).className = classname;
+					var el = document.getElementById('outfitting_module.' + modid + '.' + namehash);
+					el.classList.toggle('notenough', notenough);
+					el.classList.toggle('notallowed', notallowed);
 				}
 			}
 		}
@@ -4722,10 +5153,10 @@ window.edshipyard = new (function() {
 	var updateUIFitPowerDist = function() {
 		var maxcrew = (current.fit.getSlot('ship', 'hull').getEffectiveAttrValue('crew') - 1);
 		var crew = current.fit.getCrewDist();
-		document.getElementById('outfitting_fit_crewdist_avl').className = ('crew' + (maxcrew - crew.sys - crew.eng - crew.wep));
-		document.getElementById('outfitting_fit_crewdist_sys').className = ('crew' + crew.sys);
-		document.getElementById('outfitting_fit_crewdist_eng').className = ('crew' + crew.eng);
-		document.getElementById('outfitting_fit_crewdist_wep').className = ('crew' + crew.wep);
+		document.getElementById('outfitting_fit_crewdist_avl').className = ('crew' + (maxcrew - crew.sys - crew.eng - crew.wep) + ' max' + maxcrew);
+		document.getElementById('outfitting_fit_crewdist_sys').className = ('crew' + crew.sys + ' max' + maxcrew);
+		document.getElementById('outfitting_fit_crewdist_eng').className = ('crew' + crew.eng + ' max' + maxcrew);
+		document.getElementById('outfitting_fit_crewdist_wep').className = ('crew' + crew.wep + ' max' + maxcrew);
 		var dist = current.fit.getEffectivePowerDist();
 		document.getElementById('outfitting_fit_powerdist_sys').className = ('crew' + crew.sys + ' dist' + dist.sys);
 		document.getElementById('outfitting_fit_powerdist_eng').className = ('crew' + crew.eng + ' dist' + dist.eng);
@@ -5228,20 +5659,10 @@ window.edshipyard = new (function() {
 	
 	
 	var readStoredModules = function() {
-		if (!cache.feature.storage)
-			return false;
-		
 		current.storedmodule = { 0:{} };
 		
-		// read non-beta modules first, to copy them into the beta storage; TODO: remove this!
-		var item = 'edshipyard_modules';
-		var data = (window.localStorage.getItem(item) || '').split('/');
-		for (var i = 0;  i < data.length;  i++) {
-			var entry = data[i].split('=');
-			if (entry.length === 2)
-				current.storedmodule[0][entry[0]] = entry[1];
-		}
-		//TODO
+		if (!cache.feature.storage)
+			return false;
 		
 		var item = 'edshipyard_modules' + (current.beta ? '_beta' : '');
 		var data = (window.localStorage.getItem(item) || '').split('/');
@@ -5267,6 +5688,7 @@ window.edshipyard = new (function() {
 	var writeStoredModules = function() {
 		if (!cache.feature.storage)
 			return false;
+		
 		var data = [];
 		for (var namehash in current.storedmodule[0]) {
 			data.push(namehash + '=' + current.storedmodule[0][namehash]);
@@ -5809,6 +6231,11 @@ window.edshipyard = new (function() {
 	var updateUIStats = function() {
 		// TODO: insurance
 		
+		// mark undersized fitted power plant
+		var pwrdraw_ret = current.fit.getStat('pwrdraw_ret');
+		var slot = current.fit.getSlot('component', CORE_ABBR_SLOT.PP);
+		document.getElementById('outfitting_fit_module_component_' + CORE_ABBR_SLOT.PP).classList.toggle('notenough', slot.getEffectiveAttrValue('pwrcap') < pwrdraw_ret[0]);
+		
 		// mark undersized fitted thruster
 		var massBase = current.fit.getStat('mass') + current.fit.getStat('fuelcap') + current.fit.getStat('cargocap');
 		var slot = current.fit.getSlot('component', CORE_ABBR_SLOT.TH);
@@ -5816,22 +6243,31 @@ window.edshipyard = new (function() {
 		document.getElementById('outfitting_stats_max_mass').classList.toggle('error', slot.getEffectiveAttrValue('maxmass') < massBase);
 		massBase -= slot.getEffectiveAttrValue('mass');
 		
-		// mark undersized thruster options
-		for (var m = 0;  m < cache.mtypeModules['ct'].length;  m++) {
-			var modid = cache.mtypeModules['ct'][m];
-			var namehashes = Object.keys(current.storedmodule[modid] || EMPTY_OBJ);
-			namehashes.push('');
-			for (var n = 0;  n < namehashes.length;  n++) {
-				var namehash = namehashes[n];
-				if (namehash) {
-					current.tempSlot.setStoredHash(current.storedmodule[0][namehash]);
-				} else {
-					current.tempSlot.setModuleID(modid);
+		// mark undersized power plant and thruster options
+		for (var mtype in { cpp:1, ct:1 }) {
+			for (var m = 0;  m < cache.mtypeModules[mtype].length;  m++) {
+				var modid = cache.mtypeModules[mtype][m];
+				var namehashes = Object.keys(current.storedmodule[modid] || EMPTY_OBJ);
+				namehashes.push('');
+				for (var n = 0;  n < namehashes.length;  n++) {
+					var namehash = namehashes[n];
+					if (namehash) {
+						current.tempSlot.setStoredHash(current.storedmodule[0][namehash]);
+					} else {
+						current.tempSlot.setModuleID(modid);
+					}
+					var notenough = false;
+					switch (mtype) {
+					case 'ct':
+						notenough = (current.tempSlot.getEffectiveAttrValue('maxmass') < (massBase + current.tempSlot.getEffectiveAttrValue('mass')));
+						break;
+						
+					case 'cpp':
+						notenough = (current.tempSlot.getEffectiveAttrValue('pwrcap') < pwrdraw_ret[0]);
+						break;
+					}
+					document.getElementById('outfitting_module.' + modid + '.' + namehash).classList.toggle('notenough', notenough);
 				}
-				var classname = '';
-				if (current.tempSlot.getEffectiveAttrValue('maxmass') < (massBase + current.tempSlot.getEffectiveAttrValue('mass')))
-					classname = 'notenough';
-				document.getElementById('outfitting_module.' + modid + '.' + namehash).className = classname;
 			}
 		}
 		
@@ -6412,6 +6848,33 @@ window.edshipyard = new (function() {
 	}; // onUIPopupButtonClick()
 	
 	
+	var onUIPopupImportButtonClick = function(e) {
+		e.preventDefault();
+		switch (e.currentTarget.name) {
+		case 'import_ignore':
+		case 'import_save':
+		case 'import_saveas':
+			var action = e.currentTarget.name.split('_')[1];
+			var el;
+			for (var i = 0;  el = document.getElementById('import_store_'+i+'_'+action);  i++) {
+				if (!el.disabled)
+					el.checked = true;
+			}
+			e.stopPropagation();
+			return false;
+			
+		case 'import_load_none':
+			var i = document.forms.popup.elements.import_load.value;
+			var el = document.getElementById('import_load_' + i);
+			if (el)
+				el.checked = false;
+			e.stopPropagation();
+			return false;
+		}
+		return true;
+	}; // onUIPopupImportButtonClick()
+	
+	
 	var onUIMaximizeButtonClick = function(e) {
 		if (cache.feature.requestFullscreen && cache.feature.cancelFullscreen) {
 			cache.feature.requestFullscreen.call(window.document.documentElement);
@@ -6766,16 +7229,18 @@ window.edshipyard = new (function() {
 				showUITextPopup(
 						'Import loadout(s) by pasting them below or dragging a file onto the page.',
 						'Supported import formats include:\n\n' +
-						'* E:D Shipyard URL(s)\n' + // TODO: text exports?
-						'* Companion API JSON export (via EDAPI, EDCE, EDMC, etc)\n' +
-						'* Journal "Loadout" event JSON object(s)\n', // TODO: coriolis
+						'* E:D Shipyard URL(s)\n' +
+						'* E:D Shipyard bulk export\n' + // TODO: text exports?
+						'* Journal JSON file with "Loadout" event(s)\n' + // TODO: coriolis
+						'* Frontier API JSON data (via EDAPI, EDCE, EDMC, etc)\n',
 						e.target, false,
 						importBuild, true
 				);
 				break;
 				
 			case 'export':
-				// TODO
+				e.preventDefault();
+				// TODO?
 				break;
 				
 			case 'stored':
@@ -7255,6 +7720,22 @@ window.edshipyard = new (function() {
 	}; // onUIOptionsChange()
 	
 	
+	var onUIOptionsBackupClick = function(e) {
+		var obj = {
+			format: 'edsy',
+			version: VERSIONS[3],
+			builds: current.storedbuild[0]
+		};
+		var json = JSON.stringify(obj, null, 2);
+		showUITextPopup(
+				'Below is a JSON object encoding all stored builds, suitable for backup or transfer to another device or browser.',
+				json,
+				e.target, false,
+				true, false
+		);
+	}; // onUIOptionsBackupClick()
+	
+	
 	var onWindowHashChange = function(e) {
 		processURLHash(window.location.hash, true);
 	}; // onWindowHashChange()
@@ -7272,6 +7753,7 @@ window.edshipyard = new (function() {
 	
 	
 	var onStorageEvent = function(e) {
+		readStoredImports();
 		readStoredBuilds();
 		updateUIShipyardStoredBuilds();
 		updateUIFitStoredBuilds();
@@ -7383,6 +7865,13 @@ window.edshipyard = new (function() {
 		initUIFitSlots();
 		initUIDetails();
 		
+		// initialize storage
+		readStoredImports();
+		readStoredBuilds();
+		updateUIShipyardStoredBuilds();
+		readStoredModules();
+		updateUIModulePickerStoredModules();
+		
 		// set initial UI state
 		setUIPageTab('shipyard');
 		setUIShipyardTab('ships');
@@ -7413,29 +7902,17 @@ window.edshipyard = new (function() {
 		document.getElementById('outfitting_modules_container').addEventListener('change', onUIModulePickerChange);
 		document.getElementById('outfitting_modules_container').addEventListener('click', onUIModulePickerClick);
 		document.getElementById('outfitting_modules_container').addEventListener('dblclick', onUIModulePickerDblClick);
-		//TODO delete document.getElementById('outfitting_modules_container').addEventListener('touchstart', onUIModulePickerTouch);
-		//TODO delete document.getElementById('outfitting_modules_container').addEventListener('touchmove', onUIModulePickerTouch);
-		//TODO delete document.getElementById('outfitting_modules_container').addEventListener('touchend', onUIModulePickerTouch);
 		document.getElementById('outfitting_modules_container').addEventListener('dragstart', onUIModulePickerDragStart);
 		document.getElementById('outfitting_modules_container').addEventListener('dragend', onUIModulePickerDragEnd);
 		document.getElementById('outfitting_modules_container').addEventListener('drop', onUIModulePickerDrop);
 		document.getElementById('outfitting_modules_buttons').addEventListener('click', onUIModuleButtonsClick);
-		if (cache.feature.storage) {
-			readStoredBuilds();
-			updateUIShipyardStoredBuilds();
-			readStoredModules();
-			updateUIModulePickerStoredModules();
-			window.addEventListener('storage', onStorageEvent);
-		}
+		if (cache.feature.storage) window.addEventListener('storage', onStorageEvent);
 		document.getElementById('outfitting_fit_settings').addEventListener('change', onUIFitSettingsChange);
 		document.getElementById('outfitting_fit_settings').addEventListener('click', onUIFitSettingsClick);
 		document.getElementById('outfitting_fit_slots').addEventListener('mousedown', onUIFitSlotsMouseDown);
 		document.getElementById('outfitting_fit_slots').addEventListener('change', onUIFitSlotsChange);
 		document.getElementById('outfitting_fit_slots').addEventListener('click', onUIFitSlotsClick);
 		document.getElementById('outfitting_fit_slots').addEventListener('dblclick', onUIFitSlotsDblClick);
-		//TODO delete document.getElementById('outfitting_fit_slots').addEventListener('touchstart', onUIFitSlotsTouch);
-		//TODO delete document.getElementById('outfitting_fit_slots').addEventListener('touchmove', onUIFitSlotsTouch);
-		//TODO delete document.getElementById('outfitting_fit_slots').addEventListener('touchend', onUIFitSlotsTouch);
 		document.getElementById('outfitting_fit_slots').addEventListener('dragstart', onUIFitSlotsDragStart);
 		document.getElementById('outfitting_fit_slots').addEventListener('dragend', onUIFitSlotsDragEnd);
 		document.getElementById('outfitting_fit_slots').addEventListener('drop', onUIFitSlotsDrop);
@@ -7451,6 +7928,7 @@ window.edshipyard = new (function() {
 		document.getElementById('outfitting_fit_crewdist').addEventListener('click', onUIPowerDistClick);
 		document.getElementById('outfitting_fit_powerdist').addEventListener('click', onUIPowerDistClick);
 		document.getElementById('page_body_options').addEventListener('change', onUIOptionsChange);
+		document.getElementById('options_backup').addEventListener('click', onUIOptionsBackupClick);
 		document.getElementById('contact_email').addEventListener('click', onLinkEmailClick);
 		
 		// check for initial build hash
