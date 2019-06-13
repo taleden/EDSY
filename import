@@ -1,0 +1,79 @@
+#!/usr/local/bin/python3
+
+"""
+EDSY was created using assets and imagery from Elite Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
+It is not endorsed by nor reflects the views or opinions of Frontier Developments and no employee of Frontier Developments was involved in the making of it.
+
+Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2019 taleden
+and is provided under a Creative Commons Attribution-NonCommercial 4.0 International License (http://creativecommons.org/licenses/by-nc/4.0/).
+
+The Elite Dangerous game logic and data in this file remains the property of Frontier Developments plc, and is used here as authorized by
+Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elite-dangerous-media-usage-rules.510879/).
+"""
+
+import base64, cgi, cgitb, http.cookies, json, sys, zlib
+cgitb.enable()
+
+headers = "Cache-Control: no-cache,no-store,must-revalidate\r\nExpires: Sat, 01 Jan 2000 00:00:00 GMT\r\nPragma: no-cache\r\nStrict-Transport-Security: max-age=300; includeSubDomains\r\n" # max-age=31536000; preload
+buf = "Status: 500\r\n"+headers+"\r\n"
+
+try:
+	form = cgi.FieldStorage()
+	import_gz_b64 = form.getfirst("import", "")
+	try:
+		# if it's already valid gz+b64+trim, leave it as is
+		zlib.decompress(base64.b64decode((import_gz_b64 + "=" * ((4 - len(import_gz_b64) % 4) % 4)), "-_", True))
+	except:
+		# otherwise, compress and encode it
+		import_gz_b64 = base64.b64encode(zlib.compress(import_gz_b64.encode("utf-8")), b"-_").decode("utf-8").rstrip("=")
+	#try/except
+	if len(import_gz_b64) <= 3072:
+		# if the payload is small enough, set it as a session cookie for broadest support (no need for sessionStorage)
+		sendcookies = http.cookies.SimpleCookie()
+		sendcookies["edsy_import_buffer"] = import_gz_b64
+		sendcookies["edsy_import_buffer"]["domain"] = ".edsy.org"
+		sendcookies["edsy_import_buffer"]["path"] = "/"
+		buf = "".join([
+			"Status: 303\r\n",
+			headers,
+			sendcookies.output(), "\r\n",
+			"Location: /\r\n",
+			"\r\n"
+		])
+	else:
+		# if it's too big, store it in sessionStorage if available; otherwise, just try to set it as a cookie anyway, in case the browser can handle it after all
+		buf = "".join([
+			"Status: 200\r\n",
+			headers,
+			"Content-type: text/html\r\n",
+			"\r\n",
+			(
+"""<!DOCTYPE html>
+<meta charset="utf-8">
+<script type="application/javascript">
+'use strict';
+window.addEventListener('DOMContentLoaded', (function(e) {
+	var data = %s;
+	if (window.sessionStorage && window.sessionStorage.setItem) {
+		window.sessionStorage.setItem('edsy_import_buffer', data);
+	} else {
+		document.cookie = "edsy_import_buffer="+encodeURIComponent(data)+"; domain=.edsy.org; path=/"; 
+	}
+	window.location.href = '/';
+}));
+</script>
+""" % (json.dumps(import_gz_b64),)
+			)
+		])
+	#if len
+except:
+	buf = "".join([
+		"Status: 500\r\n",
+		headers,
+		"Content-type: text/html\r\n",
+		"\r\n",
+		cgitb.html(sys.exc_info())
+	])
+#try/except
+
+print(buf, end="")

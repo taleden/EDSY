@@ -1,17 +1,17 @@
 ﻿/*
-E:D Shipyard (EDSY) was created using assets and imagery from Elite: Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
+EDSY was created using assets and imagery from Elite Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
 It is not endorsed by nor reflects the views or opinions of Frontier Developments and no employee of Frontier Developments was involved in the making of it.
 
 Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2019 taleden
 and is provided under a Creative Commons Attribution-NonCommercial 4.0 International License (http://creativecommons.org/licenses/by-nc/4.0/).
 
-The Elite: Dangerous game logic and data in this file remains the property of Frontier Developments plc,
-and is used here as authorized by Frontier Customer Services (https://forums.frontier.co.uk/showthread.php?t=5349).
+The Elite Dangerous game logic and data in this file remains the property of Frontier Developments plc, and is used here as authorized by
+Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elite-dangerous-media-usage-rules.510879/).
 */
 'use strict';
 var eddb = {
-	version : 34221,
-	edsy_versions_db : [34221,34221,34221,34221], /* HTML,CSS,DB,JS */
+	version : 34222,
+	edsy_versions_db : [34222,34222,34222,34222], /* HTML,CSS,DB,JS */
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder',
@@ -1495,40 +1495,6 @@ var eddb = {
 		mod_weapon_range                            : { maxrng:1 },
 		mod_weapon_reload_time                      : { rldtime:1 },
 		
-		special_auto_loader                         : {}, // no side effects
-		special_blinding_shell                      : {}, // no side effects
-		special_choke_canister                      : {}, // no side effects
-		special_concordant_sequence                 : { thmload:0.5 },
-		special_corrosive_shell                     : { ammomax:-0.2 },
-		special_deep_cut_payload                    : {}, // no side effects // verify
-		special_dispersal_field                     : {}, // TODO: confirm damage:-0.1 removed in 2.2.03
-		special_distortion_field                    : { damage:0.5, jitter:3 }, // verify
-		special_drag_munitions                      : {}, // no side effects
-		special_emissive_munitions                  : { thmload:1 },
-		special_feedback_cascade                    : { damage:-0.2 },
-		special_force_shell                         : { shotspd:-0.166666666666667 }, // verify
-		special_fsd_interrupt                       : { damage:-0.3, bstint:0.5 }, // verify
-		special_high_yield_shell                    : { bstint:0.11111111111111111111111111111111 },
-		special_incendiary_rounds                   : { thmload:2, bstint:0.05263157894736842105263157894737, kinwgt:0.1, thmwgt:0.9 },
-		special_lock_breaker                        : {}, // no side effects
-		special_mass_lock                           : {}, // no side effects // verify
-		special_overload_munitions                  : {}, // no side effects
-		special_phasing_sequence                    : { damage:-0.1 },
-		special_plasma_slug                         : { damage:-0.1, ammomax:-1 },
-		special_plasma_slug_cooled                  : { damage:-0.1, thmload:-0.4, ammomax:-1 },
-		special_radiant_canister                    : {},
-		special_regeneration_sequence               : { damage:-0.1 },
-		special_reverberating_cascade               : {}, // no side effects
-		special_scramble_spectrum                   : { bstint:0.11111111111111111111111111111111 },
-		special_screening_shell                     : { rldtime:-0.5 },
-		special_shiftlock_canister                  : {},
-		special_smart_rounds                        : {}, // no side effects
-		special_super_penetrator                    : { rldtime:0.5 },
-		special_thermalshock                        : { damage:-0.1 },
-		special_thermal_cascade                     : {}, // no side effects
-		special_thermal_conduit                     : {}, // TODO: try to find some way to model the range of effect by ship heat level
-		special_thermal_vent                        : {}, // TODO: verify if there might be a distdraw effect as well
-		
 		trade_cell_heat_cell_units                  : { shieldrnfps:-1 , thmload:-1 },
 		trade_defence_health_add_defence_global_mult: { hullrnf:1, kinres:0.4, thmres:0.4, expres:0.4 },
 		trade_distributor_engine_charge_system_charge:{ engcap:1, syscap:-1 },
@@ -1641,6 +1607,7 @@ var eddb = {
 		special_engine_lightweight : 'miscx_sd',
 		special_engine_overloaded : 'ctx_ddr',
 		special_engine_toughened : 'miscx_db',
+		special_feedback_cascade : 'wpnx_feca', // unused? legacy?
 		special_feedback_cascade_cooled : 'wpnx_feca',
 		special_force_shell : 'wpnx_fosh',
 		special_fsd_cooled : 'cfsdx_ts',
@@ -1697,6 +1664,7 @@ var eddb = {
 		special_shieldcell_toughened : 'miscx_db',
 		special_shiftlock_canister : 'wpnx_slc',
 		special_smart_rounds : 'wpnx_smro',
+		special_super_penetrator : 'wpnx_supe', // unused? legacy?
 		special_super_penetrator_cooled : 'wpnx_supe',
 		special_thermal_cascade : 'wpnx_thca',
 		special_thermal_conduit : 'wpnx_thco',
@@ -1721,14 +1689,14 @@ var eddb = {
 		wpnx_drmu : { name:'Drag Munitions', special:'Target speed reduced' },
 		wpnx_emmu : { name:'Emissive Munitions', thmload:100, special:'Target signature increased' },
 		wpnx_feca : { name:'Feedback Cascade', damage:-20, thmload:-40, special:'Target shield cell disrupted' },
-		wpnx_fosh : { name:'Force Shell', shotspd:-16.6666666666667, special:'Target pushed off course' },
+		wpnx_fosh : { name:'Force Shell', shotspd:-16.66666666666667, special:'Target pushed off course' },
 		wpnx_fsin : { name:'FSD Interrupt', damage:-30, bstint:50, special:'Target FSD reboots' },
-		wpnx_hys : { name:'High Yield Shell', damage:-35, bstint:11.1111111111111, kinwgt:50, expwgt:50, special:'Damage partly explosive; target module damage' }, // verify bstint
-		wpnx_inro : { name:'Incendiary Rounds', bstint:5.263157894737, thmload:200, kinwgt:10, thmwgt:90, special:'Damage mostly thermal' },
+		wpnx_hys : { name:'High Yield Shell', damage:-35, bstint:11.11111111111111, kinwgt:50, expwgt:50, special:'Damage partly explosive; target module damage' }, // verify bstint
+		wpnx_inro : { name:'Incendiary Rounds', bstint:5.263157894736842, thmload:200, kinwgt:10, thmwgt:90, special:'Damage mostly thermal' },
 		wpnx_inim : { name:'Inertial Impact', damage:50, kinwgt:50, thmwgt:50, jitter:3, special:'Damage half kinetic' },
 		wpnx_iodi : { name:'Ion Disruption', special:'Target thrusters reboot' },
 		wpnx_mlm : { name:'Mass Lock Munition', special:'Target FSD inhibited' },
-		wpnx_muse : { name:'Multi-Servos', pwrdraw:5, bstint:-2.912621359223 },
+		wpnx_muse : { name:'Multi-Servos', pwrdraw:5, bstint:-2.912621359223300 },
 		wpnx_ovmu : { name:'Overload Munitions', thmwgt:50, expwgt:50, special:'Damage partly thermal' },
 		wpnx_os : { name:'Oversized', pwrdraw:5, damage:3 },
 		wpnx_pemu : { name:'Penetrator Munitions', special:'Target module damage' },
@@ -1739,16 +1707,16 @@ var eddb = {
 		wpnx_raca : { name:'Radiant Canister', special:'Area heat increased and sensors disrupted' },
 		wpnx_rese : { name:'Regeneration Sequence', damage:-10, special:'Target wing shields regenerated' },
 		wpnx_reca : { name:'Reverberating Cascade', special:'Target shield generator damaged' },
-		wpnx_scsp : { name:'Scramble Spectrum', bstint:11.1111111111111, special:'Target modules malfunction' },
+		wpnx_scsp : { name:'Scramble Spectrum', bstint:11.11111111111111, special:'Target modules malfunction' },
 		wpnx_scsh : { name:'Screening Shell', rldtime:-50, special:'Effective against munitions' },
 		wpnx_slc : { name:'Shift-Lock Canister', special:'Area FSDs reboot' },
 		wpnx_smro : { name:'Smart Rounds', special:'No damage to untargeted ships' },
 		wpnx_supe : { name:'Super Penetrator', thmload:-40, rldtime:50, special:'Target module damage' },
 		wpnx_tlb : { name:'Target Lock Breaker', special:'Target loses target lock' },
 		wpnx_thca : { name:'Thermal Cascade', special:'Shielded target heat increased' },
-		wpnx_thco : { name:'Thermal Conduit', special:'Damage increases with heat level' }, // TODO: model this somehow? min-max dps spread?
+		wpnx_thco : { name:'Thermal Conduit', special:'Damage increases with heat level' }, // TODO: model variable damage? min-max dps spread?
 		wpnx_thsh : { name:'Thermal Shock', damage:-10, special:'Target heat increased' },
-		wpnx_thve : { name:'Thermal Vent', special:'Heat reduced when striking a target' }, // TODO: model this?
+		wpnx_thve : { name:'Thermal Vent', special:'Heat reduced when striking a target' }, // TODO: model heat dispersal? and test for distdraw effect
 		
 		usbx_bb : { name:'Blast Block', shieldbst:-1, expres:2 },
 		usbx_fb : { name:'Force Block', shieldbst:-1, kinres:2 },
@@ -2445,9 +2413,11 @@ var eddb = {
 		72160 : { mtype:'hmc', cost:    9500, name:'Multi-cannon',                mount:'F',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.28, boottime:0, dps: 8.615, damage: 1.120, distdraw:0.060, thmload:0.09, pierce: 22, maxrng:4000, shotspd:1600, rof:7.692, bstint:0.130,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 1.0, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128049455, fdname:'Hpt_MultiCannon_Fixed_Small' },
 		72171 : { mtype:'hmc', cost:   14250, name:'Multi-cannon',                mount:'G',              class:1, rating:'G', mass: 2.00, integ:40, pwrdraw:0.37, boottime:0, dps: 6.833, damage: 0.820, distdraw:0.070, thmload:0.10, pierce: 22, maxrng:4000, shotspd:1600, rof:8.333, bstint:0.120,                      ammoclip:90, ammomax:2100,            rldtime:5.0, brcdmg: 0.7, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128049459, fdname:'Hpt_MultiCannon_Gimbal_Small' },
 		72172 : { mtype:'hmc', cost:   81600, name:'Multi-cannon',                mount:'T',              class:1, rating:'G', mass: 2.00, integ:40, pwrdraw:0.26, boottime:0, dps: 4.000, damage: 0.560, distdraw:0.030, thmload:0.04, pierce: 22, maxrng:4000, shotspd:1600, rof:7.143, bstint:0.140,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: 0.5, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128049462, fdname:'Hpt_MultiCannon_Turret_Small' },
+		72163 : { mtype:'hmc', cost:    9500, name:'Advanced Multi-cannon',       mount:'F',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.28, boottime:0, dps: 8.615, damage: 1.120, distdraw:0.060, thmload:0.09, pierce: 22, maxrng:4000, shotspd:1600, rof:7.692, bstint:0.130,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 1.0, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128935981, fdname:'Hpt_MultiCannon_Fixed_Small_Advanced' }, // verify
 		72250 : { mtype:'hmc', cost:   38000, name:'Multi-cannon',                mount:'F',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.46, boottime:0, dps:15.643, damage: 2.190, distdraw:0.110, thmload:0.18, pierce: 37, maxrng:4000, shotspd:1600, rof:7.143, bstint:0.140,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 2.0, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128049456, fdname:'Hpt_MultiCannon_Fixed_Medium' },
 		72261 : { mtype:'hmc', cost:   57000, name:'Multi-cannon',                mount:'G',              class:2, rating:'F', mass: 4.00, integ:51, pwrdraw:0.64, boottime:0, dps:12.615, damage: 1.640, distdraw:0.140, thmload:0.20, pierce: 37, maxrng:4000, shotspd:1600, rof:7.692, bstint:0.130,                      ammoclip:90, ammomax:2100,            rldtime:5.0, brcdmg: 1.5, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128049460, fdname:'Hpt_MultiCannon_Gimbal_Medium' },
 		72262 : { mtype:'hmc', cost: 1292800, name:'Multi-cannon',                mount:'T',              class:2, rating:'F', mass: 4.00, integ:51, pwrdraw:0.50, boottime:0, dps: 7.313, damage: 1.170, distdraw:0.060, thmload:0.09, pierce: 37, maxrng:4000, shotspd:1600, rof:6.250, bstint:0.160,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: 1.1, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128049463, fdname:'Hpt_MultiCannon_Turret_Medium' },
+		72253 : { mtype:'hmc', cost:   38000, name:'Advanced Multi-cannon',       mount:'F',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.46, boottime:0, dps:15.643, damage: 2.190, distdraw:0.110, thmload:0.18, pierce: 37, maxrng:4000, shotspd:1600, rof:7.143, bstint:0.140,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 2.0, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128935980, fdname:'Hpt_MultiCannon_Fixed_Medium_Advanced' }, // verify
 		72330 : { mtype:'hmc', cost:  140400, name:'Multi-cannon',                mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:0.64, boottime:0, dps:23.088, damage: 3.925, distdraw:0.180, thmload:0.28, pierce: 54, maxrng:4000, shotspd:1600, rof:5.882, bstint:0.170,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 3.5, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128049457, fdname:'Hpt_MultiCannon_Fixed_Large' },
 		72331 : { mtype:'hmc', cost:  578440, name:'Multi-cannon',                mount:'G',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:0.97, boottime:0, dps:18.933, damage: 2.840, distdraw:0.250, thmload:0.34, pierce: 54, maxrng:4000, shotspd:1600, rof:6.667, bstint:0.150,                      ammoclip:90, ammomax:2100,            rldtime:5.0, brcdmg: 2.6, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128049461, fdname:'Hpt_MultiCannon_Gimbal_Large' },
 		72352 : { mtype:'hmc', cost: 3794600, name:'Multi-cannon',                mount:'T',              class:3, rating:'E', mass: 8.00, integ:64, pwrdraw:0.86, boottime:0, dps:11.737, damage: 2.230, distdraw:0.160, thmload:0.19, pierce: 54, maxrng:4000, shotspd:1600, rof:5.263, bstint:0.190,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: 2.0, minbrc:40, maxbrc:80,             kinwgt:100, thmwgt:0, dmgfall:2000, ammocost:1, fdid:128049464, fdname:'Hpt_MultiCannon_Turret_Large' },

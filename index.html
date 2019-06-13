@@ -3,23 +3,31 @@
 	<head>
 		<meta charset="utf-8">
 <!--
-E:D Shipyard (EDSY) was created using assets and imagery from Elite: Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
+EDSY was created using assets and imagery from Elite Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
 It is not endorsed by nor reflects the views or opinions of Frontier Developments and no employee of Frontier Developments was involved in the making of it.
 
 Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2019 taleden
 and is provided under a Creative Commons Attribution-NonCommercial 4.0 International License (http://creativecommons.org/licenses/by-nc/4.0/).
 
-The Elite: Dangerous game logic and data in this file remains the property of Frontier Developments plc,
-and is used here as authorized by Frontier Customer Services (https://forums.frontier.co.uk/showthread.php?t=5349).
+The Elite Dangerous game logic and data in this file remains the property of Frontier Developments plc, and is used here as authorized by
+Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elite-dangerous-media-usage-rules.510879/).
 -->
 		<title>EDSY</title>
 		<meta name="application-name" content="EDSY">
-		<meta name="edsy-versions-html" id="edsy_versions_html" content="34221,34221,34221,34221"><!-- HTML,CSS,DB,JS -->
+		<meta name="edsy-versions-html" id="edsy_versions_html" content="34222,34222,34222,34222"><!-- HTML,CSS,DB,JS -->
 		<meta name="author" content="taleden">
-		<meta name="description" content="E:D Shipyard (EDSY) is a ship outfitting tool for Elite: Dangerous">
+		<meta name="description" content="EDSY is a ship outfitting tool for Elite Dangerous">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'; style-src 'self' 'unsafe-inline';">
+		<meta http-equiv="-x-Content-Security-Policy" content="default-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'; style-src 'self' 'unsafe-inline';  connect-src 'self' http://www.example.com">
 		<link rel="stylesheet" type="text/css" href="edsy.css">
+		<link rel="icon" sizes="16x16 32x32" href="favicon.ico">
+		<link rel="icon" sizes="16x16" href="favicon-16.png">
+		<link rel="icon" sizes="32x32" href="favicon-32.png">
+		<link rel="icon" sizes="48x48" href="favicon-48.png">
+		<link rel="icon" sizes="152x152" href="favicon-152.png">
+		<link rel="icon" sizes="196x196" href="favicon-196.png">
+		<link rel="mask-icon" href="favicon.svg" color="#ff7f00">
+		<link rel="apple-touch-icon-precomposed" href="favicon-152.png">
 	</head>
 	<body class="">
 		<div id="svg_defs">
@@ -141,7 +149,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 		<div id="page">
 			<div id="page_header">
 				<header id="header_title">
-					<a href="http://www.edshipyard.com/new/">EDSY</a>
+					<a href="">EDSY</a>
 					<button id="window_maximize"><svg class="iconsvg maximize"><use xlink:href="#icon_maximize"/></svg></button>
 					<button id="window_minimize"><svg class="iconsvg minimize"><use xlink:href="#icon_minimize"/></svg></button>
 				</header>
@@ -151,7 +159,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 					<label class="togglebutton"><input name="tab" type="radio" value="options"><div><svg class="iconsvg unknown"><use xlink:href="#icon_unknown"/></svg><svg class="iconsvg repair"><use xlink:href="#icon_repair"/></svg><span>Help</span></div></label>
 				</form>
 				<div id="header_version">
-					<abbr title="updated 2019-05-24">v3.4.2b1</abbr>
+					<abbr title="updated 2019-06-12">v3.4.2b2</abbr>
 					<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X76V6PNF8CAV4&source=url"><img src="btn_donate_TN.gif" width="56" height="21"></a>
 				</div>
 			</div>
@@ -786,16 +794,6 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 				<form id="page_body_options" name="options">
 					<div id="options_container">
 						<section>
-							<header>About</header>
-							<p>
-								Note that although stored builds are now supported on this preview site, they are still being kept separate from your
-								live builds from the old design of the site, to avoid the chance of corrupting those builds in case there are bugs.
-								Whenever you access this preview all of your live builds will be copied over for you to experiment with, but any
-								changes made on this preview site will not affect the live site, and deleted builds will be restored from the live site
-								the next time you return.
-							</p>
-						</section>
-						<section>
 							<header>Options</header>
 							<div>
 								<label class="checkbox left"><input type="checkbox" name="onlybest"><div><div class="check"></div><span>Hide Small Modules</span></div></label>
@@ -808,8 +806,8 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 								be shown in red to signify that it will not be possible to actually fit them in-game.
 							</div>
 							<div>
-								<button id="options_backup" name="backup">Backup All Builds</button>
-								&mdash; Export all stored builds in a structured format suitable for backup or transfer to another device or browser.
+								<button id="options_backup" name="backup">Backup All Data</button>
+								&mdash; Export all stored builds, modules, and other preferences in a structured format suitable for backup or transfer to another device or browser.
 							</div>
 						</section>
 						<section>
@@ -822,7 +820,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 							</ul>
 						</section>
 						<footer>
-							E:D Shipyard (EDSY) was created using assets and imagery from <a href="http://www.elitedangerous.com/">Elite: Dangerous</a>,
+							EDSY was created using assets and imagery from <a href="http://www.elitedangerous.com/">Elite Dangerous</a>,
 							with the permission of <a href="http://frontier.co.uk/">Frontier Developments plc</a>, for non-commercial purposes.
 							It is not endorsed by nor reflects the views or opinions of Frontier Developments
 							and no employee of Frontier Developments was involved in the making of it.
@@ -843,6 +841,7 @@ and is used here as authorized by Frontier Customer Services (https://forums.fro
 						<table id="popup_table"></table>
 					</div>
 					<div id="popup_controls">
+						<div id="popup_status"></div>
 						<button id="popup_cancel" name="cancel" value="cancel">Cancel</button>
 						<button id="popup_okay" name="okay" value="okay">Okay</button>
 					</div>

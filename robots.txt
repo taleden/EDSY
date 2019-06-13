@@ -1,0 +1,3 @@
+User-Agent: bingbot
+Allow: /
+Crawl-delay: 86400

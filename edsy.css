@@ -1,16 +1,16 @@
 /*
-E:D Shipyard (EDSY) was created using assets and imagery from Elite: Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
+EDSY was created using assets and imagery from Elite Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
 It is not endorsed by nor reflects the views or opinions of Frontier Developments and no employee of Frontier Developments was involved in the making of it.
 
 Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2019 taleden
 and is provided under a Creative Commons Attribution-NonCommercial 4.0 International License (http://creativecommons.org/licenses/by-nc/4.0/).
 
-The Elite: Dangerous game logic and data in this file remains the property of Frontier Developments plc,
-and is used here as authorized by Frontier Customer Services (https://forums.frontier.co.uk/showthread.php?t=5349).
+The Elite Dangerous game logic and data in this file remains the property of Frontier Developments plc, and is used here as authorized by
+Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elite-dangerous-media-usage-rules.510879/).
 */
 
 :root {
-	--edsy-versions-css:34221,34221,34221,34221; /* HTML,CSS,DB,JS */
+	--edsy-versions-css:34222,34222,34222,34222; /* HTML,CSS,DB,JS */
 	
 	--color-orange-5: hsl(27,100%,60%);
 	--color-orange-4: hsl(27,100%,48%);
@@ -2748,6 +2748,15 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	display: none;
 }
 
+#popup_desc P {
+	text-align: center;
+}
+
+#popup_desc BUTTON {
+	margin: 0.25rem;
+	padding: 0.125rem 0.5rem;
+}
+
 #popup_textarea {
 	flex: 0 1 auto;
 	margin: 0.25rem;
@@ -2853,13 +2862,21 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 
 #popup_controls {
 	flex: 0 0 auto;
-	margin: 0.25rem;
-	text-align: right;
+	display: flex;
+	justify-content: flex-end;
 }
-#popup_controls:empty {
+
+#popup_status {
+	flex: 1 0 auto;
+	margin: 0.25rem;
+	font: var(--font-text);
+}
+#popup_status:empty {
 	display: none;
 }
 
 #popup_controls BUTTON {
+	flex: 0 0 auto;
+	margin: 0.25rem;
 	padding: 0.125rem 0.5rem;
 }
