@@ -10,7 +10,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 */
 
 :root {
-	--edsy-versions-css:34222,34222,34222,34222; /* HTML,CSS,DB,JS */
+	--edsy-versions-css:34222,34223,34222,34223; /* HTML,CSS,DB,JS */
 	
 	--color-orange-5: hsl(27,100%,60%);
 	--color-orange-4: hsl(27,100%,48%);
@@ -125,6 +125,31 @@ A {
 A:hover {
 	color: var(--color-blue-5);
 	text-decoration: underline;
+}
+A.button {
+	display: inline-block;
+	margin: 0.25rem;
+	padding: 0.125rem 0.5rem;
+	background-color: var(--color-orange-1);
+	color: var(--color-orange-5);
+	font: var(--font-caps);
+}
+A.button:hover {
+	color: var(--color-orange-5);
+	text-decoration: none;
+}
+A.button:active {
+	background-color: white;
+	color: black;
+}
+
+UL {
+	margin: 0;
+	padding: 0;
+}
+LI {
+	margin: 0 1rem;
+	padding: 0;
 }
 
 TABLE {
@@ -2749,11 +2774,17 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 
 #popup_desc P {
-	text-align: center;
+	margin: 0.5rem 1rem;
+}
+
+#popup_desc UL {
+	margin: 0.5rem 1rem;
+}
+#popup_desc LI {
+	padding: 0.125rem 0;
 }
 
 #popup_desc BUTTON {
-	margin: 0.25rem;
 	padding: 0.125rem 0.5rem;
 }
 

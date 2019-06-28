@@ -1,0 +1,150 @@
+/*
+EDSY was created using assets and imagery from Elite Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
+It is not endorsed by nor reflects the views or opinions of Frontier Developments and no employee of Frontier Developments was involved in the making of it.
+
+Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2019 taleden
+and is provided under a Creative Commons Attribution-NonCommercial 4.0 International License (http://creativecommons.org/licenses/by-nc/4.0/).
+
+The Elite Dangerous game logic and data in this file remains the property of Frontier Developments plc, and is used here as authorized by
+Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elite-dangerous-media-usage-rules.510879/).
+*/
+
+:root {
+	--color-orange-5: hsl(27,100%,60%);
+	--color-orange-1: hsl(27,65%,12%);
+	--color-blue-5: hsl(197,100%,60%);
+	--color-blue-4: hsl(197,100%,48%);
+	--font-caps: normal normal normal 1rem/normal 'EuroCaps', 'Verdana', 'Geneva', sans-serif;
+	--font-text: normal normal normal 0.875rem/normal 'Sintony', 'Helvetica', 'Arial', sans-serif;
+	--font-fixed: normal normal normal 0.875rem/normal 'Telegrama', 'Courier New', 'Courier', monospace;
+}
+
+@font-face {
+	font-family: 'EuroCaps';
+	src: url('EuroCaps.woff2') format('woff2'), url('EuroCaps.woff') format('woff'), url('EuroCaps.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'Sintony';
+	src: local('Sintony'), url('Sintony.woff2') format('woff2'), url('Sintony.woff') format('woff'), url('Sintony.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'Telegrama';
+	src: local('Telegrama'), url('Telegrama.woff2') format('woff2'), url('Telegrama.woff') format('woff'), url('Telegrama.ttf') format('truetype');
+}
+* {
+	box-sizing: border-box;
+}
+
+HTML,
+BODY {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #222;
+	color: white;
+	font: var(--font-text);
+	font-size: 100%;
+}
+
+DIV {
+	scrollbar-color: var(--color-orange-5) var(--color-orange-1);
+}
+DIV::-webkit-scrollbar,
+DIV::-webkit-scrollbar-corner {
+	width: 0.75rem;
+	height: 0.75rem;
+	background-color: var(--color-orange-1);
+}
+DIV::-webkit-scrollbar-thumb {
+	background-color: var(--color-orange-5);
+}
+
+P {
+	margin: 0.25rem;
+}
+P.center {
+	text-align: center;
+}
+
+ABBR {
+	display: inline-block;
+	margin: 0.125rem 0;
+	border-bottom: 0.0625rem dotted white;
+	cursor: help;
+	line-height: 0.8571;
+	text-decoration: none;
+}
+
+A {
+	color: var(--color-blue-4);
+	text-decoration: none;
+}
+A:hover {
+	color: var(--color-blue-5);
+	text-decoration: underline;
+}
+A.button {
+	display: inline-block;
+	margin: 0.25rem 0.5rem;
+	padding: 0.25rem 0.5rem;
+	background-color: var(--color-orange-1);
+	color: var(--color-orange-5);
+	font: var(--font-caps);
+}
+A.button:hover {
+	color: var(--color-orange-5);
+	text-decoration: none;
+}
+A.button:active {
+	background-color: white;
+	color: black;
+}
+
+UL {
+	margin: 0;
+	padding: 0;
+}
+LI {
+	margin: 0 1rem;
+	padding: 0;
+}
+
+SPAN.header {
+	color: var(--color-orange-5);
+	font: var(--font-caps);
+}
+SPAN.message {
+	font: var(--font-fixed);
+}
+
+
+#page_modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 100;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+#page_box {
+	flex: 0 1 auto;
+	width: auto;
+	height: auto;
+	min-width: 0;
+	max-width: 90%;
+	min-height: 0;
+	max-height: 90%;
+	border: 0.125rem solid var(--color-orange-5);
+	padding: 0.25rem;
+	background-color: black;
+}
+
+#page_box UL {
+	margin: 0.5rem 1rem;
+}

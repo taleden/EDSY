@@ -10,7 +10,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [34222,34222,34222,34222]; /* HTML,CSS,DB,JS */
+	var VERSIONS = [34222,34223,34222,34223]; /* HTML,CSS,DB,JS */
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -212,6 +212,23 @@ window.edsy = new (function() {
 	var encodeHTML = function(text) {
 		return text.replace(/\&/g, '&amp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/\"/g, '&quot;').replace(/\'/g, '&apos;').replace(/\//g, '&sol;');
 	}; // encodeHTML()
+	
+	
+	var getCookie = function(name, defaultvalue) {
+		return ((document.cookie.match(new RegExp('(?:^|;)\\s*' + name + '\\s*=\\s*"?([^"\\s;]*)"?\\s*(?:;|$)')) || EMPTY_ARR)[1] || defaultvalue);
+	}; // getCookie()
+	
+	
+	var getCookies = function(pattern) {
+		var cookies = document.cookie;
+		var c = {};
+		var re = new RegExp('(?:^|;)\\s*(' + pattern + ')\\s*=\\s*"?([^"\\s;]*)"?', 'g');
+		var match;
+		while ((match = re.exec(cookies)) !== null) {
+			c[match[1]] = match[2];
+		}
+		return c;
+	}; // getCookies()
 	
 	
 	var formatNumText = ((window.Intl && window.Intl.NumberFormat)
@@ -480,6 +497,16 @@ window.edsy = new (function() {
 		var m = b & ((1 << 14) - 1);
 		return (e >= ((1 << 5) - 1)) ? (m ? NaN : (s ? -Infinity : Infinity)) : ((s ? -1 : 1) * pow(2.0, e - ((1 << 5) - 2) + (e == 0)) * ((e ? (1 << 14) : 0) | m));
 	}; // float20Decode()
+	
+	
+	var b64Encode = function(t) {
+		return btoa(t).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+	}; // b64Encode()
+	
+	
+	var b64Decode = function(t) {
+		return atob((t + '===').slice(0, t.length + ((4 - (t.length % 4)) % 4)).replace(/-/g, '+').replace(/_/g, '/'));
+	}; // b64Decode()
 	
 	
 	/*
@@ -3323,6 +3350,157 @@ window.edsy = new (function() {
 	}; // setUIOutfittingPanels()
 	
 	
+	var setCurrentDrag = function(modid, namehash, fromgroup, fromslot) {
+		current.drag = (isNaN(modid) ? null : { id:modid, namehash:namehash, group:fromgroup, slot:fromslot });
+		if (!isNaN(modid) && fromgroup) {
+			document.getElementById('outfitting_modules_container').addEventListener('dragenter', onUIModulePickerDragEnter);
+			document.getElementById('outfitting_modules_container').addEventListener('dragover', onUIModulePickerDragOver);
+			document.getElementById('outfitting_modules_container').addEventListener('dragleave', onUIModulePickerDragLeave);
+		} else {
+			document.getElementById('outfitting_modules_container').removeEventListener('dragenter', onUIModulePickerDragEnter);
+			document.getElementById('outfitting_modules_container').removeEventListener('dragover', onUIModulePickerDragOver);
+			document.getElementById('outfitting_modules_container').removeEventListener('dragleave', onUIModulePickerDragLeave);
+		}
+		document.getElementById('outfitting_fit_ship_hull').className = (isNaN(modid) ? '' : 'dragerror');
+		document.getElementById('outfitting_fit_ship_hatch').className = (isNaN(modid) ? '' : 'dragerror');
+		for (var slotgroup in GROUP_LABEL) {
+			var slot;
+			for (var slotnum = 0;  slot = current.fit.getSlot(slotgroup, slotnum);  slotnum++) {
+				var tr = document.getElementById('outfitting_fit_slot_' + slotgroup + '_' + slotnum);
+				if (isNaN(modid)) {
+					tr.className = '';
+					tr.removeEventListener('dragenter', onUIFitSlotsDragEnter);
+					tr.removeEventListener('dragover', onUIFitSlotsDragOver);
+					tr.removeEventListener('dragleave', onUIFitSlotsDragLeave);
+				} else if (!(current.option.experimental ? slot.isModuleIDValid(modid) : slot.isModuleIDAllowed(modid))) {
+					tr.className = 'dragerror';
+					tr.removeEventListener('dragenter', onUIFitSlotsDragEnter);
+					tr.removeEventListener('dragover', onUIFitSlotsDragOver);
+					tr.removeEventListener('dragleave', onUIFitSlotsDragLeave);
+				} else {
+					tr.className = 'dragok';
+					tr.addEventListener('dragenter', onUIFitSlotsDragEnter);
+					tr.addEventListener('dragover', onUIFitSlotsDragOver);
+					tr.addEventListener('dragleave', onUIFitSlotsDragLeave);
+				}
+			}
+		}
+	}; // setCurrentDrag()
+	
+	
+	/*
+	* IMPORT
+	*/
+	
+	
+	var showUIImportPopup = function() {
+		var cookies = getCookies('edsy_fdapi_cmdr_[A-Za-z0-9_-]+');
+		var cmdrs = [];
+		var cmdr64 = {};
+		for (var name in cookies) {
+			var c64 = name.slice(16);
+			var c = b64Decode(c64);
+			if (c) {
+				cmdrs.push(c);
+				cmdr64[c] = c64;
+			}
+		}
+		var html = [
+			'You can import your current ship (and any others used today) directly from the Frontier API.<br>You must log in with Frontier to grant access, but EDSY will never see your password.',
+			'<ul>',
+		];
+		if (cmdrs.length > 0) {
+			cmdrs.sort();
+			for (i = 0;  i < cmdrs.length;  i++)
+				html.push('<li><button name="fdapi_import" value="' + encodeHTML(cmdr64[cmdrs[i]]) + '">Import</button> <button name="fdapi_delete" value="' + encodeHTML(cmdr64[cmdrs[i]]) + '">Remove</button> CMDR ' + encodeHTML(cmdrs[i]) + '</li>');
+		}
+		html.push('<li><a href="fdapi?auth=A">Authorize ' + (cmdrs.length ? 'Another ' : '') + 'Account</a></li>');
+		html.push('</ul>');
+		html.push('You can also import loadout(s) by pasting them below or dropping a file onto the page.');
+		showUITextPopup(
+				html.join("\n"),
+				(
+					'Supported import formats include:\n\n' +
+					'* EDSY URL(s)\n' +
+					'* EDSY backup export\n' +
+					// TODO: text exports?
+					// TODO: coriolis
+					'* Journal JSON file with "Loadout" event(s)\n' +
+					'* Frontier API Profile JSON data (via EDAPI, EDCE, EDMC, etc)\n'
+				),
+				null, false,
+				importData, true
+		);
+		for (var i = 0;  i < document.forms.popup.elements.length;  i++) {
+			var button = document.forms.popup.elements[i];
+			if (button.name === 'fdapi_import' || button.name === 'fdapi_delete' || button.name === 'fdapi_auth')
+				button.addEventListener('click', onUIPopupImportButtonClick);
+		}
+	}; // showUIImportPopup()
+	
+	
+	var importFromAPI = function(cmdr64) {
+		var request = new XMLHttpRequest();
+		request.onreadystatechange = function() {
+			if (request.readyState == 4) {
+				hideUIPopup();
+				var response = null;
+				try {
+					response = JSON.parse(request.responseText);
+					console.log('FDAPI: ' + request.status + '/' + response.status + ', ' + typeof(response['import']));
+				} catch (exc) {
+					response = null;
+					console.log('FDAPI: failed to parse response: ' + exc);
+				}
+//request={status:200};response={location:'foo'};
+//request={status:500};response={};
+				if (request.status == 200) {
+					if (!response) {
+						alert("EDSY-FDAPI connector error");
+					} else if (response['location']) {
+						showUITextPopup(
+								(
+									'EDSY\'s API access for this account has expired or been reset.' +
+									'<ul><li><a href="' + encodeHTML(response['location']) + '">Re-Authorize Account</a></li></ul>'
+								),
+								null,
+								null, true,
+								false, true
+						);
+					} else if (response['import']) {
+						importData(response['import']);
+					} else {
+						alert("Frontier API returned no builds.\n\nThis may happen if you haven't played lately,\nor it may be a temporary error.");
+					}
+				} else {
+					var status = (response || EMPTY_OBJ)['status'];
+					var message = (status ? ('Frontier API error ' + request.status + '/' + status) : ('EDSY-FDAPI connector error ' + request.status));
+					showUITextPopup(
+							(
+								message +
+								'<br><br>' +
+								'You can try re-authorizing EDSY\'s API access, but if the<br>' +
+								'error persists then there may be a temporary API outage.' +
+								'<ul><li><a href="fdapi?auth=I">Re-Authorize Account</a></li></ul>'
+							),
+							null,
+							null, true,
+							false, true
+					);
+				}
+			}
+		}; // onreadystatechange()
+		var onCancel = function() {
+			request.onreadystatechange = function() {};
+			request.abort();
+		}; // onCancel()
+		showUITextPopup('Querying Frontier API ...<br><center><img src="loading.svg"></center>', null, null, true, null, onCancel);
+		request.open('GET', 'fdapi?c=' + encodeURIComponent(cmdr64), true);
+		request.timeout = 10000;
+		request.send();
+	}; // importFromAPI()
+	
+	
 	var createUIImportedBuildHeader = function() {
 		var thead = document.createElement('thead');
 		var tr = document.createElement('tr');
@@ -3522,8 +3700,7 @@ window.edsy = new (function() {
 		var b64text = null;
 		try {
 			b64text = decodeURIComponent(text.replace(/[ \t\r\n]+/g, ''));
-			var gzdata = atob((b64text + '===').slice(0, b64text.length + ((4 - (b64text.length % 4)) % 4)).replace(/-/g, '+').replace(/_/g, '/'));
-			var gztext = pako.inflate(gzdata, {to:'string'});
+			var gztext = pako.inflate(b64Decode(b64text), {to:'string'});
 			text = gztext;
 		} catch (exc) {
 			b64text = null;
@@ -3544,56 +3721,13 @@ window.edsy = new (function() {
 		// identify the format by the first line
 		var eol = text.indexOf('\n');
 		var line1 = text.slice(0, (eol < 0) ? 100 : eol).trim();
-		if (line1.toUpperCase() === 'FDAPI') {
-			showUITextPopup('Querying Frontier API ...<br><center><img src="loading.svg"></center>', null, null, true, null, onCancel);
-			var request = new XMLHttpRequest();
-			request.onreadystatechange = function() {
-				if (request.readyState == 4) {
-					hideUIPopup();
-					var response = null;
-					try {
-						response = JSON.parse(request.responseText);
-						console.log('FDAPI: ' + request.status + '/' + response.status + ', ' + typeof(response['import']));
-					} catch (exc) {
-						response = null;
-						console.log('FDAPI: failed to parse response: ' + exc);
-					}
-					if (request.status == 200) {
-						if (!response) {
-							alert("EDSY-FDAPI connector error");
-						} else if (response['location']) {
-							var authurl = response['location'];
-							showUITextPopup(
-									'EDSY requires your authorization to access the Frontier API; you will be redirected to the Frontier User Portal to authenticate, and then returned here.<br><br>Save changes to your current build before proceeding! Unsaved changes will be lost.',
-									null,
-									null, true,
-									function() { window.location.href = authurl; }, true
-							);
-						} else if (response['import']) {
-							importData(response['import']);
-						} else {
-							alert("Frontier API returned no builds.\n\nThis may happen if you haven't played lately,\nor it may be a temporary error.");
-						}
-					} else {
-						var status = (response || EMPTY_OBJ)['status'];
-						var message = (status ? ('Frontier API error ' + request.status + '/' + status) : ('EDSY-FDAPI connector error ' + request.status));
-						showUITextPopup(
-								message + '<br><br>It may help to re-authorize EDSY to access the Frontier API:<p><button name="fdapi_auth">Re-Authorize Frontier API</button></p>If the error persists, it may indicate a temporary API outage; try again later.',
-								null,
-								null, true,
-								false, true
-						);
-						document.forms.popup.elements.fdapi_auth.addEventListener('click', onUIPopupButtonClick);
-					}
-				}
-			}; // onreadystatechange()
-			var onCancel = function() {
-				request.onreadystatechange = function() {};
-				request.abort();
-			}; // onCancel()
-			request.open('GET', '/fdapi', true);
-			request.timeout = 10000;
-			request.send();
+		if (line1.toUpperCase().slice(0,5) === 'FDAPI') {
+			var cmdr64 = line1.split(':')[1];
+			if (cmdr64) {
+				importFromAPI(cmdr64);
+			} else {
+				showUIImportPopup();
+			}
 			return true;
 		} else if (line1.match(/^[a-z]+:\/\/[^#]*(edshipyard|edsy)[^#]*#/i)) { // URL hash(es)
 			var urls = text.match(/[a-z]+:\/\/[^#]+#[^ \t\r\n#]*/ig);
@@ -3620,6 +3754,7 @@ window.edsy = new (function() {
 			}
 		} else if (line1.match(/^\[[ a-z0-9_-]+(,[^\[\]]+)?\] *(\[[^\[\]]+\])?$/i)) { // plain text
 			// TODO: plain text import? does anybody actually use it?
+			errors.push('Plain text import is not yet implemented');
 		} else if (line1[0] === '[' || line1[0] === '{') {
 			var json = null;
 			try {
@@ -3804,8 +3939,7 @@ window.edsy = new (function() {
 				if (!b64text) {
 					try {
 						b64text = text.replace(/[ \t\r\n]+/g, '');
-						b64text = pako.gzip(b64text, {to:'string'});
-						b64text = btoa(b64text);
+						b64text = b64Encode(pako.gzip(b64text, {to:'string'}));
 						b64text = b64text.replace(/.{80}/g, function(a) { return a+'\n'; });
 					} catch (exc) {
 						b64text = text;
@@ -4342,10 +4476,12 @@ window.edsy = new (function() {
 									var bpid = fdevmap.mtypeBlueprint[mtypeid][fdname];
 									if (bpid) {
 										var bpgrade = parseInt(modulejson.Engineering.Level);
-										var bproll = -1;
 										// pre-3.0 utility ammo blueprints only had a grade 3, which now has to be grade 1
 										if (fdname === 'CHAFFLAUNCHER_CHAFFCAPACITY' || fdname === 'HEATSINKLAUNCHER_HEATSINKCAPACITY' || fdname === 'POINTDEFENCE_POINTDEFENSECAPACITY')
 											bpgrade = 1;
+										var bproll = parseFloat(modulejson.Engineering.Quality);
+										if (isNaN(bproll))
+											bproll = -1;
 										if (!slot.setBlueprint(bpid, bpgrade, bproll)) {
 											if (errors) errors.push(modulejson.Slot + ': Invalid blueprint: ' + modulejson.Engineering.BlueprintName);
 										}
@@ -4372,8 +4508,14 @@ window.edsy = new (function() {
 												modifier_rof = modifier;
 											} else if (!isModuleAttrModifiable(module, attr)) {
 												// ignore unmodifiable attributes, Journal includes them all the time (mass on lightweight bulkheads, shotspd, etc)
-											} else if (!slot.setEffectiveAttrModifier(attr, modifier)) {
-												if (errors) errors.push(modulejson.Slot + ': Invalid modifier: ' + modjson.Label + '=' + modjson.Value);
+											} else {
+/* TODO?
+var rollmod = slot.getEffectiveAttrModifier(attr);
+if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' rolled '+rollmod+' found '+modifier+' error '+(modifier-rollmod));
+*/
+												if (!slot.setEffectiveAttrModifier(attr, modifier)) {
+													if (errors) errors.push(modulejson.Slot + ': Invalid modifier: ' + modjson.Label + '=' + modjson.Value);
+												}
 											}
 										} else if (attr !== null && errors) errors.push(modulejson.Slot + ': Modifier #' + (m+1) + ': Unknown attribute: ' + modjson.Label);
 									}
@@ -4399,44 +4541,6 @@ window.edsy = new (function() {
 		
 		return build;
 	}; // decodeJournalBuild()
-	
-	
-	var setCurrentDrag = function(modid, namehash, fromgroup, fromslot) {
-		current.drag = (isNaN(modid) ? null : { id:modid, namehash:namehash, group:fromgroup, slot:fromslot });
-		if (!isNaN(modid) && fromgroup) {
-			document.getElementById('outfitting_modules_container').addEventListener('dragenter', onUIModulePickerDragEnter);
-			document.getElementById('outfitting_modules_container').addEventListener('dragover', onUIModulePickerDragOver);
-			document.getElementById('outfitting_modules_container').addEventListener('dragleave', onUIModulePickerDragLeave);
-		} else {
-			document.getElementById('outfitting_modules_container').removeEventListener('dragenter', onUIModulePickerDragEnter);
-			document.getElementById('outfitting_modules_container').removeEventListener('dragover', onUIModulePickerDragOver);
-			document.getElementById('outfitting_modules_container').removeEventListener('dragleave', onUIModulePickerDragLeave);
-		}
-		document.getElementById('outfitting_fit_ship_hull').className = (isNaN(modid) ? '' : 'dragerror');
-		document.getElementById('outfitting_fit_ship_hatch').className = (isNaN(modid) ? '' : 'dragerror');
-		for (var slotgroup in GROUP_LABEL) {
-			var slot;
-			for (var slotnum = 0;  slot = current.fit.getSlot(slotgroup, slotnum);  slotnum++) {
-				var tr = document.getElementById('outfitting_fit_slot_' + slotgroup + '_' + slotnum);
-				if (isNaN(modid)) {
-					tr.className = '';
-					tr.removeEventListener('dragenter', onUIFitSlotsDragEnter);
-					tr.removeEventListener('dragover', onUIFitSlotsDragOver);
-					tr.removeEventListener('dragleave', onUIFitSlotsDragLeave);
-				} else if (!(current.option.experimental ? slot.isModuleIDValid(modid) : slot.isModuleIDAllowed(modid))) {
-					tr.className = 'dragerror';
-					tr.removeEventListener('dragenter', onUIFitSlotsDragEnter);
-					tr.removeEventListener('dragover', onUIFitSlotsDragOver);
-					tr.removeEventListener('dragleave', onUIFitSlotsDragLeave);
-				} else {
-					tr.className = 'dragok';
-					tr.addEventListener('dragenter', onUIFitSlotsDragEnter);
-					tr.addEventListener('dragover', onUIFitSlotsDragOver);
-					tr.addEventListener('dragleave', onUIFitSlotsDragLeave);
-				}
-			}
-		}
-	}; // setCurrentDrag()
 	
 	
 	/*
@@ -5003,7 +5107,6 @@ window.edsy = new (function() {
 		for (var b = 1;  b < blocks.length;  b++) {
 			switch (blocks[b].slice(0,2)) {
 			case 'L=':
-				// TODO: support multiple loadouts in the urlhash?
 				if (hashlock)
 					current.hashlock = true;
 				var ok = setCurrentFitHash(blocks[b].slice(2));
@@ -7009,11 +7112,6 @@ window.edsy = new (function() {
 		} else if (e.target.name === 'cancel') {
 			if (typeof onCancel === 'function')
 				onCancel(value);
-		} else if (e.target.name === 'fdapi') {
-			importData('FDAPI');
-		} else if (e.target.name === 'fdapi_auth') {
-			console.log('redir');
-			window.location.href = 'fdapi?auth';
 		}
 	}; // onUIPopupButtonClick()
 	
@@ -7021,6 +7119,20 @@ window.edsy = new (function() {
 	var onUIPopupImportButtonClick = function(e) {
 		e.preventDefault();
 		switch (e.currentTarget.name) {
+		case 'fdapi_import':
+			hideUIPopup();
+			importData('FDAPI:' + e.target.value);
+			e.stopPropagation();
+			return false;
+			
+		case 'fdapi_delete':
+			var cookie = 'edsy_fdapi_cmdr_' + e.target.value + '=; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; SameSite=lax';
+			document.cookie = cookie;
+			hideUIPopup();
+			showUIImportPopup();
+			e.stopPropagation();
+			return false;
+			
 		case 'import_ignore':
 		case 'import_save':
 		case 'import_saveas':
@@ -7402,24 +7514,7 @@ window.edsy = new (function() {
 			switch (tokens[2]) {
 			case 'import':
 				e.preventDefault();
-				showUITextPopup(
-						(
-							'Your current ship, plus any others you\'ve used today, can be imported directly from the Frontier API:<p><button name="fdapi">Query Frontier API</button></p>' +
-							'You can also import loadout(s) by pasting them below or dropping a file onto the page.'
-						),
-						(
-							'Supported import formats include:\n\n' +
-							'* EDSY URL(s)\n' +
-							'* EDSY backup export\n' +
-							// TODO: text exports?
-							// TODO: coriolis
-							'* Journal JSON file with "Loadout" event(s)\n' +
-							'* Frontier API JSON data (via EDAPI, EDCE, EDMC, etc)\n'
-						),
-						e.target, false,
-						importData, true
-				);
-				document.forms.popup.elements.fdapi.addEventListener('click', onUIPopupButtonClick);
+				showUIImportPopup();
 				break;
 				
 			case 'export':
@@ -8049,7 +8144,7 @@ window.edsy = new (function() {
 		cache.feature.cancelFullscreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
 		
 		// initialize cache and UI
-		current.beta = true; // TODO: (window.location.pathname.indexOf('/beta/') >= 0);
+		current.beta = (window.location.pathname.indexOf('/beta/') >= 0) || (window.location.pathname.indexOf('/dev/') >= 0);
 		initCache();
 		initUIShipyardShips();
 		initUIShipyardStoredBuilds();
@@ -8130,7 +8225,7 @@ window.edsy = new (function() {
 		if (buffer_storage = (window.sessionStorage && window.sessionStorage.getItem('edsy_import_buffer'))) {
 			window.sessionStorage.removeItem('edsy_import_buffer');
 		}
-		if (buffer_cookie = (document.cookie.match(/(?:^|;)\s*edsy_import_buffer\s*=\s*([^\s;]*)\s*(?:;|$)/) || EMPTY_ARR)[1]) {
+		if (buffer_cookie = getCookie('edsy_import_buffer')) {
 			document.cookie = 'edsy_import_buffer=; domain=.edsy.org; path=/';
 			document.cookie = 'edsy_import_buffer=; domain=.edsy.org; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:01 GMT';
 		}

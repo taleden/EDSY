@@ -16,7 +16,13 @@ cgitb.enable()
 
 try:
 	http.cookies.Morsel._reserved['same-site'] = 'SameSite'
+	
+	EMPTY_OBJ = {}
+	SECS_PER_HOUR = 60 * 60
+	SECS_PER_MONTH = SECS_PER_HOUR * 24 * 30
 	UINT64_MAX = numpy.iinfo(numpy.uint64).max
+	LOCAL = ('REQUEST_URI' not in os.environ)
+	DEV = (not LOCAL) and os.environ['REQUEST_URI'].startswith('/dev/')
 	
 	
 	def b64enc(data):
@@ -34,22 +40,73 @@ try:
 	#strxor()
 	
 	
-	def getRandomText(words=1, seed=None):
-		return b64enc(numpy.random.RandomState(seed).randint(UINT64_MAX, size=words, dtype=numpy.uint64))
+	def getRandomText(size=1, seed=None):
+		return b64enc(numpy.random.RandomState(seed).bytes(size))
 	#getRandomText()
 	
 	
 	def getMask(salt):
-		seed = int(os.lstat(__file__).st_ino) # TODO: '.' for consistency during development; change to __file__ for production
-		pepper = getRandomText(3, seed)
+		seed = int(os.lstat('.' if (LOCAL or DEV) else __file__).st_ino) # TODO: '.' for consistency during development; change to __file__ for production
+		pepper = getRandomText(24, seed)
 		return hashlib.sha512((salt+pepper).encode()).digest()
 	#getMask()
 	
 	
+	def getMasked(text, mask, after=None):
+		if not after:
+			return b64enc(xor(text.encode(), mask))
+		parts = text.rsplit(after,1)
+		parts[-1] = b64enc(xor(parts[-1].encode(), mask))
+		return after.join(parts)
+	#getMasked()
+	
+	
+	def getUnmasked(text, mask, after=None):
+		if not after:
+			return xor(b64dec(text), mask).decode()
+		parts = text.rsplit(after,1)
+		parts[-1] = xor(b64dec(parts[-1]), mask).decode()
+		return after.join(parts)
+	#getUnmasked()
+	
+	
+	class FDAPIError(Exception):
+		def __init__(self, message, status=None):
+			super().__init__(message)
+			self.message = str(message)
+			self.status = int(status) if status != None else None
+		#__init__()
+	#FDAPIError
+	
+	
+	class FDAPILocalError(FDAPIError):
+		"""For errors arising in this script or with its supporting cookies"""
+	
+	
+	class FDAPIRemoteError(FDAPIError):
+		"""For errors during communication with or received from the remote Frontier API server"""
+	
+	
+	class FDAPIRemoteUnauthorizedError(FDAPIRemoteError):
+		"""For 401 Unauthorized responses, indicating a revoked refresh token"""
+	
+	
+	class FDAPIRemoteUnprocessableError(FDAPIRemoteError):
+		"""For 422 Unprocessable Entity responses, indicating an expired or invalid access token"""
+	
+	
+	class FDAPIRemoteNoContentError(FDAPIRemoteError):
+		"""For 204 No Content responses, indicating no journal entries today"""
+	
+	
+	class FDAPIRemoteTemporaryError(FDAPIRemoteError):
+		"""For responses we believe to be temporary errors"""
+	
+	
 	class FDAPIHandler:
-		EDSY_USERAGENT = 'EDCD-EDSY-3.4.2.0'
+		EDSY_USERAGENT = 'EDCD-EDSY-3.4.2.2.3'
 		EDSY_CLIENTID = '398bde95-e204-4b08-b837-eff7b5304ddb'
-		EDSY_URL_REDIRECT = 'https://edsy.org/fdapi'
+		EDSY_URL_REDIRECT = 'https://edsy.org/dev/fdapi' if DEV else 'https://edsy.org/fdapi'
 		FDAPI_TIMEOUT = 10
 		FDAPI_URL_AUTH = 'https://auth.frontierstore.net/auth'
 		FDAPI_URL_TOKEN = 'https://auth.frontierstore.net/token'
@@ -58,7 +115,7 @@ try:
 		
 		
 		def __init__(self):
-			self.debug = None # TODO DEBUG = []
+			self.debug = list() if LOCAL else None
 			self.inCookies = http.cookies.SimpleCookie(os.environ.get('HTTP_COOKIE'))
 			self.inForm = cgi.FieldStorage(keep_blank_values=True)
 			self.outHeaders = {
@@ -69,44 +126,16 @@ try:
 				'strict-transport-security': 'max-age=300; includeSubDomains', # max-age=31536000; preload
 			}
 			self.outCookies = http.cookies.SimpleCookie()
-			self.outHTML = []
-			self.outJSON = {}
+			self.outHTML = list()
+			self.outJSON = dict()
 			self.salt = None
 			self.mask = None
-			self.state = None
 			self.code = None
 			self.verifier = None
+			self.cmdr64 = None
 			self.access = None
 			self.refresh = None
 		#__init__()
-		
-		
-		def GetMasked(self, text, after=None):
-			try:
-				if after:
-					parts = text.rsplit(after,1)
-					parts[-1] = b64enc(xor(parts[-1].encode(), self.mask))
-					text = after.join(parts)
-				else:
-					text = b64enc(xor(text.encode(), self.mask))
-			except: # TypeError
-				text = None
-			return text
-		#GetMasked()
-		
-		
-		def GetUnmasked(self, text, after=None):
-			try:
-				if after:
-					parts = text.rsplit(after,1)
-					parts[-1] = xor(b64dec(parts[-1]), self.mask).decode()
-					text = after.join(parts)
-				else:
-					text = xor(b64dec(text), self.mask).decode()
-			except: # TypeError
-				text = None
-			return text
-		#GetUnmasked()
 		
 		
 		def HasFormField(self, field):
@@ -114,17 +143,37 @@ try:
 		#HasFormField()
 		
 		
-		def GetFormField(self, field):
-			return self.inForm.getfirst(field)
+		def GetFormField(self, field, default=None):
+			return self.inForm.getfirst(field, default)
 		#GetFormField()
 		
 		
-		def GetCookie(self, name):
-			return (self.inCookies[name].value if (name in self.inCookies) else None)
+		def HasCookie(self, name):
+			return (name in self.inCookies)
+		#HasCookie()
+		
+		
+		def IterCookies(self):
+			return self.inCookies.__iter__()
+		#IterCookies()
+		
+		
+		def GetCookie(self, name, default=None):
+			return (self.inCookies[name].value if (name in self.inCookies) else default)
 		#GetCookie()
 		
 		
-		def SetCookie(self, name, value=None, age=None):
+		def UnsetCookie(self, name, httponly=True):
+			if name not in self.inCookies:
+				return False
+			del self.inCookies[name]
+			return self.SetCookie(name, httponly=httponly)
+		#UnsetCookie()
+		
+		
+		def SetCookie(self, name, value=None, age=None, httponly=True):
+			if not name:
+				return False
 			if value:
 				self.outCookies[name] = value
 				self.outCookies[name]['max-age'] = age
@@ -132,158 +181,293 @@ try:
 				self.outCookies[name] = ""
 				self.outCookies[name]['max-age'] = 0
 				self.outCookies[name]['expires'] = 'Thu, 01 Jan 1970 00:00:00 GMT'
-			#if value
+			#if
 			self.outCookies[name]['secure'] = True
-			self.outCookies[name]['httponly'] = True
-			self.outCookies[name]['same-site'] = 'lax' # TODO: see if Frontier needs to change post-auth redirect from 302 to 303
+			self.outCookies[name]['httponly'] = httponly
+			self.outCookies[name]['same-site'] = 'lax' # TODO: see if Frontier needs to change post-auth redirect from 302 to 303 to allow 'strict'
+			return True
 		#SetCookie()
 		
 		
-		def SetRedirect(self, url):
-			self.outHeaders['status'] = 303
-			self.outHeaders['location'] = url
-			self.outHTML.extend( (
-				'<meta http-equiv="refresh" content="0; url=%s" />' % html.escape(url),
-				'<script type="application/javascript">window.addEventListener("DOMContentLoaded", (function(e) { window.location.href = %s; }));</script>' % json.dumps(url),
-			) )
-		#SetRedirect()
+		def ClearCookies(self):
+			for name in self.inCookies:
+				if name.startswith('edsy_fdapi_'):
+					self.SetCookie(name, httponly=self.inCookies[name]['httponly'])
+			#for
+			self.inCookies = http.cookies.SimpleCookie()
+		#ClearCookies()
 		
 		
 		def Process(self):
+		#	if self.debug != None:
+		#		for k in os.environ:
+		#			self.debug.append(k+' = '+os.environ[k])
+			
+			# load or create the salt and mask
+			self.salt = self.GetCookie('edsy_fdapi_salt')
+			if not self.salt:
+				self.salt = getRandomText(24)
+				self.ClearCookies()
+			self.mask = getMask(self.salt)
 			if self.debug != None:
-				for k in os.environ:
-					self.debug.append(k+' = '+os.environ[k])
-			self.outHeaders['status'] = 500
-			if self.HasFormField('auth') or self.HasFormField('code'):
-				# if we got an explicit (re-)auth request or a code, generate HTML/JS response to redirect to FD or back to EDSY
+				self.debug.append("salt = " + str(self.salt))
+				self.debug.append("mask = " + str(self.mask))
+			#if
+			
+			# delete obsolete cookies (until ~ 2019-09-01, then they should all be expired anyway)
+			for name in ['edsy_fdapi_access','edsy_fdapi_refresh']:
+				if self.HasCookie(name):
+					self.SetCookie(name, httponly=True)
+			#for
+			
+			# sync cmdr/access/refresh cookies
+			cmdrs = dict()
+			accesses = dict()
+			refreshes = dict()
+			for cookie in self.IterCookies():
+				if cookie.startswith('edsy_fdapi_cmdr_'):
+					cmdrs[cookie[16:]] = cookie
+				elif cookie.startswith('edsy_fdapi_access_'):
+					accesses[cookie[18:]] = cookie
+				elif cookie.startswith('edsy_fdapi_refresh_'):
+					refreshes[cookie[19:]] = cookie
+			#for
+			for suffix,cookie in cmdrs.items():
+				if (suffix not in accesses) and (suffix not in refreshes):
+					self.UnsetCookie(cookie, httponly=False)
+					if self.debug != None:
+						self.debug.append("expired = " + cookie)
+			#for
+			for suffix,cookie in accesses.items():
+				if suffix not in cmdrs:
+					self.UnsetCookie(cookie)
+					if self.debug != None:
+						self.debug.append("removed = " + cookie)
+			#for
+			for suffix,cookie in refreshes.items():
+				if suffix not in cmdrs:
+					self.UnsetCookie(cookie)
+					if self.debug != None:
+						self.debug.append("removed = " + cookie)
+			#for
+			
+			# decide what format to respond in
+			if self.HasFormField('auth') or self.HasFormField('state'): # explicit (re-)auth request or OAuth callback state
 				self.outHTML.extend( (
 					'<!DOCTYPE html>',
 					'<meta charset="utf-8">',
-					'<meta http-equiv="Content-Security-Policy" content="default-src \'self\'; base-uri \'none\'; object-src \'none\'; script-src \'unsafe-inline\'; style-src \'unsafe-inline\';">',
-					'<style type="text/css">',
-					'HTML, BODY { background-color: black; color: white; font-size: 100%; }',
-					'</style>',
+					'<meta http-equiv="Content-Security-Policy" content="default-src \'self\'; base-uri \'none\'; object-src \'none\'; script-src \'unsafe-inline\';">',
+					'<link rel="stylesheet" type="text/css" href="edsy-mini.css">',
 				) )
-				self.code = self.GetFormField('code')
-				errormsg = self.ProcessCode() if self.code else self.GenerateAuth(True)
-				if errormsg:
-					self.outHTML.append('<b>ERROR:</b> ' + errormsg)
-			else:
-				# otherwise, assume we're in an AJAX call; generate JSON response
-				self.outJSON['status'] = 500
-				errormsg = self.ProcessQuery()
-				if errormsg:
-					self.outJSON['message'] = errormsg
-			#if auth/code
+				try:
+					if not self.mask:
+						raise FDAPILocalError("mask error")
+					redirect = self.GenerateAuthURL() if self.HasFormField('auth') else self.ProcessAuth()
+					if not redirect:
+						raise FDAPILocalError("auth prep error" if self.HasFormField('auth') else "access token not received")
+					self.outHeaders['status'] = 303
+					self.outHeaders['location'] = redirect
+					lines = (
+						'<meta http-equiv="refresh" content="0; url=%s" />' % html.escape(redirect),
+						'<script type="application/javascript">window.addEventListener("DOMContentLoaded", (function(e) { window.location.href = %s; }));</script>' % json.dumps(redirect),
+					)
+					self.outHTML.extend(lines)
+				except FDAPIError as exc:
+					self.outHeaders['status'] = 500
+					header = ("Frontier API error" if isinstance(exc, FDAPIRemoteError) else "EDSY-FDAPI error") + " " + str(exc.status or "")
+					message = html.escape(exc.message or "unknown error")
+					self.outHTML.extend( (
+						'<div id="page_modal">',
+						'<div id="page_box">',
+						'<p>' + header + '<br>' + message + '<br><br>',
+						'The authorization attempt failed. You can try again, but if<br>',
+						'the error persists then there may be a temporary API outage.</p>',
+						'<ul><li><a href="fdapi?auth=A">Re-Try Authorization</a></li>',
+						'<li><a href="' + ('/dev/' if DEV else '/') + '">Return to EDSY</a></li></ul>',
+						'</div>',
+						'</div>',
+					) )
+					if self.debug != None:
+						self.debug.append(repr(exc))
+				#try/except
+			else: # AJAX call
+				try:
+					if not self.mask:
+						raise FDAPILocalError("mask error")
+					data = self.ProcessQuery()
+					if data:
+						self.outHeaders['status'] = 200
+						self.outJSON['status'] = 200
+						self.outJSON['import'] = b64enc(zlib.compress(json.dumps(data).encode()))
+					else:
+						authurl = self.GenerateAuthURL()
+						self.outHeaders['status'] = 200
+						self.outJSON['status'] = 303
+						self.outJSON['location'] = authurl
+					#if
+				except FDAPIError as exc:
+					self.outHeaders['status'] = 500
+					self.outJSON['message'] = exc.message or "unknown error"
+					if exc.status != None:
+						self.outJSON['status'] = exc.status
+					if self.debug != None:
+						self.debug.append(repr(exc))
+				#try/except
+			#if
 		#Process()
 		
 		
-		def ProcessCode(self):
-			self.state = self.GetFormField('state')
-			if not self.state:
-				return 'state not provided'
-			prevstate = self.GetCookie('edsy_fdapi_state')
-			if not prevstate:
-			#	# same-site=strict cookies may not be sent after redirect from Frontier; try redirecting to ourself to resolve
-			#	if os.environ.get('HTTP_REFERER',"").startswith(self.FDAPI_URL_AUTH) and ('REQUEST_URI' in os.environ):
-			#		self.SetRedirect(os.environ['REQUEST_URI'])
-			#		return None
-				return 'prior state not found'
-			elif self.state != prevstate:
-				return 'state mismatch'
-			self.salt = self.GetCookie('edsy_fdapi_salt')
-			if not self.salt:
-				return 'salt not found'
+		def ProcessAuth(self):
+			# gather data
+			codestate = self.GetFormField('state')
+			self.code = self.GetFormField('code')
+			error = self.GetFormField('error')
+			errordesc = self.GetFormField('error_description')
+			state = self.GetCookie('edsy_fdapi_state')
 			verifier_masked = self.GetCookie('edsy_fdapi_verifier')
-			if not verifier_masked:
-				return 'verifier not found'
-			self.mask = getMask(self.salt)
-			self.verifier = self.GetUnmasked(verifier_masked)
-			errormsg = self.FetchAccessToken()
-			if not errormsg:
-				self.SetRedirect('/#/I=FDAPI')
-			return errormsg
-		#ProcessCode()
+			try:
+				self.verifier = getUnmasked(verifier_masked, self.mask)
+			except Exception as exc:
+				if self.debug != None:
+					self.debug.append(repr(exc))
+				self.verifier = None
+			#try/except
+			
+			# debug
+			if self.debug != None:
+				self.debug.append("codestate = " + str(codestate))
+				self.debug.append("code = " + str(self.code))
+				self.debug.append("error = " + str(error))
+				self.debug.append("errordesc = " + str(errordesc))
+				self.debug.append("state = " + str(state))
+				self.debug.append("verifier_masked = " + str(verifier_masked))
+				self.debug.append("verifier = " + str(self.verifier))
+			#if
+			
+			# check for local errors
+			if not (state and self.verifier):
+				raise FDAPILocalError("auth state data expired" if verifier_masked else "auth state data missing")
+			
+			# check for remote errors
+			if codestate != state:
+				raise FDAPIRemoteError("auth state mismatch", 0)
+			if not self.code:
+				raise FDAPIRemoteError((str(error) or "auth code missing") + ((" (" + str(errordesc) + ")") if errordesc else ""), 0)
+			
+			# proceed
+			if not self.FetchAccessToken():
+				return None
+			return ('/dev/#/I=FDAPI:' if DEV else '/#/I=FDAPI:') + (str(self.cmdr64 or '') if state.startswith('I') else '')
+		#ProcessAuth()
 		
 		
 		def ProcessQuery(self):
-			self.salt = self.GetCookie('edsy_fdapi_salt')
+			# gather data
+			self.cmdr64 = self.GetFormField('c', '')
+			access_masked = self.GetCookie('edsy_fdapi_access_' + self.cmdr64)
+			refresh_masked = self.GetCookie('edsy_fdapi_refresh_' + self.cmdr64)
 			
-			if self.salt:
-				access_masked = self.GetCookie('edsy_fdapi_access')
-				if access_masked:
-					self.mask = getMask(self.salt)
-					self.access = self.GetUnmasked(access_masked, after='.')
-					if self.access:
-						errormsg = self.QueryAPI()
-						if not errormsg:
-							return None
-						elif self.debug != None:
-							self.debug.append("ERROR = "+errormsg)
-					#if access
-				#if access_masked
+			# debug
+			if self.debug != None:
+				self.debug.append("cmdr64 = " + str(self.cmdr64))
+				self.debug.append("access_masked = " + str(access_masked))
+				self.debug.append("refresh_masked = " + str(refresh_masked))
+			#if
+			
+			# if we have tokens, use them
+			data = None
+			try:
+				if self.cmdr64 and access_masked:
+					try:
+						self.access = getUnmasked(access_masked, self.mask, after='.')
+						if self.debug != None:
+							self.debug.append("access = " + str(self.access))
+					except Exception as exc:
+						if self.debug != None:
+							self.debug.append(repr(exc))
+						raise FDAPILocalError("access token mask error")
+					#try/except
+					
+					try:
+						data = self.FetchBuilds()
+					except (FDAPIRemoteUnauthorizedError, FDAPIRemoteUnprocessableError) as exc:
+						if self.debug != None:
+							self.debug.append(repr(exc))
+						data = None
+					#try/except
+				#if
 				
-				refresh_masked = self.GetCookie('edsy_fdapi_refresh')
-				if refresh_masked:
-					if not self.mask:
-						self.mask = getMask(self.salt)
-					self.refresh = self.GetUnmasked(refresh_masked)
-					if self.refresh:
-						errormsg = self.FetchAccessToken() or self.QueryAPI()
-						if not errormsg:
-							return None
-						elif self.debug != None:
-							self.debug.append("ERROR = "+errormsg)
-					#if refresh
-				#if refresh_masked
-			#if salt
+				if self.cmdr64 and refresh_masked and not data:
+					try:
+						self.refresh = getUnmasked(refresh_masked, self.mask)
+						if self.debug != None:
+							self.debug.append("refresh = " + str(self.refresh))
+					except Exception as exc:
+						if self.debug != None:
+							self.debug.append(repr(exc))
+						raise FDAPILocalError("refresh token mask error")
+					#try/except
+					
+					try:
+						self.FetchAccessToken()
+						data = self.FetchBuilds()
+					except FDAPIRemoteUnauthorizedError as exc:
+						if self.debug != None:
+							self.debug.append(repr(exc))
+						data = None
+					#try/except
+				#if
+			except FDAPILocalError as exc:
+				if self.debug != None:
+					self.debug.append(repr(exc))
+				data = None
+			#try/except
 			
-			return self.GenerateAuth()
+			return data
 		#ProcessQuery()
 		
 		
-		def GenerateAuth(self, redirect=False):
-			self.salt = getRandomText(3)
-			self.mask = getMask(self.salt)
-			self.state = getRandomText(1)
-			self.verifier = getRandomText(4)
-			verifier_masked = self.GetMasked(self.verifier)
-			challenge = b64enc(hashlib.sha256(self.verifier.encode()).digest())
-			authurl = (
-				self.FDAPI_URL_AUTH +
-				'?scope=capi' +
-				'&audience=all' +
-				'&client_id=' + self.EDSY_CLIENTID +
-				'&response_type=code' +
-				'&code_challenge=' + challenge +
-				'&code_challenge_method=S256' +
-				'&state=' + self.state +
-				'&redirect_uri=' + urllib.parse.quote_plus(self.EDSY_URL_REDIRECT)
-			)
+		def GenerateAuthURL(self):
+			try:
+				# generate auth state data
+				state = ("A" if (self.GetFormField('auth') == "A") else "I") + getRandomText(8)
+				self.verifier = getRandomText(32)
+				verifier_masked = getMasked(self.verifier, self.mask)
+				challenge = b64enc(hashlib.sha256(self.verifier.encode()).digest())
+				if not (state and self.verifier and verifier_masked and challenge):
+					raise Exception()
+				
+				# debug
+				if self.debug != None:
+					self.debug.append("state = " + str(state))
+					self.debug.append("verifier = " + str(self.verifier))
+					self.debug.append("verifier_masked = " + str(verifier_masked))
+					self.debug.append("challenge = " + str(challenge))
+				#if
+				
+				# proceed
+				self.SetCookie('edsy_fdapi_salt', self.salt, SECS_PER_MONTH)
+				self.SetCookie('edsy_fdapi_state', state, SECS_PER_HOUR)
+				self.SetCookie('edsy_fdapi_verifier', verifier_masked, SECS_PER_HOUR)
+				authurl = (
+					self.FDAPI_URL_AUTH +
+					'?scope=capi' +
+					'&audience=all' +
+					'&client_id=' + self.EDSY_CLIENTID +
+					'&response_type=code' +
+					'&code_challenge=' + challenge +
+					'&code_challenge_method=S256' +
+					'&state=' + state +
+					'&redirect_uri=' + urllib.parse.quote_plus(self.EDSY_URL_REDIRECT)
+				)
+			except Exception as exc:
+				if self.debug != None:
+					self.debug.append(repr(exc))
+				raise FDAPILocalError("auth init error")
+			#try/except
 			
-			self.SetCookie('edsy_fdapi_salt', self.salt, 60*60*24*30)
-			self.SetCookie('edsy_fdapi_state', self.state, 60*60)
-			self.SetCookie('edsy_fdapi_verifier', verifier_masked, 60*60)
-			self.SetCookie('edsy_fdapi_access')
-			self.SetCookie('edsy_fdapi_refresh')
-			if redirect:
-				self.SetRedirect(authurl)
-			else:
-				self.outHeaders['status'] = 200
-				self.outJSON['status'] = 303
-				self.outJSON['location'] = authurl
-			#if redirect
-			
-			if self.debug != None:
-				self.debug.append("salt = "+str(self.salt))
-				self.debug.append("mask = "+b64enc(self.mask))
-				self.debug.append("state = "+str(self.state))
-				self.debug.append("verifier = "+str(self.verifier))
-				self.debug.append(authurl)
-			#if debug
-			
-			return None
-		#GenerateAuth()
+			return authurl
+		#GenerateAuthURL()
 		
 		
 		def DebugRequest(self, request):
@@ -297,21 +481,14 @@ try:
 		
 		
 		def FetchAccessToken(self):
-			if self.debug != None:
-				self.debug.append("salt = "+str(self.salt))
-				self.debug.append("mask = "+b64enc(self.mask))
-				self.debug.append("state = "+str(self.state))
-				self.debug.append("code = "+str(self.code))
-				self.debug.append("verifier = "+str(self.verifier))
-				self.debug.append("refresh = "+str(self.refresh))
-				self.debug.append(self.FDAPI_URL_TOKEN)
-			#if debug
-			
+			# send request
 			reqHeaders = {
 				'user-agent': self.EDSY_USERAGENT,
 				'content-type': 'application/json',
 			}
 			if self.code and self.verifier:
+				self.SetCookie('edsy_fdapi_state')
+				self.SetCookie('edsy_fdapi_verifier')
 				reqBodyJSON = {
 					'grant_type': 'authorization_code',
 					'client_id': self.EDSY_CLIENTID,
@@ -326,52 +503,71 @@ try:
 					'refresh_token': self.refresh,
 				}
 			else:
-				return "Auth code or refresh token not found"
+				raise FDAPILocalError("token request data missing")
+			#if
 			request = requests.post(self.FDAPI_URL_TOKEN, headers=reqHeaders, json=reqBodyJSON, allow_redirects=False, timeout=self.FDAPI_TIMEOUT)
 			if self.debug != None:
 				self.DebugRequest(request)
 			
-			errormsg = 'Unknown error'
-			if request.headers['content-type'] == 'application/json' or request.headers['content-type'] == 'json':
-				resJSON = request.json()
-				if request.status_code == requests.codes.ok:
-					self.outHeaders['status'] = 200
-					self.SetCookie('edsy_fdapi_state')
-					self.SetCookie('edsy_fdapi_verifier')
-					if 'access_token' in resJSON:
-						self.access = resJSON['access_token']
-						access_masked = self.GetMasked(self.access, after='.')
-						access_expires = min(60*60*24*30, resJSON.get('expires_in',60*60*24*30*2) - 60)
-						self.SetCookie('edsy_fdapi_access', access_masked, access_expires)
-					#if access_token
-					if 'refresh_token' in resJSON:
-						self.refresh = resJSON['refresh_token']
-						refresh_masked = self.GetMasked(self.refresh)
-						self.SetCookie('edsy_fdapi_refresh', refresh_masked, 60*60*24*30)
-					#if refresh_token
-					errormsg = None
-				elif request.status_code == requests.codes.unauthorized: # 401
-					self.outHeaders['status'] = 401
-					errormsg = "Auth code or refresh token expired or invalid"
-				else:
-					errormsg = resJSON.get('message', 'Unknown API server error')
-				#if status
-			else:
-				errormsg = 'Invalid API server response'
-			#if content-type
+			# parse response
+			response = None
+			try:
+				if request.headers['content-type'] == 'application/json' or request.headers['content-type'] == 'json':
+					response = request.json()
+			except Exception as exc:
+				if self.debug != None:
+					self.debug.append(repr(exc))
+				response = None
+			#try/except
 			
-			return errormsg
+			# check for response errors
+			if request.status_code == requests.codes.unauthorized: # = 401
+				raise FDAPIRemoteUnauthorizedError("token revoked", request.status_code)
+			elif request.status_code != requests.codes.ok: # != 200
+				raise FDAPIRemoteError((response or EMPTY_OBJ).get('message', 'unknown error'), request.status_code)
+			if not response:
+				raise FDAPIRemoteError("invalid response", request.status_code)
+			
+			# get and mask tokens
+			try:
+				self.access = response['access_token']
+				access_masked = getMasked(self.access, self.mask, after='.')
+				access_expires = min(SECS_PER_MONTH, response.get('expires_in',SECS_PER_MONTH*2) - 60)
+				self.refresh = response.get('refresh_token')
+				refresh_masked = getMasked(self.refresh, self.mask) if self.refresh else None
+			except Exception as exc:
+				if self.debug != None:
+					self.debug.append(repr(exc))
+				raise FDAPILocalError("token masking error")
+			#try/except
+			
+			# set cookies
+			if not self.cmdr64:
+				self.cmdr64 = b64enc(self.FetchProfileData().get('commander',EMPTY_OBJ).get('name','').encode())
+				if not self.cmdr64:
+					raise FDAPIRemoteError("unknown CMDR", 0)
+			#if
+			self.SetCookie('edsy_fdapi_salt', self.salt, SECS_PER_MONTH)
+			self.SetCookie('edsy_fdapi_cmdr_' + self.cmdr64, "1", SECS_PER_MONTH, httponly=False)
+			self.SetCookie('edsy_fdapi_access_' + self.cmdr64, access_masked, access_expires)
+			self.SetCookie('edsy_fdapi_refresh_' + self.cmdr64, refresh_masked, SECS_PER_MONTH)
+			
+			return self.access
 		#FetchAccessToken()
 		
 		
-		def QueryAPI(self):
-			if self.debug != None:
-				self.debug.append("salt = "+str(self.salt))
-				self.debug.append("mask = "+b64enc(self.mask))
-				self.debug.append("access = "+str(self.access))
-				self.debug.append(self.FDAPI_URL_JOURNAL)
-			#if debug
-			
+		def FetchBuilds(self):
+			try:
+				data = self.FetchJournalData()
+			except FDAPIRemoteNoContentError:
+				data = self.FetchProfileData()
+			#try/except
+			return data
+		#FetchBuilds()
+		
+		
+		def FetchJournalData(self):
+			# send request
 			reqHeaders = {
 				'user-agent': self.EDSY_USERAGENT,
 				'authorization': ('Bearer '+self.access),
@@ -380,61 +576,83 @@ try:
 			if self.debug != None:
 				self.DebugRequest(request)
 			
-			self.outJSON['status'] = request.status_code
-			errormsg = 'Unknown error'
-			importobj = None
-			if request.status_code == requests.codes.no_content: # 204
-				request = requests.get(self.FDAPI_URL_PROFILE, headers=reqHeaders, allow_redirects=False, timeout=self.FDAPI_TIMEOUT)
+			# check for response errors
+			if request.status_code == requests.codes.unprocessable_entity: # = 422
+				raise FDAPIRemoteUnprocessableError("token expired", request.status_code)
+			if request.status_code == requests.codes.no_content: # = 204
+				raise FDAPIRemoteNoContentError("no data", request.status_code)
+			if request.status_code != requests.codes.ok and request.status_code != requests.codes.partial_content: # != 200,206
+				raise FDAPIRemoteError("unknown error", request.status_code)
+			if request.headers['content-type'] != 'application/json' and request.headers['content-type'] != 'json':
+				raise FDAPIRemoteError("invalid response", request.status_code)
+			if request.text == 'Journal unavailable':
+				raise FDAPIRemoteTemporaryError(request.text, request.status_code)
+			
+			# identify last event per ShipID
+			try:
+				loadouts = {}
+				for line in request.text.split("\n"):
+					try:
+						response = json.loads(line) if line else None
+					except Exception as exc:
+						if self.debug != None:
+							self.debug.append(repr(exc))
+						response = None
+					#try/except
+					if response:
+						event = response.get('event')
+						shipid = response.get('ShipID')
+						if (event == 'Loadout') and shipid:
+							loadouts[shipid] = response
+					#if
+				#for
+				data = list(loadouts.values())
+			except Exception as exc:
 				if self.debug != None:
-					self.DebugRequest(request)
-				self.outJSON['status'] = request.status_code
-				if request.status_code == requests.codes.ok:
-					self.outHeaders['status'] = 200
-					if request.headers['content-type'] == 'application/json':
-						resJSON = request.json()
-						importobj = {
-							'commander': resJSON.get('commander'),
-							'ship': resJSON.get('ship'),
-						}
-						errormsg = None
-					else:
-						errormsg = 'Invalid API server response'
-					#if content-type
-				else:
-					errormsg = 'Unknown API server error'
-				#if status
-			elif request.status_code == requests.codes.ok or request.status_code == requests.codes.partial_content: # 200,206
-				self.outHeaders['status'] = 200
-				if request.headers['content-type'] == 'application/json':
-					if request.text == 'Journal unavailable':
-						errormsg = request.text
-					else:
-						loadouts = {}
-						for line in request.text.split("\n"):
-							if line:
-								resJSON = json.loads(line)
-								if resJSON.get('event') == 'Loadout':
-									shipid = resJSON.get('ShipID')
-									if shipid:
-										loadouts[shipid] = resJSON
-						#for line
-						importobj = list(loadouts.values())
-						errormsg = None
-					#if unavailable
-				else:
-					errormsg = 'Invalid API server response'
-				#if content-type
-			elif request.status_code == requests.codes.unprocessable_entity: # 422
-				errormsg = "Access token expired or invalid"
-			else:
-				errormsg = 'Unknown API server error'
-			#if status
+					self.debug.append(repr(exc))
+				raise FDAPILocalError("journal parsing error")
+			#try/except
 			
-			if importobj:
-				self.outJSON['import'] = b64enc(zlib.compress(json.dumps(importobj).encode()))
+			return data
+		#FetchJournalData()
+		
+		
+		def FetchProfileData(self):
+			# send request
+			reqHeaders = {
+				'user-agent': self.EDSY_USERAGENT,
+				'authorization': ('Bearer '+self.access),
+			}
+			request = requests.get(self.FDAPI_URL_PROFILE, headers=reqHeaders, allow_redirects=False, timeout=self.FDAPI_TIMEOUT)
+			if self.debug != None:
+				self.DebugRequest(request)
 			
-			return errormsg
-		#QueryAPI()
+			# check for response errors
+			if request.status_code == requests.codes.unprocessable_entity: # = 422
+				raise FDAPIRemoteUnprocessableError("token expired", request.status_code)
+			if request.status_code != requests.codes.ok: # != 200
+				raise FDAPIRemoteError("unknown error", request.status_code)
+			if request.headers['content-type'] != 'application/json' and request.headers['content-type'] != 'json':
+				raise FDAPIRemoteError("invalid response", request.status_code)
+			
+			# collect relevant data
+			try:
+				response = request.json()
+				data = {}
+				if 'commander' in response:
+					data['commander'] = response['commander']
+				if 'ship' in response:
+					data['ship'] = response['ship']
+				if 'ships' in response:
+					data['ships'] = response['ships']
+			except Exception as exc:
+				if self.debug != None:
+					self.debug.append(repr(exc))
+				raise FDAPILocalError("profile parsing error")
+			#try/except
+			
+			return data
+		#FetchProfileData()
 		
 		
 		def Output(self):
@@ -450,7 +668,8 @@ try:
 					body += ("\n<!--\n%s\n-->" % "\n".join(self.debug))
 			else:
 				self.outHeaders['status'] = 500
-			#if JSON/HTML
+				body = ""
+			#if
 			return ("%s%s%s%s\r\n%s" % (
 				"\r\n".join(("%s: %s" % (key,val)) for key,val in self.outHeaders.items()),
 				"\r\n" if self.outHeaders else "",
