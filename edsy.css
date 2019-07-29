@@ -10,7 +10,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 */
 
 :root {
-	--edsy-versions-css:34222,34223,34222,34223; /* HTML,CSS,DB,JS */
+	--edsy-versions-css:34224,34224,34224,34224; /* HTML,CSS,DB,JS */
 	
 	--color-orange-5: hsl(27,100%,60%);
 	--color-orange-4: hsl(27,100%,48%);
@@ -141,6 +141,14 @@ A.button:hover {
 A.button:active {
 	background-color: white;
 	color: black;
+}
+
+DL {
+	margin: 0;
+	padding: 0;
+}
+DD {
+	margin-left: 2em;
 }
 
 UL {
@@ -368,7 +376,8 @@ INPUT.toggleinput {
 	cursor: default;
 }
 
-.checkbox INPUT + DIV .check {
+.checkbox INPUT + DIV .check,
+.checkbox INPUT + DIV .radio {
 	display: inline-block;
 	position: absolute;
 	right: 4px;
@@ -376,14 +385,21 @@ INPUT.toggleinput {
 	width: 7px;
 	height: 7px;
 }
-.checkbox.left INPUT + DIV .check {
+.checkbox.left INPUT + DIV .check,
+.checkbox.left INPUT + DIV .radio {
 	right: auto;
 	left: 4px;
 }
-.checkbox INPUT:checked + DIV .check {
+.checkbox INPUT + DIV .radio {
+	transform-origin: 50% 50%;
+	transform: rotate(45deg);
+}
+.checkbox INPUT:checked + DIV .check,
+.checkbox INPUT:checked + DIV .radio {
 	background-color: var(--color-orange-5);
 }
-.checkbox INPUT:checked:disabled + DIV .check {
+.checkbox INPUT:checked:disabled + DIV .check,
+.checkbox INPUT:checked:disabled + DIV .radio {
 	background-color: var(--color-grey-3) !important;
 }
 
@@ -406,16 +422,44 @@ INPUT.toggleinput {
 	right: -4px;
 	border-left: none;
 }
+
+.checkbox INPUT + DIV .radio::before,
+.checkbox INPUT + DIV .radio::after {
+	box-sizing: border-box;
+	content: '';
+	display: block;
+	position: absolute;
+	height: 9px;
+	width: 9px;
+	border: 0 solid var(--color-orange-3);
+}
+.checkbox INPUT + DIV .radio::before {
+	top: 2px;
+	left: -4px;
+	border-width: 0 0 2px 2px;
+}
+.checkbox INPUT + DIV .radio::after {
+	bottom: 2px;
+	right: -4px;
+	border-width: 2px 2px 0 0;
+}
+
 .checkbox INPUT:checked + DIV .check::before,
-.checkbox INPUT:checked + DIV .check::after {
+.checkbox INPUT:checked + DIV .check::after,
+.checkbox INPUT:checked + DIV .radio::before,
+.checkbox INPUT:checked + DIV .radio::after {
 	border-color: var(--color-orange-5);
 }
 .checkbox INPUT:active + DIV .check::before,
-.checkbox INPUT:active + DIV .check::after {
+.checkbox INPUT:active + DIV .check::after,
+.checkbox INPUT:active + DIV .radio::before,
+.checkbox INPUT:active + DIV .radio::after {
 	border-color: white !important;
 }
 .checkbox INPUT:disabled + DIV .check::before,
-.checkbox INPUT:disabled + DIV .check::after {
+.checkbox INPUT:disabled + DIV .check::after,
+.checkbox INPUT:disabled + DIV .radio::before,
+.checkbox INPUT:disabled + DIV .radio::after {
 	border-color: var(--color-grey-3) !important;
 }
 
@@ -2820,8 +2864,15 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	padding: 0;
 }
 
+#popup_table SPAN.text {
+	font: var(--font-text);
+}
+
 #popup_table BUTTON {
 	border: none;
+}
+#popup_table BUTTON.text {
+	padding: 0.125rem 0.5rem;
 }
 
 #popup_table BUTTON.import_saveas,

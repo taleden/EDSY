@@ -14,7 +14,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 -->
 		<title>EDSY</title>
 		<meta name="application-name" content="EDSY">
-		<meta name="edsy-versions-html" id="edsy_versions_html" content="34222,34222,34222,34222"><!-- HTML,CSS,DB,JS -->
+		<meta name="edsy-versions-html" id="edsy_versions_html" content="34224,34224,34224,34224"><!-- HTML,CSS,DB,JS -->
 		<meta name="author" content="taleden">
 		<meta name="description" content="EDSY is a ship outfitting tool for Elite Dangerous">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,6 +54,10 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 					</symbol>
 					<symbol id="icon_delete" viewbox="0 0 13 13" stroke="none" fill="currentColor" shape-rendering="geometricPrecision">
 						<path d="M 3,0 h 7 v 1 h 3 v 1 h -2 v 9.75 l -2,1.25 h -5 l -2,-1.25 v -9.75 h -2 v -1 h 3 z M 3,2 v 9 l 1.5,1 h 4 l 1.5,-1 v -9 h -1 v 9 h -1 v -9 h -1 v 9 h -1 v -9 h -1 v 9 h -1 v -9 z"/>
+					</symbol>
+					<symbol id="icon_clipboard" viewbox="0 0 13 13" stroke="none" fill="currentColor" shape-rendering="geometricPrecision">
+						<path d="M 0,6 h 5 v -2.5 l 4,4 -4,4 v -2.5 h -5 z M 3,1 h 10 v 12 h -10 v -3 h 1 v 2 h 8 v -10 h -1 v 1 h -6 v -1 h -1 v 3 h -1 z"/>
+						<circle cx="8" cy="1.5" r="1.5"/>
 					</symbol>
 					<symbol id="icon_import" viewbox="0 0 13 13" stroke="none" fill="currentColor" shape-rendering="geometricPrecision">
 						<path d="M 0,9 h 2 v 2 h 9 v -2 h 2 v 4 h -13 z M 6.5,0 l 4,4 h -2.5 v 5 h -3 v -5 h -2.5 z"/>
@@ -159,7 +163,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 					<label class="togglebutton"><input name="tab" type="radio" value="options"><div><svg class="iconsvg unknown"><use xlink:href="#icon_unknown"/></svg><svg class="iconsvg repair"><use xlink:href="#icon_repair"/></svg><span>Help</span></div></label>
 				</form>
 				<div id="header_version">
-					<abbr title="updated 2019-06-12">v3.4.2b3</abbr>
+					<abbr title="updated 2019-07-28">v3.4.2b4</abbr>
 					<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X76V6PNF8CAV4&source=url"><img src="btn_donate_TN.gif" width="56" height="21"></a>
 				</div>
 			</div>
@@ -195,9 +199,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 						<form id="outfitting_fit" name="fit" class="">
 							<div id="outfitting_fit_settings">
 								<button id="outfitting_fit_import"><svg class="iconsvg import"><use xlink:href="#icon_import"/></svg></button>
-								<!-- TODO?
 								<button id="outfitting_fit_export"><svg class="iconsvg export"><use xlink:href="#icon_export"/></svg></button>
-								-->
 								<select id="outfitting_fit_stored" name="outfitting_fit_stored">
 									<option value="">(Stock)</option>
 								</select>
@@ -796,14 +798,23 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 						<section>
 							<header>Options</header>
 							<div>
+								Insurance Level &mdash; Select your insurance coverage level to calculate rebuy costs.
+								<dl>
+									<dd><label class="checkbox left"><input type="radio" name="insurance" value="9500"><div><div class="radio"></div><span>95.0% (Standard)</span></div></label></dd>
+									<dd><label class="checkbox left"><input type="radio" name="insurance" value="9625"><div><div class="radio"></div><span>96.3% (Beta backer)</span></div></label></dd>
+									<dd><label class="checkbox left"><input type="radio" name="insurance" value="9750"><div><div class="radio"></div><span>97.5% (Alpha backer)</span></div></label></dd>
+								</dl>
+							</div>
+							<div>
 								<label class="checkbox left"><input type="checkbox" name="onlybest"><div><div class="check"></div><span>Hide Small Modules</span></div></label>
 								&mdash; Display only the largest size class of each available module type in the SLOT view of the module browser.
 							</div>
 							<div>
 								<label class="checkbox left"><input type="checkbox" name="experimental"><div><div class="check"></div><span>Experimental Mode</span></div></label>
 								&mdash; Allow fitting modules that are too large for the slot, of a type not allowed by the ship or the slot, or
-								over the limit for modules of that type. This allows for theoretical "what-if" builds, but disallowed modules will
-								be shown in red to signify that it will not be possible to actually fit them in-game.
+								over the limit for modules of that type, and allow engineering modifiers and experimental effects without applying
+								any blueprint. This allows for theoretical "what-if" builds, but disallowed modules will be shown in red to signify
+								that it will not be possible to actually fit them in-game.
 							</div>
 							<div>
 								<button id="options_backup" name="backup">Backup All Data</button>
@@ -814,7 +825,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 							<header>Contact Me</header>
 							<ul>
 								<li><a href="https://discord.gg/5JSnnV4">discord</a></li>
-								<li><a href="https://forums.frontier.co.uk/showthread.php?t=92900">forum</a></li>
+								<li><a href="https://forums.frontier.co.uk/threads/elite-shipyard.92900/">forum</a></li>
 								<li><a href="https://www.reddit.com/message/compose/?to=taleden&subject=EDSY">reddit</a></li>
 								<li><a href="#" id="contact_email">email</a></li>
 							</ul>

@@ -1,0 +1,49 @@
+#!/usr/local/bin/python3
+
+"""
+EDSY was created using assets and imagery from Elite Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
+It is not endorsed by nor reflects the views or opinions of Frontier Developments and no employee of Frontier Developments was involved in the making of it.
+
+Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2019 taleden
+and is provided under a Creative Commons Attribution-NonCommercial 4.0 International License (http://creativecommons.org/licenses/by-nc/4.0/).
+
+The Elite Dangerous game logic and data in this file remains the property of Frontier Developments plc, and is used here as authorized by
+Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elite-dangerous-media-usage-rules.510879/).
+"""
+
+import cgi, cgitb, requests, sys
+cgitb.enable()
+
+try:
+	outHeaders = {
+		'status': 500,
+		'cache-control': 'no-cache,no-store,must-revalidate,private',
+		'expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
+		'pragma': 'no-cache',
+		'strict-transport-security': 'max-age=300; includeSubDomains', # max-age=31536000; preload
+		'content-type': 'text/plain',
+	}
+	outBody = list()
+	inForm = cgi.FieldStorage()
+	if 'url' in inForm:
+		reqParams = {
+			'format': 'simple',
+			'url': inForm.getfirst('url')
+		}
+		req = requests.get('https://is.gd/create.php', params=reqParams, timeout=10)
+		outHeaders['status'] = req.status_code
+		outHeaders['content-type'] = req.headers['content-type']
+		outBody.append(req.text)
+	else:
+		outHeaders['status'] = 400
+		outBody.append('')
+	#if url
+	print("%s%s\r\n%s" % (
+			"\r\n".join(("%s: %s" % (key,val)) for key,val in outHeaders.items()),
+			"\r\n" if outHeaders else "",
+			"\n".join(outBody)
+	), end="")
+except:
+	print("Status:500\r\nCache-Control: no-cache,no-store,must-revalidate,private\r\nExpires: Sat, 01 Jan 2000 00:00:00 GMT\r\nPragma: no-cache\r\nStrict-Transport-Security: max-age=300; includeSubDomains\r\nContent-type: text/html\r\n\r\n", end="")
+	print(cgitb.html(sys.exc_info()))
+#try/except
