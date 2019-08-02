@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+<!--
+EDSY was created using assets and imagery from Elite Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
+It is not endorsed by nor reflects the views or opinions of Frontier Developments and no employee of Frontier Developments was involved in the making of it.
+
+Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2019 taleden
+and is provided under a Creative Commons Attribution-NonCommercial 4.0 International License (http://creativecommons.org/licenses/by-nc/4.0/).
+
+The Elite Dangerous game logic and data in this file remains the property of Frontier Developments plc, and is used here as authorized by
+Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elite-dangerous-media-usage-rules.510879/).
+-->
+		<title>EDSY</title>
+		<meta name="application-name" content="EDSY">
+		<meta name="author" content="taleden">
+		<meta name="description" content="EDSY is a ship outfitting tool for Elite Dangerous">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="-x-Content-Security-Policy" content="default-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'; style-src 'self' 'unsafe-inline'">
+		<style type="text/css">
+:root {
+	--color-red-2: hsl(0,90%,24%);
+	--color-blue-5: hsl(197,100%,60%);
+	--color-blue-4: hsl(197,100%,48%);
+	--font-caps: normal normal normal 1rem/normal 'EuroCaps', 'Verdana', 'Geneva', sans-serif;
+	--font-text: normal normal normal 0.875rem/normal 'Sintony', 'Helvetica', 'Arial', sans-serif;
+	--font-fixed: normal normal normal 0.875rem/normal 'Telegrama', 'Courier New', 'Courier', monospace;
+}
+
+@font-face {
+	font-family: 'EuroCaps';
+	src: url('EuroCaps.woff2') format('woff2'), url('EuroCaps.woff') format('woff'), url('EuroCaps.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'Sintony';
+	src: local('Sintony'), url('Sintony.woff2') format('woff2'), url('Sintony.woff') format('woff'), url('Sintony.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'Telegrama';
+	src: local('Telegrama'), url('Telegrama.woff2') format('woff2'), url('Telegrama.woff') format('woff'), url('Telegrama.ttf') format('truetype');
+}
+
+* {
+	box-sizing: border-box;
+}
+
+HTML,
+BODY {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #222;
+	color: white;
+	font: var(--font-caps);
+	font-size: 100%;
+}
+
+HEADER {
+	margin: 0;
+}
+
+A {
+	color: var(--color-blue-4);
+	text-decoration: none;
+}
+A:hover {
+	color: var(--color-blue-5);
+	text-decoration: underline;
+}
+
+#page {
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	font: var(--font-caps);
+}
+
+#page_header {
+	flex: 0 0 auto;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	background-color: var(--color-red-2);
+}
+
+#header_title {
+	flex: 1 0 10px;
+	padding: 0 0.5rem;
+	font: var(--font-text);
+	font-size: 1.125rem;
+	font-weight: bold;
+}
+
+#header_title A {
+	color: inherit;
+	text-decoration: none;
+}
+
+#page_body {
+	flex: 1 0 10px;
+	min-width: 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	padding: 0.25em;
+}
+
+#page_body_beta {
+	flex: 0 0 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: 33%;
+	font: var(--font-text);
+}
+		</style>
+	</head>
+	<body>
+		<div id="page">
+			<div id="page_header">
+				<header id="header_title">
+					<a href="">EDSY</a>
+				</header>
+			</div>
+			<div id="page_body">
+				<div id="page_body_beta">
+					<h1>The Elite: Dangerous beta has concluded.</h1>
+					<h1><a id="link_redirect" href="/">Please update your link.</a></h1>
+				</div>
+			</div>
+		</div>
+		<script type="application/javascript">
+			document.getElementById('link_redirect').href = '/' + window.location.hash;
+		</script>
+	</body>
+</html>

@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 */
 'use strict';
 var eddb = {
-	version : 34224,
-	edsy_versions_db : [34224,34224,34224,34224], /* HTML,CSS,DB,JS */
+	version : 34290,
+	edsy_versions_db : [34290,34224,34290,34224], /* HTML,CSS,DB,JS */
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder',
@@ -770,11 +770,11 @@ var eddb = {
 				internal :[30650,550,550,550,0,0,0,150,3152], // verify positions
 			},
 			module:{
-				40131 : { cost:        0, mass: 0.00, fdid:128839283, fdname:'Krait_Light_Armour_Grade1' }, // Lightweight Alloy
-				40122 : { cost: 22791270, mass:36.00, fdid:128839284, fdname:'Krait_Light_Armour_Grade2' }, // Reinforced Alloy // verify
-				40113 : { cost: 51280360, mass:67.00, fdid:128839285, fdname:'Krait_Light_Armour_Grade3' }, // Military Grade Composite // verify
-				40114 : { cost:121192590, mass:67.00, fdid:128839286, fdname:'Krait_Light_Armour_Mirrored' }, // Mirrored Surface Composite // verify
-				40115 : { cost:134297570, mass:67.00, fdid:128839287, fdname:'Krait_Light_Armour_Reactive' }, // Reactive Surface Composite // verify
+				40131 : { cost:       0, mass: 0.00, fdid:128839283, fdname:'Krait_Light_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost:14988900, mass:26.00, fdid:128839284, fdname:'Krait_Light_Armour_Grade2' }, // Reinforced Alloy // verify
+				40113 : { cost:33725030, mass:53.00, fdid:128839285, fdname:'Krait_Light_Armour_Grade3' }, // Military Grade Composite // verify
+				40114 : { cost:79703480, mass:53.00, fdid:128839286, fdname:'Krait_Light_Armour_Mirrored' }, // Mirrored Surface Composite // verify
+				40115 : { cost:88322100, mass:53.00, fdid:128839287, fdname:'Krait_Light_Armour_Reactive' }, // Reactive Surface Composite // verify
 			},
 		},
 		14 : {
