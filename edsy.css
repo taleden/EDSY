@@ -10,7 +10,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 */
 
 :root {
-	--edsy-versions-css:34224,34224,34224,34224; /* HTML,CSS,DB,JS */
+	--edsy-versions-css:34291,34291,34291,34291; /* HTML,CSS,DB,JS */
 	
 	--color-orange-5: hsl(27,100%,60%);
 	--color-orange-4: hsl(27,100%,48%);
@@ -665,7 +665,8 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 	min-width: 0;
 	display: flex;
 	flex-direction: row;
-	justify-content: center;
+	justify-content: left;
+	overflow-x: auto;
 }
 
 #outfitting_bottom {
@@ -961,7 +962,7 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 #outfitting_modules_buttons {
 	flex: 0 0 auto;
 	min-width: 0;
-	display: flex;
+	display: none;
 	flex-direction: row;
 	margin: 0 -0.25em;
 }
@@ -1998,7 +1999,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_details_buttons {
 	flex: 0 0 auto;
 	min-width: 0;
-	display: flex;
+	display: none;
 	flex-direction: row;
 	margin: 0 -0.25em;
 }
@@ -2563,8 +2564,10 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 		display: none;
 	}
 	
-	#outfitting_modules,
-	#outfitting_details {
+	BODY.show1 #outfitting_modules,
+	BODY.show2 #outfitting_modules,
+	BODY.show1 #outfitting_details,
+	BODY.show2 #outfitting_details {
 		flex: 0 2 32em;
 		max-width: 32em;
 	}
@@ -2572,23 +2575,80 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	#outfitting_modules,
 	#outfitting_fit,
 	#outfitting_details {
+		display: flex;
+	}
+	/* redundant BODY.classes to match specificity */
+	BODY.show3.show3 #outfitting_top #outfitting_modules,
+	BODY.show3.show3 #outfitting_top #outfitting_fit,
+	BODY.show3.show3 #outfitting_top #outfitting_details {
+		display: flex;
+	}
+	BODY.show2 #outfitting_top:not(.show2modules) #outfitting_modules,
+	BODY.show2 #outfitting_top:not(.show2slots) #outfitting_fit,
+	BODY.show2 #outfitting_top:not(.show2details) #outfitting_details {
 		display: none;
 	}
-	
-	#outfitting_top.show1modules #outfitting_modules,
-	#outfitting_top.show1slots #outfitting_fit,
-	#outfitting_top.show1details #outfitting_details {
+	BODY.show2 #outfitting_top.show2modules #outfitting_modules,
+	BODY.show2 #outfitting_top.show2slots #outfitting_fit,
+	BODY.show2 #outfitting_top.show2details #outfitting_details {
+		display: flex;
+	}
+	BODY.show1 #outfitting_top:not(.show1modules) #outfitting_modules,
+	BODY.show1 #outfitting_top:not(.show1slots) #outfitting_fit,
+	BODY.show1 #outfitting_top:not(.show1details) #outfitting_details {
+		display: none;
+	}
+	BODY.show1 #outfitting_top.show1modules #outfitting_modules,
+	BODY.show1 #outfitting_top.show1slots #outfitting_fit,
+	BODY.show1 #outfitting_top.show1details #outfitting_details {
 		display: flex;
 	}
 	
-	#outfitting_modules_button_details {
+	#outfitting_modules_buttons,
+	#outfitting_details_buttons {
 		display: none;
+	}
+	BODY.show3 #outfitting_modules_buttons,
+	BODY.show3 #outfitting_details_buttons {
+		display: none;
+	}
+	BODY.show2 #outfitting_modules_buttons,
+	BODY.show2 #outfitting_details_buttons,
+	BODY.show1 #outfitting_modules_buttons,
+	BODY.show1 #outfitting_details_buttons {
+		display: flex;
+	}
+	
+	#outfitting_modules_button_back,
+	#outfitting_modules_button_details,
+	#outfitting_details_button_back,
+	#outfitting_details_button_replace {
+		display: block;
+	}
+	/* redundant BODY.classes to match specificity */
+	BODY.show2 #outfitting_top:not(.show2details) #outfitting_modules_button_back,
+	BODY.show2 #outfitting_top:not(.show2slots) #outfitting_modules_button_details,
+	BODY.show2.show2 #outfitting_top #outfitting_details_button_back {
+		display: none;
+	}
+	BODY.show2 #outfitting_top.show2details #outfitting_modules_button_back,
+	BODY.show2 #outfitting_top.show2slots #outfitting_modules_button_details,
+	BODY.show2.show2 #outfitting_top #outfitting_details_button_replace {
+		display: block;
+	}
+	/* redundant BODY.classes to match specificity */
+	BODY.show1.show1 #outfitting_top #outfitting_modules_button_details {
+		display: none;
+	}
+	BODY.show1.show1 #outfitting_top #outfitting_modules_button_back,
+	BODY.show1.show1 #outfitting_top #outfitting_details_button_back,
+	BODY.show1.show1 #outfitting_top #outfitting_details_button_replace {
+		display: block;
 	}
 	
 	#outfitting_cols_label {
 		display: inline-block;
 	}
-	
 	#outfitting_show_popout {
 		display: none;
 		position: absolute;
@@ -2600,11 +2660,9 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 		background-color: black;
 		z-index: 2;
 	}
-	
 	#outfitting_cols_focus:checked ~ #outfitting_show_popout {
 		display: flex;
 	}
-	
 	#outfitting_fit_settings .togglebutton INPUT + DIV {
 		margin: 1px;
 	}
@@ -2615,11 +2673,11 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 
 @media only screen and (min-width: 30em) {
-	#outfitting_cols_label {
+	/* duplicated at different widths for 1/2/3-panel modes */
+	BODY.show1 #outfitting_cols_label {
 		display: none;
 	}
-	
-	#outfitting_show_popout {
+	BODY.show1 #outfitting_show_popout {
 		display: flex;
 		position: static;
 		margin: 0;
@@ -2628,8 +2686,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 		background-color: transparent;
 		z-index: 0;
 	}
-	
-	#outfitting_fit_settings .togglebutton INPUT + DIV {
+	BODY.show1 #outfitting_fit_settings .togglebutton INPUT + DIV {
 		margin: 0 0 2px 2px;
 	}
 }
@@ -2640,31 +2697,53 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	}
 }
 
-@media only screen and (min-width: 45em) {
-	#outfitting_top.show1modules #outfitting_modules,
-	#outfitting_top.show1slots #outfitting_fit,
-	#outfitting_top.show1details #outfitting_details {
-		display: none;
+@media only screen and (min-width: 46em) {
+	BODY:not(.show2) #outfitting_top {
+		justify-content: center;
 	}
 	
-	#outfitting_top.show2modules #outfitting_modules,
-	#outfitting_top.show2slots #outfitting_fit,
-	#outfitting_top.show2details #outfitting_details {
+	BODY.show2 #outfitting_top:not(.show2modules) #outfitting_modules,
+	BODY.show2 #outfitting_top:not(.show2slots) #outfitting_fit,
+	BODY.show2 #outfitting_top:not(.show2details) #outfitting_details {
+		display: none;
+	}
+	BODY.show2 #outfitting_top.show2modules #outfitting_modules,
+	BODY.show2 #outfitting_top.show2slots #outfitting_fit,
+	BODY.show2 #outfitting_top.show2details #outfitting_details {
 		display: flex;
 	}
 	
-	#outfitting_modules_button_back,
-	#outfitting_modules_button_details,
-	#outfitting_details_button_back {
+	/* redundant BODY.classes to match specificity */
+	BODY.show2 #outfitting_top:not(.show2details) #outfitting_modules_button_back,
+	BODY.show2 #outfitting_top:not(.show2slots) #outfitting_modules_button_details,
+	BODY.show2.show2 #outfitting_top #outfitting_details_button_back {
 		display: none;
 	}
-	#outfitting_top.show2details #outfitting_modules_button_back,
-	#outfitting_top.show2slots #outfitting_modules_button_details {
+	BODY.show2 #outfitting_top.show2details #outfitting_modules_button_back,
+	BODY.show2 #outfitting_top.show2slots #outfitting_modules_button_details,
+	BODY.show2.show2 #outfitting_top #outfitting_details_button_replace {
 		display: block;
+	}
+	
+	/* duplicated at different widths for 1/2/3-panel modes */
+	BODY.show2 #outfitting_cols_label {
+		display: none;
+	}
+	BODY.show2 #outfitting_show_popout {
+		display: flex;
+		position: static;
+		margin: 0;
+		border: none;
+		padding: 0;
+		background-color: transparent;
+		z-index: 0;
+	}
+	BODY.show2 #outfitting_fit_settings .togglebutton INPUT + DIV {
+		margin: 0 0 2px 2px;
 	}
 }
 
-@media only screen and (min-width: 45em) and (orientation:landscape) {
+@media only screen and (min-width: 46em) and (orientation:landscape) {
 	#outfitting_bottom .stats_toggle:checked ~ DIV .stats_toggles {
 		flex: 0 0 auto;
 		min-width: 0;
@@ -2675,7 +2754,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	}
 }
 
-@media only screen and (min-width: 45em) and (max-height: 30em) {
+@media only screen and (min-width: 46em) and (max-height: 30em) {
 	#outfitting_bottom .stats_show_label {
 		display: block;
 	}
@@ -2686,28 +2765,47 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	}
 }
 
-@media only screen and (min-width: 64em) {
-	#outfitting_modules,
-	#outfitting_details {
+@media only screen and (min-width: 65em) {
+	BODY:not(.show3) #outfitting_top {
+		justify-content: center;
+	}
+	
+	BODY.show3 #outfitting_modules,
+	BODY.show3 #outfitting_details {
 		flex: 0 1 26em;
 		max-width: 26em;
 	}
 	
-	#outfitting_modules,
-	#outfitting_fit,
-	#outfitting_details,
-	#outfitting_top.show1modules #outfitting_modules,
-	#outfitting_top.show1slots #outfitting_fit,
-	#outfitting_top.show1details #outfitting_details,
-	#outfitting_top.show2modules #outfitting_modules,
-	#outfitting_top.show2slots #outfitting_fit,
-	#outfitting_top.show2details #outfitting_details {
+	/* redundant BODY.classes to match specificity */
+	BODY.show3.show3 #outfitting_top #outfitting_modules,
+	BODY.show3.show3 #outfitting_top #outfitting_fit,
+	BODY.show3.show3 #outfitting_top #outfitting_details {
 		display: flex;
 	}
 	
-	#outfitting_modules_buttons,
-	#outfitting_details_buttons {
+	BODY.show3 #outfitting_modules_buttons,
+	BODY.show3 #outfitting_details_buttons {
 		display: none;
+	}
+	
+	/* duplicated at different widths for 1/2/3-panel modes */
+	BODY.show3 #outfitting_cols_label,
+	BODY:not(.show3) #outfitting_cols_label {
+		display: none;
+	}
+	BODY.show3 #outfitting_show_popout,
+	BODY:not(.show3) #outfitting_show_popout {
+		display: flex;
+		position: static;
+		margin: 0;
+		border: none;
+		padding: 0;
+		background-color: transparent;
+		z-index: 0;
+	}
+	BODY.show3 #outfitting_fit_settings .togglebutton INPUT + DIV,
+	BODY:not(.show3) #outfitting_fit_settings .togglebutton INPUT + DIV {
+		margin: 0 0 2px 2px;
 	}
 }
 

@@ -10,7 +10,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [34224,34224,34224,34224]; /* HTML,CSS,DB,JS */
+	var VERSIONS = [34291,34291,34291,34291]; /* HTML,CSS,DB,JS */
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -112,6 +112,10 @@ window.edsy = new (function() {
 			insurance: 9500,
 			onlybest: false,
 			experimental: false,
+			show1: true,
+			show2: true,
+			show3: true,
+			hidestats: true,
 		},
 		page: null,
 		shipyard_tab: null,
@@ -2909,11 +2913,27 @@ window.edsy = new (function() {
 	
 	
 	var updateUIOptions = function() {
+		current.option.insurance = parseInt(current.option.insurance);
+		current.option.onlybest = !!current.option.onlybest;
+		current.option.experimental = !!current.option.experimental;
+		current.option.show1 = !!current.option.show1;
+		current.option.show2 = !!current.option.show2;
+		current.option.show3 = !!current.option.show3;
+		current.option.hidestats = !!current.option.hidestats;
+		
 		document.body.classList.toggle('onlybest', current.option.onlybest);
 		document.body.classList.toggle('experimental', current.option.experimental);
+		document.body.classList.toggle('show1', current.option.show1);
+		document.body.classList.toggle('show2', current.option.show2);
+		document.body.classList.toggle('show3', current.option.show3);
+		
 		document.forms.options.elements.insurance.value = current.option.insurance;
 		document.forms.options.elements.onlybest.checked = current.option.onlybest;
 		document.forms.options.elements.experimental.checked = current.option.experimental;
+		document.forms.options.elements.show1.checked = current.option.show1;
+		document.forms.options.elements.show2.checked = current.option.show2;
+		document.forms.options.elements.show3.checked = current.option.show3;
+		document.forms.options.elements.hidestats.checked = current.option.hidestats;
 	}; // updateUIOptions()
 	
 	
@@ -2921,6 +2941,8 @@ window.edsy = new (function() {
 		current.page = tab;
 		document.forms.header.elements.tab.value = tab;
 		document.getElementById('page_body').className = tab;
+		if (tab === 'outfitting')
+			updateUIStatsPanels();
 	}; // setUIPageTab()
 	
 	
@@ -5256,13 +5278,8 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 			var item = 'edsy_options' + (current.beta ? '_beta' : '');
 			var data = JSON.parse(window.localStorage.getItem(item) || '{}');
 			for (var opt in current.option) {
-				if (data[opt] !== undefined) {
-					switch (typeof current.option[opt]) {
-					case 'boolean':  current.option[opt] = Boolean(data[opt]);  break;
-					case 'number':   current.option[opt] = Number(data[opt]);   break;
-					default:         current.option[opt] = data[opt];
-					}
-				}
+				if (data[opt] !== undefined)
+					current.option[opt] = data[opt];
 			}
 		} catch (exc) {
 			console.log(exc);
@@ -6658,7 +6675,7 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 			panelOrder[enabledPanel] = next;
 			document.getElementById('stats_toggle_' + enabledPanel).value = next;
 		}
-		if (space < 0) {
+		if (current.option.hidestats && space < 0) {
 			panels.sort(function(p1,p2) { return panelOrder[p2] - panelOrder[p1]; });
 			while (space < 0 && panels.length > 1) {
 				var p = panels.pop();
@@ -8223,10 +8240,18 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 		current.option.insurance = parseInt(document.forms.options.elements.insurance.value);
 		current.option.onlybest = document.forms.options.elements.onlybest.checked;
 		current.option.experimental = document.forms.options.elements.experimental.checked;
-		writeStoredOptions();
+		current.option.show1 = document.forms.options.elements.show1.checked;
+		current.option.show2 = document.forms.options.elements.show2.checked;
+		current.option.show3 = document.forms.options.elements.show3.checked;
+		current.option.hidestats = document.forms.options.elements.hidestats.checked;
 		updateUIOptions();
+		
+		updateUILayout();
 		updateUIDetailsModifications();
+		updateUIStatsPanels();
 		updateUIStatsTotals();
+		
+		writeStoredOptions();
 	}; // onUIOptionsChange()
 	
 	
