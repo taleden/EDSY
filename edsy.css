@@ -10,7 +10,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 */
 
 :root {
-	--edsy-versions-css:34291,34291,34291,34291; /* HTML,CSS,DB,JS */
+	--edsy-versions-css:34292,34292,34292,34292; /* HTML,CSS,DB,JS */
 	
 	--color-orange-5: hsl(27,100%,60%);
 	--color-orange-4: hsl(27,100%,48%);
@@ -27,6 +27,11 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 	--color-blue-3: hsl(197,100%,36%);
 	--color-blue-2: hsl(197,90%,24%);
 	--color-blue-1: hsl(197,75%,18%);
+	--color-green-5: hsl(148,80%,60%);
+	--color-green-4: hsl(148,90%,45%);
+	--color-green-3: hsl(148,100%,30%);
+	--color-green-2: hsl(148,100%,24%);
+	--color-green-1: hsl(148,100%,18%);
 	--color-yellow-5: hsl(42,100%,60%);
 	--color-yellow-4: hsl(42,100%,48%);
 	--color-yellow-3: hsl(42,100%,36%);
@@ -1757,67 +1762,99 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	visibility: hidden;
 }
 
-#outfitting_fit_slots.priority1okay .priority1 .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority2okay .priority2 .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority3okay .priority3 .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority4okay .priority4 .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority5okay .priority5 .checkbox INPUT:checked + DIV .check {
+#outfitting_fit_slots.priority1mfn .priority1 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority2mfn .priority2 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority3mfn .priority3 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority4mfn .priority4 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority5mfn .priority5 .checkbox INPUT:checked + DIV .check {
 	background-color: var(--color-blue-5);
 }
-#outfitting_fit_slots.priority1okay .priority1 .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority2okay .priority2 .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority3okay .priority3 .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority4okay .priority4 .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority5okay .priority5 .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority1okay .priority1 .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority2okay .priority2 .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority3okay .priority3 .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority4okay .priority4 .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority5okay .priority5 .checkbox INPUT + DIV .check::after {
+#outfitting_fit_slots.priority1mfn .priority1 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority2mfn .priority2 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority3mfn .priority3 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority4mfn .priority4 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority5mfn .priority5 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority1mfn .priority1 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority2mfn .priority2 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority3mfn .priority3 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority4mfn .priority4 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority5mfn .priority5 .checkbox INPUT + DIV .check::after {
 	border-color: var(--color-blue-3);
 }
-#outfitting_fit_slots.priority1okay .priority1 .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority2okay .priority2 .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority3okay .priority3 .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority4okay .priority4 .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority5okay .priority5 .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority1okay .priority1 .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority2okay .priority2 .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority3okay .priority3 .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority4okay .priority4 .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority5okay .priority5 .checkbox INPUT:checked + DIV .check::after {
+#outfitting_fit_slots.priority1mfn .priority1 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority2mfn .priority2 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority3mfn .priority3 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority4mfn .priority4 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority5mfn .priority5 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority1mfn .priority1 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority2mfn .priority2 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority3mfn .priority3 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority4mfn .priority4 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority5mfn .priority5 .checkbox INPUT:checked + DIV .check::after {
 	border-color: var(--color-blue-5);
 }
 
-#outfitting_fit_slots.priority1error .priority1 .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority2error .priority2 .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority3error .priority3 .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority4error .priority4 .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority5error .priority5 .checkbox INPUT:checked + DIV .check {
+#outfitting_fit_slots.priority1dmg .priority1 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority2dmg .priority2 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority3dmg .priority3 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority4dmg .priority4 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority5dmg .priority5 .checkbox INPUT:checked + DIV .check {
+	background-color: var(--color-green-5);
+}
+#outfitting_fit_slots.priority1dmg .priority1 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority2dmg .priority2 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority3dmg .priority3 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority4dmg .priority4 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority5dmg .priority5 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority1dmg .priority1 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority2dmg .priority2 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority3dmg .priority3 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority4dmg .priority4 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority5dmg .priority5 .checkbox INPUT + DIV .check::after {
+	border-color: var(--color-green-3);
+}
+#outfitting_fit_slots.priority1dmg .priority1 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority2dmg .priority2 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority3dmg .priority3 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority4dmg .priority4 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority5dmg .priority5 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority1dmg .priority1 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority2dmg .priority2 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority3dmg .priority3 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority4dmg .priority4 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority5dmg .priority5 .checkbox INPUT:checked + DIV .check::after {
+	border-color: var(--color-green-5);
+}
+
+#outfitting_fit_slots.priority1err .priority1 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority2err .priority2 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority3err .priority3 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority4err .priority4 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority5err .priority5 .checkbox INPUT:checked + DIV .check {
 	background-color: var(--color-red-5);
 }
-#outfitting_fit_slots.priority1error .priority1 .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority2error .priority2 .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority3error .priority3 .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority4error .priority4 .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority5error .priority5 .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority1error .priority1 .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority2error .priority2 .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority3error .priority3 .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority4error .priority4 .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority5error .priority5 .checkbox INPUT + DIV .check::after {
+#outfitting_fit_slots.priority1err .priority1 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority2err .priority2 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority3err .priority3 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority4err .priority4 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority5err .priority5 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority1err .priority1 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority2err .priority2 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority3err .priority3 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority4err .priority4 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority5err .priority5 .checkbox INPUT + DIV .check::after {
 	border-color: var(--color-red-3);
 }
-#outfitting_fit_slots.priority1error .priority1 .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority2error .priority2 .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority3error .priority3 .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority4error .priority4 .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority5error .priority5 .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority1error .priority1 .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority2error .priority2 .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority3error .priority3 .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority4error .priority4 .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority5error .priority5 .checkbox INPUT:checked + DIV .check::after {
+#outfitting_fit_slots.priority1err .priority1 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority2err .priority2 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority3err .priority3 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority4err .priority4 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority5err .priority5 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority1err .priority1 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority2err .priority2 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority3err .priority3 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority4err .priority4 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority5err .priority5 .checkbox INPUT:checked + DIV .check::after {
 	border-color: var(--color-red-5);
 }
 
@@ -1867,69 +1904,91 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	visibility: hidden;
 }
 
-#outfitting_fit_slots.priority1okay .priority1 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority2okay .priority2 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority3okay .priority3 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority4okay .priority4 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority5okay .priority5 BUTTON.outfitting_fit_priority {
+#outfitting_fit_slots.priority1mfn .priority1 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority2mfn .priority2 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority3mfn .priority3 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority4mfn .priority4 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority5mfn .priority5 BUTTON.outfitting_fit_priority {
 	color: var(--color-blue-5);
 }
-#outfitting_fit_slots.priority1okay .priority1 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority2okay .priority2 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority3okay .priority3 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority4okay .priority4 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority5okay .priority5 BUTTON.outfitting_fit_priority::before {
+#outfitting_fit_slots.priority1mfn .priority1 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority2mfn .priority2 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority3mfn .priority3 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority4mfn .priority4 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority5mfn .priority5 BUTTON.outfitting_fit_priority::before {
 	border-right-color: var(--color-blue-3);
 }
-#outfitting_fit_slots.priority1okay .priority1 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority2okay .priority2 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority3okay .priority3 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority4okay .priority4 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority5okay .priority5 BUTTON.outfitting_fit_priority::after {
+#outfitting_fit_slots.priority1mfn .priority1 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority2mfn .priority2 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority3mfn .priority3 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority4mfn .priority4 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority5mfn .priority5 BUTTON.outfitting_fit_priority::after {
 	border-left-color: var(--color-blue-3);
 }
 
-#outfitting_fit_slots.priority1warning .priority1 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority2warning .priority2 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority3warning .priority3 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority4warning .priority4 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority5warning .priority5 BUTTON.outfitting_fit_priority {
+#outfitting_fit_slots.priority1dmg .priority1 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority2dmg .priority2 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority3dmg .priority3 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority4dmg .priority4 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority5dmg .priority5 BUTTON.outfitting_fit_priority {
+	color: var(--color-green-5);
+}
+#outfitting_fit_slots.priority1dmg .priority1 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority2dmg .priority2 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority3dmg .priority3 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority4dmg .priority4 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority5dmg .priority5 BUTTON.outfitting_fit_priority::before {
+	border-right-color: var(--color-green-3);
+}
+#outfitting_fit_slots.priority1dmg .priority1 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority2dmg .priority2 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority3dmg .priority3 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority4dmg .priority4 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority5dmg .priority5 BUTTON.outfitting_fit_priority::after {
+	border-left-color: var(--color-green-3);
+}
+
+#outfitting_fit_slots.priority1wrn .priority1 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority2wrn .priority2 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority3wrn .priority3 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority4wrn .priority4 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority5wrn .priority5 BUTTON.outfitting_fit_priority {
 	color: var(--color-red-5);
 }
-#outfitting_fit_slots.priority1warning .priority1 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority2warning .priority2 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority3warning .priority3 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority4warning .priority4 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority5warning .priority5 BUTTON.outfitting_fit_priority::before {
+#outfitting_fit_slots.priority1wrn .priority1 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority2wrn .priority2 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority3wrn .priority3 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority4wrn .priority4 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority5wrn .priority5 BUTTON.outfitting_fit_priority::before {
 	border-right-color: var(--color-red-3);
 }
-#outfitting_fit_slots.priority1warning .priority1 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority2warning .priority2 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority3warning .priority3 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority4warning .priority4 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority5warning .priority5 BUTTON.outfitting_fit_priority::after {
+#outfitting_fit_slots.priority1wrn .priority1 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority2wrn .priority2 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority3wrn .priority3 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority4wrn .priority4 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority5wrn .priority5 BUTTON.outfitting_fit_priority::after {
 	border-left-color: var(--color-red-3);
 }
 
-#outfitting_fit_slots.priority1error .priority1 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority2error .priority2 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority3error .priority3 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority4error .priority4 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority5error .priority5 BUTTON.outfitting_fit_priority {
+#outfitting_fit_slots.priority1err .priority1 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority2err .priority2 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority3err .priority3 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority4err .priority4 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority5err .priority5 BUTTON.outfitting_fit_priority {
 	color: var(--color-red-5);
 }
-#outfitting_fit_slots.priority1error .priority1 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority2error .priority2 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority3error .priority3 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority4error .priority4 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority5error .priority5 BUTTON.outfitting_fit_priority::before {
+#outfitting_fit_slots.priority1err .priority1 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority2err .priority2 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority3err .priority3 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority4err .priority4 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority5err .priority5 BUTTON.outfitting_fit_priority::before {
 	border-right-color: var(--color-red-3);
 }
-#outfitting_fit_slots.priority1error .priority1 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority2error .priority2 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority3error .priority3 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority4error .priority4 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority5error .priority5 BUTTON.outfitting_fit_priority::after {
+#outfitting_fit_slots.priority1err .priority1 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority2err .priority2 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority3err .priority3 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority4err .priority4 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority5err .priority5 BUTTON.outfitting_fit_priority::after {
 	border-left-color: var(--color-red-3);
 }
 
@@ -2483,7 +2542,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 .outfitting_stats_panel .outfitting_stats_powerbar SPAN.marker50 {
 	right: 55%;
-	border-color: var(--color-blue-5);
+	border-color: var(--color-green-5);
 }
 .outfitting_stats_panel .outfitting_stats_powerbar SPAN.marker40 {
 	right: 64%;
@@ -2535,11 +2594,15 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	overflow: hidden;
 	text-align: center;
 }
-.outfitting_stats_panel .outfitting_stats_powerbar ABBR.okay {
+.outfitting_stats_panel .outfitting_stats_powerbar ABBR.mfn {
 	border-right: 2px solid var(--color-blue-3);
 	background-color: var(--color-blue-4);
 }
-.outfitting_stats_panel .outfitting_stats_powerbar ABBR.error {
+.outfitting_stats_panel .outfitting_stats_powerbar ABBR.dmg {
+	border-right: 2px solid var(--color-green-3);
+	background-color: var(--color-green-4);
+}
+.outfitting_stats_panel .outfitting_stats_powerbar ABBR.err {
 	border-right: 2px solid var(--color-red-3);
 	background-color: var(--color-red-4);
 }
@@ -3037,6 +3100,26 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #popup_table INPUT.toggleinput:disabled + LABEL {
 	background-color: transparent;
 	color: var(--color-grey-4);
+}
+
+#popup_table TD.export {
+	width: 30em;
+	min-width: 5em;
+	padding: 0;
+}
+
+#popup_table DIV.export {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	min-width: 0;
+	padding: 0.125rem 0.5rem;
+}
+
+#popup_table INPUT.export,
+#popup_table TEXTAREA.export {
+	flex: 1 1 10px;
+	min-width: 5em;
 }
 
 
