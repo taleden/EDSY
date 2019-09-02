@@ -10,13 +10,13 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 */
 'use strict';
 var eddb = {
-	version : 34292,
-	edsy_versions_db : [34292,34292,34292,34292], /* HTML,CSS,DB,JS */
+	version : 34293,
+	edsy_versions_db : [34293,34293,34293,34293], /* HTML,CSS,DB,JS */
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder',
 			id:1, stype:'mp', name:'Sidewinder', class:1, cost:5070, retail:32000,
-			topspd:220, bstspd:320, mnv:5, shields:40, armour:60, mass:25,
+			topspd:220, bstspd:320, mnv:5, shields:40, armour:60, mass:25, fwdacc:44.39, revacc:29.96, latacc:29.96,
 			minthrust:45.454, boostcost:7, pitch:42, yaw:16, roll:110, pitchacc:220, yawacc:110, rollacc:240, minpitch:34,
 			heatcap:140, heatdismin:1.18, heatdismax:18.15, fuelcost:50, fuelreserve:0.30, hardness:20, masslock:6, crew:1,
 			slots:{
@@ -44,7 +44,7 @@ var eddb = {
 		21 : {
 			fdid:128049255, fdname:'Eagle',
 			id:21, stype:'co', name:'Eagle', class:1, cost:7490, retail:44800,
-			topspd:240, bstspd:350, mnv:7, shields:60, armour:40, mass:50,
+			topspd:240, bstspd:350, mnv:7, shields:60, armour:40, mass:50, fwdacc:43.97, revacc:29.97, latacc:29.86,
 			minthrust:75.0, boostcost:8, pitch:50, yaw:18, roll:120, pitchacc:220, yawacc:110, rollacc:240, minpitch:40,
 			heatcap:165, heatdismin:1.38, heatdismax:21.48, fuelcost:50, fuelreserve:0.34, hardness:28, masslock:6, crew:1,
 			slots:{
@@ -72,7 +72,7 @@ var eddb = {
 		31 : {
 			fdid:128049261, fdname:'Hauler',
 			id:31, stype:'fr', name:'Hauler', class:1, cost:8160, retail:52720,
-			topspd:200, bstspd:300, mnv:4, shields:50, armour:100, mass:14,
+			topspd:200, bstspd:300, mnv:4, shields:50, armour:100, mass:14, fwdacc:39.87, revacc:29.95, latacc:29.95,
 			minthrust:35.0, boostcost:7, pitch:36, yaw:14, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:30,
 			heatcap:123, heatdismin:1.06, heatdismax:16.20, fuelcost:50, fuelreserve:0.25, hardness:20, masslock:6, crew:1,
 			slots:{
@@ -100,7 +100,7 @@ var eddb = {
 		41 : {
 			fdid:128049267, fdname:'Adder',
 			id:41, stype:'ex', name:'Adder', class:1, cost:18710, retail:87810,
-			topspd:220, bstspd:320, mnv:4, shields:60, armour:90, mass:35,
+			topspd:220, bstspd:320, mnv:4, shields:60, armour:90, mass:35, fwdacc:39.41, revacc:27.73, latacc:27.86,
 			minthrust:45.454, boostcost:8, pitch:38, yaw:14, roll:100, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
 			heatcap:170, heatdismin:1.45, heatdismax:22.60, fuelcost:50, fuelreserve:0.36, hardness:35, masslock:7, crew:2,
 			slots:{
@@ -128,7 +128,7 @@ var eddb = {
 		25 : {
 			fdid:128672138, fdname:'Empire_Eagle',
 			id:25, stype:'co', name:'Imperial Eagle', class:1, cost:50890, retail:110830,
-			topspd:300, bstspd:400, mnv:5, shields:80, armour:60, mass:50,
+			topspd:300, bstspd:400, mnv:5, shields:80, armour:60, mass:50, fwdacc:34.54, revacc:27.84, latacc:27.84,
 			minthrust:70.0, boostcost:8, pitch:40, yaw:15, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:30,
 			heatcap:163, heatdismin:1.50, heatdismax:21.20, fuelcost:50, fuelreserve:0.37, hardness:28, masslock:6, crew:1, // verify masslock
 			slots:{
@@ -156,7 +156,7 @@ var eddb = {
 		22 : {
 			fdid:128049273, fdname:'Viper',
 			id:22, stype:'co', name:'Viper Mk III', class:1, cost:74610, retail:142930,
-			topspd:320, bstspd:400, mnv:4, shields:105, armour:70, mass:50,
+			topspd:320, bstspd:400, mnv:4, shields:105, armour:70, mass:50, fwdacc:53.98, revacc:29.70, latacc:24.95,
 			minthrust:62.5, boostcost:10, pitch:35, yaw:15, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
 			heatcap:195, heatdismin:1.69, heatdismax:26.20, fuelcost:50, fuelreserve:0.41, hardness:35, masslock:7, crew:1,
 			slots:{
@@ -184,7 +184,7 @@ var eddb = {
 		 2 : {
 			fdid:128049279, fdname:'CobraMkIII',
 			id:2, stype:'mp', name:'Cobra Mk III', class:1, cost:186260, retail:349720,
-			topspd:280, bstspd:400, mnv:5, shields:80, armour:120, mass:180,
+			topspd:280, bstspd:400, mnv:5, shields:80, armour:120, mass:180, fwdacc:35.03, revacc:25.16, latacc:20.02,
 			minthrust:50.0, boostcost:10, pitch:40, yaw:10, roll:100, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
 			heatcap:225, heatdismin:1.92, heatdismax:30.63, fuelcost:50, fuelreserve:0.49, hardness:35, masslock:8, crew:2,
 			slots:{
@@ -212,7 +212,7 @@ var eddb = {
 		28 : {
 			fdid:128672255, fdname:'Viper_MkIV',
 			id:28, stype:'co', name:'Viper Mk IV', class:1, cost:290680, retail:437930,
-			topspd:270, bstspd:340, mnv:3, shields:150, armour:150, mass:190,
+			topspd:270, bstspd:340, mnv:3, shields:150, armour:150, mass:190, fwdacc:53.84, revacc:30.14, latacc:24.97,
 			minthrust:64.815, boostcost:10, pitch:30, yaw:12, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:25,
 			heatcap:209, heatdismin:1.82, heatdismax:28.98, fuelcost:50, fuelreserve:0.46, hardness:35, masslock:7, crew:1, // verify masslock
 			slots:{
@@ -240,7 +240,7 @@ var eddb = {
 		43 : {
 			fdid:128671217, fdname:'DiamondBack',
 			id:43, stype:'ex', name:'Diamondback Scout', class:1, cost:441800, retail:564330,
-			topspd:280, bstspd:380, mnv:5, shields:120, armour:120, mass:170,
+			topspd:280, bstspd:380, mnv:5, shields:120, armour:120, mass:170, fwdacc:39.57, revacc:29.82, latacc:25.19,
 			minthrust:60.714, boostcost:10, pitch:42, yaw:15, roll:100, pitchacc:200, yawacc:100, rollacc:220, minpitch:35,
 			heatcap:346, heatdismin:2.42, heatdismax:48.05, fuelcost:50, fuelreserve:0.49, hardness:40, masslock:8, crew:1,
 			slots:{
@@ -268,7 +268,7 @@ var eddb = {
 		 8 : {
 			fdid:128672262, fdname:'CobraMkIV',
 			id:8, stype:'mp', name:'Cobra Mk IV', class:1, cost:584200, retail:764720,
-			topspd:200, bstspd:300, mnv:3, shields:120, armour:120, mass:210,
+			topspd:200, bstspd:300, mnv:3, shields:120, armour:120, mass:210, fwdacc:27.84, revacc:19.91, latacc:15.03,
 			minthrust:50.0, boostcost:10, pitch:30, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:25,
 			heatcap:228, heatdismin:1.99, heatdismax:31.68, fuelcost:50, fuelreserve:0.51, hardness:35, masslock:8, crew:2,
 			slots:{
@@ -296,7 +296,7 @@ var eddb = {
 		32 : {
 			fdid:128049285, fdname:'Type6',
 			id:32, stype:'fr', name:'Type-6 Transporter', class:2, cost:858010, retail:1045950,
-			topspd:220, bstspd:350, mnv:3, shields:90, armour:180, mass:155,
+			topspd:220, bstspd:350, mnv:3, shields:90, armour:180, mass:155, fwdacc:20.10, revacc:14.96, latacc:15.07,
 			minthrust:40.909, boostcost:10, pitch:30, yaw:17, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:23,
 			heatcap:179, heatdismin:1.70, heatdismax:24.55, fuelcost:50, fuelreserve:0.39, hardness:35, masslock:8, crew:1,
 			slots:{
@@ -324,7 +324,7 @@ var eddb = {
 		53 : {
 			fdid:128049291, fdname:'Dolphin',
 			id:53, stype:'pa', name:'Dolphin', class:1, cost:1095780, retail:1337320,
-			topspd:250, bstspd:350, mnv:3, shields:110, armour:110, mass:140,
+			topspd:250, bstspd:350, mnv:3, shields:110, armour:110, mass:140, fwdacc:39.63, revacc:30.01, latacc:14.97,
 			minthrust:48.0, boostcost:10, pitch:30, yaw:20, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:23,
 			heatcap:165, heatdismin:1.91, heatdismax:31.35, fuelcost:50, fuelreserve:0.50, hardness:35, masslock:9, crew:1, // verify masslock
 			slots:{
@@ -355,7 +355,7 @@ var eddb = {
 		44 : {
 			fdid:128671831, fdname:'DiamondBackXL',
 			id:44, stype:'ex', name:'Diamondback Explorer', class:1, cost:1616160, retail:1894760,
-			topspd:260, bstspd:340, mnv:4, shields:150, armour:150, mass:260,
+			topspd:260, bstspd:340, mnv:4, shields:150, armour:150, mass:260, fwdacc:34.63, revacc:25.06, latacc:19.89,
 			minthrust:61.538, boostcost:13, pitch:35, yaw:13, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:28,
 			heatcap:351, heatdismin:2.46, heatdismax:50.55, fuelcost:50, fuelreserve:0.52, hardness:42, masslock:10, crew:1,
 			slots:{
@@ -384,7 +384,7 @@ var eddb = {
 			fdid:128671223, fdname:'Empire_Courier',
 			id:7, stype:'mp', name:'Imperial Courier', class:1, cost:2462010, retail:2542930,
 			faction:'Empire', rank:3,
-			topspd:280, bstspd:380, mnv:4, shields:200, armour:80, mass:35,
+			topspd:280, bstspd:380, mnv:4, shields:200, armour:80, mass:35, fwdacc:57.53, revacc:30.02, latacc:24.88,
 			minthrust:78.571, boostcost:10, pitch:38, yaw:16, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:32,
 			heatcap:230, heatdismin:1.62, heatdismax:25.05, fuelcost:50, fuelreserve:0.41, hardness:30, masslock:7, crew:1,
 			slots:{
@@ -412,7 +412,7 @@ var eddb = {
 		35 : {
 			fdid:128672269, fdname:'Independant_Trader',
 			id:35, stype:'fr', name:'Keelback', class:2, cost:2937840, retail:3126150,
-			topspd:200, bstspd:300, mnv:2, shields:135, armour:270, mass:180,
+			topspd:200, bstspd:300, mnv:2, shields:135, armour:270, mass:180, fwdacc:20.22, revacc:15.07, latacc:15.03,
 			minthrust:45.0, boostcost:10, pitch:27, yaw:15, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:20,
 			heatcap:215, heatdismin:1.87, heatdismax:29.78, fuelcost:50, fuelreserve:0.39, hardness:45, masslock:8, crew:2, // verify masslock
 			slots:{
@@ -440,7 +440,7 @@ var eddb = {
 		45 : {
 			fdid:128672276, fdname:'Asp_Scout',
 			id:45, stype:'ex', name:'Asp Scout', class:2, cost:3811220, retail:3961160,
-			topspd:220, bstspd:300, mnv:5, shields:120, armour:180, mass:150,
+			topspd:220, bstspd:300, mnv:5, shields:120, armour:180, mass:150, fwdacc:35.02, revacc:20.10, latacc:20.03,
 			minthrust:50.0, boostcost:13, pitch:40, yaw:15, roll:110, pitchacc:200, yawacc:100, rollacc:220, minpitch:35,
 			heatcap:210, heatdismin:1.80, heatdismax:29.65, fuelcost:50, fuelreserve:0.47, hardness:52, masslock:8, crew:2, // verify masslock
 			slots:{
@@ -468,7 +468,7 @@ var eddb = {
 		23 : {
 			fdid:128049309, fdname:'Vulture',
 			id:23, stype:'co', name:'Vulture', class:1, cost:4670100, retail:4925620,
-			topspd:210, bstspd:340, mnv:5, shields:240, armour:160, mass:230,
+			topspd:210, bstspd:340, mnv:5, shields:240, armour:160, mass:230, fwdacc:39.55, revacc:29.88, latacc:19.98,
 			minthrust:90.476, boostcost:16, pitch:42, yaw:17, roll:110, pitchacc:180, yawacc:90, rollacc:200, minpitch:35,
 			heatcap:237, heatdismin:1.87, heatdismax:35.63, fuelcost:50, fuelreserve:0.57, hardness:55, masslock:10, crew:2,
 			slots:{
@@ -496,7 +496,7 @@ var eddb = {
 		42 : {
 			fdid:128049303, fdname:'Asp',
 			id:42, stype:'ex', name:'Asp Explorer', class:2, cost:6137180, retail:6661160,
-			topspd:250, bstspd:340, mnv:4, shields:140, armour:210, mass:280,
+			topspd:250, bstspd:340, mnv:4, shields:140, armour:210, mass:280, fwdacc:23.64, revacc:15.04, latacc:14.97,
 			minthrust:48.0, boostcost:13, pitch:38, yaw:10, roll:100, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
 			heatcap:272, heatdismin:2.34, heatdismax:39.90, fuelcost:50, fuelreserve:0.63, hardness:52, masslock:11, crew:2,
 			slots:{
@@ -525,7 +525,7 @@ var eddb = {
 			fdid:128049321, fdname:'Federation_Dropship',
 			id:4, stype:'co', name:'Federal Dropship', class:2, cost:13501480, retail:14314210,
 			faction:'Federation', rank:3,
-			topspd:180, bstspd:300, mnv:3, shields:200, armour:300, mass:580,
+			topspd:180, bstspd:300, mnv:3, shields:200, armour:300, mass:580, fwdacc:29.99, revacc:20.34, latacc:10.19,
 			minthrust:55.556, boostcost:19, pitch:30, yaw:14, roll:80, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
 			heatcap:331, heatdismin:2.60, heatdismax:46.50, fuelcost:50, fuelreserve:0.83, hardness:60, masslock:14, crew:2,
 			slots:{
@@ -553,7 +553,7 @@ var eddb = {
 		33 : {
 			fdid:128049297, fdname:'Type7',
 			id:33, stype:'fr', name:'Type-7 Transporter', class:3, cost:16774470, retail:17472250,
-			topspd:180, bstspd:300, mnv:1, shields:156, armour:340, mass:350,
+			topspd:180, bstspd:300, mnv:1, shields:156, armour:340, mass:350, fwdacc:20.11, revacc:15.02, latacc:15.13,
 			minthrust:33.333, boostcost:10, pitch:22, yaw:22, roll:60, pitchacc:200, yawacc:50, rollacc:200, minpitch:16, minyaw:16,
 			heatcap:226, heatdismin:2.17, heatdismax:32.45, fuelcost:50, fuelreserve:0.52, hardness:54, masslock:10, crew:1, // verify masslock
 			slots:{
@@ -581,7 +581,7 @@ var eddb = {
 		 9 : {
 			fdid:128816574, fdname:'TypeX',
 			id:9, stype:'co', name:'Alliance Chieftain', class:2, cost:18603850, retail:19382250,
-			topspd:230, bstspd:330, mnv:4, shields:200, armour:280, mass:400,
+			topspd:230, bstspd:330, mnv:4, shields:200, armour:280, mass:400, fwdacc:37.84, revacc:25.84, latacc:20.01,
 			minthrust:65.217, boostcost:19, pitch:38, yaw:16, roll:90, pitchacc:170, yawacc:60, rollacc:150, minpitch:32,
 			heatcap:289, heatdismin:2.60, heatdismax:46.50, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:13, crew:2,
 			slots:{
@@ -610,7 +610,7 @@ var eddb = {
 			fdid:128672145, fdname:'Federation_Dropship_MkII',
 			id:26, stype:'co', name:'Federal Assault Ship', class:2, cost:19102490, retail:19814210,
 			faction:'Federation', rank:5,
-			topspd:210, bstspd:350, mnv:4, shields:200, armour:300, mass:480,
+			topspd:210, bstspd:350, mnv:4, shields:200, armour:300, mass:480, fwdacc:39.81, revacc:20.04, latacc:15.07,
 			minthrust:71.429, boostcost:19, pitch:38, yaw:19, roll:90, pitchacc:170, yawacc:80, rollacc:200, minpitch:30,
 			heatcap:286, heatdismin:2.53, heatdismax:45.23, fuelcost:50, fuelreserve:0.72, hardness:60, masslock:14, crew:2, // verify masslock
 			slots:{
@@ -639,7 +639,7 @@ var eddb = {
 			fdid:128049315, fdname:'Empire_Trader',
 			id:3, stype:'mp', name:'Imperial Clipper', class:3, cost:21108270, retail:22295860,
 			faction:'Empire', rank:7,
-			topspd:300, bstspd:380, mnv:5, shields:180, armour:270, mass:400,
+			topspd:300, bstspd:380, mnv:5, shields:180, armour:270, mass:400, fwdacc:24.74, revacc:20.05, latacc:10.10,
 			minthrust:60.0, boostcost:19, pitch:40, yaw:18, roll:80, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
 			heatcap:304, heatdismin:2.63, heatdismax:46.80, fuelcost:50, fuelreserve:0.74, hardness:60, masslock:12, crew:2,
 			slots:{
@@ -667,7 +667,7 @@ var eddb = {
 		10 : {
 			fdid:128816581, fdname:'TypeX_2',
 			id:10, stype:'co', name:'Alliance Crusader', class:2, cost:22087940, retail:22866340,
-			topspd:180, bstspd:300, mnv:3, shields:200, armour:300, mass:500,
+			topspd:180, bstspd:300, mnv:3, shields:200, armour:300, mass:500, fwdacc:29.78, revacc:24.78, latacc:18.96,
 			minthrust:61.11, boostcost:19, pitch:32, yaw:16, roll:80, pitchacc:150, yawacc:50, rollacc:150, minpitch:30, // verify minthrust
 			heatcap:316, heatdismin:2.53, heatdismax:45.23, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:13, crew:3, // verify hardness,masslock
 			slots:{ // verify
@@ -695,7 +695,7 @@ var eddb = {
 		13 : {
 			fdid:128816588, fdname:'TypeX_3',
 			id:13, stype:'co', name:'Alliance Challenger', class:2, cost:29561170, retail:30472250,
-			topspd:200, bstspd:310, mnv:4, shields:220, armour:300, mass:450,
+			topspd:200, bstspd:310, mnv:4, shields:220, armour:300, mass:450, fwdacc:31.65, revacc:25.94, latacc:20.09,
 			minthrust:65.00, boostcost:19, pitch:35, yaw:16, roll:90, pitchacc:120, yawacc:50, rollacc:120, minpitch:32, // verify minthrust
 			heatcap:316, heatdismin:2.87, heatdismax:51.40, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:13, crew:2, // verify hardness,masslock
 			slots:{ // verify
@@ -724,7 +724,7 @@ var eddb = {
 			fdid:128672152, fdname:'Federation_Gunship',
 			id:27, stype:'co', name:'Federal Gunship', class:2, cost:34806280, retail:35814210,
 			faction:'Federation', rank:7,
-			topspd:170, bstspd:280, mnv:1, shields:250, armour:350, mass:580,
+			topspd:170, bstspd:280, mnv:1, shields:250, armour:350, mass:580, fwdacc:24.61, revacc:17.83, latacc:10.08,
 			minthrust:58.824, boostcost:23, pitch:25, yaw:18, roll:80, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
 			heatcap:325, heatdismin:2.87, heatdismax:51.40, fuelcost:50, fuelreserve:0.82, hardness:60, masslock:14, crew:2, // verify masslock
 			slots:{
@@ -752,7 +752,7 @@ var eddb = {
 		11 : {
 			fdid:128839281, fdname:'Krait_Light',
 			id:11, stype:'mp', name:'Krait Phantom', class:2, cost:35732880, retail:37472250,
-			topspd:250, bstspd:350, mnv:3, shields:200, armour:180, mass:270,
+			topspd:250, bstspd:350, mnv:3, shields:200, armour:180, mass:270, fwdacc:NaN, revacc:NaN, latacc:NaN,
 			minthrust:64.00, boostcost:13, pitch:31, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:200, minpitch:26, // verify minthrust
 			heatcap:300, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.63, hardness:60, masslock:16, crew:2, // verify hardness,masslock
 			slots:{ // verify
@@ -780,7 +780,7 @@ var eddb = {
 		14 : {
 			fdid:128816567, fdname:'Krait_MkII',
 			id:14, stype:'mp', name:'Krait Mk II', class:2, cost:44152080, retail:45814210,
-			topspd:240, bstspd:330, mnv:3, shields:220, armour:220, mass:320,
+			topspd:240, bstspd:330, mnv:3, shields:220, armour:220, mass:320, fwdacc:28.01, revacc:18.04, latacc:15.12,
 			minthrust:62.50, boostcost:13, pitch:31, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:200, minpitch:26, // verify minthrust
 			heatcap:300, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.63, hardness:55, masslock:16, crew:3, // verify hardness,masslock
 			slots:{ // verify
@@ -808,7 +808,7 @@ var eddb = {
 		51 : {
 			fdid:128049327, fdname:'Orca',
 			id:51, stype:'pa', name:'Orca', class:3, cost:47792090, retail:48539890,
-			topspd:300, bstspd:380, mnv:1, shields:220, armour:220, mass:290,
+			topspd:300, bstspd:380, mnv:1, shields:220, armour:220, mass:290, fwdacc:29.66, revacc:25.08, latacc:19.95,
 			minthrust:66.667, boostcost:16, pitch:25, yaw:18, roll:55, pitchacc:220, yawacc:110, rollacc:240, minpitch:20,
 			heatcap:262, heatdismin:2.30, heatdismax:42.68, fuelcost:50, fuelreserve:0.79, hardness:55, masslock:15, crew:2,
 			slots:{
@@ -839,7 +839,7 @@ var eddb = {
 		24 : {
 			fdid:128049351, fdname:'FerDeLance',
 			id:24, stype:'co', name:'Fer-de-Lance', class:2, cost:51126980, retail:51567040,
-			topspd:260, bstspd:350, mnv:4, shields:300, armour:225, mass:250,
+			topspd:260, bstspd:350, mnv:4, shields:300, armour:225, mass:250, fwdacc:29.31, revacc:24.34, latacc:20.04,
 			minthrust:84.615, boostcost:19, pitch:38, yaw:12, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
 			heatcap:224, heatdismin:2.05, heatdismax:41.63, fuelcost:50, fuelreserve:0.67, hardness:70, masslock:12, crew:2,
 			slots:{
@@ -867,7 +867,7 @@ var eddb = {
 		12 : {
 			fdid:128915979, fdname:'Mamba',
 			id:12, stype:'co', name:'Mamba', class:2, cost:55434290, retail:55867040,
-			topspd:310, bstspd:380, mnv:3, shields:270, armour:230, mass:250,
+			topspd:310, bstspd:380, mnv:3, shields:270, armour:230, mass:250, fwdacc:NaN, revacc:NaN, latacc:NaN,
 			minthrust:77.42, boostcost:17, pitch:30, yaw:10, roll:75, pitchacc:180, yawacc:90, rollacc:200, minpitch:27, // verify minthrust
 			heatcap:165, heatdismin:2.05, heatdismax:41.63, fuelcost:50, fuelreserve:0.50, hardness:70, masslock:12, crew:2, // verify masslock
 			slots:{ // verify
@@ -895,7 +895,7 @@ var eddb = {
 		 5 : {
 			fdid:128049339, fdname:'Python',
 			id:5, stype:'mp', name:'Python', class:2, cost:55316050, retail:56978180,
-			topspd:230, bstspd:300, mnv:2, shields:260, armour:260, mass:350,
+			topspd:230, bstspd:300, mnv:2, shields:260, armour:260, mass:350, fwdacc:29.59, revacc:18.02, latacc:15.92,
 			minthrust:60.870, boostcost:23, pitch:29, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:24,
 			heatcap:300, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.83, hardness:65, masslock:17, crew:2,
 			slots:{
@@ -923,7 +923,7 @@ var eddb = {
 		34 : {
 			fdid:128049333, fdname:'Type9',
 			id:34, stype:'fr', name:'Type-9 Heavy', class:3, cost:72108220, retail:76555840,
-			topspd:130, bstspd:200, mnv:0, shields:240, armour:480, mass:850,
+			topspd:130, bstspd:200, mnv:0, shields:240, armour:480, mass:850, fwdacc:20.03, revacc:10.11, latacc:10.03,
 			minthrust:30.769, boostcost:19, pitch:20, yaw:8, roll:20, pitchacc:100, yawacc:50, rollacc:80, minpitch:15,
 			heatcap:289, heatdismin:3.10, heatdismax:48.35, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:16, crew:3,
 			slots:{
@@ -951,7 +951,7 @@ var eddb = {
 		52 : {
 			fdid:128049345, fdname:'BelugaLiner',
 			id:52, stype:'pa', name:'Beluga Liner', class:3, cost:79686090, retail:84532760,
-			topspd:200, bstspd:280, mnv:2, shields:280, armour:280, mass:950,
+			topspd:200, bstspd:280, mnv:2, shields:280, armour:280, mass:950, fwdacc:20.01, revacc:17.12, latacc:15.03,
 			minthrust:55.0, boostcost:19, pitch:25, yaw:17, roll:60, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
 			heatcap:283, heatdismin:2.60, heatdismax:50.85, fuelcost:50, fuelreserve:0.81, hardness:60, masslock:18, crew:3, // verify masslock
 			slots:{
@@ -982,7 +982,7 @@ var eddb = {
 		36 : {
 			fdid:128785619, fdname:'Type9_Military',
 			id:36, stype:'fr', name:'Type-10 Defender', class:3, cost:121486140, retail:124755340,
-			topspd:180, bstspd:220, mnv:0, shields:320, armour:580, mass:1200,
+			topspd:180, bstspd:220, mnv:0, shields:320, armour:580, mass:1200, fwdacc:17.96, revacc:10.04, latacc:10.09,
 			minthrust:83.333, boostcost:19, pitch:22, yaw:8, roll:40, pitchacc:100, yawacc:35, rollacc:80, minpitch:18,
 			heatcap:335, heatdismin:3.16, heatdismax:67.15, fuelcost:50, fuelreserve:0.77, hardness:75, masslock:26, crew:3, // verify masslock
 			slots:{
@@ -997,7 +997,7 @@ var eddb = {
 				utility  :[0,0,0,0,0,0,0,0],
 				component:[40131,41650,42750,43650,44550,45650,46450,47630],
 				military :[0,0],
-				internal :[750,650,30650,450,350,0,250,0,0,3152], // verify positions
+				internal :[750,650,30650,450,350,0,250,0,0,3152],
 			},
 			module:{
 				40131 : { cost:        0, mass:  0.00, fdid:128785621, fdname:'Type9_Military_Armour_Grade1' }, // Lightweight Alloy
@@ -1010,7 +1010,7 @@ var eddb = {
 		 6 : {
 			fdid:128049363, fdname:'Anaconda',
 			id:6, stype:'sh', name:'Anaconda', class:3, cost:142447820, retail:146969450,
-			topspd:180, bstspd:240, mnv:1, shields:350, armour:525, mass:400,
+			topspd:180, bstspd:240, mnv:1, shields:350, armour:525, mass:400, fwdacc:19.85, revacc:10.03, latacc:10.05,
 			minthrust:44.444, boostcost:27, pitch:25, yaw:10, roll:60, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
 			heatcap:334, heatdismin:3.16, heatdismax:67.15, fuelcost:50, fuelreserve:1.07, hardness:65, masslock:23, crew:3,
 			slots:{
@@ -1039,7 +1039,7 @@ var eddb = {
 			fdid:128049369, fdname:'Federation_Corvette',
 			id:61, stype:'sh', name:'Federal Corvette', class:3, cost:183147460, retail:187969450,
 			faction:'Federation', rank:12,
-			topspd:200, bstspd:260, mnv:2, shields:555, armour:370, mass:900,
+			topspd:200, bstspd:260, mnv:2, shields:555, armour:370, mass:900, fwdacc:19.87, revacc:10.08, latacc:9.98,
 			minthrust:50.0, boostcost:27, pitch:28, yaw:8, roll:75, pitchacc:100, yawacc:50, rollacc:80, minpitch:22,
 			heatcap:333, heatdismin:3.28, heatdismax:70.33, fuelcost:50, fuelreserve:1.13, hardness:70, masslock:24, crew:3, // verify hardness, masslock
 			slots:{
@@ -1068,7 +1068,7 @@ var eddb = {
 			fdid:128049375, fdname:'Cutter',
 			id:62, stype:'sh', name:'Imperial Cutter', class:3, cost:200484780, retail:208969450,
 			faction:'Empire', rank:12,
-			topspd:200, bstspd:320, mnv:0, shields:600, armour:400, mass:1100,
+			topspd:200, bstspd:320, mnv:0, shields:600, armour:400, mass:1100, fwdacc:29.37, revacc:10.04, latacc:6.06,
 			minthrust:80.0, boostcost:23, pitch:18, yaw:8, roll:45, pitchacc:100, yawacc:50, rollacc:80, minpitch:14,
 			heatcap:327, heatdismin:3.27, heatdismax:72.58, fuelcost:50, fuelreserve:1.16, hardness:70, masslock:27, crew:3, // verify hardness, masslock
 			slots:{
@@ -1137,10 +1137,10 @@ var eddb = {
 	//	{ attr:'stype' },
 	//	{ attr:'mtype' },
 	//	{ attr:'name' },
-		{ attr:'cost',                                                     name:'Cost',                 unit:'Cr',   bad:1, min:0,          step:1, default:0, scale:0,             desc:'Purchase cost (in credits)' }, // *
+		{ attr:'cost',       hidden:1,                                     name:'Cost',                 unit:'Cr',   bad:1, min:0,          step:1, default:0, scale:0,             desc:'Purchase cost (in credits)' }, // *
 	//	{ attr:'retail',                                                   name:'Retail Price',         unit:'Cr',   bad:1, min:0,          step:1, default:0, scale:0,             desc:'Total purchase cost (in credits) including the default loadout' }, // ship
-		{ attr:'faction',                                     abbr:'Fac',  name:'Faction',        values:['','Alliance','Empire','Federation'],     default:'',                     desc:'Faction membership required to purchase' }, // ship
-		{ attr:'rank',                                        abbr:'Rank', name:'Faction Rank',                      bad:1, min:0,          step:1, default:0, scale:0,             desc:'Faction rank level required to purchase' }, // ship
+		{ attr:'faction',    hidden:1,                        abbr:'Fac',  name:'Faction',        values:['','Alliance','Empire','Federation'],     default:'',                     desc:'Faction membership required to purchase' }, // ship
+		{ attr:'rank',       hidden:1,                        abbr:'Rank', name:'Faction Rank',                      bad:1, min:0,          step:1, default:0, scale:0,             desc:'Faction rank level required to purchase' }, // ship
 		{ attr:'crew',                                        abbr:'Crew', name:'Crew Seats',                               min:1,          step:1, default:1, scale:0,             desc:'Number of seats for multi-crew' }, // ship
 	//	{ attr:'class',      fdattr:'Size',                   abbr:'Cls',  name:'Class',                                    min:0, max:  8, step:1, default:0, scale:0,             desc:'Size class (0-8)' }, // *
 	//	{ attr:'rating',     fdattr:'Class',                  abbr:'Rtg',  name:'Rating',         values:['','A','B','C','D','E','F','G','H','I'],  default:'',                     desc:'Performance rating (A-I)' },  // *
@@ -1503,176 +1503,103 @@ var eddb = {
 		iss_wa : { name:'Wide Angle', maxgrade:5, mass:[20,40,60,80,100], pwrdraw:[10,20,30,40,50], scanangmod:[40,80,120,160,200], fdname:'Sensor_WideAngle' },
 		iss_er : { name:'Expanded Radius', maxgrade:5, pwrdraw:[10,20,30,40,50], mass:[20,40,60,80,100], proberad:[10,20,30,40,50], fdname:'Sensor_Expanded' },
 	}, // eddb.blueprint{}
-	fdexpeffect : {
-		special_armour_chunky : 'cbhx_dp',
-		special_armour_explosive : 'cbhx_lp',
-		special_armour_kinetic : 'cbhx_ap',
-		special_armour_thermic : 'cbhx_rp',
-		special_auto_loader : 'wpnx_aulo',
-		special_blinding_shell : 'wpnx_dash',
-		special_choke_canister : 'wpnx_iodi',
-		special_concordant_sequence : 'wpnx_cose',
-		special_corrosive_shell : 'wpnx_cosh',
-		special_deep_cut_payload : 'wpnx_pepa',
-		special_dispersal_field : 'wpnx_difi',
-		special_distortion_field : 'wpnx_inim',
-		special_drag_munitions : 'wpnx_drmu',
-		special_emissive_munitions : 'wpnx_emmu',
-		special_engine_cooled : 'ctx_ts',
-		special_engine_haulage : 'ctx_ddi',
-		special_engine_lightweight : 'miscx_sd',
-		special_engine_overloaded : 'ctx_ddr',
-		special_engine_toughened : 'miscx_db',
-		special_feedback_cascade : 'wpnx_feca', // unused? legacy?
-		special_feedback_cascade_cooled : 'wpnx_feca',
-		special_force_shell : 'wpnx_fosh',
-		special_fsd_cooled : 'cfsdx_ts',
-		special_fsd_fuelcapacity : 'cfsdx_dc',
-		special_fsd_heavy : 'cfsdx_mm',
-		special_fsd_interrupt : 'wpnx_fsin',
-		special_fsd_lightweight : 'miscx_sd',
-		special_fsd_toughened : 'cfsdx_db',
-		special_high_yield_shell : 'wpnx_hys',
-		special_hullreinforcement_chunky : 'ihrpx_dp',
-		special_hullreinforcement_explosive : 'ihrpx_lp',
-		special_hullreinforcement_kinetic : 'ihrpx_ap',
-		special_hullreinforcement_thermic : 'ihrpx_rp',
-		special_incendiary_rounds : 'wpnx_inro',
-		special_lock_breaker : 'wpnx_tlb',
-		special_mass_lock : 'wpnx_mlm',
-		special_overload_munitions : 'wpnx_ovmu',
-		special_penetrator_munitions : 'wpnx_pemu',
-		special_phasing_sequence : 'wpnx_phse',
-		special_plasma_slug : 'wpnx_plsl',
-		special_plasma_slug_cooled : 'hrgx_plsl',
-		special_powerdistributor_capacity : 'cpdx_cc',
-		special_powerdistributor_efficient : 'miscx_fc',
-		special_powerdistributor_fast : 'cpdx_sc',
-		special_powerdistributor_lightweight : 'miscx_sd',
-		special_powerdistributor_toughened : 'miscx_db',
-		special_powerplant_cooled : 'cppx_ts',
-		special_powerplant_highcharge : 'cppx_mon',
-		special_powerplant_lightweight : 'miscx_sd',
-		special_powerplant_toughened : 'miscx_db',
-		special_radiant_canister : 'wpnx_raca',
-		special_regeneration_sequence : 'wpnx_rese',
-		special_reverberating_cascade : 'wpnx_reca',
-		special_scramble_spectrum : 'wpnx_scsp',
-		special_screening_shell : 'wpnx_scsh',
-		special_shield_efficient : 'isgx_ld',
-		special_shield_health : 'isgx_hc',
-		special_shield_kinetic : 'isgx_fb',
-		special_shield_lightweight : 'miscx_sd',
-		special_shield_regenerative : 'isgx_fc',
-		special_shield_resistive : 'isgx_mw',
-		special_shield_thermic : 'isgx_tb',
-		special_shield_toughened : 'miscx_db',
-		special_shieldbooster_chunky : 'usbx_sc',
-		special_shieldbooster_efficient : 'miscx_fc',
-		special_shieldbooster_explosive : 'usbx_bb',
-		special_shieldbooster_kinetic : 'usbx_fb',
-		special_shieldbooster_thermic : 'usbx_tb',
-		special_shieldbooster_toughened : 'miscx_db',
-		special_shieldcell_efficient : 'miscx_fc',
-		special_shieldcell_gradual : 'iscbx_rc',
-		special_shieldcell_lightweight : 'miscx_sd',
-		special_shieldcell_oversized : 'iscbx_bc',
-		special_shieldcell_toughened : 'miscx_db',
-		special_shiftlock_canister : 'wpnx_slc',
-		special_smart_rounds : 'wpnx_smro',
-		special_super_penetrator : 'wpnx_supe', // unused? legacy?
-		special_super_penetrator_cooled : 'wpnx_supe',
-		special_thermal_cascade : 'wpnx_thca',
-		special_thermal_conduit : 'wpnx_thco',
-		special_thermal_vent : 'wpnx_thve',
-		special_thermalshock : 'wpnx_thsh',
-		special_weapon_damage : 'wpnx_os',
-		special_weapon_efficient : 'miscx_fc',
-		special_weapon_lightweight : 'miscx_sd',
-		special_weapon_rateoffire : 'wpnx_muse',
-		special_weapon_toughened : 'miscx_db',
-	}, // eddb.fdexpeffect{}
 	expeffect : {
-		miscx_fc : { name:'Flow Control', pwrdraw:-10 },
-		miscx_db : { name:'Double Braced', integ:15 },
-		miscx_sd : { name:'Stripped Down', mass:-10 },
+		wpnx_aulo : { name:'Auto Loader', special:'Auto reload while firing', fdname:'special_auto_loader' },
+		wpnx_cose : { name:'Concordant Sequence', thmload:50, special:'Wing shield regen increased', fdname:'special_concordant_sequence' },
+		wpnx_cosh : { name:'Corrosive Shell', ammomax:-20, special:'Target armor hardness reduced', fdname:'special_corrosive_shell' },
+		wpnx_dash : { name:'Dazzle Shell', special:'Target sensor acuity reduced', fdname:'special_blinding_shell' },
+		wpnx_difi : { name:'Dispersal Field', special:'Target gimbal/turret tracking reduced', fdname:'special_dispersal_field' },
+		wpnx_db : { name:'Double Braced', integ:15, fdname:'special_weapon_toughened' },
+		wpnx_drmu : { name:'Drag Munitions', special:'Target speed reduced', fdname:'special_drag_munitions' },
+		wpnx_emmu : { name:'Emissive Munitions', thmload:100, special:'Target signature increased', fdname:'special_emissive_munitions' },
+	//	wpnx_feca : { name:'Feedback Cascade', damage:-20, special:'Target shield cell disrupted', fdname:'special_feedback_cascade' },
+		hrgx_feca : { name:'Feedback Cascade', damage:-20, thmload:-40, special:'Target shield cell disrupted', fdname:'special_feedback_cascade_cooled' },
+		wpnx_fc : { name:'Flow Control', pwrdraw:-10, fdname:'special_weapon_efficient' },
+		wpnx_fosh : { name:'Force Shell', shotspd:-16.66666666666667, special:'Target pushed off course', fdname:'special_force_shell' },
+		wpnx_fsin : { name:'FSD Interrupt', damage:-30, bstint:50, special:'Target FSD reboots', fdname:'special_fsd_interrupt' },
+		wpnx_hys : { name:'High Yield Shell', damage:-35, bstint:11.11111111111111, kinwgt:50, expwgt:50, special:'Target module damage', fdname:'special_high_yield_shell' }, // verify bstint
+		wpnx_inro : { name:'Incendiary Rounds', bstint:5.263157894736842, thmload:200, kinwgt:10, thmwgt:90, fdname:'special_incendiary_rounds' },
+		wpnx_inim : { name:'Inertial Impact', damage:50, kinwgt:50, thmwgt:50, jitter:3, fdname:'special_distortion_field' },
+		wpnx_iodi : { name:'Ion Disruption', special:'Target thrusters reboot', fdname:'special_choke_canister' },
+		wpnx_mlm : { name:'Mass Lock Munition', special:'Target FSD inhibited', fdname:'special_mass_lock' },
+		wpnx_muse : { name:'Multi-Servos', pwrdraw:5, bstint:-2.912621359223300, fdname:'special_weapon_rateoffire' },
+		wpnx_ovmu : { name:'Overload Munitions', thmwgt:50, expwgt:50, fdname:'special_overload_munitions' },
+		wpnx_os : { name:'Oversized', pwrdraw:5, damage:3, fdname:'special_weapon_damage' },
+		wpnx_pemu : { name:'Penetrator Munitions', special:'Target module damage', fdname:'special_penetrator_munitions' },
+		wpnx_pepa : { name:'Penetrator Payload', special:'Target module damage', fdname:'special_deep_cut_payload' },
+		wpnx_phse : { name:'Phasing Sequence', damage:-10, special:'Damage slightly bypasses shields', fdname:'special_phasing_sequence' }, // TODO: get exact mechanics
+		wpnx_plsl : { name:'Plasma Slug', damage:-10, ammomax:-100, special:'Reload from ship fuel', fdname:'special_plasma_slug' },
+		hrgx_plsl : { name:'Plasma Slug', damage:-10, thmload:-40, ammomax:-100, special:'Reload from ship fuel', fdname:'special_plasma_slug_cooled' },
+		wpnx_raca : { name:'Radiant Canister', special:'Area heat increased and sensors disrupted', fdname:'special_radiant_canister' },
+		wpnx_rese : { name:'Regeneration Sequence', damage:-10, special:'Target wing shields regenerated', fdname:'special_regeneration_sequence' },
+		wpnx_reca : { name:'Reverberating Cascade', special:'Target shield generator damaged', fdname:'special_reverberating_cascade' },
+		wpnx_scsp : { name:'Scramble Spectrum', bstint:11.11111111111111, special:'Target modules malfunction', fdname:'special_scramble_spectrum' },
+		wpnx_scsh : { name:'Screening Shell', rldtime:-50, special:'Effective against munitions', fdname:'special_screening_shell' },
+		wpnx_slc : { name:'Shift-Lock Canister', special:'Area FSDs reboot', fdname:'special_shiftlock_canister' },
+		wpnx_smro : { name:'Smart Rounds', special:'No damage to untargeted ships', fdname:'special_smart_rounds' },
+		wpnx_sd : { name:'Stripped Down', mass:-10, fdname:'special_weapon_lightweight' },
+	//	wpnx_supe : { name:'Super Penetrator', rldtime:50, special:'Target module damage', fdname:'special_super_penetrator' },
+		hrgx_supe : { name:'Super Penetrator', thmload:-40, rldtime:50, special:'Target module damage', fdname:'special_super_penetrator_cooled' },
+		wpnx_tlb : { name:'Target Lock Breaker', special:'Target loses target lock', fdname:'special_lock_breaker' },
+		wpnx_thca : { name:'Thermal Cascade', special:'Shielded target heat increased', fdname:'special_thermal_cascade' },
+		wpnx_thco : { name:'Thermal Conduit', special:'Damage increases with heat level', fdname:'special_thermal_conduit' }, // TODO: model variable damage? min-max dps spread?
+		wpnx_thsh : { name:'Thermal Shock', damage:-10, special:'Target heat increased', fdname:'special_thermalshock' },
+		wpnx_thve : { name:'Thermal Vent', special:'Heat reduced when striking a target', fdname:'special_thermal_vent' }, // TODO: model heat dispersal? and test for distdraw effect
 		
-		wpnx_aulo : { name:'Auto Loader', special:'Auto reload while firing' },
-		wpnx_cose : { name:'Concordant Sequence', thmload:50, special:'Wing shield regen increased' },
-		wpnx_cosh : { name:'Corrosive Shell', ammomax:-20, special:'Target armor hardness reduced' },
-		wpnx_dash : { name:'Dazzle Shell', special:'Target sensor acuity reduced' },
-		wpnx_difi : { name:'Dispersal Field', special:'Target gimbal/turret tracking reduced' },
-		wpnx_drmu : { name:'Drag Munitions', special:'Target speed reduced' },
-		wpnx_emmu : { name:'Emissive Munitions', thmload:100, special:'Target signature increased' },
-		wpnx_feca : { name:'Feedback Cascade', damage:-20, thmload:-40, special:'Target shield cell disrupted' },
-		wpnx_fosh : { name:'Force Shell', shotspd:-16.66666666666667, special:'Target pushed off course' },
-		wpnx_fsin : { name:'FSD Interrupt', damage:-30, bstint:50, special:'Target FSD reboots' },
-		wpnx_hys : { name:'High Yield Shell', damage:-35, bstint:11.11111111111111, kinwgt:50, expwgt:50, special:'Damage partly explosive; target module damage' }, // verify bstint
-		wpnx_inro : { name:'Incendiary Rounds', bstint:5.263157894736842, thmload:200, kinwgt:10, thmwgt:90, special:'Damage mostly thermal' },
-		wpnx_inim : { name:'Inertial Impact', damage:50, kinwgt:50, thmwgt:50, jitter:3, special:'Damage half kinetic' },
-		wpnx_iodi : { name:'Ion Disruption', special:'Target thrusters reboot' },
-		wpnx_mlm : { name:'Mass Lock Munition', special:'Target FSD inhibited' },
-		wpnx_muse : { name:'Multi-Servos', pwrdraw:5, bstint:-2.912621359223300 },
-		wpnx_ovmu : { name:'Overload Munitions', thmwgt:50, expwgt:50, special:'Damage partly thermal' },
-		wpnx_os : { name:'Oversized', pwrdraw:5, damage:3 },
-		wpnx_pemu : { name:'Penetrator Munitions', special:'Target module damage' },
-		wpnx_pepa : { name:'Penetrator Payload', special:'Target module damage' },
-		wpnx_phse : { name:'Phasing Sequence', damage:-10, special:'Damage slightly bypasses shields' }, // TODO: get exact mechanics
-		wpnx_plsl : { name:'Plasma Slug', damage:-10, ammomax:-100, special:'Reload from ship fuel' },
-		hrgx_plsl : { name:'Plasma Slug', damage:-10, thmload:-40, ammomax:-100, special:'Reload from ship fuel' },
-		wpnx_raca : { name:'Radiant Canister', special:'Area heat increased and sensors disrupted' },
-		wpnx_rese : { name:'Regeneration Sequence', damage:-10, special:'Target wing shields regenerated' },
-		wpnx_reca : { name:'Reverberating Cascade', special:'Target shield generator damaged' },
-		wpnx_scsp : { name:'Scramble Spectrum', bstint:11.11111111111111, special:'Target modules malfunction' },
-		wpnx_scsh : { name:'Screening Shell', rldtime:-50, special:'Effective against munitions' },
-		wpnx_slc : { name:'Shift-Lock Canister', special:'Area FSDs reboot' },
-		wpnx_smro : { name:'Smart Rounds', special:'No damage to untargeted ships' },
-		wpnx_supe : { name:'Super Penetrator', thmload:-40, rldtime:50, special:'Target module damage' },
-		wpnx_tlb : { name:'Target Lock Breaker', special:'Target loses target lock' },
-		wpnx_thca : { name:'Thermal Cascade', special:'Shielded target heat increased' },
-		wpnx_thco : { name:'Thermal Conduit', special:'Damage increases with heat level' }, // TODO: model variable damage? min-max dps spread?
-		wpnx_thsh : { name:'Thermal Shock', damage:-10, special:'Target heat increased' },
-		wpnx_thve : { name:'Thermal Vent', special:'Heat reduced when striking a target' }, // TODO: model heat dispersal? and test for distdraw effect
+		usbx_bb : { name:'Blast Block', shieldbst:-1, expres:2, fdname:'special_shieldbooster_explosive' },
+		usbx_db : { name:'Double Braced', integ:15, fdname:'special_shieldbooster_toughened' },
+		usbx_fc : { name:'Flow Control', pwrdraw:-10, fdname:'special_shieldbooster_efficient' },
+		usbx_fb : { name:'Force Block', shieldbst:-1, kinres:2, fdname:'special_shieldbooster_kinetic' },
+		usbx_sc : { name:'Super Capacitors', shieldbst:5, kinres:-2, thmres:-2, expres:-2, fdname:'special_shieldbooster_chunky' },
+		usbx_tb : { name:'Thermo Block', shieldbst:-1, thmres:2, fdname:'special_shieldbooster_thermic' },
 		
-		usbx_bb : { name:'Blast Block', shieldbst:-1, expres:2 },
-		usbx_fb : { name:'Force Block', shieldbst:-1, kinres:2 },
-		usbx_sc : { name:'Super Capacitors', shieldbst:5, kinres:-2, thmres:-2, expres:-2 },
-		usbx_tb : { name:'Thermo Block', shieldbst:-1, thmres:2 },
+		cbhx_ap : { name:'Angled Plating', hullbst:-3, kinres:8, fdname:'special_armour_kinetic' },
+		cbhx_dp : { name:'Deep Plating', hullbst:8, kinres:-3, thmres:-3, expres:-3, fdname:'special_armour_chunky' },
+		cbhx_lp : { name:'Layered Plating', hullbst:-3, expres:8, fdname:'special_armour_explosive' },
+		cbhx_rp : { name:'Reflective Plating', hullbst:-3, thmres:8, fdname:'special_armour_thermic' },
 		
-		cbhx_ap : { name:'Angled Plating', hullbst:-3, kinres:8 },
-		cbhx_dp : { name:'Deep Plating', hullbst:8, kinres:-3, thmres:-3, expres:-3 },
-		cbhx_lp : { name:'Layered Plating', hullbst:-3, expres:8 },
-		cbhx_rp : { name:'Reflective Plating', hullbst:-3, thmres:8 },
+		cppx_db : { name:'Double Braced', integ:15, fdname:'special_powerplant_toughened' },
+		cppx_mon : { name:'Monstered', mass:10, pwrcap:5, fdname:'special_powerplant_highcharge' },
+		cppx_sd : { name:'Stripped Down', mass:-10, fdname:'special_powerplant_lightweight' },
+		cppx_ts : { name:'Thermal Spread', heateff:-10, fdname:'special_powerplant_cooled' },
 		
-		cppx_mon : { name:'Monstered', mass:10, pwrcap:5 },
-		cppx_ts : { name:'Thermal Spread', heateff:-10 },
+		ctx_db : { name:'Double Braced', integ:15, fdname:'special_engine_toughened' },
+		ctx_ddr : { name:'Drag Drives', engoptmul:4, engheat:10, fdname:'special_engine_overloaded' },
+		ctx_ddi : { name:'Drive Distributors', engoptmass:10, fdname:'special_engine_haulage' },
+		ctx_sd : { name:'Stripped Down', mass:-10, fdname:'special_engine_lightweight' },
+		ctx_ts : { name:'Thermal Spread', mass:5, engheat:-10, fdname:'special_engine_cooled' },
 		
-		ctx_ddr : { name:'Drag Drives', engoptmul:4, engheat:10 },
-		ctx_ddi : { name:'Drive Distributors', engoptmass:10 },
-		ctx_ts : { name:'Thermal Spread', mass:5, engheat:-10 },
+		cfsdx_dc : { name:'Deep Charge', pwrdraw:5, maxfuel:10, fdname:'special_fsd_fuelcapacity' },
+		cfsdx_db : { name:'Double Braced', integ:25, fdname:'special_fsd_toughened' },
+		cfsdx_mm : { name:'Mass Manager', integ:-8, fsdoptmass:4, fdname:'special_fsd_heavy' },
+		cfsdx_sd : { name:'Stripped Down', mass:-10, fdname:'special_fsd_lightweight' },
+		cfsdx_ts : { name:'Thermal Spread', fsdheat:-10, fdname:'special_fsd_cooled' },
 		
-		cfsdx_dc : { name:'Deep Charge', pwrdraw:5, maxfuel:10 },
-		cfsdx_db : { name:'Double Braced', integ:25 },
-		cfsdx_mm : { name:'Mass Manager', integ:-8, fsdoptmass:4 },
-		cfsdx_ts : { name:'Thermal Spread', fsdheat:-10 },
+		cpdx_cc : { name:'Cluster Capacitors', wepcap:8, wepchg:-2, engcap:8, engchg:-2, syscap:8, syschg:-2, fdname:'special_powerdistributor_capacity' },
+		cpdx_db : { name:'Double Braced', integ:15, fdname:'special_powerdistributor_toughened' },
+		cpdx_fc : { name:'Flow Control', pwrdraw:-10, fdname:'special_powerdistributor_efficient' },
+		cpdx_sd : { name:'Stripped Down', mass:-10, fdname:'special_powerdistributor_lightweight' },
+		cpdx_sc : { name:'Super Conduits', wepcap:-4, wepchg:4, engcap:-4, engchg:4, syscap:-4, syschg:4, fdname:'special_powerdistributor_fast' },
 		
-		cpdx_cc : { name:'Cluster Capacitors', wepcap:8, wepchg:-2, engcap:8, engchg:-2, syscap:8, syschg:-2 },
-		cpdx_sc : { name:'Super Conduits', wepcap:-4, wepchg:4, engcap:-4, engchg:4, syscap:-4, syschg:4 },
+		ihrpx_ap : { name:'Angled Plating', hullrnf:-5, kinres:2, fdname:'special_hullreinforcement_kinetic' },
+		ihrpx_dp : { name:'Deep Plating', hullrnf:10, kinres:-2, thmres:-2, expres:-2, fdname:'special_hullreinforcement_chunky' },
+		ihrpx_lp : { name:'Layered Plating', hullrnf:-5, expres:2, fdname:'special_hullreinforcement_explosive' },
+		ihrpx_rp : { name:'Reflective Plating', hullrnf:-5, thmres:2, fdname:'special_hullreinforcement_thermic' },
 		
-		ihrpx_ap : { name:'Angled Plating', hullrnf:-5, kinres:2 },
-		ihrpx_dp : { name:'Deep Plating', hullrnf:10, kinres:-2, thmres:-2, expres:-2 },
-		ihrpx_lp : { name:'Layered Plating', hullrnf:-5, expres:2 },
-		ihrpx_rp : { name:'Reflective Plating', hullrnf:-5, thmres:2 },
+		iscbx_bc : { name:'Boss Cells', spinup:20, shieldrnfps:5, fdname:'special_shieldcell_oversized' },
+		iscbx_db : { name:'Double Braced', integ:15, fdname:'special_shieldcell_toughened' },
+		iscbx_fc : { name:'Flow Control', pwrdraw:-10, fdname:'special_shieldcell_efficient' },
+		iscbx_rc : { name:'Recycling Cell', scbdur:10, shieldrnfps:-5, fdname:'special_shieldcell_gradual' },
+		iscbx_sd : { name:'Stripped Down', mass:-10, fdname:'special_shieldcell_lightweight' },
 		
-		iscbx_bc : { name:'Boss Cells', spinup:20, shieldrnfps:5 },
-		iscbx_rc : { name:'Recycling Cell', scbdur:10, shieldrnfps:-5 },
-		
-		isgx_fc : { name:'Fast Charge', genrate:15, bgenrate:15, kinres:-1.5, thmres:-1.5, expres:-1.5 },
-		isgx_fb : { name:'Force Block', genoptmul:-3, kinres:8 },
-		isgx_hc : { name:'Hi-Cap', pwrdraw:10, genoptmul:6, genpwr:25 },
-		isgx_ld : { name:'Lo-Draw', pwrdraw:-20, genoptmul:-2, genpwr:-20, kinres:-1, thmres:-1, expres:-1 },
-		isgx_mw : { name:'Multi-Weave', pwrdraw:10, genpwr:25, kinres:3, thmres:3, expres:3 },
-		isgx_tb : { name:'Thermo Block', genoptmul:-3, thmres:8 },
+		isgx_db : { name:'Double Braced', integ:15, fdname:'special_shield_toughened' },
+		isgx_fc : { name:'Fast Charge', genrate:15, bgenrate:15, kinres:-1.5, thmres:-1.5, expres:-1.5, fdname:'special_shield_regenerative' },
+		isgx_fb : { name:'Force Block', genoptmul:-3, kinres:8, fdname:'special_shield_kinetic' },
+		isgx_hc : { name:'Hi-Cap', pwrdraw:10, genoptmul:6, genpwr:25, fdname:'special_shield_health' },
+		isgx_ld : { name:'Lo-Draw', pwrdraw:-20, genoptmul:-2, genpwr:-20, kinres:-1, thmres:-1, expres:-1, fdname:'special_shield_efficient' },
+		isgx_mw : { name:'Multi-Weave', pwrdraw:10, genpwr:25, kinres:3, thmres:3, expres:3, fdname:'special_shield_resistive' },
+		isgx_sd : { name:'Stripped Down', mass:-10, fdname:'special_shield_lightweight' },
+		isgx_tb : { name:'Thermo Block', genoptmul:-3, thmres:8, fdname:'special_shield_thermic' },
 	}, // eddb.expeffect{}
 	group : {
 		hardpoint : { mtypes:{hel:1, hul:1, hc:1, hex:1, hexax:1, hexgg:1, hexgp:1, hexgs:1, hexsc:1, hfc:1, hm:1, hmtl:1, hmtm:1, hmr:1, hmc:1, hpa:1, hpl:1, hrg:1, htp:1} },
@@ -1715,7 +1642,7 @@ var eddb = {
 			keyattrs:['damage','distdraw','thmload','maximumrng'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maximumrng','dmgfall','_X_ jitter'],
 			blueprints:['wpn_eff','wpn_lw','wpn_lr','wpn_oc','wpn_sr','wpn_stu'],
-			expeffects:['wpnx_cose','miscx_db','miscx_fc','wpnx_os','wpnx_rese','miscx_sd','wpnx_thco','wpnx_thsh','wpnx_thve'],
+			expeffects:['wpnx_cose','wpnx_db','wpnx_fc','wpnx_os','wpnx_rese','wpnx_sd','wpnx_thco','wpnx_thsh','wpnx_thve'],
 		},
 		
 		hul : {
@@ -1724,7 +1651,7 @@ var eddb = {
 			keyattrs:['damage','distdraw','thmload','maximumrng'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maximumrng','bstint','_X_ bstsize','jitter','dmgfall'],
 			blueprints:['wpn_eff','wpn_foc','wpn_lw','wpn_lr','wpn_oc','wpn_rf','wpn_sr','wpn_stu'],
-			expeffects:['wpnx_cose','miscx_db','miscx_fc','wpnx_inim','wpnx_muse','wpnx_os','wpnx_phse','wpnx_scsp','miscx_sd','wpnx_thsh'],
+			expeffects:['wpnx_cose','wpnx_db','wpnx_fc','wpnx_inim','wpnx_muse','wpnx_os','wpnx_phse','wpnx_scsp','wpnx_sd','wpnx_thsh'],
 		},
 		
 		hc : {
@@ -1733,7 +1660,7 @@ var eddb = {
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maximumrng','bstint','ammoclip','ammomax','rldtime','jitter','dmgfall'],
 			blueprints:['wpn_eff','wpn_hc','wpn_lw','wpn_lr','wpn_oc','wpn_rf','wpn_sr','wpn_stu'],
-			expeffects:['wpnx_aulo','wpnx_difi','miscx_db','miscx_fc','wpnx_fosh','wpnx_hys','wpnx_muse','wpnx_os','wpnx_smro','miscx_sd','wpnx_thca'],
+			expeffects:['wpnx_aulo','wpnx_difi','wpnx_db','wpnx_fc','wpnx_fosh','wpnx_hys','wpnx_muse','wpnx_os','wpnx_smro','wpnx_sd','wpnx_thca'],
 		},
 		
 		hex : {
@@ -1783,7 +1710,7 @@ var eddb = {
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maximumrng','bstint','bstsize','ammoclip','ammomax','rldtime','jitter','bstrof'],
 			blueprints:['wpn_ds','wpn_eff','wpn_hc','wpn_lw','wpn_oc','wpn_rf','wpn_stu'],
-			expeffects:['wpnx_cosh','wpnx_dash','miscx_db','wpnx_drmu','miscx_fc','wpnx_inro','wpnx_muse','wpnx_os','wpnx_scsh','miscx_sd'],
+			expeffects:['wpnx_cosh','wpnx_dash','wpnx_db','wpnx_drmu','wpnx_fc','wpnx_inro','wpnx_muse','wpnx_os','wpnx_scsh','wpnx_sd'],
 		},
 		
 		hm : {
@@ -1792,7 +1719,7 @@ var eddb = {
 			keyattrs:['damage','distdraw','thmload','ammoclip'],
 			modifiable:['mass','integ','pwrdraw','damage','thmload','pierce','bstint','ammoclip','ammomax','rldtime','jitter'],
 			blueprints:['wpn_hc','wpn_lw','wpn_rf','wpn_stu'],
-			expeffects:['miscx_db','wpnx_emmu','miscx_fc','wpnx_iodi','wpnx_ovmu','wpnx_os','wpnx_raca','wpnx_reca','wpnx_slc','miscx_sd'],
+			expeffects:['wpnx_db','wpnx_emmu','wpnx_fc','wpnx_iodi','wpnx_ovmu','wpnx_os','wpnx_raca','wpnx_reca','wpnx_slc','wpnx_sd'],
 		},
 		
 		hmtl : {
@@ -1813,7 +1740,7 @@ var eddb = {
 			keyattrs:['damage','distdraw','thmload','ammoclip'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','bstint','ammoclip','ammomax','rldtime','jitter'],
 			blueprints:['wpn_hc','wpn_lw','wpn_rf','wpn_stu'],
-			expeffects:['miscx_db','wpnx_emmu','miscx_fc','wpnx_fsin','wpnx_muse','wpnx_ovmu','wpnx_os','wpnx_pemu','miscx_sd','wpnx_thca','wpnx_drmu'],
+			expeffects:['wpnx_db','wpnx_emmu','wpnx_fc','wpnx_fsin','wpnx_muse','wpnx_ovmu','wpnx_os','wpnx_pemu','wpnx_sd','wpnx_thca','wpnx_drmu'],
 		},
 		
 		hmc : {
@@ -1822,7 +1749,7 @@ var eddb = {
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maximumrng','bstint','ammoclip','ammomax','rldtime','jitter','dmgfall'],
 			blueprints:['wpn_eff','wpn_hc','wpn_lw','wpn_lr','wpn_oc','wpn_rf','wpn_sr','wpn_stu'],
-			expeffects:['wpnx_aulo','wpnx_cosh','miscx_db','wpnx_emmu','miscx_fc','wpnx_inro','wpnx_muse','wpnx_os','wpnx_smro','miscx_sd','wpnx_thsh'],
+			expeffects:['wpnx_aulo','wpnx_cosh','wpnx_db','wpnx_emmu','wpnx_fc','wpnx_inro','wpnx_muse','wpnx_os','wpnx_smro','wpnx_sd','wpnx_thsh'],
 		},
 		
 		hpa : {
@@ -1831,7 +1758,7 @@ var eddb = {
 			keyattrs:['damage','distdraw','thmload','maximumrng'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maximumrng','bstint','ammoclip','_X_ ammomax','rldtime','jitter','dmgfall'],
 			blueprints:['wpn_eff','wpn_foc','wpn_lw','wpn_lr','wpn_oc','wpn_rf','wpn_sr','wpn_stu'],
-			expeffects:['wpnx_dash','wpnx_difi','miscx_db','miscx_fc','wpnx_muse','wpnx_os','wpnx_phse','wpnx_plsl','miscx_sd','wpnx_tlb','wpnx_thco'],
+			expeffects:['wpnx_dash','wpnx_difi','wpnx_db','wpnx_fc','wpnx_muse','wpnx_os','wpnx_phse','wpnx_plsl','wpnx_sd','wpnx_tlb','wpnx_thco'],
 		},
 		
 		hpl : {
@@ -1840,7 +1767,7 @@ var eddb = {
 			keyattrs:['damage','distdraw','thmload','maximumrng'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maximumrng','bstint','jitter','dmgfall'],
 			blueprints:['wpn_eff','wpn_foc','wpn_lw','wpn_lr','wpn_oc','wpn_rf','wpn_sr','wpn_stu'],
-			expeffects:['wpnx_cose','miscx_db','wpnx_emmu','miscx_fc','wpnx_muse','wpnx_os','wpnx_phse','wpnx_scsp','miscx_sd','wpnx_thsh'],
+			expeffects:['wpnx_cose','wpnx_db','wpnx_emmu','wpnx_fc','wpnx_muse','wpnx_os','wpnx_phse','wpnx_scsp','wpnx_sd','wpnx_thsh'],
 		},
 		
 		hrg : {
@@ -1849,7 +1776,7 @@ var eddb = {
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maximumrng','bstint','ammoclip','ammomax','_X_ rldtime','_X_ jitter','dmgfall'],
 			blueprints:['wpn_hc','wpn_lw','wpn_lr','wpn_sr','wpn_stu'],
-			expeffects:['miscx_db','wpnx_feca','miscx_fc','wpnx_muse','wpnx_os','hrgx_plsl','miscx_sd','wpnx_supe'],
+			expeffects:['wpnx_db','hrgx_feca','wpnx_fc','wpnx_muse','wpnx_os','hrgx_plsl','wpnx_sd','hrgx_supe'],
 		},
 		
 		htp : {
@@ -1858,7 +1785,7 @@ var eddb = {
 			keyattrs:['damage','distdraw','thmload','ammoclip'],
 			modifiable:['mass','integ','pwrdraw','_X_ damage','thmload','pierce','_X_ bstint','_X_ ammoclip','_X_ rldtime','_X_ jitter'],
 			blueprints:['wpn_lw','wpn_stu'],
-			expeffects:['miscx_db','miscx_fc','wpnx_mlm','wpnx_os','wpnx_pepa','wpnx_reca','miscx_sd'],
+			expeffects:['wpnx_db','wpnx_fc','wpnx_mlm','wpnx_os','wpnx_pepa','wpnx_reca','wpnx_sd'],
 		},
 		
 		
@@ -1928,7 +1855,7 @@ var eddb = {
 			keyattrs:['shieldbst','thmres'],
 			modifiable:['mass','integ','pwrdraw','shieldbst','kinres','thmres','expres'],
 			blueprints:['usb_br','usb_hd','usb_kr','usb_ra','usb_tr'],
-			expeffects:['usbx_bb','miscx_db','miscx_fc','usbx_fb','usbx_sc','usbx_tb'],
+			expeffects:['usbx_bb','usbx_db','usbx_fc','usbx_fb','usbx_sc','usbx_tb'],
 		},
 		
 		ufsws : {
@@ -1960,7 +1887,7 @@ var eddb = {
 			keyattrs:['heateff'],
 			modifiable:['mass','integ','pwrcap','heateff'],
 			blueprints:['cpp_arm','cpp_le','cpp_oc'],
-			expeffects:['miscx_db','cppx_mon','miscx_sd','cppx_ts'],
+			expeffects:['cppx_db','cppx_mon','cppx_sd','cppx_ts'],
 		},
 		
 		ct : {
@@ -1969,7 +1896,7 @@ var eddb = {
 			keyattrs:['engoptmass','engoptmul'],
 			modifiable:['mass','integ','pwrdraw','engoptmass','engoptmul','engheat'],
 			blueprints:['ct_ct','ct_dt','ct_str'],
-			expeffects:['miscx_db','ctx_ddr','ctx_ddi','miscx_sd','ctx_ts'],
+			expeffects:['ctx_db','ctx_ddr','ctx_ddi','ctx_sd','ctx_ts'],
 		},
 		
 		cfsd : {
@@ -1978,7 +1905,7 @@ var eddb = {
 			keyattrs:['fsdoptmass','maxfuel'],
 			modifiable:['mass','integ','pwrdraw','boottime','fsdoptmass','fsdheat','_X_ maxfuel'],
 			blueprints:['cfsd_fb','cfsd_ir','cfsd_sh'],
-			expeffects:['cfsdx_dc','cfsdx_db','cfsdx_mm','miscx_sd','cfsdx_ts'],
+			expeffects:['cfsdx_dc','cfsdx_db','cfsdx_mm','cfsdx_sd','cfsdx_ts'],
 		},
 		
 		cls : {
@@ -1995,7 +1922,7 @@ var eddb = {
 			keyattrs:['engcap','engchg'],
 			modifiable:['mass','integ','pwrdraw','_X_ boottime','wepcap','wepchg','engcap','engchg','syscap','syschg'],
 			blueprints:['cpd_ce','cpd_ef','cpd_hc','cpd_sh','cpd_sf','cpd_wf'],
-			expeffects:['cpdx_cc','miscx_db','miscx_fc','miscx_sd','cpdx_sc'],
+			expeffects:['cpdx_cc','cpdx_db','cpdx_fc','cpdx_sd','cpdx_sc'],
 		},
 		
 		cs : {
@@ -2174,7 +2101,7 @@ var eddb = {
 			keyattrs:['shieldrnfps','ammomax'],
 			modifiable:['_X_ mass','integ','pwrdraw','boottime','spinup','scbdur','shieldrnfps','scbheat','_X_ ammomax'],
 			blueprints:['iscb_rc','iscb_sp'],
-			expeffects:['iscbx_bc','miscx_db','miscx_fc','iscbx_rc','miscx_sd'],
+			expeffects:['iscbx_bc','iscbx_db','iscbx_fc','iscbx_rc','iscbx_sd'],
 		},
 		
 		isg : {
@@ -2183,7 +2110,7 @@ var eddb = {
 			keyattrs:['genoptmul','thmres'],
 			modifiable:['mass','integ','pwrdraw','_X_ boottime','genoptmass','genoptmul','_X_ genrate','bgenrate','genpwr','kinres','thmres','expres'],
 			blueprints:['isg_elp','isg_kr','isg_rf','isg_tr'],
-			expeffects:['miscx_db','isgx_fc','isgx_fb','isgx_hc','isgx_ld','isgx_mw','miscx_sd','isgx_tb'],
+			expeffects:['isgx_db','isgx_fc','isgx_fb','isgx_hc','isgx_ld','isgx_mw','isgx_sd','isgx_tb'],
 		},
 		
 		/* removed, now built-in

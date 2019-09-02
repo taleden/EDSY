@@ -10,7 +10,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [34292,34292,34292,34292]; /* HTML,CSS,DB,JS */
+	var VERSIONS = [34293,34293,34293,34293]; /* HTML,CSS,DB,JS */
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -22,6 +22,7 @@ window.edsy = new (function() {
 	var WEAPON_CHARGE = 0.0;
 	var GROUPS = ['hardpoint','utility','component','military','internal'];
 	var GROUP_LABEL = { hardpoint:'Hardpoints', utility:'Utility Mounts', component:'Core Internal', military:'Military', internal:'Optional Internal' };
+	var CORE_SLOT_FDNAME = ['Armour', 'PowerPlant', 'MainEngines', 'FrameShiftDrive', 'LifeSupport', 'PowerDistributor', 'Radar', 'FuelTank'];
 	var CORE_SLOT_NAME = ['Bulkhead', 'Power Plant', 'Thruster', 'Frame Shift Drive', 'Life Support', 'Power Distributor', 'Sensors', 'Fuel Tank'];
 	var CORE_SLOT_ABBR = ['BH','PP','TH','FD','LS','PD','SS','FT'];
 	var CORE_ABBR_SLOT = { BH:0,PP:1,TH:2,FD:3,LS:4,PD:5,SS:6,FT:7,
@@ -36,8 +37,9 @@ window.edsy = new (function() {
 	var MAX_DAMAGED_PWRCAP = 0.5;
 	var MAX_MALFUNCTION_PWRCAP = 0.4;
 	var MIN_MODIFIER = 0.00005;
+	var MIN_BPROLL = 0.00025;
 	var DISCOUNTS = [30,20,15,10,5,2.5];
-	var HASH_VERSION = 14;
+	var HASH_VERSION = 15;
 	var HTML_ICON = {
 		'unknown'    : '<svg class="iconsvg unknown"><use xlink:href="#icon_unknown"/></svg>',
 		'ignore'     : '<svg class="iconsvg ignore"><use xlink:href="#icon_ignore"/></svg>',
@@ -67,6 +69,10 @@ window.edsy = new (function() {
 		attribute: {},
 		formatNumText: {},
 		formatPctText: {},
+		reSpacePercent: new RegExp('[ \u00A0]+(%)'),
+		reTrailingPointZero: null,
+		reDecimalSep: null,
+		reThousandSep: null,
 		feature: {},
 		ships: [],
 		shipBuild: {},
@@ -84,7 +90,9 @@ window.edsy = new (function() {
 		discounts: [],
 	};
 	var current = {
+		dev: false,
 		beta: false,
+		locale: undefined,
 		hashlock: false,
 		popup: {
 			element: null,
@@ -105,6 +113,8 @@ window.edsy = new (function() {
 		pickerTouch: {},
 		slotsClick: {},
 		slotsTouch: {},
+		bprollClick: {},
+		bprollTouch: {},
 		importLabel: {},
 		labelImports: {},
 		storedbuild: { 0:{} },
@@ -138,11 +148,14 @@ window.edsy = new (function() {
 	var
 		LN2 = Math.LN2,
 		LN10 = Math.LN10,
+		PI = Math.PI,
 		abs = Math.abs,
+		atan2 = Math.atan2,
 		ceil = Math.ceil,
 		exp = Math.exp,
 		floor = Math.floor,
 		log = Math.log,
+		log2 = Math.log2,
 		max = Math.max,
 		min = Math.min,
 		pow = Math.pow,
@@ -243,7 +256,7 @@ window.edsy = new (function() {
 		? (
 			function(num, dec) {
 				return (cache.formatNumText[dec] || (
-					cache.formatNumText[dec] = (new window.Intl.NumberFormat(undefined, { style:'decimal', useGrouping:true,  minimumIntegerDigits:1, minimumFractionDigits:dec, maximumFractionDigits:dec })).format
+					cache.formatNumText[dec] = (new window.Intl.NumberFormat(current.locale, { style:'decimal', useGrouping:true,  minimumIntegerDigits:1, minimumFractionDigits:dec, maximumFractionDigits:dec })).format
 				))(num);
 			}
 		) : (
@@ -262,12 +275,26 @@ window.edsy = new (function() {
 	); // formatNumText()
 	
 	
+	var parseNumText = function(text) {
+		if (!cache.reDecimalSep) {
+			var sep = formatNumText(1.234,3).substring(1,2);
+			cache.reDecimalSep = new RegExp('\\' + sep);
+			sep = formatNumText(1234,0).substring(1,2);
+			if (!sep.match(/\d/))
+				cache.reThousandSep = new RegExp('\\' + sep, 'g');
+		}
+		if (cache.reThousandSep)
+			text = text.replace(cache.reThousandSep, '');
+		return parseFloat(text.replace(cache.reDecimalSep, '.').trim());
+	}; // parseNumText()
+	
+	
 	var formatPctText = ((window.Intl && window.Intl.NumberFormat)
 		? (
 			function(num, dec) {
 				return (cache.formatPctText[dec] || (
-					cache.formatPctText[dec] = (new window.Intl.NumberFormat(undefined, { style:'percent', useGrouping:false,  minimumIntegerDigits:1, minimumFractionDigits:dec, maximumFractionDigits:dec })).format
-				))(num);
+					cache.formatPctText[dec] = (new window.Intl.NumberFormat(current.locale, { style:'percent', useGrouping:false,  minimumIntegerDigits:1, minimumFractionDigits:dec, maximumFractionDigits:dec })).format
+				))(num).replace(cache.reSpacePercent, '$1');
 			}
 		) : (
 			function(num, dec) {
@@ -311,15 +338,15 @@ window.edsy = new (function() {
 	//	return ((sec >= 10) ? ((h ? (h.toFixed(0) + ':') : '') + ((h && m < 10) ? '0' : '') + m.toFixed(0) + ':' + (((h || m) && s < 10) ? '0' : '') + s.toFixed(0)) : s.toFixed(1));
 		
 		if (brief) {
-			if (h) return (((h < 10) ? (h+(m/60)).toFixed(1) : h.toFixed(0)) + '<small class="semantic">h</small>');
-			if (m) return (((m < 10) ? (m+(s/60)).toFixed(1) : m.toFixed(0)) + '<small class="semantic">m</small>');
-			return (((h && !m) ? '0<small class="semantic">m</small>' : '') + s.toFixed((sec < 10) ? 1 : 0) + '<small class="semantic">s</small>');
+			if (h) return (((h < 10) ? formatNumText(h+(m/60), 1) : formatNumText(h, 0)) + '<small class="semantic">h</small>');
+			if (m) return (((m < 10) ? formatNumText(m+(s/60), 1) : formatNumText(m, 0)) + '<small class="semantic">m</small>');
+			return (((h && !m) ? '0<small class="semantic">m</small>' : '') + formatNumText(s, (sec < 10) ? 1 : 0) + '<small class="semantic">s</small>');
 		}
 		var html = '';
-		if (h) html += (h.toFixed(0) + '<small class="semantic">h</small>');
-		if (m) html += (m.toFixed(0) + '<small class="semantic">m</small>');
+		if (h) html += (formatNumText(h, 0) + '<small class="semantic">h</small>');
+		if (m) html += (formatNumText(m, 0) + '<small class="semantic">m</small>');
 		if (h && !m) html += '0<small class="semantic">m</small>';
-		html += (s.toFixed((sec < 10) ? 1 : 0) + '<small class="semantic">s</small>');
+		html += (formatNumText(s, (sec < 10) ? 1 : 0) + '<small class="semantic">s</small>');
 		return html;
 	}; // formatTimeHTML()
 	
@@ -335,7 +362,7 @@ window.edsy = new (function() {
 			n /= 1000;
 			k++;
 		}
-		return ('<abbr title="' + formatNumHTML(num, 0) + ' CR">' + n.toFixed((n < 10) ? 2 : ((n < 100) ? 1 : 0)) + (['',' K',' M',' B',' T'][k] || '') + '</abbr><small>CR</small>');
+		return ('<abbr title="' + formatNumHTML(num, 0) + ' CR">' + formatNumText(n, (n < 10) ? 2 : ((n < 100) ? 1 : 0)) + (['',' K',' M',' B',' T'][k] || '') + '</abbr><small>CR</small>');
 	}; // formatPriceHTML()
 	
 	
@@ -640,13 +667,15 @@ window.edsy = new (function() {
 		this.modid = 0;
 		this.module = null;
 		this.discounts = 0;
+		this.cost = 0;
 		this.powered = true;
 		this.priority = 1;
 		this.bpid = 0;
 		this.bpgrade = 0;
-		this.bproll = -1;
+		this.bproll = 0;
 		this.expid = 0;
-		this.modifier = null;
+		this.attrModifier = null;
+		this.attrOverride = null;
 		if (modid) {
 			if (!this.setModuleID(modid))
 				throw 'invalid initial module id #' + modid;
@@ -758,14 +787,21 @@ window.edsy = new (function() {
 			this.modid = (modid | 0);
 			this.module =  ((this.slotgroup === 'ship' && this.slotnum === 'hull') ? eddb.ship[modid] : this.build.getModule(modid));
 			this.discounts = 0;
+			this.cost = 0;
 			this.bpid = 0;
 			this.bpgrade = 0;
-			this.bproll = -1;
+			this.bproll = 0;
 			this.expid = 0;
-			this.modifier = null;
+			this.attrModifier = null;
+			this.attrOverride = null;
 			this.clearStats();
 			return true;
 		}, // setModuleID()
+		
+		
+		hasActualCost: function() {
+			return (this.cost > 0);
+		}, // hasActualCost()
 		
 		
 		getDiscounts: function() {
@@ -774,10 +810,31 @@ window.edsy = new (function() {
 		
 		
 		setDiscounts: function(discounts) {
-			this.discounts = (discounts & ((1 << DISCOUNTS.length) - 1));
+			this.discounts = (discounts & 0x3F);
+			this.cost = 0;
 			this.clearStats();
 			return true;
 		}, // setDiscounts()
+		
+		
+		getBaseCost: function() {
+			return this.getBaseAttrValue('cost');
+		}, // getBaseCost()
+		
+		
+		getCost: function() {
+			return (this.hasActualCost() ? this.cost : this.getEffectiveAttrValue('cost'));
+		}, // getCost()
+		
+		
+		setCost: function(cost) {
+			cost = parseInt(round(min(max(cost, 0), 9999999999)));
+			var base = this.getBaseCost();
+			this.discounts = (base ? getClosestDiscount(cost / base) : 0);
+			this.cost = cost;
+			this.clearStats();
+			return true;
+		}, // setCost()
 		
 		
 		getPowered: function() {
@@ -827,49 +884,63 @@ window.edsy = new (function() {
 				if (bpgrade === null) {
 					bpgrade = (this.bpid ? ((this.bpgrade / eddb.blueprint[this.bpid].maxgrade * blueprint.maxgrade + 0.5) | 0) : blueprint.maxgrade);
 				} else {
-					bpgrade = min(max(bpgrade, 1), eddb.blueprint[bpid].maxgrade);
+					bpgrade = min(max(bpgrade, 1), blueprint.maxgrade);
 				}
 				this.bpid = bpid;
 				this.bpgrade = bpgrade;
-				if (bproll === null || bproll < 0) {
-					this.bproll = bproll = -1;
-					this.clearHash();
-				} else {
-					this.bproll = bproll = min(max(bproll, 0), 1);
-					this.modifier = {};
+				if (bproll) {
+					this.bproll = bproll = min(max(bproll, MIN_BPROLL), 1);
+					this.attrModifier = {};
+					this.attrOverride = {};
 					for (var a = 0;  a < mtype.modifiable.length;  a++) {
 						var attr = mtype.modifiable[a];
 						var attribute = cache.attribute[attr];
 						if (attribute && blueprint[attr] && (attribute.modset || attribute.modadd || attribute.modmod || this.getBaseAttrValue(attr))) {
-							var himod = blueprint[attr][bpgrade - 1];
-							var lomod = ((bpgrade > 1) ? blueprint[attr][bpgrade - 2] : ((himod && blueprint[attr][1]) ? (himod - (blueprint[attr][1] - himod)) : 0));
-							this.modifier[attr] = (((himod < 0) === !attribute.bad) ? himod : (lomod + bproll * (himod - lomod))) / (attribute.modmod || ((attribute.modadd || attribute.modset) ? 1 : 100));
+							this.attrModifier[attr] = getBlueprintGradeRollAttrModifier(bpid, bpgrade, bproll, attr);
 						}
 					}
 					// when modifying clip size, round up to a multiple of burst size
 					// (this requires applying the ammoclip modifier manually to avoid rounding to step first)
-					if (this.modifier['ammoclip']) {
-						var ammoclip = this.getBaseAttrValue('ammoclip') * (1 + this.modifier['ammoclip']);
+					if (this.attrModifier['ammoclip']) {
+						var ammoclip = this.getBaseAttrValue('ammoclip') * (1 + this.attrModifier['ammoclip']);
 						var bstsize = this.getEffectiveAttrValue('bstsize');
-						this.modifier['ammoclip'] = getModuleAttrModifier(this.module, 'ammoclip', ceil(ammoclip / bstsize) * bstsize);
+						this.attrModifier['ammoclip'] = getModuleAttrModifier(this.module, 'ammoclip', ceil(ammoclip / bstsize) * bstsize);
 					}
 					// when modifying damage falloff, cap at maximum range
-					if (this.modifier['dmgfall']) {
+					if (this.attrModifier['dmgfall']) {
 						var maxrng = this.getEffectiveAttrValue('maximumrng');
 						var dmgfall = this.getEffectiveAttrValue('dmgfall');
-						this.modifier['dmgfall'] = getModuleAttrModifier(this.module, 'dmgfall', min(maxrng, dmgfall));
+						this.attrModifier['dmgfall'] = getModuleAttrModifier(this.module, 'dmgfall', min(maxrng, dmgfall));
 					}
 					this.clearStats();
+				} else {
+					this.bproll = bproll = 0;
+					if (this.attrModifier) {
+						this.attrOverride = {};
+						for (var attr in this.attrModifier)
+							this.attrOverride[attr] = true;
+					} else {
+						this.attrOverride = null;
+					}
+					this.clearHash();
 				}
 			} else {
 				this.bpid = 0;
 				this.bpgrade = 0;
-				this.bproll = -1;
-				if (bproll === null || bproll < 0) {
-					this.clearHash();
-				} else {
-					this.modifier = null;
+				this.bproll = 0;
+				if (bproll) {
+					this.attrModifier = null;
+					this.attrOverride = null;
 					this.clearStats();
+				} else {
+					if (this.attrModifier) {
+						this.attrOverride = {};
+						for (var attr in this.attrModifier)
+							this.attrOverride[attr] = true;
+					} else {
+						this.attrOverride = null;
+					}
+					this.clearHash();
 				}
 			}
 			return true;
@@ -937,7 +1008,7 @@ window.edsy = new (function() {
 		
 		
 		isModified: function() {
-			return !!(this.modifier || this.expid);
+			return !!(this.attrModifier || this.expid);
 		}, // isModified()
 		
 		
@@ -1024,15 +1095,27 @@ window.edsy = new (function() {
 		}, // getEffectiveAttrValue()
 		
 		
+		isAttrOverridden: function(attr) {
+			return !!((this.attrOverride || EMPTY_OBJ)[attr]);
+		}, // isAttrOverridden()
+		
+		
 		getBaseAttrModifier: function(attr) {
-			return ((this.modifier || EMPTY_OBJ)[attr] || 0);
+			return ((this.attrModifier || EMPTY_OBJ)[attr] || 0);
 		}, // getBaseAttrModifier()
 		
 		
 		getRelatedAttrModifier: function(attr) {
 			switch (attr) {
 			case 'cost':
-				return (cache.discountMod[this.discounts] - 1);
+				if (!this.hasActualCost())
+					return (cache.discountMod[this.discounts] - 1);
+				var base = this.getBaseCost();
+				var value = this.getCost();
+				if (!isFinite(base) || !isFinite(value))
+					return 0;
+				var modifier = (value / base) - 1;
+				return (abs(modifier) < MIN_MODIFIER) ? 0 : modifier; // TODO: check for within 10?
 				
 			case 'brcdmg':
 				return this.getEffectiveAttrModifier('damage');
@@ -1081,10 +1164,10 @@ window.edsy = new (function() {
 			case 'engminmass':
 			case 'engmaxmass':
 				// TODO: verify all combinations
-				// thrusters legacy negative optmass:
+				// thrusters legacy negative optmass: negative minmass, negative maxmass
 				// thrusters legacy positive optmass:
-				// thrusters modern negative optmass:
-				// thrusters modern positive optmass:
+				// thrusters modern negative optmass: negative minmass, negative maxmass
+				// thrusters modern positive optmass: positive minmass, positive maxmass
 				return this.getEffectiveAttrModifier('engoptmass');
 				
 			case 'engminmul':
@@ -1125,15 +1208,21 @@ window.edsy = new (function() {
 		}, // getRelatedAttrModifier()
 		
 		
-		getEffectiveAttrModifier: function(attr) {
-			// get base, related and experimental modifiers
-			var modBase = this.getBaseAttrModifier(attr);
-			var modRel = this.getRelatedAttrModifier(attr);
+		getExperimentalAttrModifier: function(attr) {
 			var modExp = ((eddb.expeffect[this.expid] || EMPTY_OBJ)[attr] || 0);
 			if (modExp) {
 				var attribute = cache.attribute[attr];
 				modExp /= ((attribute.modset || attribute.modadd) ? 1 : (attribute.modmod || 100));
 			}
+			return modExp;
+		}, // getExperimentalAttrModifier()
+		
+		
+		getEffectiveAttrModifier: function(attr) {
+			// get base, related and experimental modifiers
+			var modBase = this.getBaseAttrModifier(attr);
+			var modRel = this.getRelatedAttrModifier(attr);
+			var modExp = this.getExperimentalAttrModifier(attr);
 			
 			// apply these modifiers in reverse; usually it doesn't matter, but for modset we want base to override related which overrides experimental
 			return getAttrModifierSum(attr, getAttrModifierSum(attr, modExp, modRel), modBase);
@@ -1165,11 +1254,7 @@ window.edsy = new (function() {
 			
 			// get related and experimental modifiers
 			var modRel = this.getRelatedAttrModifier(attr);
-			var modExp = ((eddb.expeffect[this.expid] || EMPTY_OBJ)[attr] || 0);
-			if (modExp) {
-				var attribute = cache.attribute[attr];
-				modExp /= ((attribute.modset || attribute.modadd) ? 1 : (attribute.modmod || 100));
-			}
+			var modExp = this.getExperimentalAttrModifier(attr);
 			
 			// set the base modifier
 			var basemodifier = getAttrModifierDifference(attr, modifier, getAttrModifierSum(attr, modExp, modRel));
@@ -1203,78 +1288,104 @@ window.edsy = new (function() {
 			}
 			// set the modifier (or clear if it's tiny, probably just a rounding error)
 			if (!modifier || abs(modifier) < MIN_MODIFIER) {
-				if (this.modifier) {
-					delete this.modifier[attr];
+				if (this.attrModifier) {
+					delete this.attrModifier[attr];
+					delete this.attrOverride[attr];
 					var empty = true;
-					for (var key in this.modifier) {
+					for (var key in this.attrModifier) {
 						empty = false;
 						break;
 					}
-					if (empty)
-						this.modifier = null;
-					this.bproll = -1;
+					if (empty) {
+						this.attrModifier = null;
+						this.attrOverride = null;
+					}
 					this.clearStats();
 				}
 			} else {
 				if (!isModuleAttrModifiable(this.module, attr))
 					return false;
-				if (!this.modifier)
-					this.modifier = {};
-				this.modifier[attr] = getModuleAttrModifier(this.module, attr, getModuleAttrValue(this.module, attr, modifier));
-				this.bproll = -1;
+				if (!this.attrModifier)
+					this.attrModifier = {};
+				this.attrModifier[attr] = getModuleAttrModifier(this.module, attr, getModuleAttrValue(this.module, attr, modifier));
+				if (!this.attrOverride)
+					this.attrOverride = {};
+				this.attrOverride[attr] = true;
 				this.clearStats();
 			}
+			
 			return true;
 		}, // setAttrModifier()
 		
 		
 		getHash: function(stored) {
 			/*
-			module hash format:
-				<char 1-3>: module id (0..262143)
-				<char 4>: slot flags
-					0x20 <bit 1>: discounted?
-					0x10 <bit 2>: modified?
+			module hash format (HASH_VERSION=15):
+				<3 chars / 18 bits>: module id (0..262143)
+				<1 char / 6 bits>: slot flags
+					0x20 <bit 1>: costed?
+					0x10 <bit 2>: engineered?
 					0x08 <bit 3>: powered?
 					0x07 <bit 4-6>: priority (0..7)
-				<char 5?>: discount bits
-				<char 5-7 or 6-8>: engineering flags
-					0x20000 <bit 1>: rolled?
-					0xF<<13 <bit 2-5>: blueprint index (0..15)
-					0x7<<10 <bit 6-8>: blueprint grade (0..7)
-					0x1F<<5 <bit 9-13>: experimental index (0..31)
-					0x1F <bit 14-18>: rolled ? (roll / 0.05) : (number of modifications)
-				<char 8-11 or 9-12>: modified attribute
-					0xF<<20 <bit 1-4>: attribute index (0..15)
-					0xFFFFF <bit 5-24>: modifier
-				<...>
+				costed ?
+					<1 char / 6 bits>: cost bits
+						0x30 <bit 1-2>: number of extra cost chars
+						0x0F <bit 3-6>: cost & 0xF
+					<3-6 chars / 18-36 bits>: cost >> 4
+				!costed ?
+					<1 char / 6 bits>: discount bits
+				engineered ?
+					<2 chars / 12 bits>: engineering flags
+						0x800 <bit 1>: unused
+						0x780 <bit 2-5>: blueprint index (0..15)
+						0x070 <bit 6-8>: blueprint grade (0..7)
+						0x00F <bit 9-12>: experimental index (0..15)
+					<2 chars / 12 bits: roll * 4000
+					<1 char / 6 bits>: number of modified attributes (0..31)
+					<4 chars / 24 bits>: modified attribute
+						0xF00000 <bit 1-4>: attribute index (0..15)
+						0x0FFFFF <bit 5-24>: modifier
+					<...>
 			*/
 			if (!this.module || (this.slotgroup === 'ship' && this.slotnum === 'hull'))
 				return '';
 			if (!this.hash) {
 				var modidhash = hashEncode(this.modid & 0x1FFFF, 3);
+				
+				var costed = this.hasActualCost();
+				var costhash = '';
+				if (costed) {
+					var cost = this.getCost();
+					var costbits = (cost & 0xF);
+					cost >>= 4;
+					var costsize = min(max(ceil(ceil(log2(cost)) / 6), 2), 5);
+					costbits |= (((costsize - 2) & 0x3) << 4);
+					costhash = hashEncode(costbits, 1) + hashEncode(cost, costsize);
+				} else {
+					costhash = hashEncode(this.discounts, 1);
+				}
+				
 				var mtype = (eddb.mtype[this.module.mtype] || EMPTY_OBJ);
 				var bpidx = ((mtype.blueprints || EMPTY_ARR).indexOf(this.bpid) + 1);
 				var expidx = ((mtype.expeffects || EMPTY_ARR).indexOf(this.expid) + 1);
-				var mods = 0;
-				var hash = '';
-				var custom = ((bpidx < 1) || (this.bpgrade < 1) || (this.bproll < 0));
-				if (!custom) {
-					mods = (((this.bproll / 0.05) + 0.5) | 0);
-				} else if (mtype.modifiable && this.modifier) {
+				var bproll = (((this.bproll * 4000) + 0.5) | 0);
+				var nummods = 0;
+				var modhash = '';
+				if (mtype.modifiable && this.attrModifier) {
 					for (var a = 0;  a < mtype.modifiable.length;  a++) {
 						var attr = mtype.modifiable[a];
-						if (cache.attribute[attr] && this.modifier[attr]) {
-							mods++;
-							hash += hashEncode(((a & 0xF) << 20) | (float20Encode(this.modifier[attr]) & 0xFFFFF), 4);
+						if (cache.attribute[attr] && this.attrModifier[attr] && this.attrOverride[attr]) {
+							nummods++;
+							modhash += hashEncode(((a & 0xF) << 20) | (float20Encode(this.attrModifier[attr]) & 0xFFFFF), 4);
 						}
 					}
 				}
-				var modbits = ((custom ? 0 : 0x20000) | ((bpidx & 0xF) << 13) | ((this.bpgrade & 0x7) << 10) | ((expidx & 0x1F) << 5) | (mods & 0x1F));
-				var modhash = (modbits ? (hashEncode(modbits, 3) + hash) : '');
-				var slotbits = ((this.discounts ? 0x20 : 0) | (modhash ? 0x10 : 0) | (this.powered ? 0 : 0x8) | ((this.priority - 1) & 0x7));
-				this.hash = (modidhash + hashEncode(slotbits, 1) + (this.discounts ? hashEncode(this.discounts, 1) : '') + modhash);
-				this.storedhash = (hashEncode(HASH_VERSION, 1) + modidhash + hashEncode((modhash ? 0x10 : 0), 1) + modhash);
+				var engbits = (((bpidx & 0xF) << 7) | ((this.bpgrade & 0x7) << 4) | (expidx & 0xF));
+				var enghash = ((engbits || nummods) ? (hashEncode(engbits, 2) + hashEncode(bproll, 2) + hashEncode(nummods & 0x1F, 1) + modhash) : '');
+				
+				var slotbits = ((costed ? 0x20 : 0) | (enghash ? 0x10 : 0) | (this.powered ? 0 : 0x8) | ((this.priority - 1) & 0x7));
+				this.hash = (modidhash + hashEncode(slotbits, 1) + costhash + enghash);
+				this.storedhash = (hashEncode(HASH_VERSION, 1) + modidhash + hashEncode((enghash ? 0x10 : 0), 1) + hashEncode(0, 1) + enghash); // TODO: cost/discount in storedhash?
 			}
 			return (stored ? this.storedhash : this.hash);
 		}, // getHash()
@@ -1312,10 +1423,11 @@ window.edsy = new (function() {
 				if (errors) errors.push(errortag + getModuleLabel(this.getModule()) + ' requires Experimental Mode');
 			}
 			
-			// discounted, modified, powered and priority
-			var slotbits = ((version < 8) ? 0 : hashDecode(hash.slice(i, (i += 1))));
-			var discounted = (version < 14) ? 0 : (slotbits & 0x20);
-			var modified = (slotbits & 0x10);
+			// slot bits: costed/discounted, engineered, powered, priority
+			var slotbits = ((version >= 8) ? hashDecode(hash.slice(i, (i += 1))) : 0);
+			var costed = ((version >= 15) ? (slotbits & 0x20) : 0);
+			var discounted = ((version >= 15) ? !costed : ((version >= 14) ? (slotbits & 0x20) : 0));
+			var engineered = (slotbits & 0x10);
 			var powered = !(slotbits & 0x8);
 			var priority = (slotbits & 0x7) + 1;
 			if (!this.setPowered(powered)) {
@@ -1325,37 +1437,51 @@ window.edsy = new (function() {
 				if (errors) errors.push(errortag + 'Invalid power priority setting: ' + priority);
 			}
 			
-			// discounts
-			if (discounted) {
+			// cost/discount bits
+			if (costed) {
+				var costbits = hashDecode(hash.slice(i, (i += 1)));
+				var cost = hashDecode(hash.slice(i, (i += (((costbits >> 4) & 0x3) + 2))));
+				cost = (cost << 4) + (costbits & 0xF);
+				if (!this.setCost(cost)) {
+					if (errors) errors.push(errortag + 'Invalid cost: ' + cost);
+				}
+			} else if (discounted) {
 				var discounts = hashDecode(hash.slice(i, (i += 1)));
 				if (!this.setDiscounts(discounts)) {
 					if (errors) errors.push(errortag + 'Invalid discounts: ' + discounts);
 				}
 			}
 			
-			// modification data
+			// engineering bits
 			var mtypeid = (this.module || EMPTY_OBJ).mtype;
 			var mtype = (eddb.mtype[mtypeid] || EMPTY_OBJ);
-			if (mtype.modifiable && modified) {
-				var modbits = ((version < 9) ? 0 : hashDecode(hash.slice(i, (i += ((version < 12) ? 2 : 3)))));
-				if (version < 12) {
-					var bpidx = ((modbits >> 6) & 0x3F);
-					var bpid = (bpidx ? (idmap.blueprint[mtypeid] || mtype.blueprints || EMPTY_ARR)[((bpidx % 10 + 0.5) | 0)] : 0);
-					var bpgrade = ((bpidx / 10 + 0.5) | 0);
+			if (engineered) {
+				var engbits = ((version >= 9) ? hashDecode(hash.slice(i, (i += ((version >= 12 && version <= 14) ? 3 : 2)))) : 0);
+				var bpidx, bpid, bpgrade, expidx, expid, bproll, nummods;
+				if (version >= 15) {
+					bpidx = ((engbits >> 7) & 0xF);
+					bpid = (idmap.blueprint[mtypeid] || mtype.blueprints || EMPTY_ARR)[bpidx - 1];
+					bpgrade = ((engbits >> 4) & 0x7);
+					expidx = (engbits & 0xF);
+					bproll = hashDecode(hash.slice(i, (i += 2))) / 4000.0;
+					nummods = hashDecode(hash.slice(i, (i += 1)));
+				} else if (version >= 12) {
+					var bprolled = ((version >= 14) ? (engbits & 0x20000) : false);
+					bpidx = ((engbits >> 13) & ((version >= 14) ? 0xF : 0x1F));
+					bpid = (idmap.blueprint[mtypeid] || mtype.blueprints || EMPTY_ARR)[bpidx - 1];
+					bpgrade = ((engbits >> 10) & 0x7);
+					expidx = ((engbits >> 5) & 0x1F);
+					bproll = (bprolled ? max(MIN_BPROLL, (engbits & 0x1F) * 0.05) : 0);
+					nummods = (bprolled ? 0 : (engbits & 0x1F));
 				} else {
-					var bprolled = ((version < 14) ? false : (modbits & 0x20000));
-					var bpidx = ((modbits >> 13) & ((version < 14) ? 0x1F : 0xF));
-					var bpid = (idmap.blueprint[mtypeid] || mtype.blueprints || EMPTY_ARR)[bpidx - 1];
-					var bpgrade = ((modbits >> 10) & 0x7);
+					bpidx = ((engbits >> 6) & 0x3F);
+					bpid = (bpidx ? (idmap.blueprint[mtypeid] || mtype.blueprints || EMPTY_ARR)[((bpidx % 10 + 0.5) | 0)] : 0);
+					bpgrade = ((bpidx / 10 + 0.5) | 0);
+					expidx = 0;
+					bproll = 0;
+					nummods = (engbits & 0x3F);
 				}
-				var mods = ((version < 12) ? (modbits & 0x3F) : (modbits & 0x1F));
-				var bproll = -1;
-				if (bprolled) {
-					bproll = (mods * 0.05);
-					mods = 0;
-				}
-				var expidx = ((version < 12) ? 0 : ((modbits >> 5) & 0x1F));
-				var expid = (idmap.expeffect[mtypeid] || mtype.expeffects || EMPTY_ARR)[expidx - 1];
+				expid = (idmap.expeffect[mtypeid] || mtype.expeffects || EMPTY_ARR)[expidx - 1];
 				
 				// set blueprint, grade, roll
 				if (!this.setBlueprint(bpid, bpgrade, bproll)) {
@@ -1367,9 +1493,9 @@ window.edsy = new (function() {
 				
 				// attr mods
 				var v9rof = 0;
-				while (mods-- > 0) {
+				while (nummods-- > 0) {
 					var attrmod = hashDecode(hash.slice(i, (i += 4)));
-					var attr = mtype.modifiable[((attrmod >> 20) & 0xF)];
+					var attr = (mtype.modifiable || EMPTY_ARR)[((attrmod >> 20) & 0xF)];
 					var attribute = cache.attribute[attr];
 					if (attribute) {
 						var modifier = float20Decode(attrmod & 0xFFFFF);
@@ -1436,7 +1562,6 @@ window.edsy = new (function() {
 			var powered = this.getPowered();
 			var priority = this.getPriority();
 			var ok = this.setHash(modulehash.slice(1), version, errors, experimental);
-			// this.setDiscounts(0); // TODO: save discounts in storedhash?
 			this.setPowered(powered);
 			this.setPriority(priority);
 			return ok;
@@ -1470,20 +1595,37 @@ window.edsy = new (function() {
 				var blueprint = eddb.blueprint[this.bpid];
 				var expeffect = eddb.expeffect[this.expid];
 				if (blueprint || expeffect)
-					buffer.push(tag + (blueprint ? (blueprint.name + ' ' + this.bpgrade + ((this.bproll < 0) ? '' : (' ' + formatPctText(this.bproll, 0)))) : '(No Blueprint)') + (expeffect ? (', ' + expeffect.name) : ''));
-				if (this.bproll < 0) {
-					line = '';
-					var mtype = (eddb.mtype[this.module.mtype] || EMPTY_OBJ);
-					var attrs = [];
-					for (var a = 0;  a < mtype.modifiable.length;  a++) {
-						var attr = mtype.modifiable[a];
-						if (cache.attribute[attr] && this.modifier[attr])
+					buffer.push(tag + (blueprint ? (blueprint.name + ' ' + this.bpgrade + (this.bproll ? (' ' + formatPctText(this.bproll, 1)) : '')) : '(No Blueprint)') + (expeffect ? (', ' + expeffect.name) : ''));
+				// gather relevant attrs: either directly or indirectly modifiable (via expeffect)
+				var attrflag = {};
+				var modifiable = ((eddb.mtype[this.module.mtype] || EMPTY_OBJ).modifiable || EMPTY_ARR);
+				for (var a = 0;  a < modifiable.length;  a++)
+					attrflag[modifiable[a]] = true;
+				for (var attr in (expeffect || EMPTY_OBJ))
+					attrflag[attr] = true;
+				// identify modified attrs
+				var attrs = [];
+				for (var attr in attrflag) {
+					if (cache.attribute[attr] && this.getEffectiveAttrModifier(attr)) {
+						if (attr === 'damage') {
+							attrs.push('dps');
+							if (isFinite(this.getBaseAttrValue('rof')))
+								attrs.push('damage');
+						} else if (attr === 'bstint') {
+							attrs.push('dps');
+							attrs.push('rof');
+						} else {
 							attrs.push(attr);
+						}
 					}
+				}
+				// sort and export modified attrs
+				if (attrs.length > 0) {
 					attrs.sort(sortAttributes);
+					line = '';
 					for (var a = 0;  a < attrs.length;  a++) {
 						var attr = attrs[a];
-						var text = '; ' + cache.attribute[attr].name + ' ' + getModuleAttrModifierText(module, attr, this.modifier[attr]);
+						var text = '; ' + cache.attribute[attr].name + ' ' + getModuleAttrModifierText(module, attr, this.getEffectiveAttrModifier(attr));
 						if (line && (line.length + text.length > 65)) {
 							buffer.push(tag + line.slice(2));
 							line = '';
@@ -1497,6 +1639,100 @@ window.edsy = new (function() {
 			
 			return buffer.join('\n');
 		}, // exportText()
+		
+		
+		exportJournal: function() {
+			var ship = eddb.ship[this.build.getShipID()];
+			var module = this.getModule();
+			if (!ship || !module)
+				return null;
+			
+			var slotsize = this.getSlotSize();
+			var slotname = null;
+			switch (this.slotgroup) {
+			case 'hardpoint':
+				var n = 0;
+				for (var s = this.slotnum;  s >= 0;  s--)
+					n += (ship.slots.hardpoint[s] == slotsize);
+				slotname = (['Tiny','Small','Medium','Large','Huge'][slotsize] || 'Unknown') + 'Hardpoint' + n;
+				break;
+			case 'utility':
+				slotname = 'TinyHardpoint' + (this.slotnum + 1);
+				break;
+			case 'component':
+				slotname = CORE_SLOT_FDNAME[this.slotnum];
+				break;
+			case 'military':
+				slotname = 'Military' + ((this.slotnum < 9) ? '0' : '') + (this.slotnum + 1);
+				break;
+			case 'internal':
+				slotname = 'Slot' + ((this.slotnum < 9) ? '0' : '') + (this.slotnum + 1) + '_Size' + slotsize;
+				break;
+			default:
+				return null;
+			}
+			
+			// slot and module
+			var obj = {
+				"Slot": slotname,
+				"Item": (module.fdname || '').toLowerCase(),
+				"On": !!this.getPowered(),
+				"Priority": parseInt(this.getPriority() - 1),
+				"Value": parseInt(this.getCost()),
+			};
+			
+			// engineering?
+			if (this.isModified()) {
+				var obj_eng = obj["Engineering"] = {};
+				var blueprint = eddb.blueprint[this.bpid];
+				if (blueprint) {
+					obj_eng["BlueprintName"] = blueprint.fdname;
+					obj_eng["Level"] = this.bpgrade;
+					obj_eng["Quality"] = (this.bproll ? parseFloat(this.bproll.toFixed(6)) : 0);
+				}
+				var expeffect = eddb.expeffect[this.expid];
+				if (expeffect) {
+					obj_eng["ExperimentalEffect"] = expeffect.fdname;
+				}
+				// gather relevant attrs: either directly or indirectly modifiable (via expeffect)
+				var attrflag = {};
+				var modifiable = ((eddb.mtype[this.module.mtype] || EMPTY_OBJ).modifiable || EMPTY_ARR);
+				for (var a = 0;  a < modifiable.length;  a++)
+					attrflag[modifiable[a]] = true;
+				for (var attr in (expeffect || EMPTY_OBJ))
+					attrflag[attr] = true;
+				// identify modified attrs
+				var attrs = [];
+				for (var attr in attrflag) {
+					if (cache.attribute[attr] && this.getEffectiveAttrModifier(attr)) {
+						if (attr === 'damage') {
+							attrs.push('dps');
+							if (isFinite(this.getBaseAttrValue('rof')))
+								attrs.push('damage');
+						} else if (attr === 'bstint') {
+							attrs.push('dps');
+							attrs.push('rof');
+						} else {
+							attrs.push(attr);
+						}
+					}
+				}
+				// sort and export modified attrs
+				if (attrs.length > 0) {
+					attrs.sort(sortAttributes);
+					var obj_eng_mod = obj_eng["Modifiers"] = [];
+					for (var a = 0;  a < attrs.length;  a++) {
+						obj_eng_mod.push({
+							"Label": cache.attribute[attrs[a]].fdattr,
+							"Value": parseFloat(this.getEffectiveAttrValue(attrs[a]).toFixed(6)),
+							"OriginalValue": parseFloat(this.getBaseAttrValue(attrs[a]).toFixed(6)),
+						});
+					}
+				}
+			}
+			
+			return obj;
+		}, // exportJournal()
 		
 	}; // Slot.prototype
 	
@@ -1579,7 +1815,7 @@ window.edsy = new (function() {
 		
 		
 		setName: function(name) {
-			this.name = (name || '').slice(0,22).toUpperCase();
+			this.name = (name || '').slice(0,22);
 			this.clearHash();
 			return true;
 		}, // setName()
@@ -1591,7 +1827,7 @@ window.edsy = new (function() {
 		
 		
 		setNameTag: function(nametag) {
-			this.nametag = (nametag || '').slice(0,6).toUpperCase();
+			this.nametag = (nametag || '').slice(0,6);
 			this.clearHash();
 			return true;
 		}, // setNameTag()
@@ -1837,12 +2073,12 @@ window.edsy = new (function() {
 			
 			// ship hull
 			var slot_hull = this.getSlot('ship', 'hull');
-			stats.cost += slot_hull.getEffectiveAttrValue('cost');
+			stats.cost += slot_hull.getCost();
 			stats.mass += slot_hull.getEffectiveAttrValue('mass');
 			
 			// cargo hatch
 			var slot = this.getSlot('ship', 'hatch');
-			stats.cost += slot.getEffectiveAttrValue('cost');
+			stats.cost += slot.getCost();
 			var module = slot.getModule();
 			if (module && slot.getPowered()) {
 				var pwrdraw = slot.getEffectiveAttrValue('pwrdraw');
@@ -1860,7 +2096,7 @@ window.edsy = new (function() {
 				for (var slotnum = 0;  slot = this.getSlot(slotgroup, slotnum);  slotnum++) {
 					if (module = slot.getModule()) {
 						var mtypeid = module.mtype;
-						stats.cost += slot.getEffectiveAttrValue('cost');
+						stats.cost += slot.getCost();
 						stats.cost_vehicle += slot.getEffectiveAttrValue('vslots') * slot.getEffectiveAttrValue('vcount') * (slot.getEffectiveAttrValue('ammocost') || 0);
 						stats.mass += slot.getEffectiveAttrValue('mass');
 						stats.pwrcap += slot.getEffectiveAttrValue('pwrcap');
@@ -1974,6 +2210,7 @@ window.edsy = new (function() {
 			var fuelpower = slot.getEffectiveAttrValue('fuelpower');
 			stats._jump_laden    = getJumpDistance(            stats.mass + stats.fuelcap + stats.cargocap, min(stats.fuelcap, maxfuel), optmass, fuelmul, fuelpower, stats.jumpbst);
 			stats._jump_unladen  = getJumpDistance(            stats.mass + stats.fuelcap                 , min(stats.fuelcap, maxfuel), optmass, fuelmul, fuelpower, stats.jumpbst);
+			stats._jump_max      = getJumpDistance(            stats.mass + min(stats.fuelcap, maxfuel)   , min(stats.fuelcap, maxfuel), optmass, fuelmul, fuelpower, stats.jumpbst);
 			stats._range_laden   = getJumpRange(stats.fuelcap, stats.mass + stats.fuelcap + stats.cargocap, min(stats.fuelcap, maxfuel), optmass, fuelmul, fuelpower, stats.jumpbst);
 			stats._range_unladen = getJumpRange(stats.fuelcap, stats.mass + stats.fuelcap                 , min(stats.fuelcap, maxfuel), optmass, fuelmul, fuelpower, stats.jumpbst);
 			
@@ -2067,12 +2304,19 @@ window.edsy = new (function() {
 		
 		getHash: function() {
 			if (!this.hash) {
+				var slot = this.getSlot('ship', 'hull');
+				var cost = (slot.hasActualCost() ? slot.getCost() : 0);
+				var costbits = (cost & 0xF);
+				cost >>= 4;
+				var costsize = min(max(ceil(ceil(log2(cost)) / 6), 2), 5);
+				costbits |= (((costsize - 2) & 0x3) << 4);
 				var crewbits = (((this.crewdist.sys & 0x3) << 4) | ((this.crewdist.eng & 0x3) << 2) | (this.crewdist.wep & 0x3));
 				var distbits = (((this.powerdist.sys & 0xF) << 8) | ((this.powerdist.eng & 0xF) << 4) | (this.powerdist.wep & 0xF));
 				var hash = (
 					hashEncode(HASH_VERSION, 1)
 					+ hashEncode(this.shipid & 0x3F, 1)
-					+ hashEncode(this.getSlot('ship', 'hull').getDiscounts(), 1)
+					+ hashEncode(slot.getDiscounts(), 1)
+					+ hashEncode(costbits, 1) + hashEncode(cost, costsize)
 					+ hashEncode(crewbits, 1)
 					+ hashEncode(distbits, 2)
 					+ this.getSlot('ship', 'hatch').getHash()
@@ -2081,7 +2325,6 @@ window.edsy = new (function() {
 					var slotgroup = GROUPS[g];
 					hash += ',';
 					var gap = 0;
-					var slot = null;
 					for (var slotnum = 0;  slot = this.getSlot(slotgroup, slotnum);  slotnum++) {
 						var slothash = slot.getHash();
 						if (slothash) {
@@ -2178,6 +2421,67 @@ window.edsy = new (function() {
 			return buffer.join('\n');
 		}, // exportText()
 		
+		
+		exportJournal: function() {
+			var ship = eddb.ship[this.shipid];
+			if (!ship)
+				return '';
+			
+			// ship hull
+			var slot = this.getSlot('ship', 'hull');
+			var obj = {
+				"header": {
+					"appName": "EDSY",
+					"appVersion": VERSIONS[3],
+					"appURL": "https:\/\/edsy.org"
+				},
+				"data": {
+					"event": "Loadout",
+					"Ship": (ship.fdname || '').toLowerCase(),
+					"ShipName": (this.name || ''),
+					"ShipIdent": (this.nametag || ''),
+					"HullValue": parseInt(slot.getCost()),
+					"ModulesValue": 0,
+					"UnladenMass": parseFloat(this.getStat('mass').toFixed(6)),
+					"CargoCapacity": parseInt(this.getStat('cargocap')),
+					"MaxJumpRange": parseFloat(this.getStat('_jump_max').toFixed(6)),
+					"FuelCapacity": {
+						"Main": parseFloat(this.getStat('fuelcap').toFixed(6)),
+						"Reserve": parseFloat(ship.fuelreserve.toFixed(6)),
+					},
+					"Rebuy": parseInt(this.getStat('cost') * (1 - (current.option.insurance / 10000.0))),
+					"Modules": [],
+				},
+			};
+			
+			// cargo hatch
+			var slot = this.getSlot('ship', 'hatch');
+			if (slot.getModule()) {
+				obj.data.Modules.push({
+					"Slot": "CargoHatch",
+					"Item": ("ModularCargoBayDoor" + ((ship.fdid == 128049351) ? 'FDL' : '')).toLowerCase(),
+					"On": !!slot.getPowered(),
+					"Priority": parseInt(slot.getPriority() - 1),
+				});
+			}
+			
+			// slots
+			var milslots = [];
+			for (var groupnum = 0;  groupnum < GROUPS.length;  groupnum++) {
+				for (var slotnum = 0;  slot = this.getSlot(GROUPS[groupnum], slotnum);  slotnum++) {
+					var slotobj = slot.exportJournal();
+					if (slotobj) {
+						((GROUPS[groupnum] === 'military') ? milslots : obj.data.Modules).push(slotobj);
+						obj.data.ModulesValue += parseInt(slot.getCost()) || 0;
+					}
+				}
+			}
+			if (milslots.length > 0)
+				obj.data.Modules = obj.data.Modules.concat(milslots);
+			
+			return JSON.stringify(obj);
+		}, // exportJournal()
+		
 	}; // Build.prototype
 	
 	
@@ -2214,11 +2518,24 @@ window.edsy = new (function() {
 			return null;
 		}
 		var build = new Build(shipid, false);
+		var slot = build.getSlot('ship', 'hull');
 		var discounts = ((version >= 14) ? hashDecode(hashgroup.ship.slice(i, i += 1)) : 0);
+		var cost = 0;
+		if (version >= 15) {
+			var costbits = hashDecode(hashgroup.ship.slice(i, i += 1));
+			cost = hashDecode(hashgroup.ship.slice(i, (i += (((costbits >> 4) & 0x3) + 2))));
+			cost = (cost << 4) + (costbits & 0xF);
+		}
 		var crewbits = ((version >= 12) ? hashDecode(hashgroup.ship.slice(i, i += 1)) : 0);
 		var distbits = ((version >= 12) ? hashDecode(hashgroup.ship.slice(i, i += 2)) : 0x444);
-		if (!build.getSlot('ship', 'hull').setDiscounts(discounts)) {
-			if (errors) errors.push('Invalid hull discounts: ' + discounts);
+		if (cost) {
+			if (!slot.setCost(cost)) {
+				if (errors) errors.push('Invalid hull cost: ' + cost);
+			}
+		} else {
+			if (!slot.setDiscounts(discounts)) {
+				if (errors) errors.push('Invalid hull discounts: ' + discounts);
+			}
 		}
 		/* TODO? saving powerdist with build
 		if (!build.setCrewDist((crewbits >> 4) & 0x3, (crewbits >> 2) & 0x3, crewbits & 0x3)) {
@@ -2248,18 +2565,25 @@ window.edsy = new (function() {
 					}
 				} else {
 					var slotbits = ((version >= 8) ? hashDecode(hashgroup[slotgroup].slice(j, j += 1)) : 0);
-					var discounted = (version < 14) ? 0 : (slotbits & 0x20);
-					var modified = (slotbits & 0x10);
-					if (discounted) {
+					var costed = ((version >= 15) ? (slotbits & 0x20) : 0);
+					var discounted = ((version >= 15) ? !costed : ((version >= 14) ? (slotbits & 0x20) : 0));
+					var engineered = (slotbits & 0x10);
+					if (costed) {
+						var costbits = hashDecode(hashgroup[slotgroup].slice(j, (j += 1)));
+						j += (((costbits >> 4) & 0x3) + 2);
+					} else if (discounted) {
 						j += 1;
 					}
-					if (modified) {
-						var modbits = ((version >= 9) ? hashDecode(hashgroup[slotgroup].slice(j, j += ((version >= 12) ? 3 : 2))) : 0);
-						var bprolled = (version < 14) ? 0 : (modbits & 0x20000);
-						if (!bprolled) {
-							var mods = ((version >= 12) ? (modbits & 0x1F) : (modbits & 0x3F));
-							j += mods * 4;
+					if (engineered) {
+						var engbits = ((version >= 9) ? hashDecode(hashgroup[slotgroup].slice(j, j += ((version >= 12 && version <= 14) ? 3 : 2))) : 0);
+						var nummods = 0;
+						if (version >= 15) {
+							j += 2; // bproll
+							nummods = hashDecode(hashgroup[slotgroup].slice(j, j += 1));
+						} else if (!(version >= 14 && (engbits & 0x20000))) { // !bprolled
+							nummods = ((version >= 12) ? (engbits & 0x1F) : (engbits & 0x3F));
 						}
+						j += nummods * 4;
 					}
 					var tgtslotgroup = slotgroup;
 					var tgtslotnum = 0;
@@ -2501,7 +2825,8 @@ window.edsy = new (function() {
 				idmap.blueprint['iss'][1] = 'iss_er';
 				idmap.blueprint['iss'][2] = 'iss_er';
 			case 13:
-			case 14: // HASH_VERSION
+			case 14:
+			case 15: // HASH_VERSION
 			default:
 			}
 		}
@@ -2615,7 +2940,7 @@ window.edsy = new (function() {
 	var getModuleAttrs = function(module) {
 		var attrflag = {};
 		for (var attr in module) {
-			if (cache.attribute[attr])
+			if (cache.attribute[attr] && !cache.attribute[attr].hidden)
 				attrflag[attr] = 1;
 		}
 		var mtype = eddb.mtype[module.mtype];
@@ -2747,10 +3072,14 @@ window.edsy = new (function() {
 		}
 		var decimals = -ceil(log(step) / LN10 - 0.000001);
 		if (decimals > 0) {
-			var text = value.toFixed(decimals).replace(/(\.[0-9]*?[1-9])0+$/, '$1').replace(/\.0*$/, '');
+			if (!cache.reTrailingPointZero) {
+				var sep = formatNumText(1.234,3).substring(1,2);
+				cache.reTrailingPointZero = new RegExp('(\\'+sep+'[0-9]*?[1-9])0+$|\\'+sep+'0*$');
+			}
+			var text = formatNumText(value, decimals).replace(cache.reTrailingPointZero, '$1');
 		} else {
 			var step = pow(10, -decimals);
-			var text = (((value / step + 0.5) | 0) * step).toFixed(0);
+			var text = formatNumText(((value / step + 0.5) | 0) * step, 0);
 		}
 		return text;
 	}; // getModuleAttrValueText()
@@ -2782,21 +3111,26 @@ window.edsy = new (function() {
 			text = ((value > base) ? '+' : '');
 			var attribute = cache.attribute[attr];
 			if (attribute.modset || attribute.modadd) {
-				text += (value - base).toFixed((attribute.step >= 1) ? 0 : 2);
+				text += formatNumText(value - base, (attribute.step >= 1) ? 0 : 2);
 			} else if (attribute.modmod || attribute.unit === '%') {
-				text += (value - base).toFixed(1) + '%';
+				text += formatNumText(value - base, 1) + '%';
 			} else {
-				text += (((value / base) - 1) * 100).toFixed(1) + '%';
+				text += formatNumText(((value / base) - 1) * 100, 1) + '%';
 			}
 		}
 		return text;
 	}; // getModuleAttrModifierText()
 	
 	
+	var getModuleAttrModifierHTML = function(module, attr, modifier) {
+		return getModuleAttrModifierText(module, attr, modifier).replace('%', '<small class="semantic">%</small>');
+	}; // getModuleAttrModifierHTML()
+	
+	
 	var parseModuleAttrModifierText = function(module, attr, text) {
 		var attribute = cache.attribute[attr];
 		text = text.trim();
-		var textvalue = parseFloat(text);
+		var textvalue = parseNumText(text);
 		if (!attribute || isNaN(textvalue))
 			return undefined;
 		var base = getModuleAttrValue(module, attr);
@@ -2807,6 +3141,38 @@ window.edsy = new (function() {
 		}
 		return getModuleAttrModifier(module, attr, value);
 	}; // parseModuleAttrModifierText()
+	
+	
+	var getBlueprintGradeRollAttrModifier = function(bpid, bpgrade, bproll, attr) {
+		var blueprint = eddb.blueprint[bpid];
+		if (!blueprint)
+			return null;
+		var attribute = cache.attribute[attr];
+		if (!attribute || !blueprint[attr])
+			return null;
+		bpgrade = min(max(bpgrade, 1), blueprint.maxgrade);
+		bproll = min(max(bproll, 0), 1);
+		var himod = blueprint[attr][bpgrade - 1];
+		var lomod = ((bpgrade > 1) ? blueprint[attr][bpgrade - 2] : ((himod && blueprint[attr][1]) ? (himod - (blueprint[attr][1] - himod)) : 0));
+		return (((himod < 0) === !attribute.bad) ? himod : (lomod + bproll * (himod - lomod))) / (attribute.modmod || ((attribute.modadd || attribute.modset) ? 1 : 100));
+	}; // getBlueprintGradeRollAttrModifier()
+	
+	
+	/* unused  var getBlueprintGradeAttrModifierRoll = function(bpid, bpgrade, attr, modifier) {
+		var blueprint = eddb.blueprint[bpid];
+		if (!blueprint)
+			return null;
+		var attribute = cache.attribute[attr];
+		if (!attribute || !blueprint[attr])
+			return null;
+		bpgrade = min(max(bpgrade, 1), blueprint.maxgrade);
+		var himod = blueprint[attr][bpgrade - 1];
+		if ((himod < 0) === !attribute.bad)
+			return null;
+		var lomod = ((bpgrade > 1) ? blueprint[attr][bpgrade - 2] : ((himod && blueprint[attr][1]) ? (himod - (blueprint[attr][1] - himod)) : 0));
+		return ((modifier * (attribute.modmod || ((attribute.modadd || attribute.modset) ? 1 : 100))) - lomod) / (himod - lomod);
+	}; // getBlueprintGradeAttrModifierRoll()
+	*/
 	
 	
 	/*
@@ -2937,9 +3303,9 @@ window.edsy = new (function() {
 			var md = (lo + hi) >> 1;
 			var val = cache.discountMod[a[md]];
 			if (val < mod) {
-				lo = md + 1;
+				lo = md;
 			} else if (val > mod) {
-				hi = md - 1;
+				hi = md;
 			} else {
 				return a[md];
 			}
@@ -3044,48 +3410,24 @@ window.edsy = new (function() {
 		}
 		
 		// generate and sort discount bits
-		for (var db = 0;  db < 0x40;  db++) {
+		var db = ((1 << DISCOUNTS.length) - 1);
+		cache.discountMod[db] = 0;
+		while (db-- > 0) {
 			var mod = 1.0, m = 1, i = DISCOUNTS.length;
 			while (i-- > 0) {
 				mod *= (db & m) ? (1.0 - DISCOUNTS[i] / 100.0) : 1.0;
 				m <<= 1;
 			}
 			cache.discountMod[db] = mod;
-			cache.discounts.push(db);
 		}
-		cache.discountMod[0x3F] = 0;
+		cache.discounts = Object.keys(cache.discountMod);
 		cache.discounts.sort(sortDiscounts);
 	}; // initCache()
 	
 	
 	/*
-	* PAGE UI
+	* PAGE & POPUP UI
 	*/
-	
-	
-	var updateUIOptions = function() {
-		current.option.insurance = parseInt(current.option.insurance);
-		current.option.onlybest = !!current.option.onlybest;
-		current.option.experimental = !!current.option.experimental;
-		current.option.show1 = !!current.option.show1;
-		current.option.show2 = !!current.option.show2;
-		current.option.show3 = !!current.option.show3;
-		current.option.hidestats = !!current.option.hidestats;
-		
-		document.body.classList.toggle('onlybest', current.option.onlybest);
-		document.body.classList.toggle('experimental', current.option.experimental);
-		document.body.classList.toggle('show1', current.option.show1);
-		document.body.classList.toggle('show2', current.option.show2);
-		document.body.classList.toggle('show3', current.option.show3);
-		
-		document.forms.options.elements.insurance.value = current.option.insurance;
-		document.forms.options.elements.onlybest.checked = current.option.onlybest;
-		document.forms.options.elements.experimental.checked = current.option.experimental;
-		document.forms.options.elements.show1.checked = current.option.show1;
-		document.forms.options.elements.show2.checked = current.option.show2;
-		document.forms.options.elements.show3.checked = current.option.show3;
-		document.forms.options.elements.hidestats.checked = current.option.hidestats;
-	}; // updateUIOptions()
 	
 	
 	var setUIPageTab = function(tab) {
@@ -3626,7 +3968,7 @@ window.edsy = new (function() {
 		div.className = 'export';
 		var input = document.createElement('input');
 		input.type = 'text';
-		input.size = 20;
+		input.size = 50;
 		input.className = 'export';
 		input.name = 'export_url';
 		input.value = window.location.protocol + '//' + window.location.hostname + window.location.pathname + '#/L=' + current.fit.getHash();
@@ -3659,6 +4001,7 @@ window.edsy = new (function() {
 		var input = document.createElement('input');
 		input.style.display = 'none';
 		input.type = 'text';
+		input.size = 50;
 		input.className = 'export';
 		input.name = 'export_short';
 		input.value = 'short';
@@ -3701,6 +4044,34 @@ window.edsy = new (function() {
 		td.appendChild(button);
 		tr.appendChild(td);
 		tbody.appendChild(tr);
+		
+		if (current.dev) { // TODO DEBUG
+			var tr = document.createElement('tr');
+			var td = document.createElement('td');
+			td.appendChild(document.createTextNode('Journal'));
+			tr.appendChild(td);
+			var td = document.createElement('td');
+			td.className = 'export';
+			var div = document.createElement('div');
+			div.className = 'export';
+			var input = document.createElement('input');
+			input.type = 'text';
+			input.size = 50;
+			input.className = 'export';
+			input.name = 'export_journal';
+			input.value = current.fit.exportJournal();
+			input.addEventListener('focus', onUIPopupExportFieldFocus);
+			div.appendChild(input);
+			td.appendChild(div);
+			tr.appendChild(td);
+			var td = document.createElement('td');
+			var button = document.createElement('button');
+			button.innerHTML = HTML_ICON['clipboard'];
+			button.addEventListener('click', onUIPopupExportCopyButtonClick);
+			td.appendChild(button);
+			tr.appendChild(td);
+			tbody.appendChild(tr);
+		}
 		
 		table.appendChild(tbody);
 		document.forms.popup.elements.export_url.focus();
@@ -3763,7 +4134,8 @@ window.edsy = new (function() {
 				var response = null;
 				try {
 					response = JSON.parse(request.responseText);
-					console.log('FDAPI: ' + request.status + '/' + response.status + ', ' + typeof(response['import']));
+					if (current.dev)
+						console.log('FDAPI: ' + request.status + '/' + response.status + ', ' + typeof(response['import']));
 				} catch (exc) {
 					response = null;
 					console.log('FDAPI: failed to parse response: ' + exc);
@@ -4024,6 +4396,8 @@ window.edsy = new (function() {
 		text = text.trim();
 		if (!text)
 			return true;
+		if (current.dev)
+			console.log(text);
 		
 		// initialize storage for possibly decoding multiple builds
 		var errors = [];
@@ -4056,7 +4430,7 @@ window.edsy = new (function() {
 							var index = importdata.buildlist.length;
 							var builderrors = [];
 							var build = Build.fromHash(parts[p].slice(2), builderrors);
-							var importhash = build ? ('url|' + build.getShipID() + '|' + hashEncodeS(build.getName()) + '|' + hashEncodeS(build.getNameTag())) : null;
+							var importhash = build ? ('URL|' + build.getShipID() + '|' + hashEncodeS(build.getName().toUpperCase()) + '|' + hashEncodeS(build.getNameTag().toUpperCase())) : null;
 							importdata.buildlist[index] = { index:index, importhash:importhash, fleetid:null, namehash:null, build:build, builderrors:builderrors };
 							if (build)
 								curindex = index;
@@ -4092,7 +4466,7 @@ window.edsy = new (function() {
 					if (json['imports']) {
 						importdata.imports = importdata.imports || {};
 						for (var importhash in json['imports']) {
-							importdata.imports[importhash] = json['imports'][importhash];
+							importdata.imports[importhash.toUpperCase()] = json['imports'][importhash.toUpperCase()];
 						}
 					}
 					for (var i = 0;  i < (json['buildlist'] || EMPTY_ARR).length;  i++) {
@@ -4133,7 +4507,7 @@ window.edsy = new (function() {
 								var index = importdata.buildlist.length;
 								var builderrors = [];
 								var build = decodeJournalBuild(json[i], builderrors);
-								var importhash = build ? ('journal|' + build.getShipID() + '|' + max(0,fleetid) + '|' + hashEncodeS(build.getName()) + '|' + hashEncodeS(build.getNameTag())) : null;
+								var importhash = build ? ('JOURNAL|' + build.getShipID() + '|' + max(0,fleetid) + '|' + hashEncodeS(build.getName().toUpperCase()) + '|' + hashEncodeS(build.getNameTag().toUpperCase())) : null;
 								importdata.buildlist[index] = { index:index, importhash:importhash, fleetid:fleetid, namehash:null, build:build, builderrors:builderrors };
 								fleetids[fleetid] = true;
 							}
@@ -4164,7 +4538,7 @@ window.edsy = new (function() {
 							var index = importdata.buildlist.length;
 							var builderrors = [];
 							var build = decodeCAPIBuild(shipobj, builderrors);
-							var importhash = build ? ('fdapi|' + build.getShipID() + '|' + max(0,fleetids[i]) + '|' + hashEncodeS(build.getName()) + '|' + hashEncodeS(build.getNameTag())) : null;
+							var importhash = build ? ('FDAPI|' + build.getShipID() + '|' + max(0,fleetids[i]) + '|' + hashEncodeS(build.getName().toUpperCase()) + '|' + hashEncodeS(build.getNameTag().toUpperCase())) : null;
 							importdata.buildlist[index] = { index:index, importhash:importhash, fleetid:fleetids[i], namehash:null, build:build, builderrors:builderrors };
 							if (build && fleetids[i] == fleetid)
 								curindex = index;
@@ -4382,39 +4756,27 @@ window.edsy = new (function() {
 		if (!cache.fdevmap) {
 			var fdevmap = {
 				ship: {},
-				shipModule: {},
-				module: {},
-				mtypeBlueprint: {},
 				slotGroup: {
 					HUGEHARDPOINT    : 'hardpoint',
 					LARGEHARDPOINT   : 'hardpoint',
 					MEDIUMHARDPOINT  : 'hardpoint',
 					SMALLHARDPOINT   : 'hardpoint',
 					TINYHARDPOINT    : 'utility',
-					ARMOUR           : 'component',
-					POWERPLANT       : 'component',
-					MAINENGINES      : 'component',
-					FRAMESHIFTDRIVE  : 'component',
-					LIFESUPPORT      : 'component',
-					POWERDISTRIBUTOR : 'component',
-					RADAR            : 'component',
-					FUELTANK         : 'component',
 					MILITARY         : 'military',
 					SLOT             : 'internal',
 				},
-				slotNum : {
-					ARMOUR           : CORE_ABBR_SLOT.BH,
-					POWERPLANT       : CORE_ABBR_SLOT.PP,
-					MAINENGINES      : CORE_ABBR_SLOT.TH,
-					FRAMESHIFTDRIVE  : CORE_ABBR_SLOT.FD,
-					LIFESUPPORT      : CORE_ABBR_SLOT.LS,
-					POWERDISTRIBUTOR : CORE_ABBR_SLOT.PD,
-					RADAR            : CORE_ABBR_SLOT.SS,
-					FUELTANK         : CORE_ABBR_SLOT.FT,
-				},
+				slotNum: {},
+				shipModule: {},
+				module: {},
+				mtypeBlueprint: {},
+				expeffect: {},
 				attrField: {},
 				fieldAttr: {},
 			};
+			for (var s = 0;  s < CORE_SLOT_FDNAME.length;  s++) {
+				fdevmap.slotGroup[CORE_SLOT_FDNAME[s].toUpperCase()] = 'component';
+				fdevmap.slotNum[CORE_SLOT_FDNAME[s].toUpperCase()] = s;
+			}
 			
 			// current ship and ship-module mappings
 			for (var shipid in eddb.ship) {
@@ -4490,6 +4852,13 @@ window.edsy = new (function() {
 						fdevmap.mtypeBlueprint[mtypeid][modtype + '_SHIELDED'] = fdevmap.mtypeBlueprint[mtypeid]['MISC_SHIELDED'];
 					}
 				}
+			}
+			
+			// expeffect mappings are (now) bi-directional
+			for (var expid in eddb.expeffect) {
+				var fdexpid = eddb.expeffect[expid].fdname;
+				if (fdexpid)
+					fdevmap.expeffect[fdexpid.toUpperCase()] = expid;
 			}
 			
 			// attr mappings are (now) bi-directional, except for some special cases
@@ -4594,6 +4963,7 @@ window.edsy = new (function() {
 							var field = modifierarr[m].name;
 							var fieldmodifier = parseFloat(modifierarr[m].value);
 							var attrmods = eddb.fdattrmod[field];
+							var expid = fdevmap.expeffect[field.toUpperCase()];
 							if (field === 'mod_weapon_clip_size_override') {
 								modifiers['ammoclip'] = getModuleAttrModifier(module, 'ammoclip', fieldmodifier);
 							} else if (field === 'mod_weapon_falloffrange_from_range') {
@@ -4604,7 +4974,7 @@ window.edsy = new (function() {
 									var modifier = fieldmodifier * attrmods[attr];
 									modifiers[attr] = (attribute.modset ? modifier : getAttrModifierSum(attr, modifiers[attr], modifier));
 								}
-							} else if (eddb.fdexpeffect[field]) {
+							} else if (expid) {
 								specialobj = specialobj || {};
 								specialobj[field] = fieldmodifier;
 							} else if (unknowns) {
@@ -4620,10 +4990,10 @@ window.edsy = new (function() {
 					
 					if (specialobj) {
 						for (var field in specialobj) {
-							if (field === 'special_plasma_slug' && module.mtype === 'hrg')
-								field = 'special_plasma_slug_cooled';
+							if (module.mtype === 'hrg' && (field === 'special_feedback_cascade' || field === 'special_plasma_slug' || field === 'special_super_penetrator'))
+								field += '_cooled';
 							eventengobj["ExperimentalEffect"] = field;
-							var expid = eddb.fdexpeffect[field];
+							var expid = fdevmap.expeffect[field.toUpperCase()];
 							var expeffect = eddb.expeffect[expid];
 							if (expeffect) {
 								for (var attr in expeffect) {
@@ -4679,7 +5049,6 @@ window.edsy = new (function() {
 				eventobj["Modules"].push(eventslotobj);
 			}
 		}
-//console.log(JSON.stringify(eventobj));
 		return decodeJournalBuild(eventobj, errors);
 	}; // decodeCAPIBuild()
 	
@@ -4745,13 +5114,15 @@ window.edsy = new (function() {
 			}
 		}
 		
-		// apply the hull discount
-		var slot = build.getSlot('ship', 'hull');
+		// get the hull and module costs
 		if ('HullValue' in json) {
-			if (!slot.setDiscounts(getClosestDiscount(((json.HullValue || 0) + extravalue) / ship.cost))) {
-				if (errors) errors.push('Failed to calculate discounted hull value: ' + json.HullValue + '+' + extravalue + ' vs base ' + ship.cost);
+			var slot = build.getSlot('ship', 'hull');
+			if (!slot.setCost((json.HullValue || 0) + extravalue)) {
+				if (errors) errors.push('Invalid hull value: ' + json.HullValue + '+' + extravalue);
 			}
 		}
+		var modulesValueExpected = json['ModulesValue'];
+		var modulesValueActual = 0;
 		
 		for (var slotgroup in eddb.group) {
 			if (slotgroup !== 'component') {
@@ -4798,64 +5169,70 @@ window.edsy = new (function() {
 									if (errors) errors.push(modulejson.Slot + getModuleLabel(this.getModule()) + ' requires Experimental Mode');
 								}
 								if ('Value' in modulejson) {
-									var modvalue = modulejson.Value || 0;
-									var basecost = build.getModule(modid).cost;
-									if (!slot.setDiscounts(basecost ? getClosestDiscount(modvalue / basecost) : 0)) {
-										if (errors) errors.push(modulejson.Slot + ': Failed to calculate discounted value: ' + modulejson.Value + ' vs base ' + basecost);
+									modulesValueExpected -= modulejson.Value;
+									if (!slot.setCost(modulejson.Value)) {
+										if (errors) errors.push(modulejson.Slot + ': Invalid value: ' + modulejson.Value);
 									}
+								} else {
+									modulesValueActual += slot.getCost();
 								}
 								var mtypeid = slot.getModule().mtype;
 								if (modulejson.Engineering) {
 									var fdname = (modulejson.Engineering.BlueprintName || '').trim().toUpperCase();
 									var bpid = fdevmap.mtypeBlueprint[mtypeid][fdname];
+									var bpgrade = 0;
+									var bproll = 0;
 									if (bpid) {
-										var bpgrade = parseInt(modulejson.Engineering.Level);
+										bpgrade = parseInt(modulejson.Engineering.Level);
 										// pre-3.0 utility ammo blueprints only had a grade 3, which now has to be grade 1
 										if (fdname === 'CHAFFLAUNCHER_CHAFFCAPACITY' || fdname === 'HEATSINKLAUNCHER_HEATSINKCAPACITY' || fdname === 'POINTDEFENCE_POINTDEFENSECAPACITY')
 											bpgrade = 1;
-										var bproll = parseFloat(modulejson.Engineering.Quality);
-										if (isNaN(bproll))
-											bproll = -1;
+										bproll = parseFloat(modulejson.Engineering.Quality);
+										if (isNaN(bproll) || bproll <= 0)
+											bproll = 0;
 										if (!slot.setBlueprint(bpid, bpgrade, bproll)) {
 											if (errors) errors.push(modulejson.Slot + ': Invalid blueprint: ' + modulejson.Engineering.BlueprintName);
 										}
 									} else if (modulejson.Engineering.BlueprintName && errors) errors.push(modulejson.Slot + ': Unknown blueprint: ' + modulejson.Engineering.BlueprintName);
 									
-									var expid = eddb.fdexpeffect[(modulejson.Engineering.ExperimentalEffect || '').trim().toLowerCase()];
+									var expid = fdevmap.expeffect[(modulejson.Engineering.ExperimentalEffect || '').trim().toUpperCase()];
 									if (expid) {
 										if (!slot.setExpeffectID(expid)) {
 											if (errors) errors.push(modulejson.Slot + ': Invalid experimental: ' + modulejson.Engineering.ExperimentalEffect);
 										}
 									} else if (modulejson.Engineering.ExperimentalEffect && errors) errors.push(modulejson.Slot + ': Unknown experimental: ' + modulejson.Engineering.ExperimentalEffect);
 									
-									var modifier_rof = null;
+									// if there's a ROF modifier, handle it last so it takes into account bstsize/bstrof
+									var modlist = [];
+									var modjson_rof = null;
 									for (var m = 0;  m < (modulejson.Engineering.Modifiers || EMPTY_ARR).length;  m++) {
 										var modjson = modulejson.Engineering.Modifiers[m];
+										var attr = fdevmap.fieldAttr[modjson.Label];
+										if (attr === 'rof') {
+											modjson_rof = modjson;
+										} else if (attr) {
+											modlist.push(modjson);
+										}
+									}
+									if (modjson_rof) {
+										modlist.push(modjson_rof);
+									}
+									
+									for (var m = 0;  m < modlist.length;  m++) {
+										var modjson = modlist[m];
 										var attr = fdevmap.fieldAttr[modjson.Label];
 										if (attr) {
 											var module = slot.getModule();
 											var base = parseFloat(modjson.OriginalValue);
 											if (isNaN(base))
-												base = getModuleAttrValue(module, attr);
+												base = slot.getBaseAttrValue(attr);
 											var modifier = getAttrModifier(attr, base, parseFloat(modjson.Value));
-											if (attr === 'rof') {
-												modifier_rof = modifier;
-											} else if (!isModuleAttrModifiable(module, attr)) {
+											if (!isModuleAttrModifiable(module, attr)) {
 												// ignore unmodifiable attributes, Journal includes them all the time (mass on lightweight bulkheads, shotspd, etc)
-											} else {
-/* TODO?
-var rollmod = slot.getEffectiveAttrModifier(attr);
-if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' rolled '+rollmod+' found '+modifier+' error '+(modifier-rollmod));
-*/
-												if (!slot.setEffectiveAttrModifier(attr, modifier)) {
-													if (errors) errors.push(modulejson.Slot + ': Invalid modifier: ' + modjson.Label + '=' + modjson.Value);
-												}
+											} else if (!slot.setEffectiveAttrModifier(attr, modifier)) {
+												if (errors) errors.push(modulejson.Slot + ': Invalid modifier: ' + modjson.Label + '=' + modjson.Value);
 											}
 										} else if (attr !== null && errors) errors.push(modulejson.Slot + ': Modifier #' + (m+1) + ': Unknown attribute: ' + modjson.Label);
-									}
-									// apply ROF last, so it takes into account bstsize/bstrof
-									if (modifier_rof) {
-										slot.setEffectiveAttrModifier('rof', modifier_rof);
 									}
 								}
 							} else if (errors) errors.push(modulejson.Slot + ': Invalid module: ' + modulejson.Item);
@@ -4870,6 +5247,21 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 						}
 					} else if (errors) errors.push(modulejson.Slot + ': Invalid slot');
 				}
+			}
+		}
+		
+		// check modules value
+		if (!isNaN(modulesValueExpected) && !isNaN(modulesValueActual) && modulesValueExpected != modulesValueActual && modulesValueActual > 0) {
+			var discounts = getClosestDiscount(modulesValueExpected / modulesValueActual);
+			if (discounts > 0) {
+				for (var slotgroup in eddb.group) {
+					for (var slotnum = 0;  slot = build.getSlot(slotgroup, slotnum);  slotnum++) {
+						if (!slot.hasActualCost()) {
+							slot.setDiscounts(discounts);
+						}
+					}
+				}
+				if (errors) errors.push('Module values not specified; applying estimated '+formatPctText(1 - cache.discountMod[discounts], 1)+' discount');
 			}
 		}
 		
@@ -5392,7 +5784,7 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 			}
 		}
 		updateUIFitLimitedSlots();
-		document.forms.stats.elements.stats_cur_fuel.value = fit.getStat('fuelcap');
+		document.forms.stats.elements.stats_cur_fuel.value = formatNumText(fit.getStat('fuelcap'), 0);
 		document.forms.stats.elements.stats_cur_cargo.value = '0';
 		updateUIStats();
 		setCurrentSlot('ship', 'hull');
@@ -5529,6 +5921,7 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 	
 	
 	var setStoredImport = function(importhash, namehash) {
+		importhash = importhash.toUpperCase();
 		var namehashOld = current.importLabel[importhash];
 		if (namehashOld) {
 			delete current.labelImports[namehashOld][importhash];
@@ -5559,8 +5952,11 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 		var data = (window.localStorage.getItem(item) || '').split('/');
 		for (var i = 0;  i < data.length;  i++) {
 			var entry = data[i].split('=');
-			if (entry.length === 2)
-				setStoredImport(entry[0], entry[1]);
+			if (entry.length === 2) {
+				var importhash = entry[0].toUpperCase();
+				var namehash = entry[1];
+				setStoredImport(importhash, namehash);
+			}
 		}
 		return true;
 	}; // readStoredImports()
@@ -5572,7 +5968,7 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 		
 		var data = [];
 		for (var importhash in current.importLabel) {
-			data.push(importhash + '=' + current.importLabel[importhash]);
+			data.push(importhash.toUpperCase() + '=' + current.importLabel[importhash]);
 		}
 		var item = 'edsy_imports' + (current.beta ? '_beta' : '');
 		window.localStorage.setItem(item, data.join('/'));
@@ -5704,7 +6100,6 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 		var slot = current.fit.getSlot('ship', 'hull');
 		var crew = slot.getEffectiveAttrValue('crew');
 		var mass = slot.getEffectiveAttrValue('mass');
-		var cost = slot.getEffectiveAttrValue('cost');
 		var boostcost = slot.getEffectiveAttrValue('boostcost');
 		
 		// update displays
@@ -6071,9 +6466,10 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 		document.getElementById('outfitting_fit_attrs_' + group_slot).innerHTML = attrhtml.join(' ');
 		
 		var el = document.getElementById('outfitting_fit_price_' + group_slot);
-		var value = slot.getEffectiveAttrValue('cost');
-		var direction = getAttrModifierDirection('cost', slot.getEffectiveAttrModifier('cost'));
-		el.innerHTML = ((slot.getBaseAttrValue('cost') !== undefined) ? formatPriceHTML(value) : '');
+		var value = slot.getCost();
+		var base = slot.getBaseCost();
+		var direction = base - value;
+		el.innerHTML = ((base !== undefined) ? formatPriceHTML(value) : '');
 		el.classList.toggle('modgood', direction > 0);
 		el.classList.toggle('modbad', direction < 0);
 	}; // updateUIFitSlot()
@@ -6232,21 +6628,9 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 	
 	
 	var initUIDetails = function() {
-		var row = document.getElementById('details_discount');
-		for (var i = -1;  i < DISCOUNTS.length;  i++) {
-			var bit = (1 << (DISCOUNTS.length - i - 1)) + ((i < 0) ? -1 : 0);
-			var label = document.createElement('label');
-			label.className = 'togglebutton';
-			var input = document.createElement('input');
-			input.type = 'checkbox';
-			input.id = 'discount_' + bit;
-			input.name = 'discount';
-			input.value = bit;
-			var div = document.createElement('div');
-			div.innerHTML = (i < 0) ? 'FREE' : formatPctHTML(1 - cache.discountMod[bit], (DISCOUNTS[i] % 1 ? 1 : 0));
-			label.appendChild(input);
-			label.appendChild(div);
-			row.appendChild(label);
+		for (var i = 0;  i < DISCOUNTS.length;  i++) {
+			var bit = (1 << (DISCOUNTS.length - 1 - i));
+			document.getElementById('details_cost_' + bit).innerHTML = formatPctHTML(1 - cache.discountMod[bit], (DISCOUNTS[i] % 1 ? 1 : 0));
 		}
 		
 		var table = document.createElement('table');
@@ -6545,12 +6929,18 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 		var modid = slot.getModuleID();
 		var module = slot.getModule();
 		
-		document.getElementById('outfitting_details_module').style.visibility = (module ? 'visible' : 'hidden');
+		// set displayed label
+		var label = (module ? (module.mtype ? getModuleLabel(module, false, true) : module.name) : ((current.outfitting_focus === 'slot') ? '(Empty Slot)' : '(No Module)'));
+		document.getElementById('outfitting_details_label').innerHTML = label;
+		document.getElementById('details_rank').innerHTML = ((module && (module.rank > 0)) ? ((module.faction || 'unknown') + ' rank ' + module.rank + ' (' + eddb.rank[module.faction][module.rank] + ')') : '');
+		
+		// show or hide sections
+		document.getElementById('details_cost').style.display = (module ? 'block' : 'none');
+		document.getElementById('details_engineering').style.display = ((module && slot.isModifiable()) ? 'block' : 'none');
+		document.getElementById('outfitting_details_table').style.display = (module ? '' : 'none');
+		
 		if (!module)
 			return true;
-		
-		// set displayed label
-		document.getElementById('outfitting_details_label').innerHTML = (module.mtype ? getModuleLabel(module, false, true) : module.name);
 		
 		// rebuild blueprint selector
 		var select = document.forms.details.elements.blueprint;
@@ -6613,44 +7003,68 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 			tbody.rows[r].style.display = 'none';
 		}
 		
-		// set displayed discounts and modification data
-		updateUIDetailsDiscounts();
+		// set displayed cost and modification data
+		updateUIDetailsCost();
 		updateUIDetailsModifications();
 		return true;
 	}; // updateUIDetailsModule()
 	
 	
-	var updateUIDetailsDiscounts = function() {
-		var slot = current.fit.getSlot(current.group, current.slot);
+	var updateUIDetailsCost = function() {
+		var slot = getUIOutfittingSlot();
+		if (!slot)
+			return false;
+		var cost = slot.getCost();
+		var base = slot.getBaseCost();
+		var actual = slot.hasActualCost();
 		var discounts = (current.outfitting_focus === 'slot') ? slot.getDiscounts() : 0;
-		var disabled = (current.outfitting_focus === 'slot') ? (slot.getBaseAttrValue('cost') < 1) : true;
-		var inputs = document.getElementById('details_discount').getElementsByTagName('INPUT');
+		var disabled = (current.outfitting_focus === 'slot') ? (base < 1) : true;
+		var el = document.forms.details.elements.cost;
+		el.value = formatNumText(cost, 0);
+		el.size = max(cost, base).toString().length + 1;
+		el.disabled = disabled;
+		el = document.getElementById('details_cost_mod');
+		el.innerHTML = ((base < 0 || base == cost) ? '' : formatPctHTML(cost / base - 1, 1));
+		el.className = ((cost < base) ? 'modgood' : ((cost > base) ? 'modbad' : ''));
+		el = document.getElementById('details_cost_label');
+		var inputs = document.getElementById('details_cost').getElementsByTagName('INPUT');
 		for (var i = 0;  i < inputs.length;  i++) {
-			inputs[i].checked = ((discounts & inputs[i].value) == inputs[i].value) && ((discounts == 0x3F) == (inputs[i].value == 0x3F));
-			inputs[i].disabled = disabled;
+			if (inputs[i].name === 'discount') {
+				var bit = parseInt(inputs[i].value);
+				inputs[i].checked = (bit ? (((discounts & bit) == bit) && ((discounts == 0x3F) == (bit == 0x3F))) : actual);
+				inputs[i].disabled = disabled;
+			}
 		}
-	}; // updateUIDetailsDiscounts()
+		return true;
+	}; // updateUIDetailsCost()
 	
 	
-	var setUIDetailsDiscount = function(discount, checked) {
+	var setUIDetailsCost = function(cost) {
 		if (current.outfitting_focus !== 'slot')
 			return false;
 		var slot = current.fit.getSlot(current.group, current.slot);
-		var discounts = slot.getDiscounts();
-		if (checked) {
-			discounts = (((discounts == 0x3F) ? 0 : discounts) | discount);
-		} else {
-			discounts = (discounts & ~discount);
-		}
+		if (!slot.setCost(cost))
+			return false;
+		updateUIFitStoredBuildControls();
+		updateUIFitSlot(current.group, current.slot);
+		updateUIStats();
+		updateUIDetailsCost();
+		return true;
+	}; // setUIDetailsCost()
+	
+	
+	var setUIDetailsDiscounts = function(discounts) {
+		if (current.outfitting_focus !== 'slot')
+			return false;
+		var slot = current.fit.getSlot(current.group, current.slot);
 		if (!slot.setDiscounts(discounts))
 			return false;
 		updateUIFitStoredBuildControls();
 		updateUIFitSlot(current.group, current.slot);
 		updateUIStats();
-		updateUIDetailsDiscounts();
-		updateUIDetailsModifications(); // just to redraw cost
+		updateUIDetailsCost();
 		return true;
-	}; // setUIDetailsDiscount()
+	}; // setUIDetailsDiscounts()
 	
 	
 	var updateUIDetailsModifications = function() {
@@ -6680,7 +7094,7 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 		} else {
 			select.selectedIndex = -1;
 		}
-		document.getElementById('details_expeffect').innerHTML = ((eddb.expeffect[expid] || EMPTY_OBJ).special || '');
+		document.getElementById('details_special').innerHTML = ((eddb.expeffect[expid] || EMPTY_OBJ).special || '');
 		
 		var maxgrade = (bpid ? eddb.blueprint[bpid].maxgrade : 0);
 		for (var g = 1;  g <= MAX_BLUEPRINT_GRADE;  g++) {
@@ -6688,35 +7102,59 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 		}
 		document.forms.details.elements.blueprint_grade.value = bpgrade.toFixed(0);
 		
-		var inputs = document.getElementById('details_select_expeffect').getElementsByTagName('INPUT');
-		for (var i = 0;  i < inputs.length;  i++) {
-			inputs[i].disabled = !(bpid || modified);
-		}
-		document.forms.details.elements.blueprint_roll.value = bproll.toFixed(1);
+		updateUIDetailsBlueprintRoll((bpid || modified) ? bproll : null);
 		
 		var module = slot.getModule();
 		if (module) {
 			var input;
 			for (var r = 0;  (input = document.getElementById('outfitting_details_input_' + r)) && cache.attribute[input.name];  r++) {
 				var attr = input.name;
+				var override = slot.isAttrOverridden(attr);
 				var modifier = slot.getEffectiveAttrModifier(attr);
 				var direction = getAttrModifierDirection(attr, modifier);
 				var value = slot.getEffectiveAttrValue(attr);
-				/* TODO: ship rank? the Fed names are too long :/
-				if (attr === 'rank' && value < (eddb.rank[module.faction] || EMPTY_ARR).length) {
-					value = eddb.rank[module.faction][value];
-				}
-				*/
 				input.value = getModuleAttrValueText(module, attr, value);
 				input.size = max(input.value.length, 3);
-				input.disabled = !((modifiable && (isModuleAttrModifiable(module, attr) || ((attr === 'rof') && isModuleAttrModifiable(module, 'bstint')) || (attr === 'cost' && slot.getBaseAttrValue('cost'))) && (bpid || current.option.experimental)) || slot.getBaseAttrModifier(attr));
+				input.disabled = !((modifiable && (isModuleAttrModifiable(module, attr) || ((attr === 'rof') && isModuleAttrModifiable(module, 'bstint'))) && (bpid || current.option.experimental)) || slot.getBaseAttrModifier(attr));
 				var moddisplay = document.getElementById('outfitting_details_mod_' + r);
-				moddisplay.className = (direction ? ((direction < 0) ? 'modbad' : 'modgood') : '');
-				moddisplay.innerHTML = getModuleAttrModifierText(module, attr, modifier);
+				moddisplay.className = (direction ? ((direction < 0) ? 'modbad' : 'modgood') : '') + (override ? ' modoverride' : '');
+				moddisplay.innerHTML = getModuleAttrModifierHTML(module, attr, modifier);
 			}
 		}
 		return true;
 	}; // updateUIDetailsModifications()
+	
+	
+	var updateUIDetailsBlueprintRoll = function(bproll) {
+		if (bproll === undefined) {
+			var slot = getUIOutfittingSlot();
+			if (!slot)
+				return false;
+			bproll = (slot.getBlueprintID() || slot.isModified()) ? slot.getBlueprintRoll() : null;
+		}
+		var className, disabled, value;
+		if (bproll === null) {
+			className = 'disabled';
+			disabled = true;
+			value = '';
+		} else if (bproll <= 0) {
+			className = 'invalid';
+			disabled = false;
+			value = 'N/A';
+		} else {
+			className = '';
+			disabled = false;
+			value = formatPctText(bproll, 1);
+			document.getElementById('roll_ring1').style.transform = ('rotate(' + (min(max(bproll / 0.5    , 0), 1) * 180).toFixed(0) + 'deg)');
+			document.getElementById('roll_ring2').style.transform = ('rotate(' + (min(max(bproll / 0.5 - 1, 0), 1) * 180).toFixed(0) + 'deg)');
+		}
+		document.getElementById('engineering_roll').className = className;
+		document.forms.details.elements.blueprint_roll.disabled = disabled;
+		document.forms.details.elements.blueprint_roll.value = value;
+		document.forms.details.elements.blueprint_roll_preset1.disabled = disabled;
+		document.forms.details.elements.blueprint_roll_preset2.disabled = disabled;
+		document.forms.details.elements.blueprint_roll_preset3.disabled = disabled;
+	}; // updateUIDetailsBlueprintRoll()
 	
 	
 	var setUIDetailsBlueprintID = function(bpid) {
@@ -6805,18 +7243,19 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 			if (text.slice(-1) === '%' && (attribute.unit !== '%' || text[0] === '+' || text[0] === '-')) {
 				var modifier = parseModuleAttrModifierText(module, attr, text);
 			} else {
-				var modifier = getModuleAttrModifier(module, attr, parseFloat(text));
+				var modifier = getModuleAttrModifier(module, attr, parseNumText(text));
 			}
 			if (!slot.setEffectiveAttrModifier(attr, modifier))
 				return false;
 		}
+		if (slot.getBlueprintRoll())
+			slot.setBlueprintRoll(0);
 		if (current.outfitting_focus === 'slot') {
 			updateUIFitStoredBuildControls();
 			updateUIFitSlot(current.group, current.slot);
 			updateUIStats();
 		}
 		updateUIDetailsStoredModuleControls();
-		updateUIDetailsDiscounts();
 		updateUIDetailsModifications();
 		return true;
 	}; // setUIDetailsAttrText()
@@ -6829,14 +7268,14 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 	
 	var setStatsCurFuel = function(value) {
 		value = min(max(value, 0), current.fit.getStat('fuelcap'));
-		document.forms.stats.elements.stats_cur_fuel.value = value;
+		document.forms.stats.elements.stats_cur_fuel.value = formatNumText(value, (value % 1) ? 1 : 0);
 		updateUIStats();
 	}; // setStatsCurFuel()
 	
 	
 	var setStatsCurCargo = function(value) {
 		value = min(max((value + 0.5) | 0, 0), current.fit.getStat('cargocap'));
-		document.forms.stats.elements.stats_cur_cargo.value = value;
+		document.forms.stats.elements.stats_cur_cargo.value = formatNumText(value, 0);
 		updateUIStats();
 	}; // setStatsCurCargo()
 	
@@ -6939,8 +7378,8 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 		var cabincap = current.fit.getStat('cabincap');
 		
 		// compute derived stats
-		var curTtlFuel = min(max(parseFloat(document.forms.stats.elements.stats_cur_fuel.value) || 0, 0), fuelcap) + fuelres;
-		var curTtlCrgo = min(max(parseFloat(document.forms.stats.elements.stats_cur_cargo.value) || 0, 0), cargocap);
+		var curTtlFuel = min(max(parseNumText(document.forms.stats.elements.stats_cur_fuel.value) || 0, 0), fuelcap) + fuelres;
+		var curTtlCrgo = min(max(parseNumText(document.forms.stats.elements.stats_cur_cargo.value) || 0, 0), cargocap);
 		var curTtlMass = mass + curTtlFuel + curTtlCrgo;
 		var maxTtlMass = mass + fuelcap + cargocap;
 		
@@ -7031,12 +7470,12 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 		var fuelpower = slot.getEffectiveAttrValue('fuelpower');
 		
 		// get or compute derived stats
-		var curTtlFuel = min(max(parseFloat(document.forms.stats.elements.stats_cur_fuel.value) || 0, 0), fuelcap);
-		var curTtlCrgo = min(max(parseFloat(document.forms.stats.elements.stats_cur_cargo.value) || 0, 0), cargocap);
+		var curTtlFuel = min(max(parseNumText(document.forms.stats.elements.stats_cur_fuel.value) || 0, 0), fuelcap);
+		var curTtlCrgo = min(max(parseNumText(document.forms.stats.elements.stats_cur_cargo.value) || 0, 0), cargocap);
 		var ldnNavJmp = current.fit.getStat('_jump_laden');
 		var unlNavJmp = current.fit.getStat('_jump_unladen');
 		var curNavJmp = getJumpDistance(         mass + curTtlFuel + fuelres + curTtlCrgo, min(curTtlFuel, maxfuel), optmass, fuelmul, fuelpower, jumpbst);
-		var maxNavJmp = getJumpDistance(         mass + min(fuelcap, maxfuel)            , min(fuelcap   , maxfuel), optmass, fuelmul, fuelpower, jumpbst);
+		var maxNavJmp = current.fit.getStat('_jump_max');
 		var curNavRng = getJumpRange(curTtlFuel, mass + curTtlFuel           + curTtlCrgo, min(curTtlFuel, maxfuel), optmass, fuelmul, fuelpower, jumpbst);
 		var ldnNavRng = current.fit.getStat('_range_laden');
 		var unlNavRng = current.fit.getStat('_range_unladen');
@@ -7094,8 +7533,8 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 		var maxmulrot = slot.getEffectiveAttrValue('maxmulrot');
 		
 		// compute derived stats
-		var curTtlFuel = min(max(parseFloat(document.forms.stats.elements.stats_cur_fuel.value) || 0, 0), fuelcap) + fuelres;
-		var curTtlCrgo = min(max(parseFloat(document.forms.stats.elements.stats_cur_cargo.value) || 0, 0), cargocap);
+		var curTtlFuel = min(max(parseNumText(document.forms.stats.elements.stats_cur_fuel.value) || 0, 0), fuelcap) + fuelres;
+		var curTtlCrgo = min(max(parseNumText(document.forms.stats.elements.stats_cur_cargo.value) || 0, 0), cargocap);
 		var powerdistEngMul = powerdist_eng / MAX_POWER_DIST;
 		var curNavSpdMul = getMassCurveMultiplier(mass + curTtlFuel + curTtlCrgo, minmass, optmass, maxmass, minmulspd, optmulspd, maxmulspd) / 100;
 		var ldnNavSpdMul = getMassCurveMultiplier(mass + fuelcap    + cargocap  , minmass, optmass, maxmass, minmulspd, optmulspd, maxmulspd) / 100;
@@ -7246,7 +7685,7 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 		var expShdRes = current.fit.getStat('_sexpres') / 100;
 		var cauShdRes = current.fit.getStat('_scaures') / 100;
 		var rawShdStr = current.fit.getStat('_shields');
-		var ammomaxText = (shieldrnfps_ammomax / shieldrnfps).toFixed((shieldrnfps_ammomax % shieldrnfps) ? 1 : 0);
+		var ammomaxText = formatNumText(shieldrnfps_ammomax / shieldrnfps, (shieldrnfps_ammomax % shieldrnfps) ? 1 : 0);
 		var powerdistSysMul = pow(powerdist_sys / MAX_POWER_DIST, 1.1);
 		var bgenFastTime = min((rawShdStr / 2 / bgenrate), (syscap / max(0, bgenrate * distdraw_mj - syschg * powerdistSysMul)));
 		var bgenSlowTime = (rawShdStr / 2 - bgenrate * bgenFastTime) / min(bgenrate, (syschg * powerdistSysMul) / distdraw_mj);
@@ -7363,6 +7802,46 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 		document.getElementById('outfitting_stats_wpn_cur_sus').innerHTML = (dps ? formatPctHTML(curWpnSus, 1) : htmlNA);
 		document.getElementById('outfitting_stats_wpn_max_sus').innerHTML = (dps ? formatPctHTML(maxWpnSus, 1) : htmlNA);
 	}; // updateUIStatsWpn()
+	
+	
+	/*
+	* OPTIONS UI
+	*/
+	
+	
+	var initUIOptions = function() {
+		var rows = document.getElementById('options_insurance').getElementsByTagName('DD');
+		for (var i = 0;  i < rows.length;  i++) {
+			var input = rows[i].getElementsByTagName('INPUT')[0];
+			var span = rows[i].getElementsByTagName('SPAN')[0];
+			span.innerText = span.innerText.replace(/[0-9\.]+ *%/, formatPctText(parseFloat(input.value) / 10000, 1));
+		}
+	}; // initUIOptions()
+	
+	
+	var updateUIOptions = function() {
+		current.option.insurance = parseInt(current.option.insurance);
+		current.option.onlybest = !!current.option.onlybest;
+		current.option.experimental = !!current.option.experimental;
+		current.option.show1 = !!current.option.show1;
+		current.option.show2 = !!current.option.show2;
+		current.option.show3 = !!current.option.show3;
+		current.option.hidestats = !!current.option.hidestats;
+		
+		document.body.classList.toggle('onlybest', current.option.onlybest);
+		document.body.classList.toggle('experimental', current.option.experimental);
+		document.body.classList.toggle('show1', current.option.show1);
+		document.body.classList.toggle('show2', current.option.show2);
+		document.body.classList.toggle('show3', current.option.show3);
+		
+		document.forms.options.elements.insurance.value = current.option.insurance;
+		document.forms.options.elements.onlybest.checked = current.option.onlybest;
+		document.forms.options.elements.experimental.checked = current.option.experimental;
+		document.forms.options.elements.show1.checked = current.option.show1;
+		document.forms.options.elements.show2.checked = current.option.show2;
+		document.forms.options.elements.show3.checked = current.option.show3;
+		document.forms.options.elements.hidestats.checked = current.option.hidestats;
+	}; // updateUIOptions()
 	
 	
 	/*
@@ -7501,12 +7980,12 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 		switch (e.currentTarget.name) {
 		case 'fdapi_import':
 			hideUIPopup();
-			importData('FDAPI:' + e.target.value);
+			importData('FDAPI:' + e.currentTarget.value);
 			e.stopPropagation();
 			return false;
 			
 		case 'fdapi_delete':
-			var cookie = 'edsy_fdapi_cmdr_' + e.target.value + '=; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; SameSite=lax';
+			var cookie = 'edsy_fdapi_cmdr_' + e.currentTarget.value + '=; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; SameSite=lax';
 			document.cookie = cookie;
 			hideUIPopup();
 			showUIImportPopup();
@@ -8344,21 +8823,159 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 	
 	
 	var onUIDetailsModuleChange = function(e) {
-		var slot = current.fit.getSlot(current.group, current.slot);
-		if (e.target.name === 'discount') {
-			setUIDetailsDiscount(e.target.value, e.target.checked);
+		if (e.target.name === 'cost') {
+			if (e.target.value) {
+				// TODO input as discounts?
+				setUIDetailsCost(parseNumText(e.target.value));
+			} else {
+				setUIDetailsDiscounts(0);
+			}
+		} else if (e.target.name === 'discount') {
+			var slot = getUIOutfittingSlot();
+			var bit = parseInt(e.target.value);
+			if (bit) {
+				var discounts = slot.getDiscounts();
+				if (e.target.checked) {
+					discounts = (((discounts == 0x3F) ? 0 : discounts) | bit);
+				} else {
+					discounts = (discounts & ~bit);
+				}
+				setUIDetailsDiscounts(discounts);
+			} else {
+				if (e.target.checked) {
+					setUIDetailsCost(slot.getCost());
+				} else {
+					setUIDetailsDiscounts(slot.getDiscounts());
+				}
+			} 
 		} else if (e.target.name === 'blueprint') {
 			setUIDetailsBlueprintID(e.target.value);
 		} else if (e.target.name === 'blueprint_grade') {
 			setUIDetailsBlueprintGrade(parseInt(e.target.value));
 		} else if (e.target.name === 'blueprint_roll') {
-			setUIDetailsBlueprintRoll(parseFloat(e.target.value));
+			var value = e.target.value.trim();
+			if (value) {
+				value = parseNumText(e.target.value);
+				setUIDetailsBlueprintRoll(isNaN(value) ? null : (value / 100.0));
+			} else {
+				updateUIDetailsBlueprintRoll();
+			}
 		} else if (e.target.name === 'expeffect') {
 			setUIDetailsExpeffect(e.target.value);
 		} else if (e.target.tagName === 'INPUT') {
 			setUIDetailsAttrText(e.target.name, e.target.value);
 		}
 	}; // onUIDetailsModuleChange()
+	
+	
+	var onUIDetailsRollTouchStart = function(e) {
+		var el = e.target;
+		while (el && el !== e.currentTarget) {
+			if (el.tagName === 'INPUT')
+				return onUIDetailsRollTouchCancel(e);
+			el = el.parentNode;
+		}
+		var input = document.forms.details.elements.blueprint_roll;
+		if (!el || input.disabled || e.touches.length !== 1)
+			return onUIDetailsRollTouchCancel(e);
+		e.preventDefault();
+		e.stopPropagation();
+		var rect = input.getBoundingClientRect();
+		var touchdata = current.bprollTouch = {
+			x:  (rect.right + rect.left) / 2,
+			rx: (rect.right - rect.left) / 2,
+			y:  (rect.bottom + rect.top) / 2,
+			ry: (rect.bottom - rect.top) / 2,
+		};
+		var el = document.getElementById('engineering_roll');
+		el.addEventListener('touchmove', onUIDetailsRollTouchMove);
+		el.addEventListener('touchend', onUIDetailsRollTouchEnd);
+		el.addEventListener('touchcancel', onUIDetailsRollTouchCancel);
+		return onUIDetailsRollTouchMove(e);
+	}; // onUIDetailsRollTouchStart()
+	
+	
+	var onUIDetailsRollTouchMove = function(e) {
+		var touchdata = current.bprollTouch;
+		if (!touchdata || e.touches.length !== 1)
+			return onUIDetailsRollTouchCancel(e);
+		e.preventDefault();
+		e.stopPropagation();
+		var obj = e.touches[0];
+		var dx = obj.clientX - touchdata.x;
+		var dy = obj.clientY - touchdata.y;
+		var bproll = (((abs(dx) <= touchdata.rx) && (abs(dy) <= touchdata.ry)) ? -1 : (ceil((0.5 - atan2(dx,dy) / PI / 2) * 20) / 20));
+		updateUIDetailsBlueprintRoll(bproll);
+	}; // onUIDetailsRollTouchMove()
+	
+	
+	var onUIDetailsRollTouchEnd = function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		onUIDetailsRollTouchCancel(e);
+		var value = parseNumText(document.forms.details.elements.blueprint_roll.value);
+		setUIDetailsBlueprintRoll(isNaN(value) ? null : (value / 100.0));
+	}; // onUIDetailsRollTouchEnd()
+	
+	
+	var onUIDetailsRollTouchCancel = function(e) {
+		current.bprollTouch = null;
+		var el = document.getElementById('engineering_roll');
+		el.removeEventListener('touchmove', onUIDetailsRollTouchMove);
+		el.removeEventListener('touchend', onUIDetailsRollTouchEnd);
+		el.removeEventListener('touchcancel', onUIDetailsRollTouchCancel);
+	}; // onUIDetailsRollTouchCancel()
+	
+	
+	var onUIDetailsRollMouseDown = function(e) {
+		var el = e.target;
+		while (el && el !== e.currentTarget) {
+			if (el.tagName === 'INPUT')
+				return;
+			el = el.parentNode;
+		}
+		var input = document.forms.details.elements.blueprint_roll;
+		if (!el || input.disabled)
+			return;
+		e.preventDefault();
+		e.stopPropagation();
+		var rect = input.getBoundingClientRect();
+		var clickdata = current.bprollClick = {
+			x:  (rect.right + rect.left) / 2,
+			y:  (rect.bottom + rect.top) / 2,
+		};
+		document.addEventListener('mousemove', onUIDetailsRollMouseMove, true);
+		document.addEventListener('mouseup', onUIDetailsRollMouseUp, true);
+		return onUIDetailsRollMouseMove(e);
+	}; // onUIDetailsRollMouseDown()
+	
+	
+	var onUIDetailsRollMouseMove = function(e) {
+		var clickdata = current.bprollClick;
+		if (!clickdata)
+			return onUIDetailsRollMouseUp(e);
+		var obj = e;
+		var dx = obj.clientX - clickdata.x;
+		var dy = obj.clientY - clickdata.y;
+		var bproll = ((e.target === document.forms.details.elements.blueprint_roll) ? -1 : (ceil((0.5 - atan2(dx,dy) / PI / 2) * 20.0) / 20.0));
+		updateUIDetailsBlueprintRoll(bproll);
+	}; // onUIDetailsRollMouseMove()
+	
+	
+	var onUIDetailsRollMouseUp = function(e) {
+		current.bprollClick = null;
+		document.removeEventListener('mousemove', onUIDetailsRollMouseMove, true);
+		document.removeEventListener('mouseup', onUIDetailsRollMouseUp, true);
+		var value = parseNumText(document.forms.details.elements.blueprint_roll.value);
+		setUIDetailsBlueprintRoll(isNaN(value) ? null : (value / 100.0));
+	}; // onUIDetailsRollMouseUp()
+	
+	
+	var onUIDetailsRollButtonClick = function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		setUIDetailsBlueprintRoll(e.target.value);
+	}; // onUIDetailsRollButtonClick()
 	
 	
 	var onUIDetailsButtonsClick = function(e) {
@@ -8410,9 +9027,9 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 		}
 		
 		var scale = 0;
-		var value = parseFloat(e.target.value);
+		var value = parseNumText(e.target.value);
 		var step = (e.shiftKey ? 10 : 1);
-		value = (((mod > 0) ? (floor(round(value / pow(10, -scale)) / step) + 1) : (ceil(round(value / pow(10, -scale)) / step) - 1)) * pow(10, -scale) * step).toFixed(scale);
+		value = formatNumText(((mod > 0) ? (floor(round(value / pow(10, -scale)) / step) + 1) : (ceil(round(value / pow(10, -scale)) / step) - 1)) * pow(10, -scale) * step, scale);
 		switch (e.target.name) {
 		case 'stats_cur_fuel':   setStatsCurFuel(value);   break;
 		case 'stats_cur_cargo':  setStatsCurCargo(value);  break;
@@ -8423,8 +9040,8 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 	var onUIStatsInputChange = function(e) {
 		e.stopPropagation();
 		switch (e.target.name) {
-		case 'stats_cur_fuel':   setStatsCurFuel(parseFloat(e.target.value) || 0);   break;
-		case 'stats_cur_cargo':  setStatsCurCargo(parseFloat(e.target.value) || 0);  break;
+		case 'stats_cur_fuel':   setStatsCurFuel(parseNumText(e.target.value) || 0);   break;
+		case 'stats_cur_cargo':  setStatsCurCargo(parseNumText(e.target.value) || 0);  break;
 		}
 	}; // onUIStatsInputChange()
 	
@@ -8550,6 +9167,9 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 	
 	
 	var onDOMContentLoaded = function(e) {
+		// sniff locale
+		current.locale = ((window.navigator.languages || EMPTY_ARR)[0] || window.navigator.userLanguage || window.navigator.language || window.navigator.browserLanguage || window.navigator.systemLanguage || undefined);
+		
 		// fill in the current version and update date first thing
 		var v = '' + document.getElementById('edsy_versions_html').getAttribute('content').split(',').reduce(function(a,b) { return max(parseInt(a), parseInt(b)); });
 		document.getElementById('version_label').innerHTML = ('v' + v[0] + '.' + v[1] + '.' + v[2] + (['-','a','b','rc'][parseInt(v[3])] || '.') + v[4]);
@@ -8593,6 +9213,7 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 		cache.feature.cancelFullscreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
 		
 		// initialize cache and UI
+		current.dev = (window.location.protocol === 'file:') || (window.location.pathname.indexOf('/dev/') >= 0);
 		current.beta = (window.location.pathname.indexOf('/beta/') >= 0) || (window.location.pathname.indexOf('/dev/') >= 0);
 		initCache();
 		initUIShipyardShips();
@@ -8600,6 +9221,7 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 		initUIModulePicker();
 		initUIFitSlots();
 		initUIDetails();
+		initUIOptions();
 		
 		// initialize storage
 		readStoredOptions();
@@ -8652,6 +9274,11 @@ if(abs(modifier-rollmod)>MIN_MODIFIER) console.log(modulejson.Slot+' '+attr+' ro
 		document.getElementById('outfitting_details_settings').addEventListener('change', onUIDetailsSettingsChange);
 		document.getElementById('outfitting_details_settings').addEventListener('click', onUIDetailsSettingsClick);
 		document.getElementById('outfitting_details_module').addEventListener('change', onUIDetailsModuleChange);
+		document.getElementById('engineering_roll').addEventListener('touchstart', onUIDetailsRollTouchStart);
+		document.getElementById('engineering_roll').addEventListener('mousedown', onUIDetailsRollMouseDown);
+		document.forms.details.elements.blueprint_roll_preset1.addEventListener('click', onUIDetailsRollButtonClick);
+		document.forms.details.elements.blueprint_roll_preset2.addEventListener('click', onUIDetailsRollButtonClick);
+		document.forms.details.elements.blueprint_roll_preset3.addEventListener('click', onUIDetailsRollButtonClick);
 		document.getElementById('outfitting_details_buttons').addEventListener('click', onUIDetailsButtonsClick);
 		document.getElementById('outfitting_bottom').addEventListener('change', onUIBottomChange);
 		document.forms.stats.elements.stats_cur_fuel.addEventListener('wheel', onUIStatsInputWheel);

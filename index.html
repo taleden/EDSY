@@ -14,8 +14,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 -->
 		<title>EDSY</title>
 		<meta name="application-name" content="EDSY">
-		<meta name="edsy-versions-html" id="edsy_versions_html" content="34292,34292,34292,34292"><!-- HTML,CSS,DB,JS -->
-		<meta name="last-modified" id="last_modified" content="2019-08-20">
+		<meta name="edsy-versions-html" id="edsy_versions_html" content="34293,34293,34293,34293"><!-- HTML,CSS,DB,JS -->
+		<meta name="last-modified" id="last_modified" content="2019-09-02">
 		<meta name="author" content="taleden">
 		<meta name="description" content="EDSY is a ship outfitting tool for Elite Dangerous">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,6 +37,11 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 					<symbol id="icon_unknown" viewbox="0 0 13 13" stroke="none" fill="currentColor" shape-rendering="geometricPrecision">
 						<path d="M 2,4 a 4.5,4 0 1 1 7.75,2.75 l -2.25,2.25 h -2.5 v -1.5 l 2.5,-2.5 a 1.75,1.25 0 1 0 -2.75,-1 z"/>
 						<circle cx="6.5" cy="11.5" r="1.75"/>
+					</symbol>
+					<symbol id="icon_menudots" viewbox="0 0 13 13" stroke="none" fill="currentColor" shape-rendering="geometricPrecision">
+						<circle cx="6.5" cy="1.5" r="1.5"/>
+						<circle cx="6.5" cy="6.5" r="1.5"/>
+						<circle cx="6.5" cy="11.5" r="1.5"/>
 					</symbol>
 					<symbol id="icon_ignore" viewbox="0 0 13 13" stroke="none" fill="currentColor" shape-rendering="geometricPrecision">
 						<path d="M 6.5,0.75 a 5.75,5.75 0 1 1 0,11.5 a 5.75,5.75 0 1 1 0,-11.5 M 6.5,2.25 a 4.25,4.25 0 1 0 0,8.5 a 4.25,4.25 0 1 0 0,-8.5 z M 11.25,0.5 l 1.25,1.25 -10.75,10.75 -1.25,-1.25 z"/>
@@ -266,31 +271,80 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 							<div id="outfitting_details_container">
 								<div id="outfitting_details_module" class="">
 									<header id="outfitting_details_label"></header>
-									<div id="details_discount"></div>
-									<div id="details_select_blueprint" class="details_select">
-										<select name="blueprint"><option value="">(No Blueprint)</option></select>
-										<div class="togglebutton">
-											<input id="blueprint_grade_1" name="blueprint_grade" type="radio" value="1">
-											<input id="blueprint_grade_2" name="blueprint_grade" type="radio" value="2">
-											<input id="blueprint_grade_3" name="blueprint_grade" type="radio" value="3">
-											<input id="blueprint_grade_4" name="blueprint_grade" type="radio" value="4">
-											<input id="blueprint_grade_5" name="blueprint_grade" type="radio" value="5">
-											<label for="blueprint_grade_1"><svg class="iconsvg engineer"><use xlink:href="#icon_engineer"/></svg><svg class="iconsvg engineered"><use xlink:href="#icon_engineered"/></svg></label>
-											<label for="blueprint_grade_2"><svg class="iconsvg engineer"><use xlink:href="#icon_engineer"/></svg><svg class="iconsvg engineered"><use xlink:href="#icon_engineered"/></svg></label>
-											<label for="blueprint_grade_3"><svg class="iconsvg engineer"><use xlink:href="#icon_engineer"/></svg><svg class="iconsvg engineered"><use xlink:href="#icon_engineered"/></svg></label>
-											<label for="blueprint_grade_4"><svg class="iconsvg engineer"><use xlink:href="#icon_engineer"/></svg><svg class="iconsvg engineered"><use xlink:href="#icon_engineered"/></svg></label>
-											<label for="blueprint_grade_5"><svg class="iconsvg engineer"><use xlink:href="#icon_engineer"/></svg><svg class="iconsvg engineered"><use xlink:href="#icon_engineered"/></svg></label>
+									<div id="details_rank"></div>
+									<div id="details_cost">
+										<div class="details_cost_row">
+											<input type="text" name="cost" value="">
+											<span>CR</span>
+											<span id="details_cost_mod"></span>
+											<!-- TODO details cost popout?
+											<input type="checkbox" id="details_cost_focus" class="toggleinput">
+											<label id="details_cost_label" for="details_cost_focus"><svg class="iconsvg menudots"><use xlink:href="#icon_menudots"/></svg></label>
+											<div id="details_cost_popout">
+												<div class="details_cost_popout_row">
+													<label class="togglebutton"><input name="discount" type="checkbox" value="4"><div id="details_cost_4">-0%</div></label>
+													<label class="togglebutton"><input name="discount" type="checkbox" value="2"><div id="details_cost_2">-0%</div></label>
+													<label class="togglebutton"><input name="discount" type="checkbox" value="1"><div id="details_cost_1">-0%</div></label>
+												</div>
+												<div class="details_cost_popout_row">
+													<label class="togglebutton"><input name="discount" type="checkbox" value="32"><div id="details_cost_32">-0%</div></label>
+													<label class="togglebutton"><input name="discount" type="checkbox" value="16"><div id="details_cost_16">-0%</div></label>
+													<label class="togglebutton"><input name="discount" type="checkbox" value="8"><div id="details_cost_8">-0%</div></label>
+												</div>
+												<div class="details_cost_popout_row">
+													<label class="togglebutton"><input name="discount" type="checkbox" value="0"><div id="details_cost_0">Actual</div></label>
+													<label class="togglebutton"><input name="discount" type="checkbox" value="63"><div id="details_cost_63">Free</div></label>
+												</div>
+											</div>
+											<!-- -->
+											<label class="togglebutton"><input name="discount" type="checkbox" value="0"><div id="details_cost_0">Actual</div></label>
+										</div>
+										<div class="details_cost_row">
+											<label class="togglebutton"><input name="discount" type="checkbox" value="1"><div id="details_cost_1">-0%</div></label>
+											<label class="togglebutton"><input name="discount" type="checkbox" value="2"><div id="details_cost_2">-0%</div></label>
+											<label class="togglebutton"><input name="discount" type="checkbox" value="4"><div id="details_cost_4">-0%</div></label>
+											<label class="togglebutton"><input name="discount" type="checkbox" value="8"><div id="details_cost_8">-0%</div></label>
+											<label class="togglebutton"><input name="discount" type="checkbox" value="16"><div id="details_cost_16">-0%</div></label>
+											<label class="togglebutton"><input name="discount" type="checkbox" value="32"><div id="details_cost_32">-0%</div></label>
+											<label class="togglebutton"><input name="discount" type="checkbox" value="63"><div id="details_cost_63">Free</div></label>
 										</div>
 									</div>
-									<div id="details_select_expeffect" class="details_select">
-										<select name="expeffect"><option value="">(No Experimental Effect)</option></select>
-										<label class="togglebutton"><input id="blueprint_roll_rand" name="blueprint_roll" type="radio" value="-1.0"><div><svg class="iconsvg blueprint tinted"><use xlink:href="#icon_blueprint_rand"/></svg></div></label>
-										<label class="togglebutton"><input id="blueprint_roll_min" name="blueprint_roll" type="radio" value="0.0"><div><svg class="iconsvg blueprint tinted"><use xlink:href="#icon_blueprint_min"/></svg></div></label>
-										<label class="togglebutton"><input id="blueprint_roll_avg" name="blueprint_roll" type="radio" value="0.5"><div><svg class="iconsvg blueprint tinted"><use xlink:href="#icon_blueprint_avg"/></svg></div></label>
-										<label class="togglebutton"><input id="blueprint_roll_high" name="blueprint_roll" type="radio" value="0.8"><div><svg class="iconsvg blueprint tinted"><use xlink:href="#icon_blueprint_high"/></svg></div></label>
-										<label class="togglebutton"><input id="blueprint_roll_max" name="blueprint_roll" type="radio" value="1.0"><div><svg class="iconsvg blueprint tinted"><use xlink:href="#icon_blueprint_max"/></svg></div></label>
+									<div id="details_engineering">
+										<div id="engineering_controls">
+											<div id="engineering_selects">
+												<select name="blueprint"><option value="">(No Blueprint)</option></select>
+												<div class="togglebutton">
+													<span>Grade</span>
+													<input id="blueprint_grade_1" name="blueprint_grade" type="radio" value="1">
+													<input id="blueprint_grade_2" name="blueprint_grade" type="radio" value="2">
+													<input id="blueprint_grade_3" name="blueprint_grade" type="radio" value="3">
+													<input id="blueprint_grade_4" name="blueprint_grade" type="radio" value="4">
+													<input id="blueprint_grade_5" name="blueprint_grade" type="radio" value="5">
+													<label for="blueprint_grade_1"><svg class="iconsvg engineer"><use xlink:href="#icon_engineer"/></svg><svg class="iconsvg engineered"><use xlink:href="#icon_engineered"/></svg></label>
+													<label for="blueprint_grade_2"><svg class="iconsvg engineer"><use xlink:href="#icon_engineer"/></svg><svg class="iconsvg engineered"><use xlink:href="#icon_engineered"/></svg></label>
+													<label for="blueprint_grade_3"><svg class="iconsvg engineer"><use xlink:href="#icon_engineer"/></svg><svg class="iconsvg engineered"><use xlink:href="#icon_engineered"/></svg></label>
+													<label for="blueprint_grade_4"><svg class="iconsvg engineer"><use xlink:href="#icon_engineer"/></svg><svg class="iconsvg engineered"><use xlink:href="#icon_engineered"/></svg></label>
+													<label for="blueprint_grade_5"><svg class="iconsvg engineer"><use xlink:href="#icon_engineer"/></svg><svg class="iconsvg engineered"><use xlink:href="#icon_engineered"/></svg></label>
+												</div>
+												<select name="expeffect"><option value="">(No Experimental Effect)</option></select>
+											</div>
+											<div id="engineering_roll">
+												<div class="outer">
+													<div class="mask"><div id="roll_ring1" class="inner"></div></div>
+													<div class="mask"><div id="roll_ring2" class="inner"></div></div>
+													<div class="middle">
+														<input type="text" id="blueprint_roll" name="blueprint_roll" value="">
+													</div>
+												</div>
+											</div>
+											<div id="engineering_rollbuttons">
+												<button name="blueprint_roll_preset1" value="0.5">50%</button>
+												<button name="blueprint_roll_preset2" value="0.8">80%</button>
+												<button name="blueprint_roll_preset3" value="1.0">100%</button>
+											</div>
+										</div>
+										<div id="details_special"></div>
 									</div>
-									<div id="details_expeffect"></div>
 								</div>
 							</div>
 							<div id="outfitting_details_buttons">
@@ -798,7 +852,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 					<div id="options_container">
 						<section>
 							<header>Options</header>
-							<div>
+							<div id="options_insurance">
 								<b>Insurance Level</b>
 								&mdash; Select your insurance coverage level to calculate rebuy costs.
 								<dl>

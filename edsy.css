@@ -10,7 +10,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 */
 
 :root {
-	--edsy-versions-css:34292,34292,34292,34292; /* HTML,CSS,DB,JS */
+	--edsy-versions-css:34293,34293,34293,34293; /* HTML,CSS,DB,JS */
 	
 	--color-orange-5: hsl(27,100%,60%);
 	--color-orange-4: hsl(27,100%,48%);
@@ -66,7 +66,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 */
 
 
-* {
+*,
+*::before,
+*::after {
 	box-sizing: border-box;
 }
 
@@ -121,6 +123,11 @@ ABBR.attribute {
 SMALL {
 	font-size: 75%;
 	color: var(--color-grey-4);
+}
+.modgood SMALL,
+.modbad SMALL,
+.togglebutton SMALL {
+	color: inherit;
 }
 
 A {
@@ -305,6 +312,9 @@ TEXTAREA::-webkit-scrollbar-thumb {
 .modbad {
 	color: var(--color-red-5);
 }
+.modoverride {
+	background-color: var(--color-grey-1);
+}
 
 .iconsvg {
 	display: inline-block;
@@ -410,7 +420,6 @@ INPUT.toggleinput {
 
 .checkbox INPUT + DIV .check::before,
 .checkbox INPUT + DIV .check::after {
-	box-sizing: border-box;
 	content: '';
 	display: block;
 	position: absolute;
@@ -430,7 +439,6 @@ INPUT.toggleinput {
 
 .checkbox INPUT + DIV .radio::before,
 .checkbox INPUT + DIV .radio::after {
-	box-sizing: border-box;
 	content: '';
 	display: block;
 	position: absolute;
@@ -670,7 +678,7 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 	min-width: 0;
 	display: flex;
 	flex-direction: row;
-	justify-content: left;
+	justify-content: center;
 	overflow-x: auto;
 }
 
@@ -1874,7 +1882,6 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 #outfitting_fit_slots BUTTON.outfitting_fit_priority::before,
 #outfitting_fit_slots BUTTON.outfitting_fit_priority::after {
-	box-sizing: border-box;
 	content: '';
 	display: block;
 	position: absolute;
@@ -2049,174 +2056,310 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_details_container {
 	flex: 1 0 10px;
 	border: 2px solid var(--color-orange-5);
-	padding: 0 0.25em;
+	padding: 0 0.5rem;
 	background-color: black;
 	overflow-y: auto;
 }
 
 
-#outfitting_details_buttons {
-	flex: 0 0 auto;
-	min-width: 0;
-	display: none;
-	flex-direction: row;
-	margin: 0 -0.25em;
-}
-
-#outfitting_details_buttons BUTTON {
-	flex: 1 0 10px;
-	margin: 0.25em 0.25em 0 0.25em;
-}
-
-
-#outfitting_details_module HEADER {
+#outfitting_details_label {
 	position: -webkit-sticky;
 	position: sticky;
 	top: 0;
 	z-index: 1;
-	margin-bottom: 0.25em;
 	border-bottom: 2px solid var(--color-orange-3);
-	padding: 0 0.25em;
+	padding-top: 0.25rem;
 	background-color: black;
 	color: var(--color-grey-5);
 	font-weight: bold;
 }
 
-#outfitting_details_module .details_select {
-	display: flex;
-	flex-direction: row;
+#details_rank {
+	margin-bottom: 0.5rem;
+	font-size: 0.875em;
+	font: var(--font-text);
 }
 
-#outfitting_details_module .details_select SELECT {
+
+#details_cost {
+	margin-bottom: 0.5rem;
+	border-bottom: 2px solid var(--color-orange-3);
+	padding-bottom: 0.5rem;
+	font-size: 0.875em;
+}
+
+#details_cost .details_cost_row {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	margin-top: 0.25rem;
+}
+#details_cost .details_cost_row:first-child {
+	margin-top: 0;
+}
+
+#details_cost .details_cost_row > * {
+	margin-left: 0.25rem;
+}
+#details_cost .details_cost_row > *:first-child {
+	margin-left: 0;
+}
+
+#details_cost INPUT {
+	flex: 0 1 auto;
+	min-width: 5em;
+	padding: 0 0.25em;
+	text-align: right;
+	font-size: 0.875em;
+}
+
+#details_cost SPAN {
+	margin-right: 0.25rem;
+	align-self: center;
+}
+#details_cost SPAN#details_cost_mod {
+	flex: 1 0 auto;
+}
+
+#details_cost .details_cost_row:last-child .togglebutton {
+	flex: 1 0 auto;
+}
+
+#details_cost .togglebutton INPUT + DIV {
+	border: 1px solid var(--color-orange-3);
+	padding: 0 0.25em;
+	background-color: var(--color-orange-1);
+	color: var(--color-orange-4);
+	text-align: center;
+}
+#details_cost .togglebutton INPUT:checked + DIV {
+	border-color: var(--color-orange-5);
+	background-color: var(--color-orange-5);
+	color: black;
+}
+#details_cost .togglebutton INPUT:active + DIV {
+	border-color: white;
+	background-color: white;
+	color: black;
+}
+#details_cost .togglebutton INPUT:disabled + DIV {
+	border-color: var(--color-grey-3);
+	background-color: var(--color-grey-1);
+	color: var(--color-grey-4);
+}
+#details_cost .togglebutton INPUT:disabled:checked + DIV {
+	background-color: var(--color-grey-3);
+	color: black;
+}
+
+#details_cost .togglebutton INPUT + DIV SMALL {
+	font-size: 0.5rem;
+}
+
+
+#details_engineering {
+	margin-bottom: 0.5rem;
+	border-bottom: 2px solid var(--color-orange-3);
+	padding-bottom: 0.5rem;
+}
+
+#engineering_controls {
+	display: flex;
+	align-items: center;
+}
+
+#engineering_selects {
 	flex: 1 0 10px;
+}
+
+#engineering_selects SELECT {
+	display: block;
+	width: 100%;
 	min-width: 0;
-	margin-right: 0.5em;
 }
 
-#outfitting_details_module .details_select .togglebutton {
-	flex: 0 0 auto;
-}
-
-#outfitting_details_module #details_select_blueprint .togglebutton {
+#engineering_selects .togglebutton {
 	display: flex;
-	flex-direction: row;
+	justify-content: space-between;
+	width: 100%;
+	margin-bottom: 0.25em;
 	cursor: default;
 }
 
-#outfitting_details_module #details_select_blueprint .togglebutton LABEL {
+#engineering_selects .togglebutton SPAN {
+	flex: 1 0 auto;
+	align-self: center;
+	padding-right: 0.25em;
+	color: var(--color-grey-5);
+	text-align: right;
+	font-size: 0.875rem;
+}
+
+#engineering_selects .togglebutton LABEL {
 	flex: 0 0 auto;
 	border: 1px solid transparent;
 	cursor: pointer;
 }
 
-#outfitting_details_module #details_select_blueprint .togglebutton LABEL .iconsvg {
+#engineering_selects .togglebutton LABEL .iconsvg {
 	margin: 2px;
 	color: var(--color-orange-4);
 }
-#outfitting_details_module #details_select_blueprint .togglebutton LABEL .iconsvg.engineered {
+#engineering_selects .togglebutton LABEL .iconsvg.engineered {
 	display: none;
 }
-#outfitting_details_module #details_select_blueprint .togglebutton INPUT:checked + LABEL .iconsvg.engineer,
-#outfitting_details_module #details_select_blueprint .togglebutton INPUT:checked + * + LABEL .iconsvg.engineer,
-#outfitting_details_module #details_select_blueprint .togglebutton INPUT:checked + * + * + LABEL .iconsvg.engineer,
-#outfitting_details_module #details_select_blueprint .togglebutton INPUT:checked + * + * + * + LABEL .iconsvg.engineer,
-#outfitting_details_module #details_select_blueprint .togglebutton INPUT:checked + * + * + * + * + LABEL .iconsvg.engineer {
+#engineering_selects .togglebutton INPUT:checked + LABEL .iconsvg.engineer,
+#engineering_selects .togglebutton INPUT:checked + * + LABEL .iconsvg.engineer,
+#engineering_selects .togglebutton INPUT:checked + * + * + LABEL .iconsvg.engineer,
+#engineering_selects .togglebutton INPUT:checked + * + * + * + LABEL .iconsvg.engineer,
+#engineering_selects .togglebutton INPUT:checked + * + * + * + * + LABEL .iconsvg.engineer {
 	display: none;
 }
-#outfitting_details_module #details_select_blueprint .togglebutton INPUT:checked + LABEL .iconsvg.engineered,
-#outfitting_details_module #details_select_blueprint .togglebutton INPUT:checked + * + LABEL .iconsvg.engineered,
-#outfitting_details_module #details_select_blueprint .togglebutton INPUT:checked + * + * + LABEL .iconsvg.engineered,
-#outfitting_details_module #details_select_blueprint .togglebutton INPUT:checked + * + * + * + LABEL .iconsvg.engineered {
+#engineering_selects .togglebutton INPUT:checked + LABEL .iconsvg.engineered,
+#engineering_selects .togglebutton INPUT:checked + * + LABEL .iconsvg.engineered,
+#engineering_selects .togglebutton INPUT:checked + * + * + LABEL .iconsvg.engineered,
+#engineering_selects .togglebutton INPUT:checked + * + * + * + LABEL .iconsvg.engineered {
 	display: inline-block;
 }
-#outfitting_details_module #details_select_blueprint .togglebutton INPUT:checked + * + * + * + * + LABEL .iconsvg.engineered {
+#engineering_selects .togglebutton INPUT:checked + * + * + * + * + LABEL .iconsvg.engineered {
 	display: inline-block;
 	color: var(--color-orange-5);
 }
 
-#outfitting_details_module #details_select_blueprint .togglebutton INPUT:active + * + * + * + * + LABEL .iconsvg {
+#engineering_selects .togglebutton INPUT:active + * + * + * + * + LABEL .iconsvg {
 	color: white;
 }
 
-#outfitting_details_module #details_select_blueprint .togglebutton INPUT:disabled + * + * + * + * + LABEL {
+#engineering_selects .togglebutton INPUT:disabled + * + * + * + * + LABEL {
 	cursor: default;
 }
-#outfitting_details_module #details_select_blueprint .togglebutton INPUT:disabled + * + * + * + * + LABEL .iconsvg.engineer {
+#engineering_selects .togglebutton INPUT:disabled + * + * + * + * + LABEL .iconsvg.engineer {
 	display: inline-block;
 	color: var(--color-grey-4);
 }
-#outfitting_details_module #details_select_blueprint .togglebutton INPUT:disabled + * + * + * + * + LABEL .iconsvg.engineered {
+#engineering_selects .togglebutton INPUT:disabled + * + * + * + * + LABEL .iconsvg.engineered {
 	display: none;
 }
 
-#outfitting_details_module #details_select_expeffect .togglebutton INPUT + DIV {
-	border: 1px solid transparent;
-}
-#outfitting_details_module #details_select_expeffect .togglebutton INPUT:checked + DIV {
-	border-color: var(--color-orange-5);
-}
-#outfitting_details_module #details_select_expeffect .togglebutton INPUT:disabled + DIV {
-	border-color: transparent;
-}
-
-#outfitting_details_module #details_select_expeffect .togglebutton INPUT + DIV .iconsvg {
-	margin: 2px;
-}
-#outfitting_details_module #details_select_expeffect .togglebutton INPUT:active + DIV .iconsvg {
-	color: white;
-}
-#outfitting_details_module #details_select_expeffect .togglebutton INPUT:disabled + DIV .iconsvg {
-	color: var(--color-grey-4);
-}
-
-#outfitting_details_module #details_discount {
+#engineering_roll {
+	flex: 0 0 auto;
 	display: flex;
-	flex-direction: row;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	width: 4.5em;
+	height: 4.5em;
 }
 
-#outfitting_details_module #details_discount .togglebutton {
-	flex: 1 0 auto;
+#engineering_roll .outer {
+	position: absolute;
+	left: 0.25em;
+	right: 0.25em;
+	top: 0.25em;
+	bottom: 0.25em;
+	border-radius: 50%;
+	overflow: hidden;
 }
 
-#outfitting_details_module #details_discount .togglebutton INPUT + DIV {
-	margin: 0 0 2px 2px;
-	border: 1px solid var(--color-orange-3);
-	background-color: var(--color-orange-1);
-	color: var(--color-orange-4);
-	text-align: center;
+#engineering_roll .mask {
+	position: absolute;
+	left: 50%;
+	width: 50%;
+	height: 100%;
+	overflow: hidden;
 }
-#outfitting_details_module #details_discount .togglebutton:first-child INPUT + DIV {
-	margin-left: 0;
+#engineering_roll .mask + .mask {
+	left: 0;
 }
-#outfitting_details_module #details_discount .togglebutton INPUT:checked + DIV {
-	border-color: var(--color-orange-5);
-	background-color: var(--color-orange-5);
-	color: black;
+
+#engineering_roll .inner {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	transform-origin: left center;
 }
-#outfitting_details_module #details_discount .togglebutton INPUT:active + DIV {
-	border-color: white;
-	background-color: white;
-	color: black;
+#engineering_roll .inner:before,
+#engineering_roll .inner:after {
+	content: '';
+	position: absolute;
+	display: block;
+	width: 100%;
+	height: 100%;
+	background-color: var(--color-blue-2);
 }
-#outfitting_details_module #details_discount .togglebutton INPUT:disabled + DIV {
+#engineering_roll .inner:after {
+	left: -100%;
+	background-color: var(--color-blue-4);
+}
+#engineering_roll.invalid .inner:before,
+#engineering_roll.invalid .inner:after {
+	background-color: var(--color-red-2);
+}
+#engineering_roll.disabled .inner:before,
+#engineering_roll.disabled .inner:after {
+	background-color: var(--color-grey-2);
+}
+#engineering_roll .mask + .mask .inner {
+	transform-origin: right center;
+}
+#engineering_roll .mask + .mask .inner:after {
+	left: 100%;
+}
+#engineering_roll .middle {
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	left: 50%;
+	top: 50%;
+	width: 3em;
+	height: 3em;
+	margin-left: -1.5em;
+	margin-top: -1.5em;
+	border-radius: 50%;
+	background-color: black;
+}
+
+#engineering_roll #blueprint_roll {
+	align-self: center;
+	width: 3.5em;
 	border-color: var(--color-grey-3);
-	background-color: var(--color-grey-1);
-	color: var(--color-grey-4);
+	background-color: transparent;
+	padding: 0;
+	text-align: center;
+	font: var(--font-caps);
+	font-size: 0.875rem;
 }
-#outfitting_details_module #details_discount .togglebutton INPUT:disabled:checked + DIV {
-	background-color: var(--color-grey-3);
-	color: black;
+#engineering_roll #blueprint_roll:focus {
+	border-color: white;
+	background-color: var(--color-grey-2);
+}
+#engineering_roll #blueprint_roll:disabled {
+	border-color: transparent;
+	background-color: transparent;
 }
 
-#outfitting_details_module #details_discount .togglebutton INPUT + DIV SMALL {
-	color: inherit;
+#engineering_rollbuttons {
+	flex: 0 0 auto;
+	display: flex;
+	align-self: stretch;
+	flex-direction: column;
+	justify-content: space-between;
+	padding: 0.25em 0;
 }
+
+#engineering_rollbuttons BUTTON {
+	font-size: 0.875rem;
+	text-align: right;
+}
+
+#details_special {
+	font: var(--font-text);
+}
+
 
 #outfitting_details_module TABLE {
+	margin-bottom: 0.25rem;
 	width: 100%;
 }
 
@@ -2280,6 +2423,20 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_details_module TD SPAN {
 	display: block;
 	padding-bottom: 2px;
+}
+
+
+#outfitting_details_buttons {
+	flex: 0 0 auto;
+	min-width: 0;
+	display: none;
+	flex-direction: row;
+	margin: 0 -0.25em;
+}
+
+#outfitting_details_buttons BUTTON {
+	flex: 1 0 10px;
+	margin: 0.25em 0.25em 0 0.25em;
 }
 
 
