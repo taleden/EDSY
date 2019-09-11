@@ -14,12 +14,12 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 -->
 		<title>EDSY</title>
 		<meta name="application-name" content="EDSY">
-		<meta name="edsy-versions-html" id="edsy_versions_html" content="34293,34293,34293,34293"><!-- HTML,CSS,DB,JS -->
-		<meta name="last-modified" id="last_modified" content="2019-09-02">
+		<meta name="edsy-versions-html" id="edsy_versions_html" content="34294,34294,34294,34294"><!-- HTML,CSS,DB,JS -->
+		<meta name="last-modified" id="last_modified" content="2019-09-11">
 		<meta name="author" content="taleden">
 		<meta name="description" content="EDSY is a ship outfitting tool for Elite Dangerous">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'; style-src 'self' 'unsafe-inline'">
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; form-action https://inara.cz; object-src 'none'; style-src 'self' 'unsafe-inline'">
 		<link rel="stylesheet" type="text/css" href="edsy.css">
 		<link rel="icon" sizes="16x16 32x32" href="favicon.ico">
 		<link rel="icon" sizes="16x16" href="favicon-16.png">
@@ -228,26 +228,16 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 							</div>
 							<div id="outfitting_fit_slots" class="">
 								<div id="outfitting_fit_header">
-									<div class="slots_header_row">
+									<div class="grow">
 										<span>Name:</span>
-										<input class="grow" name="shipname" type="text" maxlength=22>
+										<input name="shipname" type="text" maxlength=22>
+									</div>
+									<div>
 										<span>ID:</span>
 										<input name="shipnametag" type="text" maxlength=6>
+										<span id="fit_header_export">Export:</span>
+										<button name="export_inara"><img src="inara.png"></button>
 									</div>
-									<!-- TODO? powerdist in fit --
-									<div id="outfitting_fit_powerdist" class="slots_header_row">
-										<span>Crew:</span>
-										<button id="outfitting_fit_crewdist_avl" class="" name="crewdist_avl"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div>AVL</div></button>
-										<button id="outfitting_fit_crewdist_sys" class="" name="crewdist_sys"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div>SYS</div></button>
-										<button id="outfitting_fit_crewdist_eng" class="" name="crewdist_eng"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div>ENG</div></button>
-										<button id="outfitting_fit_crewdist_wep" class="" name="crewdist_wep"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div>WEP</div></button>
-										<span>Dist:</span>
-										<button id="outfitting_fit_powerdist_rst" class="" name="powerdist_rst"><div class="powerpips"></div><div>RST</div></button>
-										<button id="outfitting_fit_powerdist_sys" class="" name="powerdist_sys"><div class="powerpips"><span></span><span></span><span></span><span></span></div><div>SYS</div></button>
-										<button id="outfitting_fit_powerdist_eng" class="" name="powerdist_eng"><div class="powerpips"><span></span><span></span><span></span><span></span></div><div>ENG</div></button>
-										<button id="outfitting_fit_powerdist_wep" class="" name="powerdist_wep"><div class="powerpips"><span></span><span></span><span></span><span></span></div><div>WEP</div></button>
-									</div>
-									<!-- TODO? -->
 								</div>
 								<div id="outfitting_fit_body">
 									<div id="slots_column_left" class="slots_body_column">
@@ -886,6 +876,84 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 								<label class="checkbox left"><input type="checkbox" name="hidestats"><div><div class="check"></div><span>Dynamic Statistics Panels</span></div></label>
 								&mdash; Some of the least recently enabled statistics panels are usually hidden at narrower browser widths;
 								you can disable that behavior, but this may force the display to scroll horizontally.
+							</div>
+							<div>
+								<b>Appearance</b>
+								&mdash; Customize EDSY's fonts and colors.
+								<table>
+									<tbody>
+										<tr>
+											<th>Text Font</th>
+											<td colspan=5><input type="text" name="fonttext"></td>
+											<td><button class="iconsvg" name="reset" value="fonttext"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg></button></td>
+										</tr>
+										<tr>
+											<th>Caps Font</th>
+											<td colspan=5><input type="text" name="fontcaps"></td>
+											<td><button class="iconsvg" name="reset" value="fontcaps"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg></button></td>
+										</tr>
+										<tr>
+											<th>Fixed Font</th>
+											<td colspan=5><input type="text" name="fontfixed"></td>
+											<td><button class="iconsvg" name="reset" value="fontfixed"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg></button></td>
+										</tr>
+										<tr>
+											<th></th>
+											<td colspan=2>
+												<button name="colormatrix">Apply GUI Color Matrix</button>
+											</td>
+											<td colspan=3 class="tal">
+												<label class="checkbox left"><input type="checkbox" name="colorinvert"><div><div class="check"></div><span>Invert greys (black-on-white)</span></div></label>
+											</td>
+											<td></td>
+										</tr>
+										<tr>
+											<th>Oranges</th>
+											<td><div class="colorpicker"><input type="text" name="colororange1"><button class="colororange1"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="colororange2"><button class="colororange2"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="colororange3"><button class="colororange3"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="colororange4"><button class="colororange4"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="colororange5"><button class="colororange5"></button></div></td>
+											<td><button class="iconsvg" name="reset" value="colororange"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg></button></td>
+										</tr>
+										<tr>
+											<th>Reds</th>
+											<td><div class="colorpicker"><input type="text" name="colorred1"><button class="colorred1"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="colorred2"><button class="colorred2"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="colorred3"><button class="colorred3"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="colorred4"><button class="colorred4"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="colorred5"><button class="colorred5"></button></div></td>
+											<td><button class="iconsvg" name="reset" value="colorred"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg></button></td>
+										</tr>
+										<tr>
+											<th>Blues</th>
+											<td><div class="colorpicker"><input type="text" name="colorblue1"><button class="colorblue1"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="colorblue2"><button class="colorblue2"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="colorblue3"><button class="colorblue3"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="colorblue4"><button class="colorblue4"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="colorblue5"><button class="colorblue5"></button></div></td>
+											<td><button class="iconsvg" name="reset" value="colorblue"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg></button></td>
+										</tr>
+										<tr>
+											<th>Greens</th>
+											<td><div class="colorpicker"><input type="text" name="colorgreen1"><button class="colorgreen1"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="colorgreen2"><button class="colorgreen2"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="colorgreen3"><button class="colorgreen3"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="colorgreen4"><button class="colorgreen4"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="colorgreen5"><button class="colorgreen5"></button></div></td>
+											<td><button class="iconsvg" name="reset" value="colorgreen"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg></button></td>
+										</tr>
+										<tr>
+											<th>Yellows</th>
+											<td><div class="colorpicker"><input type="text" name="coloryellow1"><button class="coloryellow1"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="coloryellow2"><button class="coloryellow2"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="coloryellow3"><button class="coloryellow3"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="coloryellow4"><button class="coloryellow4"></button></div></td>
+											<td><div class="colorpicker"><input type="text" name="coloryellow5"><button class="coloryellow5"></button></div></td>
+											<td><button class="iconsvg" name="reset" value="coloryellow"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg></button></td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 							<div>
 								<button id="options_backup" name="backup">Backup All Data</button>

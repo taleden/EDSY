@@ -11,8 +11,11 @@ The Elite Dangerous game logic and data in this file remains the property of Fro
 Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elite-dangerous-media-usage-rules.510879/).
 """
 
-import base64, cgi, cgitb, http.cookies, json, sys, zlib
+import base64, cgi, cgitb, http.cookies, json, os, sys, zlib
 cgitb.enable()
+
+LOCAL = ('REQUEST_URI' not in os.environ)
+DEV = (not LOCAL) and os.environ['REQUEST_URI'].startswith('/dev/')
 
 headers = "Cache-Control: no-cache,no-store,must-revalidate\r\nExpires: Sat, 01 Jan 2000 00:00:00 GMT\r\nPragma: no-cache\r\nStrict-Transport-Security: max-age=300; includeSubDomains\r\n" # max-age=31536000; preload
 buf = "Status: 500\r\n"+headers+"\r\n"
@@ -32,12 +35,12 @@ try:
 		sendcookies = http.cookies.SimpleCookie()
 		sendcookies["edsy_import_buffer"] = import_gz_b64
 		sendcookies["edsy_import_buffer"]["domain"] = ".edsy.org"
-		sendcookies["edsy_import_buffer"]["path"] = "/"
+		sendcookies["edsy_import_buffer"]["path"] = ("/dev/" if DEV else "/")
 		buf = "".join([
 			"Status: 303\r\n",
 			headers,
 			sendcookies.output(), "\r\n",
-			"Location: /\r\n",
+			("Location: " + ("/dev/" if DEV else "/") + "\r\n"),
 			"\r\n"
 		])
 	else:
@@ -57,12 +60,12 @@ window.addEventListener('DOMContentLoaded', (function(e) {
 	if (window.sessionStorage && window.sessionStorage.setItem) {
 		window.sessionStorage.setItem('edsy_import_buffer', data);
 	} else {
-		document.cookie = "edsy_import_buffer="+encodeURIComponent(data)+"; domain=.edsy.org; path=/"; 
+		document.cookie = "edsy_import_buffer="+encodeURIComponent(data)+"; domain=.edsy.org; path=%s"; 
 	}
-	window.location.href = '/';
+	window.location.href = '%s';
 }));
 </script>
-""" % (json.dumps(import_gz_b64),)
+""" % (json.dumps(import_gz_b64),("/dev/" if DEV else "/"),("/dev/" if DEV else "/"))
 			)
 		])
 	#if len

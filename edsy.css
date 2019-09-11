@@ -10,41 +10,44 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 */
 
 :root {
-	--edsy-versions-css:34293,34293,34293,34293; /* HTML,CSS,DB,JS */
+	--edsy-versions-css:34294,34294,34294,34294; /* HTML,CSS,DB,JS */
 	
-	--color-orange-5: hsl(27,100%,60%);
-	--color-orange-4: hsl(27,100%,48%);
-	--color-orange-3: hsl(27,100%,36%);
-	--color-orange-2: hsl(27,85%,18%);
-	--color-orange-1: hsl(27,65%,12%);
-	--color-red-5: hsl(0,100%,60%);
-	--color-red-4: hsl(0,100%,48%);
-	--color-red-3: hsl(0,100%,36%);
-	--color-red-2: hsl(0,90%,24%);
-	--color-red-1: hsl(0,75%,15%);
-	--color-blue-5: hsl(197,100%,60%);
-	--color-blue-4: hsl(197,100%,48%);
-	--color-blue-3: hsl(197,100%,36%);
-	--color-blue-2: hsl(197,90%,24%);
-	--color-blue-1: hsl(197,75%,18%);
-	--color-green-5: hsl(148,80%,60%);
-	--color-green-4: hsl(148,90%,45%);
-	--color-green-3: hsl(148,100%,30%);
-	--color-green-2: hsl(148,100%,24%);
-	--color-green-1: hsl(148,100%,18%);
-	--color-yellow-5: hsl(42,100%,60%);
-	--color-yellow-4: hsl(42,100%,48%);
-	--color-yellow-3: hsl(42,100%,36%);
-	--color-yellow-2: hsl(42,100%,18%);
-	--color-yellow-1: hsl(42,100%,12%);
-	--color-grey-5: hsl(0,0%,85%);
-	--color-grey-4: hsl(0,0%,70%);
-	--color-grey-3: hsl(0,0%,50%);
-	--color-grey-2: hsl(0,0%,30%);
-	--color-grey-1: hsl(0,0%,15%);
-	--font-caps: normal normal normal 1rem/normal 'EuroCaps', 'Verdana', 'Geneva', sans-serif;
-	--font-text: normal normal normal 0.875rem/normal 'Sintony', 'Helvetica', 'Arial', sans-serif;
-	--font-fixed: normal normal normal 0.875rem/normal 'Telegrama', 'Courier New', 'Courier', monospace;
+	--colorblack: black;
+	--colorwhite: white;
+	--colorgrey5: #d9d9d9; /* hsl(0,0%,85%); */
+	--colorgrey4: #b3b3b3; /* hsl(0,0%,70%); */
+	--colorgrey3: #808080; /* hsl(0,0%,50%); */
+	--colorgrey2: #4d4d4d; /* hsl(0,0%,30%); */
+	--colorgrey1: #262626; /* hsl(0,0%,15%); */
+	--colororange5: #ff8f33; /* hsl(27,100%,60%); */
+	--colororange4: #f56e00; /* hsl(27,100%,48%); */
+	--colororange3: #b85300; /* hsl(27,100%,36%); */
+	--colororange2: #552a07; /* hsl(27, 85%,18%); */
+	--colororange1: #321d0b; /* hsl(27, 65%,12%); */
+	--colorred5: #ff3333; /* hsl(0,100%,60%); */
+	--colorred4: #f50000; /* hsl(0,100%,48%); */
+	--colorred3: #b80000; /* hsl(0,100%,36%); */
+	--colorred2: #740606; /* hsl(0, 90%,24%); */
+	--colorred1: #430a0a; /* hsl(0, 75%,15%); */
+	--colorblue5: #33c5ff; /* hsl(197,100%,60%); */
+	--colorblue4: #00aff5; /* hsl(197,100%,48%); */
+	--colorblue3: #0084b8; /* hsl(197,100%,36%); */
+	--colorblue2: #065574; /* hsl(197, 90%,24%); */
+	--colorblue1: #0b3d50; /* hsl(197, 75%,18%); */
+	--colorgreen5: #47eb94; /* hsl(148, 80%,60%); */
+	--colorgreen4: #0bda6c; /* hsl(148, 90%,45%); */
+	--colorgreen3: #009947; /* hsl(148,100%,30%); */
+	--colorgreen2: #007a39; /* hsl(148,100%,24%); */
+	--colorgreen1: #005c2b; /* hsl(148,100%,18%); */
+	--coloryellow5: #ffc233; /* hsl(42,100%,60%); */
+	--coloryellow4: #f5ab00; /* hsl(42,100%,48%); */
+	--coloryellow3: #b88100; /* hsl(42,100%,36%); */
+	--coloryellow2: #5c4000; /* hsl(42,100%,18%); */
+	--coloryellow1: #3d2b00; /* hsl(42,100%,12%); */
+	
+	--fontcaps: 1rem 'EuroCaps', 'Verdana', 'Geneva', sans-serif;
+	--fonttext: 0.875rem 'Sintony', 'Helvetica', 'Arial', sans-serif;
+	--fontfixed: 0.875rem 'Telegrama', 'Courier New', 'Courier', monospace;
 }
 
 @font-face {
@@ -78,9 +81,9 @@ BODY {
 	padding: 0;
 	width: 100%;
 	height: 100%;
-	background-color: #222;
-	color: white;
-	font: var(--font-caps);
+	background-color: var(--colorgrey1);
+	color: var(--colorwhite);
+	font: var(--fontcaps);
 	font-size: 100%;
 }
 
@@ -88,13 +91,13 @@ DIV::-webkit-scrollbar,
 DIV::-webkit-scrollbar-corner {
 	width: 0.75rem;
 	height: 0.75rem;
-	background-color: var(--color-orange-1);
+	background-color: var(--colororange1);
 }
 DIV::-webkit-scrollbar-thumb {
-	background-color: var(--color-orange-5);
+	background-color: var(--colororange5);
 }
 DIV {
-	scrollbar-color: var(--color-orange-5) var(--color-orange-1);
+	scrollbar-color: var(--colororange5) var(--colororange1);
 }
 
 HEADER {
@@ -108,21 +111,21 @@ P {
 ABBR {
 	display: inline-block;
 	margin: 0.125rem 0;
-	border-bottom: 0.0625rem dotted white;
+	border-bottom: 0.0625rem dotted var(--colorwhite);
 	cursor: help;
 	line-height: 0.8571;
 	text-decoration: none;
 }
 ABBR.attribute {
-	color: var(--color-orange-5);
-	border-color: var(--color-orange-5);
-	font: var(--font-text);
+	color: var(--colororange5);
+	border-color: var(--colororange5);
+	font: var(--fonttext);
 	line-height: 0.8571;
 }
 
 SMALL {
 	font-size: 75%;
-	color: var(--color-grey-4);
+	color: var(--colorgrey4);
 }
 .modgood SMALL,
 .modbad SMALL,
@@ -131,28 +134,28 @@ SMALL {
 }
 
 A {
-	color: var(--color-blue-4);
+	color: var(--colorblue4);
 	text-decoration: none;
 }
 A:hover {
-	color: var(--color-blue-5);
+	color: var(--colorblue5);
 	text-decoration: underline;
 }
 A.button {
 	display: inline-block;
 	margin: 0.25rem;
 	padding: 0.125rem 0.5rem;
-	background-color: var(--color-orange-1);
-	color: var(--color-orange-5);
-	font: var(--font-caps);
+	background-color: var(--colororange1);
+	color: var(--colororange5);
+	font: var(--fontcaps);
 }
 A.button:hover {
-	color: var(--color-orange-5);
+	color: var(--colororange5);
 	text-decoration: none;
 }
 A.button:active {
-	background-color: white;
-	color: black;
+	background-color: var(--colorwhite);
+	color: var(--colorblack);
 }
 
 DL {
@@ -196,20 +199,20 @@ BUTTON {
 	margin: 0;
 	border: 0.0625rem solid transparent;
 	padding: 0;
-	background-color: var(--color-orange-1);
-	color: var(--color-orange-5);
-	font: var(--font-caps);
+	background-color: var(--colororange1);
+	color: var(--colororange5);
+	font: var(--fontcaps);
 	cursor: pointer;
 }
 BUTTON:active {
 	border-color: transparent;
-	background-color: white !important;
-	color: black !important;
+	background-color: var(--colorwhite) !important;
+	color: var(--colorblack) !important;
 }
 BUTTON:disabled {
 	border-color: transparent;
-	background-color: var(--color-grey-1) !important;
-	color: var(--color-grey-4) !important;
+	background-color: var(--colorgrey1) !important;
+	color: var(--colorgrey4) !important;
 	cursor: auto;
 }
 
@@ -222,14 +225,14 @@ INPUT {
 	margin: 0;
 	border: none;
 	padding: 0;
-	font: var(--font-caps);
+	font: var(--fontcaps);
 }
 INPUT[type=text] {
-	border: 0.0625rem solid white;
+	border: 0.0625rem solid var(--colorwhite);
 	padding: 0.0625rem 0.25rem;
-	background-color: var(--color-grey-2);
-	color: white;
-	font: var(--font-text);
+	background-color: var(--colorgrey2);
+	color: var(--colorwhite);
+	font: var(--fonttext);
 }
 INPUT:disabled {
 	border-color: transparent;
@@ -239,12 +242,12 @@ INPUT:disabled {
 
 SELECT {
 	margin: 0;
-	border: 0.0625rem solid white;
+	border: 0.0625rem solid var(--colorwhite);
 	padding: 0;
-	background-color: var(--color-grey-2);
-	color: white;
+	background-color: var(--colorgrey2);
+	color: var(--colorwhite);
 	cursor: pointer;
-	font: var(--font-text);
+	font: var(--fonttext);
 }
 SELECT:disabled {
 	border-color: transparent;
@@ -254,28 +257,28 @@ SELECT:disabled {
 }
 
 OPTGROUP {
-	background-color: var(--color-grey-4);
-	color: black;
+	background-color: var(--colorgrey4);
+	color: var(--colorblack);
 }
 
 OPTION {
-	background-color: var(--color-grey-5);
-	color: black;
+	background-color: var(--colorgrey5);
+	color: var(--colorblack);
 	margin: 0;
 	border: 0.0625rem solid transparent;
 	padding: 0 0.25rem;
 }
 OPTION:disabled {
-	color: var(--color-grey-2);
+	color: var(--colorgrey2);
 	font-style: italic;
 }
 
 TEXTAREA {
 	margin: 0;
-	border: 0.0625rem solid white;
+	border: 0.0625rem solid var(--colorwhite);
 	padding: 0 0.25rem;
-	background-color: var(--color-grey-2);
-	color: white;
+	background-color: var(--colorgrey2);
+	color: var(--colorwhite);
 	font-family: 'Courier New', 'Courier', monospace;
 	font-size: 87.5%;
 	white-space: pre;
@@ -285,10 +288,10 @@ TEXTAREA::-webkit-scrollbar,
 TEXTAREA::-webkit-scrollbar-corner {
 	width: 0.75rem;
 	height: 0.75rem;
-	background-color: var(--color-grey-1);
+	background-color: var(--colorgrey1);
 }
 TEXTAREA::-webkit-scrollbar-thumb {
-	background-color: white;
+	background-color: var(--colorwhite);
 }
 
 
@@ -303,17 +306,17 @@ TEXTAREA::-webkit-scrollbar-thumb {
 .vam { vertical-align: middle; }
 
 .dropok {
-	border-color: var(--color-blue-5) !important;
+	border-color: var(--colorblue5) !important;
 }
 
 .modgood {
-	color: var(--color-blue-5);
+	color: var(--colorblue5);
 }
 .modbad {
-	color: var(--color-red-5);
+	color: var(--colorred5);
 }
 .modoverride {
-	background-color: var(--color-grey-1);
+	background-color: var(--colorgrey1);
 }
 
 .iconsvg {
@@ -328,11 +331,11 @@ TEXTAREA::-webkit-scrollbar-thumb {
 	line-height: 13px;
 }
 .iconsvg.warning {
-	color: var(--color-red-3);
+	color: var(--colorred3);
 }
 .iconsvg.guardian,
 .iconsvg.blueprint {
-	color: var(--color-blue-5);
+	color: var(--colorblue5);
 }
 
 .togglebutton {
@@ -356,6 +359,10 @@ INPUT.toggleinput {
 }
 .togglebutton INPUT:disabled + DIV {
 	cursor: default;
+}
+
+.togglebutton ABBR {
+	cursor: inherit;
 }
 
 .checkbox {
@@ -411,11 +418,11 @@ INPUT.toggleinput {
 }
 .checkbox INPUT:checked + DIV .check,
 .checkbox INPUT:checked + DIV .radio {
-	background-color: var(--color-orange-5);
+	background-color: var(--colororange5);
 }
 .checkbox INPUT:checked:disabled + DIV .check,
 .checkbox INPUT:checked:disabled + DIV .radio {
-	background-color: var(--color-grey-3) !important;
+	background-color: var(--colorgrey3) !important;
 }
 
 .checkbox INPUT + DIV .check::before,
@@ -426,7 +433,7 @@ INPUT.toggleinput {
 	top: -4px;
 	bottom: -4px;
 	width: 4px;
-	border: 2px solid var(--color-orange-3);
+	border: 2px solid var(--colororange3);
 }
 .checkbox INPUT + DIV .check::before {
 	left: -4px;
@@ -444,7 +451,7 @@ INPUT.toggleinput {
 	position: absolute;
 	height: 9px;
 	width: 9px;
-	border: 0 solid var(--color-orange-3);
+	border: 0 solid var(--colororange3);
 }
 .checkbox INPUT + DIV .radio::before {
 	top: 2px;
@@ -461,43 +468,43 @@ INPUT.toggleinput {
 .checkbox INPUT:checked + DIV .check::after,
 .checkbox INPUT:checked + DIV .radio::before,
 .checkbox INPUT:checked + DIV .radio::after {
-	border-color: var(--color-orange-5);
+	border-color: var(--colororange5);
 }
 .checkbox INPUT:active + DIV .check::before,
 .checkbox INPUT:active + DIV .check::after,
 .checkbox INPUT:active + DIV .radio::before,
 .checkbox INPUT:active + DIV .radio::after {
-	border-color: white !important;
+	border-color: var(--colorwhite) !important;
 }
 .checkbox INPUT:disabled + DIV .check::before,
 .checkbox INPUT:disabled + DIV .check::after,
 .checkbox INPUT:disabled + DIV .radio::before,
 .checkbox INPUT:disabled + DIV .radio::after {
-	border-color: var(--color-grey-3) !important;
+	border-color: var(--colorgrey3) !important;
 }
 
 
 TABLE.striped {
 	border-collapse: separate;
 	border-spacing: 0;
-	border: 0.5em solid black;
+	border: 0.5em solid var(--colorblack);
 }
 
 TABLE.striped TH,
 TABLE.striped TD {
-	border: 0 solid var(--color-orange-3);
+	border: 0 solid var(--colororange3);
 	padding: 1px 0.25em;
 }
 
 TABLE.striped THEAD TH {
 	border-width: 2px 0 2px 2px;
-	color: var(--color-orange-5);
+	color: var(--colororange5);
 	font-weight: bold;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-	cursor: arrow;
+	cursor: default;
 }
 TABLE.striped THEAD TR.colgroup TH {
 	border-width: 0;
@@ -519,7 +526,7 @@ TABLE.striped TBODY TD.colgroup + TD:not(.colgroup) {
 }
 
 TABLE.striped THEAD TH ABBR {
-	border-color: var(--color-orange-5);
+	border-color: var(--colororange5);
 }
 
 TABLE.striped TH.stickytop {
@@ -528,7 +535,7 @@ TABLE.striped TH.stickytop {
 	top: 0;
 	z-index: 1;
 	border-bottom-width: 2px;
-	background-color: black;
+	background-color: var(--colorblack);
 }
 TABLE.striped TD.stickyleft {
 	position: -webkit-sticky;
@@ -536,7 +543,7 @@ TABLE.striped TD.stickyleft {
 	left: 0;
 	z-index: 1;
 	border-right-width: 2px;
-	background-color: black;
+	background-color: var(--colorblack);
 }
 TABLE.striped TH.stickytopleft {
 	position: -webkit-sticky;
@@ -544,24 +551,24 @@ TABLE.striped TH.stickytopleft {
 	top: 0;
 	left: 0;
 	z-index: 2;
-	border: 2px solid var(--color-orange-3);
+	border: 2px solid var(--colororange3);
 	border-right-width: 2px;
 	border-bottom-width: 2px;
-	background-color: black;
+	background-color: var(--colorblack);
 }
 TABLE.striped TH.stickytopleft + TH {
 	border-left-width: 0;
 }
 
 TABLE.striped TBODY TR:nth-child(even) TD {
-	background-color: var(--color-orange-1);
+	background-color: var(--colororange1);
 }
 TABLE.striped TBODY TR:hover TD {
-	background-color: var(--color-orange-2);
+	background-color: var(--colororange2);
 }
 
 TABLE.striped TBODY TD.text {
-	font: var(--font-text);
+	font: var(--fonttext);
 }
 
 TABLE.striped SMALL:not(.semantic) {
@@ -574,8 +581,8 @@ TABLE.striped BUTTON {
 TABLE.striped BUTTON.label {
 	width: 100%;
 	max-width: 100%;
-	font: var(--font-text);
-	color: var(--color-yellow-5);
+	font: var(--fonttext);
+	color: var(--coloryellow5);
 	text-align: left;
 	white-space: nowrap;
 	overflow: hidden;
@@ -587,13 +594,13 @@ TABLE.striped BUTTON .iconsvg {
 }
 
 TABLE.striped .togglebutton INPUT + DIV .iconsvg {
-	color: var(--color-orange-3);
+	color: var(--colororange3);
 }
 TABLE.striped .togglebutton INPUT:checked + DIV .iconsvg {
-	color: var(--color-orange-5);
+	color: var(--colororange5);
 }
 TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
-	color: white;
+	color: var(--colorwhite);
 }
 
 
@@ -614,7 +621,7 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-	font: var(--font-caps);
+	font: var(--fontcaps);
 }
 
 #page_header {
@@ -657,9 +664,9 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 	flex: 1 0 10px;
 	width: 100%;
 	min-width: 0;
-	border: 2px solid var(--color-orange-5);
+	border: 2px solid var(--colororange5);
 	padding: 0 0.25em;
-	background-color: black;
+	background-color: var(--colorblack);
 	overflow: auto;
 	overflow-y: scroll;
 	white-space: nowrap;
@@ -741,9 +748,9 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 	flex: 1 0 10px;
 	display: flex;
 	flex-direction: column;
-	border: 2px solid var(--color-orange-5);
+	border: 2px solid var(--colororange5);
 	padding: 0.5em;
-	background-color: black;
+	background-color: var(--colorblack);
 	overflow: auto;
 }
 
@@ -773,13 +780,13 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-	background-color: var(--color-red-2);
+	background-color: var(--colorred2);
 }
 
 #header_title {
 	flex: 1 0 10px;
 	padding: 0 0.5rem;
-	font: var(--font-text);
+	font: var(--fonttext);
 	font-size: 1.125rem;
 	font-weight: bold;
 }
@@ -788,7 +795,7 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 	margin-left: 0.5rem;
 	padding: 2px;
 	background-color: transparent;
-	color: white;
+	color: var(--colorwhite);
 	font-size: 1rem;
 	line-height: 1rem;
 	vertical-align: baseline;
@@ -821,12 +828,12 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 	padding: 0 0.5em;
 }
 #page_tabs .togglebutton INPUT:checked + DIV {
-	background-color: var(--color-grey-1);
-	color: var(--color-red-5);
+	background-color: var(--colorgrey1);
+	color: var(--colorred5);
 }
 #page_tabs .togglebutton INPUT:active + DIV {
-	background-color: white;
-	color: black;
+	background-color: var(--colorwhite);
+	color: var(--colorblack);
 }
 
 #page_tabs .togglebutton INPUT + DIV SPAN {
@@ -842,7 +849,7 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 	align-items: center;
 	align-content: space-between;
 	padding: 0 0.5em;
-	font: var(--font-text);
+	font: var(--fonttext);
 	font-size: 0.75rem;
 }
 
@@ -883,21 +890,21 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 }
 
 #shipyard_tabs .togglebutton INPUT + DIV {
-	border: 1px solid var(--color-orange-3);
+	border: 1px solid var(--colororange3);
 	border-bottom: none;
 	padding: 0 0.5em;
-	background-color: var(--color-orange-1);
-	color: var(--color-orange-4);
+	background-color: var(--colororange1);
+	color: var(--colororange4);
 }
 #shipyard_tabs .togglebutton INPUT:checked + DIV {
-	border-color: var(--color-orange-5);
-	background-color: var(--color-orange-5);
-	color: black;
+	border-color: var(--colororange5);
+	background-color: var(--colororange5);
+	color: var(--colorblack);
 }
 #shipyard_tabs .togglebutton INPUT:active + DIV {
-	border-color: white;
-	background-color: white;
-	color: black;
+	border-color: var(--colorwhite);
+	background-color: var(--colorwhite);
+	color: var(--colorblack);
 }
 
 #page_body_shipyard:not(.ships) #shipyard_ships_container,
@@ -909,7 +916,65 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 	padding: 0;
 }
 
-#shipyard_container TBODY TD:first-child {
+#shipyard_container TABLE.striped THEAD TH {
+	padding: 0;
+}
+
+#shipyard_container TABLE.striped THEAD TH SPAN {
+	padding: 1px 0.25em;
+}
+
+#shipyard_container TABLE.striped THEAD TH .togglebutton {
+	display: block;
+}
+
+#shipyard_container TABLE.striped THEAD TH .togglebutton INPUT + DIV {
+	display: flex;
+	align-items: center;
+}
+#shipyard_container TABLE.striped THEAD TH .togglebutton INPUT:active + DIV {
+	background-color: var(--colorwhite);
+	color: var(--colorblack);
+}
+
+#shipyard_container TABLE.striped THEAD TH .togglebutton INPUT:checked + DIV::after {
+	content: '';
+	display: block;
+	float: right;
+	margin: 0.125em 0.25em;
+	border: 0 solid transparent;
+	border-width: 6px 3px;
+}
+#shipyard_container TABLE.striped THEAD TH .togglebutton INPUT:checked.asc + DIV::after {
+	border-bottom-color: var(--colororange5);
+}
+#shipyard_container TABLE.striped THEAD TH .togglebutton INPUT:checked.desc + DIV::after {
+	border-top-color: var(--colororange5);
+}
+#shipyard_container TABLE.striped THEAD TH .togglebutton INPUT:checked.key1 + DIV::after {
+	border-left-color: var(--colororange5);
+}
+#shipyard_container TABLE.striped THEAD TH .togglebutton INPUT:checked.key2 + DIV::after {
+	border-right-color: var(--colororange5);
+}
+#shipyard_container TABLE.striped THEAD TH .togglebutton INPUT:checked:active.asc + DIV::after {
+	border-bottom-color: var(--colorblack);
+}
+#shipyard_container TABLE.striped THEAD TH .togglebutton INPUT:checked:active.desc + DIV::after {
+	border-top-color: var(--colorblack);
+}
+#shipyard_container TABLE.striped THEAD TH .togglebutton INPUT:checked:active.key1 + DIV::after {
+	border-left-color: var(--colorblack);
+}
+#shipyard_container TABLE.striped THEAD TH .togglebutton INPUT:checked:active.key2 + DIV::after {
+	border-right-color: var(--colorblack);
+}
+
+#shipyard_container TABLE.striped THEAD TH .togglebutton INPUT + DIV SPAN {
+	flex: 1 0 auto;
+}
+
+#shipyard_container TABLE.striped TBODY TD:first-child {
 	max-width: 15em;
 }
 
@@ -939,22 +1004,22 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 }
 
 #outfitting_modules_tabs .togglebutton INPUT + DIV {
-	border: 1px solid var(--color-orange-3);
+	border: 1px solid var(--colororange3);
 	border-bottom: none;
 	padding: 0 0.2em;
-	background-color: var(--color-orange-1);
-	color: var(--color-orange-4);
+	background-color: var(--colororange1);
+	color: var(--colororange4);
 	font-size: 0.875rem;
 }
 #outfitting_modules_tabs .togglebutton INPUT:checked + DIV {
-	border-color: var(--color-orange-5);
-	background-color: var(--color-orange-5);
-	color: black;
+	border-color: var(--colororange5);
+	background-color: var(--colororange5);
+	color: var(--colorblack);
 }
 #outfitting_modules_tabs .togglebutton INPUT:active + DIV {
-	border-color: white;
-	background-color: white;
-	color: black;
+	border-color: var(--colorwhite);
+	background-color: var(--colorwhite);
+	color: var(--colorblack);
 }
 
 
@@ -963,12 +1028,12 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 	min-width: 0;
 	display: flex;
 	flex-direction: row;
-	border: 2px solid var(--color-orange-5);
-	background-color: black;
+	border: 2px solid var(--colororange5);
+	background-color: var(--colorblack);
 	overflow-y: auto;
 }
 #outfitting_modules_container.dragready {
-	border-color: var(--color-blue-5);
+	border-color: var(--colorblue5);
 }
 
 
@@ -992,8 +1057,8 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 }
 
 #outfitting_modules .group > HEADER {
-	background-color: var(--color-grey-4);
-	color: black;
+	background-color: var(--colorgrey4);
+	color: var(--colorblack);
 	text-align: center;
 	font-weight: bold;
 }
@@ -1003,7 +1068,7 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 }
 
 #outfitting_modules .mtype > HEADER {
-	color: white;
+	color: var(--colorwhite);
 	text-align: center;
 }
 
@@ -1092,7 +1157,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	flex-direction: row;
 }
 #outfitting_modules_picker .row.stored {
-	font: var(--font-text);
+	font: var(--fonttext);
 }
 #outfitting_modules_picker .row.empty {
 	margin: 0.5em;
@@ -1108,8 +1173,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	margin: 1px;
 	border: 1px solid transparent;
 	padding: 0 0.2em;
-	background-color: var(--color-orange-1);
-	color: var(--color-orange-5);
+	background-color: var(--colororange1);
+	color: var(--colororange5);
 	text-align: center;
 	white-space: nowrap;
 	overflow: hidden;
@@ -1123,17 +1188,17 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	content: '(empty)';
 }
 #outfitting_modules_picker .togglebutton INPUT:checked + DIV {
-	border-color: var(--color-orange-5);
+	border-color: var(--colororange5);
 }
 #page_body_outfitting.focusmodule #outfitting_modules_picker .togglebutton INPUT:checked + DIV {
-	background-color: var(--color-orange-5);
-	color: black;
+	background-color: var(--colororange5);
+	color: var(--colorblack);
 }
 #outfitting_modules_picker .togglebutton INPUT:active + DIV,
 #outfitting_modules_picker .togglebutton.active INPUT + DIV {
-	border-color: white !important;
-	background-color: white !important;
-	color: black !important;
+	border-color: var(--colorwhite) !important;
+	background-color: var(--colorwhite) !important;
+	color: var(--colorblack) !important;
 }
 
 #outfitting_modules_picker .togglebutton INPUT + DIV .iconsvg.warning {
@@ -1170,8 +1235,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_modules_picker.size7 .sized:not(.fitsize7) .togglebutton INPUT + DIV,
 #outfitting_modules_picker.size8 .sized:not(.fitsize8) .togglebutton INPUT + DIV,
 #outfitting_modules_picker.reserved .mtype:not(.reserved) .togglebutton INPUT + DIV {
-	background-color: var(--color-red-1);
-	color: var(--color-red-5);
+	background-color: var(--colorred1);
+	color: var(--colorred5);
 }
 #outfitting_modules_picker .togglebutton INPUT.notallowed:checked + DIV,
 #outfitting_modules_picker.size1 .sized:not(.fitsize1) .togglebutton INPUT:checked + DIV,
@@ -1183,7 +1248,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_modules_picker.size7 .sized:not(.fitsize7) .togglebutton INPUT:checked + DIV,
 #outfitting_modules_picker.size8 .sized:not(.fitsize8) .togglebutton INPUT:checked + DIV,
 #outfitting_modules_picker.reserved .mtype:not(.reserved) .togglebutton INPUT:checked + DIV {
-	border-color: var(--color-red-5);
+	border-color: var(--colorred5);
 }
 #page_body_outfitting.focusmodule #outfitting_modules_picker .togglebutton INPUT.notallowed:checked + DIV,
 #page_body_outfitting.focusmodule #outfitting_modules_picker.size1 .sized:not(.fitsize1) .togglebutton INPUT:checked + DIV,
@@ -1195,8 +1260,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #page_body_outfitting.focusmodule #outfitting_modules_picker.size7 .sized:not(.fitsize7) .togglebutton INPUT:checked + DIV,
 #page_body_outfitting.focusmodule #outfitting_modules_picker.size8 .sized:not(.fitsize8) .togglebutton INPUT:checked + DIV,
 #page_body_outfitting.focusmodule #outfitting_modules_picker.reserved .mtype:not(.reserved) .togglebutton INPUT:checked + DIV {
-	background-color: var(--color-red-5);
-	color: black;
+	background-color: var(--colorred5);
+	color: var(--colorblack);
 }
 #outfitting_modules_picker .togglebutton INPUT.notallowed + DIV .iconsvg.tinted,
 #outfitting_modules_picker.size1 .sized:not(.fitsize1) .togglebutton INPUT + DIV .iconsvg.tinted,
@@ -1226,8 +1291,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_modules_picker.military .group:not(.internal) .togglebutton INPUT + DIV,
 #outfitting_modules_picker.military .mtype:not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb) .togglebutton INPUT + DIV,
 #outfitting_modules_picker.internal .group:not(.internal) .togglebutton INPUT + DIV {
-	background-color: var(--color-grey-1);
-	color: var(--color-grey-5);
+	background-color: var(--colorgrey1);
+	color: var(--colorgrey5);
 }
 #outfitting_modules_picker.hardpoint .group:not(.hardpoint) .togglebutton INPUT:checked + DIV,
 #outfitting_modules_picker.utility .group:not(.utility) .togglebutton INPUT:checked + DIV,
@@ -1244,7 +1309,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_modules_picker.military .group:not(.internal) .togglebutton INPUT:checked + DIV,
 #outfitting_modules_picker.military .mtype:not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb) .togglebutton INPUT:checked + DIV,
 #outfitting_modules_picker.internal .group:not(.internal) .togglebutton INPUT:checked + DIV {
-	border-color: var(--color-grey-5);
+	border-color: var(--colorgrey5);
 }
 #page_body_outfitting.focusmodule #outfitting_modules_picker.hardpoint .group:not(.hardpoint) .togglebutton INPUT:checked + DIV,
 #page_body_outfitting.focusmodule #outfitting_modules_picker.utility .group:not(.utility) .togglebutton INPUT:checked + DIV,
@@ -1261,8 +1326,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #page_body_outfitting.focusmodule #outfitting_modules_picker.military .group:not(.internal) .togglebutton INPUT:checked + DIV,
 #page_body_outfitting.focusmodule #outfitting_modules_picker.military .mtype:not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb) .togglebutton INPUT:checked + DIV,
 #page_body_outfitting.focusmodule #outfitting_modules_picker.internal .group:not(.internal) .togglebutton INPUT:checked + DIV {
-	background-color: var(--color-grey-5);
-	color: black;
+	background-color: var(--colorgrey5);
+	color: var(--colorblack);
 }
 #outfitting_modules_picker.hardpoint .group:not(.hardpoint) .togglebutton INPUT + DIV .iconsvg.tinted,
 #outfitting_modules_picker.utility .group:not(.utility) .togglebutton INPUT + DIV .iconsvg.tinted,
@@ -1313,7 +1378,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 
 #outfitting_fit_settings > SPAN {
 	flex: 1 0 auto;
-	font: var(--font-text);
+	font: var(--fonttext);
 	text-align: right;
 }
 
@@ -1326,16 +1391,16 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_cols_label {
 	display: none;
 	margin-bottom: 2px;
-	border: 1px solid var(--color-orange-3);
-	background-color: var(--color-orange-1);
+	border: 1px solid var(--colororange3);
+	background-color: var(--colororange1);
 	padding: 0 0.2em;
-	color: var(--color-orange-4);
+	color: var(--colororange4);
 	cursor: pointer;
 }
 #outfitting_cols_focus:checked + #outfitting_cols_label {
-	border-color: var(--color-orange-5);
-	background-color: var(--color-orange-5);
-	color: black;
+	border-color: var(--colororange5);
+	background-color: var(--colororange5);
+	color: var(--colorblack);
 }
 
 #outfitting_show_popout {
@@ -1345,20 +1410,20 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 
 #outfitting_fit_settings .togglebutton INPUT + DIV {
 	margin: 0 0 2px 2px;
-	border: 1px solid var(--color-orange-3);
-	background-color: var(--color-orange-1);
+	border: 1px solid var(--colororange3);
+	background-color: var(--colororange1);
 	padding: 0 0.2em;
-	color: var(--color-orange-4);
+	color: var(--colororange4);
 }
 #outfitting_fit_settings .togglebutton INPUT:checked + DIV {
-	border-color: var(--color-orange-5);
-	background-color: var(--color-orange-5);
-	color: black;
+	border-color: var(--colororange5);
+	background-color: var(--colororange5);
+	color: var(--colorblack);
 }
 #outfitting_fit_settings .togglebutton INPUT:active + DIV {
-	border-color: white;
-	background-color: white;
-	color: black;
+	border-color: var(--colorwhite);
+	background-color: var(--colorwhite);
+	color: var(--colorblack);
 }
 
 
@@ -1367,16 +1432,16 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	min-width: 0;
 	display: flex;
 	flex-direction: column;
-	border: 2px solid var(--color-orange-5);
-	background-color: black;
+	border: 2px solid var(--colororange5);
+	background-color: var(--colorblack);
 	overflow-y: auto;
 }
 
 #outfitting_fit_slots #outfitting_fit_header {
 	flex: 0 0 auto;
 	display: flex;
-	flex-direction: row;
 	flex-wrap: wrap;
+	justify-content: flex-end;
 	margin: 0 0.25em;
 }
 
@@ -1388,41 +1453,43 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	margin: 0 0.25em;
 }
 
-#outfitting_fit_slots .slots_header_row {
-	flex: 1 0 10px;
+
+#outfitting_fit_header DIV {
+	flex: 0 0 auto;
 	display: flex;
-	flex-direction: row;
-	align-items: flex-end;
-	padding: 0.25em 0;
+	align-items: center;
+	margin: 0.25em;
 }
-#outfitting_fit_slots .slots_header_row:first-child {
-	flex: 100 0 10px;
+#outfitting_fit_header DIV.grow {
+	flex: 1 0 auto;
 }
 
-#outfitting_fit_slots .slots_header_row > SPAN {
-	flex: 1 0 auto;
-	margin: 0 0.25em;
-	color: var(--color-grey-5);
-	font: var(--font-text);
+#outfitting_fit_header SPAN {
+	align-self: flex-end;
+	margin-right: 0.25em;
+	color: var(--colorgrey5);
+	font: var(--fonttext);
 	text-align: right;
 }
+#outfitting_fit_header SPAN#fit_header_export {
+	margin-left: 0.25em;
+}
 
-#outfitting_fit_slots .slots_header_row > INPUT {
+#outfitting_fit_header INPUT {
 	flex: 0 0 auto;
 	width: 6em;
-	font: var(--font-caps);
+	font: var(--fontcaps);
 }
-#outfitting_fit_slots .slots_header_row > INPUT.grow {
-	flex: 100 1 auto;
+#outfitting_fit_header DIV.grow INPUT {
+	flex: 1 0 auto;
 }
 
-#outfitting_fit_slots .slots_header_row > LABEL {
-	flex: 0 0 auto;
-	margin: 0 0.25em;
-	color: var(--color-grey-5);
-	font: var(--font-text);
-	text-align: right;
+#outfitting_fit_header BUTTON {
+	align-self: stretch;
+	padding: 0.125rem;
+	line-height: 0;
 }
+
 
 /* TODO move/rename powerdist controls to stats section */
 .outfitting_stats_panel .nopad {
@@ -1459,16 +1526,16 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 .outfitting_powerdist BUTTON DIV:last-child {
 	position: relative;
 	padding: 1px 2px;
-	color: var(--color-orange-5);
+	color: var(--colororange5);
 	text-align: center;
 }
 .outfitting_powerdist BUTTON:active DIV:last-child {
-	background-color: var(--color-orange-5);
-	color: black;
+	background-color: var(--colororange5);
+	color: var(--colorblack);
 }
 .outfitting_powerdist BUTTON:disabled DIV:last-child {
 	background-color: transparent;
-	color: var(--color-grey-4);
+	color: var(--colorgrey4);
 }
 
 .outfitting_powerdist BUTTON#outfitting_fit_powerdist_rst DIV:last-child::before,
@@ -1479,7 +1546,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	left: 0;
 	right: 0;
 	height: 2px;
-	border: 1px solid var(--color-orange-5);
+	border: 1px solid var(--colororange5);
 }
 .outfitting_powerdist BUTTON#outfitting_fit_powerdist_rst DIV:last-child::before {
 	top: 0;
@@ -1495,24 +1562,24 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	width: 5px;
 	height: 5px;
 	margin-left: 1px;
-	border: 2px solid var(--color-orange-1);
+	border: 2px solid var(--colororange1);
 	border-radius: 2px;
-	background-color: var(--color-orange-1);
+	background-color: var(--colororange1);
 }
 .outfitting_powerdist BUTTON SPAN:first-child {
 	margin-left: 0;
 }
 .outfitting_powerdist BUTTON .crewpips SPAN {
-	border-color: var(--color-blue-1);
-	background-color: var(--color-blue-1);
+	border-color: var(--colorblue1);
+	background-color: var(--colorblue1);
 }
 
 .outfitting_powerdist BUTTON.dist1 SPAN:nth-child(1),
 .outfitting_powerdist BUTTON.dist3 SPAN:nth-child(2),
 .outfitting_powerdist BUTTON.dist5 SPAN:nth-child(3),
 .outfitting_powerdist BUTTON.dist7 SPAN:nth-child(4) {
-	border-color: var(--color-orange-3);
-	background-color: var(--color-orange-3);
+	border-color: var(--colororange3);
+	background-color: var(--colororange3);
 }
 .outfitting_powerdist BUTTON.dist2 SPAN:nth-child(1),
 .outfitting_powerdist BUTTON.dist3 SPAN:nth-child(1),
@@ -1530,8 +1597,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 .outfitting_powerdist BUTTON.dist7 SPAN:nth-child(3),
 .outfitting_powerdist BUTTON.dist8 SPAN:nth-child(3),
 .outfitting_powerdist BUTTON.dist8 SPAN:nth-child(4) {
-	border-color: var(--color-orange-5);
-	background-color: var(--color-orange-5);
+	border-color: var(--colororange5);
+	background-color: var(--colororange5);
 }
 
 .outfitting_powerdist BUTTON.crew1 SPAN:nth-child(1),
@@ -1544,8 +1611,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 .outfitting_powerdist BUTTON.crew4 SPAN:nth-child(3),
 .outfitting_powerdist BUTTON.crew4 SPAN:nth-child(3),
 .outfitting_powerdist BUTTON.crew4 SPAN:nth-child(4) {
-	border-color: var(--color-blue-5);
-	background-color: var(--color-blue-5);
+	border-color: var(--colorblue5);
+	background-color: var(--colorblue5);
 }
 
 .outfitting_powerdist BUTTON:not(.max4):not(.max3):not(.max2):not(.max1) .crewpips SPAN:nth-child(1),
@@ -1554,6 +1621,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 .outfitting_powerdist BUTTON:not(.max4) .crewpips SPAN:nth-child(4) {
 	display: none;
 }
+/* */
 
 
 #outfitting_fit_body .slots_body_column {
@@ -1577,25 +1645,25 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	position: -webkit-sticky;
 	position: sticky;
 	top: 0;
-	border: 0 solid var(--color-orange-3);
+	border: 0 solid var(--colororange3);
 	border-width: 2px 0;
-	background-color: black;
-	color: var(--color-grey-5);
+	background-color: var(--colorblack);
+	color: var(--colorgrey5);
 	z-index: 1;
 }
 #outfitting_fit_slots TBODY TH {
-	border-top: 0.5em solid black;
-	background-color: var(--color-grey-4);
-	color: black;
+	border-top: 0.5em solid var(--colorblack);
+	background-color: var(--colorgrey4);
+	color: var(--colorblack);
 }
 
 #outfitting_fit_slots THEAD ABBR {
-	border-color: var(--color-grey-5);
+	border-color: var(--colorgrey5);
 }
 
 #outfitting_fit_slots TD {
 	width: 0%;
-	border-top: 2px solid black;
+	border-top: 2px solid var(--colorblack);
 	padding: 0 0.25em;
 	text-align: right;
 	white-space: nowrap;
@@ -1643,7 +1711,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 
 #outfitting_fit_slots TH.outfitting_fit_attrs LABEL.checkbox ABBR { /* TODO? only for 'sustained' toggle */
-	border-color: black;
+	border-color: var(--colorblack);
 	margin: 0 0.25em;
 }
 
@@ -1686,8 +1754,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	height: 100%;
 	border: 1px solid transparent;
 	padding: 0 0.2em;
-	background-color: var(--color-orange-1);
-	color: var(--color-orange-5);
+	background-color: var(--colororange1);
+	color: var(--colororange5);
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -1696,56 +1764,56 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots .togglebutton INPUT + DIV SPAN:empty::after {
 	display: inline;
 	content: '(empty)';
-	color: var(--color-orange-3);
+	color: var(--colororange3);
 }
 
 #outfitting_fit_slots .togglebutton INPUT:checked + DIV {
-	border-color: var(--color-orange-5);
+	border-color: var(--colororange5);
 }
 #page_body_outfitting.focusslot #outfitting_fit_slots .togglebutton INPUT:checked + DIV {
-	background-color: var(--color-orange-5);
-	color: black;
+	background-color: var(--colororange5);
+	color: var(--colorblack);
 }
 
 #outfitting_fit_slots .togglebutton INPUT:active + DIV,
 #outfitting_fit_slots .togglebutton.active INPUT + DIV {
-	border-color: white !important;
-	background-color: white !important;
-	color: black !important;
+	border-color: var(--colorwhite) !important;
+	background-color: var(--colorwhite) !important;
+	color: var(--colorblack) !important;
 }
 
 #outfitting_fit_slots .notallowed .togglebutton INPUT + DIV,
 #outfitting_fit_slots .overlimit .togglebutton INPUT + DIV {
-	background-color: var(--color-red-1);
-	color: var(--color-red-5);
+	background-color: var(--colorred1);
+	color: var(--colorred5);
 }
 #outfitting_fit_slots .notallowed .togglebutton INPUT:checked + DIV,
 #outfitting_fit_slots .overlimit .togglebutton INPUT:checked + DIV {
-	border-color: var(--color-red-5);
+	border-color: var(--colorred5);
 }
 #page_body_outfitting.focusslot #outfitting_fit_slots .notallowed .togglebutton INPUT:checked + DIV,
 #page_body_outfitting.focusslot #outfitting_fit_slots .overlimit .togglebutton INPUT:checked + DIV {
-	background-color: var(--color-red-5);
-	color: black;
+	background-color: var(--colorred5);
+	color: var(--colorblack);
 }
 
 #outfitting_fit_slots .dragready .togglebutton INPUT + DIV {
-	border-color: var(--color-blue-5);
+	border-color: var(--colorblue5);
 }
 
 #outfitting_fit_slots .dragerror .togglebutton INPUT + DIV {
-	background-color: var(--color-grey-1);
-	color: var(--color-grey-5);
+	background-color: var(--colorgrey1);
+	color: var(--colorgrey5);
 }
 #outfitting_fit_slots .dragerror .togglebutton INPUT + DIV SPAN:empty::after {
-	color: var(--color-grey-3);
+	color: var(--colorgrey3);
 }
 #outfitting_fit_slots .dragerror .togglebutton INPUT:checked + DIV {
-	border-color: var(--color-grey-5);
+	border-color: var(--colorgrey5);
 }
 #page_body_outfitting.focusslot #outfitting_fit_slots .dragerror .togglebutton INPUT:checked + DIV {
-	background-color: var(--color-grey-5);
-	color: black;
+	background-color: var(--colorgrey5);
+	color: var(--colorblack);
 }
 
 #page_body_outfitting.focusslot #outfitting_fit_slots .togglebutton INPUT:checked + DIV SPAN:empty::after,
@@ -1775,7 +1843,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots.priority3mfn .priority3 .checkbox INPUT:checked + DIV .check,
 #outfitting_fit_slots.priority4mfn .priority4 .checkbox INPUT:checked + DIV .check,
 #outfitting_fit_slots.priority5mfn .priority5 .checkbox INPUT:checked + DIV .check {
-	background-color: var(--color-blue-5);
+	background-color: var(--colorblue5);
 }
 #outfitting_fit_slots.priority1mfn .priority1 .checkbox INPUT + DIV .check::before,
 #outfitting_fit_slots.priority2mfn .priority2 .checkbox INPUT + DIV .check::before,
@@ -1787,7 +1855,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots.priority3mfn .priority3 .checkbox INPUT + DIV .check::after,
 #outfitting_fit_slots.priority4mfn .priority4 .checkbox INPUT + DIV .check::after,
 #outfitting_fit_slots.priority5mfn .priority5 .checkbox INPUT + DIV .check::after {
-	border-color: var(--color-blue-3);
+	border-color: var(--colorblue3);
 }
 #outfitting_fit_slots.priority1mfn .priority1 .checkbox INPUT:checked + DIV .check::before,
 #outfitting_fit_slots.priority2mfn .priority2 .checkbox INPUT:checked + DIV .check::before,
@@ -1799,7 +1867,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots.priority3mfn .priority3 .checkbox INPUT:checked + DIV .check::after,
 #outfitting_fit_slots.priority4mfn .priority4 .checkbox INPUT:checked + DIV .check::after,
 #outfitting_fit_slots.priority5mfn .priority5 .checkbox INPUT:checked + DIV .check::after {
-	border-color: var(--color-blue-5);
+	border-color: var(--colorblue5);
 }
 
 #outfitting_fit_slots.priority1dmg .priority1 .checkbox INPUT:checked + DIV .check,
@@ -1807,7 +1875,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots.priority3dmg .priority3 .checkbox INPUT:checked + DIV .check,
 #outfitting_fit_slots.priority4dmg .priority4 .checkbox INPUT:checked + DIV .check,
 #outfitting_fit_slots.priority5dmg .priority5 .checkbox INPUT:checked + DIV .check {
-	background-color: var(--color-green-5);
+	background-color: var(--colorgreen5);
 }
 #outfitting_fit_slots.priority1dmg .priority1 .checkbox INPUT + DIV .check::before,
 #outfitting_fit_slots.priority2dmg .priority2 .checkbox INPUT + DIV .check::before,
@@ -1819,7 +1887,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots.priority3dmg .priority3 .checkbox INPUT + DIV .check::after,
 #outfitting_fit_slots.priority4dmg .priority4 .checkbox INPUT + DIV .check::after,
 #outfitting_fit_slots.priority5dmg .priority5 .checkbox INPUT + DIV .check::after {
-	border-color: var(--color-green-3);
+	border-color: var(--colorgreen3);
 }
 #outfitting_fit_slots.priority1dmg .priority1 .checkbox INPUT:checked + DIV .check::before,
 #outfitting_fit_slots.priority2dmg .priority2 .checkbox INPUT:checked + DIV .check::before,
@@ -1831,7 +1899,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots.priority3dmg .priority3 .checkbox INPUT:checked + DIV .check::after,
 #outfitting_fit_slots.priority4dmg .priority4 .checkbox INPUT:checked + DIV .check::after,
 #outfitting_fit_slots.priority5dmg .priority5 .checkbox INPUT:checked + DIV .check::after {
-	border-color: var(--color-green-5);
+	border-color: var(--colorgreen5);
 }
 
 #outfitting_fit_slots.priority1err .priority1 .checkbox INPUT:checked + DIV .check,
@@ -1839,7 +1907,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots.priority3err .priority3 .checkbox INPUT:checked + DIV .check,
 #outfitting_fit_slots.priority4err .priority4 .checkbox INPUT:checked + DIV .check,
 #outfitting_fit_slots.priority5err .priority5 .checkbox INPUT:checked + DIV .check {
-	background-color: var(--color-red-5);
+	background-color: var(--colorred5);
 }
 #outfitting_fit_slots.priority1err .priority1 .checkbox INPUT + DIV .check::before,
 #outfitting_fit_slots.priority2err .priority2 .checkbox INPUT + DIV .check::before,
@@ -1851,7 +1919,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots.priority3err .priority3 .checkbox INPUT + DIV .check::after,
 #outfitting_fit_slots.priority4err .priority4 .checkbox INPUT + DIV .check::after,
 #outfitting_fit_slots.priority5err .priority5 .checkbox INPUT + DIV .check::after {
-	border-color: var(--color-red-3);
+	border-color: var(--colorred3);
 }
 #outfitting_fit_slots.priority1err .priority1 .checkbox INPUT:checked + DIV .check::before,
 #outfitting_fit_slots.priority2err .priority2 .checkbox INPUT:checked + DIV .check::before,
@@ -1863,7 +1931,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots.priority3err .priority3 .checkbox INPUT:checked + DIV .check::after,
 #outfitting_fit_slots.priority4err .priority4 .checkbox INPUT:checked + DIV .check::after,
 #outfitting_fit_slots.priority5err .priority5 .checkbox INPUT:checked + DIV .check::after {
-	border-color: var(--color-red-5);
+	border-color: var(--colorred5);
 }
 
 
@@ -1873,12 +1941,12 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	border: none;
 	padding: 0 6px 0.1em 6px;
 	background-color: transparent;
-	color: var(--color-orange-5);
-	font: var(--font-fixed);
+	color: var(--colororange5);
+	font: var(--fontfixed);
 }
 #outfitting_fit_slots BUTTON.outfitting_fit_priority:active {
 	background-color: transparent !important;
-	color: white !important;
+	color: var(--colorwhite) !important;
 }
 #outfitting_fit_slots BUTTON.outfitting_fit_priority::before,
 #outfitting_fit_slots BUTTON.outfitting_fit_priority::after {
@@ -1894,18 +1962,18 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots BUTTON.outfitting_fit_priority::before {
 	left: 0;
 	border-left: none;
-	border-right-color: var(--color-orange-3);
+	border-right-color: var(--colororange3);
 }
 #outfitting_fit_slots BUTTON.outfitting_fit_priority:active::before {
-	border-right-color: white !important;
+	border-right-color: var(--colorwhite) !important;
 }
 #outfitting_fit_slots BUTTON.outfitting_fit_priority::after {
 	right: 0;
 	border-right: none;
-	border-left-color: var(--color-orange-3);
+	border-left-color: var(--colororange3);
 }
 #outfitting_fit_slots BUTTON.outfitting_fit_priority:active::after {
-	border-left-color: white !important;
+	border-left-color: var(--colorwhite) !important;
 }
 #outfitting_fit_slots BUTTON.outfitting_fit_priority:disabled {
 	visibility: hidden;
@@ -1916,21 +1984,21 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots.priority3mfn .priority3 BUTTON.outfitting_fit_priority,
 #outfitting_fit_slots.priority4mfn .priority4 BUTTON.outfitting_fit_priority,
 #outfitting_fit_slots.priority5mfn .priority5 BUTTON.outfitting_fit_priority {
-	color: var(--color-blue-5);
+	color: var(--colorblue5);
 }
 #outfitting_fit_slots.priority1mfn .priority1 BUTTON.outfitting_fit_priority::before,
 #outfitting_fit_slots.priority2mfn .priority2 BUTTON.outfitting_fit_priority::before,
 #outfitting_fit_slots.priority3mfn .priority3 BUTTON.outfitting_fit_priority::before,
 #outfitting_fit_slots.priority4mfn .priority4 BUTTON.outfitting_fit_priority::before,
 #outfitting_fit_slots.priority5mfn .priority5 BUTTON.outfitting_fit_priority::before {
-	border-right-color: var(--color-blue-3);
+	border-right-color: var(--colorblue3);
 }
 #outfitting_fit_slots.priority1mfn .priority1 BUTTON.outfitting_fit_priority::after,
 #outfitting_fit_slots.priority2mfn .priority2 BUTTON.outfitting_fit_priority::after,
 #outfitting_fit_slots.priority3mfn .priority3 BUTTON.outfitting_fit_priority::after,
 #outfitting_fit_slots.priority4mfn .priority4 BUTTON.outfitting_fit_priority::after,
 #outfitting_fit_slots.priority5mfn .priority5 BUTTON.outfitting_fit_priority::after {
-	border-left-color: var(--color-blue-3);
+	border-left-color: var(--colorblue3);
 }
 
 #outfitting_fit_slots.priority1dmg .priority1 BUTTON.outfitting_fit_priority,
@@ -1938,21 +2006,21 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots.priority3dmg .priority3 BUTTON.outfitting_fit_priority,
 #outfitting_fit_slots.priority4dmg .priority4 BUTTON.outfitting_fit_priority,
 #outfitting_fit_slots.priority5dmg .priority5 BUTTON.outfitting_fit_priority {
-	color: var(--color-green-5);
+	color: var(--colorgreen5);
 }
 #outfitting_fit_slots.priority1dmg .priority1 BUTTON.outfitting_fit_priority::before,
 #outfitting_fit_slots.priority2dmg .priority2 BUTTON.outfitting_fit_priority::before,
 #outfitting_fit_slots.priority3dmg .priority3 BUTTON.outfitting_fit_priority::before,
 #outfitting_fit_slots.priority4dmg .priority4 BUTTON.outfitting_fit_priority::before,
 #outfitting_fit_slots.priority5dmg .priority5 BUTTON.outfitting_fit_priority::before {
-	border-right-color: var(--color-green-3);
+	border-right-color: var(--colorgreen3);
 }
 #outfitting_fit_slots.priority1dmg .priority1 BUTTON.outfitting_fit_priority::after,
 #outfitting_fit_slots.priority2dmg .priority2 BUTTON.outfitting_fit_priority::after,
 #outfitting_fit_slots.priority3dmg .priority3 BUTTON.outfitting_fit_priority::after,
 #outfitting_fit_slots.priority4dmg .priority4 BUTTON.outfitting_fit_priority::after,
 #outfitting_fit_slots.priority5dmg .priority5 BUTTON.outfitting_fit_priority::after {
-	border-left-color: var(--color-green-3);
+	border-left-color: var(--colorgreen3);
 }
 
 #outfitting_fit_slots.priority1wrn .priority1 BUTTON.outfitting_fit_priority,
@@ -1960,21 +2028,21 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots.priority3wrn .priority3 BUTTON.outfitting_fit_priority,
 #outfitting_fit_slots.priority4wrn .priority4 BUTTON.outfitting_fit_priority,
 #outfitting_fit_slots.priority5wrn .priority5 BUTTON.outfitting_fit_priority {
-	color: var(--color-red-5);
+	color: var(--colorred5);
 }
 #outfitting_fit_slots.priority1wrn .priority1 BUTTON.outfitting_fit_priority::before,
 #outfitting_fit_slots.priority2wrn .priority2 BUTTON.outfitting_fit_priority::before,
 #outfitting_fit_slots.priority3wrn .priority3 BUTTON.outfitting_fit_priority::before,
 #outfitting_fit_slots.priority4wrn .priority4 BUTTON.outfitting_fit_priority::before,
 #outfitting_fit_slots.priority5wrn .priority5 BUTTON.outfitting_fit_priority::before {
-	border-right-color: var(--color-red-3);
+	border-right-color: var(--colorred3);
 }
 #outfitting_fit_slots.priority1wrn .priority1 BUTTON.outfitting_fit_priority::after,
 #outfitting_fit_slots.priority2wrn .priority2 BUTTON.outfitting_fit_priority::after,
 #outfitting_fit_slots.priority3wrn .priority3 BUTTON.outfitting_fit_priority::after,
 #outfitting_fit_slots.priority4wrn .priority4 BUTTON.outfitting_fit_priority::after,
 #outfitting_fit_slots.priority5wrn .priority5 BUTTON.outfitting_fit_priority::after {
-	border-left-color: var(--color-red-3);
+	border-left-color: var(--colorred3);
 }
 
 #outfitting_fit_slots.priority1err .priority1 BUTTON.outfitting_fit_priority,
@@ -1982,21 +2050,21 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots.priority3err .priority3 BUTTON.outfitting_fit_priority,
 #outfitting_fit_slots.priority4err .priority4 BUTTON.outfitting_fit_priority,
 #outfitting_fit_slots.priority5err .priority5 BUTTON.outfitting_fit_priority {
-	color: var(--color-red-5);
+	color: var(--colorred5);
 }
 #outfitting_fit_slots.priority1err .priority1 BUTTON.outfitting_fit_priority::before,
 #outfitting_fit_slots.priority2err .priority2 BUTTON.outfitting_fit_priority::before,
 #outfitting_fit_slots.priority3err .priority3 BUTTON.outfitting_fit_priority::before,
 #outfitting_fit_slots.priority4err .priority4 BUTTON.outfitting_fit_priority::before,
 #outfitting_fit_slots.priority5err .priority5 BUTTON.outfitting_fit_priority::before {
-	border-right-color: var(--color-red-3);
+	border-right-color: var(--colorred3);
 }
 #outfitting_fit_slots.priority1err .priority1 BUTTON.outfitting_fit_priority::after,
 #outfitting_fit_slots.priority2err .priority2 BUTTON.outfitting_fit_priority::after,
 #outfitting_fit_slots.priority3err .priority3 BUTTON.outfitting_fit_priority::after,
 #outfitting_fit_slots.priority4err .priority4 BUTTON.outfitting_fit_priority::after,
 #outfitting_fit_slots.priority5err .priority5 BUTTON.outfitting_fit_priority::after {
-	border-left-color: var(--color-red-3);
+	border-left-color: var(--colorred3);
 }
 
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled,
@@ -2004,21 +2072,21 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled,
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled,
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled {
-	color: var(--color-grey-3);
+	color: var(--colorgrey3);
 }
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled::before,
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled::before,
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled::before,
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled::before,
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled::before {
-	border-right-color: var(--color-grey-3);
+	border-right-color: var(--colorgrey3);
 }
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled::after,
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled::after,
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled::after,
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled::after,
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled::after {
-	border-left-color: var(--color-grey-3);
+	border-left-color: var(--colorgrey3);
 }
 
 
@@ -2048,16 +2116,16 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	border: 1px solid transparent;
 	padding: 3px;
 	background-color: transparent;
-	color: var(--color-orange-5);
+	color: var(--colororange5);
 	line-height: 0;
 }
 
 
 #outfitting_details_container {
 	flex: 1 0 10px;
-	border: 2px solid var(--color-orange-5);
+	border: 2px solid var(--colororange5);
 	padding: 0 0.5rem;
-	background-color: black;
+	background-color: var(--colorblack);
 	overflow-y: auto;
 }
 
@@ -2067,23 +2135,23 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	position: sticky;
 	top: 0;
 	z-index: 1;
-	border-bottom: 2px solid var(--color-orange-3);
+	border-bottom: 2px solid var(--colororange3);
 	padding-top: 0.25rem;
-	background-color: black;
-	color: var(--color-grey-5);
+	background-color: var(--colorblack);
+	color: var(--colorgrey5);
 	font-weight: bold;
 }
 
 #details_rank {
 	margin-bottom: 0.5rem;
 	font-size: 0.875em;
-	font: var(--font-text);
+	font: var(--fonttext);
 }
 
 
 #details_cost {
 	margin-bottom: 0.5rem;
-	border-bottom: 2px solid var(--color-orange-3);
+	border-bottom: 2px solid var(--colororange3);
 	padding-bottom: 0.5rem;
 	font-size: 0.875em;
 }
@@ -2126,30 +2194,30 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 
 #details_cost .togglebutton INPUT + DIV {
-	border: 1px solid var(--color-orange-3);
+	border: 1px solid var(--colororange3);
 	padding: 0 0.25em;
-	background-color: var(--color-orange-1);
-	color: var(--color-orange-4);
+	background-color: var(--colororange1);
+	color: var(--colororange4);
 	text-align: center;
 }
 #details_cost .togglebutton INPUT:checked + DIV {
-	border-color: var(--color-orange-5);
-	background-color: var(--color-orange-5);
-	color: black;
+	border-color: var(--colororange5);
+	background-color: var(--colororange5);
+	color: var(--colorblack);
 }
 #details_cost .togglebutton INPUT:active + DIV {
-	border-color: white;
-	background-color: white;
-	color: black;
+	border-color: var(--colorwhite);
+	background-color: var(--colorwhite);
+	color: var(--colorblack);
 }
 #details_cost .togglebutton INPUT:disabled + DIV {
-	border-color: var(--color-grey-3);
-	background-color: var(--color-grey-1);
-	color: var(--color-grey-4);
+	border-color: var(--colorgrey3);
+	background-color: var(--colorgrey1);
+	color: var(--colorgrey4);
 }
 #details_cost .togglebutton INPUT:disabled:checked + DIV {
-	background-color: var(--color-grey-3);
-	color: black;
+	background-color: var(--colorgrey3);
+	color: var(--colorblack);
 }
 
 #details_cost .togglebutton INPUT + DIV SMALL {
@@ -2159,7 +2227,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 
 #details_engineering {
 	margin-bottom: 0.5rem;
-	border-bottom: 2px solid var(--color-orange-3);
+	border-bottom: 2px solid var(--colororange3);
 	padding-bottom: 0.5rem;
 }
 
@@ -2190,7 +2258,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	flex: 1 0 auto;
 	align-self: center;
 	padding-right: 0.25em;
-	color: var(--color-grey-5);
+	color: var(--colorgrey5);
 	text-align: right;
 	font-size: 0.875rem;
 }
@@ -2203,7 +2271,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 
 #engineering_selects .togglebutton LABEL .iconsvg {
 	margin: 2px;
-	color: var(--color-orange-4);
+	color: var(--colororange4);
 }
 #engineering_selects .togglebutton LABEL .iconsvg.engineered {
 	display: none;
@@ -2223,11 +2291,11 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 #engineering_selects .togglebutton INPUT:checked + * + * + * + * + LABEL .iconsvg.engineered {
 	display: inline-block;
-	color: var(--color-orange-5);
+	color: var(--colororange5);
 }
 
 #engineering_selects .togglebutton INPUT:active + * + * + * + * + LABEL .iconsvg {
-	color: white;
+	color: var(--colorwhite);
 }
 
 #engineering_selects .togglebutton INPUT:disabled + * + * + * + * + LABEL {
@@ -2235,7 +2303,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 #engineering_selects .togglebutton INPUT:disabled + * + * + * + * + LABEL .iconsvg.engineer {
 	display: inline-block;
-	color: var(--color-grey-4);
+	color: var(--colorgrey4);
 }
 #engineering_selects .togglebutton INPUT:disabled + * + * + * + * + LABEL .iconsvg.engineered {
 	display: none;
@@ -2285,19 +2353,19 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	display: block;
 	width: 100%;
 	height: 100%;
-	background-color: var(--color-blue-2);
+	background-color: var(--colorblue2);
 }
 #engineering_roll .inner:after {
 	left: -100%;
-	background-color: var(--color-blue-4);
+	background-color: var(--colorblue4);
 }
 #engineering_roll.invalid .inner:before,
 #engineering_roll.invalid .inner:after {
-	background-color: var(--color-red-2);
+	background-color: var(--colorred2);
 }
 #engineering_roll.disabled .inner:before,
 #engineering_roll.disabled .inner:after {
-	background-color: var(--color-grey-2);
+	background-color: var(--colorgrey2);
 }
 #engineering_roll .mask + .mask .inner {
 	transform-origin: right center;
@@ -2317,22 +2385,22 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	margin-left: -1.5em;
 	margin-top: -1.5em;
 	border-radius: 50%;
-	background-color: black;
+	background-color: var(--colorblack);
 }
 
 #engineering_roll #blueprint_roll {
 	align-self: center;
 	width: 3.5em;
-	border-color: var(--color-grey-3);
+	border-color: var(--colorgrey3);
 	background-color: transparent;
 	padding: 0;
 	text-align: center;
-	font: var(--font-caps);
+	font: var(--fontcaps);
 	font-size: 0.875rem;
 }
 #engineering_roll #blueprint_roll:focus {
-	border-color: white;
-	background-color: var(--color-grey-2);
+	border-color: var(--colorwhite);
+	background-color: var(--colorgrey2);
 }
 #engineering_roll #blueprint_roll:disabled {
 	border-color: transparent;
@@ -2354,7 +2422,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 
 #details_special {
-	font: var(--font-text);
+	font: var(--fonttext);
 }
 
 
@@ -2386,8 +2454,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 
 #outfitting_details_module TBODY TD ABBR {
 	display: block;
-	border-color: var(--color-grey-3);
-	color: var(--color-grey-5);
+	border-color: var(--colorgrey3);
+	color: var(--colorgrey5);
 	/*
 	padding-bottom: 3px;
 	overflow-wrap: break-word;
@@ -2416,7 +2484,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	margin: 1px 0;
 	padding: 0 0.125rem;
 	text-align: right;
-	font: var(--font-caps);
+	font: var(--fontcaps);
 	font-size: 0.875rem;
 }
 
@@ -2455,8 +2523,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 
 .stats_show_label {
 	display: block;
-	background-color: var(--color-orange-1);
-	color: var(--color-orange-5);
+	background-color: var(--colororange1);
+	color: var(--colororange5);
 	text-align: center;
 	font-size: 0.875rem;
 	white-space: nowrap;
@@ -2495,8 +2563,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 .stats_toggle_label {
 	display: block;
 	padding: 0 0.25em;
-	background-color: var(--color-orange-1);
-	color: var(--color-orange-4);
+	background-color: var(--colororange1);
+	color: var(--colororange4);
 	text-align: right;
 	white-space: nowrap;
 	overflow: hidden;
@@ -2514,7 +2582,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	align-items: center;
 	min-width: 0;
 	margin: 0.125em;
-	border: 1px solid var(--color-orange-3);
+	border: 1px solid var(--colororange3);
 	padding: 0.125em 0.25em;
 	text-align: center;
 }
@@ -2526,9 +2594,9 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #stats_toggle_6:checked ~ DIV .stats_toggle_label_6,
 #stats_toggle_7:checked ~ DIV .stats_toggle_label_7,
 #stats_toggle_8:checked ~ DIV .stats_toggle_label_8 {
-	border-color: var(--color-orange-5);
-	background-color: var(--color-orange-5);
-	color: black;
+	border-color: var(--colororange5);
+	background-color: var(--colororange5);
+	color: var(--colorblack);
 }
 #stats_show:active ~ DIV .stats_show_label,
 #stats_toggle_1:active ~ DIV .stats_toggle_label_1,
@@ -2539,13 +2607,13 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #stats_toggle_6:active ~ DIV .stats_toggle_label_6,
 #stats_toggle_7:active ~ DIV .stats_toggle_label_7,
 #stats_toggle_8:active ~ DIV .stats_toggle_label_8 {
-	border-color: white;
-	background-color: white;
-	color: black;
+	border-color: var(--colorwhite);
+	background-color: var(--colorwhite);
+	color: var(--colorblack);
 }
 
 .stats_toggles .stats_toggle_label ABBR {
-	border-color: var(--color-orange-4);
+	border-color: var(--colororange4);
 	cursor: pointer;
 }
 #stats_toggle_1:checked ~ DIV .stats_toggle_label_1 ABBR,
@@ -2565,7 +2633,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #stats_toggle_6:active ~ DIV .stats_toggle_label_6 ABBR,
 #stats_toggle_7:active ~ DIV .stats_toggle_label_7 ABBR,
 #stats_toggle_8:active ~ DIV .stats_toggle_label_8 ABBR {
-	border-color: black;
+	border-color: var(--colorblack);
 }
 
 #outfitting_stats_wrapper {
@@ -2583,9 +2651,9 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	display: none;
 	flex-direction: row;
 	margin: 0.125em;
-	border: 0 solid var(--color-orange-5);
+	border: 0 solid var(--colororange5);
 	border-width: 2px 1px;
-	background-color: black;
+	background-color: var(--colorblack);
 	overflow-x: auto;
 }
 #outfitting_bottom .stats_toggle:checked ~ DIV #outfitting_stats_container {
@@ -2595,7 +2663,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 .outfitting_stats_panel {
 	flex: 0 0 auto;
 	display: none;
-	border: 0 solid var(--color-orange-5);
+	border: 0 solid var(--colororange5);
 	border-width: 0 1px;
 }
 #stats_toggle_1:checked ~ DIV #outfitting_stats_1,
@@ -2610,14 +2678,14 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 
 .outfitting_stats_panel .error {
-	color: var(--color-red-5);
+	color: var(--colorred5);
 }
 .outfitting_stats_panel ABBR.error {
-	border-color: var(--color-red-5);
+	border-color: var(--colorred5);
 }
 
 .outfitting_stats_panel .error SMALL {
-	color: var(--color-red-4);
+	color: var(--colorred4);
 }
 .outfitting_stats_panel SMALL:not(.semantic) {
 	display: none;
@@ -2647,13 +2715,13 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 
 .outfitting_stats_panel THEAD TD {
-	color: var(--color-orange-5);
+	color: var(--colororange5);
 	text-align: center;
 	font-weight: bold;
 }
 
 .outfitting_stats_panel TBODY TH {
-	color: var(--color-orange-5);
+	color: var(--colororange5);
 	text-align: right;
 	font-weight: bold;
 }
@@ -2663,7 +2731,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 
 .outfitting_stats_panel THEAD TD ABBR,
 .outfitting_stats_panel TBODY TH ABBR {
-	border-color: var(--color-orange-5);
+	border-color: var(--colororange5);
 }
 
 .outfitting_stats_panel TBODY TD.other {
@@ -2674,7 +2742,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	width: 2.5em;
 	padding: 0 0.125rem;
 	text-align: right;
-	font: var(--font-caps);
+	font: var(--fontcaps);
 	font-size: 0.875rem;
 }
 
@@ -2694,16 +2762,16 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	top: 0;
 	bottom: 0;
 	right: 10%;
-	border-right: 1px solid var(--color-red-5);
+	border-right: 1px solid var(--colorred5);
 	padding-right: 3px;
 }
 .outfitting_stats_panel .outfitting_stats_powerbar SPAN.marker50 {
 	right: 55%;
-	border-color: var(--color-green-5);
+	border-color: var(--colorgreen5);
 }
 .outfitting_stats_panel .outfitting_stats_powerbar SPAN.marker40 {
 	right: 64%;
-	border-color: var(--color-blue-5);
+	border-color: var(--colorblue5);
 }
 
 .outfitting_stats_panel .outfitting_stats_powerbar DIV {
@@ -2711,7 +2779,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	left: 0;
 	right: 0;
 	height: 50%;
-	background-color: var(--color-orange-2);
+	background-color: var(--colororange2);
 	overflow: hidden;
 	white-space: nowrap;
 	text-align: left;
@@ -2731,7 +2799,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	bottom: 0;
 	right: 0;
 	width: 10%;
-	background-color: var(--color-red-2);
+	background-color: var(--colorred2);
 }
 
 .outfitting_stats_panel .outfitting_stats_powerbar ABBR {
@@ -2741,27 +2809,27 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	height: 100%;
 	margin: 0;
 	border: none;
-	border-right: 2px solid var(--color-orange-3);
-	background-color: var(--color-orange-4);
+	border-right: 2px solid var(--colororange3);
+	background-color: var(--colororange4);
 	padding: 1px 0;
-	color: black;
-	font: var(--font-fixed);
+	color: var(--colorblack);
+	font: var(--fontfixed);
 	font-size: 0.5625rem;
 	line-height: 0.4375rem;
 	overflow: hidden;
 	text-align: center;
 }
 .outfitting_stats_panel .outfitting_stats_powerbar ABBR.mfn {
-	border-right: 2px solid var(--color-blue-3);
-	background-color: var(--color-blue-4);
+	border-right: 2px solid var(--colorblue3);
+	background-color: var(--colorblue4);
 }
 .outfitting_stats_panel .outfitting_stats_powerbar ABBR.dmg {
-	border-right: 2px solid var(--color-green-3);
-	background-color: var(--color-green-4);
+	border-right: 2px solid var(--colorgreen3);
+	background-color: var(--colorgreen4);
 }
 .outfitting_stats_panel .outfitting_stats_powerbar ABBR.err {
-	border-right: 2px solid var(--color-red-3);
-	background-color: var(--color-red-4);
+	border-right: 2px solid var(--colorred3);
+	background-color: var(--colorred4);
 }
 
 .outfitting_stats_panel .outfitting_stats_powerbar ABBR SPAN {
@@ -2875,9 +2943,9 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 		bottom: -2px;
 		right: 100%;
 		margin-right: 2px;
-		border: 2px solid var(--color-orange-5);
+		border: 2px solid var(--colororange5);
 		padding: 2px 0.5em;
-		background-color: black;
+		background-color: var(--colorblack);
 		z-index: 2;
 	}
 	#outfitting_cols_focus:checked ~ #outfitting_show_popout {
@@ -3037,7 +3105,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 
 #page_body_options SECTION {
 	flex: 0 0 auto;
-	font: var(--font-text);
+	font: var(--fonttext);
 }
 #page_body_options SECTION:last-of-type {
 	flex: 1 0 auto;
@@ -3066,17 +3134,81 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 
 #page_body_options .checkbox SPAN {
 	margin-left: 0.5em;
-	color: var(--color-orange-5);
+	color: var(--colororange5);
 }
 
 #page_body_options BUTTON {
 	padding: 0.25em 0.5em;
 }
+#page_body_options BUTTON.iconsvg {
+	padding: 2px;
+	background-color: transparent;
+}
+
+#page_body_options TABLE {
+	margin-left: 2em;
+}
+
+#page_body_options TH,
+#page_body_options TD {
+	padding: 0.125em 0.25em;
+	vertical-align: middle;
+}
+
+#page_body_options TABLE INPUT {
+	font-size: 0.875em;
+	width: 100%;
+}
+
+#page_body_options TABLE BUTTON {
+	padding: 0 0.5em;
+}
+
+#page_body_options .colorpicker {
+	display: flex;
+}
+
+#page_body_options .colorpicker INPUT {
+	width: 6em;
+	align-self: center;
+}
+
+#page_body_options .colorpicker BUTTON {
+	align-self: stretch;
+	border: 1px solid var(--colorwhite);
+	padding: 0;
+	width: 1.5em;
+}
+#page_body_options .colorpicker BUTTON.colororange1 { background-color: var(--colororange1); }
+#page_body_options .colorpicker BUTTON.colororange2 { background-color: var(--colororange2); }
+#page_body_options .colorpicker BUTTON.colororange3 { background-color: var(--colororange3); }
+#page_body_options .colorpicker BUTTON.colororange4 { background-color: var(--colororange4); }
+#page_body_options .colorpicker BUTTON.colororange5 { background-color: var(--colororange5); }
+#page_body_options .colorpicker BUTTON.colorred1 { background-color: var(--colorred1); }
+#page_body_options .colorpicker BUTTON.colorred2 { background-color: var(--colorred2); }
+#page_body_options .colorpicker BUTTON.colorred3 { background-color: var(--colorred3); }
+#page_body_options .colorpicker BUTTON.colorred4 { background-color: var(--colorred4); }
+#page_body_options .colorpicker BUTTON.colorred5 { background-color: var(--colorred5); }
+#page_body_options .colorpicker BUTTON.colorblue1 { background-color: var(--colorblue1); }
+#page_body_options .colorpicker BUTTON.colorblue2 { background-color: var(--colorblue2); }
+#page_body_options .colorpicker BUTTON.colorblue3 { background-color: var(--colorblue3); }
+#page_body_options .colorpicker BUTTON.colorblue4 { background-color: var(--colorblue4); }
+#page_body_options .colorpicker BUTTON.colorblue5 { background-color: var(--colorblue5); }
+#page_body_options .colorpicker BUTTON.colorgreen1 { background-color: var(--colorgreen1); }
+#page_body_options .colorpicker BUTTON.colorgreen2 { background-color: var(--colorgreen2); }
+#page_body_options .colorpicker BUTTON.colorgreen3 { background-color: var(--colorgreen3); }
+#page_body_options .colorpicker BUTTON.colorgreen4 { background-color: var(--colorgreen4); }
+#page_body_options .colorpicker BUTTON.colorgreen5 { background-color: var(--colorgreen5); }
+#page_body_options .colorpicker BUTTON.coloryellow1 { background-color: var(--coloryellow1); }
+#page_body_options .colorpicker BUTTON.coloryellow2 { background-color: var(--coloryellow2); }
+#page_body_options .colorpicker BUTTON.coloryellow3 { background-color: var(--coloryellow3); }
+#page_body_options .colorpicker BUTTON.coloryellow4 { background-color: var(--coloryellow4); }
+#page_body_options .colorpicker BUTTON.coloryellow5 { background-color: var(--coloryellow5); }
 
 #page_body_options FOOTER {
 	flex: 0 0 auto;
-	color: var(--color-grey-5);
-	font: var(--font-text);
+	color: var(--colorgrey5);
+	font: var(--fonttext);
 	font-size: 0.75rem;
 }
 
@@ -3094,9 +3226,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	height: 100%;
 	z-index: 100;
 	display: none;
-    background-color: var(--color-grey-1);
     background-color: rgba(32, 32, 32, 0.75);
-	font: var(--font-caps);
+	font: var(--fontcaps);
 }
 
 #popup_form {
@@ -3120,16 +3251,16 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	display: flex;
 	flex-direction: column;
 	box-shadow: 0 0 2em 2em rgba(0, 0, 0, 0.75);
-	border: 2px solid var(--color-orange-5);
+	border: 2px solid var(--colororange5);
 	padding: 0.25rem;
-	background-color: black;
+	background-color: var(--colorblack);
 }
 
 #popup_desc {
 	flex: 0 0 auto;
 	max-width: 50em;
 	margin: 0.25rem;
-	font: var(--font-text);
+	font: var(--fonttext);
 }
 #popup_desc:empty {
 	display: none;
@@ -3183,7 +3314,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 
 #popup_table SPAN.text {
-	font: var(--font-text);
+	font: var(--fonttext);
 }
 
 #popup_table BUTTON {
@@ -3207,7 +3338,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	margin: 0.25rem;
 }
 #popup_table ABBR .iconsvg.warning {
-	color: var(--color-red-5);
+	color: var(--colorred5);
 }
 
 #popup_table DIV.import_store {
@@ -3244,19 +3375,19 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 
 #popup_table INPUT.toggleinput + LABEL {
-	color: var(--color-orange-5);
+	color: var(--colororange5);
 }
 #popup_table INPUT.toggleinput:checked + LABEL {
-	background-color: var(--color-orange-5);
-	color: black;
+	background-color: var(--colororange5);
+	color: var(--colorblack);
 }
 #popup_table INPUT.toggleinput:active + LABEL {
-	background-color: white;
-	color: black;
+	background-color: var(--colorwhite);
+	color: var(--colorblack);
 }
 #popup_table INPUT.toggleinput:disabled + LABEL {
 	background-color: transparent;
-	color: var(--color-grey-4);
+	color: var(--colorgrey4);
 }
 
 #popup_table TD.export {
@@ -3289,7 +3420,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #popup_status {
 	flex: 1 0 auto;
 	margin: 0.25rem;
-	font: var(--font-text);
+	font: var(--fonttext);
 }
 #popup_status:empty {
 	display: none;
