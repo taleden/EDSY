@@ -35,7 +35,7 @@ try:
 		sendcookies = http.cookies.SimpleCookie()
 		sendcookies["edsy_import_buffer"] = import_gz_b64
 		sendcookies["edsy_import_buffer"]["domain"] = ".edsy.org"
-		sendcookies["edsy_import_buffer"]["path"] = ("/dev/" if DEV else "/")
+		sendcookies["edsy_import_buffer"]["path"] = ("/dev" if DEV else "/")
 		buf = "".join([
 			"Status: 303\r\n",
 			headers,
@@ -65,7 +65,7 @@ window.addEventListener('DOMContentLoaded', (function(e) {
 	window.location.href = '%s';
 }));
 </script>
-""" % (json.dumps(import_gz_b64),("/dev/" if DEV else "/"),("/dev/" if DEV else "/"))
+""" % (json.dumps(import_gz_b64),("/dev" if DEV else "/"),("/dev" if DEV else "/"))
 			)
 		])
 	#if len

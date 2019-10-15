@@ -23,6 +23,13 @@ try:
 	UINT64_MAX = numpy.iinfo(numpy.uint64).max
 	LOCAL = ('REQUEST_URI' not in os.environ)
 	DEV = (not LOCAL) and os.environ['REQUEST_URI'].startswith('/dev/')
+	COOKIE = ('edsydev_fdapi_' if DEV else 'edsy_fdapi_')
+	COOKIE_SALT = COOKIE + 'salt'
+	COOKIE_STATE = COOKIE + 'state'
+	COOKIE_VERIFIER = COOKIE + 'verifier'
+	COOKIEPFX_CMDR = COOKIE + 'cmdr_'
+	COOKIEPFX_ACCESS = COOKIE + 'access_'
+	COOKIEPFX_REFRESH = COOKIE + 'refresh_'
 	
 	
 	def b64enc(data):
@@ -46,7 +53,7 @@ try:
 	
 	
 	def getMask(salt):
-		seed = int(os.lstat('.' if (LOCAL or DEV) else __file__).st_ino) # TODO: '.' for consistency during development; change to __file__ for production
+		seed = int(os.lstat('.' if (LOCAL or DEV) else __file__).st_ino) # '.' for consistency during development; __file__ for production
 		pepper = getRandomText(24, seed)
 		return hashlib.sha512((salt+pepper).encode()).digest()
 	#getMask()
@@ -104,7 +111,7 @@ try:
 	
 	
 	class FDAPIHandler:
-		EDSY_USERAGENT = 'EDCD-EDSY-3.4.2.2.3'
+		EDSY_USERAGENT = 'EDCD-EDSY-3.5.3.4.1'
 		EDSY_CLIENTID = '398bde95-e204-4b08-b837-eff7b5304ddb'
 		EDSY_URL_REDIRECT = 'https://edsy.org/dev/fdapi' if DEV else 'https://edsy.org/fdapi'
 		FDAPI_TIMEOUT = 10
@@ -115,7 +122,7 @@ try:
 		
 		
 		def __init__(self):
-			self.debug = list() if LOCAL else None
+			self.debug = list() if (LOCAL or DEV) else None
 			self.inCookies = http.cookies.SimpleCookie(os.environ.get('HTTP_COOKIE'))
 			self.inForm = cgi.FieldStorage(keep_blank_values=True)
 			self.outHeaders = {
@@ -148,9 +155,10 @@ try:
 		#GetFormField()
 		
 		
-		def HasCookie(self, name):
-			return (name in self.inCookies)
-		#HasCookie()
+		# only used for clearing obsolete cookies
+	#	def HasCookie(self, name):
+	#		return (name in self.inCookies)
+	#	#HasCookie()
 		
 		
 		def IterCookies(self):
@@ -182,6 +190,7 @@ try:
 				self.outCookies[name]['max-age'] = 0
 				self.outCookies[name]['expires'] = 'Thu, 01 Jan 1970 00:00:00 GMT'
 			#if
+			self.outCookies[name]['path'] = ('/dev' if DEV else '/')
 			self.outCookies[name]['secure'] = True
 			self.outCookies[name]['httponly'] = httponly
 			self.outCookies[name]['same-site'] = 'lax' # TODO: see if Frontier needs to change post-auth redirect from 302 to 303 to allow 'strict'
@@ -191,7 +200,7 @@ try:
 		
 		def ClearCookies(self):
 			for name in self.inCookies:
-				if name.startswith('edsy_fdapi_'):
+				if name.startswith(COOKIE):
 					self.SetCookie(name, httponly=self.inCookies[name]['httponly'])
 			#for
 			self.inCookies = http.cookies.SimpleCookie()
@@ -204,7 +213,7 @@ try:
 		#			self.debug.append(k+' = '+os.environ[k])
 			
 			# load or create the salt and mask
-			self.salt = self.GetCookie('edsy_fdapi_salt')
+			self.salt = self.GetCookie(COOKIE_SALT)
 			if not self.salt:
 				self.salt = getRandomText(24)
 				self.ClearCookies()
@@ -214,23 +223,23 @@ try:
 				self.debug.append("mask = " + str(self.mask))
 			#if
 			
-			# delete obsolete cookies (until ~ 2019-09-01, then they should all be expired anyway)
-			for name in ['edsy_fdapi_access','edsy_fdapi_refresh']:
-				if self.HasCookie(name):
-					self.SetCookie(name, httponly=True)
-			#for
+		#	# delete obsolete cookies (until ~ 2019-09-01, then they should all be expired anyway)
+		#	for name in ['edsy_fdapi_access','edsy_fdapi_refresh']:
+		#		if self.HasCookie(name):
+		#			self.SetCookie(name, httponly=True)
+		#	#for
 			
 			# sync cmdr/access/refresh cookies
 			cmdrs = dict()
 			accesses = dict()
 			refreshes = dict()
 			for cookie in self.IterCookies():
-				if cookie.startswith('edsy_fdapi_cmdr_'):
-					cmdrs[cookie[16:]] = cookie
-				elif cookie.startswith('edsy_fdapi_access_'):
-					accesses[cookie[18:]] = cookie
-				elif cookie.startswith('edsy_fdapi_refresh_'):
-					refreshes[cookie[19:]] = cookie
+				if cookie.startswith(COOKIEPFX_CMDR):
+					cmdrs[cookie[len(COOKIEPFX_CMDR):]] = cookie
+				elif cookie.startswith(COOKIEPFX_ACCESS):
+					accesses[cookie[len(COOKIEPFX_ACCESS):]] = cookie
+				elif cookie.startswith(COOKIEPFX_REFRESH):
+					refreshes[cookie[len(COOKIEPFX_REFRESH):]] = cookie
 			#for
 			for suffix,cookie in cmdrs.items():
 				if (suffix not in accesses) and (suffix not in refreshes):
@@ -294,10 +303,10 @@ try:
 				try:
 					if not self.mask:
 						raise FDAPILocalError("mask error")
-					data = self.ProcessQuery()
+					data,status = self.ProcessQuery()
 					if data:
 						self.outHeaders['status'] = 200
-						self.outJSON['status'] = 200
+						self.outJSON['status'] = status
 						self.outJSON['import'] = b64enc(zlib.compress(json.dumps(data).encode()))
 					else:
 						authurl = self.GenerateAuthURL()
@@ -323,8 +332,8 @@ try:
 			self.code = self.GetFormField('code')
 			error = self.GetFormField('error')
 			errordesc = self.GetFormField('error_description')
-			state = self.GetCookie('edsy_fdapi_state')
-			verifier_masked = self.GetCookie('edsy_fdapi_verifier')
+			state = self.GetCookie(COOKIE_STATE)
+			verifier_masked = self.GetCookie(COOKIE_VERIFIER)
 			try:
 				self.verifier = getUnmasked(verifier_masked, self.mask)
 			except Exception as exc:
@@ -364,8 +373,8 @@ try:
 		def ProcessQuery(self):
 			# gather data
 			self.cmdr64 = self.GetFormField('c', '')
-			access_masked = self.GetCookie('edsy_fdapi_access_' + self.cmdr64)
-			refresh_masked = self.GetCookie('edsy_fdapi_refresh_' + self.cmdr64)
+			access_masked = self.GetCookie(COOKIEPFX_ACCESS + self.cmdr64)
+			refresh_masked = self.GetCookie(COOKIEPFX_REFRESH + self.cmdr64)
 			
 			# debug
 			if self.debug != None:
@@ -376,6 +385,7 @@ try:
 			
 			# if we have tokens, use them
 			data = None
+			status = 0
 			try:
 				if self.cmdr64 and access_masked:
 					try:
@@ -389,11 +399,12 @@ try:
 					#try/except
 					
 					try:
-						data = self.FetchBuilds()
+						data,status = self.FetchBuilds()
 					except (FDAPIRemoteUnauthorizedError, FDAPIRemoteUnprocessableError) as exc:
 						if self.debug != None:
 							self.debug.append(repr(exc))
 						data = None
+						status = 0
 					#try/except
 				#if
 				
@@ -410,20 +421,22 @@ try:
 					
 					try:
 						self.FetchAccessToken()
-						data = self.FetchBuilds()
+						data,status = self.FetchBuilds()
 					except FDAPIRemoteUnauthorizedError as exc:
 						if self.debug != None:
 							self.debug.append(repr(exc))
 						data = None
+						status = 0
 					#try/except
 				#if
 			except FDAPILocalError as exc:
 				if self.debug != None:
 					self.debug.append(repr(exc))
 				data = None
+				status = 0
 			#try/except
 			
-			return data
+			return data,status
 		#ProcessQuery()
 		
 		
@@ -446,9 +459,9 @@ try:
 				#if
 				
 				# proceed
-				self.SetCookie('edsy_fdapi_salt', self.salt, SECS_PER_MONTH)
-				self.SetCookie('edsy_fdapi_state', state, SECS_PER_HOUR)
-				self.SetCookie('edsy_fdapi_verifier', verifier_masked, SECS_PER_HOUR)
+				self.SetCookie(COOKIE_SALT, self.salt, SECS_PER_MONTH)
+				self.SetCookie(COOKIE_STATE, state, SECS_PER_HOUR)
+				self.SetCookie(COOKIE_VERIFIER, verifier_masked, SECS_PER_HOUR)
 				authurl = (
 					self.FDAPI_URL_AUTH +
 					'?scope=capi' +
@@ -471,11 +484,10 @@ try:
 		
 		
 		def DebugRequest(self, request):
-			self.debug.append("%s\n%s%s%s" % (
+			self.debug.append("%s\n%s%s" % (
 				str(request.status_code),
 				"\n".join( (k+": "+v) for k,v in request.headers.items() ),
 				"\n" if request.headers else "",
-				request.text,
 			))
 		#DebugRequest()
 		
@@ -487,8 +499,8 @@ try:
 				'content-type': 'application/json',
 			}
 			if self.code and self.verifier:
-				self.SetCookie('edsy_fdapi_state')
-				self.SetCookie('edsy_fdapi_verifier')
+				self.SetCookie(COOKIE_STATE)
+				self.SetCookie(COOKIE_VERIFIER)
 				reqBodyJSON = {
 					'grant_type': 'authorization_code',
 					'client_id': self.EDSY_CLIENTID,
@@ -543,14 +555,15 @@ try:
 			
 			# set cookies
 			if not self.cmdr64:
-				self.cmdr64 = b64enc(self.FetchProfileData().get('commander',EMPTY_OBJ).get('name','').encode())
+				data,status = self.FetchProfileData()
+				self.cmdr64 = b64enc((data or EMPTY_OBJ).get('commander',EMPTY_OBJ).get('name','').encode())
 				if not self.cmdr64:
-					raise FDAPIRemoteError("unknown CMDR", 0)
+					raise FDAPIRemoteError("unknown CMDR", status)
 			#if
-			self.SetCookie('edsy_fdapi_salt', self.salt, SECS_PER_MONTH)
-			self.SetCookie('edsy_fdapi_cmdr_' + self.cmdr64, "1", SECS_PER_MONTH, httponly=False)
-			self.SetCookie('edsy_fdapi_access_' + self.cmdr64, access_masked, access_expires)
-			self.SetCookie('edsy_fdapi_refresh_' + self.cmdr64, refresh_masked, SECS_PER_MONTH)
+			self.SetCookie(COOKIE_SALT, self.salt, SECS_PER_MONTH)
+			self.SetCookie(COOKIEPFX_CMDR + self.cmdr64, "1", SECS_PER_MONTH, httponly=False)
+			self.SetCookie(COOKIEPFX_ACCESS + self.cmdr64, access_masked, access_expires)
+			self.SetCookie(COOKIEPFX_REFRESH + self.cmdr64, refresh_masked, SECS_PER_MONTH)
 			
 			return self.access
 		#FetchAccessToken()
@@ -558,11 +571,11 @@ try:
 		
 		def FetchBuilds(self):
 			try:
-				data = self.FetchJournalData()
+				data,status = self.FetchJournalData()
 			except FDAPIRemoteNoContentError:
-				data = self.FetchProfileData()
+				data,status = self.FetchProfileData()
 			#try/except
-			return data
+			return data,status
 		#FetchBuilds()
 		
 		
@@ -572,7 +585,7 @@ try:
 				'user-agent': self.EDSY_USERAGENT,
 				'authorization': ('Bearer '+self.access),
 			}
-			request = requests.get(self.FDAPI_URL_JOURNAL, headers=reqHeaders, allow_redirects=False, timeout=self.FDAPI_TIMEOUT)
+			request = requests.get(self.FDAPI_URL_JOURNAL, headers=reqHeaders, allow_redirects=False, timeout=self.FDAPI_TIMEOUT, stream=True)
 			if self.debug != None:
 				self.DebugRequest(request)
 			
@@ -585,13 +598,15 @@ try:
 				raise FDAPIRemoteError("unknown error", request.status_code)
 			if request.headers['content-type'] != 'application/json' and request.headers['content-type'] != 'json':
 				raise FDAPIRemoteError("invalid response", request.status_code)
-			if request.text == 'Journal unavailable':
-				raise FDAPIRemoteTemporaryError(request.text, request.status_code)
 			
-			# identify last event per ShipID
+			# identify last Loadout event per ShipID
 			try:
+				if request.encoding is None:
+					request.encoding = 'utf-8'
 				loadouts = {}
-				for line in request.text.split("\n"):
+				for line in request.iter_lines(decode_unicode=True):
+					if line == 'Journal unavailable':
+						raise FDAPIRemoteTemporaryError(request.text, request.status_code)
 					try:
 						response = json.loads(line) if line else None
 					except Exception as exc:
@@ -607,13 +622,14 @@ try:
 					#if
 				#for
 				data = list(loadouts.values())
+				status = request.status_code
 			except Exception as exc:
 				if self.debug != None:
 					self.debug.append(repr(exc))
 				raise FDAPILocalError("journal parsing error")
 			#try/except
 			
-			return data
+			return data,status
 		#FetchJournalData()
 		
 		
@@ -645,13 +661,14 @@ try:
 					data['ship'] = response['ship']
 				if 'ships' in response:
 					data['ships'] = response['ships']
+				status = request.status_code
 			except Exception as exc:
 				if self.debug != None:
 					self.debug.append(repr(exc))
 				raise FDAPILocalError("profile parsing error")
 			#try/except
 			
-			return data
+			return data,status
 		#FetchProfileData()
 		
 		

@@ -10,7 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 */
 
 :root {
-	--edsy-versions-css:34294,34294,34294,34294; /* HTML,CSS,DB,JS */
+	--edsy-versions-css:35341,35341,35341,35341; /* HTML,CSS,DB,JS */
+	--edsy-lastmodified-css:20191015;
 	
 	--colorblack: black;
 	--colorwhite: white;
@@ -484,6 +485,12 @@ INPUT.toggleinput {
 }
 
 
+.scroller {
+	position: relative;
+	overflow: auto;
+}
+
+
 TABLE.striped {
 	border-collapse: separate;
 	border-spacing: 0;
@@ -496,7 +503,8 @@ TABLE.striped TD {
 	padding: 1px 0.25em;
 }
 
-TABLE.striped THEAD TH {
+TABLE.striped THEAD TH,
+TABLE.striped THEAD TD {
 	border-width: 2px 0 2px 2px;
 	color: var(--colororange5);
 	font-weight: bold;
@@ -506,6 +514,9 @@ TABLE.striped THEAD TH {
 	user-select: none;
 	cursor: default;
 }
+TABLE.striped THEAD TD {
+	border-width: 0 0 2px 0;
+}
 TABLE.striped THEAD TR.colgroup TH {
 	border-width: 0;
 }
@@ -514,7 +525,8 @@ TABLE.striped THEAD TR.colgroup TH.colgroup {
 	border-left-width: 2px;
 	text-align: center;
 }
-TABLE.striped THEAD TR.colgroup TH.colgroup + TH:not(.colgroup) {
+TABLE.striped THEAD TR.colgroup TH.colgroup + TH:not(.colgroup),
+TABLE.striped THEAD TH + TD {
 	border-left-width: 2px;
 }
 TABLE.striped THEAD TR TH:last-child {
@@ -535,6 +547,13 @@ TABLE.striped TH.stickytop {
 	top: 0;
 	z-index: 1;
 	border-bottom-width: 2px;
+	background-color: var(--colorblack);
+}
+TABLE.striped TD.stickytop {
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+	z-index: 1;
 	background-color: var(--colorblack);
 }
 TABLE.striped TD.stickyleft {
@@ -569,6 +588,13 @@ TABLE.striped TBODY TR:hover TD {
 
 TABLE.striped TBODY TD.text {
 	font: var(--fonttext);
+}
+
+TABLE.striped TBODY + TBODY TR:first-of-type TH,
+TABLE.striped TBODY + TBODY TR:first-of-type TD,
+TABLE.striped TFOOT TR:first-of-type TH,
+TABLE.striped TFOOT TR:first-of-type TD {
+	border-top-width: 2px;
 }
 
 TABLE.striped SMALL:not(.semantic) {
@@ -640,9 +666,11 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 
 #page_body.shipyard #page_body_loading,
 #page_body.outfitting #page_body_loading,
+#page_body.analysis #page_body_loading,
 #page_body.options #page_body_loading,
 #page_body:not(.shipyard) #page_body_shipyard,
 #page_body:not(.outfitting) #page_body_outfitting,
+#page_body:not(.analysis) #page_body_analysis,
 #page_body:not(.options) #page_body_options {
 	display: none;
 }
@@ -665,11 +693,7 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 	width: 100%;
 	min-width: 0;
 	border: 2px solid var(--colororange5);
-	padding: 0 0.25em;
 	background-color: var(--colorblack);
-	overflow: auto;
-	overflow-y: scroll;
-	white-space: nowrap;
 }
 
 
@@ -734,6 +758,29 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 	flex-direction: column;
 	margin: 0.25em;
 }
+
+
+#page_body_analysis {
+	flex: 1 0 10px;
+	min-width: 0;
+	max-width: 70em;
+	display: flex;
+	flex-direction: column;
+	margin: 0.25em;
+}
+
+#analysis_tabs {
+	flex: 0 0 auto;
+}
+
+#analysis_container {
+	flex: 1 0 10px;
+	width: 100%;
+	min-width: 0;
+	border: 2px solid var(--colororange5);
+	background-color: var(--colorblack);
+}
+
 
 #page_body_options {
 	flex: 0 1 auto;
@@ -913,7 +960,9 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 }
 
 #shipyard_container {
-	padding: 0;
+	overflow: auto;
+	overflow-y: scroll;
+	white-space: nowrap;
 }
 
 #shipyard_container TABLE.striped THEAD TH {
@@ -2843,6 +2892,160 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 
 
 /*
+* ANALYSIS BLOCK
+*/
+
+
+#analysis_tabs {
+	display: flex;
+	flex-direction: row;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: arrow;
+}
+
+#analysis_tabs LABEL {
+	flex: 0 0 auto;
+	margin-left: 0.2em;
+}
+#analysis_tabs LABEL:first-child {
+	margin-left: 0;
+}
+
+#analysis_tabs SPAN {
+	flex: 1 0 0px;
+}
+
+#analysis_tabs .togglebutton INPUT + DIV {
+	border: 1px solid var(--colororange3);
+	border-bottom: none;
+	padding: 0 0.5em;
+	background-color: var(--colororange1);
+	color: var(--colororange4);
+}
+#analysis_tabs .togglebutton INPUT:checked + DIV {
+	border-color: var(--colororange5);
+	background-color: var(--colororange5);
+	color: var(--colorblack);
+}
+#analysis_tabs .togglebutton INPUT:active + DIV {
+	border-color: var(--colorwhite);
+	background-color: var(--colorwhite);
+	color: var(--colorblack);
+}
+
+#page_body_analysis:not(.compare) #analysis_compare_container,
+#page_body_analysis:not(.retrofit) #analysis_retrofit_container {
+	display: none;
+}
+
+#analysis_container {
+	display: flex;
+	flex-direction: row;
+}
+
+#analysis_retrofit_container {
+	flex: 1 0 10px;
+	display: flex;
+	flex-direction: column;
+	padding: 0.25em;
+}
+
+#analysis_retrofit_container .analysis_retrofit_section {
+	flex: 1 0 10px;
+	display: flex;
+	flex-direction: row;
+}
+#analysis_retrofit_container .analysis_retrofit_section:first-child {
+	flex: 0 1 auto;
+}
+
+#analysis_retrofit_container .analysis_retrofit_panel {
+	flex: 1 1 auto;
+	margin: 0.25em;
+	display: flex;
+	flex-direction: column;
+}
+
+#analysis_retrofit_container .analysis_retrofit_panel .scroller {
+	flex: 1 0 10px;
+}
+
+#analysis_retrofit_container #analysis_retrofit_setup {
+	flex: 0 1 auto;
+}
+
+#analysis_retrofit_container #analysis_retrofit_setup TD {
+	white-space: nowrap;
+}
+
+#analysis_retrofit_container BUTTON.text {
+	flex: 0 0 auto;
+	margin: 0.25em;
+}
+
+#analysis_retrofit_container .analysis_retrofit_divider {
+	flex: 0 0 auto;
+	margin-bottom: 0.25em;
+	display: flex;
+	flex-direction: row;
+}
+
+#analysis_retrofit_container .analysis_retrofit_divider HEADER {
+	flex: 1 0 auto;
+	background-color: var(--colorgrey4);
+	color: var(--colorblack);
+	text-align: center;
+	font-weight: bold;
+}
+
+#analysis_retrofit_container .analysis_retrofit_divider BUTTON {
+	flex: 0 0 auto;
+	align-self: center;
+	margin-left: 0.25em;
+	padding: 0.125rem;
+	line-height: 0;
+}
+
+#analysis_retrofit_container TABLE {
+	width: 100%;
+	min-width: 0;
+	border: none;
+	border-right: 0.25em solid black;
+}
+
+#analysis_retrofit_container TABLE TD {
+	font: var(--fonttext);
+}
+#analysis_retrofit_setup TABLE TD {
+	padding: 0.125em 0.25em;
+}
+#analysis_retrofit_container TABLE.striped THEAD TD,
+#analysis_retrofit_builds TABLE.striped TBODY TD:first-child {
+	vertical-align: middle;
+}
+
+#analysis_retrofit_container TABLE.single TH.retrofit_steps_build,
+#analysis_retrofit_container TABLE.single TD.retrofit_steps_build {
+	display: none;
+}
+
+#analysis_retrofit_container TABLE LABEL {
+	width: 100%;
+}
+
+#analysis_retrofit_container TABLE SELECT {
+	width: 100%;
+}
+
+#analysis_retrofit_setup INPUT {
+	text-align: center;
+}
+
+
+/*
 * RESPONSIVE LAYOUT
 */
 
@@ -3418,7 +3621,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 
 #popup_status {
-	flex: 1 0 auto;
+	flex: 1 1 auto;
 	margin: 0.25rem;
 	font: var(--fonttext);
 }
@@ -3428,6 +3631,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 
 #popup_controls BUTTON {
 	flex: 0 0 auto;
+	align-self: flex-end;
 	margin: 0.25rem;
 	padding: 0.125rem 0.5rem;
 }

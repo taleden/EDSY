@@ -10,7 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [34294,34294,34294,34294]; /* HTML,CSS,DB,JS */
+	var VERSIONS = [35341,35341,35341,35341]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20191015;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -38,6 +39,9 @@ window.edsy = new (function() {
 	var MAX_MALFUNCTION_PWRCAP = 0.4;
 	var MIN_MODIFIER = 0.00005;
 	var MIN_BPROLL = 0.00025;
+//	var BPGRADE_PROGRESS = [0.99, 0.99, 0.65, 0.5, 0.35, 0.25];
+	var BPROLL_UPGRADE = 0.8;
+//	var BPROLL_LIMIT = 0.95;
 	var DISCOUNTS = [30,20,15,10,5,2.5];
 	var HASH_VERSION = 15;
 	var HTML_ICON = {
@@ -86,10 +90,10 @@ window.edsy = new (function() {
 		mtypeExpeffects: {},
 		moduleHash: {},
 		hashVersionMap: {},
-		storedmodules: {},
 		discountMod: {},
 		discounts: [],
 		option: {},
+		template: {},
 	};
 	var current = {
 		dev: false,
@@ -119,8 +123,13 @@ window.edsy = new (function() {
 		bprollTouch: {},
 		importLabel: {},
 		labelImports: {},
-		storedbuild: { 0:{} },
-		storedmodule: { 0:{} },
+		stored: {
+			shipNamehashStored: { 0:{} },
+			shipStoreds: { 0:[] },
+			moduleNamehashStored: { 0:{} },
+			moduleStoreds: { 0:[] },
+		},
+		pickerNameNamehash: {},
 		option: {
 			insurance: 9500,
 			onlybest: false,
@@ -146,10 +155,13 @@ window.edsy = new (function() {
 		tempSlot: null,
 		group: null,
 		slot: null,
+		analysis_tab: null,
 		tableSort: {
 			shipyard_ships_table: {},
 			shipyard_storedbuilds_table: {},
 		},
+		counter: {},
+		retrofit: null,
 	};
 	
 	
@@ -214,28 +226,39 @@ window.edsy = new (function() {
 	}; // setDOMSelectLength()
 	
 	
-	var populateDOMSelectStoredBuilds = function(select, shipid, curnamehash) {
-		var names = [];
-		var nameNamehash = {};
-		for (var namehash in current.storedbuild[shipid]) {
-			var name = hashDecodeS(namehash);
-			names.push(name);
-			nameNamehash[name] = namehash;
+	var populateDOMSelectStoreds = function(select, storeds, namehash, offset) {
+		var selectedIndex = (select.selectedIndex ? -1 : 0);
+		storeds = storeds || EMPTY_ARR;
+		setDOMSelectLength(select, offset + storeds.length);
+		for (var i = 0;  i < storeds.length;  i++) {
+			select.options[offset+i].value = storeds[i].namehash;
+			select.options[offset+i].text = storeds[i].name;
+			if (storeds[i].namehash === namehash)
+				selectedIndex = offset+i;
 		}
-		names.sort();
-		
-		var curindex = (select.selectedIndex ? -1 : 0);
-		setDOMSelectLength(select, 1 + names.length);
-		for (var i = 0;  i < names.length;  i++) {
-			select.options[i+1].value = nameNamehash[names[i]];
-			select.options[i+1].text = names[i];
-			if (nameNamehash[names[i]] === curnamehash)
-				curindex = i+1;
-		}
-		select.selectedIndex = curindex;
-		
+		select.selectedIndex = selectedIndex;
 		return true;
-	}; // populateDOMSelectStoredBuilds()
+	}; // populateDOMSelectStoreds()
+	
+	
+	var setClipboardString = function(string) {
+		var el = document.createElement('textarea');
+		el.value = string;
+		el.setAttribute('readonly', '');
+		el.style.position = 'absolute';
+		el.style.left = '-1000px';
+		document.body.appendChild(el);
+		el.focus();
+		el.select();
+		var ok = true;
+		try {
+			document.execCommand('copy');
+		} catch (exc) {
+			ok = false;
+		}
+		document.body.removeChild(el);
+		return ok;
+	}; // setClipboardString()
 	
 	
 	var encodeHTML = function(text) {
@@ -793,7 +816,7 @@ window.edsy = new (function() {
 			if (!(experimental ? this.isModuleIDValid(modid) : this.isModuleIDAllowed(modid)))
 				return false;
 			this.modid = (modid | 0);
-			this.module =  ((this.slotgroup === 'ship' && this.slotnum === 'hull') ? eddb.ship[modid] : this.build.getModule(modid));
+			this.module = ((this.slotgroup === 'ship' && this.slotnum === 'hull') ? eddb.ship[modid] : this.build.getModule(modid));
 			this.discounts = 0;
 			this.cost = 0;
 			this.bpid = 0;
@@ -1764,6 +1787,95 @@ window.edsy = new (function() {
 	}; // getStoredHashModuleID()
 	
 	
+	Slot.getRetrofitData = function(slot1, slot2, modidNum, limdisc, limdisceng, limbpgrade, limbproll, limexpeffect, limrolls) {
+		var steps = [];
+		
+		// gather attributes
+		var sgrp1 = slot1 ? slot1.getSlotGroup() : null;
+		var sgrp2 = slot2 ? slot2.getSlotGroup() : null;
+		if (sgrp1 && sgrp2 && (sgrp1 === 'ship') !== (sgrp2 === 'ship'))
+			return null;
+		var modid1 = slot1 ? slot1.getModuleID() : 0;
+		var modid2 = slot2 ? slot2.getModuleID() : 0;
+		var discmod1 = slot1 ? cache.discountMod[slot1.getDiscounts()] : 1;
+		var discmod2 = slot2 ? cache.discountMod[slot2.getDiscounts()] : 1;
+		var bpid1 = slot1 ? slot1.getBlueprintID() : '';
+		var bpid2 = slot2 ? slot2.getBlueprintID() : '';
+		var bpgrade1 = slot1 ? slot1.getBlueprintGrade() : 0;
+		var bpgrade2 = slot2 ? slot2.getBlueprintGrade() : 0;
+		var bproll1 = slot1 ? slot1.getBlueprintRoll() : 0;
+		var bproll2 = slot2 ? slot2.getBlueprintRoll() : 0;
+		var expid1 = slot1 ? slot1.getExpeffectID() : '';
+		var expid2 = slot2 ? slot2.getExpeffectID() : '';
+		
+		// increment module tallies
+		if (modid1 && sgrp1 !== 'ship')
+			modidNum[modid1] = (modidNum[modid1] || 0) + 1;
+		if (modid2 && sgrp2 !== 'ship' && modid1 != modid2)
+			modidNum[modid2] = (modidNum[modid2] || 0) + 1;
+		
+		// if we have an old module and it's different, or it's insufficiently discounted and not too engineered, sell it
+		if (modid1) {
+			if ((modid1 != modid2) || (discmod1 > max(cache.discountMod[limdisc], discmod2) && (!bpid2 || bpid1 != bpid2 || bpgrade1 <= limdisceng))) {
+				steps.push({ sgrp:sgrp1, id:modid1, num:modidNum[modid1], act:'Sell', desc:(formatPctText(1 - discmod1, 1) + ' discount'), cost:{'':-slot1.getCost()} });
+				slot1 = null;
+				modid1 = bpgrade1 = bproll1 = 0;
+				bpid1 = expid1 = '';
+			}
+		}
+		
+		// if we have a new module, ...
+		if (modid2) {
+			// if we have no matching old module, buy one
+			if (modid1 != modid2) {
+				steps.push({ sgrp:sgrp2, id:modid2, num:modidNum[modid2], act:'Buy', desc:(formatPctText(1 - discmod2, 1) + ' discount'), cost:{'':slot2.getCost()} });
+				modid1 = modid2;
+				bpgrade1 = bproll1 = 0;
+				bpid1 = expid1 = '';
+			}
+			
+			// if we have a blueprint, roll it up
+			var blueprint = eddb.blueprint[bpid2];
+			if (blueprint) {
+				if (bpid1 != bpid2) {
+					bpid1 = bpid2;
+					bpgrade1 = 1;
+					bproll1 = 0;
+					expid1 = '';
+				} else if (bproll1 <= 0) {
+					steps.push({ sgrp:sgrp2, id:modid2, num:modidNum[modid2], act:'Conv', desc:(blueprint.name + ' G' + bpgrade1 + ' (legacy)'), cost:{} });
+					bpgrade1--;
+					bproll1 = 1;
+				}
+				while (bpgrade1 <= min(limbpgrade, bpgrade2)) {
+					var limit = ((bpgrade1 < min(limbpgrade, bpgrade2)) ? BPROLL_UPGRADE : min(limbproll, bproll2));
+					if (bproll1 <= 0 || bproll1 < limit) {
+					//	var rolls = max(1, round(2 * log((1 - limit) / (1 - bproll1)) / log(1 - BPGRADE_PROGRESS[bpgrade1])) / 2);
+						var rolls = max(1, round(2 * (limit - bproll1) * limrolls[bpgrade1]) / 2);
+						var mats = blueprint.mats[bpgrade1 - 1];
+						var cost = {};
+						for (var mat in mats)
+							cost[mat] = rolls * mats[mat];
+						steps.push({ sgrp:sgrp2, id:modid2, num:modidNum[modid2], act:'Eng', desc:(blueprint.name + ' G' + bpgrade1 + ' x' + rolls), cost:cost });
+					}
+					bpgrade1++;
+					bproll1 = 0;
+				}
+			}
+			
+			// if we have an experimental, apply it
+			var expeffect = eddb.expeffect[expid2];
+			var mtype2 = (slot2.getSlotGroup() === 'hardpoint') ? 'wpn' : slot2.getModuleMtype();
+			if (expeffect && expid1 != expid2 && limexpeffect !== '' && (limexpeffect === 'all' || (','+limexpeffect+',').indexOf(mtype2) != -1)) {
+				var cost = clone({}, expeffect.mats);
+				steps.push({ sgrp:sgrp2, id:modid2, num:modidNum[modid2], act:'Exp', desc:expeffect.name, cost:cost });
+			}
+		}
+		
+		return steps;
+	}; // getRetrofitData()
+	
+	
 	var Build = function(shipid, stock) {
 		var ship = eddb.ship[shipid];
 		if (!ship)
@@ -2332,6 +2444,79 @@ window.edsy = new (function() {
 				this.updateStats();
 			return this.stats[stat];
 		}, // getStat()
+		
+		
+		getRetrofitData: function(base, limdisc, limdisceng, limbpgrade, limbproll, limexpeffect, limrolls) {
+			if (!base) {
+				base = new Build(this.getShipID(), true);
+			}
+			
+			// collect slots for each group (but combine military with internal for this purpose)
+			var groupSlots1 = {};
+			var groupSlots2 = {};
+			for (var slotgroup in GROUP_LABEL) {
+				var compgroup = ((slotgroup === 'military') ? 'internal' : slotgroup);
+				groupSlots1[compgroup] = [];
+				groupSlots2[compgroup] = [];
+				var slot;
+				for (var slotnum = 0;  slot = base.getSlot(slotgroup, slotnum);  slotnum++) {
+					if (slot.getModule())
+						groupSlots1[compgroup].push(slot);
+				}
+				for (var slotnum = 0;  slot = this.getSlot(slotgroup, slotnum);  slotnum++) {
+					if (slot.getModule())
+						groupSlots2[compgroup].push(slot);
+				}
+			}
+			
+			// sort and compare slot-modules
+			var slot1 = base.getSlot('ship', 'hull');
+			var slot2 = this.getSlot('ship', 'hull');
+			var modidNum = {};
+			var steps = Slot.getRetrofitData(slot1, slot2, modidNum, limdisc, limdisceng, limbpgrade, limbproll, limexpeffect, limrolls);
+			for (var g = 0;  g < GROUPS.length;  g++) {
+				var slotgroup = GROUPS[g];
+				if (slotgroup === 'military')
+					continue;
+				groupSlots1[slotgroup].sort(sortSlotModules);
+				groupSlots2[slotgroup].sort(sortSlotModules);
+				var slotnum1 = 0;
+				var slotnum2 = 0;
+				var groupsteps = [];
+				var groupsales = [];
+				do {
+					var slot1 = groupSlots1[slotgroup][slotnum1];
+					var slot2 = groupSlots2[slotgroup][slotnum2];
+					if (slot1 && slot2 && (slot1.getModuleID() == slot2.getModuleID() || (slotgroup === 'component' && slotnum1 === slotnum2))) {
+						Array.prototype.push.apply(groupsteps, Slot.getRetrofitData(slot1, slot2, modidNum, limdisc, limdisceng, limbpgrade, limbproll, limexpeffect, limrolls));
+						slotnum1++;
+						slotnum2++;
+					} else if (slot1 && (!slot2 || sortSlotModules(slot1, slot2) < 0)) {
+						Array.prototype.push.apply(groupsales, Slot.getRetrofitData(slot1, null, modidNum, limdisc, limdisceng, limbpgrade, limbproll, limexpeffect, limrolls));
+						slotnum1++;
+					} else if (slot2 && (!slot1 || sortSlotModules(slot1, slot2) > 0)) {
+						Array.prototype.push.apply(groupsteps, Slot.getRetrofitData(null, slot2, modidNum, limdisc, limdisceng, limbpgrade, limbproll, limexpeffect, limrolls));
+						slotnum2++;
+					} else if (!slot1 && !slot2) {
+						break;
+					} else {
+						console.log('retrofit error: slot '+slot1+' vs '+slot2);
+						slotnum1++;
+						slotnum2++;
+					}
+				} while (true);
+				Array.prototype.push.apply(steps, groupsales);
+				Array.prototype.push.apply(steps, groupsteps);
+			}
+			
+			// clear extraneous '#1's for modules that only appear once
+			for (var i = 0;  i < steps.length;  i++) {
+				if (steps[i].sgrp !== 'ship' && steps[i].num == 1 && modidNum[steps[i].id] == 1)
+					steps[i].num = 0;
+			}
+			
+			return steps;
+		}, // getRetrofitData()
 		
 		
 		getHash: function() {
@@ -3245,6 +3430,11 @@ window.edsy = new (function() {
 	}; // sortNumbersDesc()
 	
 	
+	var sortStoreds = function(stored1, stored2) {
+		return ((stored1.name < stored2.name) ? -1 : ((stored1.name > stored2.name) ? 1 : 0));
+	}; // sortStoreds()
+	
+	
 	var sortAttributes = function(attr1, attr2) {
 		var a1 = cache.attribute[attr1];
 		var a2 = cache.attribute[attr2];
@@ -3258,6 +3448,16 @@ window.edsy = new (function() {
 		v2 = attr2;
 		return (v1 < v2) ? -1 : ((v1 > v2) ? 1 : 0);
 	}; // sortAttributes()
+	
+	
+	var sortMaterials = function(mat1, mat2) {
+		var m1 = eddb.material[mat1];
+		var m2 = eddb.material[mat2];
+		if (!m1 || !m2) return (m1 ? 1 : (m2 ? -1 : 0));
+		var v1 = m1.name;
+		var v2 = m2.name;
+		return (v1 < v2) ? -1 : ((v1 > v2) ? 1 : 0);
+	}; // sortMaterials();
 	
 	
 	var sortShipIDs = function(shipid1, shipid2) {
@@ -3367,6 +3567,66 @@ window.edsy = new (function() {
 		}
 		return (((mod - cache.discountMod[a[lo]]) < (cache.discountMod[a[hi]] - mod)) ? a[lo] : a[hi]);
 	}; // getClosestDiscount()
+	
+	
+	var sortSlotModules = function(slot1, slot2) {
+		// by emptiness
+		var m1 = slot1.getModule();
+		var m2 = slot2.getModule();
+		var v1 = !!m1;
+		var v2 = !!m2;
+		if (!v1 || !v2) return (v1 ? -1 : (v2 ? 1 : 0));
+		var c;
+		// if same/different module ...
+		if (slot1.getModuleID() == slot2.getModuleID()) {
+			// by blueprint
+			c = sortBlueprints(slot1.getBlueprintID(), slot2.getBlueprintID());
+			if (c) return c;
+			// by grade
+			v1 = slot1.getBlueprintGrade();
+			v2 = slot2.getBlueprintGrade();
+			if (v1 != v2) return v2 - v1;
+			// by roll
+			v1 = slot1.getBlueprintRoll();
+			v2 = slot2.getBlueprintRoll();
+			if (v1 != v2) return v2 - v1;
+			// by expeffect
+			c = sortExpeffects(slot1.getExpeffectID(), slot2.getExpeffectID());
+			if (c) return c;
+			// by discount
+			c = sortDiscounts(slot1.getDiscounts(), slot2.getDiscounts());
+			if (c) return c;
+		} else {
+			// by slotgroup
+			v1 = GROUPS.indexOf(slot1.getSlotGroup());
+			v2 = GROUPS.indexOf(slot2.getSlotGroup());
+			if (v1 != v2) return v2 - v1;
+			// if not core component, ...
+			if (GROUPS[v1] !== 'component') {
+				// by class (size), descending
+				v1 = 0 + (m1.class || 0);
+				v2 = 0 + (m2.class || 0);
+				if (v1 != v2) return v2 - v1;
+				// by mtype
+				c = sortMtypes(m1.mtype, m2.mtype);
+				if (c) return c;
+				// by name
+				v1 = m1.name;
+				v2 = m2.name;
+				if (v1 != v2) return ((v1 < v2) ? -1 : (v1 > v2) ? 1 : 0);
+				// by cost
+				v1 = 0 - (m1.cost || 0);
+				v2 = 0 - (m2.cost || 0);
+				if (v1 != v2) return v1 - v2;
+			}
+		}
+		// by slot index
+		v1 = slot1.getSlotNum();
+		v2 = slot2.getSlotNum();
+		if (v1 != v2) return v1 - v2;
+		
+		return 0;
+	}; // sortSlotModules()
 	
 	
 	var initCache = function() {
@@ -3710,9 +3970,6 @@ window.edsy = new (function() {
 	
 	
 	var initUIShipyardShips = function() {
-		var div = document.createElement('div');
-		div.id = 'shipyard_ships_container';
-		
 		var table = document.createElement('table');
 		table.id = 'shipyard_ships_table';
 		table.className = 'striped';
@@ -3728,16 +3985,11 @@ window.edsy = new (function() {
 			tbody.appendChild(tr);
 		}
 		table.appendChild(tbody);
-		
-		div.appendChild(table);
-		document.getElementById('shipyard_container').appendChild(div);
+		document.getElementById('shipyard_ships_container').appendChild(table);
 	}; // initUIShipyardShips()
 	
 	
 	var initUIShipyardStoredBuilds = function() {
-		var div = document.createElement('div');
-		div.id = 'shipyard_storedbuilds_container';
-		
 		var table = document.createElement('table');
 		table.id = 'shipyard_storedbuilds_table';
 		table.className = 'striped';
@@ -3746,10 +3998,29 @@ window.edsy = new (function() {
 		var tbody = document.createElement('tbody');
 		tbody.id = 'shipyard_storedbuilds_tbody';
 		table.appendChild(tbody);
-		
-		div.appendChild(table);
-		document.getElementById('shipyard_container').appendChild(div);
+		document.getElementById('shipyard_storedbuilds_container').appendChild(table);
+		if (current.beta) {
+			var button = document.createElement('button');
+			button.style.margin = '0.5em';
+			button.style.padding = '0.125em 0.25em';
+			button.innerHTML = 'Copy from Live Site';
+			button.addEventListener('click', onUIShipyardStoredCopyLiveClick);
+			document.getElementById('shipyard_storedbuilds_container').appendChild(button);
+		}
 	}; // initUIShipyardStoredBuilds()
+	
+	
+	var onUIShipyardStoredCopyLiveClick = function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		if (current.beta && confirm('Copy builds from live site storage?\nAny matching beta or dev site builds will be overwritten.')) {
+			readStoredBuilds(true);
+			updateUIShipyardStoredBuilds();
+			updateUIFitStoredBuilds();
+			updateUIAnalysisStoredBuilds();
+			writeStoredBuilds();
+		}
+	}; // onUIShipyardStoredCopyLiveClick()
 	
 	
 	var createUIShipyardHeader = function(columns, tab) {
@@ -3863,21 +4134,14 @@ window.edsy = new (function() {
 		var r = tbody.rows.length;
 		while (r-- > 0) {
 			var namehash = tbody.rows[r].id.split('.')[1];
-			if (namehash && !current.storedbuild[0][namehash])
+			if (namehash && !current.stored.shipNamehashStored[0][namehash])
 				tbody.removeChild(tbody.rows[r]);
 		}
 		
 		// add or update all that currently exist
-		var names = [];
-		var nameNamehash = {};
-		for (namehash in current.storedbuild[0]) {
-			var name = hashDecodeS(namehash);
-			names.push(name);
-			nameNamehash[name] = namehash;
-		}
-		names.sort();
-		for (var n = 0;  n < names.length;  n++) {
-			updateUIShipyardStoredBuild(nameNamehash[names[n]], null, true);
+		var storeds = current.stored.shipStoreds[0];
+		for (var i = 0;  i < storeds.length;  i++) {
+			updateUIShipyardStoredBuild(storeds[i].namehash, null, true);
 		}
 		sortUIShipyardTable(document.getElementById('shipyard_storedbuilds_table'), UI_SHIPYARD_STOREDBUILD_COLS);
 		
@@ -3888,16 +4152,16 @@ window.edsy = new (function() {
 	var updateUIShipyardStoredBuild = function(namehash, build, sorted) {
 		if (!namehash)
 			return false;
-		var buildhash = current.storedbuild[0][namehash];
+		var stored = current.stored.shipNamehashStored[0][namehash];
 		var tbody = document.getElementById('shipyard_storedbuilds_tbody');
 		var tr = document.getElementById('shipyard_storedbuild.' + namehash);
-		if (buildhash) {
+		if (stored) {
 			if (!build)
-				build = Build.fromHash(buildhash);
+				build = Build.fromHash(stored.buildhash);
 			if (!tr) {
 				tr = createUIShipyardRow(UI_SHIPYARD_STOREDBUILD_COLS);
 				tr.id = 'shipyard_storedbuild.' + namehash;
-				tr.cells[0].innerHTML = '<button name="storedbuild_reload" value="'+namehash+'" class="label">'+encodeHTML(hashDecodeS(namehash))+'</button>';
+				tr.cells[0].innerHTML = '<button name="storedbuild_reload" value="'+namehash+'" class="label">'+encodeHTML(stored.name)+'</button>';
 				tr.cells[1].innerHTML = '<button name="storedbuild_rename" value="'+namehash+'">' + HTML_ICON['rename'] + '</button><button name="storedbuild_delete" value="'+namehash+'">'+ HTML_ICON['delete'] + '</button>';
 				tr.cells[2].innerHTML = eddb.ship[build.getShipID()].name;
 				tbody.appendChild(tr);
@@ -4265,11 +4529,12 @@ window.edsy = new (function() {
 	
 	
 	var showUIImportPopup = function() {
-		var cookies = getCookies('edsy_fdapi_cmdr_[A-Za-z0-9_-]+');
+		var prefix = 'edsy' + (current.dev ? 'dev' : '') + '_fdapi_cmdr_';
+		var cookies = getCookies(prefix + '[A-Za-z0-9_-]+');
 		var cmdrs = [];
 		var cmdr64 = {};
 		for (var name in cookies) {
-			var c64 = name.slice(16);
+			var c64 = name.slice(prefix.length);
 			var c = b64Decode(c64);
 			if (c) {
 				cmdrs.push(c);
@@ -4323,7 +4588,9 @@ window.edsy = new (function() {
 						console.log('FDAPI: ' + request.status + '/' + response.status + ', ' + typeof(response['import']));
 				} catch (exc) {
 					response = null;
-					console.log('FDAPI: failed to parse response: ' + exc);
+					console.log('FDAPI: ' + request.status + '; ' + exc);
+					if (current.dev)
+						console.log(request.response);
 				}
 //request={status:200};response={location:'foo'};
 //request={status:500};response={};
@@ -4340,6 +4607,9 @@ window.edsy = new (function() {
 								null, true,
 								false, true
 						);
+					} else if (response.status == 206 && confirm('Frontier API returned incomplete data.\n\nThis is common after long sessions; re-try?')) {
+					//	setTimeout(function() { importFromAPI(cmdr64); }, 1);
+						importFromAPI(cmdr64);
 					} else if (response['import']) {
 						importData(response['import']);
 					} else {
@@ -4456,7 +4726,7 @@ window.edsy = new (function() {
 		var shipid = (build ? build.getShipID() : -1);
 		var builderrors = importobj.builderrors;
 		var namehash = importobj.namehash || '';
-		var defaultaction = ((build && namehash) ? ((current.storedbuild[shipid] || EMPTY_OBJ)[namehash] ? 'save' : (multiple ? 'saveas' : 'ignore')) : 'ignore');
+		var defaultaction = ((build && namehash) ? ((current.stored.shipNamehashStored[shipid] || EMPTY_OBJ)[namehash] ? 'save' : (multiple ? 'saveas' : 'ignore')) : 'ignore');
 		
 		var tr = document.createElement('tr');
 		
@@ -4500,7 +4770,7 @@ window.edsy = new (function() {
 		option.value = '';
 		option.text = '';
 		select.appendChild(option);
-		populateDOMSelectStoredBuilds(select, shipid, namehash);
+		populateDOMSelectStoreds(select, current.stored.shipStoreds[shipid], namehash, 1);
 		if (select.options.length < 2) {
 			if (defaultaction === 'save')
 				defaultaction = 'saveas';
@@ -4740,6 +5010,7 @@ window.edsy = new (function() {
 							var build = decodeCAPIBuild(shipobj, builderrors);
 							var importhash = build ? ('fdapi|' + build.getShipID() + '|' + max(0,fleetids[i]) + '|' + hashEncodeS(build.getName().toUpperCase()) + '|' + hashEncodeS(build.getNameTag().toUpperCase())) : null;
 							importdata.buildlist[index] = { index:index, importhash:importhash, fleetid:fleetids[i], namehash:null, build:build, builderrors:builderrors };
+							importdata.warning = 'These FDAPI builds may erroneously show legacy blueprints on all engineered modules';
 							if (build && fleetids[i] == fleetid)
 								curindex = index;
 						}
@@ -4787,7 +5058,7 @@ window.edsy = new (function() {
 			extras = importdata.imports || importdata.modules || importdata.options;
 			for (var namehash in (importdata.modules || EMPTY_OBJ)) {
 				numModules += 1;
-				numModulesOW += (current.storedmodule[0][namehash] ? 1 : 0);
+				numModulesOW += (current.stored.moduleNamehashStored[0][namehash] ? 1 : 0);
 			}
 			if (extras) {
 				var status = document.getElementById('popup_status');
@@ -4870,7 +5141,7 @@ window.edsy = new (function() {
 				namehash = hashEncodeS(label_saveas.value.trim());
 				if (!namehash) {
 					message = 'Specify a label for the stored build.';
-				} else if (current.storedbuild[0][namehash]) {
+				} else if (current.stored.shipNamehashStored[0][namehash]) {
 					message = 'The specified stored build label already exists; it will be overwritten.';
 					input_action.value = 'save';
 					label_save.value = namehash;
@@ -4906,10 +5177,22 @@ window.edsy = new (function() {
 				for (var namehash in (current.importdata.modules || EMPTY_OBJ)) {
 					var modulehash = current.importdata.modules[namehash];
 					var modid = Slot.getStoredHashModuleID(modulehash);
-					if (!current.storedmodule[modid])
-						current.storedmodule[modid] = {};
-					current.storedmodule[0][namehash] = modulehash;
-					current.storedmodule[modid][namehash] = modulehash;
+					var stored = {
+						modid:modid,
+						namehash:namehash,
+						name:hashDecodeS(namehash),
+						modulehash:modulehash
+					};
+					if (!current.stored.moduleNamehashStored[modid])
+						current.stored.moduleNamehashStored[modid] = {};
+					current.stored.moduleNamehashStored[0][namehash] = current.stored.moduleNamehashStored[modid][namehash] = stored;
+					current.stored.moduleStoreds[0] = current.stored.moduleStoreds[modid] = null;
+				}
+				for (var modid in current.stored.moduleNamehashStored) {
+					if (!current.stored.moduleStoreds[modid]) {
+						current.stored.moduleStoreds[modid] = Object.values(current.stored.moduleNamehashStored[modid]);
+						current.stored.moduleStoreds[modid].sort(sortStoreds);
+					}
 				}
 				for (var opt in (current.importdata.options || EMPTY_OBJ)) {
 					if (current.option[opt] !== undefined)
@@ -4924,10 +5207,22 @@ window.edsy = new (function() {
 				if (importbuild.build && importbuild.namehash) {
 					var shipid = importbuild.build.getShipID();
 					var buildhash = importbuild.build.getHash();
-					if (!current.storedbuild[shipid])
-						current.storedbuild[shipid] = {};
-					current.storedbuild[0][importbuild.namehash] = buildhash;
-					current.storedbuild[shipid][importbuild.namehash] = buildhash;
+					var stored = {
+						shipid:shipid,
+						namehash:importbuild.namehash,
+						name:hashDecodeS(importbuild.namehash),
+						buildhash:buildhash
+					};
+					if (!current.stored.shipNamehashStored[shipid])
+						current.stored.shipNamehashStored[shipid] = {};
+					current.stored.shipNamehashStored[0][importbuild.namehash] = current.stored.shipNamehashStored[shipid][importbuild.namehash] = stored;
+					current.stored.shipStoreds[0] = current.stored.shipStoreds[shipid] = null;
+				}
+			}
+			for (var shipid in current.stored.shipNamehashStored) {
+				if (!current.stored.shipStoreds[shipid]) {
+					current.stored.shipStoreds[shipid] = Object.values(current.stored.shipNamehashStored[shipid]);
+					current.stored.shipStoreds[shipid].sort(sortStoreds);
 				}
 			}
 			writeStoredOptions();
@@ -4946,6 +5241,7 @@ window.edsy = new (function() {
 			updateUIModulePickerStoredModules();
 			updateUIDetailsStoredModules();
 			updateUIDetailsStoredModuleControls();
+			updateUIAnalysisStoredBuilds();
 			current.importdata = null;
 		} else {
 			var html = 'Some choices were invalid; hover over the warning icon for details.';
@@ -5615,13 +5911,10 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		}
 		
 		// update all stored module picker buttons that previously or currently exist
-		var nameNamehash = {};
-		for (var namehash in cache.storedmodules) {
-			nameNamehash[hashDecodeS(namehash)] = namehash;
-		}
-		cache.storedmodules = {};
-		for (var namehash in current.storedmodule[0]) {
-			nameNamehash[hashDecodeS(namehash)] = namehash;
+		var nameNamehash = current.pickerNameNamehash;
+		current.pickerNameNamehash = {};
+		for (var namehash in current.stored.moduleNamehashStored[0]) {
+			nameNamehash[current.stored.moduleNamehashStored[0][namehash].name] = namehash;
 		}
 		var names = Object.keys(nameNamehash);
 		names.sort();
@@ -5636,12 +5929,11 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	var updateUIModulePickerStoredModule = function(namehash, sorted) {
 		if (!namehash)
 			return false;
-		var modulehash = current.storedmodule[0][namehash];
+		var stored = current.stored.moduleNamehashStored[0][namehash];
 		var divRow = document.getElementById('outfitting_modules_stored.' + namehash);
-		if (modulehash) {
-			cache.storedmodules[namehash] = 1;
-			var modid = Slot.getStoredHashModuleID(modulehash);
-			var module = eddb.module[modid];
+		if (stored) {
+			current.pickerNameNamehash[stored.name] = namehash;
+			var module = eddb.module[stored.modid];
 			var mtypeid = module.mtype;
 			var szcls = module.class;
 			var divType = document.getElementById('outfitting_modules_mtype_' + mtypeid);
@@ -5661,11 +5953,11 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 				label.draggable = true;
 				var input = document.createElement('input');
 				input.type = 'radio';
-				input.id = 'outfitting_module.' + modid + '.' + namehash;
+				input.id = 'outfitting_module.' + stored.modid + '.' + namehash;
 				input.name = 'module';
-				input.value = modid + '.' + namehash;
+				input.value = stored.modid + '.' + namehash;
 				var div = document.createElement('div');
-				div.innerHTML = HTML_ICON['warning'] + HTML_ICON['engineer'] + encodeHTML(hashDecodeS(namehash));
+				div.innerHTML = HTML_ICON['warning'] + HTML_ICON['engineer'] + encodeHTML(stored.name);
 				label.appendChild(input);
 				label.appendChild(div);
 				label.htmlFor = input.id;
@@ -5707,7 +5999,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 				input.checked = true;
 			}
 			if (namehash) {
-				current.pickerSlot.setStoredHash(current.storedmodule[0][namehash]);
+				current.pickerSlot.setStoredHash(current.stored.moduleNamehashStored[0][namehash].modulehash);
 			} else {
 				current.pickerSlot.setModuleID(modid);
 			}
@@ -6033,14 +6325,14 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	var setCurrentFitNameHash = function(namehash) {
 		var ok = false;
 		if (namehash) {
-			var buildhash = current.storedbuild[0][namehash];
-			if (!buildhash)
+			var stored = current.stored.shipNamehashStored[0][namehash];
+			if (!stored)
 				return false;
 			current.hashlock = true;
-			ok = setCurrentFitHash(buildhash, namehash);
+			ok = setCurrentFitHash(stored.buildhash, namehash);
 			current.hashlock = false;
 			if (ok)
-				updateUIFitHash(buildhash);
+				updateUIFitHash(stored.buildhash);
 		} else {
 			var shipid = (current.fit ? current.fit.getShipID() : 1);
 			ok = setCurrentFit(new Build(shipid, true), '');
@@ -6102,27 +6394,42 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	}; // writeStoredOptions()
 	
 	
-	var readStoredBuilds = function() {
-		current.storedbuild = { 0:{} };
+	var readStoredBuilds = function(overrideLive) {
+		current.stored.shipNamehashStored = { 0:{} };
+		current.stored.shipStoreds = { 0:[] };
 		
 		if (!cache.feature.storage)
 			return false;
 		
 		var item = 'edsy_loadouts' + (current.beta ? '_beta' : '');
 		var data = (window.localStorage.getItem(item) || '').split('/');
+		if (current.beta && overrideLive) {
+			data = data.concat((window.localStorage.getItem('edsy_loadouts') || '').split('/'));
+		}
 		for (var i = 0;  i < data.length;  i++) {
 			var entry = data[i].split('=');
-			if (entry.length === 2)
-				current.storedbuild[0][entry[0]] = entry[1];
+			if (entry.length === 2) {
+				var namehash = entry[0];
+				var buildhash = entry[1];
+				var shipid = Build.getHashShipID(buildhash);
+				var stored = {
+					shipid:shipid,
+					namehash:namehash,
+					name:hashDecodeS(namehash),
+					buildhash:buildhash
+				};
+				current.stored.shipNamehashStored[0][namehash] = stored;
+			}
 		}
-		
-		// pre-parse the build hashes and sort by shipid
-		for (var namehash in current.storedbuild[0]) {
-			var buildhash = current.storedbuild[0][namehash];
-			var shipid = Build.getHashShipID(buildhash);
-			if (!current.storedbuild[shipid])
-				current.storedbuild[shipid] = {};
-			current.storedbuild[shipid][namehash] = buildhash;
+		for (var namehash in current.stored.shipNamehashStored[0]) {
+			var stored = current.stored.shipNamehashStored[0][namehash];
+			if (!current.stored.shipNamehashStored[stored.shipid])
+				current.stored.shipNamehashStored[stored.shipid] = {};
+			current.stored.shipNamehashStored[stored.shipid][namehash] = stored;
+		}
+		for (var shipid in current.stored.shipNamehashStored) {
+			current.stored.shipStoreds[shipid] = Object.values(current.stored.shipNamehashStored[shipid]);
+			current.stored.shipStoreds[shipid].sort(sortStoreds);
 		}
 		
 		return true;
@@ -6134,8 +6441,8 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			return false;
 		
 		var data = [];
-		for (var namehash in current.storedbuild[0]) {
-			data.push(namehash + '=' + current.storedbuild[0][namehash]);
+		for (var namehash in current.stored.shipNamehashStored[0]) {
+			data.push(namehash + '=' + current.stored.shipNamehashStored[0][namehash].buildhash);
 		}
 		var item = 'edsy_loadouts' + (current.beta ? '_beta' : '');
 		window.localStorage.setItem(item, data.join('/'));
@@ -6205,8 +6512,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	var updateUIFitStoredBuilds = function() {
 		var select = document.forms.fit.elements.outfitting_fit_stored;
 		var shipid = (current.fit ? current.fit.getShipID() : -1);
-		var curnamehash = select.value;
-		return populateDOMSelectStoredBuilds(select, shipid, curnamehash);
+		return populateDOMSelectStoreds(select, current.stored.shipStoreds[shipid], select.value, 1);
 	}; // updateUIFitStoredBuilds()
 	
 	
@@ -6223,7 +6529,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 				select.selectedIndex = -1;
 		}
 		namehash = select.value;
-		var storedbuild = (namehash && current.storedbuild[0][namehash]);
+		var storedbuild = (namehash && current.stored.shipNamehashStored[0][namehash]);
 		document.getElementById('outfitting_fit_stored_reload').disabled = (setfit || !storedbuild);
 		document.getElementById('outfitting_fit_stored_save').disabled = (setfit || !storedbuild);
 		document.getElementById('outfitting_fit_stored_saveas').disabled = false;
@@ -6247,28 +6553,39 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 					return false;
 				name = (name || '').trim();
 				namehash = hashEncodeS(name);
-			} while (!name || (current.storedbuild[0][namehash] && !confirm("A build labeled\n\n    "+name+"\n\nalready exists. Overwrite?")));
+			} while (!name || (current.stored.shipNamehashStored[0][namehash] && !confirm("A build labeled\n\n    "+name+"\n\nalready exists. Overwrite?")));
 		}
 		var buildhash = current.fit.getHash();
 		var shipid = current.fit.getShipID();
-		if (!current.storedbuild[shipid])
-			current.storedbuild[shipid] = {};
-		current.storedbuild[0][namehash] = buildhash;
-		current.storedbuild[shipid][namehash] = buildhash;
+		var stored = {
+			shipid:shipid,
+			namehash:namehash,
+			name:hashDecodeS(namehash),
+			buildhash:buildhash
+		};
+		if (!current.stored.shipNamehashStored[shipid])
+			current.stored.shipNamehashStored[shipid] = {};
+		current.stored.shipNamehashStored[0][namehash] = current.stored.shipNamehashStored[shipid][namehash] = stored;
+		current.stored.shipStoreds[0] = Object.values(current.stored.shipNamehashStored[0]);
+		current.stored.shipStoreds[0].sort(sortStoreds);
+		current.stored.shipStoreds[shipid] = Object.values(current.stored.shipNamehashStored[shipid]);
+		current.stored.shipStoreds[shipid].sort(sortStoreds);
 		writeStoredBuilds();
 		updateUIShipyardStoredBuild(namehash, current.fit);
 		if (namehash !== oldnamehash) {
 			updateUIFitStoredBuilds();
 		}
 		updateUIFitStoredBuildControls(true, namehash);
+		updateUIAnalysisStoredBuilds();
 	}; // saveCurrentStoredBuild()
 	
 	
 	var renameStoredBuild = function(namehash) {
-		if (!namehash || !current.storedbuild[0][namehash])
+		var stored = current.stored.shipNamehashStored[0][namehash];
+		if (!namehash || !stored)
 			return false;
 		var oldnamehash = namehash;
-		var name = hashDecodeS(namehash);
+		var name = stored.name;
 		do {
 			name = prompt("Enter a new label for the stored build", name);
 			if (name === null)
@@ -6277,12 +6594,16 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			namehash = hashEncodeS(name);
 			if (namehash === oldnamehash)
 				return false;
-		} while (!name || (current.storedbuild[0][namehash] && !confirm("A build labeled\n\n    "+name+"\n\nalready exists. Overwrite?")));
-		var shipid = Build.getHashShipID(current.storedbuild[0][oldnamehash]);
-		current.storedbuild[0][namehash] = current.storedbuild[0][oldnamehash];
-		current.storedbuild[shipid][namehash] = current.storedbuild[shipid][oldnamehash];
-		delete current.storedbuild[0][oldnamehash];
-		delete current.storedbuild[shipid][oldnamehash];
+		} while (!name || (current.stored.shipNamehashStored[0][namehash] && !confirm("A build labeled\n\n    "+name+"\n\nalready exists. Overwrite?")));
+		stored.namehash = namehash;
+		stored.name = name;
+		current.stored.shipNamehashStored[0][namehash] = current.stored.shipNamehashStored[stored.shipid][namehash] = stored;
+		delete current.stored.shipNamehashStored[0][oldnamehash];
+		delete current.stored.shipNamehashStored[stored.shipid][oldnamehash];
+		current.stored.shipStoreds[0] = Object.values(current.stored.shipNamehashStored[0]);
+		current.stored.shipStoreds[0].sort(sortStoreds);
+		current.stored.shipStoreds[stored.shipid] = Object.values(current.stored.shipNamehashStored[stored.shipid]);
+		current.stored.shipStoreds[stored.shipid].sort(sortStoreds);
 		writeStoredBuilds();
 		updateUIShipyardStoredBuild(oldnamehash);
 		updateUIShipyardStoredBuild(namehash);
@@ -6293,18 +6614,24 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		} else {
 			updateUIFitStoredBuilds();
 		}
+		updateUIAnalysisStoredBuilds(oldnamehash, namehash);
 	}; // renameStoredBuild()
 	
 	
 	var deleteStoredBuild = function(namehash) {
-		if (!namehash || !current.storedbuild[0][namehash])
+		var stored = current.stored.shipNamehashStored[0][namehash];
+		if (!namehash || !stored)
 			return false;
-		var name = hashDecodeS(namehash);
+		var name = stored.name;
 		if (!confirm("The stored build labeled\n\n    "+name+"\n\nwill be deleted. Are you sure?"))
 			return false;
-		var shipid = Build.getHashShipID(current.storedbuild[0][namehash]);
-		delete current.storedbuild[0][namehash];
-		delete current.storedbuild[shipid][namehash];
+		delete current.stored.shipNamehashStored[0][namehash];
+		delete current.stored.shipNamehashStored[stored.shipid][namehash];
+		current.stored.shipStoreds[0] = Object.values(current.stored.shipNamehashStored[0]);
+		current.stored.shipStoreds[0].sort(sortStoreds);
+		current.stored.shipStoreds[stored.shipid] = Object.values(current.stored.shipNamehashStored[stored.shipid]);
+		current.stored.shipStoreds[stored.shipid].sort(sortStoreds);
+		stored = null;
 		writeStoredBuilds();
 		updateUIShipyardStoredBuild(namehash);
 		var select = document.forms.fit.elements.outfitting_fit_stored;
@@ -6315,6 +6642,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		} else {
 			updateUIFitStoredBuilds();
 		}
+		updateUIAnalysisStoredBuilds();
 	}; // deleteStoredBuild()
 	
 	
@@ -6339,12 +6667,12 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		for (var mtype in { ct:1, cpd:1, isg:1,  ifh:2, ipc:2 }) {
 			for (var m = 0;  m < cache.mtypeModules[mtype].length;  m++) {
 				var modid = cache.mtypeModules[mtype][m];
-				var namehashes = Object.keys(current.storedmodule[modid] || EMPTY_OBJ);
+				var namehashes = Object.keys(current.stored.moduleNamehashStored[modid] || EMPTY_OBJ);
 				namehashes.push('');
 				for (var n = 0;  n < namehashes.length;  n++) {
 					var namehash = namehashes[n];
 					if (namehash) {
-						current.tempSlot.setStoredHash(current.storedmodule[0][namehash]);
+						current.tempSlot.setStoredHash(current.stored.moduleNamehashStored[0][namehash].modulehash);
 					} else {
 						current.tempSlot.setModuleID(modid);
 					}
@@ -6738,7 +7066,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		var limitOld = (slot.getModule() || EMPTY_OBJ).limit;
 		var ok;
 		if (namehash || storedhash) {
-			ok = slot.setStoredHash(storedhash || current.storedmodule[0][namehash], null, current.option.experimental);
+			ok = slot.setStoredHash(storedhash || current.stored.moduleNamehashStored[0][namehash].modulehash, null, current.option.experimental);
 			modid = slot.getModuleID();
 		} else {
 			ok = slot.setModuleID(modid, current.option.experimental);
@@ -6914,7 +7242,8 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	
 	
 	var readStoredModules = function() {
-		current.storedmodule = { 0:{} };
+		current.stored.moduleNamehashStored = { 0:{} };
+		current.stored.moduleStoreds = { 0:[] };
 		
 		if (!cache.feature.storage)
 			return false;
@@ -6923,17 +7252,28 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		var data = (window.localStorage.getItem(item) || '').split('/');
 		for (var i = 0;  i < data.length;  i++) {
 			var entry = data[i].split('=');
-			if (entry.length === 2)
-				current.storedmodule[0][entry[0]] = entry[1];
+			if (entry.length === 2) {
+				var namehash = entry[0];
+				var modulehash = entry[1];
+				var modid = Slot.getStoredHashModuleID(modulehash);
+				var stored = {
+					modid:modid,
+					namehash:namehash,
+					name:hashDecodeS(namehash),
+					modulehash:modulehash
+				};
+				current.stored.moduleNamehashStored[0][namehash] = stored;
+			}
 		}
-		
-		// pre-parse the module hashes and sort by modid
-		for (var namehash in current.storedmodule[0]) {
-			var modulehash = current.storedmodule[0][namehash];
-			var modid = Slot.getStoredHashModuleID(modulehash);
-			if (!current.storedmodule[modid])
-				current.storedmodule[modid] = {};
-			current.storedmodule[modid][namehash] = modulehash;
+		for (var namehash in current.stored.moduleNamehashStored[0]) {
+			var stored = current.stored.moduleNamehashStored[0][namehash];
+			if (!current.stored.moduleNamehashStored[stored.modid])
+				current.stored.moduleNamehashStored[stored.modid] = {};
+			current.stored.moduleNamehashStored[stored.modid][namehash] = stored;
+		}
+		for (var modid in current.stored.moduleNamehashStored) {
+			current.stored.moduleStoreds[modid] = Object.values(current.stored.moduleNamehashStored[modid]);
+			current.stored.moduleStoreds[modid].sort(sortStoreds);
 		}
 		
 		return true;
@@ -6945,8 +7285,8 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			return false;
 		
 		var data = [];
-		for (var namehash in current.storedmodule[0]) {
-			data.push(namehash + '=' + current.storedmodule[0][namehash]);
+		for (var namehash in current.stored.moduleNamehashStored[0]) {
+			data.push(namehash + '=' + current.stored.moduleNamehashStored[0][namehash].modulehash);
 		}
 		var item = 'edsy_modules' + (current.beta ? '_beta' : '');
 		window.localStorage.setItem(item, data.join('/'));
@@ -6956,49 +7296,33 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	
 	var updateUIDetailsStoredModules = function() {
 		var select = document.forms.details.elements.outfitting_details_stored;
-		var names = [];
-		var nameNamehash = {};
-		var curnamehash;
-		var selectedIndex = -1;
 		
 		if (current.outfitting_focus === 'module') {
 			var tokens = document.forms.modules.elements.module.value.split('.');
 			var namehash = tokens[1];
 			if (namehash) {
-				var name = hashDecodeS(namehash);
-				names.push(name);
-				nameNamehash[name] = namehash;
-				curnamehash = namehash;
+				setDOMSelectLength(select, 2);
+				select.options[1].value = namehash;
+				select.options[1].text = hashDecodeS(namehash);
+				select.selectedIndex = 1;
 			} else {
-				selectedIndex = 0;
+				setDOMSelectLength(select, 1);
+				select.selectedIndex = 0;
 			}
 		} else if (current.outfitting_focus === 'slot') {
 			var slot = current.fit.getSlot(current.group, current.slot);
 			var modid = slot.getModuleID();
 			if (current.group === 'ship') {
-				selectedIndex = 0;
+				setDOMSelectLength(select, 1);
+				select.selectedIndex = 0;
 			} else if (modid) {
-				for (var namehash in current.storedmodule[modid]) {
-					var name = hashDecodeS(namehash);
-					names.push(name);
-					nameNamehash[name] = namehash;
-				}
-				names.sort();
-				curnamehash = select.value;
-				selectedIndex = ((slot.getStoredHash() === cache.moduleHash[modid]) ? 0 : -1);
+				var namehash = select.value;
+				select.selectedIndex = ((slot.getStoredHash() === cache.moduleHash[modid]) ? 0 : -1);
+				populateDOMSelectStoreds(select, current.stored.moduleStoreds[modid], namehash, 1);
 			}
 		} else {
 			return false;
 		}
-		
-		setDOMSelectLength(select, 1 + names.length);
-		for (var i = 0;  i < names.length;  i++) {
-			select.options[i+1].value = nameNamehash[names[i]];
-			select.options[i+1].text = names[i];
-			if (nameNamehash[names[i]] === curnamehash)
-				selectedIndex = i+1;
-		}
-		select.selectedIndex = selectedIndex;
 		
 		return true;
 	}; // updateUIDetailsStoredModules()
@@ -7018,7 +7342,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			select.selectedIndex = ((modid && modulehash === stockhash) ? 0 : -1);
 		}
 		namehash = select.value || '';
-		var storedhash = (namehash ? current.storedmodule[0][namehash] : stockhash);
+		var storedhash = (namehash ? current.stored.moduleNamehashStored[0][namehash] : stockhash);
 		
 		select.disabled = (current.outfitting_focus === 'module' || current.group === 'ship' || !modid);
 		document.getElementById('outfitting_details_stored_reload').disabled = (!namehash || modulehash === storedhash);
@@ -7049,12 +7373,21 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 					return false;
 				name = (name || '').trim();
 				namehash = hashEncodeS(name);
-			} while (!name || (current.storedmodule[0][namehash] && !confirm("A module labeled\n\n    "+name+"\n\nalready exists. Overwrite?")));
+			} while (!name || (current.stored.moduleNamehashStored[0][namehash] && !confirm("A module labeled\n\n    "+name+"\n\nalready exists. Overwrite?")));
 		}
-		if (!current.storedmodule[modid])
-			current.storedmodule[modid] = {};
-		current.storedmodule[0][namehash] = modulehash;
-		current.storedmodule[modid][namehash] = modulehash;
+		var stored = {
+			modid:modid,
+			namehash:namehash,
+			name:hashDecodeS(namehash),
+			modulehash:modulehash
+		};
+		if (!current.stored.moduleNamehashStored[modid])
+			current.stored.moduleNamehashStored[modid] = {};
+		current.stored.moduleNamehashStored[0][namehash] = current.stored.moduleNamehashStored[modid][namehash] = stored;
+		current.stored.moduleStoreds[0] = Object.values(current.stored.moduleNamehashStored[0]);
+		current.stored.moduleStoreds[0].sort(sortStoreds);
+		current.stored.moduleStoreds[modid] = Object.values(current.stored.moduleNamehashStored[modid]);
+		current.stored.moduleStoreds[modid].sort(sortStoreds);
 		writeStoredModules();
 		if (namehash !== oldnamehash) {
 			updateUIModulePickerStoredModules();
@@ -7069,10 +7402,11 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	
 	
 	var renameStoredModule = function(namehash) {
-		if (!namehash || !current.storedmodule[0][namehash])
+		var stored = current.stored.moduleNamehashStored[0][namehash];
+		if (!namehash || !stored)
 			return false;
 		var oldnamehash = namehash;
-		var name = hashDecodeS(namehash);
+		var name = stored.name;
 		do {
 			name = prompt("Enter a new label for the stored module", name);
 			if (name === null)
@@ -7081,18 +7415,22 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			namehash = hashEncodeS(name);
 			if (namehash === oldnamehash)
 				return false;
-		} while (!name || (current.storedmodule[0][namehash] && !confirm("A module labeled\n\n    "+name+"\n\nalready exists. Overwrite?")));
-		var modid = Slot.getStoredHashModuleID(current.storedmodule[0][oldnamehash]);
-		current.storedmodule[0][namehash] = current.storedmodule[0][oldnamehash];
-		current.storedmodule[modid][namehash] = current.storedmodule[modid][oldnamehash];
-		delete current.storedmodule[0][oldnamehash];
-		delete current.storedmodule[modid][oldnamehash];
+		} while (!name || (current.stored.moduleNamehashStored[0][namehash] && !confirm("A module labeled\n\n    "+name+"\n\nalready exists. Overwrite?")));
+		stored.namehash = namehash;
+		stored.name = name;
+		current.stored.moduleNamehashStored[0][namehash] = current.stored.moduleNamehashStored[stored.modid][namehash] = stored;
+		delete current.stored.moduleNamehashStored[0][oldnamehash];
+		delete current.stored.moduleNamehashStored[stored.modid][oldnamehash];
+		current.stored.moduleStoreds[0] = Object.values(current.stored.moduleNamehashStored[0]);
+		current.stored.moduleStoreds[0].sort(sortStoreds);
+		current.stored.moduleStoreds[stored.modid] = Object.values(current.stored.moduleNamehashStored[stored.modid]);
+		current.stored.moduleStoreds[stored.modid].sort(sortStoreds);
 		writeStoredModules();
 		updateUIModulePickerStoredModules();
 		var select = document.forms.details.elements.outfitting_details_stored;
 		if (select.value === oldnamehash) {
 			if (current.outfitting_focus === 'module') {
-				setUIPickerModule(modid, namehash, true);
+				setUIPickerModule(stored.modid, namehash, true);
 			}
 			updateUIDetailsStoredModules();
 			select.value = namehash;
@@ -7103,14 +7441,19 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	
 	
 	var deleteStoredModule = function(namehash) {
-		if (!namehash || !current.storedmodule[0][namehash])
+		var stored = current.stored.moduleNamehashStored[0][namehash];
+		if (!namehash || !stored)
 			return false;
-		var name = hashDecodeS(namehash);
+		var name = stored.name;
 		if (!confirm("The stored module labeled\n\n    "+name+"\n\nwill be deleted. Are you sure?"))
 			return false;
-		var modid = Slot.getStoredHashModuleID(current.storedmodule[0][namehash]);
-		delete current.storedmodule[0][namehash];
-		delete current.storedmodule[modid][namehash];
+		delete current.stored.moduleNamehashStored[0][namehash];
+		delete current.stored.moduleNamehashStored[stored.modid][namehash];
+		current.stored.moduleStoreds[0] = Object.values(current.stored.moduleNamehashStored[0]);
+		current.stored.moduleStoreds[0].sort(sortStoreds);
+		current.stored.moduleStoreds[stored.modid] = Object.values(current.stored.moduleNamehashStored[stored.modid]);
+		current.stored.moduleStoreds[stored.modid].sort(sortStoreds);
+		stored = null;
 		writeStoredModules();
 		updateUIModulePickerStoredModules();
 		var select = document.forms.details.elements.outfitting_details_stored;
@@ -7134,7 +7477,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		var slot = current.pickerSlot;
 		var ok;
 		if (namehash) {
-			ok = slot.setStoredHash(current.storedmodule[0][namehash]);
+			ok = slot.setStoredHash(current.stored.moduleNamehashStored[0][namehash].modulehash);
 		} else {
 			var modid = slot.getModuleID();
 			ok = slot.setModuleID(modid);
@@ -7556,12 +7899,12 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		for (var mtype in { cpp:1, ct:1 }) {
 			for (var m = 0;  m < cache.mtypeModules[mtype].length;  m++) {
 				var modid = cache.mtypeModules[mtype][m];
-				var namehashes = Object.keys(current.storedmodule[modid] || EMPTY_OBJ);
+				var namehashes = Object.keys(current.stored.moduleNamehashStored[modid] || EMPTY_OBJ);
 				namehashes.push('');
 				for (var n = 0;  n < namehashes.length;  n++) {
 					var namehash = namehashes[n];
 					if (namehash) {
-						current.tempSlot.setStoredHash(current.storedmodule[0][namehash]);
+						current.tempSlot.setStoredHash(current.stored.moduleNamehashStored[0][namehash].modulehash);
 					} else {
 						current.tempSlot.setModuleID(modid);
 					}
@@ -8031,6 +8374,382 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	
 	
 	/*
+	* ANALYSIS UI
+	*/
+	
+	
+	var initUIAnalysisRetrofit = function() {
+		var els = document.forms.analysis.elements;
+		
+		var tbody = document.getElementById('analysis_retrofit_builds_table').tBodies[0];
+		cache.template.analysis_retrofit_builds_row = tbody.removeChild(tbody.rows[0]);
+		els.retrofit_builds_show_all.addEventListener('change', onUIAnalysisRetrofitSetupShowChange);
+		els.retrofit_builds_add.addEventListener('click', onUIAnalysisRetrofitSetupAddClick);
+		//els.retrofit_builds_add.addEventListener('change', onUIAnalysisRetrofitSetupAddChange);
+		els.retrofit_builds_run.addEventListener('click', onUIAnalysisRetrofitSetupRunClick);
+		
+		var discounts = [0,0x1,0x2,0x3,0x4,0x5,0x8,0x9,0x10,0x11,0x20,0x21,0x3F];
+		setDOMSelectLength(els.retrofit_setup_discount, discounts.length);
+		for (var i = 0;  i < discounts.length;  i++) {
+			var discountbits = discounts[i];
+			var discountmod = cache.discountMod[discountbits];
+			var text = formatPctText(1 - discountmod, ((discountbits & 0x1) && (discountmod > 0)) ? 1 : 0);
+			if (discountmod == 1) {
+				text += ' (never)';
+			} else if (discountmod == 0) {
+				text += ' (always)';
+			} else if (discountbits != 0x1 && discountbits & 0x1) {
+				text += ' (2.5% + ' + formatPctText(1 - cache.discountMod[discountbits & ~0x1], 0) + ')';
+			}
+			els.retrofit_setup_discount.options[i].value = discountbits;
+			els.retrofit_setup_discount.options[i].text = text;
+		}
+		els.retrofit_setup_discount.selectedIndex = discounts.length - 1;
+		
+		/*
+		setDOMSelectLength(els.retrofit_setup_disceng, 1 + MAX_BLUEPRINT_GRADE);
+		setDOMSelectLength(els.retrofit_setup_bpgrade, 1 + MAX_BLUEPRINT_GRADE);
+		for (var i = 0;  i <= MAX_BLUEPRINT_GRADE;  i++) {
+			var text = 'grade ' + i + (i ? '' : ' (always ignore)');
+			els.retrofit_setup_disceng.options[i].value = i;
+			els.retrofit_setup_disceng.options[i].text = text;
+			els.retrofit_setup_bpgrade.options[i].value = i;
+			els.retrofit_setup_bpgrade.options[i].text = text;
+		}
+		els.retrofit_setup_disceng.selectedIndex = 1;
+		els.retrofit_setup_bpgrade.selectedIndex = MAX_BLUEPRINT_GRADE;
+		
+		setDOMSelectLength(els.retrofit_setup_bproll, 21);
+		for (var i = 0;  i < 21;  i++) {
+			els.retrofit_setup_bproll.options[i].value = i * 0.05;
+			els.retrofit_setup_bproll.options[i].text = formatPctText(i * 0.05, 0) + (i ? '' : ' (always ignore)');
+		}
+		els.retrofit_setup_bproll.selectedIndex = 20;
+		*/
+		
+		els.retrofit_steps_copy.addEventListener('click', onUIAnalysisRetrofitStepsCopyClick);
+		var tbody = document.getElementById('analysis_retrofit_steps_table').tBodies[0];
+		cache.template.analysis_retrofit_steps_row = tbody.removeChild(tbody.rows[0]);
+		els.retrofit_steps_show_all.addEventListener('change', onUIAnalysisRetrofitStepsShowChange);
+		
+		els.retrofit_costs_copy.addEventListener('click', onUIAnalysisRetrofitCostsCopyClick);
+		var tbody = document.getElementById('analysis_retrofit_costs_table').tBodies[0];
+		cache.template.analysis_retrofit_costs_row = tbody.removeChild(tbody.rows[1]);
+		
+		addUIAnalysisRetrofitBuild('');
+	}; // initUIAnalysisRetrofit()
+	
+	
+	var onUIAnalysisTabChange = function(e) {
+		if (e.target.name === 'tab' && e.target.checked) {
+			setUIAnalysisTab(e.target.value);
+		}
+	}; // onUIAnalysisTabChange()
+	
+	
+	var setUIAnalysisTab = function(tab) {
+		current.analysis_tab = tab;
+		document.forms.analysis.elements.tab.value = tab;
+		document.forms.analysis.className = tab;
+	}; // setUIAnalysisTab()
+	
+	
+	var updateUIAnalysisStoredBuilds = function(oldnamehash, newnamehash) {
+		/*
+		var select = document.forms.analysis.elements.retrofit_builds_add;
+		populateDOMSelectStoreds(select, current.stored.shipStoreds[0], '', 2);
+		select.selectedIndex = 0;
+		*/
+		
+		var tbody = document.getElementById('analysis_retrofit_builds_table').tBodies[0];
+		var r = tbody.rows.length;
+		while (r-- > 0) {
+			var selects = tbody.rows[r].getElementsByTagName('SELECT');
+			var namehash = selects[0].value;
+			if (oldnamehash && namehash === oldnamehash)
+				namehash = newnamehash;
+			var stored = current.stored.shipNamehashStored[0][namehash];
+			if (namehash && !stored) {
+				tbody.removeChild(tbody.rows[r]);
+			} else {
+				var shipid = stored ? stored.shipid : (current.fit ? current.fit.getShipID() : -1);
+				
+				populateDOMSelectStoreds(selects[0], current.stored.shipStoreds[0], namehash, 1);
+				if (selects[0].selectedIndex < 0)
+					selects[0].selectedIndex = 0;
+				
+				var namehash = selects[1].value;
+				if (oldnamehash && namehash === oldnamehash)
+					namehash = newnamehash;
+				populateDOMSelectStoreds(selects[1], current.stored.shipStoreds[shipid], namehash, 1);
+				if (selects[1].selectedIndex < 0)
+					selects[1].selectedIndex = 0;
+			}
+		}
+	}; // updateUIAnalysisStoredBuilds()
+	
+	
+	var onUIAnalysisRetrofitSetupShowChange = function(e) {
+		e.stopPropagation();
+		
+		var checkboxAll = document.forms.analysis.elements.retrofit_builds_show_all;
+		var checkboxes = document.getElementById('analysis_retrofit_builds_table').getElementsByTagName('INPUT');
+		if (e.target === checkboxAll) {
+			for (var i = 0;  i < checkboxes.length;  i++) {
+				if (checkboxes[i] !== checkboxAll && checkboxes[i].name.startsWith('retrofit_builds_show_')) {
+					checkboxes[i].checked = checkboxAll.checked;
+				}
+			}
+		} else if (e.target.checked != checkboxAll.checked) {
+			for (var i = 0;  i < checkboxes.length;  i++) {
+				if (checkboxes[i] !== checkboxAll && checkboxes[i].name.startsWith('retrofit_builds_show_') && checkboxes[i].checked != e.target.checked) {
+					return;
+				}
+			}
+			checkboxAll.checked = e.target.checked;
+		}
+	}; // onUIAnalysisRetrofitSetupShowhange()
+	
+	
+	var onUIAnalysisRetrofitSetupAddChange = function(e) {
+		e.stopPropagation();
+		var namehash = e.target.value;
+		e.target.selectedIndex = 0;
+		addUIAnalysisRetrofitBuild(namehash);
+	}; // onUIAnalysisRetrofitSetupAddChange()
+	
+	
+	var onUIAnalysisRetrofitSetupAddClick = function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		addUIAnalysisRetrofitBuild('');
+	}; // onUIAnalysisRetrofitSetupAddClick()
+	
+	
+	var addUIAnalysisRetrofitBuild = function(namehash) {
+		var shipid = namehash ? current.stored.shipNamehashStored[0][namehash].shipid : (current.fit ? current.fit.getShipID() : -1);
+		var n = (current.counter.analysis_retrofit || 0) + 1;
+		current.counter.analysis_retrofit = n;
+		var tbody = document.getElementById('analysis_retrofit_builds_table').tBodies[0];
+		var tr = cache.template.analysis_retrofit_builds_row.cloneNode(true);
+		tbody.appendChild(tr);
+		var els = document.forms.analysis.elements;
+		populateDOMSelectStoreds(els.retrofit_builds_target_, current.stored.shipStoreds[0], namehash, 1);
+		populateDOMSelectStoreds(els.retrofit_builds_base_, current.stored.shipStoreds[shipid], '', 1);
+		els.retrofit_builds_target_.focus();
+		els.retrofit_builds_base_.selectedIndex = 0;
+		
+		els.retrofit_builds_show_.addEventListener('change', onUIAnalysisRetrofitSetupShowChange);
+		els.retrofit_builds_target_.addEventListener('change', onUIAnalysisRetrofitSetupTargetChange);
+		els.retrofit_builds_delete_.addEventListener('click', onUIAnalysisRetrofitSetupDeleteClick);
+		
+		els.retrofit_builds_show_.name += n;
+		els.retrofit_builds_target_.name += n;
+		els.retrofit_builds_base_.name += n;
+		els.retrofit_builds_delete_.name += n;
+	}; // addUIAnalysisRetrofitBuild()
+	
+	
+	var onUIAnalysisRetrofitSetupTargetChange = function(e) {
+		e.stopPropagation();
+		
+		var namehash = e.target.value;
+		var shipid = namehash ? current.stored.shipNamehashStored[0][namehash].shipid : current.fit.getShipID();
+		var n = e.target.name.split('_')[3];
+		var els = document.forms.analysis.elements;
+		var select = els['retrofit_builds_base_' + n];
+		populateDOMSelectStoreds(select, current.stored.shipStoreds[shipid], '', 1);
+		select.selectedIndex = 0;
+	}; // onUIAnalysisRetrofitSetupTargetChange()
+	
+	
+	var onUIAnalysisRetrofitSetupDeleteClick = function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		
+		var tr = e.target;
+		while (tr && tr.tagName !== 'TR')
+			tr = tr.parentNode;
+		if (tr)
+			tr.parentNode.removeChild(tr);
+	}; // onUIAnalysisRetrofitSetupDeleteClick()
+	
+	
+	var onUIAnalysisRetrofitSetupRunClick = function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		updateUIAnalysisRetrofit();
+	}; // onUIAnalysisRetrofitSetupRunClick()
+	
+	
+	var updateUIAnalysisRetrofit = function() {
+		// gather settings
+		var els = document.forms.analysis.elements;
+		var limdisc = els.retrofit_setup_discount.value;
+		var limdisceng = els.retrofit_setup_disceng.value;
+		var limbpgrade = els.retrofit_setup_bpgrade.value;
+		var limbproll = els.retrofit_setup_bproll.value;
+		var limexpeffect = els.retrofit_setup_expeffect.value;
+		var limrolls = [
+			0,
+			parseFloat(els.retrofit_setup_rolls1.value),
+			parseFloat(els.retrofit_setup_rolls2.value),
+			parseFloat(els.retrofit_setup_rolls3.value),
+			parseFloat(els.retrofit_setup_rolls4.value),
+			parseFloat(els.retrofit_setup_rolls5.value)
+		];
+		
+		// generate all retrofit reports
+		current.retrofit = [];
+		var checkboxes = document.getElementById('analysis_retrofit_builds_table').tBodies[0].getElementsByTagName('INPUT');
+		for (var i = 0;  i < checkboxes.length;  i++) {
+			if (checkboxes[i].checked && checkboxes[i].name.startsWith('retrofit_builds_show_')) {
+				var n = checkboxes[i].name.split('_')[3];
+				var stored1 = current.stored.shipNamehashStored[0][els['retrofit_builds_base_' + n].value];
+				var stored2 = current.stored.shipNamehashStored[0][els['retrofit_builds_target_' + n].value];
+				var build1 = (stored1 ? Build.fromHash(stored1.buildhash) : null);
+				var build2 = (stored2 ? Build.fromHash(stored2.buildhash) : current.fit);
+				current.retrofit.push({ name:(stored2 ? stored2.name : '(Current Build)'), steps:build2.getRetrofitData(build1, limdisc, limdisceng, limbpgrade, limbproll, limexpeffect, limrolls) });
+			}
+		}
+		
+		// clear results table
+		var table = document.getElementById('analysis_retrofit_steps_table');
+		while (table.tBodies.length > 0)
+			table.removeChild(table.tBodies[table.tBodies.length - 1]);
+		
+		// print new results
+		table.classList.toggle('single', current.retrofit.length < 2);
+		for (var i = 0;  i < current.retrofit.length;  i++) {
+			var tbody = document.createElement('TBODY');
+			table.appendChild(tbody);
+			var nameHTML = encodeHTML(current.retrofit[i].name);
+			var steps = current.retrofit[i].steps;
+			for (var s = 0;  s < steps.length;  s++) {
+				var tr = cache.template.analysis_retrofit_steps_row.cloneNode(true);
+				tr.cells[1].innerHTML = nameHTML;
+				tr.cells[2].innerHTML = encodeHTML((steps[s].sgrp === 'ship') ? eddb.ship[steps[s].id].name : (getModuleLabel(eddb.module[steps[s].id]) + (steps[s].num ? (' #' + steps[s].num) : '')));
+				tr.cells[3].innerHTML = steps[s].act;
+				tr.cells[4].innerHTML = encodeHTML(steps[s].desc || '');
+				tbody.appendChild(tr);
+				els.retrofit_steps_show_.addEventListener('change', onUIAnalysisRetrofitStepsShowChange);
+				els.retrofit_steps_show_.name += (i + '_' + s);
+			}
+		}
+		
+		updateUIAnalysisRetrofitMaterials();
+	}; // updateUIAnalysisRetrofit()
+	
+	
+	var onUIAnalysisRetrofitStepsShowChange = function(e) {
+		e.stopPropagation();
+		
+		var checkboxAll = document.forms.analysis.elements.retrofit_steps_show_all;
+		var checkboxes = document.getElementById('analysis_retrofit_steps_table').getElementsByTagName('INPUT');
+		if (e.target === checkboxAll) {
+			for (var i = 0;  i < checkboxes.length;  i++) {
+				if (checkboxes[i] !== checkboxAll && checkboxes[i].name.startsWith('retrofit_steps_show_')) {
+					checkboxes[i].checked = checkboxAll.checked;
+				}
+			}
+		} else if (e.target.checked != checkboxAll.checked) {
+			var same = true;
+			for (var i = 0;  i < checkboxes.length;  i++) {
+				if (checkboxes[i] !== checkboxAll && checkboxes[i].name.startsWith('retrofit_steps_show_') && checkboxes[i].checked != e.target.checked) {
+					same = false;
+					break;
+				}
+			}
+			if (same)
+				checkboxAll.checked = e.target.checked;
+		}
+		
+		updateUIAnalysisRetrofitMaterials();
+	}; // onUIAnalysisRetrofitStepsShowChange()
+	
+	
+	var updateUIAnalysisRetrofitMaterials = function() {
+		// clear results table
+		var tbody = document.getElementById('analysis_retrofit_costs_table').tBodies[0];
+		while (tbody.rows.length > 1)
+			tbody.removeChild(tbody.rows[tbody.rows.length - 1]);
+		
+		// tally up results
+		var matTotal = {'':0};
+		var els = document.forms.analysis.elements;
+		for (var i = 0;  i < current.retrofit.length;  i++) {
+			var steps = current.retrofit[i].steps;
+			for (var s = 0;  s < steps.length;  s++) {
+				var checkbox = els['retrofit_steps_show_' + i + '_' + s];
+				if (checkbox.checked) {
+					for (var mat in steps[s].cost) {
+						matTotal[mat] = (matTotal[mat] || 0) + steps[s].cost[mat];
+					}
+				}
+			}
+		}
+		
+		// print total cost
+		tbody.rows[0].cells[1].innerHTML = formatPriceHTML(matTotal['']);
+		delete matTotal[''];
+		
+		// print other materials
+		var mats = Object.keys(matTotal);
+		mats.sort(sortMaterials);
+		for (var i = 0;  i < mats.length;  i++) {
+			var material = eddb.material[mats[i]];
+			var tr = cache.template.analysis_retrofit_costs_row.cloneNode(true);
+			tr.cells[0].innerHTML = encodeHTML(material.name);
+			tr.cells[1].innerHTML = encodeHTML(eddb.mattype[material.mattype].abbr);
+			tr.cells[2].innerHTML = encodeHTML('G' + material.rarity);
+			tr.cells[3].innerHTML = formatNumHTML(ceil(matTotal[mats[i]]), 0);
+			tbody.appendChild(tr);
+		}
+	}; // updateUIAnalysisRetrofitMaterials()
+	
+	
+	var onUIAnalysisRetrofitStepsCopyClick = function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		
+		var table = document.getElementById('analysis_retrofit_steps_table');
+		var lines = [];
+		var fields = [];
+		for (var r = 0;  r < table.rows.length;  r++) {
+			var row = table.rows[r];
+			for (var c = 1;  c < row.cells.length;  c++) {
+				fields[c-1] = row.cells[c].innerText;
+			}
+			lines.push(fields.join('\t'));
+		}
+		lines.push('');
+		setClipboardString(lines.join('\n'));
+	}; // onUIAnalysisRetrofitStepsCopyClick()
+	
+	
+	var onUIAnalysisRetrofitCostsCopyClick = function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		var table = document.getElementById('analysis_retrofit_costs_table');
+		var lines = [];
+		var fields = [];
+		for (var r = 0;  r < table.rows.length;  r++) {
+			var row = table.rows[r];
+			if (row.cells.length === 2) {
+				lines.push('Credits\t\t\t' + row.cells[1].innerText);
+			} else {
+				for (var c = 0;  c < row.cells.length;  c++) {
+					fields[c] = row.cells[c].innerText;
+				}
+				lines.push(fields.join('\t'));
+			}
+		}
+		lines.push('');
+		setClipboardString(lines.join('\n'));
+	}; // onUIAnalysisRetrofitCostsCopyClick()
+	
+	
+	/*
 	* OPTIONS UI
 	*/
 	
@@ -8175,7 +8894,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	
 	
 	var onDocumentDrop = function(e) {
-		var file = e.dataTransfer.files[0];
+		var file = e.dataTransfer.files[0]; // TODO: handle multiple files
 		if (file) {
 			e.stopPropagation();
 			e.preventDefault();
@@ -8257,7 +8976,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			return false;
 			
 		case 'fdapi_delete':
-			var cookie = 'edsy_fdapi_cmdr_' + e.currentTarget.value + '=; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; SameSite=lax';
+			var cookie = 'edsy' + (current.dev ? 'dev' : '') + '_fdapi_cmdr_' + e.currentTarget.value + '=; path=' + (current.dev ? '/dev' : '/') + '; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; SameSite=lax';
 			document.cookie = cookie;
 			hideUIPopup();
 			showUIImportPopup();
@@ -8291,7 +9010,6 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	var onUIPopupExportShortButtonClick = function(e) {
 		document.forms.popup.elements.export_short_gen_button.disabled = true;
 		document.forms.popup.elements.export_short_gen_button.innerHTML = 'Generating ...';
-		var url = window.location.protocol + '//' + window.location.hostname + window.location.pathname + '#/L=' + current.fit.getHash();
 		var request = new XMLHttpRequest();
 		request.onreadystatechange = function() {
 			if (request.readyState == 4) {
@@ -8303,7 +9021,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 				document.forms.popup.elements.export_short.select();
 			}
 		}; // onreadystatechange()
-		request.open('GET', 'shortlink?url=' + encodeURIComponent(url), true);
+		request.open('GET', 'shortlink?url=' + encodeURIComponent(current.fit.getEDSYURL()), true);
 		request.timeout = 10000;
 		request.send();
 	}; // onUIPopupExportShortButtonClick()
@@ -8383,6 +9101,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			if (tokens[1] === 'ship') {
 				setCurrentFit(new Build(el.value, true), '');
 				setUIPageTab('outfitting');
+				updateUIAnalysisStoredBuilds();
 			}
 		} else {
 			var table = el;
@@ -8413,6 +9132,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			case 'reload':
 				setCurrentFitNameHash(el.value);
 				setUIPageTab('outfitting');
+				updateUIAnalysisStoredBuilds();
 				break;
 				
 			case 'rename':
@@ -8710,6 +9430,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 					document.getElementById('fit_header_export').style.display = (inaraURL ? '' : 'none');
 					document.forms.fit.elements.export_inara.style.display = (inaraURL ? '' : 'none');
 				}
+				updateUIAnalysisStoredBuilds();
 			}
 		} else {
 			updateUIFitColumns();
@@ -8744,6 +9465,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 				switch (tokens[3]) {
 				case 'reload':
 					setCurrentFitNameHash(namehash);
+					updateUIAnalysisStoredBuilds();
 					break;
 					
 				case 'save':
@@ -9466,10 +10188,14 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			format: 'edsy',
 			version: VERSIONS[3],
 		//	imports: current.importLabel, // no need to migrate this; it's a minor convenience, easy enough to re-populate, and may get bloated over time
-			builds: current.storedbuild[0],
-			modules: current.storedmodule[0],
+			builds: {},
+			modules: {},
 			options: current.option,
 		};
+		for (var namehash in current.stored.shipNamehashStored[0])
+			obj.builds[namehash] = current.stored.shipNamehashStored[0][namehash].buildhash;
+		for (var namehash in current.stored.moduleNamehashStored[0])
+			obj.modules[namehash] = current.stored.moduleNamehashStored[0][namehash].modulehash;
 		var json = JSON.stringify(obj, null, 2);
 		showUITextPopup(
 				'Below is a JSON object encoding all stored builds, modules, and other preferences, suitable for backup or transfer to another device or browser.',
@@ -9501,6 +10227,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		readStoredBuilds();
 		updateUIShipyardStoredBuilds();
 		updateUIFitStoredBuilds();
+		updateUIAnalysisStoredBuilds();
 		readStoredModules();
 		updateUIModulePickerStoredModules();
 		updateUIDetailsStoredModules();
@@ -9516,31 +10243,48 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	
 	var verifyVersionSync = function() {
 		var vH,vC,vD,vJ;
+		var dH,dC,dD,dJ;
 		try {
 			vH = document.getElementById('edsy_versions_html').getAttribute('content').split(',');
 			vH = [ parseInt(vH[0]),parseInt(vH[1]),parseInt(vH[2]),parseInt(vH[3]) ];
+			dH = parseInt((document.getElementById('last_modified').getAttribute('content') || '0').replace(/-/g,''));
 		} catch (e) {
 			vH = [ 0,0,0,0 ];
+			dH = 0;
 		}
 		try {
-			vC = getComputedStyle(document.documentElement).getPropertyValue('--edsy-versions-css').split(',');
+			var compstyle = getComputedStyle(document.documentElement);
+			vC = compstyle.getPropertyValue('--edsy-versions-css').split(',');
 			vC = [ parseInt(vC[0]),parseInt(vC[1]),parseInt(vC[2]),parseInt(vC[3]) ];
+			dC = parseInt(compstyle.getPropertyValue('--edsy-lastmodified-css') || 0);
 		} catch (e) {
 			vC = [ 0,0,0,0 ];
+			dC = 0;
 		}
 		try {
 			vD = ((eddb || EMPTY_OBJ).edsy_versions_db || EMPTY_ARR);
 			vD = [ parseInt(vD[0]),parseInt(vD[1]),parseInt(vD[2]),parseInt(vD[3]) ];
+			dD = ((eddb || EMPTY_OBJ).edsy_lastmodified_db || 0);
 		} catch (e) {
 			vD = [ 0,0,0,0 ];
+			dD = 0;
 		}
 		try {
 			vJ = (VERSIONS || EMPTY_ARR);
 			vJ = [ parseInt(vJ[0]),parseInt(vJ[1]),parseInt(vJ[2]),parseInt(vJ[3]) ];
+			dJ = LASTMODIFIED;
 		} catch (e) {
 			vJ = [ 0,0,0,0 ];
+			dJ = 0;
 		}
 		
+		// fill in the current version and update date
+		var v = '' + max(vH[0], vC[1], vD[2], vJ[3]) + '00000';
+		document.getElementById('version_label').innerHTML = ('v' + v[0] + '.' + v[1] + '.' + v[2] + (['-','a','b','rc'][v[3]] || '.') + v[4]);
+		var d = '' + max(dH, dC, dD, dJ) + '00000000';
+		document.getElementById('version_label').title = ('updated ' + d.slice(0,4) + '-' + d.slice(4,6) + '-' + d.slice(6,8));
+		
+		// cross check expected versions
 		if (vH[0] >= max(vC[0], max(vD[0], vJ[0]))) {
 			if (vC[1] >= max(vH[1], max(vD[1], vJ[1]))) {
 				if (vD[2] >= max(vH[2], max(vC[2], vJ[2]))) {
@@ -9565,11 +10309,6 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	var onDOMContentLoaded = function(e) {
 		// sniff locale
 		current.locale = ((window.navigator.languages || EMPTY_ARR)[0] || window.navigator.userLanguage || window.navigator.language || window.navigator.browserLanguage || window.navigator.systemLanguage || undefined);
-		
-		// fill in the current version and update date first thing
-		var v = '' + document.getElementById('edsy_versions_html').getAttribute('content').split(',').reduce(function(a,b) { return max(parseInt(a), parseInt(b)); });
-		document.getElementById('version_label').innerHTML = ('v' + v[0] + '.' + v[1] + '.' + v[2] + (['-','a','b','rc'][parseInt(v[3])] || '.') + v[4]);
-		document.getElementById('version_label').title = ('updated ' + document.getElementById('last_modified').getAttribute('content'));
 		
 		// add popup events now, in case we need them for the version sync
 		document.getElementById('popup_modal').addEventListener('keydown', onUIModalKeydownCapture, true);
@@ -9610,13 +10349,14 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		
 		// initialize cache and UI
 		current.dev = (window.location.protocol === 'file:') || (window.location.pathname.indexOf('/dev/') >= 0);
-		current.beta = (window.location.pathname.indexOf('/beta/') >= 0) || (window.location.pathname.indexOf('/dev/') >= 0);
+		current.beta = current.dev || (window.location.pathname.indexOf('/beta/') >= 0);
 		initCache();
 		initUIShipyardShips();
 		initUIShipyardStoredBuilds();
 		initUIModulePicker();
 		initUIFitSlots();
 		initUIDetails();
+		initUIAnalysisRetrofit();
 		initUIOptions();
 		
 		// initialize storage
@@ -9625,6 +10365,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		readStoredImports();
 		readStoredBuilds();
 		updateUIShipyardStoredBuilds();
+		updateUIAnalysisStoredBuilds();
 		readStoredModules();
 		updateUIModulePickerStoredModules();
 		
@@ -9684,6 +10425,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		document.forms.stats.elements.stats_cur_cargo.addEventListener('change', onUIStatsInputChange);
 		document.getElementById('outfitting_fit_crewdist').addEventListener('click', onUIPowerDistClick);
 		document.getElementById('outfitting_fit_powerdist').addEventListener('click', onUIPowerDistClick);
+		document.getElementById('analysis_tabs').addEventListener('change', onUIAnalysisTabChange);
 		document.getElementById('page_body_options').addEventListener('change', onUIOptionsChange);
 		document.getElementById('page_body_options').addEventListener('click', onUIOptionsClick);
 		document.getElementById('options_backup').addEventListener('click', onUIOptionsBackupClick);
@@ -9694,6 +10436,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		setUIShipyardTab('ships');
 		setUIModuleTab('SLOT');
 		updateUIFitColumns();
+		setUIAnalysisTab('retrofit');
 		
 		// check for initial import or build hash
 		var buffer_storage, buffer_cookie;
@@ -9701,8 +10444,8 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			window.sessionStorage.removeItem('edsy_import_buffer');
 		}
 		if (buffer_cookie = getCookie('edsy_import_buffer')) {
-			document.cookie = 'edsy_import_buffer=; domain=.edsy.org; path=' + (current.dev ? '/dev/' : '/');
-			document.cookie = 'edsy_import_buffer=; domain=.edsy.org; path=' + (current.dev ? '/dev/' : '/') + '; max-age=0; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+			document.cookie = 'edsy_import_buffer=; domain=.edsy.org; path=' + (current.dev ? '/dev' : '/');
+			document.cookie = 'edsy_import_buffer=; domain=.edsy.org; path=' + (current.dev ? '/dev' : '/') + '; max-age=0; expires=Thu, 01 Jan 1970 00:00:01 GMT';
 		}
 		current.hashlock = true;
 		setCurrentFit(new Build(1, true), '');
