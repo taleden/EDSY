@@ -4499,7 +4499,7 @@ window.edsy = new (function() {
 		tr.appendChild(td);
 		tbody.appendChild(tr);
 		
-		if (current.dev && current.fit.getInaraURL()) { // TODO DEBUG
+		if (current.fit.getInaraURL()) {
 			var tr = document.createElement('tr');
 			var td = document.createElement('td');
 			td.appendChild(document.createTextNode('Export'));
@@ -6286,7 +6286,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		updateUIFitStoredBuildControls(true, namehash);
 		document.forms.fit.elements.shipname.value = fit.getName();
 		document.forms.fit.elements.shipnametag.value = fit.getNameTag();
-		var inaraURL = (current.dev ? fit.getInaraURL() : null); // TODO DEBUG
+		var inaraURL = fit.getInaraURL();
 		document.getElementById('fit_header_export').style.display = (inaraURL ? '' : 'none');
 		document.forms.fit.elements.export_inara.style.display = (inaraURL ? '' : 'none');
 		updateUIFitPowerDist();
@@ -9425,7 +9425,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			var inaraShip = current.fit.inaraShip;
 			var inaraURL = current.fit.getInaraURL();
 			if (setCurrentFitNameHash(e.target.value)) {
-				if (current.dev && current.fit.setInaraXref(inaraAcct, inaraShip) && inaraURL) { // TODO DEBUG
+				if (current.fit.setInaraXref(inaraAcct, inaraShip) && inaraURL) {
 					// TODO: not like this :X
 					document.getElementById('fit_header_export').style.display = (inaraURL ? '' : 'none');
 					document.forms.fit.elements.export_inara.style.display = (inaraURL ? '' : 'none');
@@ -9599,7 +9599,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	var onUIFitExportInaraButtonClick = function(e) {
 		e.preventDefault();
 		e.stopPropagation();
-		var inaraURL = (current.dev ? current.fit.getInaraURL() : null); // TODO DEBUG
+		var inaraURL = current.fit.getInaraURL();
 		if (!inaraURL)
 			return;
 		var form = document.createElement('form');
