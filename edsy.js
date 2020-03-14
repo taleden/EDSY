@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [35341,35341,35341,35341]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20191015;
+	var VERSIONS = [35341,35341,35341,36241]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20200313;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
