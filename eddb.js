@@ -755,7 +755,7 @@ var eddb = {
 			id:11, stype:'mp', name:'Krait Phantom', class:2, cost:35732880, retail:37472250,
 			topspd:250, bstspd:350, mnv:3, shields:200, armour:180, mass:270, fwdacc:NaN, revacc:NaN, latacc:NaN,
 			minthrust:64.00, boostcost:13, pitch:31, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:200, minpitch:26, // verify minthrust
-			heatcap:300, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.63, hardness:60, masslock:16, crew:2, // verify hardness,masslock
+			heatcap:300, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.63, hardness:60, masslock:14, crew:2, // verify hardness
 			slots:{ // verify
 				hardpoint:[3,3,2,2],
 				utility  :[0,0,0,0],
@@ -783,7 +783,7 @@ var eddb = {
 			id:14, stype:'mp', name:'Krait Mk II', class:2, cost:44152080, retail:45814210,
 			topspd:240, bstspd:330, mnv:3, shields:220, armour:220, mass:320, fwdacc:28.01, revacc:18.04, latacc:15.12,
 			minthrust:62.50, boostcost:13, pitch:31, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:200, minpitch:26, // verify minthrust
-			heatcap:300, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.63, hardness:55, masslock:16, crew:3, // verify hardness,masslock
+			heatcap:300, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.63, hardness:55, masslock:16, crew:3, // verify hardness
 			slots:{ // verify
 				hardpoint:[3,3,3,2,2],
 				utility  :[0,0,0,0],
@@ -985,7 +985,7 @@ var eddb = {
 			id:36, stype:'fr', name:'Type-10 Defender', class:3, cost:121486140, retail:124755340,
 			topspd:180, bstspd:220, mnv:0, shields:320, armour:580, mass:1200, fwdacc:17.96, revacc:10.04, latacc:10.09,
 			minthrust:83.333, boostcost:19, pitch:22, yaw:8, roll:40, pitchacc:100, yawacc:35, rollacc:80, minpitch:18,
-			heatcap:335, heatdismin:3.16, heatdismax:67.15, fuelcost:50, fuelreserve:0.77, hardness:75, masslock:26, crew:3, // verify masslock
+			heatcap:335, heatdismin:3.16, heatdismax:67.15, fuelcost:50, fuelreserve:0.77, hardness:75, masslock:26, crew:3,
 			slots:{
 				hardpoint:[3,3,3,3,2,2,2,1,1],
 				utility  :[0,0,0,0,0,0,0,0],
@@ -1071,7 +1071,7 @@ var eddb = {
 			faction:'Empire', rank:12,
 			topspd:200, bstspd:320, mnv:0, shields:600, armour:400, mass:1100, fwdacc:29.37, revacc:10.04, latacc:6.06,
 			minthrust:80.0, boostcost:23, pitch:18, yaw:8, roll:45, pitchacc:100, yawacc:50, rollacc:80, minpitch:14,
-			heatcap:327, heatdismin:3.27, heatdismax:72.58, fuelcost:50, fuelreserve:1.16, hardness:70, masslock:27, crew:3, // verify hardness, masslock
+			heatcap:327, heatdismin:3.27, heatdismax:72.58, fuelcost:50, fuelreserve:1.16, hardness:70, masslock:26, crew:3, // verify hardness
 			slots:{
 				hardpoint:[4,3,3,2,2,2,2],
 				utility  :[0,0,0,0,0,0,0,0],
