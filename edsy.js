@@ -1213,6 +1213,9 @@ window.edsy = new (function() {
 			case 'maxmulrot':
 				return this.getEffectiveAttrModifier('engoptmul');
 				
+			case 'maxrng':
+				return this.getEffectiveAttrModifier('typemis');
+				
 			case 'genminmass':
 				// TODO: verify all combinations
 				// shieldgen legacy negative optmass:
