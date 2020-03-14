@@ -4969,11 +4969,24 @@ window.edsy = new (function() {
 					}
 					// scan it backwards so that the order reflects the most recent event for each ship
 					var fleetids = {};
+					var slotCraft = null;
 					var i = json.length;
 					while (i-- > 0) {
-						if (json[i]['event'] === 'Loadout') {
+						if (json[i]['event'] === 'EngineerCraft') {
+							var slot = json[i]['Slot'];
+							if (!slotCraft)
+								slotCraft = {};
+							if (!slotCraft[slot])
+								slotCraft[slot] = json[i];
+						} else if (json[i]['event'] === 'Loadout') {
 							var fleetid = json[i]['ShipID'] || -i;
 							if (!fleetids[fleetid]) {
+								for (var s = 0;  s < json[i]['Modules'].length;  s++) {
+									var slot = json[i]['Modules'][s]['Slot'];
+									if ((slotCraft || EMPTY_OBJ)[slot] && slotCraft[slot]['Module'].toLowerCase() === json[i]['Modules'][s]['Item'].toLowerCase()) {
+										json[i]['Modules'][s]['Engineering'] = slotCraft[slot];
+									}
+								}
 								var index = importdata.buildlist.length;
 								var builderrors = [];
 								var build = decodeJournalBuild(json[i], builderrors);
@@ -4981,6 +4994,7 @@ window.edsy = new (function() {
 								importdata.buildlist[index] = { index:index, importhash:importhash, fleetid:fleetid, namehash:null, build:build, builderrors:builderrors };
 								fleetids[fleetid] = true;
 							}
+							slotCraft = null;
 						}
 					}
 					// now reverse the imports to restore the original journal order

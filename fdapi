@@ -600,6 +600,7 @@ try:
 				raise FDAPIRemoteError("invalid response", request.status_code)
 			
 			# identify last Loadout event per ShipID
+			# TODO: retain EngineerCraft events between Loadouts; maybe also MassModuleStore, ModuleBuy, ModuleRetrieve, ModuleSell, ModuleStore, ModuleSwap?
 			try:
 				if request.encoding is None:
 					request.encoding = 'utf-8'
