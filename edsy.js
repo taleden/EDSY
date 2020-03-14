@@ -2199,9 +2199,10 @@ window.edsy = new (function() {
 				dps_cau: 0,
 				dps_nodistdraw: 0,
 				dps_distdraw: 0,
-				distdraw_second: 0,
-				duration_wepcap: 1/0,
-				duration_nocap: 1/0,
+				ammotime_wepcap: 1/0,
+				ammotime_nocap: 1/0,
+				wepcap_burst_cur: 0,
+				wepcap_burst_max: 0,
 				wepchg_sustain_cur: 0,
 				wepchg_sustain_max: 0,
 			};
@@ -2234,6 +2235,7 @@ window.edsy = new (function() {
 			
 			// all other modules
 			var wepcap = this.getSlot('component', CORE_ABBR_SLOT.PD).getEffectiveAttrValue('wepcap');
+			var weapons = [];
 			var slot_isg = null;
 			for (var slotgroup in GROUP_LABEL) {
 				for (var slotnum = 0;  slot = this.getSlot(slotgroup, slotnum);  slotnum++) {
@@ -2288,30 +2290,33 @@ window.edsy = new (function() {
 								var distdraw = slot.getEffectiveAttrValue('distdraw');
 								var ammoclip = slot.getEffectiveAttrValue('ammoclip');
 								var ammomax = slot.getEffectiveAttrValue('ammomax');
-								var fpc = slot.getEffectiveAttrValue('sfpc');
-								var spc = slot.getEffectiveAttrValue('sspc') || 1;
-								var dps = slot.getEffectiveAttrValue('sdps');
+								var eps = slot.getEffectiveAttrValue('eps');
+								var seps = slot.getEffectiveAttrValue('seps');
+								var spc = slot.getEffectiveAttrValue('spc') || 1;
+								var sspc = slot.getEffectiveAttrValue('sspc') || 1;
+								var sfpc = slot.getEffectiveAttrValue('sfpc');
+								var sdps = slot.getEffectiveAttrValue('sdps');
 								
-								thmload *= fpc / spc;
+								thmload *= sfpc / sspc;
 								stats.thmload_hardpoint_wepfull += getEffectiveWeaponThermalLoad(thmload, distdraw, wepcap, 1.0);
 								stats.thmload_hardpoint_wepempty += getEffectiveWeaponThermalLoad(thmload, distdraw, wepcap, 0.0);
 								
-								stats.dps += dps;
-								stats.dps_abs += dps * (slot.getEffectiveAttrValue('abswgt') / 100.0);
-								stats.dps_thm += dps * (slot.getEffectiveAttrValue('thmwgt') / 100.0);
-								stats.dps_kin += dps * (slot.getEffectiveAttrValue('kinwgt') / 100.0);
-								stats.dps_exp += dps * (slot.getEffectiveAttrValue('expwgt') / 100.0);
-								stats.dps_axe += dps * (slot.getEffectiveAttrValue('axewgt') / 100.0);
-								stats.dps_cau += dps * (slot.getEffectiveAttrValue('cauwgt') / 100.0);
+								stats.dps += sdps;
+								stats.dps_abs += sdps * (slot.getEffectiveAttrValue('abswgt') / 100.0);
+								stats.dps_thm += sdps * (slot.getEffectiveAttrValue('thmwgt') / 100.0);
+								stats.dps_kin += sdps * (slot.getEffectiveAttrValue('kinwgt') / 100.0);
+								stats.dps_exp += sdps * (slot.getEffectiveAttrValue('expwgt') / 100.0);
+								stats.dps_axe += sdps * (slot.getEffectiveAttrValue('axewgt') / 100.0);
+								stats.dps_cau += sdps * (slot.getEffectiveAttrValue('cauwgt') / 100.0);
 								
-								var ammotime = ammoclip ? (spc * ((ammoclip + ammomax) / fpc)) : 1/0;
+								weapons.push( {key:spc, spc:spc, eps:eps, seps:seps} );
+								var ammotime = ammoclip ? (sspc * ((ammoclip + ammomax) / sfpc)) : 1/0;
 								if (distdraw) {
-									stats.dps_distdraw += dps;
-									stats.distdraw_second += distdraw * fpc / spc;
-									stats.duration_wepcap = min(stats.duration_wepcap, ammotime);
+									stats.dps_distdraw += sdps;
+									stats.ammotime_wepcap = min(stats.ammotime_wepcap, ammotime);
 								} else {
-									stats.dps_nodistdraw += dps;
-									stats.duration_nocap = min(stats.duration_nocap, ammotime);
+									stats.dps_nodistdraw += sdps;
+									stats.ammotime_nocap = min(stats.ammotime_nocap, ammotime);
 								}
 							} else if (mtypeid === 'usb') {
 								kinmod_usb *= (1 - (slot.getEffectiveAttrValue('kinres') / 100));
@@ -2429,12 +2434,34 @@ window.edsy = new (function() {
 			*/
 			
 			// derived Weapon stats
-			var powerdist_wep = this.getEffectivePowerDist('wep');
 			var slot = this.getSlot('component', CORE_ABBR_SLOT.PD);
+			var wepcap = slot.getEffectiveAttrValue('wepcap');
 			var wepchg = slot.getEffectiveAttrValue('wepchg');
+			var powerdist_wep = this.getEffectivePowerDist('wep');
 			var powerdistWepMul = pow(powerdist_wep / MAX_POWER_DIST, 1.1);
-			stats.wepchg_sustain_cur = min(max(wepchg * powerdistWepMul / stats.distdraw_second, 0), 1);
-			stats.wepchg_sustain_max = min(max(wepchg                   / stats.distdraw_second, 0), 1);
+			weapons.sort(sortObjKeyAsc);
+			var eps = 0;
+			var seps = 0;
+			for (var i = 0;  i < weapons.length;  i++) {
+				eps += weapons[i].eps;
+				seps += weapons[i].seps;
+			}
+			var eps_cur = eps;
+			var eps_max = eps;
+			stats.wepcap_burst_cur = (wepcap / max(0, eps_cur - wepchg * powerdistWepMul));
+			stats.wepcap_burst_max = (wepcap / max(0, eps_max - wepchg));
+			for (var i = 0;  i < weapons.length;  i++) {
+				if (stats.wepcap_burst_cur >= weapons[i].spc) {
+					eps_cur = eps_cur - weapons[i].eps + weapons[i].seps;
+					stats.wepcap_burst_cur = (wepcap / max(0, eps_cur - wepchg * powerdistWepMul));
+				}
+				if (stats.wepcap_burst_max >= weapons[i].spc) {
+					eps_max = eps_max - weapons[i].eps + weapons[i].seps;
+					stats.wepcap_burst_max = (wepcap / max(0, eps_max - wepchg));
+				}
+			}
+			stats.wepchg_sustain_cur = min(max(wepchg * powerdistWepMul / seps, 0), 1);
+			stats.wepchg_sustain_max = min(max(wepchg                   / seps, 0), 1);
 		}, // updateStats()
 		
 		
@@ -8352,23 +8379,17 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		var dps_cau = current.fit.getStat('dps_cau');
 		var dps_nodistdraw = current.fit.getStat('dps_nodistdraw');
 		var dps_distdraw = current.fit.getStat('dps_distdraw');
-		var distdraw_second = current.fit.getStat('distdraw_second');
-		var duration_wepcap = current.fit.getStat('duration_wepcap');
-		var duration_nocap = current.fit.getStat('duration_nocap');
+		var ammotime_wepcap = current.fit.getStat('ammotime_wepcap');
+		var ammotime_nocap = current.fit.getStat('ammotime_nocap');
+		var wepcap_burst_cur = current.fit.getStat('wepcap_burst_cur');
+		var wepcap_burst_max = current.fit.getStat('wepcap_burst_max');
 		var wepchg_sustain_cur = current.fit.getStat('wepchg_sustain_cur');
 		var wepchg_sustain_max = current.fit.getStat('wepchg_sustain_max');
-		var powerdist_wep = current.fit.getEffectivePowerDist('wep');
-		var slot = current.fit.getSlot('component', CORE_ABBR_SLOT.PD);
-		var wepcap = slot.getEffectiveAttrValue('wepcap');
-		var wepchg = slot.getEffectiveAttrValue('wepchg');
 		
 		// compute derived stats
-		var powerdistWepMul = pow(powerdist_wep / MAX_POWER_DIST, 1.1);
-		var curWpnDur = (wepcap / max(0, distdraw_second - wepchg * powerdistWepMul));
-		var maxWpnDur = (wepcap / max(0, distdraw_second - wepchg));
 		var curWpnSus = ((dps_nodistdraw + (dps_distdraw ? (dps_distdraw * wepchg_sustain_cur) : 0)) / dps);
 		var maxWpnSus = ((dps_nodistdraw + (dps_distdraw ? (dps_distdraw * wepchg_sustain_max) : 0)) / dps);
-		var ammWpnDur = min(duration_nocap, ((duration_wepcap <= maxWpnDur) ? duration_wepcap : (maxWpnDur + (duration_wepcap - maxWpnDur) / maxWpnSus)));
+		var ammWpnDur = min(ammotime_nocap, ((ammotime_wepcap <= wepcap_burst_max) ? ammotime_wepcap : (wepcap_burst_max + (ammotime_wepcap - wepcap_burst_max) / maxWpnSus)));
 		
 		// update displays
 		var htmlNA = '<small class="semantic">N/A</small>';
@@ -8378,8 +8399,8 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		document.getElementById('outfitting_stats_wpn_kin_burst').innerHTML = (dps ? formatPctHTML(dps_kin / dps, 0) : htmlNA);
 		document.getElementById('outfitting_stats_wpn_exp_burst').innerHTML = (dps ? formatPctHTML(dps_exp / dps, 0) : htmlNA);
 		document.getElementById('outfitting_stats_wpn_axe_burst').innerHTML = (dps ? formatPctHTML(dps_axe / dps, 0) : htmlNA);
-		document.getElementById('outfitting_stats_wpn_cur_dur').innerHTML = (dps ? formatTimeHTML(curWpnDur) : htmlNA);
-		document.getElementById('outfitting_stats_wpn_max_dur').innerHTML = (dps ? formatTimeHTML(maxWpnDur) : htmlNA);
+		document.getElementById('outfitting_stats_wpn_cur_dur').innerHTML = (dps ? formatTimeHTML(wepcap_burst_cur) : htmlNA);
+		document.getElementById('outfitting_stats_wpn_max_dur').innerHTML = (dps ? formatTimeHTML(wepcap_burst_max) : htmlNA);
 		document.getElementById('outfitting_stats_wpn_amm_dur').innerHTML = (dps ? formatTimeHTML(ammWpnDur) : htmlNA);
 		document.getElementById('outfitting_stats_wpn_cur_sus').innerHTML = (dps ? formatPctHTML(curWpnSus, 1) : htmlNA);
 		document.getElementById('outfitting_stats_wpn_max_sus').innerHTML = (dps ? formatPctHTML(maxWpnSus, 1) : htmlNA);
