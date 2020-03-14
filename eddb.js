@@ -327,7 +327,7 @@ var eddb = {
 			id:53, stype:'pa', name:'Dolphin', class:1, cost:1095780, retail:1337320,
 			topspd:250, bstspd:350, mnv:3, shields:110, armour:110, mass:140, fwdacc:39.63, revacc:30.01, latacc:14.97,
 			minthrust:48.0, boostcost:10, pitch:30, yaw:20, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:23,
-			heatcap:165, heatdismin:1.91, heatdismax:31.35, fuelcost:50, fuelreserve:0.50, hardness:35, masslock:9, crew:1, // verify masslock
+			heatcap:245, heatdismin:1.91, heatdismax:56.00, fuelcost:50, fuelreserve:0.50, hardness:35, masslock:9, crew:1, // verify masslock
 			slots:{
 				hardpoint:[1,1],
 				utility  :[0,0,0],
