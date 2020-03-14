@@ -938,9 +938,9 @@ window.edsy = new (function() {
 					}
 					// when modifying damage falloff, cap at maximum range
 					if (this.attrModifier['dmgfall']) {
-						var maxrng = this.getEffectiveAttrValue('maximumrng');
+						var maximumrng = this.getEffectiveAttrValue('maximumrng');
 						var dmgfall = this.getEffectiveAttrValue('dmgfall');
-						this.attrModifier['dmgfall'] = getModuleAttrModifier(this.module, 'dmgfall', min(maxrng, dmgfall));
+						this.attrModifier['dmgfall'] = getModuleAttrModifier(this.module, 'dmgfall', min(maximumrng, dmgfall));
 					}
 					this.clearStats();
 				} else {
