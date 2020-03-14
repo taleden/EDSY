@@ -634,14 +634,13 @@ window.edsy = new (function() {
 	
 	
 	var getEquilibriumHeatLevel = function(heatdismax, thmload) {
-		// https://forums.frontier.co.uk/showthread.php/286628-Research-Detailed-Heat-Mechanics
-		// https://forums.frontier.co.uk/showthread.php/286628-Research-Detailed-Heat-Mechanics?p=6399855&viewfull=1#post6399855
+		// https://forums.frontier.co.uk/threads/research-detailed-heat-mechanics.286628/post-6399855
 		return sqrt(thmload / heatdismax);
 	}; // getEquilibriumHeatLevel()
 	
 	
 	var getTimeUntilHeatLevel = function(heatcap, heatdismax, thmload, heatlevel0, heatlevel) {
-		// https://forums.frontier.co.uk/showthread.php/286628-Research-Detailed-Heat-Mechanics?p=6519883&viewfull=1#post6519883
+		// https://forums.frontier.co.uk/threads/research-detailed-heat-mechanics.286628/post-6519883
 		heatdismax /= heatcap;
 		if (!thmload) {
 			var C = -1 / (heatdismax * heatlevel0);
@@ -656,7 +655,7 @@ window.edsy = new (function() {
 	
 	
 	var getHeatLevelAtTime = function(heatcap, heatdismax, thmload, heatlevel0, seconds) {
-		// https://forums.frontier.co.uk/showthread.php/286628-Research-Detailed-Heat-Mechanics?p=6519883&viewfull=1#post6519883
+		// https://forums.frontier.co.uk/threads/research-detailed-heat-mechanics.286628/post-6519883
 		heatdismax /= heatcap;
 		if (!thmload) {
 			var C = -1 / (heatdismax * heatlevel0);
@@ -671,7 +670,7 @@ window.edsy = new (function() {
 	
 	
 	var getEffectiveWeaponThermalLoad = function(thmload, distdraw, wepcap, weplvl) {
-		// https://forums.frontier.co.uk/showthread.php/286628-Research-Detailed-Heat-Mechanics?p=6408594&viewfull=1#post6408594
+		// https://forums.frontier.co.uk/threads/research-detailed-heat-mechanics.286628/post-6408594
 		return (thmload * (1 + 4 * min(max(1 - (wepcap * weplvl - distdraw) / wepcap, 0), 1)));
 	}; // getEffectiveWeaponThermalLoad()
 	
