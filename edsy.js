@@ -8754,6 +8754,8 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		var fields = [];
 		for (var r = 0;  r < table.rows.length;  r++) {
 			var row = table.rows[r];
+			if (!row.cells[0].getElementsByTagName('INPUT')[0].checked)
+				continue;
 			for (var c = 1;  c < row.cells.length;  c++) {
 				fields[c-1] = row.cells[c].innerText;
 			}
