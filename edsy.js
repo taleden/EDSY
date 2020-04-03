@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [35341,35341,35341,36241]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20200313;
+	var VERSIONS = [36241,36241,36241,36241]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20200403;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -9935,6 +9935,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	var onUIFitSlotsDragEnter = function(e) {
 		if (contains(e.dataTransfer.types, 'edsy/mid')) {
 			e.preventDefault();
+			// TODO: dropEffect===none bug in chrome; check allowedEffect and ctrlKey to set it manually
 			// TODO: .dragready highlighting?
 		} else {
 			onDocumentDragEnter(e);
@@ -9945,6 +9946,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	var onUIFitSlotsDragOver = function(e) {
 		if (contains(e.dataTransfer.types, 'edsy/mid')) {
 			e.preventDefault();
+			// TODO: dropEffect===none bug in chrome; check allowedEffect and ctrlKey to set it manually
 		} else {
 			onDocumentDragOver(e);
 		}

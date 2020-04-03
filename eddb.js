@@ -11,8 +11,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 'use strict';
 var eddb = {
 	version : 36241,
-	edsy_versions_db : [35341,35341,36241,35341], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20200313,
+	edsy_versions_db : [36241,36241,36241,36241], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20200403,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
