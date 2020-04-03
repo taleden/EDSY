@@ -75,6 +75,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 						<path d="M 0,6 h 5 v -2.5 l 4,4 -4,4 v -2.5 h -5 z M 3,1 h 10 v 12 h -10 v -3 h 1 v 2 h 8 v -10 h -1 v 1 h -6 v -1 h -1 v 3 h -1 z"/>
 						<circle cx="8" cy="1.5" r="1.5"/>
 					</symbol>
+					<symbol id="icon_xref" viewbox="0 0 13 13" stroke="none" fill="currentColor" shape-rendering="geometricPrecision">
+						<path d="M 6,0 v 1 h -5 v 11 h 11 v -5 h 1 v 6 h -13 v -13 z M 13,0 v 5.75 l -1.75,-1.75 l -3.5,3.5 l -2.25,-2.25 l 3.5,-3.5 l -1.75,-1.75 z"/>
+					</symbol>
 					<symbol id="icon_import" viewbox="0 0 13 13" stroke="none" fill="currentColor" shape-rendering="geometricPrecision">
 						<path d="M 0,9 h 2 v 2 h 9 v -2 h 2 v 4 h -13 z M 6.5,0 l 4,4 h -2.5 v 5 h -3 v -5 h -2.5 z"/>
 					</symbol>
@@ -247,6 +250,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 									<div id="outfitting_ops_popout">
 										<button id="outfitting_fit_import"><svg class="iconsvg import"><use xlink:href="#icon_import"/></svg> Import...</button>
 										<button id="outfitting_fit_export"><svg class="iconsvg export"><use xlink:href="#icon_export"/></svg> Export...</button>
+										<button id="outfitting_fit_xref"><svg class="iconsvg xref"><use xlink:href="#icon_xref"/></svg> Search EDDB</button>
 									</div>
 								</div>
 							</div>
@@ -997,6 +1001,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 								<div id="analysis_retrofit_steps" class="analysis_retrofit_panel">
 									<div class="analysis_retrofit_divider">
 										<header>Checklist</header>
+										<button name="retrofit_steps_xref"><svg class="iconsvg xref"><use xlink:href="#icon_xref"/></svg></button>
 										<button name="retrofit_steps_copy"><svg class="iconsvg clipboard"><use xlink:href="#icon_clipboard"/></svg></button>
 									</div>
 									<div class="scroller">
@@ -1012,7 +1017,10 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 											</thead>
 											<tbody>
 												<tr>
-													<td><label class="checkbox"><input type="checkbox" name="retrofit_steps_show_" checked><div><div class="check"></div></div></label></td>
+													<td>
+														<label class="checkbox"><input type="checkbox" name="retrofit_steps_show_" checked><div><div class="check"></div></div></label>
+														<input type="hidden" name="retrofit_steps_xref_" value="">
+													</td>
 													<td class="retrofit_steps_build">Sidewinder</td>
 													<td>1C Lightweight Alloy</td>
 													<td>Eng</td>

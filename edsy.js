@@ -796,6 +796,11 @@ window.edsy = new (function() {
 		}, // swapWith()
 		
 		
+		getShipID: function() {
+			return this.build.getShipID();
+		}, // getShipID()
+		
+		
 		getModuleID: function() {
 			return this.modid;
 		}, // getModuleID()
@@ -1797,6 +1802,8 @@ window.edsy = new (function() {
 		var sgrp2 = slot2 ? slot2.getSlotGroup() : null;
 		if (sgrp1 && sgrp2 && (sgrp1 === 'ship') !== (sgrp2 === 'ship'))
 			return null;
+		var shipid1 = slot1 ? slot1.getShipID() : 0;
+		var shipid2 = slot2 ? slot2.getShipID() : 0;
 		var modid1 = slot1 ? slot1.getModuleID() : 0;
 		var modid2 = slot2 ? slot2.getModuleID() : 0;
 		var discmod1 = slot1 ? cache.discountMod[slot1.getDiscounts()] : 1;
@@ -1819,7 +1826,7 @@ window.edsy = new (function() {
 		// if we have an old module and it's different, or it's insufficiently discounted and not too engineered, sell it
 		if (modid1) {
 			if ((modid1 != modid2) || (discmod1 > max(cache.discountMod[limdisc], discmod2) && (!bpid2 || bpid1 != bpid2 || bpgrade1 <= limdisceng))) {
-				steps.push({ sgrp:sgrp1, id:modid1, num:modidNum[modid1], act:'Sell', desc:(formatPctText(1 - discmod1, 1) + ' discount'), cost:{'':-slot1.getCost()} });
+				steps.push({ sgrp:sgrp1, sid:shipid1, mid:((sgrp1 === 'ship') ? 0 : modid1), num:modidNum[modid1], act:'Sell', desc:(formatPctText(1 - discmod1, 1) + ' discount'), cost:{'':-slot1.getCost()} });
 				slot1 = null;
 				modid1 = bpgrade1 = bproll1 = 0;
 				bpid1 = expid1 = '';
@@ -1830,7 +1837,7 @@ window.edsy = new (function() {
 		if (modid2) {
 			// if we have no matching old module, buy one
 			if (modid1 != modid2) {
-				steps.push({ sgrp:sgrp2, id:modid2, num:modidNum[modid2], act:'Buy', desc:(formatPctText(1 - discmod2, 1) + ' discount'), cost:{'':slot2.getCost()} });
+				steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Buy', desc:(formatPctText(1 - discmod2, 1) + ' discount'), cost:{'':slot2.getCost()} });
 				modid1 = modid2;
 				bpgrade1 = bproll1 = 0;
 				bpid1 = expid1 = '';
@@ -1845,7 +1852,7 @@ window.edsy = new (function() {
 					bproll1 = 0;
 					expid1 = '';
 				} else if (bproll1 <= 0) {
-					steps.push({ sgrp:sgrp2, id:modid2, num:modidNum[modid2], act:'Conv', desc:(blueprint.name + ' G' + bpgrade1 + ' (legacy)'), cost:{} });
+					steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Conv', desc:(blueprint.name + ' G' + bpgrade1 + ' (legacy)'), cost:{} });
 					bpgrade1--;
 					bproll1 = 1;
 				}
@@ -1858,7 +1865,7 @@ window.edsy = new (function() {
 						var cost = {};
 						for (var mat in mats)
 							cost[mat] = rolls * mats[mat];
-						steps.push({ sgrp:sgrp2, id:modid2, num:modidNum[modid2], act:'Eng', desc:(blueprint.name + ' G' + bpgrade1 + ' x' + rolls), cost:cost });
+						steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Eng', desc:(blueprint.name + ' G' + bpgrade1 + ' x' + rolls), cost:cost });
 					}
 					bpgrade1++;
 					bproll1 = 0;
@@ -1870,7 +1877,7 @@ window.edsy = new (function() {
 			var mtype2 = (slot2.getSlotGroup() === 'hardpoint') ? 'wpn' : slot2.getModuleMtype();
 			if (expeffect && expid1 != expid2 && limexpeffect !== '' && (limexpeffect === 'all' || (','+limexpeffect+',').indexOf(mtype2) != -1)) {
 				var cost = clone({}, expeffect.mats);
-				steps.push({ sgrp:sgrp2, id:modid2, num:modidNum[modid2], act:'Exp', desc:expeffect.name, cost:cost });
+				steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Exp', desc:expeffect.name, cost:cost });
 			}
 		}
 		
@@ -1977,6 +1984,45 @@ window.edsy = new (function() {
 			this.inaraShip = ship;
 			return true;
 		}, // setInaraXref()
+		
+		
+		getEDDBURL: function() {
+			var sid = this.getShipID();
+			
+			// pre-flag stock modules that will come with the ship anyway
+			var ship = eddb.ship[sid];
+			var idFlag = {};
+			for (var slotgroup in this.slots) {
+				if (slotgroup !== 'ship') {
+					for (var slotnum = 0;  slotnum < ship.slots[slotgroup].length;  slotnum++) {
+						var mid = abs(ship.stock[slotgroup][slotnum]);
+						var module = cache.shipModules[sid][mid] || eddb.module[mid];
+						var eddbid = module ? module.eddbid : 0;
+						if (eddbid) {
+							idFlag[eddbid] = true;
+						}
+					}
+				}
+			}
+			
+			// identify all other modules in this build
+			var idList = [];
+			for (var slotgroup in this.slots) {
+				if (slotgroup !== 'ship') {
+					var slot;
+					for (var slotnum = 0;  slot = this.getSlot(slotgroup, slotnum);  slotnum++) {
+						var mid = slot.getModuleID();
+						var module = cache.shipModules[sid][mid] || eddb.module[mid];
+						var eddbid = module ? module.eddbid : 0;
+						if (eddbid && !idFlag[eddbid]) {
+							idFlag[eddbid] = true;
+							idList.push(eddbid);
+						}
+					}
+				}
+			}
+			return ('https://eddb.io/station?m=' + idList.join(',') + (eddb.ship[sid].eddbid ? ('&s=' + eddb.ship[sid].eddbid) : ''));
+		}, // getEDDBURL()
 		
 		
 		getCrewDist: function(dist) {
@@ -2540,7 +2586,7 @@ window.edsy = new (function() {
 			
 			// clear extraneous '#1's for modules that only appear once
 			for (var i = 0;  i < steps.length;  i++) {
-				if (steps[i].sgrp !== 'ship' && steps[i].num == 1 && modidNum[steps[i].id] == 1)
+				if (steps[i].sgrp !== 'ship' && steps[i].num == 1 && modidNum[steps[i].mid] == 1)
 					steps[i].num = 0;
 			}
 			
@@ -8464,6 +8510,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		els.retrofit_setup_bproll.selectedIndex = 20;
 		*/
 		
+		els.retrofit_steps_xref.addEventListener('click', onUIAnalysisRetrofitStepsXrefClick);
 		els.retrofit_steps_copy.addEventListener('click', onUIAnalysisRetrofitStepsCopyClick);
 		var tbody = document.getElementById('analysis_retrofit_steps_table').tBodies[0];
 		cache.template.analysis_retrofit_steps_row = tbody.removeChild(tbody.rows[0]);
@@ -8663,14 +8710,24 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			var nameHTML = encodeHTML(current.retrofit[i].name);
 			var steps = current.retrofit[i].steps;
 			for (var s = 0;  s < steps.length;  s++) {
+				var ship = eddb.ship[steps[s].sid];
+				var module = cache.shipModules[steps[s].sid][steps[s].mid] || eddb.module[steps[s].mid];
 				var tr = cache.template.analysis_retrofit_steps_row.cloneNode(true);
 				tr.cells[1].innerHTML = nameHTML;
-				tr.cells[2].innerHTML = encodeHTML((steps[s].sgrp === 'ship') ? eddb.ship[steps[s].id].name : (getModuleLabel(eddb.module[steps[s].id]) + (steps[s].num ? (' #' + steps[s].num) : '')));
+				tr.cells[2].innerHTML = encodeHTML((steps[s].sgrp === 'ship') ? ship.name : (getModuleLabel(module) + (steps[s].num ? (' #' + steps[s].num) : '')));
 				tr.cells[3].innerHTML = steps[s].act;
 				tr.cells[4].innerHTML = encodeHTML(steps[s].desc || '');
 				tbody.appendChild(tr);
 				els.retrofit_steps_show_.addEventListener('change', onUIAnalysisRetrofitStepsShowChange);
 				els.retrofit_steps_show_.name += (i + '_' + s);
+				if (steps[s].act !== 'Buy') {
+					els.retrofit_steps_xref_.value = '';
+				} else if (steps[s].sgrp === 'ship') {
+					els.retrofit_steps_xref_.value = 's=' + (ship.eddbid || '');
+				} else {
+					els.retrofit_steps_xref_.value = 'm=' + (module.eddbid || '');
+				}
+				els.retrofit_steps_xref_.name += (i + '_' + s);
 			}
 		}
 		
@@ -8743,6 +8800,37 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			tbody.appendChild(tr);
 		}
 	}; // updateUIAnalysisRetrofitMaterials()
+	
+	
+	var onUIAnalysisRetrofitStepsXrefClick = function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		
+		var table = document.getElementById('analysis_retrofit_steps_table');
+		var keyFlag = {};
+		var keyList = {};
+		for (var r = 0;  r < table.rows.length;  r++) {
+			var row = table.rows[r];
+			var inputs = row.cells[0].getElementsByTagName('INPUT');
+			if (!inputs[0].checked || !inputs[1])
+				continue;
+			var tokens = inputs[1].value.split('=');
+			if (tokens[1] && (!keyFlag[tokens[0]] || !keyFlag[tokens[0]][tokens[1]])) {
+				if (!keyFlag[tokens[0]]) {
+					keyFlag[tokens[0]] = {};
+					keyList[tokens[0]] = [];
+				}
+				keyFlag[tokens[0]][tokens[1]] = true;
+				keyList[tokens[0]].push(tokens[1]);
+			}
+		}
+		var url = '';
+		for (var key in keyList) {
+			url += (url ? '&' : '?') + key + '=' + keyList[key].join(',');
+		}
+		url = 'https://eddb.io/station' + url;
+		window.open(url, '_blank') || window.location.assign(url);
+	}; // onUIAnalysisRetrofitStepsXrefClick()
 	
 	
 	var onUIAnalysisRetrofitStepsCopyClick = function(e) {
@@ -9552,6 +9640,11 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			
 		case 'outfitting_fit_export':
 			showUIExportPopup();
+			break;
+			
+		case 'outfitting_fit_xref':
+			var url = current.fit.getEDDBURL();
+			window.open(url, '_blank') || window.location.assign(url);
 			break;
 		}
 	}; // onUIFitSettingsOpsClick()
