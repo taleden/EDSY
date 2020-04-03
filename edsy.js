@@ -8897,6 +8897,26 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	}; // onWindowResizeTimeout()
 	
 	
+	var onBodyClickCapture = function(e) {
+		var colsFocus = document.getElementById('outfitting_cols_focus');
+		var opsFocus = document.getElementById('outfitting_ops_focus');
+		if (!colsFocus.checked && !opsFocus.checked)
+			return;
+		var colsCont = document.getElementById('outfitting_cols_container');
+		var opsCont = document.getElementById('outfitting_ops_container');
+		for (var el = e.target;  el && el !== e.currentTarget;  el = el.parentNode) {
+			if (el === colsCont)
+				colsCont = null;
+			if (el === opsCont)
+				opsCont = null;
+		}
+		if (colsCont)
+			colsFocus.checked = false;
+		if (opsCont)
+			opsFocus.checked = false;
+	}; // onBodyClickCapture()
+	
+	
 	var onDocumentClickFocus = function(e) {
 		if (!current.popup.element)
 			return;
@@ -9458,7 +9478,41 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	}; // onUIModulePickerDrop()
 	
 	
-	var onUIFitSettingsChange = function(e) {
+	var onUIFitSettingsStoredClick = function(e) {
+		var el = e.target;
+		while (el && el.tagName !== 'BUTTON')
+			el = el.parentNode;
+		if (!el || el.disabled)
+			return;
+		
+		e.preventDefault();
+		var namehash = document.forms.fit.elements.outfitting_fit_stored.value;
+		switch (el.id) {
+		case 'outfitting_fit_stored_reload':
+			setCurrentFitNameHash(namehash);
+			updateUIAnalysisStoredBuilds();
+			break;
+			
+		case 'outfitting_fit_stored_save':
+			saveCurrentStoredBuild(false);
+			break;
+			
+		case 'outfitting_fit_stored_saveas':
+			saveCurrentStoredBuild(true);
+			break;
+			
+		case 'outfitting_fit_stored_rename':
+			renameStoredBuild(namehash);
+			break;
+			
+		case 'delete':
+			deleteStoredBuild(namehash);
+			break;
+		}
+	}; // onUIFitSettingsStoredClick()
+	
+	
+	var onUIFitSettingsStoredChange = function(e) {
 		if (e.target.name === 'outfitting_fit_stored') {
 			var inaraAcct = current.fit.inaraAcct;
 			var inaraShip = current.fit.inaraShip;
@@ -9471,62 +9525,36 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 				}
 				updateUIAnalysisStoredBuilds();
 			}
-		} else {
-			updateUIFitColumns();
-			// let the changes finish rendering
-			setTimeout(updateUILayout, 1);
 		}
-	}; // onUIFitSettingsChange()
+	}; // onUIFitSettingsStoredChange()
 	
 	
-	var onUIFitSettingsClick = function(e) {
+	var onUIFitSettingsColsChange = function(e) {
+		updateUIFitColumns();
+		// let the changes finish rendering
+		setTimeout(updateUILayout, 1);
+	}; // onUIFitSettingsColsChange()
+	
+	
+	var onUIFitSettingsOpsClick = function(e) {
 		var el = e.target;
 		while (el && el.tagName !== 'BUTTON')
 			el = el.parentNode;
-		if (!el || el.disabled) {
-		} else {
-			var tokens = el.id.split('_');
-			switch (tokens[2]) {
-			case 'import':
-				e.preventDefault();
-				showUIImportPopup();
-				break;
-				
-			case 'export':
-				e.preventDefault();
-				showUIExportPopup();
-				break;
-				
-			case 'stored':
-				e.preventDefault();
-				var namehash = document.forms.fit.elements.outfitting_fit_stored.value;
-				
-				switch (tokens[3]) {
-				case 'reload':
-					setCurrentFitNameHash(namehash);
-					updateUIAnalysisStoredBuilds();
-					break;
-					
-				case 'save':
-					saveCurrentStoredBuild(false);
-					break;
-					
-				case 'saveas':
-					saveCurrentStoredBuild(true);
-					break;
-					
-				case 'rename':
-					renameStoredBuild(namehash);
-					break;
-					
-				case 'delete':
-					deleteStoredBuild(namehash);
-					break;
-				}
-				break;
-			}
+		if (!el || el.disabled)
+			return;
+		
+		e.preventDefault();
+		document.getElementById('outfitting_ops_focus').checked = false;
+		switch (el.id) {
+		case 'outfitting_fit_import':
+			showUIImportPopup();
+			break;
+			
+		case 'outfitting_fit_export':
+			showUIExportPopup();
+			break;
 		}
-	}; // onUIFitSettingsClick()
+	}; // onUIFitSettingsOpsClick()
 	
 	
 	var onUIFitSlotsMouseDown = function(e) {
@@ -9870,7 +9898,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		if (e.target.name === 'outfitting_details_stored') {
 			setUIDetailsNameHash(e.target.value);
 		}
-	}; // onUIFitSettingsChange()
+	}; // onUIDetailsSettingsChange()
 	
 	
 	var onUIDetailsSettingsClick = function(e) {
@@ -9907,7 +9935,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 				}
 			}
 		}
-	}; // onUIFitSettingsClick()
+	}; // onUIDetailsSettingsClick()
 	
 	
 	var onUIDetailsModuleChange = function(e) {
@@ -10414,6 +10442,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			window.addEventListener('hashchange', onWindowHashChange);
 		if (cache.feature.storage)
 			window.addEventListener('storage', onStorageEvent);
+		document.body.addEventListener('click', onBodyClickCapture, true);
 		document.body.addEventListener('focus', onBodyFocus);
 		if (cache.feature.file) {
 			document.addEventListener('dragenter', onDocumentDragEnter);
@@ -10438,8 +10467,10 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		document.getElementById('outfitting_modules_container').addEventListener('dragend', onUIModulePickerDragEnd);
 		document.getElementById('outfitting_modules_container').addEventListener('drop', onUIModulePickerDrop);
 		document.getElementById('outfitting_modules_buttons').addEventListener('click', onUIModuleButtonsClick);
-		document.getElementById('outfitting_fit_settings').addEventListener('change', onUIFitSettingsChange);
-		document.getElementById('outfitting_fit_settings').addEventListener('click', onUIFitSettingsClick);
+		document.getElementById('outfitting_stored_container').addEventListener('click', onUIFitSettingsStoredClick);
+		document.getElementById('outfitting_stored_container').addEventListener('change', onUIFitSettingsStoredChange);
+		document.getElementById('outfitting_cols_container').addEventListener('change', onUIFitSettingsColsChange);
+		document.getElementById('outfitting_ops_container').addEventListener('click', onUIFitSettingsOpsClick);
 		document.getElementById('outfitting_fit_slots').addEventListener('mousedown', onUIFitSlotsMouseDown);
 		document.getElementById('outfitting_fit_slots').addEventListener('change', onUIFitSlotsChange);
 		document.getElementById('outfitting_fit_slots').addEventListener('click', onUIFitSlotsClick);

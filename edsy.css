@@ -1420,9 +1420,10 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 
 #outfitting_fit_settings BUTTON {
-	margin: 0 0.125em;
+	margin: 0 0.125rem;
 	padding: 3px;
 	line-height: 0;
+	white-space: nowrap;
 }
 
 #outfitting_fit_settings > SPAN {
@@ -1431,30 +1432,10 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	text-align: right;
 }
 
-#outfitting_cols_container {
-	position: relative;
-	align-self: stretch;
-	font-size: 0.875rem;
-}
-
-#outfitting_cols_label {
-	display: none;
-	margin-bottom: 2px;
-	border: 1px solid var(--colororange3);
-	background-color: var(--colororange1);
-	padding: 0 0.2em;
-	color: var(--colororange4);
-	cursor: pointer;
-}
-#outfitting_cols_focus:checked + #outfitting_cols_label {
-	border-color: var(--colororange5);
-	background-color: var(--colororange5);
-	color: var(--colorblack);
-}
-
-#outfitting_show_popout {
+#outfitting_stored_container {
 	display: flex;
 	flex-direction: row;
+	align-items: flex-start;
 }
 
 #outfitting_fit_settings .togglebutton INPUT + DIV {
@@ -1473,6 +1454,65 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	border-color: var(--colorwhite);
 	background-color: var(--colorwhite);
 	color: var(--colorblack);
+}
+
+#outfitting_cols_container,
+#outfitting_ops_container {
+	position: relative;
+	align-self: stretch;
+	font-size: 0.875rem;
+	margin-left: 0.25rem;
+}
+
+#outfitting_cols_label,
+#outfitting_ops_label {
+	display: inline-block;
+	margin-bottom: 2px;
+	border: 1px solid var(--colororange3);
+	background-color: var(--colororange1);
+	padding: 0 0.2em;
+	color: var(--colororange4);
+	cursor: pointer;
+}
+#outfitting_cols_focus:checked + #outfitting_cols_label,
+#outfitting_ops_focus:checked + #outfitting_ops_label {
+	border-color: var(--colororange5);
+	background-color: var(--colororange5);
+	color: var(--colorblack);
+}
+#outfitting_cols_focus:active + #outfitting_cols_label,
+#outfitting_ops_focus:active + #outfitting_ops_label {
+	border-color: var(--colorwhite);
+	background-color: var(--colorwhite);
+	color: var(--colorblack);
+}
+
+#outfitting_cols_popout,
+#outfitting_ops_popout {
+	display: none;
+	position: absolute;
+	top: 100%;
+	right: 0;
+	margin-top: -2px;
+	box-shadow: 0 0 2em 1em rgba(0, 0, 0, 0.75);
+	clip-path: inset(0 -2em -2em -2em);
+	border: 2px solid var(--colororange5);
+	padding: 0.25em 0.5em;
+	background-color: var(--colorblack);
+	z-index: 2;
+}
+#outfitting_cols_focus:checked ~ #outfitting_cols_popout {
+	display: flex;
+	flex-direction: row;
+}
+#outfitting_ops_focus:checked ~ #outfitting_ops_popout {
+	display: flex;
+	flex-direction: column;
+}
+
+#outfitting_ops_popout BUTTON {
+	margin: 0.25rem;
+	text-align: left;
 }
 
 
@@ -3137,25 +3177,13 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 		display: block;
 	}
 	
-	#outfitting_cols_label {
-		display: inline-block;
-	}
-	#outfitting_show_popout {
-		display: none;
-		position: absolute;
-		bottom: -2px;
-		right: 100%;
-		margin-right: 2px;
-		border: 2px solid var(--colororange5);
-		padding: 2px 0.5em;
-		background-color: var(--colorblack);
-		z-index: 2;
-	}
-	#outfitting_cols_focus:checked ~ #outfitting_show_popout {
-		display: flex;
-	}
 	#outfitting_fit_settings .togglebutton INPUT + DIV {
 		margin: 1px;
+	}
+	
+	#outfitting_cols_label SPAN,
+	#outfitting_ops_label SPAN {
+		display: none;
 	}
 	
 	#outfitting_bottom .stats_show_label {
@@ -3164,25 +3192,13 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 
 @media only screen and (min-width: 30em) {
-	/* duplicated at different widths for 1/2/3-panel modes */
-	BODY.show1 #outfitting_cols_label {
-		display: none;
-	}
-	BODY.show1 #outfitting_show_popout {
-		display: flex;
-		position: static;
-		margin: 0;
-		border: none;
-		padding: 0;
-		background-color: transparent;
-		z-index: 0;
-	}
-	BODY.show1 #outfitting_fit_settings .togglebutton INPUT + DIV {
-		margin: 0 0 2px 2px;
+	#outfitting_cols_label SPAN,
+	#outfitting_ops_label SPAN {
+		display: inline;
 	}
 }
 
-@media only screen and (min-width: 35em) {
+@media only screen and (min-width: 40em) {
 	#page_tabs SPAN {
 		display: inline;
 	}
@@ -3214,23 +3230,6 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	BODY.show2 #outfitting_top.show2slots #outfitting_modules_button_details,
 	BODY.show2.show2 #outfitting_top #outfitting_details_button_replace {
 		display: block;
-	}
-	
-	/* duplicated at different widths for 1/2/3-panel modes */
-	BODY.show2 #outfitting_cols_label {
-		display: none;
-	}
-	BODY.show2 #outfitting_show_popout {
-		display: flex;
-		position: static;
-		margin: 0;
-		border: none;
-		padding: 0;
-		background-color: transparent;
-		z-index: 0;
-	}
-	BODY.show2 #outfitting_fit_settings .togglebutton INPUT + DIV {
-		margin: 0 0 2px 2px;
 	}
 }
 
@@ -3277,26 +3276,6 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	BODY.show3 #outfitting_modules_buttons,
 	BODY.show3 #outfitting_details_buttons {
 		display: none;
-	}
-	
-	/* duplicated at different widths for 1/2/3-panel modes */
-	BODY.show3 #outfitting_cols_label,
-	BODY:not(.show3) #outfitting_cols_label {
-		display: none;
-	}
-	BODY.show3 #outfitting_show_popout,
-	BODY:not(.show3) #outfitting_show_popout {
-		display: flex;
-		position: static;
-		margin: 0;
-		border: none;
-		padding: 0;
-		background-color: transparent;
-		z-index: 0;
-	}
-	BODY.show3 #outfitting_fit_settings .togglebutton INPUT + DIV,
-	BODY:not(.show3) #outfitting_fit_settings .togglebutton INPUT + DIV {
-		margin: 0 0 2px 2px;
 	}
 }
 

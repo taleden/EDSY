@@ -52,6 +52,10 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 					<symbol id="icon_ignore" viewbox="0 0 13 13" stroke="none" fill="currentColor" shape-rendering="geometricPrecision">
 						<path d="M 6.5,0.75 a 5.75,5.75 0 1 1 0,11.5 a 5.75,5.75 0 1 1 0,-11.5 M 6.5,2.25 a 4.25,4.25 0 1 0 0,8.5 a 4.25,4.25 0 1 0 0,-8.5 z M 11.25,0.5 l 1.25,1.25 -10.75,10.75 -1.25,-1.25 z"/>
 					</symbol>
+					<symbol id="icon_eye" viewbox="0 0 13 13" stroke="none" fill="currentColor" shape-rendering="geometricPrecision">
+						<path d="M 0,6.5 a 6.5,3.75 0 0 1 13,0 a 6.5,3.75 0 0 1 -13,0 z M 1.25,6.5 a 5.25,2.5 0 0 0 10.5,0 a 5.25,2.5 0 0 0 -10.5,0 z"/>
+						<circle cx="6.5" cy="6.5" r="1.75"/>
+					</symbol>
 					<symbol id="icon_save" viewbox="0 0 13 13" stroke="none" fill="currentColor" shape-rendering="geometricPrecision">
 						<path d="M 0,0 h 3 v 4 h 7 v -4 h 1.5 l 1.5,1.5 v 11.5 h -13 z M 7,0 h 2 v 3 h -2 z M 1,5 v 7 h 11 v -7 z"/>
 					</symbol>
@@ -216,25 +220,33 @@ Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elit
 						</form>
 						<form id="outfitting_fit" name="fit" class="">
 							<div id="outfitting_fit_settings">
-								<button id="outfitting_fit_import"><svg class="iconsvg import"><use xlink:href="#icon_import"/></svg></button>
-								<button id="outfitting_fit_export"><svg class="iconsvg export"><use xlink:href="#icon_export"/></svg></button>
-								<select id="outfitting_fit_stored" name="outfitting_fit_stored">
-									<option value="">(Stock)</option>
-								</select>
-								<button id="outfitting_fit_stored_reload"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg></button>
-								<button id="outfitting_fit_stored_save"><svg class="iconsvg save"><use xlink:href="#icon_save"/></svg></button>
-								<button id="outfitting_fit_stored_saveas"><svg class="iconsvg saveas"><use xlink:href="#icon_saveas"/></svg></button>
-								<button id="outfitting_fit_stored_rename"><svg class="iconsvg rename"><use xlink:href="#icon_rename"/></svg></button>
-								<button id="outfitting_fit_stored_delete"><svg class="iconsvg delete"><use xlink:href="#icon_delete"/></svg></button>
-								<span><!-- Show: --></span>
+								<div id="outfitting_stored_container">
+									<select id="outfitting_fit_stored" name="outfitting_fit_stored">
+										<option value="">(Stock)</option>
+									</select>
+									<button id="outfitting_fit_stored_reload"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg></button>
+									<button id="outfitting_fit_stored_save"><svg class="iconsvg save"><use xlink:href="#icon_save"/></svg></button>
+									<button id="outfitting_fit_stored_saveas"><svg class="iconsvg saveas"><use xlink:href="#icon_saveas"/></svg></button>
+									<button id="outfitting_fit_stored_rename"><svg class="iconsvg rename"><use xlink:href="#icon_rename"/></svg></button>
+									<button id="outfitting_fit_stored_delete"><svg class="iconsvg delete"><use xlink:href="#icon_delete"/></svg></button>
+								</div>
+								<span></span>
 								<div id="outfitting_cols_container">
 									<input type="checkbox" id="outfitting_cols_focus" class="toggleinput">
-									<label id="outfitting_cols_label" for="outfitting_cols_focus">COLS</label>
-									<div id="outfitting_show_popout">
+									<label id="outfitting_cols_label" for="outfitting_cols_focus"><svg class="iconsvg eye"><use xlink:href="#icon_eye"/></svg><span> SHOW</span></label>
+									<div id="outfitting_cols_popout">
 										<label class="togglebutton"><input name="outfitting_show_mass" type="checkbox" value="1"><div>Mass</div></label>
 										<label class="togglebutton"><input name="outfitting_show_power" type="checkbox" value="1"><div>Power</div></label>
 										<label class="togglebutton"><input name="outfitting_show_attrs" type="checkbox" value="1"><div>Attrs</div></label>
 										<label class="togglebutton"><input name="outfitting_show_price" type="checkbox" value="1"><div>Price</div></label>
+									</div>
+								</div>
+								<div id="outfitting_ops_container">
+									<input type="checkbox" id="outfitting_ops_focus" class="toggleinput">
+									<label id="outfitting_ops_label" for="outfitting_ops_focus"><svg class="iconsvg menudots"><use xlink:href="#icon_menudots"/></svg><span>OPS</span></label>
+									<div id="outfitting_ops_popout">
+										<button id="outfitting_fit_import"><svg class="iconsvg import"><use xlink:href="#icon_import"/></svg> Import...</button>
+										<button id="outfitting_fit_export"><svg class="iconsvg export"><use xlink:href="#icon_export"/></svg> Export...</button>
 									</div>
 								</div>
 							</div>
