@@ -10346,6 +10346,8 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	
 	
 	var onUIOptionsBackupClick = function(e) {
+		e.preventDefault();
+		e.stopPropagation();
 		var obj = {
 			format: 'edsy',
 			version: VERSIONS[3],
@@ -10366,6 +10368,13 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 				true, false
 		);
 	}; // onUIOptionsBackupClick()
+	
+	
+	var onUIOptionsRestoreClick = function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		showUIImportPopup();
+	}; // onUIOptionsRestoreClick()
 	
 	
 	var onWindowHashChange = function(e) {
@@ -10594,6 +10603,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		document.getElementById('page_body_options').addEventListener('change', onUIOptionsChange);
 		document.getElementById('page_body_options').addEventListener('click', onUIOptionsClick);
 		document.getElementById('options_backup').addEventListener('click', onUIOptionsBackupClick);
+		document.getElementById('options_restore').addEventListener('click', onUIOptionsRestoreClick);
 		document.getElementById('contact_email').addEventListener('click', onLinkEmailClick);
 		
 		// set initial UI state
