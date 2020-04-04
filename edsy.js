@@ -11,7 +11,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 'use strict';
 window.edsy = new (function() {
 	var VERSIONS = [36241,36241,36241,36241]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20200403;
+	var LASTMODIFIED = 20200404;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
