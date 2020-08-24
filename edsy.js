@@ -4913,7 +4913,7 @@ window.edsy = new (function() {
 	}; // createUIImportedBuildRow()
 	
 	
-	var importData = function(text) {
+	var importData = function(text, msieURLtrunc) {
 		// if it's valid (optionally URI-encoded) base64, assume it's also gzipped
 		var b64text = null;
 		try {
@@ -5109,6 +5109,8 @@ window.edsy = new (function() {
 				}
 			} else {
 				errors.push('Invalid JSON encoding');
+				if (msieURLtrunc)
+					errors.push('URL likely truncated by Windows and/or Internet Explorer');
 			}
 		} else {
 			errors.push('Unrecognized format');
@@ -6430,7 +6432,9 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	}; // setCurrentFitNameHash()
 	
 	
-	var processURLHash = function(urlhash, hashlock) {
+	var processURLHash = function(location, hashlock) {
+		var urlhash = location.hash;
+		var msieURLtrunc = (location.href.length == 2083 || location.pathname.length == 2048);
 		var blocks = urlhash.split('/');
 		if (blocks[0] !== '#')
 			return false;
@@ -6447,7 +6451,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 				return ok;
 				
 			case 'I=':
-				return importData(blocks[b].slice(2));
+				return importData(blocks[b].slice(2), msieURLtrunc);
 			}
 		}
 	}; // processURLHash()
@@ -10378,7 +10382,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	
 	
 	var onWindowHashChange = function(e) {
-		processURLHash(window.location.hash, true);
+		processURLHash(window.location, true);
 	}; // onWindowHashChange()
 	
 	
@@ -10627,7 +10631,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		current.hashlock = false;
 		if (buffer_storage && importData(buffer_storage)) {
 		} else if (buffer_cookie && importData(buffer_cookie)) {
-		} else if (window.location.hash.length > 0 && processURLHash(window.location.hash, true)) {
+		} else if (window.location.hash.length > 0 && processURLHash(window.location, true)) {
 		}
 		setUIOutfittingPanels('slots',  'slots', 'details');
 		
