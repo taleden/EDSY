@@ -1691,27 +1691,31 @@ window.edsy = new (function() {
 			
 			var slotsize = this.getSlotSize();
 			var slotname = null;
-			switch (this.slotgroup) {
-			case 'hardpoint':
-				var n = 0;
-				for (var s = this.slotnum;  s >= 0;  s--)
-					n += (ship.slots.hardpoint[s] == slotsize);
-				slotname = (['Tiny','Small','Medium','Large','Huge'][slotsize] || 'Unknown') + 'Hardpoint' + n;
-				break;
-			case 'utility':
-				slotname = 'TinyHardpoint' + (this.slotnum + 1);
-				break;
-			case 'component':
-				slotname = CORE_SLOT_FDNAME[this.slotnum];
-				break;
-			case 'military':
-				slotname = 'Military' + ((this.slotnum < 9) ? '0' : '') + (this.slotnum + 1);
-				break;
-			case 'internal':
-				slotname = 'Slot' + ((this.slotnum < 9) ? '0' : '') + (this.slotnum + 1) + '_Size' + slotsize;
-				break;
-			default:
-				return null;
+			if (ship.slotnames && ship.slotnames[this.slotgroup]) {
+				slotname = ship.slotnames[this.slotgroup][this.slotnum];
+			} else {
+				switch (this.slotgroup) {
+				case 'hardpoint':
+					var n = 0;
+					for (var s = this.slotnum;  s >= 0;  s--)
+						n += (ship.slots.hardpoint[s] == slotsize);
+					slotname = (['Tiny','Small','Medium','Large','Huge'][slotsize] || 'Unknown') + 'Hardpoint' + n;
+					break;
+				case 'utility':
+					slotname = 'TinyHardpoint' + (this.slotnum + 1);
+					break;
+				case 'component':
+					slotname = CORE_SLOT_FDNAME[this.slotnum];
+					break;
+				case 'military':
+					slotname = 'Military' + ((this.slotnum < 9) ? '0' : '') + (this.slotnum + 1);
+					break;
+				case 'internal':
+					slotname = 'Slot' + ((this.slotnum < 9) ? '0' : '') + (this.slotnum + 1) + '_Size' + slotsize;
+					break;
+				default:
+					return null;
+				}
 			}
 			
 			// slot and module

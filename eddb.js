@@ -423,6 +423,9 @@ var eddb = {
 				military :[],
 				internal :[5,5,4,3,2,2,1],
 			},
+			slotnames:{
+				internal :['Slot01_Size5','Slot02_Size5','Slot03_Size3','Slot04_Size3','Slot05_Size2','Slot06_Size2','Slot07_Size1'],
+			},
 			stock:{
 				hardpoint:[0,0,62160,62160],
 				utility  :[0,0,0],
@@ -451,6 +454,9 @@ var eddb = {
 				military :[],
 				internal :[5,4,3,3,2,2,1],
 			},
+			slotnames:{
+				internal :['Slot01_Size4','Slot02_Size4','Slot03_Size3','Slot04_Size3','Slot05_Size2','Slot06_Size2','Slot07_Size1'],
+			},
 			stock:{
 				hardpoint:[0,0,62160,62160],
 				utility  :[0,0],
@@ -478,6 +484,9 @@ var eddb = {
 				component:[1,4,5,4,3,5,4,3],
 				military :[5],
 				internal :[5,4,2,1,1,1,1],
+			},
+			slotnames:{
+				internal :['Slot01_Size5','Slot02_Size4','Slot03_Size2','Slot05_Size1','Slot06_Size1','Slot07_Size1','Slot08_Size1'],
 			},
 			stock:{
 				hardpoint:[62160,62160],
@@ -536,6 +545,9 @@ var eddb = {
 				military :[4,4],
 				internal :[6,5,5,4,3,3,2,1],
 			},
+			slotnames:{
+				internal :['Slot01_Size6','Slot02_Size5','Slot03_Size5','Slot04_Size4','Slot05_Size3','Slot06_Size3','Slot09_Size2','Slot10_Size1'],
+			},
 			stock:{
 				hardpoint:[0,0,0,62160,62160],
 				utility  :[0,0,0,0],
@@ -563,6 +575,9 @@ var eddb = {
 				component:[1,5,5,5,4,4,3,5],
 				military :[],
 				internal :[6,6,6,5,5,5,3,3,2,1],
+			},
+			slotnames:{
+				internal :['Slot01_Size6','Slot02_Size6','Slot03_Size5','Slot04_Size5','Slot05_Size4','Slot06_Size4','Slot07_Size2','Slot08_Size2','Slot09_Size2','Slot10_Size1'],
 			},
 			stock:{
 				hardpoint:[62160,62160,0,0],
@@ -934,6 +949,9 @@ var eddb = {
 				military :[],
 				internal :[8,8,7,6,5,4,4,3,3,2,1],
 			},
+			slotnames:{
+				internal :['Slot00_Size8','Slot01_Size8','Slot02_Size7','Slot03_Size6','Slot04_Size5','Slot05_Size4','Slot06_Size4','Slot07_Size3','Slot08_Size3','Slot11_Size2','Slot12_Size1'],
+			},
 			stock:{
 				hardpoint:[62160,62160,0,0,0],
 				utility  :[0,0,0,0],
@@ -993,6 +1011,9 @@ var eddb = {
 				military :[5,5],
 				internal :[8,7,6,5,4,4,3,3,2,1],
 			},
+			slotnames:{
+				internal :['Slot01_Size8','Slot02_Size7','Slot03_Size6','Slot04_Size5','Slot05_Size4','Slot06_Size4','Slot07_Size3','Slot08_Size3','Slot11_Size2','Slot12_Size1'],
+			},
 			stock:{
 				hardpoint:[0,0,0,0,62160,62160,0,0,0],
 				utility  :[0,0,0,0,0,0,0,0],
@@ -1020,6 +1041,9 @@ var eddb = {
 				component:[1,8,7,6,5,8,8,5],
 				military :[5],
 				internal :[7,6,6,6,5,5,5,4,4,4,2,1],
+			},
+			slotnames:{
+				internal :['Slot01_Size7','Slot02_Size6','Slot03_Size6','Slot04_Size6','Slot05_Size5','Slot06_Size5','Slot07_Size5','Slot08_Size4','Slot09_Size4','Slot10_Size4','Slot13_Size2','Slot14_Size1'],
 			},
 			stock:{
 				hardpoint:[0,0,0,0,0,0,62160,62160],
