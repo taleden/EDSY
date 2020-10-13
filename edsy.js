@@ -10485,6 +10485,24 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	}; // verifyVersionSync()
 	
 	
+	var onCodeOnlyLoaded = function() {
+		// sniff locale
+		current.locale = ((window.navigator.languages || EMPTY_ARR)[0] || window.navigator.userLanguage || window.navigator.language || window.navigator.browserLanguage || window.navigator.systemLanguage || undefined);
+		
+		// disable browser features
+		cache.feature.history = false;
+		cache.feature.file = false;
+		cache.feature.storage = false;
+		cache.feature.requestFullscreen = false;
+		cache.feature.cancelFullscreen = false;
+		
+		// initialize cache
+		current.dev = (window.location.protocol === 'file:') || (window.location.pathname.indexOf('/dev/') >= 0);
+		current.beta = current.dev || (window.location.pathname.indexOf('/beta/') >= 0);
+		initCache();
+	}; // onCodeOnlyLoaded()
+	
+	
 	var onDOMContentLoaded = function(e) {
 		// sniff locale
 		current.locale = ((window.navigator.languages || EMPTY_ARR)[0] || window.navigator.userLanguage || window.navigator.language || window.navigator.browserLanguage || window.navigator.systemLanguage || undefined);
@@ -10645,5 +10663,11 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		setTimeout(updateUIStatsPanels, 2);
 	}; // onDOMContentLoaded()
 	
-	window.addEventListener('DOMContentLoaded', onDOMContentLoaded);
+	
+	if (document.title === 'EDSY') {
+		window.addEventListener('DOMContentLoaded', onDOMContentLoaded);
+	} else {
+		onCodeOnlyLoaded();
+		this.decodeJournalBuild = decodeJournalBuild; // window.edsy.decodeJournalBuild(jsonstring, []).exportText()
+	}
 })();
