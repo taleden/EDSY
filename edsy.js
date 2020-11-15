@@ -10,7 +10,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [36241,36241,37441,37541]; /* HTML,CSS,DB,JS */
+	var VERSIONS = [36241,36241,37441,37542]; /* HTML,CSS,DB,JS */
 	var LASTMODIFIED = 20201115;
 	
 	var EMPTY_OBJ = {};
@@ -609,7 +609,7 @@ window.edsy = new (function() {
 	}; // getMassCurveMultiplier()
 	
 	
-	var getEffectiveDamageResistance = function(baseres, extrares, exemptres) {
+	var getEffectiveDamageResistance = function(baseres, extrares, exemptres, bestres) {
 		// https://forums.frontier.co.uk/showthread.php/266235-Kinetic-Resistance-Calculation?p=4230114&viewfull=1#post4230114
 		// https://forums.frontier.co.uk/showthread.php/286097-Shield-Booster-Mod-Calculator?p=4998592&viewfull=1#post4998592
 		/* old
@@ -621,10 +621,12 @@ window.edsy = new (function() {
 		baseres = baseres || 0;
 		extrares = extrares || 0;
 		exemptres = exemptres || 0;
-		var lo = max(30, baseres);
+		bestres = bestres || 0;
+		var lo = max(max(30, baseres), bestres || 0);
 		var hi = 65; // half credit past 30% means 100% -> 30 + (100 - 30) / 2 = 65%
 		var expected = (1 - ((1 - baseres / 100) * (1 - extrares / 100))) * 100;
-		var actual = (expected < 30) ? expected : ( lo + (expected - lo) / (100 - lo) * (hi - lo) ); // remap range [lo..100] to [lo..hi]
+		var penalized = lo + (expected - lo) / (100 - lo) * (hi - lo); // remap range [lo..100] to [lo..hi]
+		var actual = ((penalized >= 30) ? penalized : expected);
 		return (1 - ((1 - exemptres / 100) * (1 - actual / 100))) * 100;
 	}; // getEffectiveDamageResistance()
 	
@@ -2273,6 +2275,10 @@ window.edsy = new (function() {
 			var thmmod_ihrp = 1;
 			var expmod_ihrp = 1;
 			var caumod_ihrp = 1;
+			var kinmin_ihrp = 1;
+			var thmmin_ihrp = 1;
+			var expmin_ihrp = 1;
+			var caumin_ihrp = 1;
 			var kinmod_usb = 1;
 			var thmmod_usb = 1;
 			var expmod_usb = 1;
@@ -2325,10 +2331,18 @@ window.edsy = new (function() {
 							stats.integ_imrp += slot.getEffectiveAttrValue('integ');
 							stats.dmgprot *= (1 - (slot.getEffectiveAttrValue('dmgprot') / 100));
 						} else if (mtypeid === 'ihrp' || mtypeid === 'imahrp') {
-							kinmod_ihrp *= (1 - (slot.getEffectiveAttrValue('kinres') / 100));
-							thmmod_ihrp *= (1 - (slot.getEffectiveAttrValue('thmres') / 100));
-							expmod_ihrp *= (1 - (slot.getEffectiveAttrValue('expres') / 100));
-							caumod_ihrp *= (1 - (slot.getEffectiveAttrValue('caures') / 100));
+							var kinmod = (1 - (slot.getEffectiveAttrValue('kinres') / 100));
+							var thmmod = (1 - (slot.getEffectiveAttrValue('thmres') / 100));
+							var expmod = (1 - (slot.getEffectiveAttrValue('expres') / 100));
+							var caumod = (1 - (slot.getEffectiveAttrValue('caures') / 100));
+							kinmod_ihrp *= kinmod;
+							thmmod_ihrp *= thmmod;
+							expmod_ihrp *= expmod;
+							caumod_ihrp *= caumod;
+							kinmin_ihrp = min(kinmin_ihrp, kinmod);
+							thmmin_ihrp = min(thmmin_ihrp, thmmod);
+							expmin_ihrp = min(expmin_ihrp, expmod);
+							caumin_ihrp = min(caumin_ihrp, caumod);
 						} else if (mtypeid === 'iscb') {
 							stats.cost_restock += (slot.getEffectiveAttrValue('ammoclip') + slot.getEffectiveAttrValue('ammomax')) * (slot.getEffectiveAttrValue('ammocost') || 0);
 						}
@@ -2479,18 +2493,10 @@ window.edsy = new (function() {
 			var caures = slot.getEffectiveAttrValue('caures');
 			stats._armour = ((armour * (1 + stats.hullbst / 100)) + stats.hullrnf);
 			// armour resistance is stacking-penalized INCLUDING the bulkheads!
-			stats._akinres = getEffectiveDamageResistance(kinres, (1 - kinmod_ihrp) * 100);
-			stats._athmres = getEffectiveDamageResistance(thmres, (1 - thmmod_ihrp) * 100);
-			stats._aexpres = getEffectiveDamageResistance(expres, (1 - expmod_ihrp) * 100);
-			stats._acaures = getEffectiveDamageResistance(caures, (1 - caumod_ihrp) * 100);
-			
-			/* TODO: verify that these reports are accurate; they match neither the old nor the new formula and don't really make any sense
-			https://github.com/EDCD/coriolis/issues/483
-			https://edsy.org/#/L=FO00000H4C0S00,,,9opG05G0044v7iAkPcEkPcIkPcAAo00AOs00Acw00AsY00B9I00BLo00BZY00,,mpW10iG0BG_W0
-			thmres = -33, thmmod_ihrp = (1-40.3/100), athmres = 32.1 vs 20.6 expected
-			https://edsy.org/#/L=F900000H4C0S00,,,9opG05I0044v7iAkPcEkPcIkPcAAo00AQQ00AeU00Au600B9I00BLo00Bb600,15OG05I0044zmfAqpDEqpDIqpD,mpT16yG05I0044zmfAqpDEqpDIqpD15OG05I0044zmfAqpDEqpDIqpD12GG0BK0044qpD8oPcEwPcGoPc
-			thmres = -36.99, thmmod_ihrp = (1-15.47/100)*(1-15.03/100)*(1-15.03/100)*(1-41.79/100), athmres = 45.6 vs 40.7 expected
-			*/
+			stats._akinres = getEffectiveDamageResistance(kinres, (1 - kinmod_ihrp) * 100, 0, (1 - kinmin_ihrp) * 100);
+			stats._athmres = getEffectiveDamageResistance(thmres, (1 - thmmod_ihrp) * 100, 0, (1 - thmmin_ihrp) * 100);
+			stats._aexpres = getEffectiveDamageResistance(expres, (1 - expmod_ihrp) * 100, 0, (1 - expmin_ihrp) * 100);
+			stats._acaures = getEffectiveDamageResistance(caures, (1 - caumod_ihrp) * 100, 0, (1 - caumin_ihrp) * 100);
 			
 			// derived Weapon stats
 			var slot = this.getSlot('component', CORE_ABBR_SLOT.PD);
