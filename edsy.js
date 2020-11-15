@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [37442,36241,37441,37441]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20200914;
+	var VERSIONS = [36241,36241,37441,37541]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20201115;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -609,13 +609,23 @@ window.edsy = new (function() {
 	}; // getMassCurveMultiplier()
 	
 	
-	var getEffectiveDamageResistance = function(baseres, extrares, threshold, curve) {
+	var getEffectiveDamageResistance = function(baseres, extrares, exemptres) {
 		// https://forums.frontier.co.uk/showthread.php/266235-Kinetic-Resistance-Calculation?p=4230114&viewfull=1#post4230114
 		// https://forums.frontier.co.uk/showthread.php/286097-Shield-Booster-Mod-Calculator?p=4998592&viewfull=1#post4998592
-		threshold = threshold || 30;
+		/* old
+		var threshold = 30;
 		var rawres = 1 - ((1 - baseres / 100) * (1 - extrares / 100));
 		var maxres = 1 - ((1 - baseres / 100) * (1 - threshold / 100));
 		return 100 * (rawres - max(0, pow((rawres - maxres) / 2, curve || 1)));
+		*/
+		baseres = baseres || 0;
+		extrares = extrares || 0;
+		exemptres = exemptres || 0;
+		var lo = max(30, baseres);
+		var hi = 65; // half credit past 30% means 100% -> 30 + (100 - 30) / 2 = 65%
+		var expected = (1 - ((1 - baseres / 100) * (1 - extrares / 100))) * 100;
+		var actual = (expected < 30) ? expected : ( lo + (expected - lo) / (100 - lo) * (hi - lo) ); // remap range [lo..100] to [lo..hi]
+		return (1 - ((1 - exemptres / 100) * (1 - actual / 100))) * 100;
 	}; // getEffectiveDamageResistance()
 	
 	
@@ -2452,10 +2462,10 @@ window.edsy = new (function() {
 						* getMassCurveMultiplier(mass_hull, minmass, optmass, maxmass, minmul, optmul, maxmul) / 100
 				) + stats.shieldrnf;
 				// shield resistance is stacking-penalized EXCLUDING the generator!
-				stats._skinres = getEffectiveDamageResistance(kinres, (1 - kinmod_usb) * 100);
-				stats._sthmres = getEffectiveDamageResistance(thmres, (1 - thmmod_usb) * 100);
-				stats._sexpres = getEffectiveDamageResistance(expres, (1 - expmod_usb) * 100);
-				stats._scaures = getEffectiveDamageResistance(caures, (1 - caumod_usb) * 100);
+				stats._skinres = getEffectiveDamageResistance(0, (1 - kinmod_usb) * 100, kinres);
+				stats._sthmres = getEffectiveDamageResistance(0, (1 - thmmod_usb) * 100, thmres);
+				stats._sexpres = getEffectiveDamageResistance(0, (1 - expmod_usb) * 100, expres);
+				stats._scaures = getEffectiveDamageResistance(0, (1 - caumod_usb) * 100, caures);
 			} else {
 				stats._shields = 0;
 			}
@@ -2469,21 +2479,17 @@ window.edsy = new (function() {
 			var caures = slot.getEffectiveAttrValue('caures');
 			stats._armour = ((armour * (1 + stats.hullbst / 100)) + stats.hullrnf);
 			// armour resistance is stacking-penalized INCLUDING the bulkheads!
-			stats._akinres = getEffectiveDamageResistance(0, (1 - (1 - kinres / 100) * kinmod_ihrp) * 100);
-			stats._athmres = getEffectiveDamageResistance(0, (1 - (1 - thmres / 100) * thmmod_ihrp) * 100);
-			stats._aexpres = getEffectiveDamageResistance(0, (1 - (1 - expres / 100) * expmod_ihrp) * 100);
-			stats._acaures = getEffectiveDamageResistance(0, (1 - (1 - caures / 100) * caumod_ihrp) * 100);
+			stats._akinres = getEffectiveDamageResistance(kinres, (1 - kinmod_ihrp) * 100);
+			stats._athmres = getEffectiveDamageResistance(thmres, (1 - thmmod_ihrp) * 100);
+			stats._aexpres = getEffectiveDamageResistance(expres, (1 - expmod_ihrp) * 100);
+			stats._acaures = getEffectiveDamageResistance(caures, (1 - caumod_ihrp) * 100);
 			
-			/* TODO: figure out new armor resist stacking
+			/* TODO: verify that these reports are accurate; they match neither the old nor the new formula and don't really make any sense
 			https://github.com/EDCD/coriolis/issues/483
-			https://issues.frontierstore.net/issue-detail/1215
-			https://edsy.org/#/L=E400H4C0S0,,,9opGbHKAAo0AQQ0AeU0Au61B9I1BLo1Bb60,,mpT16yGbHK16yGbHKmpV12GGhHq = kinres:36.4, thmres:41.1, expres:35.2
-			stats._athmres = getEffectiveDamageResistance(0, (1 - (1 - thmres / 100) * thmmod_ihrp) * 100); // 35.9
-			stats._athmres = getEffectiveDamageResistance(0, (1 - (1 - thmres / 100) * thmmod_ihrp) * 100, 40.4); // 41.1
-			stats._athmres = getEffectiveDamageResistance(thmres, (1 - thmmod_ihrp) * 100); // 23.0
-			stats._athmres = getEffectiveDamageResistance(thmres, (1 - thmmod_ihrp) * 100, 56.5); // 41.1
-			stats._athmres = getEffectiveDamageResistance((1 - thmmod_ihrp) * 100, thmres); // 41.9
-			stats._athmres = getEffectiveDamageResistance((1 - thmmod_ihrp) * 100, thmres, 0); // -
+			https://edsy.org/#/L=FO00000H4C0S00,,,9opG05G0044v7iAkPcEkPcIkPcAAo00AOs00Acw00AsY00B9I00BLo00BZY00,,mpW10iG0BG_W0
+			thmres = -33, thmmod_ihrp = (1-40.3/100), athmres = 32.1 vs 20.6 expected
+			https://edsy.org/#/L=F900000H4C0S00,,,9opG05I0044v7iAkPcEkPcIkPcAAo00AQQ00AeU00Au600B9I00BLo00Bb600,15OG05I0044zmfAqpDEqpDIqpD,mpT16yG05I0044zmfAqpDEqpDIqpD15OG05I0044zmfAqpDEqpDIqpD12GG0BK0044qpD8oPcEwPcGoPc
+			thmres = -36.99, thmmod_ihrp = (1-15.47/100)*(1-15.03/100)*(1-15.03/100)*(1-41.79/100), athmres = 45.6 vs 40.7 expected
 			*/
 			
 			// derived Weapon stats
