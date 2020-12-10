@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 37543,
-	edsy_versions_db : [36241,36241,37543,37441], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20201115,
+	version : 37544,
+	edsy_versions_db : [36241,36241,37544,37441], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20201210,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -2411,7 +2411,7 @@ var eddb = {
 		71330 : { mtype:'hfc', cost: 1167360, name:'Fragment Cannon',             mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.02, boottime:0,dps:249.273, damage: 4.570, distdraw:0.570, thmload:1.13, pierce: 45, maximumrng:2000, shotspd: 667, rof:4.545, bstint:0.220,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 4.1, minbrc:40, maxbrc:80, jitter:5.0, kinwgt:100, thmwgt:0, dmgfall:1800, ammocost:17, fdid:128049450, fdname:'Hpt_Slugshot_Fixed_Large', eddbid:862 },
 		71331 : { mtype:'hfc', cost: 1751040, name:'Fragment Cannon',             mount:'G',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.55, boottime:0,dps:215.429, damage: 3.770, distdraw:0.810, thmload:1.40, pierce: 45, maximumrng:2000, shotspd: 667, rof:4.762, bstint:0.210,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 3.4, minbrc:40, maxbrc:80, jitter:5.0, kinwgt:100, thmwgt:0, dmgfall:1800, ammocost:17, fdid:128671321, fdname:'Hpt_Slugshot_Gimbal_Large', eddbid:1454 },
 		71332 : { mtype:'hfc', cost: 5836800, name:'Fragment Cannon',             mount:'T',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.29, boottime:0,dps:143.280, damage: 2.985, distdraw:0.370, thmload:0.74, pierce: 45, maximumrng:2000, shotspd: 667, rof:4.000, bstint:0.250,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 2.7, minbrc:40, maxbrc:80, jitter:5.0, kinwgt:100, thmwgt:0, dmgfall:1800, ammocost:17, fdid:128671322, fdname:'Hpt_Slugshot_Turret_Large', eddbid:1455 },
-		71334 : { mtype:'hfc', cost: 1751040, name:'Pacifier Frag-Cannon',        mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.02, boottime:0,dps:216.000, damage: 3.960, distdraw:0.570, thmload:1.13, pierce: 45, maximumrng:3000, shotspd:1000, rof:4.545, bstint:0.220,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 3.1, minbrc:40, maxbrc:80, jitter:1.7, kinwgt:100, thmwgt:0, dmgfall:1800, ammocost:17, fdid:128671343, fdname:'Hpt_Slugshot_Fixed_Large_Range', eddbid:1478 }, // powerplay // verify
+		71334 : { mtype:'hfc', cost: 1751040, name:'Pacifier Frag-Cannon',        mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.02, boottime:0,dps:216.000, damage: 3.960, distdraw:0.570, thmload:1.13, pierce: 45, maximumrng:3000, shotspd:1000, rof:4.545, bstint:0.220,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 3.6, minbrc:40, maxbrc:80, jitter:1.7, kinwgt:100, thmwgt:0, dmgfall:2800, ammocost:17, fdid:128671343, fdname:'Hpt_Slugshot_Fixed_Large_Range', eddbid:1478 }, // powerplay
 		
 		80190 : { mtype:'hm',  cost:   24260, name:'Mine Launcher',               mount:'F',              class:1, rating:'I', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0, dps:44.000, damage:44.000,                 thmload:5.00, pierce: 60,                            rof:1.000, bstint:1.000,                      ammoclip: 1, ammomax:  36,            rldtime:2.0,              minbrc: 0, maxbrc: 0,             expwgt:26/.44, thmwgt:18/.44, ammocost:209, fdid:128049500, fdname:'Hpt_MineLauncher_Fixed_Small', eddbid:880 },
 		80191 : { mtype:'hm',  cost:   36390, name:'Shock Mine Launcher',         mount:'F',              class:1, rating:'I', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0, dps:32.000, damage:32.000,                 thmload:5.00, pierce: 60,                            rof:1.000, bstint:1.000,                      ammoclip: 1, ammomax:  36,            rldtime:2.0, brcdmg: 9.6, minbrc: 0, maxbrc: 0,             expwgt:20/.32, thmwgt:12/.32, ammocost:209, fdid:128671448, fdname:'Hpt_MineLauncher_Fixed_Small_Impulse', eddbid:1523 },
