@@ -1103,6 +1103,7 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 #outfitting_modules_picker {
 	flex: 1 1 auto;
 	width: 10px;
+	position: relative;
 }
 
 #outfitting_modules .group > HEADER {
