@@ -2118,6 +2118,7 @@ window.edsy = new (function() {
 		
 		
 		setPowerDist: function(sys, eng, wep) {
+			// TODO: eng drains wep first in a tie? S,E,E,E -> 2,4,0 not 1.5,4,0.5
 			this.powerdist.sys = sys = min(max(sys | 0, 0                                           ), MAX_POWER_DIST);
 			this.powerdist.eng = eng = min(max(eng | 0, 0, (TOTAL_POWER_DIST - MAX_POWER_DIST) - sys), MAX_POWER_DIST, TOTAL_POWER_DIST - sys);
 			this.powerdist.wep = TOTAL_POWER_DIST - sys - eng;
@@ -2127,6 +2128,7 @@ window.edsy = new (function() {
 		
 		
 		changePowerDist: function(dist0, delta) {
+			// TODO: eng drains wep first in a tie? S,E,E,E -> 2,4,0 not 1.5,4,0.5
 			if (!(dist0 in this.powerdist))
 				return false;
 			var dist1 = ((dist0 === 'sys') ? 'eng' : 'sys');
@@ -2547,8 +2549,8 @@ window.edsy = new (function() {
 			var groupSlots2 = {};
 			for (var slotgroup in GROUP_LABEL) {
 				var compgroup = ((slotgroup === 'military') ? 'internal' : slotgroup);
-				groupSlots1[compgroup] = [];
-				groupSlots2[compgroup] = [];
+				groupSlots1[compgroup] = groupSlots1[compgroup] || [];
+				groupSlots2[compgroup] = groupSlots2[compgroup] || [];
 				var slot;
 				for (var slotnum = 0;  slot = base.getSlot(slotgroup, slotnum);  slotnum++) {
 					if (slot.getModule())
