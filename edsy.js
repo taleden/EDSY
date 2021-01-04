@@ -9615,9 +9615,12 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			renameStoredBuild(namehash);
 			break;
 			
-		case 'delete':
+		case 'outfitting_fit_stored_delete':
 			deleteStoredBuild(namehash);
 			break;
+		
+		default:
+			console.log('onUIFitSettingsStoredClick({target.id="'+el.id+'"})');
 		}
 	}; // onUIFitSettingsStoredClick()
 	
