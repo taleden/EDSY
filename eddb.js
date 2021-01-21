@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 37544,
-	edsy_versions_db : [36241,36241,37544,37441], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20201210,
+	version : 37546,
+	edsy_versions_db : [36241,36241,37546,37441], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20210121,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1212,6 +1212,7 @@ var eddb = {
 		{ attr:'shps',                                        abbr:'SHPS', name:'Sustained HPS',        unit:'/s',   bad:1, min:0,                  default:0, scale:1,             desc:'Waste heat generated per second, including reload time' },
 		{ attr:'pierce',     fdattr:'ArmourPenetration',      abbr:'Prc',  name:'Armour Piercing',                          min:0,                  default:0, scale:0,             desc:'Armour pierce rating (compare to target ship armour hardness)' }, // h*
 		{ attr:'maximumrng', fdattr:'MaximumRange',           abbr:'Rng',  name:'Maximum Range',        unit:'M',           min:0,                  default:0, scale:0,             desc:'Maximum range (in meters)' }, // h*,upd
+		{ attr:'dmgfall',    fdattr:'FalloffRange',           abbr:'FOff', name:'Damage Falloff Start', unit:'M',           min:0,                  default:0, scale:0,             desc:'Range at which applied damage will begin to decrease (in meters)' }, // h*
 		{ attr:'shotspd',    fdattr:'ShotSpeed',              abbr:'Spd',  name:'Shot Speed',           unit:'M/s',         min:0,                  default:0, scale:0,             desc:'Projectile speed (in meters per second)' }, // h*,upd
 		{ attr:'rof',        fdattr:'RateOfFire',             abbr:'ROF',  name:'Rate of Fire',         unit:'/s',          min:0,                  default:1, scale:1,             desc:'Raw rate of fire (in shots per second), not including reload time' }, // h*,ucl,uhsl,upd
 		{ attr:'srof',                                        abbr:'SROF', name:'Sustained ROF',        unit:'/s',          min:0,                  default:1, scale:1,             desc:'Sustained rate of fire (in shots per second), including reload time' },
@@ -1348,7 +1349,6 @@ var eddb = {
 		{ attr:null,         fdattr:'BoostSpeedMultiplier' },
 		{ attr:null,         fdattr:'BoostAugmenterPowerUse' },
 		{ attr:'dmgprot',    fdattr:'ModuleDefenceAbsorption',abbr:'DmgP', name:'Damage Protection',    unit:'%',           min:0, max:100,         default:0, scale:0,             desc:'Portion of incoming module damage that is absorbed' }, // imrp
-		{ attr:'dmgfall',    fdattr:'FalloffRange',           abbr:'FOff', name:'Damage Falloff Start', unit:'M',           min:0,                  default:0, scale:0,             desc:'Range at which applied damage will begin to decrease (in meters)' }, // h*
 		{ attr:'scanrngmod', fdattr:'DSS_RangeMult',          abbr:'RngM', name:'Scan Range Multiplier',unit:'%',                                   default:0, scale:1, modmod:100, desc:'Modifies maximum range to scan stellar bodies' }, // TODO: delete?
 		{ attr:'scanangmod', fdattr:'DSS_AngleMult',          abbr:'AngM', name:'Scan Angle Multiplier',unit:'%',                                   default:0, scale:1, modmod:100, desc:'Modifies maximum angle to scan stellar bodies' }, // TODO: delete?
 		{ attr:'scanratemod',fdattr:'DSS_RateMult',           abbr:'RteM', name:'Scan Rate Multiplier', unit:'%',                                   default:0, scale:1, modmod:100, desc:'Modifies time to scan stellar bodies' }, // TODO: delete?
