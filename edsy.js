@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [36241,36241,37441,37545]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20210104;
+	var VERSIONS = [37546,36241,37441,37546]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20210121;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -229,6 +229,7 @@ window.edsy = new (function() {
 	var populateDOMSelectStoreds = function(select, storeds, namehash, offset) {
 		var selectedIndex = (select.selectedIndex ? -1 : 0);
 		storeds = storeds || EMPTY_ARR;
+		offset = offset || 0;
 		setDOMSelectLength(select, offset + storeds.length);
 		for (var i = 0;  i < storeds.length;  i++) {
 			select.options[offset+i].value = storeds[i].namehash;
@@ -8587,7 +8588,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 				var namehash = selects[1].value;
 				if (oldnamehash && namehash === oldnamehash)
 					namehash = newnamehash;
-				populateDOMSelectStoreds(selects[1], current.stored.shipStoreds[shipid], namehash, 1);
+				populateDOMSelectStoreds(selects[1], current.stored.shipStoreds[shipid], namehash, 2);
 				if (selects[1].selectedIndex < 0)
 					selects[1].selectedIndex = 0;
 			}
@@ -8641,7 +8642,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		tbody.appendChild(tr);
 		var els = document.forms.analysis.elements;
 		populateDOMSelectStoreds(els.retrofit_builds_target_, current.stored.shipStoreds[0], namehash, 1);
-		populateDOMSelectStoreds(els.retrofit_builds_base_, current.stored.shipStoreds[shipid], '', 1);
+		populateDOMSelectStoreds(els.retrofit_builds_base_, current.stored.shipStoreds[shipid], '', 2);
 		els.retrofit_builds_target_.focus();
 		els.retrofit_builds_base_.selectedIndex = 0;
 		
@@ -8664,7 +8665,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		var n = e.target.name.split('_')[3];
 		var els = document.forms.analysis.elements;
 		var select = els['retrofit_builds_base_' + n];
-		populateDOMSelectStoreds(select, current.stored.shipStoreds[shipid], '', 1);
+		populateDOMSelectStoreds(select, current.stored.shipStoreds[shipid], '', 2);
 		select.selectedIndex = 0;
 	}; // onUIAnalysisRetrofitSetupTargetChange()
 	
@@ -8711,10 +8712,12 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		for (var i = 0;  i < checkboxes.length;  i++) {
 			if (checkboxes[i].checked && checkboxes[i].name.startsWith('retrofit_builds_show_')) {
 				var n = checkboxes[i].name.split('_')[3];
-				var stored1 = current.stored.shipNamehashStored[0][els['retrofit_builds_base_' + n].value];
-				var stored2 = current.stored.shipNamehashStored[0][els['retrofit_builds_target_' + n].value];
-				var build1 = (stored1 ? Build.fromHash(stored1.buildhash) : null);
-				var build2 = (stored2 ? Build.fromHash(stored2.buildhash) : current.fit);
+				var namehash1 = els['retrofit_builds_base_' + n].value;
+				var namehash2 = els['retrofit_builds_target_' + n].value;
+				var stored1 = current.stored.shipNamehashStored[0][namehash1];
+				var stored2 = current.stored.shipNamehashStored[0][namehash2];
+				var build1 = (stored1 ? Build.fromHash(stored1.buildhash) : (namehash1 ? null : current.fit));
+				var build2 = (stored2 ? Build.fromHash(stored2.buildhash) : (namehash2 ? null : current.fit));
 				current.retrofit.push({ name:(stored2 ? stored2.name : '(Current Build)'), steps:build2.getRetrofitData(build1, limdisc, limdisceng, limbpgrade, limbproll, limexpeffect, limrolls) });
 			}
 		}
