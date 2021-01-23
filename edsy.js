@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [37546,36241,37441,37546]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20210121;
+	var VERSIONS = [37546,36241,37441,37547]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20210123;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -4255,7 +4255,7 @@ window.edsy = new (function() {
 			if (!tr) {
 				tr = createUIShipyardRow(UI_SHIPYARD_STOREDBUILD_COLS);
 				tr.id = 'shipyard_storedbuild.' + namehash;
-				tr.cells[0].innerHTML = '<button name="storedbuild_reload" value="'+namehash+'" class="label">'+encodeHTML(stored.name)+'</button>';
+				tr.cells[0].innerHTML = '<button name="storedbuild_reload" value="'+namehash+'" class="label" title="'+encodeHTML(stored.name)+'">'+encodeHTML(stored.name)+'</button>';
 				tr.cells[1].innerHTML = '<button name="storedbuild_rename" value="'+namehash+'">' + HTML_ICON['rename'] + '</button><button name="storedbuild_delete" value="'+namehash+'">'+ HTML_ICON['delete'] + '</button>';
 				tr.cells[2].innerHTML = eddb.ship[build.getShipID()].name;
 				tbody.appendChild(tr);
