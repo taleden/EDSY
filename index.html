@@ -6,7 +6,7 @@
 EDSY was created using assets and imagery from Elite Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
 It is not endorsed by nor reflects the views or opinions of Frontier Developments and no employee of Frontier Developments was involved in the making of it.
 
-Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2020 taleden
+Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2021 taleden
 and is provided under a Creative Commons Attribution-NonCommercial 4.0 International License (http://creativecommons.org/licenses/by-nc/4.0/).
 
 The Elite Dangerous game logic and data in this file remains the property of Frontier Developments plc, and is used here as authorized by
@@ -14,12 +14,16 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 -->
 		<title>EDSY</title>
 		<meta name="application-name" content="EDSY">
-		<meta name="edsy-versions-html" id="edsy_versions_html" content="37546,36241,36241,37546"><!-- HTML,CSS,DB,JS -->
-		<meta name="last-modified" id="last_modified" content="20210121">
+		<meta name="edsy-versions-html" id="edsy_versions_html" content="37547,36241,36241,37546"><!-- HTML,CSS,DB,JS -->
+		<meta name="last-modified" id="last_modified" content="20210122">
 		<meta name="author" content="taleden">
 		<meta name="description" content="EDSY is a ship outfitting tool for Elite Dangerous">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; form-action https://inara.cz; object-src 'none'; style-src 'self' 'unsafe-inline'">
+		<script async src="nocache"></script>
+		<script defer src="pako.min.js"></script>
+		<script defer src="eddb.js"></script>
+		<script defer src="edsy.js"></script>
 		<link rel="stylesheet" type="text/css" href="edsy.css">
 		<link rel="icon" sizes="16x16 32x32" href="favicon.ico">
 		<link rel="icon" sizes="16x16" href="favicon-16.png">
@@ -29,7 +33,6 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 		<link rel="icon" sizes="196x196" href="favicon-196.png">
 		<link rel="mask-icon" href="favicon.svg" color="#ff7f00">
 		<link rel="apple-touch-icon-precomposed" href="favicon-152.png">
-		<script type="application/javascript" src="nocache"></script>
 	</head>
 	<body class="">
 		<div id="svg_defs">
@@ -1230,8 +1233,5 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 				</div>
 			</form>
 		</div>
-		<script type="application/javascript" src="pako.min.js"></script>
-		<script type="application/javascript" src="eddb.js"></script>
-		<script type="application/javascript" src="edsy.js"></script>
 	</body>
 </html>
