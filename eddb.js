@@ -1604,6 +1604,8 @@ var eddb = {
 		zir      : { name:'Zirconium', mattype:'raw', matgrp:7, rarity:2, fdid:128672335, fdname:'Zirconium' },
 	},
 	blueprint : {
+		special : { name:'Special', maxgrade:1 },
+		
 		misc_lw : { name:'Lightweight', maxgrade:5, mass:[-45,-55,-65,-75,-85], integ:[-10,-20,-30,-40,-50], mats:[ {pho:1}, {saal:1, man:1}, {saal:1, man:1, coce:1}, {condco:1, phal:1, prlial:1}, {coce:1, prlial:1, prraal:1} ], fdname:'Misc_LightWeight' },
 		misc_lw4 : { name:'Lightweight', maxgrade:4, mass:[-45,-55,-65,-75], integ:[-10,-20,-30,-40], mats:[ {pho:1}, {saal:1, man:1}, {saal:1, man:1, coce:1}, {condco:1, phal:1, prlial:1} ], fdname:'Misc_LightWeight' },
 		misc_rf : { name:'Reinforced', maxgrade:5, mass:[30,60,90,120,150], integ:[60,120,180,240,300], mats:[ {nic:1}, {nic:1, shem:1}, {nic:1, shem:1, tun:1}, {zin:1, tun:1, mol:1}, {hideco:1, mol:1, tec:1} ], fdname:'Misc_Reinforced' },
@@ -1853,6 +1855,7 @@ var eddb = {
 			name:'Experimental',
 			modulenames:{},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
+			modifiable:['mass','pwrdraw','damage','ammoclip','ammomax'],
 		},
 		
 		hexax : {
@@ -2025,7 +2028,7 @@ var eddb = {
 			name:'Point Defence',
 			modulenames:{},
 			keyattrs:['maximumrng','ammomax'],
-			modifiable:['mass','integ','pwrdraw','_X_ damage','_X_ thmload','_X_ maximumrng','_X_ bstint','_X_ ammoclip','ammomax','rldtime','_X_ jitter'],
+			modifiable:['mass','integ','pwrdraw','_X_ damage','thmload','maximumrng','_X_ bstint','_X_ ammoclip','ammomax','rldtime','_X_ jitter'],
 			blueprints:['upd_ammo','misc_lw','misc_rf','misc_sh'],
 		},
 		
