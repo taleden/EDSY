@@ -5167,8 +5167,11 @@ window.edsy = new (function() {
 			var numModules=0, numModulesOW=0, extras=false;
 			extras = importdata.imports || importdata.modules || importdata.options;
 			for (var namehash in (importdata.modules || EMPTY_OBJ)) {
-				numModules += 1;
-				numModulesOW += (current.stored.moduleNamehashStored[0][namehash] ? 1 : 0);
+				// skip builtins, if they snuck in somehow
+				if (!hashDecodeS(namehash).startsWith(" ")) {
+					numModules += 1;
+					numModulesOW += (current.stored.moduleNamehashStored[0][namehash] ? 1 : 0);
+				}
 			}
 			if (extras) {
 				var status = document.getElementById('popup_status');
@@ -5285,18 +5288,22 @@ window.edsy = new (function() {
 					setStoredImport(importhash, current.importdata.imports[importhash]);
 				}
 				for (var namehash in (current.importdata.modules || EMPTY_OBJ)) {
-					var modulehash = current.importdata.modules[namehash];
-					var modid = Slot.getStoredHashModuleID(modulehash);
-					var stored = {
-						modid:modid,
-						namehash:namehash,
-						name:hashDecodeS(namehash),
-						modulehash:modulehash
-					};
-					if (!current.stored.moduleNamehashStored[modid])
-						current.stored.moduleNamehashStored[modid] = {};
-					current.stored.moduleNamehashStored[0][namehash] = current.stored.moduleNamehashStored[modid][namehash] = stored;
-					current.stored.moduleStoreds[0] = current.stored.moduleStoreds[modid] = null;
+					// skip builtins
+					var name = hashDecodeS(namehash);
+					if (!name.startsWith(" ")) {
+						var modulehash = current.importdata.modules[namehash];
+						var modid = Slot.getStoredHashModuleID(modulehash);
+						var stored = {
+							modid:modid,
+							namehash:namehash,
+							name:name,
+							modulehash:modulehash
+						};
+						if (!current.stored.moduleNamehashStored[modid])
+							current.stored.moduleNamehashStored[modid] = {};
+						current.stored.moduleNamehashStored[0][namehash] = current.stored.moduleNamehashStored[modid][namehash] = stored;
+						current.stored.moduleStoreds[0] = current.stored.moduleStoreds[modid] = null;
+					}
 				}
 				for (var modid in current.stored.moduleNamehashStored) {
 					if (!current.stored.moduleStoreds[modid]) {
@@ -6056,6 +6063,9 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 				}
 				for (var c = ((mtypeid === 'cls' || mtypeid === 'cs') ? szcls : MAX_SLOT_CLASS);  c >= szcls;  c--) {
 					classes += ' fitsize' + c;
+				}
+				if (stored.name.startsWith(" ")) {
+					classes += ' builtin';
 				}
 				divRow.className = classes;
 				var label = document.createElement('label');
@@ -7360,8 +7370,20 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		if (!cache.feature.storage)
 			return false;
 		
+		// it's a little hacky, but stick on all the builtin stored modules (which are specially named with leading spaces)
 		var item = 'edsy_modules' + (current.beta ? '_beta' : '');
-		var data = (window.localStorage.getItem(item) || '').split('/');
+		var data = (window.localStorage.getItem(item) || '').split('/').concat([
+			"0W0o120W1J1b1b1h1b1o0i0W1C1N0h18130i0W1K13=FK4lG03Q0072_uK6ypDAuUkIvcQUoPcX000b000",
+			"0W0r110W161J140i0W191I0h1612=FAdsG05G0060upD6uSA8qpDE_PcG_GfKsPc",
+			"0W0n190W141J1J0i0W151I1u0o=F2jwG09G001P000",
+			"0W0p110W1G1G0i0W111I0h1F13=FA5UG07G0040sPc6oPc8yYqCoPc",
+			"0W0p110W1J170i0W1B1I0h1K1I=F7PcG09G0034-hXcvLLgtLL",
+			"0W0o120l160W1I1X1f1i0i0W1C1I0h18130i0W1613=FKZyG07I00710KV8w58T000YoPcb000f000r900",
+			"0W0o120W151k1w1v1j1b0i0W18130h131X1r1p1q1f1Z=FLIqG02G0050ypD4sPc8y00C_00Gu00",
+			"0W0m110W1B1N1J0i0W161J0h1C1I=FDwoG03G0056y008y00IoPcMupDQ_Pc",
+			"0W0m160W15131D0i0W1C1N0h1J1e=FCTqG03G0032_pD50009000",
+			"0W0m190l1K0W1G140i0W1C1N0h161l1Z=FCzYG05G0042_pD6y00GkPcL000"
+		]);
 		for (var i = 0;  i < data.length;  i++) {
 			var entry = data[i].split('=');
 			if (entry.length === 2) {
@@ -7398,7 +7420,9 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		
 		var data = [];
 		for (var namehash in current.stored.moduleNamehashStored[0]) {
-			data.push(namehash + '=' + current.stored.moduleNamehashStored[0][namehash].modulehash);
+			// skip builtins
+			if (!hashDecodeS(namehash).startsWith(" "))
+				data.push(namehash + '=' + current.stored.moduleNamehashStored[0][namehash].modulehash);
 		}
 		var item = 'edsy_modules' + (current.beta ? '_beta' : '');
 		window.localStorage.setItem(item, data.join('/'));
@@ -7455,13 +7479,14 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		}
 		namehash = select.value || '';
 		var storedhash = (namehash ? current.stored.moduleNamehashStored[0][namehash] : stockhash);
+		var builtin = hashDecodeS(namehash).startsWith(" ");
 		
 		select.disabled = (current.outfitting_focus === 'module' || current.group === 'ship' || !modid);
 		document.getElementById('outfitting_details_stored_reload').disabled = (!namehash || modulehash === storedhash);
-		document.getElementById('outfitting_details_stored_save').disabled = (!namehash || modulehash === storedhash)
+		document.getElementById('outfitting_details_stored_save').disabled = (!namehash || modulehash === storedhash || builtin)
 		document.getElementById('outfitting_details_stored_saveas').disabled = (!modulehash || (current.outfitting_focus === 'slot' && current.group === 'ship'));
-		document.getElementById('outfitting_details_stored_rename').disabled = (!namehash);
-		document.getElementById('outfitting_details_stored_delete').disabled = (!namehash);
+		document.getElementById('outfitting_details_stored_rename').disabled = (!namehash || builtin);
+		document.getElementById('outfitting_details_stored_delete').disabled = (!namehash || builtin);
 		return true;
 	}; // updateUIDetailsStoredModuleControls()
 	
@@ -7493,6 +7518,10 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			name:hashDecodeS(namehash),
 			modulehash:modulehash
 		};
+		if (stored.name.startsWith(" ")) {
+			alert("Cannot overwrite a builtin module");
+			return false;
+		}
 		if (!current.stored.moduleNamehashStored[modid])
 			current.stored.moduleNamehashStored[modid] = {};
 		current.stored.moduleNamehashStored[0][namehash] = current.stored.moduleNamehashStored[modid][namehash] = stored;
@@ -7515,7 +7544,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	
 	var renameStoredModule = function(namehash) {
 		var stored = current.stored.moduleNamehashStored[0][namehash];
-		if (!namehash || !stored)
+		if (!namehash || !stored || stored.name.startsWith(" "))
 			return false;
 		var oldnamehash = namehash;
 		var name = stored.name;
@@ -7554,7 +7583,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	
 	var deleteStoredModule = function(namehash) {
 		var stored = current.stored.moduleNamehashStored[0][namehash];
-		if (!namehash || !stored)
+		if (!namehash || !stored || stored.name.startsWith(" "))
 			return false;
 		var name = stored.name;
 		if (!confirm("The stored module labeled\n\n    "+name+"\n\nwill be deleted. Are you sure?"))
@@ -10386,8 +10415,11 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		};
 		for (var namehash in current.stored.shipNamehashStored[0])
 			obj.builds[namehash] = current.stored.shipNamehashStored[0][namehash].buildhash;
-		for (var namehash in current.stored.moduleNamehashStored[0])
-			obj.modules[namehash] = current.stored.moduleNamehashStored[0][namehash].modulehash;
+		for (var namehash in current.stored.moduleNamehashStored[0]) {
+			// skip builtins
+			if (!hashDecodeS(namehash).startsWith(" "))
+				obj.modules[namehash] = current.stored.moduleNamehashStored[0][namehash].modulehash;
+		}
 		var json = JSON.stringify(obj, null, 2);
 		showUITextPopup(
 				'Below is a JSON object encoding all stored builds, modules, and other preferences, suitable for backup or transfer to another device or browser.',

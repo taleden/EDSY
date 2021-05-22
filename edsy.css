@@ -1233,6 +1233,10 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_modules_picker .togglebutton.fullname INPUT + DIV {
 	text-align: left;
 }
+#outfitting_modules_picker .row.stored.builtin .togglebutton INPUT + DIV {
+	background-color: var(--coloryellow1);
+	color: var(--coloryellow5);
+}
 #outfitting_modules_picker .togglebutton INPUT + DIV:empty::after {
 	display: inline;
 	content: '(empty)';
@@ -1240,9 +1244,15 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_modules_picker .togglebutton INPUT:checked + DIV {
 	border-color: var(--colororange5);
 }
+#outfitting_modules_picker .row.stored.builtin .togglebutton INPUT:checked + DIV {
+	border-color: var(--coloryellow5);
+}
 #page_body_outfitting.focusmodule #outfitting_modules_picker .togglebutton INPUT:checked + DIV {
 	background-color: var(--colororange5);
 	color: var(--colorblack);
+}
+#page_body_outfitting.focusmodule #outfitting_modules_picker .row.stored.builtin .togglebutton INPUT:checked + DIV {
+	background-color: var(--coloryellow5);
 }
 #outfitting_modules_picker .togglebutton INPUT:active + DIV,
 #outfitting_modules_picker .togglebutton.active INPUT + DIV {
