@@ -1963,7 +1963,7 @@ var eddb = {
 			name:'Rail Guns',
 			modulenames:{},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
-			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maximumrng','bstint','ammoclip','ammomax','_X_ rldtime','_X_ jitter','dmgfall'],
+			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maximumrng','bstint','ammoclip','ammomax','rldtime','_X_ jitter','dmgfall'],
 			blueprints:['wpn_hc','wpn_lw','wpn_lr','wpn_sr','wpn_stu'],
 			expeffects:['wpnx_db','hrgx_feca','wpnx_fc','wpnx_muse','wpnx_os','hrgx_plsl','wpnx_sd','hrgx_supe'],
 		},
