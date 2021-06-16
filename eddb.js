@@ -11,8 +11,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 'use strict';
 var eddb = {
 	version : 37546,
-	edsy_versions_db : [36241,36241,37546,37441], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20210121,
+	edsy_versions_db : [36241,37548,37548,37548], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20210616,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -884,7 +884,7 @@ var eddb = {
 			fdid:128915979, fdname:'Mamba', eddbid:38,
 			id:12, stype:'co', name:'Mamba', class:2, cost:55434290, retail:55867040,
 			topspd:310, bstspd:380, mnv:3, shields:270, armour:230, mass:250, fwdacc:NaN, revacc:NaN, latacc:NaN,
-			minthrust:77.42, boostcost:17, pitch:30, yaw:10, roll:75, pitchacc:180, yawacc:90, rollacc:200, minpitch:27, // verify minthrust
+			minthrust:77.42, boostcost:17, pitch:30, yaw:10, roll:75, pitchacc:180, yawacc:90, rollacc:200, minpitch:27, // verify minthrust // TODO: boostcost:16?
 			heatcap:165, heatdismin:2.05, heatdismax:41.63, fuelcost:50, fuelreserve:0.50, hardness:70, masslock:12, crew:2, // verify masslock
 			slots:{ // verify
 				hardpoint:[4,3,3,1,1],
