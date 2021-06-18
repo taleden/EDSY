@@ -3159,6 +3159,407 @@ window.edsy = new (function() {
 	}; // Build.getHashVersionMap()
 	
 	
+	Build.fromJournal = function(json, errors, slefheader) {
+		var fdevmap = getFdevImportMap();
+		var shipid = fdevmap.ship[json.Ship.trim().toUpperCase()];
+		var ship = eddb.ship[shipid];
+		if (!ship) {
+			if (errors) errors.push('Invalid ship: ' + json.Ship);
+			return null;
+		}
+		
+		var build = new Build(shipid);
+		if (json.ShipName && !build.setName(json.ShipName)) {
+			if (errors) errors.push('Invalid ship name: ' + json.ShipName);
+		}
+		if (json.ShipIdent && !build.setNameTag(json.ShipIdent)) {
+			if (errors) errors.push('Invalid ship ID: ' + json.ShipIdent);
+		}
+		if (slefheader && (slefheader['appName'] || '').trim().toUpperCase() === 'INARA') {
+			var inaraAcct = (slefheader['appCustomProperties'] || EMPTY_OBJ)['inaraCommanderID'];
+			var inaraShip = (slefheader['appCustomProperties'] || EMPTY_OBJ)['inaraShipID'];
+			if (!build.setInaraXref(inaraAcct, inaraShip)) {
+				if (errors) errors.push('Invalid Inara xref: ' + inaraAcct + '/' + inaraShip);
+			}
+		}
+		
+		// build and align slot index maps
+		var extravalue = 0;
+		var groupSlotnames = { ship:[] };
+		var groupSlotnums = { ship:[] };
+		for (var slotgroup in eddb.group) {
+			groupSlotnames[slotgroup] = [];
+			groupSlotnums[slotgroup] = [];
+			for (var s = 0;  s < ship.slots[slotgroup].length;  s++)
+				groupSlotnums[slotgroup].push(s);
+		}
+		var slotModule = {};
+		var slotNum = {};
+		var slotSize = {};
+		for (var m = 0;  m < (json.Modules || EMPTY_ARR).length;  m++) {
+			var modulejson = json.Modules[m];
+			var slotname = (modulejson.Slot || '').trim().toUpperCase();
+			var tokens = slotname.match(/^([A-Z]+)([0-9]*)(?:_SIZE([0-9]+))?$/);
+			var slotgroup = fdevmap.slotGroup[(tokens || EMPTY_OBJ)[1]];
+			if (groupSlotnames[slotgroup]) {
+				groupSlotnames[slotgroup].push(slotname);
+				slotModule[slotname] = modulejson;
+				slotNum[slotname] = fdevmap.slotNum[slotname] || parseInt(tokens[2] || 0);
+				slotSize[slotname] = ((slotgroup === 'hardpoint') ? 'TSMLH'.indexOf(slotname[0]) : parseInt(tokens[3] || 0));
+			} else if (slotname === 'PLANETARYAPPROACHSUITE') {
+				/* ignore the approach suite; someday maybe we'll handle it, til then we'll just pretend it doesn't exist
+				var fdname = (modulejson.Item || '').trim().toUpperCase();
+				if (fdname === 'INT_PLANETAPPROACHSUITE') {
+					extravalue += (modulejson.Value || 0);
+				}
+				*/
+			} else if (slotname === 'CARGOHATCH') {
+				// special handling for the cargo hatch, just for powered and priority settings
+				var slot = build.getSlot('ship', 'hatch');
+				var fdname = (modulejson.Item || '').trim().toUpperCase();
+				if (fdname === 'MODULARCARGOBAYDOOR' || fdname === 'MODULARCARGOBAYDOORFDL') {
+					if (!slot.setPowered(modulejson.On)) {
+						if (errors) errors.push(modulejson.Slot + ': Invalid powered setting: ' + modulejson.On);
+					}
+					if (!slot.setPriority(parseInt(modulejson.Priority) + 1)) {
+						if (errors) errors.push(modulejson.Slot + ': Invalid priority setting: ' + modulejson.Priority);
+					}
+				} else if (errors) errors.push(modulejson.Slot + ': Invalid module: ' + modulejson.Item);
+			}
+		}
+		
+		// get the hull and module costs
+		if ('HullValue' in json) {
+			var slot = build.getSlot('ship', 'hull');
+			if (!slot.setCost((json.HullValue || 0) + extravalue)) {
+				if (errors) errors.push('Invalid hull value: ' + json.HullValue + '+' + extravalue);
+			}
+		}
+		var modulesValueExpected = json['ModulesValue'];
+		var modulesValueActual = 0;
+		
+		for (var slotgroup in eddb.group) {
+			if (slotgroup !== 'component') {
+				// sort by descending size, then ascending index
+				groupSlotnames[slotgroup].sort(function(n1,n2) { return ((slotSize[n1] != slotSize[n2]) ? (slotSize[n2] - slotSize[n1]) : (slotNum[n1] - slotNum[n2])); });
+				groupSlotnums[slotgroup].sort(function(s1,s2) { return ((ship.slots[slotgroup][s1] != ship.slots[slotgroup][s2]) ? (ship.slots[slotgroup][s2] - ship.slots[slotgroup][s1]) : (s1 - s2)); });
+				// if import slots are too few, add gaps starting with the last one that can't be shifted
+				var numgaps = groupSlotnums[slotgroup].length - groupSlotnames[slotgroup].length;
+				if (numgaps > 0) {
+					var slotmove = [];
+					for (var i = 0;  i < groupSlotnames[slotgroup].length;  i++) {
+						slotmove[i] = numgaps;
+						while (slotmove[i] > 0 && slotSize[groupSlotnames[slotgroup][i]] > ship.slots[slotgroup][groupSlotnums[slotgroup][i + slotmove[i]]])
+							slotmove[i]--;
+					}
+					var gaps = [];
+					while (gaps.length < numgaps) {
+						var i = slotmove.length;
+						while (i > 0 && slotmove[i - 1] > gaps.length)
+							i--;
+						gaps.push(i);
+					}
+					while (gaps.length > 0)
+						groupSlotnames[slotgroup].splice(gaps.pop(), 0, null);
+				} else if (numgaps < 0) {
+					errors.push('Too many ' + slotgroup + ' slots');
+				}
+			}
+		}
+		
+		// map and decode import slots
+		for (var slotgroup in eddb.group) {
+			for (var i = 0, s = 0;  i < groupSlotnames[slotgroup].length && s < groupSlotnums[slotgroup].length;  i++, s++) {
+				var modulejson = slotModule[groupSlotnames[slotgroup][i]];
+				if (modulejson) {
+					var slotnum = ((slotgroup === 'component') ? slotNum[groupSlotnames[slotgroup][i]] : groupSlotnums[slotgroup][s]);
+					var slot = build.getSlot(slotgroup, slotnum);
+					if (slot) {
+						var fdname = (modulejson.Item || '').trim().toUpperCase();
+						var modid = fdevmap.shipModule[shipid][fdname] || fdevmap.module[fdname];
+						if (modid > 0) {
+							if (slot.setModuleID(modid, true)) {
+								if (!current.option.experimental && !slot.setModuleID(modid)) {
+									if (errors) errors.push(modulejson.Slot + getModuleLabel(this.getModule()) + ' requires Experimental Mode');
+								}
+								if ('Value' in modulejson) {
+									modulesValueExpected -= modulejson.Value;
+									if (!slot.setCost(modulejson.Value)) {
+										if (errors) errors.push(modulejson.Slot + ': Invalid value: ' + modulejson.Value);
+									}
+								} else {
+									modulesValueActual += slot.getCost();
+								}
+								var mtypeid = slot.getModule().mtype;
+								if (modulejson.Engineering) {
+									var fdname = (modulejson.Engineering.BlueprintName || '').trim().toUpperCase();
+									var bpid = fdevmap.mtypeBlueprint[mtypeid][fdname];
+									var bpgrade = 0;
+									var bproll = 0;
+									if (bpid) {
+										bpgrade = parseInt(modulejson.Engineering.Level);
+										// pre-3.0 utility ammo blueprints only had a grade 3, which now has to be grade 1
+										if (fdname === 'CHAFFLAUNCHER_CHAFFCAPACITY' || fdname === 'HEATSINKLAUNCHER_HEATSINKCAPACITY' || fdname === 'POINTDEFENCE_POINTDEFENSECAPACITY')
+											bpgrade = 1;
+										bproll = parseFloat(modulejson.Engineering.Quality);
+										if (isNaN(bproll) || bproll <= 0)
+											bproll = 0;
+										if (!slot.setBlueprint(bpid, bpgrade, bproll)) {
+											if (errors) errors.push(modulejson.Slot + ': Invalid blueprint: ' + modulejson.Engineering.BlueprintName);
+										}
+									} else if (modulejson.Engineering.BlueprintName && errors) errors.push(modulejson.Slot + ': Unknown blueprint: ' + modulejson.Engineering.BlueprintName);
+									
+									var expid = fdevmap.expeffect[(modulejson.Engineering.ExperimentalEffect || '').trim().toUpperCase()];
+									if (expid) {
+										if (!slot.setExpeffectID(expid)) {
+											if (errors) errors.push(modulejson.Slot + ': Invalid experimental: ' + modulejson.Engineering.ExperimentalEffect);
+										}
+									} else if (modulejson.Engineering.ExperimentalEffect && errors) errors.push(modulejson.Slot + ': Unknown experimental: ' + modulejson.Engineering.ExperimentalEffect);
+									
+									// if there's a ROF modifier, handle it last so it takes into account bstsize/bstrof
+									var modlist = [];
+									var modjson_rof = null;
+									for (var m = 0;  m < (modulejson.Engineering.Modifiers || EMPTY_ARR).length;  m++) {
+										var modjson = modulejson.Engineering.Modifiers[m];
+										var attr = fdevmap.fieldAttr[modjson.Label];
+										if (attr === 'rof') {
+											modjson_rof = modjson;
+										} else if (attr) {
+											modlist.push(modjson);
+										}
+									}
+									if (modjson_rof) {
+										modlist.push(modjson_rof);
+									}
+									
+									for (var m = 0;  m < modlist.length;  m++) {
+										var modjson = modlist[m];
+										var attr = fdevmap.fieldAttr[modjson.Label];
+										if (attr) {
+											var module = slot.getModule();
+											var base = parseFloat(modjson.OriginalValue);
+											if (isNaN(base))
+												base = slot.getBaseAttrValue(attr);
+else if(current.dev && abs(base - slot.getBaseAttrValue(attr)) > 0.00001) console.log(modulejson.Item+' '+attr+' base '+modjson.OriginalValue+' vs expected '+slot.getBaseAttrValue(attr));
+											var modifier = getAttrModifier(attr, base, parseFloat(modjson.Value));
+											if (!isModuleAttrModifiable(module, attr)) {
+												// ignore unmodifiable attributes, Journal includes them all the time (mass on lightweight bulkheads, shotspd, etc)
+											} else if (!slot.setEffectiveAttrModifier(attr, modifier)) {
+												if (errors) errors.push(modulejson.Slot + ': Invalid modifier: ' + modjson.Label + '=' + modjson.Value);
+} else if (false && current.dev) { // TODO DEBUG
+var attrroll = getBlueprintGradeAttrModifierRoll(bpid, bpgrade, attr, slot.getBaseAttrModifier(attr));
+if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modulejson.Item+' '+attr+' roll '+attrroll+' vs '+bproll+', error '+(attrroll - bproll)+' curve '+(log(attrroll) / log(bproll)));
+											}
+										} else if (attr !== null && errors) errors.push(modulejson.Slot + ': Modifier #' + (m+1) + ': Unknown attribute: ' + modjson.Label);
+									}
+								}
+							} else if (errors) errors.push(modulejson.Slot + ': Invalid module: ' + modulejson.Item);
+						} else if (!modid && modulejson.Item && errors) errors.push(modulejson.Slot + ': Unknown module: ' + modulejson.Item);
+						
+						if (!slot.setPowered(modulejson.On)) {
+							if (errors) errors.push(modulejson.Slot + ': Invalid powered setting: ' + modulejson.On);
+						}
+						
+						if (!slot.setPriority(parseInt(modulejson.Priority) + 1)) {
+							if (errors) errors.push(modulejson.Slot + ': Invalid priority setting: ' + modulejson.Priority);
+						}
+					} else if (errors) errors.push(modulejson.Slot + ': Invalid slot');
+				}
+			}
+		}
+		
+		// check modules value
+		if (!isNaN(modulesValueExpected) && !isNaN(modulesValueActual) && modulesValueExpected != modulesValueActual && modulesValueActual > 0) {
+			var discounts = getClosestDiscount(modulesValueExpected / modulesValueActual);
+			if (discounts > 0) {
+				for (var slotgroup in eddb.group) {
+					for (var slotnum = 0;  slot = build.getSlot(slotgroup, slotnum);  slotnum++) {
+						if (!slot.hasActualCost()) {
+							slot.setDiscounts(discounts);
+						}
+					}
+				}
+				if (errors) errors.push('Module values not specified; applying estimated '+formatPctText(1 - cache.discountMod[discounts], 1)+' discount');
+			}
+		}
+		
+		return build;
+	}; // Build.fromJournal()
+	
+	
+	Build.fromCAPI = function(shipobj, errors, unknowns) {
+		var fdevmap = getFdevImportMap();
+		var shipid = fdevmap.ship[shipobj["name"].trim().toUpperCase()];
+		var eventobj = {
+			"event": "Loadout",
+			"Ship": shipobj["name"],
+			"ShipID": (shipobj["id"] | 0),
+			"ShipName": shipobj["shipName"],
+			"ShipIdent": shipobj["shipID"],
+			"HullValue": (shipobj["value"] || EMPTY_OBJ)["hull"],
+			"ModulesValue": (shipobj["value"] || EMPTY_OBJ)["modules"],
+		//	"Rebuy": undefined, // not returned by CAPI
+		};
+		for (var slotname in (shipobj["modules"] || EMPTY_OBJ)) {
+			var slotobj = shipobj["modules"][slotname];
+			var moduleobj = slotobj["module"];
+			if (moduleobj) {
+				var eventslotobj = {
+					"Slot": slotname,
+					"Item": moduleobj["name"],
+				//	"ItemID": moduleobj["id"], // not actually part of the Journal Loadout spec
+					"On": moduleobj["on"],
+					"Priority": moduleobj["priority"],
+					"Health": parseFloat(moduleobj["health"]) / 1000000,
+					"Value": moduleobj["free"] ? 0 : moduleobj["value"],
+				};
+				var engineerobj = (slotobj["engineer"] || (moduleobj || EMPTY_OBJ)["modifiers"]);
+				var modifierobj = (slotobj["modifications"] || slotobj["WorkInProgress_modifications"]);
+				var modifierarr = (engineerobj || EMPTY_OBJ)["modifiers"];
+				var specialobj = slotobj["specialModifications"];
+				if (engineerobj || modifierobj || modifierarr || specialobj) {
+					var modulename = (moduleobj["name"] || '').trim();
+					var fdname = modulename.toUpperCase();
+					var modid = fdevmap.shipModule[shipid][fdname] || fdevmap.module[fdname];
+					var module = cache.shipModules[shipid][modid] || eddb.module[modid];
+					var eventengobj = {
+						"Engineer": (engineerobj || EMPTY_OBJ)["engineerName"],
+						"EngineerID": (engineerobj || EMPTY_OBJ)["engineerId"],
+						"BlueprintID": (engineerobj || EMPTY_OBJ)["recipeID"], // before 2.3
+						"BlueprintName": ((engineerobj || EMPTY_OBJ)["recipeName"] || (moduleobj || EMPTY_OBJ)["recipeName"]),
+						"Level": ((engineerobj || EMPTY_OBJ)["recipeLevel"] || (moduleobj || EMPTY_OBJ)["recipeLevel"]),
+					//	"Quality": undefined, // not returned by CAPI
+						"Modifiers": [],
+					};
+					
+					var modifiers = {};
+					var mod_weapon_falloffrange_from_range = false;
+					
+					if (modifierobj) { // after 2.4
+						for (var field in modifierobj) {
+							// 'field' has OutfittingFieldType_ / Override_ prefix
+							var attr = fdevmap.fieldAttr[field.slice(field.indexOf('_') + 1)];
+							var modifier = parseFloat(modifierobj[field]["value"]);
+							if (attr === 'rof') {
+								attr = 'bstint';
+								modifier = (1 / (modifier - 1)) + 1;
+							}
+							var attribute = cache.attribute[attr];
+							if (attr === null || (attr && !isModuleAttrModifiable(module, attr))) {
+								// ignore
+							} else if (attribute) {
+								if (attribute.modmod && attr !== 'shieldbst') {
+									// CAPI returns modmods (except shieldbst) as final effective values rather than modifiers to base values
+									modifiers[attr] = getModuleAttrModifier(module, attr, attribute.modmod * (modifier - 1));
+								} else {
+									modifiers[attr] = (attribute.modset ? modifier : getAttrModifierSum(attr, modifiers[attr], modifier - 1));
+								}
+							} else if (unknowns) {
+								var tag = slotname + ': ' + modulename;
+								if (!unknowns[tag])
+									unknowns[tag] = {};
+								unknowns[tag][field] = 1;
+							} else if (errors) {
+								errors.push(slotname + ': ' + modulename + ': Unknown obj field: ' + field);
+							}
+						}
+					}
+					
+					if (modifierarr) { // before 2.3
+						for (var m = 0;  m < modifierarr.length;  m++) {
+							var field = modifierarr[m].name;
+							var fieldmodifier = parseFloat(modifierarr[m].value);
+							var attrmods = eddb.fdattrmod[field];
+							var expid = fdevmap.expeffect[field.toUpperCase()];
+							if (field === 'mod_weapon_clip_size_override') {
+								modifiers['ammoclip'] = getModuleAttrModifier(module, 'ammoclip', fieldmodifier);
+							} else if (field === 'mod_weapon_falloffrange_from_range') {
+								mod_weapon_falloffrange_from_range = true;
+							} else if (attrmods) {
+								for (var attr in attrmods) {
+									var attribute = cache.attribute[attr];
+									var modifier = fieldmodifier * attrmods[attr];
+									modifiers[attr] = (attribute.modset ? modifier : getAttrModifierSum(attr, modifiers[attr], modifier));
+								}
+							} else if (expid) {
+								specialobj = specialobj || {};
+								specialobj[field] = fieldmodifier;
+							} else if (unknowns) {
+								var tag = slotname + ': ' + modulename;
+								if (!unknowns[tag])
+									unknowns[tag] = {};
+								unknowns[tag][field] = 1;
+							} else if (errors) {
+								errors.push(slotname + ': ' + modulename + ': Unknown arr field: ' + field);
+							}
+						}
+					}
+					
+					if (specialobj) {
+						for (var field in specialobj) {
+							if (module.mtype === 'hrg' && (field === 'special_feedback_cascade' || field === 'special_plasma_slug' || field === 'special_super_penetrator'))
+								field += '_cooled';
+							eventengobj["ExperimentalEffect"] = field;
+							var expid = fdevmap.expeffect[field.toUpperCase()];
+							var expeffect = eddb.expeffect[expid];
+							if (expeffect) {
+								for (var attr in expeffect) {
+									var attribute = cache.attribute[attr];
+									var modifier = expeffect[attr];
+									if (!isModuleAttrModifiable(module, attr)) {
+										// ignore
+									} else if (modifier) {
+										modifier /= ((attribute.modset || attribute.modadd) ? 1 : (attribute.modmod || 100));
+										modifiers[attr] = (attribute.modset ? modifier : getAttrModifierSum(attr, modifiers[attr], modifier));
+									}
+								}
+							} else if (unknowns) {
+								var tag = slotname + ': ' + modulename;
+								if (!unknowns[tag])
+									unknowns[tag] = {};
+								unknowns[tag][field] = 1;
+							} else if (errors) {
+								errors.push(slotname + ': ' + modulename + ': Unknown special: ' + field);
+							}
+						}
+					}
+					
+					if (mod_weapon_falloffrange_from_range && modifiers['maximumrng']) {
+						modifiers['dmgfall'] = getModuleAttrModifier(module, 'dmgfall', getModuleAttrValue(module, 'maximumrng', modifiers['maximumrng']));
+					}
+					if (modifiers['bstint']) {
+						// translate bstint back to rof, considering modified bstsize/bstrof
+						var duration = 0; // TODO: verify that CAPI bstint modifier assumes 0 charge time for variable charge (dmgmul) weapons
+						var bstsize = getModuleAttrValue(module, 'bstsize', modifiers['bstsize']);
+						var bstrof = getModuleAttrValue(module, 'bstrof', modifiers['bstrof']);
+						var bstint = getModuleAttrValue(module, 'bstint', modifiers['bstint']);
+						var rof = (bstsize / ((bstsize / bstrof) + max(0, bstint - 1 / bstrof) + duration)) * (1 + (modifiers['rof'] || 0));
+						modifiers['rof'] = getModuleAttrModifier(module, 'rof', rof);
+						delete modifiers['bstint'];
+					}
+					
+					for (var attr in modifiers) {
+						var modifier = modifiers[attr];
+						var field = fdevmap.attrField[attr];
+						if (modifier && field) {
+							eventengobj["Modifiers"].push({
+								"Label": field,
+								"Value": getModuleAttrValue(module, attr, modifier),
+							});
+						}
+					}
+					
+					eventslotobj["Engineering"] = eventengobj;
+				}
+				if (!eventobj["Modules"])
+					eventobj["Modules"] = [];
+				eventobj["Modules"].push(eventslotobj);
+			}
+		}
+		return Build.fromJournal(eventobj, errors);
+	}; // Build.fromCAPI()
+	
+	
 	/*
 	* MODULES & ATTRIBUTES
 	*/
@@ -5044,7 +5445,7 @@ window.edsy = new (function() {
 						var slefApp = ((json[i]['header'] || EMPTY_OBJ)['appName'] || '').trim();
 						var index = importdata.buildlist.length;
 						var builderrors = [];
-						var build = decodeJournalBuild(json[i]['data'], builderrors, json[i]['header']);
+						var build = Build.fromJournal(json[i]['data'], builderrors, json[i]['header']);
 						var importhash = build ? ('slef|' + hashEncodeS(slefApp || '') + '|' + build.getShipID() + '|' + hashEncodeS(build.getName().toUpperCase()) + '|' + hashEncodeS(build.getNameTag().toUpperCase())) : null;
 						importdata.buildlist[index] = { index:index, importhash:importhash, fleetid:null, namehash:null, build:build, builderrors:builderrors };
 						if (build) {
@@ -5083,7 +5484,7 @@ window.edsy = new (function() {
 								}
 								var index = importdata.buildlist.length;
 								var builderrors = [];
-								var build = decodeJournalBuild(json[i], builderrors);
+								var build = Build.fromJournal(json[i], builderrors);
 								var importhash = build ? ('journal|' + build.getShipID() + '|' + max(0,fleetid) + '|' + hashEncodeS(build.getName().toUpperCase()) + '|' + hashEncodeS(build.getNameTag().toUpperCase())) : null;
 								importdata.buildlist[index] = { index:index, importhash:importhash, fleetid:fleetid, namehash:null, build:build, builderrors:builderrors };
 								fleetids[fleetid] = true;
@@ -5115,7 +5516,7 @@ window.edsy = new (function() {
 						if (shipobj["name"] && shipobj["modules"]) {
 							var index = importdata.buildlist.length;
 							var builderrors = [];
-							var build = decodeCAPIBuild(shipobj, builderrors);
+							var build = Build.fromCAPI(shipobj, builderrors);
 							var importhash = build ? ('fdapi|' + build.getShipID() + '|' + max(0,fleetids[i]) + '|' + hashEncodeS(build.getName().toUpperCase()) + '|' + hashEncodeS(build.getNameTag().toUpperCase())) : null;
 							importdata.buildlist[index] = { index:index, importhash:importhash, fleetid:fleetids[i], namehash:null, build:build, builderrors:builderrors };
 							importdata.warning = 'These FDAPI builds may erroneously show legacy blueprints on all engineered modules';
@@ -5499,407 +5900,6 @@ window.edsy = new (function() {
 		}
 		return cache.fdevmap;
 	}; // getFdevImportMap()
-	
-	
-	var decodeCAPIBuild = function(shipobj, errors, unknowns) {
-		var fdevmap = getFdevImportMap();
-		var shipid = fdevmap.ship[shipobj["name"].trim().toUpperCase()];
-		var eventobj = {
-			"event": "Loadout",
-			"Ship": shipobj["name"],
-			"ShipID": (shipobj["id"] | 0),
-			"ShipName": shipobj["shipName"],
-			"ShipIdent": shipobj["shipID"],
-			"HullValue": (shipobj["value"] || EMPTY_OBJ)["hull"],
-			"ModulesValue": (shipobj["value"] || EMPTY_OBJ)["modules"],
-		//	"Rebuy": undefined, // not returned by CAPI
-		};
-		for (var slotname in (shipobj["modules"] || EMPTY_OBJ)) {
-			var slotobj = shipobj["modules"][slotname];
-			var moduleobj = slotobj["module"];
-			if (moduleobj) {
-				var eventslotobj = {
-					"Slot": slotname,
-					"Item": moduleobj["name"],
-				//	"ItemID": moduleobj["id"], // not actually part of the Journal Loadout spec
-					"On": moduleobj["on"],
-					"Priority": moduleobj["priority"],
-					"Health": parseFloat(moduleobj["health"]) / 1000000,
-					"Value": moduleobj["free"] ? 0 : moduleobj["value"],
-				};
-				var engineerobj = (slotobj["engineer"] || (moduleobj || EMPTY_OBJ)["modifiers"]);
-				var modifierobj = (slotobj["modifications"] || slotobj["WorkInProgress_modifications"]);
-				var modifierarr = (engineerobj || EMPTY_OBJ)["modifiers"];
-				var specialobj = slotobj["specialModifications"];
-				if (engineerobj || modifierobj || modifierarr || specialobj) {
-					var modulename = (moduleobj["name"] || '').trim();
-					var fdname = modulename.toUpperCase();
-					var modid = fdevmap.shipModule[shipid][fdname] || fdevmap.module[fdname];
-					var module = cache.shipModules[shipid][modid] || eddb.module[modid];
-					var eventengobj = {
-						"Engineer": (engineerobj || EMPTY_OBJ)["engineerName"],
-						"EngineerID": (engineerobj || EMPTY_OBJ)["engineerId"],
-						"BlueprintID": (engineerobj || EMPTY_OBJ)["recipeID"], // before 2.3
-						"BlueprintName": ((engineerobj || EMPTY_OBJ)["recipeName"] || (moduleobj || EMPTY_OBJ)["recipeName"]),
-						"Level": ((engineerobj || EMPTY_OBJ)["recipeLevel"] || (moduleobj || EMPTY_OBJ)["recipeLevel"]),
-					//	"Quality": undefined, // not returned by CAPI
-						"Modifiers": [],
-					};
-					
-					var modifiers = {};
-					var mod_weapon_falloffrange_from_range = false;
-					
-					if (modifierobj) { // after 2.4
-						for (var field in modifierobj) {
-							// 'field' has OutfittingFieldType_ / Override_ prefix
-							var attr = fdevmap.fieldAttr[field.slice(field.indexOf('_') + 1)];
-							var modifier = parseFloat(modifierobj[field]["value"]);
-							if (attr === 'rof') {
-								attr = 'bstint';
-								modifier = (1 / (modifier - 1)) + 1;
-							}
-							var attribute = cache.attribute[attr];
-							if (attr === null || (attr && !isModuleAttrModifiable(module, attr))) {
-								// ignore
-							} else if (attribute) {
-								if (attribute.modmod && attr !== 'shieldbst') {
-									// CAPI returns modmods (except shieldbst) as final effective values rather than modifiers to base values
-									modifiers[attr] = getModuleAttrModifier(module, attr, attribute.modmod * (modifier - 1));
-								} else {
-									modifiers[attr] = (attribute.modset ? modifier : getAttrModifierSum(attr, modifiers[attr], modifier - 1));
-								}
-							} else if (unknowns) {
-								var tag = slotname + ': ' + modulename;
-								if (!unknowns[tag])
-									unknowns[tag] = {};
-								unknowns[tag][field] = 1;
-							} else if (errors) {
-								errors.push(slotname + ': ' + modulename + ': Unknown obj field: ' + field);
-							}
-						}
-					}
-					
-					if (modifierarr) { // before 2.3
-						for (var m = 0;  m < modifierarr.length;  m++) {
-							var field = modifierarr[m].name;
-							var fieldmodifier = parseFloat(modifierarr[m].value);
-							var attrmods = eddb.fdattrmod[field];
-							var expid = fdevmap.expeffect[field.toUpperCase()];
-							if (field === 'mod_weapon_clip_size_override') {
-								modifiers['ammoclip'] = getModuleAttrModifier(module, 'ammoclip', fieldmodifier);
-							} else if (field === 'mod_weapon_falloffrange_from_range') {
-								mod_weapon_falloffrange_from_range = true;
-							} else if (attrmods) {
-								for (var attr in attrmods) {
-									var attribute = cache.attribute[attr];
-									var modifier = fieldmodifier * attrmods[attr];
-									modifiers[attr] = (attribute.modset ? modifier : getAttrModifierSum(attr, modifiers[attr], modifier));
-								}
-							} else if (expid) {
-								specialobj = specialobj || {};
-								specialobj[field] = fieldmodifier;
-							} else if (unknowns) {
-								var tag = slotname + ': ' + modulename;
-								if (!unknowns[tag])
-									unknowns[tag] = {};
-								unknowns[tag][field] = 1;
-							} else if (errors) {
-								errors.push(slotname + ': ' + modulename + ': Unknown arr field: ' + field);
-							}
-						}
-					}
-					
-					if (specialobj) {
-						for (var field in specialobj) {
-							if (module.mtype === 'hrg' && (field === 'special_feedback_cascade' || field === 'special_plasma_slug' || field === 'special_super_penetrator'))
-								field += '_cooled';
-							eventengobj["ExperimentalEffect"] = field;
-							var expid = fdevmap.expeffect[field.toUpperCase()];
-							var expeffect = eddb.expeffect[expid];
-							if (expeffect) {
-								for (var attr in expeffect) {
-									var attribute = cache.attribute[attr];
-									var modifier = expeffect[attr];
-									if (!isModuleAttrModifiable(module, attr)) {
-										// ignore
-									} else if (modifier) {
-										modifier /= ((attribute.modset || attribute.modadd) ? 1 : (attribute.modmod || 100));
-										modifiers[attr] = (attribute.modset ? modifier : getAttrModifierSum(attr, modifiers[attr], modifier));
-									}
-								}
-							} else if (unknowns) {
-								var tag = slotname + ': ' + modulename;
-								if (!unknowns[tag])
-									unknowns[tag] = {};
-								unknowns[tag][field] = 1;
-							} else if (errors) {
-								errors.push(slotname + ': ' + modulename + ': Unknown special: ' + field);
-							}
-						}
-					}
-					
-					if (mod_weapon_falloffrange_from_range && modifiers['maximumrng']) {
-						modifiers['dmgfall'] = getModuleAttrModifier(module, 'dmgfall', getModuleAttrValue(module, 'maximumrng', modifiers['maximumrng']));
-					}
-					if (modifiers['bstint']) {
-						// translate bstint back to rof, considering modified bstsize/bstrof
-						var duration = 0; // TODO: verify that CAPI bstint modifier assumes 0 charge time for variable charge (dmgmul) weapons
-						var bstsize = getModuleAttrValue(module, 'bstsize', modifiers['bstsize']);
-						var bstrof = getModuleAttrValue(module, 'bstrof', modifiers['bstrof']);
-						var bstint = getModuleAttrValue(module, 'bstint', modifiers['bstint']);
-						var rof = (bstsize / ((bstsize / bstrof) + max(0, bstint - 1 / bstrof) + duration)) * (1 + (modifiers['rof'] || 0));
-						modifiers['rof'] = getModuleAttrModifier(module, 'rof', rof);
-						delete modifiers['bstint'];
-					}
-					
-					for (var attr in modifiers) {
-						var modifier = modifiers[attr];
-						var field = fdevmap.attrField[attr];
-						if (modifier && field) {
-							eventengobj["Modifiers"].push({
-								"Label": field,
-								"Value": getModuleAttrValue(module, attr, modifier),
-							});
-						}
-					}
-					
-					eventslotobj["Engineering"] = eventengobj;
-				}
-				if (!eventobj["Modules"])
-					eventobj["Modules"] = [];
-				eventobj["Modules"].push(eventslotobj);
-			}
-		}
-		return decodeJournalBuild(eventobj, errors);
-	}; // decodeCAPIBuild()
-	
-	
-	var decodeJournalBuild = function(json, errors, slefheader) {
-		var fdevmap = getFdevImportMap();
-		var shipid = fdevmap.ship[json.Ship.trim().toUpperCase()];
-		var ship = eddb.ship[shipid];
-		if (!ship) {
-			if (errors) errors.push('Invalid ship: ' + json.Ship);
-			return null;
-		}
-		
-		var build = new Build(shipid);
-		if (json.ShipName && !build.setName(json.ShipName)) {
-			if (errors) errors.push('Invalid ship name: ' + json.ShipName);
-		}
-		if (json.ShipIdent && !build.setNameTag(json.ShipIdent)) {
-			if (errors) errors.push('Invalid ship ID: ' + json.ShipIdent);
-		}
-		if (slefheader && (slefheader['appName'] || '').trim().toUpperCase() === 'INARA') {
-			var inaraAcct = (slefheader['appCustomProperties'] || EMPTY_OBJ)['inaraCommanderID'];
-			var inaraShip = (slefheader['appCustomProperties'] || EMPTY_OBJ)['inaraShipID'];
-			if (!build.setInaraXref(inaraAcct, inaraShip)) {
-				if (errors) errors.push('Invalid Inara xref: ' + inaraAcct + '/' + inaraShip);
-			}
-		}
-		
-		// build and align slot index maps
-		var extravalue = 0;
-		var groupSlotnames = { ship:[] };
-		var groupSlotnums = { ship:[] };
-		for (var slotgroup in eddb.group) {
-			groupSlotnames[slotgroup] = [];
-			groupSlotnums[slotgroup] = [];
-			for (var s = 0;  s < ship.slots[slotgroup].length;  s++)
-				groupSlotnums[slotgroup].push(s);
-		}
-		var slotModule = {};
-		var slotNum = {};
-		var slotSize = {};
-		for (var m = 0;  m < (json.Modules || EMPTY_ARR).length;  m++) {
-			var modulejson = json.Modules[m];
-			var slotname = (modulejson.Slot || '').trim().toUpperCase();
-			var tokens = slotname.match(/^([A-Z]+)([0-9]*)(?:_SIZE([0-9]+))?$/);
-			var slotgroup = fdevmap.slotGroup[(tokens || EMPTY_OBJ)[1]];
-			if (groupSlotnames[slotgroup]) {
-				groupSlotnames[slotgroup].push(slotname);
-				slotModule[slotname] = modulejson;
-				slotNum[slotname] = fdevmap.slotNum[slotname] || parseInt(tokens[2] || 0);
-				slotSize[slotname] = ((slotgroup === 'hardpoint') ? 'TSMLH'.indexOf(slotname[0]) : parseInt(tokens[3] || 0));
-			} else if (slotname === 'PLANETARYAPPROACHSUITE') {
-				/* ignore the approach suite; someday maybe we'll handle it, til then we'll just pretend it doesn't exist
-				var fdname = (modulejson.Item || '').trim().toUpperCase();
-				if (fdname === 'INT_PLANETAPPROACHSUITE') {
-					extravalue += (modulejson.Value || 0);
-				}
-				*/
-			} else if (slotname === 'CARGOHATCH') {
-				// special handling for the cargo hatch, just for powered and priority settings
-				var slot = build.getSlot('ship', 'hatch');
-				var fdname = (modulejson.Item || '').trim().toUpperCase();
-				if (fdname === 'MODULARCARGOBAYDOOR' || fdname === 'MODULARCARGOBAYDOORFDL') {
-					if (!slot.setPowered(modulejson.On)) {
-						if (errors) errors.push(modulejson.Slot + ': Invalid powered setting: ' + modulejson.On);
-					}
-					if (!slot.setPriority(parseInt(modulejson.Priority) + 1)) {
-						if (errors) errors.push(modulejson.Slot + ': Invalid priority setting: ' + modulejson.Priority);
-					}
-				} else if (errors) errors.push(modulejson.Slot + ': Invalid module: ' + modulejson.Item);
-			}
-		}
-		
-		// get the hull and module costs
-		if ('HullValue' in json) {
-			var slot = build.getSlot('ship', 'hull');
-			if (!slot.setCost((json.HullValue || 0) + extravalue)) {
-				if (errors) errors.push('Invalid hull value: ' + json.HullValue + '+' + extravalue);
-			}
-		}
-		var modulesValueExpected = json['ModulesValue'];
-		var modulesValueActual = 0;
-		
-		for (var slotgroup in eddb.group) {
-			if (slotgroup !== 'component') {
-				// sort by descending size, then ascending index
-				groupSlotnames[slotgroup].sort(function(n1,n2) { return ((slotSize[n1] != slotSize[n2]) ? (slotSize[n2] - slotSize[n1]) : (slotNum[n1] - slotNum[n2])); });
-				groupSlotnums[slotgroup].sort(function(s1,s2) { return ((ship.slots[slotgroup][s1] != ship.slots[slotgroup][s2]) ? (ship.slots[slotgroup][s2] - ship.slots[slotgroup][s1]) : (s1 - s2)); });
-				// if import slots are too few, add gaps starting with the last one that can't be shifted
-				var numgaps = groupSlotnums[slotgroup].length - groupSlotnames[slotgroup].length;
-				if (numgaps > 0) {
-					var slotmove = [];
-					for (var i = 0;  i < groupSlotnames[slotgroup].length;  i++) {
-						slotmove[i] = numgaps;
-						while (slotmove[i] > 0 && slotSize[groupSlotnames[slotgroup][i]] > ship.slots[slotgroup][groupSlotnums[slotgroup][i + slotmove[i]]])
-							slotmove[i]--;
-					}
-					var gaps = [];
-					while (gaps.length < numgaps) {
-						var i = slotmove.length;
-						while (i > 0 && slotmove[i - 1] > gaps.length)
-							i--;
-						gaps.push(i);
-					}
-					while (gaps.length > 0)
-						groupSlotnames[slotgroup].splice(gaps.pop(), 0, null);
-				} else if (numgaps < 0) {
-					errors.push('Too many ' + slotgroup + ' slots');
-				}
-			}
-		}
-		
-		// map and decode import slots
-		for (var slotgroup in eddb.group) {
-			for (var i = 0, s = 0;  i < groupSlotnames[slotgroup].length && s < groupSlotnums[slotgroup].length;  i++, s++) {
-				var modulejson = slotModule[groupSlotnames[slotgroup][i]];
-				if (modulejson) {
-					var slotnum = ((slotgroup === 'component') ? slotNum[groupSlotnames[slotgroup][i]] : groupSlotnums[slotgroup][s]);
-					var slot = build.getSlot(slotgroup, slotnum);
-					if (slot) {
-						var fdname = (modulejson.Item || '').trim().toUpperCase();
-						var modid = fdevmap.shipModule[shipid][fdname] || fdevmap.module[fdname];
-						if (modid > 0) {
-							if (slot.setModuleID(modid, true)) {
-								if (!current.option.experimental && !slot.setModuleID(modid)) {
-									if (errors) errors.push(modulejson.Slot + getModuleLabel(this.getModule()) + ' requires Experimental Mode');
-								}
-								if ('Value' in modulejson) {
-									modulesValueExpected -= modulejson.Value;
-									if (!slot.setCost(modulejson.Value)) {
-										if (errors) errors.push(modulejson.Slot + ': Invalid value: ' + modulejson.Value);
-									}
-								} else {
-									modulesValueActual += slot.getCost();
-								}
-								var mtypeid = slot.getModule().mtype;
-								if (modulejson.Engineering) {
-									var fdname = (modulejson.Engineering.BlueprintName || '').trim().toUpperCase();
-									var bpid = fdevmap.mtypeBlueprint[mtypeid][fdname];
-									var bpgrade = 0;
-									var bproll = 0;
-									if (bpid) {
-										bpgrade = parseInt(modulejson.Engineering.Level);
-										// pre-3.0 utility ammo blueprints only had a grade 3, which now has to be grade 1
-										if (fdname === 'CHAFFLAUNCHER_CHAFFCAPACITY' || fdname === 'HEATSINKLAUNCHER_HEATSINKCAPACITY' || fdname === 'POINTDEFENCE_POINTDEFENSECAPACITY')
-											bpgrade = 1;
-										bproll = parseFloat(modulejson.Engineering.Quality);
-										if (isNaN(bproll) || bproll <= 0)
-											bproll = 0;
-										if (!slot.setBlueprint(bpid, bpgrade, bproll)) {
-											if (errors) errors.push(modulejson.Slot + ': Invalid blueprint: ' + modulejson.Engineering.BlueprintName);
-										}
-									} else if (modulejson.Engineering.BlueprintName && errors) errors.push(modulejson.Slot + ': Unknown blueprint: ' + modulejson.Engineering.BlueprintName);
-									
-									var expid = fdevmap.expeffect[(modulejson.Engineering.ExperimentalEffect || '').trim().toUpperCase()];
-									if (expid) {
-										if (!slot.setExpeffectID(expid)) {
-											if (errors) errors.push(modulejson.Slot + ': Invalid experimental: ' + modulejson.Engineering.ExperimentalEffect);
-										}
-									} else if (modulejson.Engineering.ExperimentalEffect && errors) errors.push(modulejson.Slot + ': Unknown experimental: ' + modulejson.Engineering.ExperimentalEffect);
-									
-									// if there's a ROF modifier, handle it last so it takes into account bstsize/bstrof
-									var modlist = [];
-									var modjson_rof = null;
-									for (var m = 0;  m < (modulejson.Engineering.Modifiers || EMPTY_ARR).length;  m++) {
-										var modjson = modulejson.Engineering.Modifiers[m];
-										var attr = fdevmap.fieldAttr[modjson.Label];
-										if (attr === 'rof') {
-											modjson_rof = modjson;
-										} else if (attr) {
-											modlist.push(modjson);
-										}
-									}
-									if (modjson_rof) {
-										modlist.push(modjson_rof);
-									}
-									
-									for (var m = 0;  m < modlist.length;  m++) {
-										var modjson = modlist[m];
-										var attr = fdevmap.fieldAttr[modjson.Label];
-										if (attr) {
-											var module = slot.getModule();
-											var base = parseFloat(modjson.OriginalValue);
-											if (isNaN(base))
-												base = slot.getBaseAttrValue(attr);
-else if(current.dev && abs(base - slot.getBaseAttrValue(attr)) > 0.00001) console.log(modulejson.Item+' '+attr+' base '+modjson.OriginalValue+' vs expected '+slot.getBaseAttrValue(attr));
-											var modifier = getAttrModifier(attr, base, parseFloat(modjson.Value));
-											if (!isModuleAttrModifiable(module, attr)) {
-												// ignore unmodifiable attributes, Journal includes them all the time (mass on lightweight bulkheads, shotspd, etc)
-											} else if (!slot.setEffectiveAttrModifier(attr, modifier)) {
-												if (errors) errors.push(modulejson.Slot + ': Invalid modifier: ' + modjson.Label + '=' + modjson.Value);
-} else if (false && current.dev) { // TODO DEBUG
-var attrroll = getBlueprintGradeAttrModifierRoll(bpid, bpgrade, attr, slot.getBaseAttrModifier(attr));
-if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modulejson.Item+' '+attr+' roll '+attrroll+' vs '+bproll+', error '+(attrroll - bproll)+' curve '+(log(attrroll) / log(bproll)));
-											}
-										} else if (attr !== null && errors) errors.push(modulejson.Slot + ': Modifier #' + (m+1) + ': Unknown attribute: ' + modjson.Label);
-									}
-								}
-							} else if (errors) errors.push(modulejson.Slot + ': Invalid module: ' + modulejson.Item);
-						} else if (!modid && modulejson.Item && errors) errors.push(modulejson.Slot + ': Unknown module: ' + modulejson.Item);
-						
-						if (!slot.setPowered(modulejson.On)) {
-							if (errors) errors.push(modulejson.Slot + ': Invalid powered setting: ' + modulejson.On);
-						}
-						
-						if (!slot.setPriority(parseInt(modulejson.Priority) + 1)) {
-							if (errors) errors.push(modulejson.Slot + ': Invalid priority setting: ' + modulejson.Priority);
-						}
-					} else if (errors) errors.push(modulejson.Slot + ': Invalid slot');
-				}
-			}
-		}
-		
-		// check modules value
-		if (!isNaN(modulesValueExpected) && !isNaN(modulesValueActual) && modulesValueExpected != modulesValueActual && modulesValueActual > 0) {
-			var discounts = getClosestDiscount(modulesValueExpected / modulesValueActual);
-			if (discounts > 0) {
-				for (var slotgroup in eddb.group) {
-					for (var slotnum = 0;  slot = build.getSlot(slotgroup, slotnum);  slotnum++) {
-						if (!slot.hasActualCost()) {
-							slot.setDiscounts(discounts);
-						}
-					}
-				}
-				if (errors) errors.push('Module values not specified; applying estimated '+formatPctText(1 - cache.discountMod[discounts], 1)+' discount');
-			}
-		}
-		
-		return build;
-	}; // decodeJournalBuild()
 	
 	
 	/*
@@ -10720,6 +10720,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		window.addEventListener('DOMContentLoaded', onDOMContentLoaded);
 	} else {
 		onCodeOnlyLoaded();
-		this.decodeJournalBuild = decodeJournalBuild; // window.edsy.decodeJournalBuild(jsonstring, []).exportText()
+		this.Build = Build;
+		this.Slot = Slot;
 	}
 })();
