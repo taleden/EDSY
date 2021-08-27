@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 37546,
-	edsy_versions_db : [36241,37548,37548,37548], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20210616,
+	version : 38041,
+	edsy_versions_db : [36241,37548,38041,38041], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20210827,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1856,6 +1856,7 @@ var eddb = {
 			modulenames:{},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 			modifiable:['mass','pwrdraw','damage','ammoclip','ammomax'],
+			blueprints:['special'],
 		},
 		
 		hexax : {
@@ -1915,6 +1916,8 @@ var eddb = {
 			name:'Mining Tools - Lasers',
 			modulenames:{'Mining Laser':true, 'Abrasion Blaster':'Abrasion'},
 			keyattrs:['distdraw','thmload','maximumrng'],
+			modifiable:['integ','pwrdraw','damage','distdraw','thmload','maximumrng','dmgfall'],
+			blueprints:['special'],
 		},
 		
 		hmtm : {
@@ -2393,8 +2396,8 @@ var eddb = {
 		
 		88143 : {mtype:'hexgp',cost:  176500, name:'Guardian Plasma Charger',     mount:'F', tag:'G',     class:1, rating:'D', mass: 2.00, integ:34, pwrdraw:1.40, boottime:0, dps:15.0  , damage: 3.000, duration:1.8, dmgmul:17.0, distdraw:0.680, thmload:4.21, pierce:65, maximumrng:3000, shotspd:1200, rof:5.0, bstint:0.2,ammoclip:15, ammomax: 200,            rldtime:3.0, brcdmg: 0.4, minbrc:50, maxbrc:80,             abswgt:1.5  /.03  , axewgt:1.5  /.03  , dmgfall:1000, ammocost:100, limit:'hex', fdid:128891607, fdname:'Hpt_Guardian_PlasmaLauncher_Fixed_Small', eddbid:1781 }, // techbroker // TODO: model duration,dmgmul for min-max dps
 		88165 : {mtype:'hexgp',cost:  484050, name:'Guardian Plasma Charger',     mount:'T', tag:'G',     class:1, rating:'F', mass: 2.00, integ:34, pwrdraw:1.60, boottime:0, dps:10.0  , damage: 2.000, duration:1.8, dmgmul:17.0, distdraw:0.800, thmload:5.01, pierce:65, maximumrng:3000, shotspd:1200, rof:5.0, bstint:0.2,ammoclip:15, ammomax: 200,            rldtime:3.0, brcdmg: 0.3, minbrc:50, maxbrc:80,             abswgt:1.0  /.02  , axewgt:1.0  /.02  , dmgfall:1000, ammocost:100, limit:'hex', fdid:128891606, fdname:'Hpt_Guardian_PlasmaLauncher_Turret_Small', eddbid:1780 }, // techbroker
-		88223 : {mtype:'hexgp',cost:  567760, name:'Guardian Plasma Charger',     mount:'F', tag:'G',     class:2, rating:'B', mass: 4.00, integ:42, pwrdraw:2.13, boottime:0, dps:25.0  , damage: 5.000, duration:1.8, dmgmul:17.0, distdraw:1.250, thmload:5.21, pierce:80, maximumrng:3000, shotspd:1200, rof:5.0, bstint:0.2,ammoclip:15, ammomax: 200,            rldtime:3.0, brcdmg: NaN, minbrc:50, maxbrc:80,             abswgt:2.5  /.05  , axewgt:2.5  /.05  , dmgfall:1000, ammocost:100, limit:'hex', fdid:128833998, fdname:'Hpt_Guardian_PlasmaLauncher_Fixed_Medium', eddbid:1753 }, // techbroker // verify cost // TODO: brcdmg
-		88255 : {mtype:'hexgp',cost: 1659200, name:'Guardian Plasma Charger',     mount:'T', tag:'G',     class:2, rating:'E', mass: 4.00, integ:42, pwrdraw:2.01, boottime:0, dps:20.0  , damage: 4.000, duration:1.8, dmgmul:17.0, distdraw:1.400, thmload:5.80, pierce:80, maximumrng:3000, shotspd:1200, rof:5.0, bstint:0.2,ammoclip:15, ammomax: 200,            rldtime:3.0, brcdmg: NaN, minbrc:50, maxbrc:80,             abswgt:2.0  /.04  , axewgt:2.0  /.04  , dmgfall:1000, ammocost:100, limit:'hex', fdid:128833999, fdname:'Hpt_Guardian_PlasmaLauncher_Turret_Medium', eddbid:1754 }, // techbroker // verify cost // TODO: brcdmg
+		88223 : {mtype:'hexgp',cost:  567760, name:'Guardian Plasma Charger',     mount:'F', tag:'G',     class:2, rating:'B', mass: 4.00, integ:42, pwrdraw:2.13, boottime:0, dps:25.0  , damage: 5.000, duration:1.8, dmgmul:17.0, distdraw:1.250, thmload:5.21, pierce:80, maximumrng:3000, shotspd:1200, rof:5.0, bstint:0.2,ammoclip:15, ammomax: 200,            rldtime:3.0, brcdmg: 0.7, minbrc:50, maxbrc:80,             abswgt:2.5  /.05  , axewgt:2.5  /.05  , dmgfall:1000, ammocost:100, limit:'hex', fdid:128833998, fdname:'Hpt_Guardian_PlasmaLauncher_Fixed_Medium', eddbid:1753 }, // techbroker // verify cost, brcdmg
+		88255 : {mtype:'hexgp',cost: 1659200, name:'Guardian Plasma Charger',     mount:'T', tag:'G',     class:2, rating:'E', mass: 4.00, integ:42, pwrdraw:2.01, boottime:0, dps:20.0  , damage: 4.000, duration:1.8, dmgmul:17.0, distdraw:1.400, thmload:5.80, pierce:80, maximumrng:3000, shotspd:1200, rof:5.0, bstint:0.2,ammoclip:15, ammomax: 200,            rldtime:3.0, brcdmg: 0.6, minbrc:50, maxbrc:80,             abswgt:2.0  /.04  , axewgt:2.0  /.04  , dmgfall:1000, ammocost:100, limit:'hex', fdid:128833999, fdname:'Hpt_Guardian_PlasmaLauncher_Turret_Medium', eddbid:1754 }, // techbroker // verify cost, brcdmg
 		88333 : {mtype:'hexgp',cost: 1423300, name:'Guardian Plasma Charger',     mount:'F', tag:'G',     class:3, rating:'C', mass: 8.00, integ:51, pwrdraw:3.10, boottime:0, dps:35.0  , damage: 7.000, duration:1.8, dmgmul:17.0, distdraw:2.420, thmload:6.15, pierce:95, maximumrng:3000, shotspd:1200, rof:5.0, bstint:0.2,ammoclip:15, ammomax: 200,            rldtime:3.0, brcdmg: 1.0, minbrc:50, maxbrc:80,             abswgt:3.5  /.07  , axewgt:3.5  /.07  , dmgfall:1000, ammocost:100, limit:'hex', fdid:128834783, fdname:'Hpt_Guardian_PlasmaLauncher_Fixed_Large', eddbid:1765 }, // techbroker // verify cost
 		88345 : {mtype:'hexgp',cost: 5495200, name:'Guardian Plasma Charger',     mount:'T', tag:'G',     class:3, rating:'D', mass: 8.00, integ:51, pwrdraw:2.53, boottime:0, dps:30.0  , damage: 6.000, duration:1.8, dmgmul:17.0, distdraw:2.600, thmload:6.40, pierce:95, maximumrng:3000, shotspd:1200, rof:5.0, bstint:0.2,ammoclip:15, ammomax: 200,            rldtime:3.0, brcdmg: 0.8, minbrc:50, maxbrc:80,             abswgt:3.0  /.06  , axewgt:3.0  /.06  , dmgfall:1000, ammocost:100, limit:'hex', fdid:128834784, fdname:'Hpt_Guardian_PlasmaLauncher_Turret_Large', eddbid:1766 }, // techbroker // verify cost
 		
