@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [37546,37548,37548,37548]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20210616;
+	var VERSIONS = [37546,37548,38041,38041]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20210827;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -7373,16 +7373,18 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		// it's a little hacky, but stick on all the builtin stored modules (which are specially named with leading spaces)
 		var item = 'edsy_modules' + (current.beta ? '_beta' : '');
 		var data = (window.localStorage.getItem(item) || '').split('/').concat([
-			"0W0o120W1J1b1b1h1b1o0i0W1C1N0h18130i0W1K13=FK4lG03Q0072-Cp6ypDAsPcIwPcUoPcX000b000",
-			"0W0r110W161J140i0W191I0h1612=FAdsG05G0060upD6upD8qpDE_PcGzcQKsPc",
-			"0W0n190W141J1J0i0W151I1u0o=F2jwG09G001P000",
-			"0W0p110W1G1G0i0W111I0h1F13=FA5UG03G0040sPc4-cQ8yAFCqAF",
-			"0W0p110W1J170i0W1B1I0h1K1I=F7PcG05G0034sPccupDgvcQ",
-			"0W0o120l160W1I1X1f1i0i0W1C1I0h18130i0W1613=FKZyG03I0080-Cp8zCpT000Yyv4b000f000iu00r900",
-			"0W0o120W151k1w1v1j1b0i0W18130h131X1r1p1q1f1Z=FLIqG02G0050ypD4sPc8y00C_00Gu00",
-			"0W0m110W1B1N1J0i0W161J0h1C1I=FDwoG03G0056y008y00GzCpMupDQ_Pc",
-			"0W0m160W15131D0i0W1C1N0h1J1e=FCTqG03G0032_pD50009000", // TODO verify double-engineered lightweight/shielded ECM stats
-			"0W0m190l1K0W1G140i0W1C1N0h161l1Z=FCzYG05G0042_pD6y00GkPcL000"
+			"0W0o120W151k1w1v1j1b0i0W18130h131X1r1p1q1f1Z=FLIqG02G0050ypD4sPc8y00C_00Gu00", // 2B Enzyme, HC+Caustic
+			"0W0n140l160W111Y1o1X1p1f1l1k0W121i1X1p1q1b1o0i0W13170W1o1b1t1X1o1a=FJprG02G0062y006y00Ey00Iy00L800P800", // 1D/F Abrasion Blaster
+			"0W0n140l160W1D1f1k1f1k1d0W1C1X1p1b1o0i0W13170W1o1b1t1X1o1a=FJpqG02G0072y006y00AkPcEy00Iy00L800PBLL", // 1D/F Mining Laser
+			"0W0o120W1J1b1b1h1b1o0i0W1C1N0h18130i0W1K13=FK4lG03Q0072-Cp6ypDAsPcIwPcUoPcX000b000", // 2B Seeker, LW+HC, TC
+			"0W0o120l160W1I1X1f1i0i0W1C1I0h18130i0W1613=FKZyG03I0080-Cp8zCpT000Yyv4b000f000iu00r900", // 2B/F Rail, LR+HC, FC
+			"0W0m160W15131D0i0W1C1N0h1J1e=FCTqG03G0032_pD50009000", // 0F ECM, LW+Sh // TODO: verify
+			"0W0m110W1B1N1J0i0W161J0h1C1I=FDwoG03G0056y008y00GzCpMupDQ_Pc", // 0A KWS, FS+LR
+			"0W0m190l1K0W1G140i0W1C1N0h161l1Z=FCzYG05G0042_pD6y00GkPcL000", // 0I/T PD, LW+Foc
+			"0W0p110W1G1G0i0W111I0h1F13=FA5UG03G0040sPc4-cQ8yAFCqAF", // 3A PP, AR+OC
+			"0W0r110W161J140i0W191I0h1612=FAdsG05G0060upD6upD8qpDE_PcGzcQKsPc", // 5A FSD, IR+FB
+			"0W0p110W1J170i0W1B1I0h1K1I=F7PcG05G0034sPccupDgvcQ", // 3A SG, KR+TR
+			"0W0n190W141J1J0i0W151I1u0o=F2jwG09G001P000", // 1I DSS, ERx2
 		]);
 		for (var i = 0;  i < data.length;  i++) {
 			var entry = data[i].split('=');
