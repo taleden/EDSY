@@ -261,6 +261,34 @@ window.edsy = new (function() {
 		return ok;
 	}; // setClipboardString()
 	
+	var isDropEffectCopy = function(e) {
+		// Fixes browser bug in Chrome on Windows where dropEffect is always "none".
+		// The original bug report [1] was merged into another issue [2] but that
+		// issue was made private or something because I get permission denied when
+		// trying to view it.
+		//
+		// The fix is to wrap the retrieval of the drop effect and use the current
+		// event to determine what the drop effect is.
+		//
+		// [1]: https://bugs.chromium.org/p/chromium/issues/detail?id=501655
+		// [2]: https://bugs.chromium.org/p/chromium/issues/detail?id=39399
+
+		if (e.dataTransfer.dropEffect !== 'none') {
+			// Bug hasn't been hit because a drop effect was detected.
+			return e.dataTransfer.dropEffect;
+		}
+
+		if (e.dataTransfer.effectAllowed !== 'copyMove') {
+			// Should never happen. We should only be using this function when we're
+			// expecting a copy or move drop event. effectAllowed should have been
+			// set when the drag started.
+			console.warn('Using isDropEffectCopy() but effectAllowed is not copyMove! (effectAllowed=' + e.dataTransfer.effectAllowed + ')');
+			return e.dataTransfer.effectAllowed;
+		}
+
+		// This is the actual fix.
+		return !!e.ctrlKey;
+	} // isDropEffectCopy()
 	
 	var encodeHTML = function(text) {
 		return text.replace(/\&/g, '&amp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/\"/g, '&quot;').replace(/\'/g, '&apos;').replace(/\//g, '&sol;');
@@ -9994,7 +10022,6 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	var onUIFitSlotsDragEnter = function(e) {
 		if (contains(e.dataTransfer.types, 'edsy/mid')) {
 			e.preventDefault();
-			// TODO: dropEffect===none bug in chrome; check allowedEffect and ctrlKey to set it manually
 			// TODO: .dragready highlighting?
 		} else {
 			onDocumentDragEnter(e);
@@ -10005,7 +10032,6 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	var onUIFitSlotsDragOver = function(e) {
 		if (contains(e.dataTransfer.types, 'edsy/mid')) {
 			e.preventDefault();
-			// TODO: dropEffect===none bug in chrome; check allowedEffect and ctrlKey to set it manually
 		} else {
 			onDocumentDragOver(e);
 		}
@@ -10032,7 +10058,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			if (group1) {
 				e.preventDefault();
 				e.stopPropagation();
-				if (e.dataTransfer.dropEffect === 'copy') {
+				if (isDropEffectCopy(e)) {
 					copyCurrentFitSlotModule(group1, slot1, group2, slot2);
 				} else {
 					swapCurrentFitSlotModules(group1, slot1, group2, slot2);
