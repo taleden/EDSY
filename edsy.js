@@ -613,6 +613,7 @@ window.edsy = new (function() {
 		// no matter what.
 		if (window.secondaryActiveButton) {
 			window.secondaryActiveButton.classList.remove('right-click-active');
+			window.secondaryActiveButton = null;
 		}
 	}; // clearSecondaryActiveMouseUp()
 
