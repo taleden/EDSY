@@ -910,7 +910,13 @@ window.edsy = new (function() {
 		
 		
 		changePriority: function(delta) {
-			return this.setPriority(((this.priority + (delta || 1) - 1) % 5) + 1);
+			let priority = this.priority;
+			if (delta >= 0) {
+				priority = (priority + delta - 1) % 5 + 1;
+			} else {
+				priority = ((priority + delta) - delta * 5 - 1) % 5 + 1;
+			}
+			return this.setPriority(priority);
 		}, // changePriority()
 		
 		
