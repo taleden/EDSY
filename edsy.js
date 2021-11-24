@@ -938,7 +938,13 @@ window.edsy = new (function() {
 		
 		
 		changePriority: function(delta) {
-			return this.setPriority(((this.priority + (delta || 1) - 1) % 5) + 1);
+			let priority = this.priority;
+			if (delta >= 0) {
+				priority = (priority + delta - 1) % 5 + 1;
+			} else {
+				priority = ((priority + delta) - delta * 5 - 1) % 5 + 1;
+			}
+			return this.setPriority(priority);
 		}, // changePriority()
 		
 		
@@ -9844,6 +9850,27 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			setUIOutfittingPanels('details');
 		}
 	}; // onUIFitSlotsClickTimeout()
+
+
+	var onUIFitSlotsContextMenu = function(e) {
+		var el = e.target;
+		while (el && el.tagName !== 'LABEL' && el.tagName !== 'INPUT' && el.tagName !== 'BUTTON') {
+			el = el.parentNode;
+		}
+		if (!el) {
+		} else if (el.tagName === 'LABEL') {
+		} else if (el.tagName === 'BUTTON') {
+			e.preventDefault();
+			var tokens = el.name.split('_');
+			if (el.disabled) {
+			} else if (tokens[0] === 'priority') {
+				changeCurrentFitSlotPriority(tokens[1], tokens[2], -1);
+			} else if (tokens[0] === 'crewdist') {
+			} else if (tokens[0] === 'powerdist') {
+			}
+		} else if (el.tagName === 'INPUT') {
+		}
+	}; // onUIFitSlotsContextMenu()
 	
 	
 	var onUIFitExportInaraButtonClick = function(e) {
@@ -10687,6 +10714,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		document.getElementById('outfitting_fit_slots').addEventListener('mousedown', onUIFitSlotsMouseDown);
 		document.getElementById('outfitting_fit_slots').addEventListener('change', onUIFitSlotsChange);
 		document.getElementById('outfitting_fit_slots').addEventListener('click', onUIFitSlotsClick);
+		document.getElementById('outfitting_fit_slots').addEventListener('contextmenu', onUIFitSlotsContextMenu);
 		document.getElementById('outfitting_fit_slots').addEventListener('dblclick', onUIFitSlotsDblClick);
 		document.getElementById('outfitting_fit_slots').addEventListener('dragstart', onUIFitSlotsDragStart);
 		document.getElementById('outfitting_fit_slots').addEventListener('dragend', onUIFitSlotsDragEnd);
