@@ -569,12 +569,53 @@ window.edsy = new (function() {
 	var b64Encode = function(t) {
 		return btoa(t).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
 	}; // b64Encode()
-	
+
 	
 	var b64Decode = function(t) {
 		return atob((t + '===').slice(0, t.length + ((4 - (t.length % 4)) % 4)).replace(/-/g, '+').replace(/_/g, '/'));
 	}; // b64Decode()
 	
+
+	var secondaryActiveMouseDown = function(f) {
+		// Workaround for :active pseudo-selector not being applied to right-click
+		// events. Per the CSS spec, only holding down the primary mouse button
+		// should apply the :active pseudo-selector.
+		//
+		// Our workaround is to wrap the mouse down event with the code below. It'll
+		// find the button being pressed and add an active CSS class that we can use
+		// in our CSS.
+		//
+		// NOTE: You must opt-in to this behavior when registering the mouse down
+		// handler. You do not need to register a mouse up handler (see below).
+		return function(e) {
+			if (e.button === 2 && e.which === 3) {
+				if (window.secondaryActiveButton) {
+					window.secondaryActiveButton.classList.remove('right-click-active');
+				}
+				let button = e.target;
+				while (button && button.tagName !== 'BUTTON') {
+					button = button.parentNode;
+				}
+				if (button) {
+					window.secondaryActiveButton = button;
+					button.classList.add('right-click-active');
+				}
+			}
+			return f ? f(e) : true;
+		};
+	}; // secondaryActiveMouseDown()
+
+
+	var clearSecondaryActiveMouseUp = function(e) {
+		// If the user drags the mouse away from the "active" button, a mouse up
+		// event for that button won't register. We therefore need to define a
+		// global mouse up handler to ensure the secondary active button is cleared
+		// no matter what.
+		if (window.secondaryActiveButton) {
+			window.secondaryActiveButton.classList.remove('right-click-active');
+		}
+	}; // clearSecondaryActiveMouseUp()
+
 	
 	/*
 	* GAME FORMULAS
@@ -9713,8 +9754,8 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			break;
 		}
 	}; // onUIFitSettingsOpsClick()
-	
-	
+
+
 	var onUIFitSlotsMouseDown = function(e) {
 		if (e.button != 2 && e.which != 3)
 			return true;
@@ -9738,7 +9779,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		}
 		return true;
 	}; // onUIFitSlotsMouseDown()
-	
+
 	
 	var onUIFitSlotsChange = function(e) {
 		if (e.target.name === 'slot') {
@@ -10648,6 +10689,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		updateUIModulePickerStoredModules();
 		
 		// register event handlers
+		window.addEventListener('mouseup', clearSecondaryActiveMouseUp);
 		window.addEventListener('resize', onWindowResize);
 		if (cache.feature.history)
 			window.addEventListener('hashchange', onWindowHashChange);
@@ -10682,7 +10724,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		document.getElementById('outfitting_stored_container').addEventListener('change', onUIFitSettingsStoredChange);
 		document.getElementById('outfitting_cols_container').addEventListener('change', onUIFitSettingsColsChange);
 		document.getElementById('outfitting_ops_container').addEventListener('click', onUIFitSettingsOpsClick);
-		document.getElementById('outfitting_fit_slots').addEventListener('mousedown', onUIFitSlotsMouseDown);
+		document.getElementById('outfitting_fit_slots').addEventListener('mousedown', secondaryActiveMouseDown(onUIFitSlotsMouseDown));
 		document.getElementById('outfitting_fit_slots').addEventListener('change', onUIFitSlotsChange);
 		document.getElementById('outfitting_fit_slots').addEventListener('click', onUIFitSlotsClick);
 		document.getElementById('outfitting_fit_slots').addEventListener('contextmenu', onUIFitSlotsContextMenu);

@@ -2044,7 +2044,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	color: var(--colororange5);
 	font: var(--fontfixed);
 }
-#outfitting_fit_slots BUTTON.outfitting_fit_priority:active {
+#outfitting_fit_slots BUTTON.outfitting_fit_priority:active,
+#outfitting_fit_slots BUTTON.outfitting_fit_priority.right-click-active {
 	background-color: transparent !important;
 	color: var(--colorwhite) !important;
 }
@@ -2064,7 +2065,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	border-left: none;
 	border-right-color: var(--colororange3);
 }
-#outfitting_fit_slots BUTTON.outfitting_fit_priority:active::before {
+#outfitting_fit_slots BUTTON.outfitting_fit_priority:active::before,
+#outfitting_fit_slots BUTTON.outfitting_fit_priority.right-click-active::before {
 	border-right-color: var(--colorwhite) !important;
 }
 #outfitting_fit_slots BUTTON.outfitting_fit_priority::after {
@@ -2072,7 +2074,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	border-right: none;
 	border-left-color: var(--colororange3);
 }
-#outfitting_fit_slots BUTTON.outfitting_fit_priority:active::after {
+#outfitting_fit_slots BUTTON.outfitting_fit_priority:active::after,
+#outfitting_fit_slots BUTTON.outfitting_fit_priority.right-click-active::after {
 	border-left-color: var(--colorwhite) !important;
 }
 #outfitting_fit_slots BUTTON.outfitting_fit_priority:disabled {
