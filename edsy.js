@@ -7433,7 +7433,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			"0W0r110W161J140i0W191I0h1612=FAdsG05G0060upD6upD8qpDE_PcGzcQKsPc", // 5A FSD, IR+FB
 			"0W0q110W161J140i0W191I0h1612=FAcIG05G0060upD6upD8qpDE_PcGzcQKsPc", // 4A FSD, IR+FB
 			"0W0p110W161J140i0W191I0h1612=FAakG05G0060upD6upD8qpDE_PcGzcQKsPc", // 3A FSD, IR+FB
-			"0W0p110W1J170i0W1B1I0h1K1I=F7PcG05G0034sPccupDgvcQ", // 3A SG, KR+TR
+			"0W0p110W1J170i0W1B1I0h1K1I=F7PcG05G0044sPc8wPccupDgvcQ", // 3A SG, KR+TR
 			"0W0n190W141J1J0i0W151I1u0o=F2jwG09G001P000", // 1I DSS, ERx2
 		]);
 		for (var i = 0;  i < data.length;  i++) {
