@@ -43,7 +43,7 @@ window.edsy = new (function() {
 	var BPROLL_UPGRADE = 0.8;
 //	var BPROLL_LIMIT = 0.95;
 	var DISCOUNTS = [30,20,15,10,5,2.5];
-	var HASH_VERSION = 15;
+	var HASH_VERSION = 16;
 	var HTML_ICON = {
 		'unknown'    : '<svg class="iconsvg unknown"><use xlink:href="#icon_unknown"/></svg>',
 		'ignore'     : '<svg class="iconsvg ignore"><use xlink:href="#icon_ignore"/></svg>',
@@ -914,24 +914,35 @@ window.edsy = new (function() {
 		
 		
 		getPowered: function() {
-			return this.powered;
+			return !!this.getPowerLock() || this.powered;
 		}, // getPowered()
 		
 		
 		setPowered: function(powered) {
-			this.powered = !!powered;
+			powered = !!powered;
+			if (powered != (!!this.getPowerLock() || powered))
+				return false;
+			this.powered = powered;
 			this.clearStats();
 			return true;
 		}, // setPowered()
 		
 		
+		getPowerLock: function() {
+			return (this.module || EMPTY_OBJ).powerlock;
+		}, // getPowerLock()
+		
+		
 		getPriority: function() {
-			return this.priority;
+			return this.getPowerLock() || this.priority;
 		}, // getPriority()
 		
 		
 		setPriority: function(priority) {
-			this.priority = min(max(priority | 0, 1), 5);
+			priority = min(max(priority | 0, 1), MAX_POWER_PRIORITY);
+			if (priority != (this.getPowerLock() || priority))
+				return false;
+			this.priority = priority;
 			this.clearStats();
 			return true;
 		}, // setPriority()
@@ -940,9 +951,9 @@ window.edsy = new (function() {
 		changePriority: function(delta) {
 			let priority = this.priority;
 			if (delta >= 0) {
-				priority = (priority + delta - 1) % 5 + 1;
+				priority = (priority + delta - 1) % MAX_POWER_PRIORITY + 1;
 			} else {
-				priority = ((priority + delta) - delta * 5 - 1) % 5 + 1;
+				priority = ((priority + delta) - delta * MAX_POWER_PRIORITY - 1) % 5 + 1;
 			}
 			return this.setPriority(priority);
 		}, // changePriority()
@@ -1405,13 +1416,13 @@ window.edsy = new (function() {
 		
 		getHash: function(stored) {
 			/*
-			module hash format (HASH_VERSION=15):
+			module hash format (HASH_VERSION=16):
 				<3 chars / 18 bits>: module id (0..262143)
 				<1 char / 6 bits>: slot flags
 					0x20 <bit 1>: costed?
 					0x10 <bit 2>: engineered?
 					0x08 <bit 3>: powered?
-					0x07 <bit 4-6>: priority (0..7)
+					0x07 <bit 4-6>: priority or powerlock (0..7)
 				costed ?
 					<1 char / 6 bits>: cost bits
 						0x30 <bit 1-2>: number of extra cost chars
@@ -1468,7 +1479,7 @@ window.edsy = new (function() {
 				var engbits = (((bpidx & 0xF) << 7) | ((this.bpgrade & 0x7) << 4) | (expidx & 0xF));
 				var enghash = ((engbits || nummods) ? (hashEncode(engbits, 2) + hashEncode(bproll, 2) + hashEncode(nummods & 0x1F, 1) + modhash) : '');
 				
-				var slotbits = ((costed ? 0x20 : 0) | (enghash ? 0x10 : 0) | (this.powered ? 0 : 0x8) | ((this.priority - 1) & 0x7));
+				var slotbits = ((costed ? 0x20 : 0) | (enghash ? 0x10 : 0) | (this.getPowered() ? 0 : 0x8) | ((this.getPriority() - 1) & 0x7));
 				this.hash = (modidhash + hashEncode(slotbits, 1) + costhash + enghash);
 				this.storedhash = (hashEncode(HASH_VERSION, 1) + modidhash + hashEncode((enghash ? 0x10 : 0), 1) + hashEncode(0, 1) + enghash); // TODO: cost/discount in storedhash?
 			}
@@ -1515,10 +1526,11 @@ window.edsy = new (function() {
 			var engineered = (slotbits & 0x10);
 			var powered = !(slotbits & 0x8);
 			var priority = (slotbits & 0x7) + 1;
-			if (!this.setPowered(powered)) {
+			// invalid powered/priority is possible for powerlocked modules before v16
+			if (!this.setPowered(powered) && (version >= 16 || !this.getPowerLock())) {
 				if (errors) errors.push(errortag + 'Invalid powered setting: ' + powered);
 			}
-			if (!this.setPriority(priority)) {
+			if (!this.setPriority(priority) && (version >= 16 || !this.getPowerLock())) {
 				if (errors) errors.push(errortag + 'Invalid power priority setting: ' + priority);
 			}
 			
@@ -6954,14 +6966,14 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		document.getElementById('outfitting_fit_mass_' + group_slot).innerHTML = (value ? formatAttrHTML('mass', value) : '');
 		document.getElementById('outfitting_fit_mass_' + group_slot).className = (direction > 0 ? 'modgood' : (direction < 0 ? 'modbad' : ''));
 		
-		document.getElementById('outfitting_fit_power_' + group_slot).className = 'priority' + slot.getPriority();
+		document.getElementById('outfitting_fit_power_' + group_slot).className = 'priority' + slot.getPriority() + (slot.getPowerLock() ? ' powerlock' : '');
 		var value = slot.getEffectiveAttrValue('pwrdraw') || 0;
 		var direction = getAttrModifierDirection('pwrdraw', slot.getEffectiveAttrModifier('pwrdraw'));
 		if (value) {
 			document.getElementById('outfitting_fit_pwrdraw_' + group_slot).innerHTML = ('-' + formatAttrHTML('pwrdraw', value));
-			document.getElementById('outfitting_fit_powered_' + group_slot).disabled = false;
+			document.getElementById('outfitting_fit_powered_' + group_slot).disabled = !!slot.getPowerLock();
 			document.getElementById('outfitting_fit_powered_' + group_slot).checked = slot.getPowered();
-			document.getElementById('outfitting_fit_priority_' + group_slot).disabled = false;
+			document.getElementById('outfitting_fit_priority_' + group_slot).disabled = !!slot.getPowerLock();
 			document.getElementById('outfitting_fit_priority_' + group_slot).innerHTML = slot.getPriority();
 		} else {
 			var value = slot.getEffectiveAttrValue('pwrcap') || 0;
@@ -6969,6 +6981,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			document.getElementById('outfitting_fit_powered_' + group_slot).disabled = true;
 			document.getElementById('outfitting_fit_pwrdraw_' + group_slot).innerHTML = (value ? ('+' + formatAttrHTML('pwrcap', value)) : '');
 			document.getElementById('outfitting_fit_priority_' + group_slot).disabled = true;
+			document.getElementById('outfitting_fit_priority_' + group_slot).innerHTML = '';
 		}
 		document.getElementById('outfitting_fit_pwrdraw_' + group_slot).className = (direction > 0 ? 'modgood' : (direction < 0 ? 'modbad' : ''));
 		

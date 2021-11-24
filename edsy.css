@@ -1937,6 +1937,9 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots .checkbox INPUT:disabled + DIV .check {
 	visibility: hidden;
 }
+#outfitting_fit_slots .powerlock .checkbox INPUT + DIV .check {
+	visibility: visible;
+}
 
 #outfitting_fit_slots.priority1mfn .priority1 .checkbox INPUT:checked + DIV .check,
 #outfitting_fit_slots.priority2mfn .priority2 .checkbox INPUT:checked + DIV .check,
@@ -2075,7 +2078,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots BUTTON.outfitting_fit_priority:active::after {
 	border-left-color: var(--colorwhite) !important;
 }
-#outfitting_fit_slots BUTTON.outfitting_fit_priority:disabled {
+#outfitting_fit_slots BUTTON.outfitting_fit_priority:empty {
 	visibility: hidden;
 }
 
@@ -2173,6 +2176,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled,
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled {
 	color: var(--colorgrey3);
+	background-color: transparent !important;
 }
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled::before,
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled::before,
@@ -2180,6 +2184,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled::before,
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled::before {
 	border-right-color: var(--colorgrey3);
+	visibility: hidden;
 }
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled::after,
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled::after,
@@ -2187,6 +2192,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled::after,
 #outfitting_fit_slots #outfitting_fit_body BUTTON.outfitting_fit_priority:disabled::after {
 	border-left-color: var(--colorgrey3);
+	visibility: hidden;
 }
 
 
