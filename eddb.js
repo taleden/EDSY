@@ -702,10 +702,10 @@ var eddb = {
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128816583, fdname:'TypeX_2_Armour_Grade1', eddbid:1659 }, // Lightweight Alloy
-				40122 : { cost: 6803170, mass:40.00, fdid:128816584, fdname:'TypeX_2_Armour_Grade2', eddbid:1660 }, // Reinforced Alloy // verify
-				40113 : { cost:15307134, mass:78.00, fdid:128816585, fdname:'TypeX_2_Armour_Grade3', eddbid:1661 }, // Military Grade Composite // verify
-				40114 : { cost:36175859, mass:78.00, fdid:128816586, fdname:'TypeX_2_Armour_Mirrored', eddbid:1662 }, // Mirrored Surface Composite // verify
-				40115 : { cost:40087682, mass:78.00, fdid:128816587, fdname:'TypeX_2_Armour_Reactive', eddbid:1663 }, // Reactive Surface Composite // verify
+				40122 : { cost: 9146537, mass:40.00, fdid:128816584, fdname:'TypeX_2_Armour_Grade2', eddbid:1660 }, // Reinforced Alloy // verify
+				40113 : { cost:20579707, mass:78.00, fdid:128816585, fdname:'TypeX_2_Armour_Grade3', eddbid:1661 }, // Military Grade Composite // verify
+				40114 : { cost:48636709, mass:78.00, fdid:128816586, fdname:'TypeX_2_Armour_Mirrored', eddbid:1662 }, // Mirrored Surface Composite // verify
+				40115 : { cost:53895966, mass:78.00, fdid:128816587, fdname:'TypeX_2_Armour_Reactive', eddbid:1663 }, // Reactive Surface Composite // verify
 			},
 		},
 		13 : {
