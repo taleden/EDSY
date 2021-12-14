@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [37546,38341,38341,38341]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20211124;
+	var VERSIONS = [37546,38341,38441,38441]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20211214;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -4037,6 +4037,10 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			// by passenger cabin class (E-B-F-L)
 			v1 = 0 + (((m1.cabincls == 'E') ? 'A' : m1.cabincls) || ' ').charCodeAt(0);
 			v2 = 0 + (((m2.cabincls == 'E') ? 'A' : m2.cabincls) || ' ').charCodeAt(0);
+			if (v1 != v2) return v1 - v2;
+			// by multi limpet type (M-O-R-X-U)
+			v1 = 0 + (((m1.mlctype == 'U') ? 'z' : m1.mlctype) || ' ').charCodeAt(0);
+			v2 = 0 + (((m2.mlctype == 'U') ? 'z' : m2.mlctype) || ' ').charCodeAt(0);
 			if (v1 != v2) return v1 - v2;
 		}
 		// if experimental, by name

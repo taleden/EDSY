@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 38341,
-	edsy_versions_db : [36241,38341,38341,38341], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20211124,
+	version : 38441,
+	edsy_versions_db : [36241,38341,38441,38441], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20211214,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -702,10 +702,10 @@ var eddb = {
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128816583, fdname:'TypeX_2_Armour_Grade1', eddbid:1659 }, // Lightweight Alloy
-				40122 : { cost: 9146537, mass:40.00, fdid:128816584, fdname:'TypeX_2_Armour_Grade2', eddbid:1660 }, // Reinforced Alloy // verify
-				40113 : { cost:20579707, mass:78.00, fdid:128816585, fdname:'TypeX_2_Armour_Grade3', eddbid:1661 }, // Military Grade Composite // verify
-				40114 : { cost:48636709, mass:78.00, fdid:128816586, fdname:'TypeX_2_Armour_Mirrored', eddbid:1662 }, // Mirrored Surface Composite // verify
-				40115 : { cost:53895966, mass:78.00, fdid:128816587, fdname:'TypeX_2_Armour_Reactive', eddbid:1663 }, // Reactive Surface Composite // verify
+				40122 : { cost: 9146540, mass:40.00, fdid:128816584, fdname:'TypeX_2_Armour_Grade2', eddbid:1660 }, // Reinforced Alloy // verify
+				40113 : { cost:20579710, mass:78.00, fdid:128816585, fdname:'TypeX_2_Armour_Grade3', eddbid:1661 }, // Military Grade Composite // verify
+				40114 : { cost:48636710, mass:78.00, fdid:128816586, fdname:'TypeX_2_Armour_Mirrored', eddbid:1662 }, // Mirrored Surface Composite // verify
+				40115 : { cost:53895970, mass:78.00, fdid:128816587, fdname:'TypeX_2_Armour_Reactive', eddbid:1663 }, // Reactive Surface Composite // verify
 			},
 		},
 		13 : {
@@ -731,9 +731,9 @@ var eddb = {
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128816590, fdname:'TypeX_3_Armour_Grade1', eddbid:1650 }, // Lightweight Alloy
 				40122 : { cost: 6803170, mass:40.00, fdid:128816591, fdname:'TypeX_3_Armour_Grade2', eddbid:1651 }, // Reinforced Alloy // verify
-				40113 : { cost:15307134, mass:78.00, fdid:128816592, fdname:'TypeX_3_Armour_Grade3', eddbid:1652 }, // Military Grade Composite // verify
-				40114 : { cost:36175859, mass:78.00, fdid:128816593, fdname:'TypeX_3_Armour_Mirrored', eddbid:1653 }, // Mirrored Surface Composite // verify
-				40115 : { cost:40087682, mass:78.00, fdid:128816594, fdname:'TypeX_3_Armour_Reactive', eddbid:1654 }, // Reactive Surface Composite // verify
+				40113 : { cost:15307130, mass:78.00, fdid:128816592, fdname:'TypeX_3_Armour_Grade3', eddbid:1652 }, // Military Grade Composite // verify
+				40114 : { cost:36175860, mass:78.00, fdid:128816593, fdname:'TypeX_3_Armour_Mirrored', eddbid:1653 }, // Mirrored Surface Composite // verify
+				40115 : { cost:40087680, mass:78.00, fdid:128816594, fdname:'TypeX_3_Armour_Reactive', eddbid:1654 }, // Reactive Surface Composite // verify
 			},
 		},
 		27 : {
@@ -1353,6 +1353,7 @@ var eddb = {
 		{ attr:'scanangmod', fdattr:'DSS_AngleMult',          abbr:'AngM', name:'Scan Angle Multiplier',unit:'%',                                   default:0, scale:1, modmod:100, desc:'Modifies maximum angle to scan stellar bodies' }, // TODO: delete?
 		{ attr:'scanratemod',fdattr:'DSS_RateMult',           abbr:'RteM', name:'Scan Rate Multiplier', unit:'%',                                   default:0, scale:1, modmod:100, desc:'Modifies time to scan stellar bodies' }, // TODO: delete?
 		{ attr:'proberad',   fdattr:'DSS_PatchRadius',        abbr:'PRad', name:'Probe Radius',         unit:'% ', /* space is kludgy but easy */   default:0, scale:1,             desc:'Modifies surface scan probe range' }, // iss
+		{ attr:'mlctype',                                     abbr:'Type', name:'Controller Type',      values:['','M','O','R','X','U'],            default:'',                     desc:'Multi Limpet Controller Type (mining/operations/rescue/xeno/universal)' }, // imlc
 	], // eddb.attributes[]
 	fdfieldattr : {
 		BurstRate           : 'bstrof',
@@ -1803,7 +1804,7 @@ var eddb = {
 			{ mtypes:{cft:1} }
 		],
 		military  : { mtypes:{ihrp:1, isrp:1, imahrp:1, imrp:1, iscb:1} },
-		internal  : { mtypes:{iafmu:1, icr:1, iclc:1, idlc:1, ifh:1, ifa:1, ifsdb:1, ifsdi:1, ifs:1, cft:1, iftlc:1, ihblc:1, ihrp:1, isrp:1, imahrp:1, imrp:1, ipc:1, ipvh:1, iplc:1, inlc:1, ir:1, irlc:1, islc:1, iscb:1, isg:1, /*isbs:1,*/ iss:1} },
+		internal  : { mtypes:{iafmu:1, icr:1, iclc:1, idlc:1, ifh:1, ifa:1, ifsdb:1, ifsdi:1, ifs:1, cft:1, iftlc:1, ihblc:1, ihrp:1, isrp:1, imahrp:1, imrp:1, imlc:1, ipc:1, ipvh:1, iplc:1, inlc:1, ir:1, irlc:1, islc:1, iscb:1, isg:1, /*isbs:1,*/ iss:1} },
 	}, // eddb.group{}
 	limit : {
 		'hex'    : 4,
@@ -2230,6 +2231,13 @@ var eddb = {
 			name:'Meta Alloy Hull Reinforcements',
 			modulenames:{'Meta Alloy Hull Reinforcement Package':true},
 			keyattrs:['hullrnf','caures'],
+		},
+		
+		imlc : {
+			name:'Multi Limpets',
+			modulenames:{},
+			modulenames:{'Operations Limpet Controller':'Operations', 'Xeno Limpet Controller':'Xeno', 'Mining Multi Limpet Controller':'Mining', 'Rescue Limpet Controller':'Rescue', 'Universal Multi Limpet Controller':'Universal'},
+			keyattrs:['maxlimpet','lpactrng'],
 		},
 		
 		imrp : {
@@ -3139,6 +3147,16 @@ var eddb = {
 		 9551 : { mtype:'imahrp', cost:225000, name:'Meta Alloy Hull Reinforcement Package', class:5, rating:'E', mass: 32, hullrnf:324, caures:3.0, fdid:128793125, fdname:'Int_MetaAlloyHullReinforcement_Size5_Class1', eddbid:1672 }, // techbroker
 		 9541 : { mtype:'imahrp', cost:675000, name:'Meta Alloy Hull Reinforcement Package', class:5, rating:'D', mass: 16, hullrnf:351, caures:3.0, fdid:128793126, fdname:'Int_MetaAlloyHullReinforcement_Size5_Class2', eddbid:1673 }, // techbroker
 		
+		19351 : { mtype:'imlc', cost:    15000, name:'Mining Multi Limpet Controller',    class:3, rating:'E', mlctype:'M', mass: 80, integ: 45, pwrdraw:0.50, boottime:6, maxlimpet: 4, lpactrng: 3300, limpettime:1/0, maxspd:200, multispd:60,                                                                    fdid:129001921, fdname:'Int_MultiDroneControl_Mining_Size3_Class1', eddbid:null }, // TODO: verify
+		19331 : { mtype:'imlc', cost:    50000, name:'Mining Multi Limpet Controller',    class:3, rating:'C', mlctype:'M', mass: 52, integ: 68, pwrdraw:0.35, boottime:6, maxlimpet: 4, lpactrng: 5000, limpettime:1/0, maxspd:200, multispd:60,                                                                    fdid:129001922, fdname:'Int_MultiDroneControl_Mining_Size3_Class3', eddbid:null }, // TODO: verify
+		19332 : { mtype:'imlc', cost:    50000, name:'Operations Limpet Controller',      class:3, rating:'C', mlctype:'O', mass: 52, integ: 68, pwrdraw:0.35, boottime:6, maxlimpet: 4, lpactrng: 2600, limpettime:510, maxspd:500, multispd:60,                              hacktime:16, mincargo:3, maxcargo: 8, fdid:129001923, fdname:'Int_MultiDroneControl_Operations_Size3_Class3', eddbid:null }, // TODO: verify
+		19322 : { mtype:'imlc', cost:    80000, name:'Operations Limpet Controller',      class:3, rating:'B', mlctype:'O', mass: 66, integ: 80, pwrdraw:0.30, boottime:6, maxlimpet: 4, lpactrng: 3100, limpettime:420, maxspd:500, multispd:60,                              hacktime:22, mincargo:4, maxcargo: 9, fdid:129001924, fdname:'Int_MultiDroneControl_Operations_Size3_Class4', eddbid:null }, // TODO: verify
+		19343 : { mtype:'imlc', cost:    30000, name:'Rescue Limpet Controller',          class:3, rating:'D', mlctype:'R', mass: 40, integ: 58, pwrdraw:0.40, boottime:6, maxlimpet: 4, lpactrng: 2100, limpettime:300, maxspd:500,              fuelxfer:1.0, lmprepcap: 60, hacktime:19, mincargo:2, maxcargo: 7, fdid:129001925, fdname:'Int_MultiDroneControl_Rescue_Size3_Class2', eddbid:null }, // TODO: verify
+		19333 : { mtype:'imlc', cost:    50000, name:'Rescue Limpet Controller',          class:3, rating:'C', mlctype:'R', mass: 52, integ: 68, pwrdraw:0.35, boottime:6, maxlimpet: 4, lpactrng: 2600, limpettime:300, maxspd:500,              fuelxfer:1.0, lmprepcap: 60, hacktime:16, mincargo:3, maxcargo: 8, fdid:129001926, fdname:'Int_MultiDroneControl_Rescue_Size3_Class3', eddbid:null }, // TODO: verify
+		19334 : { mtype:'imlc', cost:    50000, name:'Xeno Limpet Controller',            class:3, rating:'C', mlctype:'X', mass: 52, integ: 68, pwrdraw:0.35, boottime:6, maxlimpet: 4, lpactrng: 5000, limpettime:300, maxspd:200,                            lmprepcap: 70,                                       fdid:129001927, fdname:'Int_MultiDroneControl_Xeno_Size3_Class3', eddbid:null }, // TODO: verify
+		19324 : { mtype:'imlc', cost:    80000, name:'Xeno Limpet Controller',            class:3, rating:'B', mlctype:'X', mass: 66, integ: 80, pwrdraw:0.30, boottime:6, maxlimpet: 4, lpactrng: 5000, limpettime:300, maxspd:200,                            lmprepcap: 70,                                       fdid:129001928, fdname:'Int_MultiDroneControl_Xeno_Size3_Class4', eddbid:null }, // TODO: verify
+		19730 : { mtype:'imlc', cost:  4000000, name:'Universal Multi Limpet Controller', class:7, rating:'C', mlctype:'U', mass:130, integ:150, pwrdraw:0.80, boottime:6, maxlimpet: 8, lpactrng: 6500, limpettime:1/0, maxspd:500, multispd:60, fuelxfer:1.0, lmprepcap:310, hacktime: 8, mincargo:3, maxcargo: 8, fdid:129001929, fdname:'Int_MultiDroneControl_Universal_Size7_Class3', eddbid:null }, // TODO: verify
+		19710 : { mtype:'imlc', cost:  8000000, name:'Universal Multi Limpet Controller', class:7, rating:'A', mlctype:'U', mass:150, integ:200, pwrdraw:1.10, boottime:6, maxlimpet: 8, lpactrng: 9100, limpettime:1/0, maxspd:500, multispd:60, fuelxfer:1.0, lmprepcap:310, hacktime: 5, mincargo:5, maxcargo:10, fdid:129001930, fdname:'Int_MultiDroneControl_Universal_Size7_Class5', eddbid:null }, // TODO: verify
 		
 		 8150 : { mtype:'imrp', cost:     5000, name:'Module Reinforcement Package', class:1, rating:'E', mass: 2.00, integ: 77, dmgprot:30, fdid:128737270, fdname:'Int_ModuleReinforcement_Size1_Class1', eddbid:1577 },
 		 8140 : { mtype:'imrp', cost:    15000, name:'Module Reinforcement Package', class:1, rating:'D', mass: 1.00, integ: 70, dmgprot:60, fdid:128737271, fdname:'Int_ModuleReinforcement_Size1_Class2', eddbid:1578 },
