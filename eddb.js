@@ -2236,7 +2236,7 @@ var eddb = {
 		imlc : {
 			name:'Multi Limpets',
 			modulenames:{},
-			modulenames:{'Operations Limpet Controller':'Operations', 'Xeno Limpet Controller':'Xeno', 'Mining Multi Limpet Controller':'Mining', 'Rescue Limpet Controller':'Rescue', 'Universal Multi Limpet Controller':'Universal'},
+		//	modulenames:{'Operations Limpet Controller':'Operations', 'Xeno Limpet Controller':'Xeno', 'Mining Multi Limpet Controller':'Mining', 'Rescue Limpet Controller':'Rescue', 'Universal Multi Limpet Controller':'Universal'},
 			keyattrs:['maxlimpet','lpactrng'],
 		},
 		
