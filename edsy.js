@@ -7425,6 +7425,8 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		var item = 'edsy_modules' + (current.beta ? '_beta' : '');
 		var data = (window.localStorage.getItem(item) || '').split('/').concat([
 			"0W0o120W151k1w1v1j1b0i0W18130h131X1r1p1q1f1Z=FLIqG02G0050ypD4sPc8y00C_00Gu00", // 2B Enzyme, HC+Caustic
+			"0W0n140l160W171r1X1o1a1f1X1k0W1G1i1X1p1j1X0i0W1J1X1i1s1X1q1f1l1k=GLXFG02G0060vBo4zHx8y00Cw00H800KvLL", // 1D/F Guardian Plasma
+			"0W0o120l160W171r1X1o1a1f1X1k0W1G1i1X1p1j1X0i0W1J1X1i1s1X1q1f1l1k=GLYVG02G0060vBo4zHx8y00Cw00H800KvLL", // 2B/F Guardian Plasma
 			"0W0n140l160W111Y1o1X1p1f1l1k0W121i1X1p1q1b1o0i0W13170W1o1b1t1X1o1a=FJprG02G0062y006y00Ey00Iy00L800P800", // 1D/F Abrasion Blaster
 			"0W0n140l160W1D1f1k1f1k1d0W1C1X1p1b1o0i0W13170W1o1b1t1X1o1a=FJpqG02G0072y006y00AkPcEy00Iy00L800PBLL", // 1D/F Mining Laser
 			"0W0o120W1J1b1b1h1b1o0i0W1C1N0h18130i0W1K13=FK4lG03Q0072-Cp6ypDAsPcIwPcUoPcX000b000", // 2B Seeker, LW+HC, TC

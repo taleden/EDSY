@@ -1879,6 +1879,8 @@ var eddb = {
 			sortname:'Experimental - Guardian Plasma',
 			modulenames:{'Guardian Plasma Charger':true},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
+			modifiable:['pwrdraw','damage','thmload','pierce','shotspd','ammoclip'],
+			blueprints:['special'],
 		},
 		
 		hexgs : {
