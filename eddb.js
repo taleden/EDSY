@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 38442,
-	edsy_versions_db : [36241,38341,38442,38441], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20211216,
+	version : 38443,
+	edsy_versions_db : [36241,38341,38443,38443], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20220210,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1888,6 +1888,8 @@ var eddb = {
 			sortname:'Experimental - Guardian Shard',
 			modulenames:{'Guardian Shard Cannon':true},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
+			modifiable:['mass','pwrdraw','distdraw','thmload','pierce','maximumrng','shotspd','jitter','dmgfall'],
+			blueprints:['special'],
 		},
 		
 		hexsc : {
@@ -2098,7 +2100,7 @@ var eddb = {
 			name:'Frame Shift Drives',
 			modulenames:{'Frame Shift Drive':true},
 			keyattrs:['fsdoptmass','maxfuel'],
-			modifiable:['mass','integ','pwrdraw','boottime','fsdoptmass','fsdheat','_X_ maxfuel'],
+			modifiable:['mass','integ','pwrdraw','boottime','fsdoptmass','fsdheat','maxfuel'],
 			blueprints:['cfsd_fb','cfsd_ir','cfsd_sh'],
 			expeffects:['cfsdx_dc','cfsdx_db','cfsdx_mm','cfsdx_sd','cfsdx_ts'],
 		},
@@ -3149,16 +3151,16 @@ var eddb = {
 		 9551 : { mtype:'imahrp', cost:225000, name:'Meta Alloy Hull Reinforcement Package', class:5, rating:'E', mass: 32, hullrnf:324, caures:3.0, fdid:128793125, fdname:'Int_MetaAlloyHullReinforcement_Size5_Class1', eddbid:1672 }, // techbroker
 		 9541 : { mtype:'imahrp', cost:675000, name:'Meta Alloy Hull Reinforcement Package', class:5, rating:'D', mass: 16, hullrnf:351, caures:3.0, fdid:128793126, fdname:'Int_MetaAlloyHullReinforcement_Size5_Class2', eddbid:1673 }, // techbroker
 		
-		19351 : { mtype:'imlc', cost:    15000, name:'Mining Multi Limpet Controller',    class:3, rating:'E', mlctype:'M', mass: 12, integ: 45, pwrdraw:0.50, boottime:6, maxlimpet: 4, lpactrng: 3300, limpettime:1/0, maxspd:200, multispd:60,                                                                    fdid:129001921, fdname:'Int_MultiDroneControl_Mining_Size3_Class1', eddbid:null }, // TODO: verify
-		19331 : { mtype:'imlc', cost:    50000, name:'Mining Multi Limpet Controller',    class:3, rating:'C', mlctype:'M', mass: 10, integ: 68, pwrdraw:0.35, boottime:6, maxlimpet: 4, lpactrng: 5000, limpettime:1/0, maxspd:200, multispd:60,                                                                    fdid:129001922, fdname:'Int_MultiDroneControl_Mining_Size3_Class3', eddbid:null }, // TODO: verify
-		19332 : { mtype:'imlc', cost:    50000, name:'Operations Limpet Controller',      class:3, rating:'C', mlctype:'O', mass: 10, integ: 68, pwrdraw:0.35, boottime:6, maxlimpet: 4, lpactrng: 2600, limpettime:510, maxspd:500, multispd:60,                              hacktime:16, mincargo:3, maxcargo: 8, fdid:129001923, fdname:'Int_MultiDroneControl_Operations_Size3_Class3', eddbid:null }, // TODO: verify
-		19322 : { mtype:'imlc', cost:    80000, name:'Operations Limpet Controller',      class:3, rating:'B', mlctype:'O', mass: 15, integ: 80, pwrdraw:0.30, boottime:6, maxlimpet: 4, lpactrng: 3100, limpettime:420, maxspd:500, multispd:60,                              hacktime:22, mincargo:4, maxcargo: 9, fdid:129001924, fdname:'Int_MultiDroneControl_Operations_Size3_Class4', eddbid:null }, // TODO: verify
-		19343 : { mtype:'imlc', cost:    30000, name:'Rescue Limpet Controller',          class:3, rating:'D', mlctype:'R', mass:  8, integ: 58, pwrdraw:0.40, boottime:6, maxlimpet: 4, lpactrng: 2100, limpettime:300, maxspd:500,              fuelxfer:1.0, lmprepcap: 60, hacktime:19, mincargo:2, maxcargo: 7, fdid:129001925, fdname:'Int_MultiDroneControl_Rescue_Size3_Class2', eddbid:null }, // TODO: verify
-		19333 : { mtype:'imlc', cost:    50000, name:'Rescue Limpet Controller',          class:3, rating:'C', mlctype:'R', mass: 10, integ: 68, pwrdraw:0.35, boottime:6, maxlimpet: 4, lpactrng: 2600, limpettime:300, maxspd:500,              fuelxfer:1.0, lmprepcap: 60, hacktime:16, mincargo:3, maxcargo: 8, fdid:129001926, fdname:'Int_MultiDroneControl_Rescue_Size3_Class3', eddbid:null }, // TODO: verify
-		19334 : { mtype:'imlc', cost:    50000, name:'Xeno Limpet Controller',            class:3, rating:'C', mlctype:'X', mass: 10, integ: 68, pwrdraw:0.35, boottime:6, maxlimpet: 4, lpactrng: 5000, limpettime:300, maxspd:200,                            lmprepcap: 70,                                       fdid:129001927, fdname:'Int_MultiDroneControl_Xeno_Size3_Class3', eddbid:null }, // TODO: verify
-		19324 : { mtype:'imlc', cost:    80000, name:'Xeno Limpet Controller',            class:3, rating:'B', mlctype:'X', mass: 15, integ: 80, pwrdraw:0.30, boottime:6, maxlimpet: 4, lpactrng: 5000, limpettime:300, maxspd:200,                            lmprepcap: 70,                                       fdid:129001928, fdname:'Int_MultiDroneControl_Xeno_Size3_Class4', eddbid:null }, // TODO: verify
-		19730 : { mtype:'imlc', cost:  4000000, name:'Universal Multi Limpet Controller', class:7, rating:'C', mlctype:'U', mass:125, integ:150, pwrdraw:0.80, boottime:6, maxlimpet: 8, lpactrng: 6500, limpettime:1/0, maxspd:500, multispd:60, fuelxfer:1.0, lmprepcap:310, hacktime: 8, mincargo:3, maxcargo: 8, fdid:129001929, fdname:'Int_MultiDroneControl_Universal_Size7_Class3', eddbid:null }, // TODO: verify
-		19710 : { mtype:'imlc', cost:  8000000, name:'Universal Multi Limpet Controller', class:7, rating:'A', mlctype:'U', mass:140, integ:200, pwrdraw:1.10, boottime:6, maxlimpet: 8, lpactrng: 9100, limpettime:1/0, maxspd:500, multispd:60, fuelxfer:1.0, lmprepcap:310, hacktime: 5, mincargo:5, maxcargo:10, fdid:129001930, fdname:'Int_MultiDroneControl_Universal_Size7_Class5', eddbid:null }, // TODO: verify
+		19351 : { mtype:'imlc', cost:    15000, name:'Mining Multi Limpet Controller',    class:3, rating:'E', mlctype:'M', mass: 12, integ: 45, pwrdraw:0.50, boottime:6, maxlimpet: 4, lpactrng: 3300, limpettime:1/0, maxspd:200, multispd:60,                                                                    fdid:129001921, fdname:'Int_MultiDroneControl_Mining_Size3_Class1', eddbid:1816 }, // TODO: verify
+		19331 : { mtype:'imlc', cost:    50000, name:'Mining Multi Limpet Controller',    class:3, rating:'C', mlctype:'M', mass: 10, integ: 68, pwrdraw:0.35, boottime:6, maxlimpet: 4, lpactrng: 5000, limpettime:1/0, maxspd:200, multispd:60,                                                                    fdid:129001922, fdname:'Int_MultiDroneControl_Mining_Size3_Class3', eddbid:1817 }, // TODO: verify
+		19332 : { mtype:'imlc', cost:    50000, name:'Operations Limpet Controller',      class:3, rating:'C', mlctype:'O', mass: 10, integ: 68, pwrdraw:0.35, boottime:6, maxlimpet: 4, lpactrng: 2600, limpettime:510, maxspd:500, multispd:60,                              hacktime:16, mincargo:3, maxcargo: 8, fdid:129001923, fdname:'Int_MultiDroneControl_Operations_Size3_Class3', eddbid:1818 }, // TODO: verify
+		19322 : { mtype:'imlc', cost:    80000, name:'Operations Limpet Controller',      class:3, rating:'B', mlctype:'O', mass: 15, integ: 80, pwrdraw:0.30, boottime:6, maxlimpet: 4, lpactrng: 3100, limpettime:420, maxspd:500, multispd:60,                              hacktime:22, mincargo:4, maxcargo: 9, fdid:129001924, fdname:'Int_MultiDroneControl_Operations_Size3_Class4', eddbid:1819 }, // TODO: verify
+		19343 : { mtype:'imlc', cost:    30000, name:'Rescue Limpet Controller',          class:3, rating:'D', mlctype:'R', mass:  8, integ: 58, pwrdraw:0.40, boottime:6, maxlimpet: 4, lpactrng: 2100, limpettime:300, maxspd:500,              fuelxfer:1.0, lmprepcap: 60, hacktime:19, mincargo:2, maxcargo: 7, fdid:129001925, fdname:'Int_MultiDroneControl_Rescue_Size3_Class2', eddbid:1820 }, // TODO: verify
+		19333 : { mtype:'imlc', cost:    50000, name:'Rescue Limpet Controller',          class:3, rating:'C', mlctype:'R', mass: 10, integ: 68, pwrdraw:0.35, boottime:6, maxlimpet: 4, lpactrng: 2600, limpettime:300, maxspd:500,              fuelxfer:1.0, lmprepcap: 60, hacktime:16, mincargo:3, maxcargo: 8, fdid:129001926, fdname:'Int_MultiDroneControl_Rescue_Size3_Class3', eddbid:1821 }, // TODO: verify
+		19334 : { mtype:'imlc', cost:    50000, name:'Xeno Limpet Controller',            class:3, rating:'C', mlctype:'X', mass: 10, integ: 68, pwrdraw:0.35, boottime:6, maxlimpet: 4, lpactrng: 5000, limpettime:300, maxspd:200,                            lmprepcap: 70,                                       fdid:129001927, fdname:'Int_MultiDroneControl_Xeno_Size3_Class3', eddbid:1822 }, // TODO: verify
+		19324 : { mtype:'imlc', cost:    80000, name:'Xeno Limpet Controller',            class:3, rating:'B', mlctype:'X', mass: 15, integ: 80, pwrdraw:0.30, boottime:6, maxlimpet: 4, lpactrng: 5000, limpettime:300, maxspd:200,                            lmprepcap: 70,                                       fdid:129001928, fdname:'Int_MultiDroneControl_Xeno_Size3_Class4', eddbid:1823 }, // TODO: verify
+		19730 : { mtype:'imlc', cost:  4000000, name:'Universal Multi Limpet Controller', class:7, rating:'C', mlctype:'U', mass:125, integ:150, pwrdraw:0.80, boottime:6, maxlimpet: 8, lpactrng: 6500, limpettime:1/0, maxspd:500, multispd:60, fuelxfer:1.0, lmprepcap:310, hacktime: 8, mincargo:3, maxcargo: 8, fdid:129001929, fdname:'Int_MultiDroneControl_Universal_Size7_Class3', eddbid:1824 }, // TODO: verify
+		19710 : { mtype:'imlc', cost:  8000000, name:'Universal Multi Limpet Controller', class:7, rating:'A', mlctype:'U', mass:140, integ:200, pwrdraw:1.10, boottime:6, maxlimpet: 8, lpactrng: 9100, limpettime:1/0, maxspd:500, multispd:60, fuelxfer:1.0, lmprepcap:310, hacktime: 5, mincargo:5, maxcargo:10, fdid:129001930, fdname:'Int_MultiDroneControl_Universal_Size7_Class5', eddbid:1825 }, // TODO: verify
 		
 		 8150 : { mtype:'imrp', cost:     5000, name:'Module Reinforcement Package', class:1, rating:'E', mass: 2.00, integ: 77, dmgprot:30, fdid:128737270, fdname:'Int_ModuleReinforcement_Size1_Class1', eddbid:1577 },
 		 8140 : { mtype:'imrp', cost:    15000, name:'Module Reinforcement Package', class:1, rating:'D', mass: 1.00, integ: 70, dmgprot:60, fdid:128737271, fdname:'Int_ModuleReinforcement_Size1_Class2', eddbid:1578 },
