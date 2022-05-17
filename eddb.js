@@ -2,7 +2,7 @@
 EDSY was created using assets and imagery from Elite Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
 It is not endorsed by nor reflects the views or opinions of Frontier Developments and no employee of Frontier Developments was involved in the making of it.
 
-Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2020 taleden
+Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2022 taleden
 and is provided under a Creative Commons Attribution-NonCommercial 4.0 International License (http://creativecommons.org/licenses/by-nc/4.0/).
 
 The Elite Dangerous game logic and data in this file remains the property of Frontier Developments plc, and is used here as authorized by
@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 38443,
-	edsy_versions_db : [36241,38341,38443,38443], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20220210,
+	version : 38444,
+	edsy_versions_db : [36241,38341,38443,38444], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20220517,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1819,6 +1819,7 @@ var eddb = {
 		'ifsdb'  : 1,
 		'ifsdi'  : 1,
 		'ifs'    : 1,
+		'imlc'   : 1,
 		'ir'     : 1,
 		'isg'    : 1,
 		'isbs'   : 1,
