@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 38444,
-	edsy_versions_db : [36241,38341,38443,38444], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20220517,
+	version : 38445,
+	edsy_versions_db : [36241,38341,38445,38444], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20220713,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -2932,6 +2932,8 @@ var eddb = {
 		  161 : { mtype:'icr', cost:  12560, name:'Corrosion Resistant Cargo Rack (Cap: 2)',  class:1, rating:'F', cargocap: 2, fdid:128681992, fdname:'Int_CorrosionProofCargoRack_Size1_Class2', eddbid:1552 }, // techbroker
 	//	  251 : { mtype:'icr', cost:       , name:'Corrosion Resistant Cargo Rack (Cap: 4)',  class:2, rating:'E', cargocap: 4, fdid:null, fdname:'Int_CorrosionProofCargoRack_Size2_Class1', eddbid:null }, // techbroker
 		  451 : { mtype:'icr', cost:  94330, name:'Corrosion Resistant Cargo Rack (Cap: 16)', class:4, rating:'E', cargocap:16, fdid:128833944, fdname:'Int_CorrosionProofCargoRack_Size4_Class1', eddbid:1699 }, // techbroker
+		  551 : { mtype:'icr', cost:      0, name:'Corrosion Resistant Cargo Rack (Cap: 32)', class:5, rating:'E', cargocap:32, fdid:     null, fdname:'Int_CorrosionProofCargoRack_Size5_Class1', eddbid:null, hidden:1 }, // CG reward // verify: fdname // TODO: fdid,eddbid
+		  651 : { mtype:'icr', cost:      0, name:'Corrosion Resistant Cargo Rack (Cap: 64)', class:6, rating:'E', cargocap:64, fdid:     null, fdname:'Int_CorrosionProofCargoRack_Size6_Class1', eddbid:null, hidden:1 }, // CG reward // verify: fdname // TODO: fdid,eddbid
 		
 		
 		22150 : { mtype:'iclc', cost:    600, name:'Collector Limpet Controller', class:1, rating:'E', mass:  0.50, integ: 24, pwrdraw:0.14, boottime:6, maxlimpet: 1, lpactrng: 800, limpettime:300, maxspd:200, multispd:60, fdid:128671229, fdname:'Int_DroneControl_Collection_Size1_Class1', eddbid:1394 },
