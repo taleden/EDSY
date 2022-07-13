@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [37546,38341,38443,38444]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20220517;
+	var VERSIONS = [37546,38341,38443,38445]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20220713;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -3252,6 +3252,14 @@ window.edsy = new (function() {
 				slotModule[slotname] = modulejson;
 				slotNum[slotname] = fdevmap.slotNum[slotname] || parseInt(tokens[2] || 0);
 				slotSize[slotname] = ((slotgroup === 'hardpoint') ? 'TSMLH'.indexOf(slotname[0]) : parseInt(tokens[3] || 0));
+				// since the slot size could be misreported by the slot name, take the greater of that or the size of the actual slotted module, if any
+				if (modulejson) {
+					var fdname = (modulejson.Item || '').trim().toUpperCase();
+					var modid = fdevmap.shipModule[shipid][fdname] || fdevmap.module[fdname];
+					var module = eddb.module[modid];
+					if (module)
+						slotSize[slotname] = max(slotSize[slotname], (module.class || 0) | 0);
+				}
 			} else if (slotname === 'PLANETARYAPPROACHSUITE') {
 				/* ignore the approach suite; someday maybe we'll handle it, til then we'll just pretend it doesn't exist
 				var fdname = (modulejson.Item || '').trim().toUpperCase();
@@ -3326,7 +3334,7 @@ window.edsy = new (function() {
 						if (modid > 0) {
 							if (slot.setModuleID(modid, true)) {
 								if (!current.option.experimental && !slot.setModuleID(modid)) {
-									if (errors) errors.push(modulejson.Slot + getModuleLabel(this.getModule()) + ' requires Experimental Mode');
+									if (errors) errors.push(modulejson.Slot + ': ' + getModuleLabel(slot.getModule()) + ' requires Experimental Mode');
 								}
 								if ('Value' in modulejson) {
 									modulesValueExpected -= modulejson.Value;
