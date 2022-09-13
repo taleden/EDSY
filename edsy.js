@@ -10,7 +10,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [37546,38341,38443,38446]; /* HTML,CSS,DB,JS */
+	var VERSIONS = [307059906,308039901,308119901,308119901]; /* HTML,CSS,DB,JS */
 	var LASTMODIFIED = 20220913;
 	
 	var EMPTY_OBJ = {};
@@ -1840,30 +1840,24 @@ window.edsy = new (function() {
 		}, // exportJournal()
 		
 		
-		exportEDOMH: function(only) {
+		exportEDOMH: function() {
 			var ship = eddb.ship[this.build.getShipID()];
 			var module = this.getModule();
-			if (!ship || !module || !this.isModified())
+			var blueprint = eddb.blueprint[this.bpid];
+			if (!ship || !module || !this.isModified() || !blueprint || !this.bproll)
 				return null;
 			
 			var obj = {
 				"item": (module.fdname || '').toLowerCase(),
-			};
-			
-			var blueprint = eddb.blueprint[this.bpid];
-			if (blueprint && this.bproll && (!only || only == "blueprint")) {
-				obj["blueprint"] = (blueprint.fdname || '').toLowerCase();
-				obj["grade"] = this.bpgrade;
-				obj["highestGradePercentage"] = (this.bproll ? parseFloat(this.bproll.toFixed(6)) : 0);
+				"blueprint": (blueprint.fdname || '').toLowerCase(),
+				"grade": this.bpgrade,
+				"highestGradePercentage": (this.bproll ? parseFloat(this.bproll.toFixed(6)) : 0),
 			}
 			
 			var expeffect = eddb.expeffect[this.expid];
-			if (expeffect && (!only || only == "experimental")) {
+			if (expeffect) {
 				obj["experimental"] = (expeffect.fdname || '').toLowerCase();
 			}
-			
-			if (!obj["blueprint"] && !obj["experimental"])
-				return null;
 			
 			return obj;
 		}, // exportEDOMH()
@@ -2900,15 +2894,17 @@ window.edsy = new (function() {
 			for (var groupnum = 0;  groupnum < GROUPS.length;  groupnum++) {
 				for (var slotnum = 0;  slot = this.getSlot(GROUPS[groupnum], slotnum);  slotnum++) {
 					// repeating the structure separately for blueprint and experimental seems weird to me, but it's how they want it *shrug*
-					slotobj = slot.exportEDOMH("blueprint");
-					if (slotobj)
-						obj["items"].push(slotobj);
-					slotobj = slot.exportEDOMH("experimental");
+					slotobj = slot.exportEDOMH();
 					if (slotobj) {
-						slotobj["blueprint"] = slotobj["experimental"];
-						delete slotobj["grade"];
-						delete slotobj["highestGradePercentage"];
-						delete slotobj["experimental"];
+						if (slotobj["experimental"]) {
+							delete slotobj["experimental"];
+							obj["items"].push(slotobj);
+							slotobj = slot.exportEDOMH();
+							slotobj["blueprint"] = slotobj["experimental"];
+							delete slotobj["grade"];
+							delete slotobj["highestGradePercentage"];
+							delete slotobj["experimental"];
+						}
 						obj["items"].push(slotobj);
 					}
 				}
@@ -5140,13 +5136,13 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			}
 			if (export_edomh) {
 				var url = JSON.stringify(export_edomh);
-				url = b64Encode(pako.deflate(url, {to:'string'}));
+			//	url = b64Encode(pako.deflate(url, {to:'string'}));
 				url = "edomh://edsy/?" + url;
 				var link = document.createElement('a');
 				link.className = 'button';
 				link.href = url;
 				link.target = '_blank';
-				link.innerHTML = '<img src="edomh.png"> EDOMH';
+				link.innerHTML = '<img src="edomh.png" class="iconsvg"> EDOMH';
 				div.appendChild(link);
 			}
 			td.appendChild(div);
@@ -7515,15 +7511,15 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		var item = 'edsy_modules' + (current.beta ? '_beta' : '');
 		var data = (window.localStorage.getItem(item) || '').split('/').concat([
 			"0W0o120W151k1w1v1j1b0i0W18130h131X1r1p1q1f1Z=FLIqG02G0050ypD4sPc8y00C_00Gu00", // 2B Enzyme, HC+Caustic
-			// 1D/F Modified Gauss Cannon, Salvation
-			// 2B/F Modified Gauss Cannon, Salvation
-			"0W0n140l160W171r1X1o1a1f1X1k0W1G1i1X1p1j1X0i0W1J1X1i1s1X1q1f1l1k=GLXFG02G0060vBo4zHx8y00Cw00H800KvLL", // 1D/F Modified Plasma Charger, Salvation
-			"0W0o120l160W171r1X1o1a1f1X1k0W1G1i1X1p1j1X0i0W1J1X1i1s1X1q1f1l1k=GLYVG02G0060vBo4zHx8y00Cw00H800KvLL", // 2B/F Modified Plasma Charger, Salvation
-			"0W0n140l160W171r1X1o1a1f1X1k0W1J1e1X1o1a0i0W1C1I=GLXIG02G0090y0051Cp98HlDFm0H058K_7YP4J9V700YpXu", // 1D/F Modified Shard Cannon, Salvation
-		//	"0W0o110l160W171r1X1o1a1f1X1k0W1J1e1X1o1a0i0W13170W1o1b1t1X1o1a0W1C1I0r=GLYOG02G0080y0051Cp993DDFm0H058L800Op7uV700", // 2A/F Guardian Shard, LR5 {CG reward}
-			"0W0o110l160W171r1X1o1a1f1X1k0W1J1e1X1o1a0i0W1C1I=GLYOG02G0090y0051Cp98HkDFm0H058K_7YP4JBV700YpXu", // 2A/F Modified Shard Cannon, Salvation
-			"0W0n140l160W111Y1o1X1p1f1l1k0W121i1X1p1q1b1o0i0W13170W1o1b1t1X1o1a=FJprG02G0062y006y00Ey00Iy00L800P800", // 1D/F Abrasion Blaster, CG reward
-			"0W0n140l160W1D1f1k1f1k1d0W1C1X1p1b1o0i0W13170W1o1b1t1X1o1a=FJpqG02G0072y006y00AkPcEy00Iy00L800PBLL", // 1D/F Mining Laser, CG reward
+			"0W0n140l160W171r1X1o1a1f1X1k0W171X1r1p1p0i0W1I16=GLXCG02G0092_156_00A_00Ew7sHD00L800P600T800YsPc", // 1D/F Guardian Gauss, RF (Salvation)
+			"0W0o120l160W171r1X1o1a1f1X1k0W171X1r1p1p0i0W1I16=GLYSG02G0092_156_00A_00Ew7sHD00L800P600T800YsPc", // 2B/F Guardian Gauss, RF (Salvation)
+			"0W0n140l160W171r1X1o1a1f1X1k0W1G1i1X1p1j1X0i0W1F13=GLXFG02G0060vBo4zHx8y00Cw00H800KvLL", // 1D/F Guardian Plasma, OC (Salvation)
+			"0W0o120l160W171r1X1o1a1f1X1k0W1G1i1X1p1j1X0i0W1F13=GLYVG02G0060vBo4zHx8y00Cw00H800KvLL", // 2B/F Guardian Plasma, OC (Salvation)
+			"0W0n140l160W171r1X1o1a1f1X1k0W1J1e1X1o1a0i0W1C1I=GLXIG02G0090y0051Cp98HlDFm0H058K_7YP4J9V700YpXu", // 1D/F Guardian Shard, LR (Salvation)
+			"0W0o110l160W171r1X1o1a1f1X1k0W1J1e1X1o1a0i0W1C1I=GLYOG02G0090y0051Cp98HkDFm0H058K_7YP4JBV700YpXu", // 2A/F Guardian Shard, LR (Salvation)
+		//	"0W0o110l160W171r1X1o1a1f1X1k0W1J1e1X1o1a0i0W13170W1o1b1t1X1o1a0W1C1I0r=GLYOG02G0080y0051Cp993DDFm0H058L800Op7uV700", // 2A/F Guardian Shard, LR5 (CG reward)
+			"0W0n140l160W111Y1o1X1p1f1l1k0W121i1X1p1q1b1o0i0W13170W1o1b1t1X1o1a=FJprG02G0062y006y00Ey00Iy00L800P800", // 1D/F Abrasion Blaster, ? (CG reward)
+			"0W0n140l160W1D1f1k1f1k1d0W1C1X1p1b1o0i0W13170W1o1b1t1X1o1a=FJpqG02G0072y006y00AkPcEy00Iy00L800PBLL", // 1D/F Mining Laser, ? (CG reward)
 			"0W0o120W1J1b1b1h1b1o0i0W1C1N0h18130i0W1K13=FK4lG03Q0072-Cp6ypDAsPcIwPcUoPcX000b000", // 2B Seeker, LW+HC, TC
 			"0W0o120l160W1I1X1f1i0i0W1C1I0h18130i0W1613=FKZyG03I0080-Cp8zCpT000Yyv4b000f000iu00r900", // 2B/F Rail, LR+HC, FC
 			"0W0m160W15131D0i0W1C1N0h1J1e=FCTqG03G0032_pD50009000", // 0F ECM, LW+Sh // TODO: verify
@@ -10682,8 +10678,8 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		}
 		
 		// fill in the current version and update date
-		var v = '' + max(vH[0], vC[1], vD[2], vJ[3]) + '00000';
-		document.getElementById('version_label').innerHTML = ('v' + v[0] + '.' + v[1] + '.' + v[2] + (['-','a','b','rc'][v[3]] || '.') + v[4]);
+		var v = ('0000000000' + max(vH[0], vC[1], vD[2], vJ[3])).slice(-10);
+		document.getElementById('version_label').innerHTML = ('v' + parseInt(v.slice(0,2)) + '.' + parseInt(v.slice(2,4)) + '.' + parseInt(v.slice(4,6)) + (['-','a','b','rc'][parseInt(v.slice(6,8))] || '.') + parseInt(v.slice(8,10)));
 		var d = '' + max(dH, dC, dD, dJ) + '00000000';
 		document.getElementById('version_label').title = ('updated ' + d.slice(0,4) + '-' + d.slice(4,6) + '-' + d.slice(6,8));
 		
