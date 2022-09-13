@@ -5136,7 +5136,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			}
 			if (export_edomh) {
 				var url = JSON.stringify(export_edomh);
-			//	url = b64Encode(pako.deflate(url, {to:'string'}));
+				url = b64Encode(pako.deflate(url, {to:'string'}));
 				url = "edomh://edsy/?" + url;
 				var link = document.createElement('a');
 				link.className = 'button';
