@@ -1873,6 +1873,8 @@ var eddb = {
 			sortname:'Experimental - Guardian Gauss',
 			modulenames:{},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
+			modifiable:['damage','distdraw','thmload','bstint','bstrof','bstsize','ammoclip','ammomax','dmgfall'],
+			blueprints:['special'],
 		},
 		
 		hexgp : {
