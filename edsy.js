@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [37546,38341,38443,38445]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20220713;
+	var VERSIONS = [37546,38341,38443,38446]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20220913;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -1839,6 +1839,35 @@ window.edsy = new (function() {
 			return obj;
 		}, // exportJournal()
 		
+		
+		exportEDOMH: function(only) {
+			var ship = eddb.ship[this.build.getShipID()];
+			var module = this.getModule();
+			if (!ship || !module || !this.isModified())
+				return null;
+			
+			var obj = {
+				"item": (module.fdname || '').toLowerCase(),
+			};
+			
+			var blueprint = eddb.blueprint[this.bpid];
+			if (blueprint && this.bproll && (!only || only == "blueprint")) {
+				obj["blueprint"] = (blueprint.fdname || '').toLowerCase();
+				obj["grade"] = this.bpgrade;
+				obj["highestGradePercentage"] = (this.bproll ? parseFloat(this.bproll.toFixed(6)) : 0);
+			}
+			
+			var expeffect = eddb.expeffect[this.expid];
+			if (expeffect && (!only || only == "experimental")) {
+				obj["experimental"] = (expeffect.fdname || '').toLowerCase();
+			}
+			
+			if (!obj["blueprint"] && !obj["experimental"])
+				return null;
+			
+			return obj;
+		}, // exportEDOMH()
+		
 	}; // Slot.prototype
 	
 	
@@ -2852,6 +2881,43 @@ window.edsy = new (function() {
 				]
 			);
 		}, // exportSLEF()
+		
+		
+		exportEDOMH: function() {
+			var ship = eddb.ship[this.shipid];
+			if (!ship)
+				return '';
+			
+			var obj = {
+				"version": 1,
+				"ship": (ship.fdname || '').toLowerCase(),
+				"name": (this.name || ''),
+				"items": [],
+			};
+			
+			var slot = null;
+			var slotobj = null;
+			for (var groupnum = 0;  groupnum < GROUPS.length;  groupnum++) {
+				for (var slotnum = 0;  slot = this.getSlot(GROUPS[groupnum], slotnum);  slotnum++) {
+					// repeating the structure separately for blueprint and experimental seems weird to me, but it's how they want it *shrug*
+					slotobj = slot.exportEDOMH("blueprint");
+					if (slotobj)
+						obj["items"].push(slotobj);
+					slotobj = slot.exportEDOMH("experimental");
+					if (slotobj) {
+						slotobj["blueprint"] = slotobj["experimental"];
+						delete slotobj["grade"];
+						delete slotobj["highestGradePercentage"];
+						delete slotobj["experimental"];
+						obj["items"].push(slotobj);
+					}
+				}
+			}
+			
+			if (obj["items"].length < 1)
+				return null;
+			return obj;
+		}, // exportEDOMH()
 		
 	}; // Build.prototype
 	
@@ -5052,7 +5118,10 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		tr.appendChild(td);
 		tbody.appendChild(tr);
 		
-		if (current.fit.getInaraURL()) {
+		var export_inara = current.fit.getInaraURL();
+		var export_edomh = current.fit.exportEDOMH();
+		
+		if (export_inara || export_edomh) {
 			var tr = document.createElement('tr');
 			var td = document.createElement('td');
 			td.appendChild(document.createTextNode('Export'));
@@ -5061,12 +5130,25 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			td.className = 'export';
 			var div = document.createElement('div');
 			div.className = 'export';
-			var button = document.createElement('button');
-			button.className = 'text';
-			button.name = 'export_inara';
-			button.innerHTML = '<img src="inara.png"> Inara';
-			button.addEventListener('click', onUIFitExportInaraButtonClick);
-			div.appendChild(button);
+			if (export_inara) {
+				var button = document.createElement('button');
+				button.className = 'text';
+				button.name = 'export_inara';
+				button.innerHTML = '<img src="inara.png"> Inara';
+				button.addEventListener('click', onUIFitExportInaraButtonClick);
+				div.appendChild(button);
+			}
+			if (export_edomh) {
+				var url = JSON.stringify(export_edomh);
+				url = b64Encode(pako.deflate(url, {to:'string'}));
+				url = "edomh://edsy/?" + url;
+				var link = document.createElement('a');
+				link.className = 'button';
+				link.href = url;
+				link.target = '_blank';
+				link.innerHTML = '<img src="edomh.png"> EDOMH';
+				div.appendChild(link);
+			}
 			td.appendChild(div);
 			tr.appendChild(td);
 			var td = document.createElement('td');
