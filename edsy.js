@@ -10,7 +10,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [307059906,308039901,308119901,308119901]; /* HTML,CSS,DB,JS */
+	var VERSIONS = [308119901,308119901,308119901,308119901]; /* HTML,CSS,DB,JS */
 	var LASTMODIFIED = 20220913;
 	
 	var EMPTY_OBJ = {};
@@ -10653,9 +10653,17 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		}
 		try {
 			var compstyle = getComputedStyle(document.documentElement);
-			vC = compstyle.getPropertyValue('--edsy-versions-css').split(',');
-			vC = [ parseInt(vC[0]),parseInt(vC[1]),parseInt(vC[2]),parseInt(vC[3]) ];
-			dC = parseInt(compstyle.getPropertyValue('--edsy-lastmodified-css') || 0);
+			vC = compstyle.getPropertyValue('--edsy-versions-css').trim();
+			dC = compstyle.getPropertyValue('--edsy-lastmodified-css').trim();
+			if (dC[0] == 'd') {
+				vC = vC.split('-');
+				vC = [ parseInt(vC[1]),parseInt(vC[2]),parseInt(vC[3]),parseInt(vC[4]) ];
+				dC = parseInt(dC.split('-')[1] || 0);
+			} else {
+				vC = vC.split(',');
+				vC = [ parseInt(vC[0]),parseInt(vC[1]),parseInt(vC[2]),parseInt(vC[3]) ];
+				dC = parseInt(dC || 0);
+			}
 		} catch (e) {
 			vC = [ 0,0,0,0 ];
 			dC = 0;
