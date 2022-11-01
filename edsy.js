@@ -7511,6 +7511,8 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		var item = 'edsy_modules' + (current.beta ? '_beta' : '');
 		var data = (window.localStorage.getItem(item) || '').split('/').concat([
 			"0W0o120W151k1w1v1j1b0i0W18130h131X1r1p1q1f1Z=FLIqG02G0050ypD4sPc8y00C_00Gu00", // 2B Enzyme, HC+Caustic
+			"0W0o120l16140W111O0W1D1f1p1p1f1i1b0i0W1813=GL3CG03G_W80zcQ4sPcAhhXEsPcL000P000UxCpWy00", // 2B/FD AX Missile, HC (CG reward)
+			"0W0p110l16140W111O0W1D1f1p1p1f1i1b0i0W1813=GL4cG03G_W80zcQ4sPcAhhXEsPcL000P000UxCpWy00", // 3B/FD AX Missile, HC (CG reward)
 			"0W0n140l160W171r1X1o1a1f1X1k0W171X1r1p1p0i0W1I16=GLXCG02G0092_156_00A_00Ew7sHD00L800P600T800YsPc", // 1D/F Guardian Gauss, RF (Salvation)
 			"0W0o120l160W171r1X1o1a1f1X1k0W171X1r1p1p0i0W1I16=GLYSG02G0092_156_00A_00Ew7sHD00L800P600T800YsPc", // 2B/F Guardian Gauss, RF (Salvation)
 			"0W0n140l160W171r1X1o1a1f1X1k0W1G1i1X1p1j1X0i0W1F13=GLXFG02G0060vBo4zHx8y00Cw00H800KvLL", // 1D/F Guardian Plasma, OC (Salvation)
