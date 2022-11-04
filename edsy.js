@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308119901,308119901,308119902,308119902]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20221101;
+	var VERSIONS = [308119903,308119901,308119902,308119903]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20221104;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -2342,6 +2342,7 @@ window.edsy = new (function() {
 				wepcap_burst_max: 0,
 				wepchg_sustain_cur: 0,
 				wepchg_sustain_max: 0,
+				lmprepcap_max: 0,
 			};
 			var kinmod_ihrp = 1;
 			var thmmod_ihrp = 1;
@@ -2476,6 +2477,8 @@ window.edsy = new (function() {
 								stats.thmload_ct += slot.getEffectiveAttrValue('engheat');
 							} else if (mtypeid === 'cfsd') {
 								stats.thmload_cfsd += slot.getEffectiveAttrValue('fsdheat');
+							} else if (mtypeid === 'idlc' || mtypeid === 'imlc' || mtypeid === 'irlc') {
+								stats.lmprepcap_max = max(stats.lmprepcap_max, slot.getEffectiveAttrValue('lmprepcap'));
 							} else if (mtypeid === 'iscb') {
 								var scbheat = slot.getEffectiveAttrValue('scbheat');
 								var spinup = slot.getEffectiveAttrValue('spinup');
@@ -8587,6 +8590,8 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		// get primary stats
 		var integ_imrp = current.fit.getStat('integ_imrp');
 		var dmgprot = current.fit.getStat('dmgprot');
+		var lmprepcap_max = current.fit.getStat('lmprepcap_max');
+		var cargocap = current.fit.getStat('cargocap');
 		
 		var slot = current.fit.getSlot('ship', 'hull');
 		var hardness = slot.getEffectiveAttrValue('hardness');
@@ -8602,6 +8607,11 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		var thmArmInt = (rawArmInt / (1 - thmArmRes / 100));
 		var expArmInt = (rawArmInt / (1 - expArmRes / 100));
 		var cauArmInt = (rawArmInt / (1 - cauArmRes / 100));
+		var rawArmRep = lmprepcap_max * cargocap;
+		var kinArmRep = (rawArmRep / (1 - kinArmRes / 100));
+		var thmArmRep = (rawArmRep / (1 - thmArmRes / 100));
+		var expArmRep = (rawArmRep / (1 - expArmRes / 100));
+		var cauArmRep = (rawArmRep / (1 - cauArmRes / 100));
 		
 		// update displays
 		var htmlNA = '<small class="semantic">N/A</small>';
@@ -8617,6 +8627,11 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		document.getElementById('outfitting_stats_thm_armour_integ').innerHTML = formatNumHTML(thmArmInt, 1);
 		document.getElementById('outfitting_stats_exp_armour_integ').innerHTML = formatNumHTML(expArmInt, 1);
 		document.getElementById('outfitting_stats_cau_armour_integ').innerHTML = formatNumHTML(cauArmInt, 1);
+		document.getElementById('outfitting_stats_raw_armour_repair').innerHTML = (rawArmRep ? formatNumHTML(rawArmRep, 1) : htmlNA);
+		document.getElementById('outfitting_stats_kin_armour_repair').innerHTML = (rawArmRep ? formatNumHTML(kinArmRep, 1) : htmlNA);
+		document.getElementById('outfitting_stats_thm_armour_repair').innerHTML = (rawArmRep ? formatNumHTML(thmArmRep, 1) : htmlNA);
+		document.getElementById('outfitting_stats_exp_armour_repair').innerHTML = (rawArmRep ? formatNumHTML(expArmRep, 1) : htmlNA);
+		document.getElementById('outfitting_stats_cau_armour_repair').innerHTML = (rawArmRep ? formatNumHTML(cauArmRep, 1) : htmlNA);
 	}; // updateUIStatsArm()
 	
 	

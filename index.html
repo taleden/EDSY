@@ -14,8 +14,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 -->
 		<title>EDSY</title>
 		<meta name="application-name" content="EDSY">
-		<meta name="edsy-versions-html" id="edsy_versions_html" content="308119901,308119901,308119901,308119901"><!-- HTML,CSS,DB,JS -->
-		<meta name="last-modified" id="last_modified" content="20220913">
+		<meta name="edsy-versions-html" id="edsy_versions_html" content="308119903,308119901,308119901,308119901"><!-- HTML,CSS,DB,JS -->
+		<meta name="last-modified" id="last_modified" content="20221104">
 		<meta name="author" content="taleden">
 		<meta name="description" content="EDSY is a ship outfitting tool for Elite Dangerous">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -702,28 +702,28 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 													<td id="outfitting_stats_raw_shield_reinf"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Effective values vs. absolute damage, including SYS pips">ABS</abbr></th>
+													<th><abbr title="Base resistance from SYS pips, and effective values vs. absolute and non-weapon damage">SYS</abbr></th>
 													<td id="outfitting_stats_abs_shield_resist"></td>
 													<td id="outfitting_stats_abs_shield_strength"></td>
 													<!-- <td id="outfitting_stats_abs_shield_regen"></td> -->
 													<td id="outfitting_stats_abs_shield_reinf"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Effective values vs. kinetic damage, including SYS pips and resistance">KIN</abbr></th>
+													<th><abbr title="Kinetic resistance, and effective values vs. kinetic damage (including both KIN and SYS resistance)">KIN</abbr></th>
 													<td id="outfitting_stats_kin_shield_resist"></td>
 													<td id="outfitting_stats_kin_shield_strength"></td>
 													<!-- <td id="outfitting_stats_kin_shield_regen"></td> -->
 													<td id="outfitting_stats_kin_shield_reinf"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Effective values vs. thermal damage, including SYS pips and resistance">THM</abbr></th>
+													<th><abbr title="Thermal resistance, and effective values vs. thermal damage (including both THM and SYS resistance)">THM</abbr></th>
 													<td id="outfitting_stats_thm_shield_resist"></td>
 													<td id="outfitting_stats_thm_shield_strength"></td>
 													<!-- <td id="outfitting_stats_thm_shield_regen"></td> -->
 													<td id="outfitting_stats_thm_shield_reinf"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Effective values vs. explosive damage, including SYS pips and resistance">EXP</abbr></th>
+													<th><abbr title="Explosive resistance, and effective values vs. explosive damage (including both EXP and SYS resistance)">EXP</abbr></th>
 													<td id="outfitting_stats_exp_shield_resist"></td>
 													<td id="outfitting_stats_exp_shield_strength"></td>
 													<!-- <td id="outfitting_stats_exp_shield_regen"></td> -->
@@ -744,40 +744,47 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 											<thead>
 												<tr>
 													<th><label for="stats_toggle_6" class="stats_toggle_label stats_toggle_label_6"><abbr title="Armour statistics">ARM</abbr></label></th>
-													<td><abbr title="Hull hardness and damage resistance (in %)">RES</abbr></td>
+													<td><abbr title="Hull hardness, and damage resistance (in %)">RES</abbr></td>
 													<td><abbr title="Raw and effective integrity">INT</abbr></td>
+													<td><abbr title="Raw and effective Repair Limpet repair total, assuming full cargo of limpets">REP</abbr></td>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
-													<th><abbr title="Raw hull hardness and armour integrity">RAW</abbr></th>
+													<th><abbr title="Raw values">RAW</abbr></th>
 													<td id="outfitting_stats_raw_armour_hardness"></td>
 													<td id="outfitting_stats_raw_armour_integ"></td>
+													<td id="outfitting_stats_raw_armour_repair"></td>
 												</tr>
 												<tr>
 													<th><abbr title="Module Reinforcement Packages total protection value (in %) and integrity">MRP</abbr></th>
 													<td id="outfitting_stats_mod_armour_protect"></td>
 													<td id="outfitting_stats_mod_armour_integ"></td>
+													<td></td>
 												</tr>
 												<tr>
-													<th><abbr title="Effective values vs. kinetic damage, including resistance">KIN</abbr></th>
+													<th><abbr title="Kinetic resistance, and effective values vs. kinetic damage (including resistance)">KIN</abbr></th>
 													<td id="outfitting_stats_kin_armour_resist"></td>
 													<td id="outfitting_stats_kin_armour_integ"></td>
+													<td id="outfitting_stats_kin_armour_repair"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Effective values vs. thermal damage, including resistance">THM</abbr></th>
+													<th><abbr title="Thermal resistance, and effective values vs. thermal damage (including resistance)">THM</abbr></th>
 													<td id="outfitting_stats_thm_armour_resist"></td>
 													<td id="outfitting_stats_thm_armour_integ"></td>
+													<td id="outfitting_stats_thm_armour_repair"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Effective values vs. explosive damage, including resistance">EXP</abbr></th>
+													<th><abbr title="Explosive resistance, and effective values vs. explosive damage (including resistance)">EXP</abbr></th>
 													<td id="outfitting_stats_exp_armour_resist"></td>
 													<td id="outfitting_stats_exp_armour_integ"></td>
+													<td id="outfitting_stats_exp_armour_repair"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Effective values vs. caustic damage, including resistance">CAU</abbr></th>
+													<th><abbr title="Caustic resistance, and effective values vs. caustic damage (including resistance)">CAU</abbr></th>
 													<td id="outfitting_stats_cau_armour_resist"></td>
 													<td id="outfitting_stats_cau_armour_integ"></td>
+													<td id="outfitting_stats_cau_armour_repair"></td>
 												</tr>
 											</tbody>
 										</table>
