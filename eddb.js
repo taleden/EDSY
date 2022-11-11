@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 308119902,
-	edsy_versions_db : [308119901,308119901,308119902,308119902], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20221101,
+	version : 308119904,
+	edsy_versions_db : [308119901,308119901,308119904,308119904], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20221111,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1952,9 +1952,9 @@ var eddb = {
 			name:'Multi-Cannons',
 			modulenames:{'Multi-cannon':1},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
-			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maximumrng','bstint','ammoclip','ammomax','rldtime','jitter','dmgfall'],
+			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maximumrng','bstint','ammoclip','ammomax','rldtime','jitter','dmgfall','rounds'],
 			blueprints:['wpn_eff','wpn_hc','wpn_lw','wpn_lr','wpn_oc','wpn_rf','wpn_sr','wpn_stu'],
-			expeffects:['wpnx_aulo','wpnx_cosh','wpnx_db','wpnx_emmu','wpnx_fc','wpnx_inro','wpnx_muse','wpnx_os','wpnx_smro','wpnx_sd','wpnx_thsh'],
+			expeffects:['wpnx_aulo','wpnx_cosh','wpnx_db','wpnx_emmu','wpnx_fc','wpnx_inro','wpnx_muse','wpnx_os','wpnx_smro','wpnx_sd','wpnx_thsh','wpnx_phse'],
 		},
 		
 		hpa : {
