@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308119903,308119901,308119904,308119904]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20221111;
+	var VERSIONS = [308119903,308119901,308149901,308149901]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20221211;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -43,7 +43,7 @@ window.edsy = new (function() {
 	var BPROLL_UPGRADE = 0.8;
 //	var BPROLL_LIMIT = 0.95;
 	var DISCOUNTS = [30,20,15,10,5,2.5];
-	var HASH_VERSION = 16;
+	var HASH_VERSION = 17;
 	var HTML_ICON = {
 		'unknown'    : '<svg class="iconsvg unknown"><use xlink:href="#icon_unknown"/></svg>',
 		'ignore'     : '<svg class="iconsvg ignore"><use xlink:href="#icon_ignore"/></svg>',
@@ -1416,7 +1416,7 @@ window.edsy = new (function() {
 		
 		getHash: function(stored) {
 			/*
-			module hash format (HASH_VERSION=16):
+			module hash format (HASH_VERSION=17):
 				<3 chars / 18 bits>: module id (0..262143)
 				<1 char / 6 bits>: slot flags
 					0x20 <bit 1>: costed?
@@ -3241,7 +3241,7 @@ window.edsy = new (function() {
 					24758:81141, 24749:81143, 24709:81225, 24699:81226, 24739:81127, 24729:81227, 24719:81228, // Abrasion Blaster, Seismic Charge Launcher, Sub-surface Displacement Missile
 					82215:82313, // 3A/F Seeker Missile Rack
 					40000:59050, 40001:59040, 40002:59030, 40003:59020, 40004:59010, // Pulse Wave Analyser
-					16819:12180, 16818:12280, 16817:12380, 16816:12480, 16815:12580, // Guardian Frame Shift Driver Booster
+					16819:12180, 16818:12280, 16817:12380, 16816:12480, 16815:12580, // Guardian Frame Shift Drive Booster
 					10662:32151, 10661:32141, 10660:32251, 10659:32241, 10658:32351, 10657:32341, 10656:32451, 10655:32441, 10654:32551, 10653:32541, // Guardian Shield Reinforcement Package
 					88350: 8151, 88349: 8141, 88348: 8251, 88347: 8241, 88346: 8351, 88345: 8341, 88344: 8451, 88343: 8441, 88342: 8551, 88341: 8541, // Guardian Module Reinforcement Package
 				};
@@ -3262,7 +3262,13 @@ window.edsy = new (function() {
 				idmap.blueprint['iss'][2] = 'iss_er';
 			case 13:
 			case 14:
-			case 15: // HASH_VERSION
+			case 15:
+			case 16:
+				idmap.module[86220] = 86250; // AX Missile Rack
+				idmap.module[86222] = 86262; // AX Missile Rack
+				idmap.module[86310] = 86330; // AX Missile Rack
+				idmap.module[86312] = 86352; // AX Missile Rack
+			case 17: // HASH_VERSION
 			default:
 			}
 		}
@@ -7529,6 +7535,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			"0W0o120W1J1b1b1h1b1o0i0W1C1N0h18130i0W1K13=FK4lG03Q0072-Cp6ypDAsPcIwPcUoPcX000b000", // 2B Seeker, LW+HC, TC
 			"0W0o120l160W1I1X1f1i0i0W1C1I0h18130i0W1613=FKZyG03I0080-Cp8zCpT000Yyv4b000f000iu00r900", // 2B/F Rail, LR+HC, FC
 			"0W0m160W15131D0i0W1C1N0h1J1e=FCTqG03G0032_pD50009000", // 0F ECM, LW+Sh // TODO: verify
+			"0W0m190W181b1X1q0W1J1f1k1h0i0W11131u0o=GCjwG02G002P000S_00", // 0I HS, ACx2
 			"0W0m110W1B1N1J0i0W161J0h1C1I=FDwoG03G0056y008y00GzCpMupDQ_Pc", // 0A KWS, FS+LR
 			"0W0m190l1K0W1G140i0W1C1N0h161l1Z=FCzYG05G0042_pD6y00GkPcL000", // 0I/T PD, LW+Foc
 			"0W0p110W1G1G0i0W111I0h1F13=FA5UG03G0040sPc4-cQ8yAFCqAF", // 3A PP, AR+OC
