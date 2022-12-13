@@ -10,7 +10,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308119903,308119901,308149901,308149902]; /* HTML,CSS,DB,JS */
+	var VERSIONS = [308119903,308119901,308149901,308149903]; /* HTML,CSS,DB,JS */
 	var LASTMODIFIED = 20221213;
 	
 	var EMPTY_OBJ = {};
@@ -1191,6 +1191,16 @@ window.edsy = new (function() {
 		isAttrOverridden: function(attr) {
 			return !!((this.attrOverride || EMPTY_OBJ)[attr]);
 		}, // isAttrOverridden()
+		
+		
+		getAllBaseAttrModifiers: function() {
+			if (!this.attrModifier)
+				return null;
+			var m = {};
+			for (var attr in this.attrModifier)
+				m[attr] = this.attrModifier[attr];
+			return m;
+		}, // getAllBaseAttrModifiers()
 		
 		
 		getBaseAttrModifier: function(attr) {
@@ -3421,6 +3431,7 @@ window.edsy = new (function() {
 									var bpid = fdevmap.mtypeBlueprint[mtypeid][fdname];
 									var bpgrade = 0;
 									var bproll = 0;
+									var bpmods = null;
 									if (bpid) {
 										bpgrade = parseInt(modulejson.Engineering.Level);
 										// pre-3.0 utility ammo blueprints only had a grade 3, which now has to be grade 1
@@ -3432,6 +3443,7 @@ window.edsy = new (function() {
 										if (!slot.setBlueprint(bpid, bpgrade, bproll)) {
 											if (errors) errors.push(modulejson.Slot + ': Invalid blueprint: ' + modulejson.Engineering.BlueprintName);
 										}
+										bpmods = slot.getAllBaseAttrModifiers();
 									} else if (modulejson.Engineering.BlueprintName && errors) errors.push(modulejson.Slot + ': Unknown blueprint: ' + modulejson.Engineering.BlueprintName);
 									
 									var expid = fdevmap.expeffect[(modulejson.Engineering.ExperimentalEffect || '').trim().toUpperCase()];
@@ -3441,41 +3453,54 @@ window.edsy = new (function() {
 										}
 									} else if (modulejson.Engineering.ExperimentalEffect && errors) errors.push(modulejson.Slot + ': Unknown experimental: ' + modulejson.Engineering.ExperimentalEffect);
 									
-									// if there's a ROF modifier, handle it last so it takes into account bstsize/bstrof
-									var modlist = [];
-									var modjson_rof = null;
-									for (var m = 0;  m < (modulejson.Engineering.Modifiers || EMPTY_ARR).length;  m++) {
-										var modjson = modulejson.Engineering.Modifiers[m];
-										var attr = fdevmap.fieldAttr[modjson.Label];
-										if (attr === 'rof') {
-											modjson_rof = modjson;
-										} else if (attr) {
-											modlist.push(modjson);
+									// if there are any individual attribute modifiers, apply them over the blueprint baseline
+									if ((modulejson.Engineering.Modifiers || EMPTY_ARR).length > 0) {
+										// if there's a ROF modifier, handle it last so it takes into account bstsize/bstrof
+										var modlist = [];
+										var modjson_rof = null;
+										for (var m = 0;  m < modulejson.Engineering.Modifiers.length;  m++) {
+											var modjson = modulejson.Engineering.Modifiers[m];
+											var attr = fdevmap.fieldAttr[modjson.Label];
+											if (attr === 'rof') {
+												modjson_rof = modjson;
+											} else if (attr) {
+												modlist.push(modjson);
+											}
 										}
-									}
-									if (modjson_rof) {
-										modlist.push(modjson_rof);
-									}
-									
-									for (var m = 0;  m < modlist.length;  m++) {
-										var modjson = modlist[m];
-										var attr = fdevmap.fieldAttr[modjson.Label];
-										if (attr) {
-											var module = slot.getModule();
-											var base = parseFloat(modjson.OriginalValue);
-											if (isNaN(base))
-												base = slot.getBaseAttrValue(attr);
+										if (modjson_rof) {
+											modlist.push(modjson_rof);
+										}
+										
+										// apply modifiers
+										for (var m = 0;  m < modlist.length;  m++) {
+											var modjson = modlist[m];
+											var attr = fdevmap.fieldAttr[modjson.Label];
+											if (attr) {
+												var module = slot.getModule();
+												var base = parseFloat(modjson.OriginalValue);
+												if (isNaN(base))
+													base = slot.getBaseAttrValue(attr);
 else if(current.dev && abs(base - slot.getBaseAttrValue(attr)) > 0.00001) console.log(modulejson.Item+' '+attr+' base '+modjson.OriginalValue+' vs expected '+slot.getBaseAttrValue(attr));
-											var modifier = getAttrModifier(attr, base, parseFloat(modjson.Value));
-											if (!isModuleAttrModifiable(module, attr)) {
-												// ignore unmodifiable attributes, Journal includes them all the time (mass on lightweight bulkheads, shotspd, etc)
-											} else if (!slot.setEffectiveAttrModifier(attr, modifier)) {
-												if (errors) errors.push(modulejson.Slot + ': Invalid modifier: ' + modjson.Label + '=' + modjson.Value);
+												var modifier = getAttrModifier(attr, base, parseFloat(modjson.Value));
+												if (!isModuleAttrModifiable(module, attr)) {
+													// ignore unmodifiable attributes, Journal includes them all the time (mass on lightweight bulkheads, shotspd, etc)
+												} else if (!slot.setEffectiveAttrModifier(attr, modifier)) {
+													if (errors) errors.push(modulejson.Slot + ': Invalid modifier: ' + modjson.Label + '=' + modjson.Value);
 } else if (false && current.dev) { // TODO DEBUG
 var attrroll = getBlueprintGradeAttrModifierRoll(bpid, bpgrade, attr, slot.getBaseAttrModifier(attr));
 if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modulejson.Item+' '+attr+' roll '+attrroll+' vs '+bproll+', error '+(attrroll - bproll)+' curve '+(log(attrroll) / log(bproll)));
-											}
-										} else if (attr !== null && errors) errors.push(modulejson.Slot + ': Modifier #' + (m+1) + ': Unknown attribute: ' + modjson.Label);
+												} else {
+													if (bpmods) delete bpmods[attr];
+												}
+											} else if (attr !== null && errors) errors.push(modulejson.Slot + ': Modifier #' + (m+1) + ': Unknown attribute: ' + modjson.Label);
+										}
+										
+										// check for blueprint modifiers that weren't specified individually; if any, this is probably a special pre-engineered module
+										for (var attr in (bpmods || EMPTY_OBJ)) {
+											if (current.dev) console.log(json.Ship+' '+modulejson.Item+' '+attr+' leftover blueprint modifier');
+											slot.setAttrModifier(attr, 0);
+											slot.setBlueprintRoll(0);
+										}
 									}
 								}
 							} else if (errors) errors.push(modulejson.Slot + ': Invalid module: ' + modulejson.Item);
