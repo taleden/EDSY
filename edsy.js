@@ -4127,11 +4127,14 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 		var v2 = 0 + (m2.class || 0);
 		if (v1 != v2) return v1 - v2;
 		// by uniqueness
-		v1 = eddb.mtype[m1.mtype].modulenames[m1.name];
-		v1 = (v1 ? ((typeof v1 !== 'string') ? 0 : 1) : 2);
-		v2 = eddb.mtype[m2.mtype].modulenames[m2.name];
-		v2 = (v2 ? ((typeof v2 !== 'string') ? 0 : 1) : 2);
+		var a1 = eddb.mtype[m1.mtype].modulenames[m1.name];
+		v1 = (a1 ? ((typeof a1 !== 'string') ? 0 : 1) : 2);
+		var a2 = eddb.mtype[m2.mtype].modulenames[m2.name];
+		v2 = (a2 ? ((typeof a2 !== 'string') ? 0 : 1) : 2);
 		if (v1 != v2) return v1 - v2;
+		// by abbreviation
+		if (v1 === 1 && a1 !== a2)
+			return (a1 < a2) ? -1 : 1;
 		// if non-unique, ...
 		if (v1 < 2) {
 			// by missile type (D-S)
@@ -4152,12 +4155,6 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			v1 = m1.name;
 			v2 = m2.name;
 			if (v1 != v2) return ((v1 < v2) ? -1 : (v1 > v2) ? 1 : 0);
-		}
-		// if experimental AX, by missile type
-		if (m1.mtype === 'hexax') {
-			v1 = 0 + (m1.missile || ' ').charCodeAt(0);
-			v2 = 0 + (m2.missile || ' ').charCodeAt(0);
-			if (v1 != v2) return v1 - v2;
 		}
 		// by tag
 		v1 = 0 - (m1.tag || '~').charCodeAt(0);
@@ -6131,21 +6128,21 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 				header.innerHTML = eddb.mtype[mtype].name;
 				divType.appendChild(header);
 				
-				var divRow, divFlex, moduleSize, moduleUnique;
+				var divRow, divFlex, moduleSize, moduleAbbrev;
 				for (var m = 0;  m <= cache.mtypeModules[mtype].length;  m++) {
 					var mID = cache.mtypeModules[mtype][m];
 					var module = eddb.module[mID];
 					var nextSize = ((module || EMPTY_OBJ).class || 0) | 0;
-					var nextUnique = eddb.mtype[mtype].modulenames[(module || EMPTY_OBJ).name];
-					nextUnique = (nextUnique ? ((typeof nextUnique !== 'string') ? '' : ' shortname') : ' fullname');
-					// close the running row when the size class changes or if the uniqueness changes or if fully unique
-					if (divRow && (!module || moduleSize !== nextSize || moduleUnique !== nextUnique || nextUnique === ' fullname')) {
+					var nextAbbrev = eddb.mtype[mtype].modulenames[(module || EMPTY_OBJ).name];
+				//	nextUnique = (nextUnique ? ((typeof nextUnique !== 'string') ? '' : ' shortname') : ' fullname');
+					// close the running row when the size class or abbreviation changes (except for shield generators), or if unabbreviated
+					if (divRow && (!module || moduleSize !== nextSize || (moduleAbbrev !== nextAbbrev && (typeof moduleAbbrev !== 'string' || mtype !== 'isg')) || !nextAbbrev)) {
 						divType.appendChild(divRow);
 						divRow = null;
 					}
 					if (module) {
 						moduleSize = nextSize;
-						moduleUnique = nextUnique;
+						moduleAbbrev = nextAbbrev;
 						if (!divRow) {
 							divRow = document.createElement('div');
 							divRow.id = 'outfitting_modules_mtype_' + mtype + '_size_' + moduleSize;
@@ -6159,7 +6156,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 							divRow.className = classes;
 						}
 						var label = document.createElement('label');
-						label.className = 'togglebutton' + moduleUnique;
+						label.className = 'togglebutton' + (moduleAbbrev ? ((typeof moduleAbbrev !== 'string') ? '' : ' shortname') : ' fullname');
 						label.draggable = true;
 						var input = document.createElement('input');
 						input.type = 'radio';

@@ -1794,7 +1794,7 @@ var eddb = {
 		isgx_tb : { name:'Thermo Block', genoptmul:-3, thmres:8, mats:{ woshem:5, flfocr:3, heva:1 }, fdname:'special_shield_thermic' },
 	}, // eddb.expeffect{}
 	group : {
-		hardpoint : { mtypes:{hel:1, hul:1, hc:1, hex:1, hexax:1, hexgg:1, hexgp:1, hexgs:1, hexsc:1, hfc:1, hm:1, hmtl:1, hmtm:1, hmr:1, hmc:1, hpa:1, hpl:1, hrg:1, htp:1} },
+		hardpoint : { mtypes:{hel:1, hul:1, hc:1, hex:1, /*hexax:1,*/ hexxm:1, hexxc:1, hexgg:1, hexgp:1, hexgs:1, hexsc:1, hfc:1, hm:1, hmtl:1, hmtm:1, hmr:1, hmc:1, hpa:1, hpl:1, hrg:1, htp:1} },
 		utility   : { mtypes:{ucl:1, uec:1, uex:1, uhsl:1, ukws:1, ucs:1, upd:1, upwa:1, usb:1, ufsws:1} },
 		component : [
 			{ mtypes:{cbh:1} },
@@ -1858,19 +1858,37 @@ var eddb = {
 		
 		hex : {
 			name:'Experimental',
-			modulenames:{},
+			modulenames:{'Remote Release Flak Launcher':'Flak', 'Remote Release Flechette Launcher':'Flechette'},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 			modifiable:['mass','pwrdraw','damage','ammoclip','ammomax'],
 			blueprints:['wpn_hc','dec_g','dec_r','dec_y'],
 		},
 		
+		/* TODO delete
 		hexax : {
 			name:'Exp - Anti-Xeno',
 			sortname:'Experimental - AX',
-			modulenames:{'AX Missile Rack':true, 'AX Multi-Cannon':true},
+			modulenames:{'AX Missile Rack':1, 'AX Multi-Cannon':1, 'Enhanced AX Missile Rack':'EMR', 'Enhanced AX Multi-Cannon':'EMC'},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 			modifiable:['mass','pwrdraw','damage','distdraw','bstint','ammoclip','ammomax','rldtime','jitter'],
 			blueprints:['wpn_hc'],
+		},
+		*/
+		
+		hexxm : {
+			name:'Exp - Anti-Xeno Missile Racks',
+			sortname:'Experimental - AX Missiles',
+			modulenames:{'AX Missile Rack':1, 'TODO Enhanced AX Missile Rack':'Enh'},
+			keyattrs:['damage','distdraw','thmload','ammoclip'],
+			modifiable:['mass','pwrdraw','damage','distdraw','bstint','ammoclip','ammomax','rldtime','jitter'],
+			blueprints:['wpn_hc'],
+		},
+		
+		hexxc : {
+			name:'Exp - Anti-Xeno Multi-Cannons',
+			sortname:'Experimental - AX Multis',
+			modulenames:{'AX Multi-Cannon':1, 'Enhanced AX Multi-Cannon':'Enh'},
+			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 		},
 		
 		hexgg : {
@@ -1885,7 +1903,7 @@ var eddb = {
 		hexgp : {
 			name:'Exp - Guardian Plasma',
 			sortname:'Experimental - Guardian Plasma',
-			modulenames:{'Guardian Plasma Charger':true},
+			modulenames:{'Guardian Plasma Charger':1},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 			modifiable:['pwrdraw','damage','thmload','pierce','shotspd','ammoclip'],
 			blueprints:['wpn_oc'],
@@ -1894,7 +1912,7 @@ var eddb = {
 		hexgs : {
 			name:'Exp - Guardian Shard',
 			sortname:'Experimental - Guardian Shard',
-			modulenames:{'Guardian Shard Cannon':true},
+			modulenames:{'Guardian Shard Cannon':1},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 			modifiable:['mass','pwrdraw','distdraw','thmload','pierce','maximumrng','shotspd','jitter','dmgfall'],
 			blueprints:['wpn_lr'],
@@ -1903,7 +1921,7 @@ var eddb = {
 		hexsc : {
 			name:'Exp - Shock Cannons',
 			sortname:'Experimental - Shock',
-			modulenames:{'Shock Cannon':true},
+			modulenames:{'Shock Cannon':1},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 		},
 		
@@ -1927,7 +1945,7 @@ var eddb = {
 		
 		hmtl : {
 			name:'Mining Tools - Lasers',
-			modulenames:{'Mining Laser':true, 'Abrasion Blaster':'Abrasion'},
+			modulenames:{'Mining Laser':1, 'Abrasion Blaster':'Abrasion'},
 			keyattrs:['distdraw','thmload','maximumrng'],
 			modifiable:['integ','pwrdraw','damage','distdraw','thmload','maximumrng','dmgfall'],
 			blueprints:['special'],
@@ -1935,7 +1953,7 @@ var eddb = {
 		
 		hmtm : {
 			name:'Mining Tools - Launchers',
-			modulenames:{'Sub-surface Displacement Missile':true, 'Seismic Charge Launcher':'Seismic'},
+			modulenames:{'Sub-surface Displacement Missile':1, 'Seismic Charge Launcher':'Seismic'},
 			keyattrs:['distdraw','thmload','maximumrng','ammoclip'],
 		},
 		
@@ -2026,7 +2044,7 @@ var eddb = {
 		
 		ukws : {
 			name:'Kill Warrant Scanners',
-			modulenames:{'Kill Warrant Scanner':true},
+			modulenames:{'Kill Warrant Scanner':1},
 			keyattrs:['scanrng','scantime'],
 			modifiable:['mass','integ','pwrdraw','_X_ boottime','scanrng','maxangle','scantime'],
 			blueprints:['scan_fs','misc_lw','scan_lr','misc_rf','misc_sh','scan_wa'],
@@ -2034,7 +2052,7 @@ var eddb = {
 		
 		ucs : {
 			name:'Manifest Scanners',
-			modulenames:{'Manifest Scanner':true},
+			modulenames:{'Manifest Scanner':1},
 			keyattrs:['scanrng','scantime'],
 			modifiable:['mass','integ','pwrdraw','_X_ boottime','scanrng','maxangle','scantime'],
 			blueprints:['scan_fs','misc_lw','scan_lr','misc_rf','misc_sh','scan_wa'],
@@ -2050,13 +2068,13 @@ var eddb = {
 		
 		upwa : {
 			name:'Pulse Wave Analyser',
-			modulenames:{'Pulse Wave Analyser':true},
+			modulenames:{'Pulse Wave Analyser':1},
 			keyattrs:['scanrng'],
 		},
 		
 		usb : {
 			name:'Shield Boosters',
-			modulenames:{'Shield Booster':true},
+			modulenames:{'Shield Booster':1},
 			keyattrs:['shieldbst','thmres'],
 			modifiable:['mass','integ','pwrdraw','shieldbst','kinres','thmres','expres'],
 			blueprints:['usb_br','usb_hd','usb_kr','usb_ra','usb_tr'],
@@ -2065,7 +2083,7 @@ var eddb = {
 		
 		ufsws : {
 			name:'Wake Scanners',
-			modulenames:{'Frame Shift Wake Scanner':true},
+			modulenames:{'Frame Shift Wake Scanner':1},
 			keyattrs:['scanrng','scantime'],
 			modifiable:['mass','integ','pwrdraw','_X_ boottime','scanrng','maxangle','scantime'],
 			blueprints:['scan_fs','misc_lw','scan_lr','misc_rf','misc_sh','scan_wa'],
@@ -2088,7 +2106,7 @@ var eddb = {
 		
 		cpp : {
 			name:'Power Plants',
-			modulenames:{'Power Plant':true, 'Guardian Hybrid Power Plant':true},
+			modulenames:{'Power Plant':1, 'Guardian Hybrid Power Plant':1},
 			keyattrs:['heateff'],
 			modifiable:['mass','integ','pwrcap','heateff'],
 			blueprints:['cpp_arm','cpp_le','cpp_oc'],
@@ -2097,7 +2115,7 @@ var eddb = {
 		
 		ct : {
 			name:'Thrusters',
-			modulenames:{'Thrusters':true, 'Enhanced Performance Thrusters':'Enhanced Performance'},
+			modulenames:{'Thrusters':1, 'Enhanced Performance Thrusters':'Enhanced Performance'},
 			keyattrs:['engoptmass','engoptmul'],
 			modifiable:['mass','integ','pwrdraw','engoptmass','engoptmul','engheat'],
 			blueprints:['ct_ct','ct_dt','ct_str'],
@@ -2106,7 +2124,7 @@ var eddb = {
 		
 		cfsd : {
 			name:'Frame Shift Drives',
-			modulenames:{'Frame Shift Drive':true},
+			modulenames:{'Frame Shift Drive':1},
 			keyattrs:['fsdoptmass','maxfuel'],
 			modifiable:['mass','integ','pwrdraw','boottime','fsdoptmass','fsdheat','maxfuel'],
 			blueprints:['cfsd_fb','cfsd_ir','cfsd_sh'],
@@ -2115,7 +2133,7 @@ var eddb = {
 		
 		cls : {
 			name:'Life Supports',
-			modulenames:{'Life Support':true},
+			modulenames:{'Life Support':1},
 			keyattrs:['emgcylife'],
 			modifiable:['mass','integ','pwrdraw','_X_ boottime'],
 			blueprints:['misc_lw','misc_rf','misc_sh'],
@@ -2123,7 +2141,7 @@ var eddb = {
 		
 		cpd : {
 			name:'Power Distributors',
-			modulenames:{'Power Distributor':true, 'Guardian Hybrid Power Distributor':true},
+			modulenames:{'Power Distributor':1, 'Guardian Hybrid Power Distributor':1},
 			keyattrs:['engcap','engchg'],
 			modifiable:['mass','integ','pwrdraw','_X_ boottime','wepcap','wepchg','engcap','engchg','syscap','syschg'],
 			blueprints:['cpd_ce','cpd_ef','cpd_hc','cpd_sh','cpd_sf','cpd_wf'],
@@ -2132,7 +2150,7 @@ var eddb = {
 		
 		cs : {
 			name:'Sensors',
-			modulenames:{'Sensors':true},
+			modulenames:{'Sensors':1},
 			keyattrs:['typemis','maxrng'],
 			modifiable:['mass','integ','pwrdraw','_X_ boottime','scanangle','typemis'],
 			blueprints:['cs_lw','cs_lr','cs_wa'],
@@ -2147,7 +2165,7 @@ var eddb = {
 		
 		iafmu : {
 			name:'Auto Field-Maintenance Units',
-			modulenames:{'Auto Field-Maintenance Unit':true},
+			modulenames:{'Auto Field-Maintenance Unit':1},
 			keyattrs:['afmrepcap'],
 			modifiable:['integ','pwrdraw','_X_ boottime'],
 			blueprints:['misc_sh'],
@@ -2161,7 +2179,7 @@ var eddb = {
 		
 		iclc : {
 			name:'Collection Limpets',
-			modulenames:{'Collector Limpet Controller':true},
+			modulenames:{'Collector Limpet Controller':1},
 			keyattrs:['maxlimpet','limpettime'],
 			modifiable:['mass','integ','pwrdraw','_X_ boottime'],
 			blueprints:['misc_lw','misc_rf','misc_sh'],
@@ -2193,7 +2211,7 @@ var eddb = {
 		
 		ifsdi : {
 			name:'FSD Interdictors',
-			modulenames:{'Frame Shift Drive Interdictor':true},
+			modulenames:{'Frame Shift Drive Interdictor':1},
 			keyattrs:['timerng','facinglim'],
 			modifiable:['mass','_X_ integ','pwrdraw','_X_ boottime','timerng','facinglim'],
 			blueprints:['ifsdi_eca','ifsdi_lr'],
@@ -2201,7 +2219,7 @@ var eddb = {
 		
 		ifs : {
 			name:'Fuel Scoops',
-			modulenames:{'Fuel Scoop':true},
+			modulenames:{'Fuel Scoop':1},
 			keyattrs:['scooprate'],
 			modifiable:['integ','pwrdraw','_X_ boottime'],
 			blueprints:['misc_sh'],
@@ -2209,7 +2227,7 @@ var eddb = {
 		
 		iftlc : {
 			name:'Fuel Transfer Limpets',
-			modulenames:{'Fuel Transfer Limpet Controller':true},
+			modulenames:{'Fuel Transfer Limpet Controller':1},
 			keyattrs:['maxlimpet','lpactrng'],
 			modifiable:['mass','integ','pwrdraw','_X_ boottime'],
 			blueprints:['misc_lw','misc_rf','misc_sh'],
@@ -2217,7 +2235,7 @@ var eddb = {
 		
 		ihblc : {
 			name:'Hatch Breaker Limpets',
-			modulenames:{'Hatch Breaker Limpet Controller':true},
+			modulenames:{'Hatch Breaker Limpet Controller':1},
 			keyattrs:['maxlimpet','lpactrng'],
 			modifiable:['mass','integ','pwrdraw','_X_ boottime'],
 			blueprints:['misc_lw','misc_rf','misc_sh'],
@@ -2225,7 +2243,7 @@ var eddb = {
 		
 		ihrp : {
 			name:'Hull Reinforcements',
-			modulenames:{'Hull Reinforcement Package':true, 'Guardian Hull Reinforcement Package':true},
+			modulenames:{'Hull Reinforcement Package':1, 'Guardian Hull Reinforcement Package':1},
 			keyattrs:['hullrnf','thmres'],
 			modifiable:['mass','hullrnf','kinres','thmres','expres','hullbst'],
 			blueprints:['ihrp_br','ihrp_hd','ihrp_kr','ihrp_lw','ihrp_tr'],
@@ -2235,44 +2253,44 @@ var eddb = {
 		isrp : {
 			name:'Shield Reinforcements',
 			sortname:'Hull Reinforcements - Shield',
-			modulenames:{'Guardian Shield Reinforcement Package':true},
+			modulenames:{'Guardian Shield Reinforcement Package':1},
 			keyattrs:['pwrdraw','shieldrnf'],
 		},
 		
 		imahrp : {
 			name:'Meta Alloy Hull Reinforcements',
-			modulenames:{'Meta Alloy Hull Reinforcement Package':true},
+			modulenames:{'Meta Alloy Hull Reinforcement Package':1},
 			keyattrs:['hullrnf','caures'],
 		},
 		
 		imlc : {
 			name:'Multi Limpets',
-			modulenames:{},
-		//	modulenames:{'Operations Limpet Controller':'Operations', 'Xeno Limpet Controller':'Xeno', 'Mining Multi Limpet Controller':'Mining', 'Rescue Limpet Controller':'Rescue', 'Universal Multi Limpet Controller':'Universal'},
+		//	modulenames:{},
+			modulenames:{'Operations Limpet Controller':'Operations', 'Xeno Limpet Controller':'Xeno', 'Mining Multi Limpet Controller':'Mining', 'Rescue Limpet Controller':'Rescue', 'Universal Multi Limpet Controller':'Universal'},
 			keyattrs:['maxlimpet','lpactrng'],
 		},
 		
 		imrp : {
 			name:'Module Reinforcements',
-			modulenames:{'Module Reinforcement Package':true, 'Guardian Module Reinforcement Package':true},
+			modulenames:{'Module Reinforcement Package':1, 'Guardian Module Reinforcement Package':1},
 			keyattrs:['integ','dmgprot'],
 		},
 		
 		ipc : {
 			name:'Passenger Cabins',
-			modulenames:{'Economy Class Passenger Cabin':true, 'Business Class Passenger Cabin':true, 'First Class Passenger Cabin':true, 'Luxury Class Passenger Cabin':true},
+			modulenames:{'Economy Class Passenger Cabin':1, 'Business Class Passenger Cabin':1, 'First Class Passenger Cabin':1, 'Luxury Class Passenger Cabin':1},
 			keyattrs:['cabincap'],
 		},
 		
 		ipvh : {
 			name:'Planetary Vehicle Hangars',
-			modulenames:{'Planetary Vehicle Hangar':true},
+			modulenames:{'Planetary Vehicle Hangar':1},
 			keyattrs:['vslots'],
 		},
 		
 		iplc : {
 			name:'Prospecting Limpets',
-			modulenames:{'Prospector Limpet Controller':true},
+			modulenames:{'Prospector Limpet Controller':1},
 			keyattrs:['maxlimpet','limpettime'],
 			modifiable:['mass','integ','pwrdraw','_X_ boottime'],
 			blueprints:['misc_lw','misc_rf','misc_sh'],
@@ -2287,7 +2305,7 @@ var eddb = {
 		
 		ir : {
 			name:'Refineries',
-			modulenames:{'Refinery':true},
+			modulenames:{'Refinery':1},
 			keyattrs:['bins'],
 			modifiable:['integ','pwrdraw','_X_ boottime'],
 			blueprints:['misc_sh'],
@@ -2295,7 +2313,7 @@ var eddb = {
 		
 		irlc : {
 			name:'Repair Limpets',
-			modulenames:{'Repair Limpet Controller':true},
+			modulenames:{'Repair Limpet Controller':1},
 			keyattrs:['maxlimpet','lmprepcap'],
 		//	modifiable:['mass','integ','pwrdraw','boottime'],
 		},
@@ -2309,7 +2327,7 @@ var eddb = {
 		
 		iscb : {
 			name:'Shield Cell Banks',
-			modulenames:{'Shield Cell Bank':true},
+			modulenames:{'Shield Cell Bank':1},
 			keyattrs:['shieldrnfps','ammomax'],
 			modifiable:['_X_ mass','integ','pwrdraw','boottime','spinup','scbdur','shieldrnfps','scbheat','_X_ ammomax'],
 			blueprints:['iscb_rc','iscb_sp'],
@@ -2318,7 +2336,7 @@ var eddb = {
 		
 		isg : {
 			name:'Shield Generators',
-			modulenames:{'Shield Generator':true, 'Bi-Weave Shield Generator':'Bi-Weave', 'Prismatic Shield Generator':'Prismatic'},
+			modulenames:{'Shield Generator':1, 'Bi-Weave Shield Generator':'Bi-Weave', 'Prismatic Shield Generator':'Prismatic'},
 			keyattrs:['genoptmul','thmres'],
 			modifiable:['mass','integ','pwrdraw','_X_ boottime','genoptmass','genoptmul','genrate','bgenrate','genpwr','kinres','thmres','expres'],
 			blueprints:['isg_elp','isg_kr','isg_rf','isg_tr'],
@@ -2386,26 +2404,32 @@ var eddb = {
 		70421 : { mtype:'hc',  cost: 5401600, name:'Cannon',                      mount:'G',              class:4, rating:'B', mass:16.00, integ:80, pwrdraw:1.03, boottime:0, dps:22.636, damage:56.590, distdraw:1.720, thmload:4.43, pierce: 90, maximumrng:4500, shotspd: 750, rof:0.400, bstint:2.500,                      ammoclip: 5, ammomax: 100,            rldtime:4.0, brcdmg:53.8, minbrc:60, maxbrc:90,             kinwgt:100, expwgt:0, dmgfall:4500, ammocost:20, fdid:128049444, fdname:'Hpt_Cannon_Gimbal_Huge', eddbid:856 },
 	//	704 2 : { mtype:'hc',  cost:        , name:'Cannon',                      mount:'T',              class:4, rating:   , mass:16.00, integ:80, pwrdraw:0.88, boottime:0, dps:15.456, damage:46.060, distdraw:0.800, thmload:2.40, pierce: 90, maximumrng:4500, shotspd: 750, rof:0.336, bstint:2.980,                      ammoclip: 5, ammomax: 100,            rldtime:4.0, brcdmg:    , minbrc:60, maxbrc:90,             kinwgt:100, expwgt:0, dmgfall:4500, ammocost:20, fdid:null, fdname:'Hpt_Cannon_Turret_Huge', eddbid:null },
 		
+		// TODO: renumber to 89xxx?
 		86226 : { mtype:'hex', cost:  261800, name:'Remote Release Flak Launcher',mount:'F',              class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:17.000, damage:34.000, distdraw:0.240, thmload:3.60, pierce: 60,                  shotspd: 550, rof:0.500, bstint:2.000,                      ammoclip: 1, ammomax:  32,            rldtime:2.0, brcdmg: 1.7,minbrc:100,maxbrc:100,             expwgt:100,                  ammocost:125,              noblueprints:{'*':1},                         fdid:128785626, fdname:'Hpt_FlakMortar_Fixed_Medium', eddbid:1620 },
 		86228 : { mtype:'hex', cost: 1259200, name:'Remote Release Flak Launcher',mount:'T',              class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:17.000, damage:34.000, distdraw:0.240, thmload:3.60, pierce: 60,                  shotspd: 550, rof:0.500, bstint:2.000,                      ammoclip: 1, ammomax:  32,            rldtime:2.0, brcdmg: 1.7,minbrc:100,maxbrc:100,             expwgt:100,                  ammocost:125,              noblueprints:{'wpn_hc':1},                    fdid:128793058, fdname:'Hpt_FlakMortar_Turret_Medium', eddbid:1621 },
 		87223 : { mtype:'hex', cost:  353760, name:'Remote Release Flechette Launcher',mount:'F',         class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps: 6.5  , damage:13.0  , distdraw:0.240, thmload:3.60, pierce: 80,                  shotspd: 550, rof:0.500, bstint:2.000,                      ammoclip: 1, ammomax:  72,            rldtime:2.0, brcdmg: 6.5,minbrc:100,maxbrc:100,             kinwgt:10/.13, expwgt:3/.13, ammocost: 56,              noblueprints:{'*':1},                         fdid:128833996, fdname:'Hpt_FlechetteLauncher_Fixed_Medium', eddbid:1751 }, // techbroker // TODO: get frag damage
 		87222 : { mtype:'hex', cost: 1279200, name:'Remote Release Flechette Launcher',mount:'T',         class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps: 6.5  , damage:13.0  , distdraw:0.240, thmload:3.60, pierce: 70,                  shotspd: 550, rof:0.500, bstint:2.000,                      ammoclip: 1, ammomax:  72,            rldtime:2.0, brcdmg: 6.5,minbrc:100,maxbrc:100,             kinwgt:10/.13, expwgt:3/.13, ammocost: 56,              noblueprints:{'*':1},                         fdid:128833997, fdname:'Hpt_FlechetteLauncher_Turret_Medium', eddbid:1752 }, // techbroker // verify cost // TODO: get frag damage
 		87220 : { mtype:'hex', cost:  480500, name:'Enzyme Missile Rack',         mount:'F', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps: 2.5  , damage: 5.0  , distdraw:0.080, thmload:1.50, pierce: 60,                  shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.0, minbrc:80,maxbrc:100,             expwgt: 4/.05, cauwgt:1/.05, ammocost:235, limit:'hex', noblueprints:{'dec_g':1,'dec_r':1,'dec_y':1}, fdid:128833995, fdname:'Hpt_CausticMissile_Fixed_Medium', eddbid:1750 }, // techbroker // TODO: get real caustic damage amount
 		
-		86250 : {mtype:'hexax',cost:  540900, name:'AX Missile Rack',             mount:'F', missile:'D', class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:35    , damage:70    , distdraw:0.140, thmload:2.40, pierce: 60,                  shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             axewgt:43   /.70   , expwgt:27  /.70   ,               ammocost:235, limit:'hex',                       fdid:128788699, fdname:'Hpt_ATDumbfireMissile_Fixed_Medium', eddbid:1614 }, // TODO: exact damage
-		86262 : {mtype:'hexax',cost: 2022700, name:'AX Missile Rack',             mount:'T', missile:'D', class:2, rating:'F', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:28.5  , damage:57    , distdraw:0.080, thmload:1.50, pierce: 60, maximumrng:5000, shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             axewgt:37   /.57   , expwgt:20  /.57   ,               ammocost:235, limit:'hex', noblueprints:{'*':1}, fdid:128788704, fdname:'Hpt_ATDumbfireMissile_Turret_Medium', eddbid:1615 }, // TODO: exact damage
-		86259 : {mtype:'hexax',cost: 2666290, name:'Enhanced AX Missile Rack',    mount:'T', missile:'D', class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:1.30, boottime:0, dps:32    , damage:64    , distdraw:0.08 , thmload:1.5 , pierce: 60, maximumrng:5000, shotspd:1250, rof:0.5  , bstint:2.0  ,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             axewgt:44   /.64   , expwgt:20  /.64   ,               ammocost:235, limit:'hex', noblueprints:{'*':1}, fdid:129022083, fdname:'Hpt_ATDumbfireMissile_Turret_Medium_V2', eddbid:null }, // TODO: exact stats, eddbid
-		86330 : {mtype:'hexax',cost: 1352250, name:'AX Missile Rack',             mount:'F', missile:'D', class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.62, boottime:0, dps:35    , damage:70    , distdraw:0.240, thmload:3.60, pierce: 60,                  shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             axewgt:43   /.70   , expwgt:27  /.70   ,               ammocost:235, limit:'hex',                       fdid:128788700, fdname:'Hpt_ATDumbfireMissile_Fixed_Large', eddbid:1623 }, // TODO: exact damage
-		86352 : {mtype:'hexax',cost: 4056750, name:'AX Missile Rack',             mount:'T', missile:'D', class:3, rating:'E', mass: 8.00, integ:64, pwrdraw:1.75, boottime:0, dps:28.5  , damage:57    , distdraw:0.140, thmload:1.90, pierce: 60, maximumrng:5000, shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             axewgt:37   /.57   , expwgt:20  /.57   ,               ammocost:235, limit:'hex', noblueprints:{'*':1}, fdid:128788705, fdname:'Hpt_ATDumbfireMissile_Turret_Large', eddbid:1624 }, // TODO: exact damage
-		86349 : {mtype:'hexax',cost: 5347530, name:'Enhanced AX Missile Rack',    mount:'T', missile:'D', class:3, rating:'D', mass: 8.00, integ:64, pwrdraw:1.85, boottime:0, dps:32    , damage:64    , distdraw:0.14 , thmload:1.9 , pierce: 60, maximumrng:5000, shotspd:1250, rof:0.5  , bstint:2.0  ,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             axewgt:44   /.64   , expwgt:20  /.64   ,               ammocost:235, limit:'hex', noblueprints:{'*':1}, fdid:129022082, fdname:'Hpt_ATDumbfireMissile_Turret_Large_V2', eddbid:null }, // TODO: exact stats, eddbid
-		86253 : {mtype:'hexax',cost:  379000, name:'AX Multi-Cannon',             mount:'F',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.46, boottime:0, dps:23.643, damage: 3.310, distdraw:0.110, thmload:0.18, pierce: 17, maximumrng:4000, shotspd:1600, rof:7.143, bstint:0.140,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 2.8, minbrc:50, maxbrc:80,             axewgt:2.190/.03310, kinwgt:1.12/.03310, dmgfall:2000, ammocost:  1, limit:'hex', noblueprints:{'*':1}, fdid:128788701, fdname:'Hpt_ATMultiCannon_Fixed_Medium', eddbid:1618 },
-		86246 : {mtype:'hexax',cost:  455080, name:'Enhanced AX Multi-Cannon',    mount:'F',              class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:0.48, boottime:0, dps:27.9  , damage: 3.9  , distdraw:0.11 , thmload:0.2 , pierce: 17, maximumrng:4000, shotspd:4000, rof:7.1  , bstint:0.14 ,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: NaN, minbrc:50, maxbrc:80,             axewgt:2.8  /.039  , kinwgt:1.1 /.039  , dmgfall:2000, ammocost:  1, limit:'hex', noblueprints:{'*':1}, fdid:129022080, fdname:'Hpt_ATMultiCannon_Fixed_Medium_V2', eddbid:null }, // TODO: exact stats, eddbid
-		86265 : {mtype:'hexax',cost: 1826500, name:'AX Multi-Cannon',             mount:'T',              class:2, rating:'F', mass: 4.00, integ:51, pwrdraw:0.50, boottime:0, dps:10.812, damage: 1.730, distdraw:0.060, thmload:0.09, pierce: 17, maximumrng:4000, shotspd:1600, rof:6.250, bstint:0.160,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: 0.4, minbrc:50, maxbrc:50,             axewgt:1.170/.01730, kinwgt:0.56/.01730, dmgfall:2000, ammocost:  1, limit:'hex', noblueprints:{'*':1}, fdid:128793059, fdname:'Hpt_ATMultiCannon_Turret_Medium', eddbid:1619 },
-		86258 : {mtype:'hexax',cost: 2193300, name:'Enhanced AX Multi-Cannon',    mount:'T',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.52, boottime:0, dps:12.5  , damage: 2.0  , distdraw:0.06 , thmload:0.1 , pierce: 17, maximumrng:4000, shotspd:4000, rof:6.2  , bstint:0.16 ,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: NaN, minbrc:50, maxbrc:50,             axewgt:1.4  /.02   , kinwgt:0.6 /.02   , dmgfall:2000, ammocost:  1, limit:'hex', noblueprints:{'*':1}, fdid:129022086, fdname:'Hpt_ATMultiCannon_Turret_Medium_V2', eddbid:1827 }, // TODO: exact stats
-		86333 : {mtype:'hexax',cost: 1181500, name:'AX Multi-Cannon',             mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:0.64, boottime:0, dps:35.971, damage: 6.115, distdraw:0.180, thmload:0.28, pierce: 33, maximumrng:4000, shotspd:1600, rof:5.882, bstint:0.170,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 5.2, minbrc:50, maxbrc:80,             axewgt:3.925/.06115, kinwgt:2.19/.06115, dmgfall:2000, ammocost:  1, limit:'hex', noblueprints:{'*':1}, fdid:128788702, fdname:'Hpt_ATMultiCannon_Fixed_Large', eddbid:1625 },
-		86326 : {mtype:'hexax',cost: 1360320, name:'Enhanced AX Multi-Cannon',    mount:'F',              class:3, rating:'B', mass: 8.00, integ:64, pwrdraw:0.69, boottime:0, dps:42.9  , damage: 7.3  , distdraw:0.18 , thmload:0.3 , pierce: 33, maximumrng:4000, shotspd:4000, rof:5.9  , bstint:0.17 ,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: NaN, minbrc:50, maxbrc:80,             axewgt:5.1  /.073  , kinwgt:2.2 /.073  , dmgfall:2000, ammocost:  1, limit:'hex', noblueprints:{'*':1}, fdid:129022084, fdname:'Hpt_ATMultiCannon_Fixed_Large_V2', eddbid:null }, // TODO: exact stats, eddbid
-		86355 : {mtype:'hexax',cost: 3821600, name:'AX Multi-Cannon',             mount:'T',              class:3, rating:'E', mass: 8.00, integ:64, pwrdraw:0.64, boottime:0, dps:20.688, damage: 3.310, distdraw:0.060, thmload:0.09, pierce: 33, maximumrng:4000, shotspd:1600, rof:6.250, bstint:0.160,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: 0.8, minbrc:50, maxbrc:50,             axewgt:2.190/.03310, kinwgt:1.12/.03310, dmgfall:2000, ammocost:  1, limit:'hex', noblueprints:{'*':1}, fdid:128793060, fdname:'Hpt_ATMultiCannon_Turret_Large', eddbid:1626 },
-		86348 : {mtype:'hexax',cost: 4588710, name:'Enhanced AX Multi-Cannon',    mount:'T',              class:3, rating:'D', mass: 8.00, integ:64, pwrdraw:0.69, boottime:0, dps:24.4  , damage: 3.9  , distdraw:0.06 , thmload:0.1 , pierce: 33, maximumrng:4000, shotspd:4000, rof:6.2  , bstint:0.16 ,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: NaN, minbrc:50, maxbrc:50,             axewgt:2.8  /.039  , kinwgt:1.1 /.039  , dmgfall:2000, ammocost:  1, limit:'hex', noblueprints:{'*':1}, fdid:129022085, fdname:'Hpt_ATMultiCannon_Turret_Large_V2', eddbid:1826 }, // TODO: exact stats
+		86250 : {mtype:'hexxm',cost:  540900, name:'AX Missile Rack',             mount:'F', missile:'D', class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:35    , damage:70    , distdraw:0.140, thmload:2.40, pierce: 60,                  shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             axewgt:43   /.70   , expwgt:27  /.70   ,               ammocost:235, limit:'hex',                       fdid:128788699, fdname:'Hpt_ATDumbfireMissile_Fixed_Medium', eddbid:1614 }, // TODO: exact damage
+		86262 : {mtype:'hexxm',cost: 2022700, name:'AX Missile Rack',             mount:'T', missile:'D', class:2, rating:'F', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:28.5  , damage:57    , distdraw:0.080, thmload:1.50, pierce: 60, maximumrng:5000, shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             axewgt:37   /.57   , expwgt:20  /.57   ,               ammocost:235, limit:'hex', noblueprints:{'*':1}, fdid:128788704, fdname:'Hpt_ATDumbfireMissile_Turret_Medium', eddbid:1615 }, // TODO: exact damage
+		86330 : {mtype:'hexxm',cost: 1352250, name:'AX Missile Rack',             mount:'F', missile:'D', class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.62, boottime:0, dps:35    , damage:70    , distdraw:0.240, thmload:3.60, pierce: 60,                  shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             axewgt:43   /.70   , expwgt:27  /.70   ,               ammocost:235, limit:'hex',                       fdid:128788700, fdname:'Hpt_ATDumbfireMissile_Fixed_Large', eddbid:1623 }, // TODO: exact damage
+		86352 : {mtype:'hexxm',cost: 4056750, name:'AX Missile Rack',             mount:'T', missile:'D', class:3, rating:'E', mass: 8.00, integ:64, pwrdraw:1.75, boottime:0, dps:28.5  , damage:57    , distdraw:0.140, thmload:1.90, pierce: 60, maximumrng:5000, shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             axewgt:37   /.57   , expwgt:20  /.57   ,               ammocost:235, limit:'hex', noblueprints:{'*':1}, fdid:128788705, fdname:'Hpt_ATDumbfireMissile_Turret_Large', eddbid:1624 }, // TODO: exact damage
+/* ! *	86291 : {mtype:'hexxm',cost:     NaN, name:'Enhanced AX Missile Rack',    mount:'F', missile:'D', class:2, rating:'-', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:35    , damage:70    , distdraw:0.140, thmload:2.40, pierce: 60,                  shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             axewgt:43   /.70   , expwgt:27  /.70   ,               ammocost:235, limit:'hex', noblueprints:{'*':1}, fdid:null     , fdname:'Hpt_ATDumbfireMissile_Fixed_Medium_V2', eddbid:null }, // TODO: exact damage, eddbid /* TODO */
+		86259 : {mtype:'hexxm',cost: 2666290, name:'Enhanced AX Missile Rack',    mount:'T', missile:'D', class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:1.30, boottime:0, dps:32    , damage:64    , distdraw:0.08 , thmload:1.5 , pierce: 60, maximumrng:5000, shotspd:1250, rof:0.5  , bstint:2.0  ,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             axewgt:44   /.64   , expwgt:20  /.64   ,               ammocost:235, limit:'hex', noblueprints:{'*':1}, fdid:129022083, fdname:'Hpt_ATDumbfireMissile_Turret_Medium_V2', eddbid:1830 }, // TODO: exact stats
+/* ! *	86391 : {mtype:'hexxm',cost:     NaN, name:'Enhanced AX Missile Rack',    mount:'F', missile:'D', class:3, rating:'-', mass: 8.00, integ:64, pwrdraw:1.62, boottime:0, dps:35    , damage:70    , distdraw:0.240, thmload:3.60, pierce: 60,                  shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             axewgt:43   /.70   , expwgt:27  /.70   ,               ammocost:235, limit:'hex', noblueprints:{'*':1}, fdid:null     , fdname:'Hpt_ATDumbfireMissile_Fixed_Large_V2', eddbid:null }, // TODO: exact damage, eddbid /* TODO */
+		86349 : {mtype:'hexxm',cost: 5347530, name:'Enhanced AX Missile Rack',    mount:'T', missile:'D', class:3, rating:'D', mass: 8.00, integ:64, pwrdraw:1.85, boottime:0, dps:32    , damage:64    , distdraw:0.14 , thmload:1.9 , pierce: 60, maximumrng:5000, shotspd:1250, rof:0.5  , bstint:2.0  ,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.1, minbrc:80,maxbrc:100,             axewgt:44   /.64   , expwgt:20  /.64   ,               ammocost:235, limit:'hex', noblueprints:{'*':1}, fdid:129022082, fdname:'Hpt_ATDumbfireMissile_Turret_Large_V2', eddbid:1829 }, // TODO: exact stats
+		
+		86253 : {mtype:'hexxc',cost:  379000, name:'AX Multi-Cannon',             mount:'F',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.46, boottime:0, dps:23.643, damage: 3.310, distdraw:0.110, thmload:0.18, pierce: 17, maximumrng:4000, shotspd:1600, rof:7.143, bstint:0.140,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 2.8, minbrc:50, maxbrc:80,             axewgt:2.190/.03310, kinwgt:1.12/.03310, dmgfall:2000, ammocost:  1, limit:'hex', fdid:128788701, fdname:'Hpt_ATMultiCannon_Fixed_Medium', eddbid:1618 },
+		86265 : {mtype:'hexxc',cost: 1826500, name:'AX Multi-Cannon',             mount:'T',              class:2, rating:'F', mass: 4.00, integ:51, pwrdraw:0.50, boottime:0, dps:10.812, damage: 1.730, distdraw:0.060, thmload:0.09, pierce: 17, maximumrng:4000, shotspd:1600, rof:6.250, bstint:0.160,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: 0.4, minbrc:50, maxbrc:50,             axewgt:1.170/.01730, kinwgt:0.56/.01730, dmgfall:2000, ammocost:  1, limit:'hex', fdid:128793059, fdname:'Hpt_ATMultiCannon_Turret_Medium', eddbid:1619 },
+		86333 : {mtype:'hexxc',cost: 1181500, name:'AX Multi-Cannon',             mount:'F',              class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:0.64, boottime:0, dps:35.971, damage: 6.115, distdraw:0.180, thmload:0.28, pierce: 33, maximumrng:4000, shotspd:1600, rof:5.882, bstint:0.170,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 5.2, minbrc:50, maxbrc:80,             axewgt:3.925/.06115, kinwgt:2.19/.06115, dmgfall:2000, ammocost:  1, limit:'hex', fdid:128788702, fdname:'Hpt_ATMultiCannon_Fixed_Large', eddbid:1625 },
+		86355 : {mtype:'hexxc',cost: 3821600, name:'AX Multi-Cannon',             mount:'T',              class:3, rating:'E', mass: 8.00, integ:64, pwrdraw:0.64, boottime:0, dps:20.688, damage: 3.310, distdraw:0.060, thmload:0.09, pierce: 33, maximumrng:4000, shotspd:1600, rof:6.250, bstint:0.160,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: 0.8, minbrc:50, maxbrc:50,             axewgt:2.190/.03310, kinwgt:1.12/.03310, dmgfall:2000, ammocost:  1, limit:'hex', fdid:128793060, fdname:'Hpt_ATMultiCannon_Turret_Large', eddbid:1626 },
+		86246 : {mtype:'hexxc',cost:  455080, name:'Enhanced AX Multi-Cannon',    mount:'F',              class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:0.48, boottime:0, dps:27.9  , damage: 3.9  , distdraw:0.11 , thmload:0.2 , pierce: 17, maximumrng:4000, shotspd:4000, rof:7.1  , bstint:0.14 ,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: NaN, minbrc:50, maxbrc:80,             axewgt:2.8  /.039  , kinwgt:1.1 /.039  , dmgfall:2000, ammocost:  1, limit:'hex', fdid:129022080, fdname:'Hpt_ATMultiCannon_Fixed_Medium_V2', eddbid:1828 }, // TODO: exact stats
+/* ! *	86297 : {mtype:'hexxc',cost:     NaN, name:'Enhanced AX Multi-Cannon',    mount:'G',              class:2, rating:'-', mass: 4.00, integ:51, pwrdraw:0.48, boottime:0, dps:27.9  , damage: 3.9  , distdraw:0.11 , thmload:0.2 , pierce: 17, maximumrng:4000, shotspd:4000, rof:7.1  , bstint:0.14 ,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: NaN, minbrc:50, maxbrc:80,             axewgt:2.8  /.039  , kinwgt:1.1 /.039  , dmgfall:2000, ammocost:  1, limit:'hex', fdid:null     , fdname:'Hpt_ATMultiCannon_Gimbal_Medium_V2', eddbid:null }, // TODO: exact stats, eddbid /* TODO */
+		86258 : {mtype:'hexxc',cost: 2193300, name:'Enhanced AX Multi-Cannon',    mount:'T',              class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.52, boottime:0, dps:12.5  , damage: 2.0  , distdraw:0.06 , thmload:0.1 , pierce: 17, maximumrng:4000, shotspd:4000, rof:6.2  , bstint:0.16 ,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: NaN, minbrc:50, maxbrc:50,             axewgt:1.4  /.02   , kinwgt:0.6 /.02   , dmgfall:2000, ammocost:  1, limit:'hex', fdid:129022086, fdname:'Hpt_ATMultiCannon_Turret_Medium_V2', eddbid:1827 }, // TODO: exact stats
+		86326 : {mtype:'hexxc',cost: 1360320, name:'Enhanced AX Multi-Cannon',    mount:'F',              class:3, rating:'B', mass: 8.00, integ:64, pwrdraw:0.69, boottime:0, dps:42.9  , damage: 7.3  , distdraw:0.18 , thmload:0.3 , pierce: 33, maximumrng:4000, shotspd:4000, rof:5.9  , bstint:0.17 ,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: NaN, minbrc:50, maxbrc:80,             axewgt:5.1  /.073  , kinwgt:2.2 /.073  , dmgfall:2000, ammocost:  1, limit:'hex', fdid:129022084, fdname:'Hpt_ATMultiCannon_Fixed_Large_V2', eddbid:1831 }, // TODO: exact stats
+/* ! *	86397 : {mtype:'hexxc',cost:     NaN, name:'Enhanced AX Multi-Cannon',    mount:'G',              class:3, rating:'-', mass: 8.00, integ:64, pwrdraw:0.69, boottime:0, dps:42.9  , damage: 7.3  , distdraw:0.18 , thmload:0.3 , pierce: 33, maximumrng:4000, shotspd:4000, rof:5.9  , bstint:0.17 ,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: NaN, minbrc:50, maxbrc:80,             axewgt:5.1  /.073  , kinwgt:2.2 /.073  , dmgfall:2000, ammocost:  1, limit:'hex', fdid:null     , fdname:'Hpt_ATMultiCannon_Gimbal_Large_V2', eddbid:null }, // TODO: exact stats, eddbid /* TODO */
+		86348 : {mtype:'hexxc',cost: 4588710, name:'Enhanced AX Multi-Cannon',    mount:'T',              class:3, rating:'D', mass: 8.00, integ:64, pwrdraw:0.69, boottime:0, dps:24.4  , damage: 3.9  , distdraw:0.06 , thmload:0.1 , pierce: 33, maximumrng:4000, shotspd:4000, rof:6.2  , bstint:0.16 ,                      ammoclip:90, ammomax:2100,            rldtime:4.0, brcdmg: NaN, minbrc:50, maxbrc:50,             axewgt:2.8  /.039  , kinwgt:1.1 /.039  , dmgfall:2000, ammocost:  1, limit:'hex', fdid:129022085, fdname:'Hpt_ATMultiCannon_Turret_Large_V2', eddbid:1826 }, // TODO: exact stats
 		
 		87144 : {mtype:'hexsc',cost:   65940, name:'Shock Cannon',                mount:'F',              class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:0.41, boottime:0, dps:86.4  , damage: 8.640, distdraw:0.270, thmload:1.14, pierce: 25, maximumrng:3000, shotspd:1200,rof:10.0  , bstint:0.1  ,                      ammoclip:16, ammomax: 240,            rldtime:6.0, brcdmg: 6.0, minbrc:40, maxbrc:60,             kinwgt:100, dmgfall:2500, ammocost:9, fdid:128891605, fdname:'Hpt_PlasmaShockCannon_Fixed_Small', eddbid:1779 }, // techbroker
 		87155 : {mtype:'hexsc',cost:  137500, name:'Shock Cannon',                mount:'G',              class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.47, boottime:0, dps:69.1  , damage: 6.910, distdraw:0.390, thmload:1.45, pierce: 25, maximumrng:3000, shotspd:1200,rof:10.0  , bstint:0.1  ,                      ammoclip:16, ammomax: 240,            rldtime:6.0, brcdmg: 4.8, minbrc:40, maxbrc:80,             kinwgt:100, dmgfall:2500, ammocost:9, fdid:128891604, fdname:'Hpt_PlasmaShockCannon_Gimbal_Small', eddbid:1778 }, // techbroker
