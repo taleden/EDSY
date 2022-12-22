@@ -5218,7 +5218,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 			for (i = 0;  i < cmdrs.length;  i++)
 				html.push('<li><button name="fdapi_import" value="' + encodeHTML(cmdr64[cmdrs[i]]) + '">Import</button> <button name="fdapi_delete" value="' + encodeHTML(cmdr64[cmdrs[i]]) + '">Remove</button> CMDR ' + encodeHTML(cmdrs[i]) + '</li>');
 		}
-		html.push('<li><a href="fdapi?auth=A">Authorize ' + (cmdrs.length ? 'Another ' : '') + 'Account</a></li>');
+		html.push('<li><a href="fdapi?auth=A">Authorize ' + (cmdrs.length ? 'Another ' : '') + 'Account <svg class="iconsvg xref"><use xlink:href="#icon_xref"/></svg></a></li>');
 		html.push('</ul>');
 		html.push('You can also import loadout(s) by pasting them below or dropping a file onto the page.');
 		showUITextPopup(
@@ -5269,7 +5269,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 						showUITextPopup(
 								(
 									'EDSY\'s API access for this account has expired or been reset.' +
-									'<ul><li><a href="' + encodeHTML(response['location']) + '">Re-Authorize Account</a></li></ul>'
+									'<ul><li><a href="' + encodeHTML(response['location']) + '">Re-Authorize Account <svg class="iconsvg xref"><use xlink:href="#icon_xref"/></svg></a></li></ul>'
 								),
 								null,
 								null, true,
@@ -5292,7 +5292,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 								'<br><br>' +
 								'You can try re-authorizing EDSY\'s API access, but if the<br>' +
 								'error persists then there may be a temporary API outage.' +
-								'<ul><li><a href="fdapi?auth=I">Re-Authorize Account</a></li></ul>'
+								'<ul><li><a href="fdapi?auth=I">Re-Authorize Account <svg class="iconsvg xref"><use xlink:href="#icon_xref"/></svg></a></li></ul>'
 							),
 							null,
 							null, true,
@@ -6134,7 +6134,6 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 					var module = eddb.module[mID];
 					var nextSize = ((module || EMPTY_OBJ).class || 0) | 0;
 					var nextAbbrev = eddb.mtype[mtype].modulenames[(module || EMPTY_OBJ).name];
-				//	nextUnique = (nextUnique ? ((typeof nextUnique !== 'string') ? '' : ' shortname') : ' fullname');
 					// close the running row when the size class or abbreviation changes (except for shield generators), or if unabbreviated
 					if (divRow && (!module || moduleSize !== nextSize || (moduleAbbrev !== nextAbbrev && (typeof moduleAbbrev !== 'string' || mtype !== 'isg')) || !nextAbbrev)) {
 						divType.appendChild(divRow);
