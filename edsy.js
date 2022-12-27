@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308119903,308119901,308149901,308149904]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20221215;
+	var VERSIONS = [308119903,308119901,308149901,308149905]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20221227;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -1409,7 +1409,7 @@ window.edsy = new (function() {
 					this.clearStats();
 				}
 			} else {
-				if (!isModuleAttrModifiable(this.module, attr))
+				if (getModuleAttrModificationIndex(this.module, attr) < 0)
 					return false;
 				if (!this.attrModifier)
 					this.attrModifier = {};
@@ -3431,7 +3431,6 @@ window.edsy = new (function() {
 									var bpid = fdevmap.mtypeBlueprint[mtypeid][fdname];
 									var bpgrade = 0;
 									var bproll = 0;
-									var bpmods = null;
 									if (bpid) {
 										bpgrade = parseInt(modulejson.Engineering.Level);
 										// pre-3.0 utility ammo blueprints only had a grade 3, which now has to be grade 1
@@ -3443,7 +3442,6 @@ window.edsy = new (function() {
 										if (!slot.setBlueprint(bpid, bpgrade, bproll)) {
 											if (errors) errors.push(modulejson.Slot + ': Invalid blueprint: ' + modulejson.Engineering.BlueprintName);
 										}
-										bpmods = slot.getAllBaseAttrModifiers();
 									} else if (modulejson.Engineering.BlueprintName && errors) errors.push(modulejson.Slot + ': Unknown blueprint: ' + modulejson.Engineering.BlueprintName);
 									
 									var expid = fdevmap.expeffect[(modulejson.Engineering.ExperimentalEffect || '').trim().toUpperCase()];
@@ -3455,6 +3453,9 @@ window.edsy = new (function() {
 									
 									// if there are any individual attribute modifiers, apply them over the blueprint baseline
 									if ((modulejson.Engineering.Modifiers || EMPTY_ARR).length > 0) {
+										var bpmods = slot.getAllBaseAttrModifiers();
+										if (current.dev) console.log(json.Ship+' '+modulejson.Item+' '+bpid+' g'+bpgrade+' @'+bproll+': '+ JSON.stringify(bpmods));
+										
 										// if there's a ROF modifier, handle it last so it takes into account bstsize/bstrof
 										var modlist = [];
 										var modjson_rof = null;
@@ -3486,20 +3487,24 @@ else if(current.dev && abs(base - slot.getBaseAttrValue(attr)) > 0.00001) consol
 													// ignore unmodifiable attributes, Journal includes them all the time (mass on lightweight bulkheads, shotspd, etc)
 												} else if (!slot.setEffectiveAttrModifier(attr, modifier)) {
 													if (errors) errors.push(modulejson.Slot + ': Invalid modifier: ' + modjson.Label + '=' + modjson.Value);
-} else if (false && current.dev) { // TODO DEBUG
+												} else {
+if (false && current.dev) { // TODO DEBUG
 var attrroll = getBlueprintGradeAttrModifierRoll(bpid, bpgrade, attr, slot.getBaseAttrModifier(attr));
 if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modulejson.Item+' '+attr+' roll '+attrroll+' vs '+bproll+', error '+(attrroll - bproll)+' curve '+(log(attrroll) / log(bproll)));
-												} else {
+}
 													if (bpmods) delete bpmods[attr];
+													if (bpmods && attr === 'rof') delete bpmods['bstint'];
 												}
 											} else if (attr !== null && errors) errors.push(modulejson.Slot + ': Modifier #' + (m+1) + ': Unknown attribute: ' + modjson.Label);
 										}
 										
 										// check for blueprint modifiers that weren't specified individually; if any, this is probably a special pre-engineered module
 										for (var attr in (bpmods || EMPTY_OBJ)) {
-											if (current.dev) console.log(json.Ship+' '+modulejson.Item+' '+attr+' leftover blueprint modifier');
-											slot.setAttrModifier(attr, 0);
-											slot.setBlueprintRoll(0);
+											if (bpmods[attr]) {
+if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+attr+':'+bpmods[attr]+' modifier'); // TODO DEBUG
+												slot.setAttrModifier(attr, 0);
+												slot.setBlueprintRoll(0);
+											}
 										}
 									}
 								}
@@ -3856,7 +3861,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 	
 	
 	var isModuleAttrModifiable = function(module, attr) {
-		return (getModuleAttrModificationIndex(module, attr) >= 0);
+		return ((getModuleAttrModificationIndex(module, attr) >= 0) || ((attr === 'rof') && (getModuleAttrModificationIndex(module, 'bstint') >= 0)));
 	}; // isModuleAttrModifiable()
 	
 	
@@ -8014,7 +8019,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 				var value = slot.getEffectiveAttrValue(attr);
 				input.value = getModuleAttrValueText(module, attr, value);
 				input.size = max(input.value.length, 3);
-				input.disabled = !((modifiable && (isModuleAttrModifiable(module, attr) || ((attr === 'rof') && isModuleAttrModifiable(module, 'bstint'))) && (bpid || current.option.experimental)) || slot.getBaseAttrModifier(attr));
+				input.disabled = !((modifiable && isModuleAttrModifiable(module, attr) && (bpid || current.option.experimental)) || slot.getBaseAttrModifier(attr));
 				var moddisplay = document.getElementById('outfitting_details_mod_' + r);
 				moddisplay.className = (direction ? ((direction < 0) ? 'modbad' : 'modgood') : '') + (override ? ' modoverride' : '');
 				moddisplay.innerHTML = getModuleAttrModifierHTML(module, attr, modifier);
