@@ -10,7 +10,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308119903,308119901,308149901,308149905]; /* HTML,CSS,DB,JS */
+	var VERSIONS = [308119903,308119901,308149901,308149906]; /* HTML,CSS,DB,JS */
 	var LASTMODIFIED = 20221228;
 	
 	var EMPTY_OBJ = {};
@@ -3456,17 +3456,28 @@ window.edsy = new (function() {
 										var bpmods = slot.getAllBaseAttrModifiers();
 if (false && current.dev) console.log(json.Ship+' '+modulejson.Item+' '+bpid+' g'+bpgrade+' @'+bproll+': '+ JSON.stringify(bpmods)); // TODO DEBUG
 										
+										// if there's a DPS modifier, it's redundant with Damage and/or ROF modifiers *except for beam weapons* -- in that case, it's the only one present
 										// if there's a ROF modifier, handle it last so it takes into account bstsize/bstrof
 										var modlist = [];
+										var modjson_dmg = null;
+										var modjson_dps = null;
 										var modjson_rof = null;
 										for (var m = 0;  m < modulejson.Engineering.Modifiers.length;  m++) {
 											var modjson = modulejson.Engineering.Modifiers[m];
 											var attr = fdevmap.fieldAttr[modjson.Label];
-											if (attr === 'rof') {
+											if (modjson.Label === 'RateOfFire') {
 												modjson_rof = modjson;
+											} else if (modjson.Label === 'DamagePerSecond') {
+												modjson_dps = modjson;
 											} else if (attr) {
+												if (attr === 'damage')
+													modjson_dmg = modjson;
 												modlist.push(modjson);
 											}
+										}
+										if (modjson_dps && !modjson_rof && !modjson_dmg) {
+											modjson_dps.Label = 'Damage';
+											modlist.push(modjson_dps);
 										}
 										if (modjson_rof) {
 											modlist.push(modjson_rof);
