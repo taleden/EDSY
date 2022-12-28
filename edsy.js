@@ -3454,7 +3454,7 @@ window.edsy = new (function() {
 									// if there are any individual attribute modifiers, apply them over the blueprint baseline
 									if ((modulejson.Engineering.Modifiers || EMPTY_ARR).length > 0) {
 										var bpmods = slot.getAllBaseAttrModifiers();
-										if (current.dev) console.log(json.Ship+' '+modulejson.Item+' '+bpid+' g'+bpgrade+' @'+bproll+': '+ JSON.stringify(bpmods));
+if (false && current.dev) console.log(json.Ship+' '+modulejson.Item+' '+bpid+' g'+bpgrade+' @'+bproll+': '+ JSON.stringify(bpmods)); // TODO DEBUG
 										
 										// if there's a ROF modifier, handle it last so it takes into account bstsize/bstrof
 										var modlist = [];
