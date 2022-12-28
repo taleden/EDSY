@@ -1878,7 +1878,7 @@ var eddb = {
 		hexxm : {
 			name:'Exp - Anti-Xeno Missile Racks',
 			sortname:'Experimental - AX Missiles',
-			modulenames:{'AX Missile Rack':1, 'TODO Enhanced AX Missile Rack':'Enh'},
+			modulenames:{'AX Missile Rack':1, 'Enhanced AX Missile Rack':'Enh'},
 			keyattrs:['damage','distdraw','thmload','ammoclip'],
 			modifiable:['mass','pwrdraw','damage','distdraw','bstint','ammoclip','ammomax','rldtime','jitter'],
 			blueprints:['wpn_hc'],
