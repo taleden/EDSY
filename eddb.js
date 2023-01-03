@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 308149905,
-	edsy_versions_db : [308119901,308119901,308149906,308149901], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20221229,
+	version : 308149907,
+	edsy_versions_db : [308119901,308119901,308149907,308149901], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20230103,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -2389,7 +2389,7 @@ var eddb = {
 		61352 : { mtype:'hul', cost:  800400, name:'Burst Laser',                 mount:'T',              class:3, rating:'E', mass: 8.00, integ:64, pwrdraw:1.57, boottime:0, dps:11.010, damage: 3.530, distdraw:0.560, thmload:0.78, pierce: 52, maximumrng:3000,               rof:3.119, bstint:0.780, bstrof:11, bstsize:3,                                                   brcdmg: 1.8, minbrc:60, maxbrc:80,             thmwgt:100, kinwgt:0, dmgfall:500, fdid:128049409, fdname:'Hpt_PulseLaserBurst_Turret_Large', eddbid:840 },
 		61450 : { mtype:'hul', cost:  281600, name:'Burst Laser',                 mount:'F',              class:4, rating:'E', mass:16.00, integ:80, pwrdraw:2.58, boottime:0, dps:32.259, damage:20.610, distdraw:2.980, thmload:4.53, pierce: 65, maximumrng:3000,               rof:1.565, bstint:1.250, bstrof: 3, bstsize:3,                                                   brcdmg:17.5, minbrc:40, maxbrc:80,             thmwgt:100, kinwgt:0, dmgfall:500, fdid:128049403, fdname:'Hpt_PulseLaserBurst_Fixed_Huge', eddbid:1549 },
 		61451 : { mtype:'hul', cost: 1245600, name:'Burst Laser',                 mount:'G',              class:4, rating:'E', mass:16.00, integ:64, pwrdraw:2.59, boottime:0, dps:25.907, damage:12.090, distdraw:2.410, thmload:3.33, pierce: 65, maximumrng:3000,               rof:2.143, bstint:1.000, bstrof: 5, bstsize:3,                                                   brcdmg:10.3, minbrc:40, maxbrc:80,             thmwgt:100, kinwgt:0, dmgfall:500, fdid:128727920, fdname:'Hpt_PulseLaserBurst_Gimbal_Huge', eddbid:1550 },
-		61164 : { mtype:'hul', cost:    8800, name:'Cytoscrambler Burst Laser',   mount:'F',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.80, boottime:0, dps:27.429, damage: 3.600, distdraw:0.310, thmload:0.28, pierce:  1, maximumrng:1000,               rof:7.619, bstint:0.700, bstrof:20, bstsize:8,                                                   brcdmg: 3.1, minbrc: 0, maxbrc: 0, jitter:3.5, thmwgt:100, kinwgt:0, dmgfall:600, fdid:128671449, fdname:'Hpt_PulseLaserBurst_Fixed_Small_Scatter', eddbid:1477 }, // powerplay
+		61164 : { mtype:'hul', cost:    8800, name:'Cytoscrambler Burst Laser',   mount:'F',              class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.80, boottime:0, dps:27.429, damage: 3.600, distdraw:0.310, thmload:0.28, pierce:  1, maximumrng:1000,               rof:7.619, bstint:0.700, bstrof:20, bstsize:8,                                                   brcdmg: 3.1, minbrc: 0, maxbrc: 0, jitter:1.70,thmwgt:100, kinwgt:0, dmgfall:600, fdid:128671449, fdname:'Hpt_PulseLaserBurst_Fixed_Small_Scatter', eddbid:1477 }, // powerplay // verify jitter
 		
 		70140 : { mtype:'hc',  cost:   21100, name:'Cannon',                      mount:'F',              class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:0.34, boottime:0, dps:11.250, damage:22.500, distdraw:0.460, thmload:1.38, pierce: 35, maximumrng:3000, shotspd:1200, rof:0.500, bstint:2.000,                      ammoclip: 6, ammomax: 120,            rldtime:3.0, brcdmg:21.4, minbrc:60, maxbrc:90,             kinwgt:100, expwgt:0, dmgfall:3000, ammocost:20, fdid:128049438, fdname:'Hpt_Cannon_Fixed_Small', eddbid:850 },
 		70151 : { mtype:'hc',  cost:   42200, name:'Cannon',                      mount:'G',              class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.38, boottime:0, dps: 8.292, damage:15.920, distdraw:0.480, thmload:1.25, pierce: 35, maximumrng:3000, shotspd:1000, rof:0.521, bstint:1.920,                      ammoclip: 5, ammomax: 100,            rldtime:4.0, brcdmg:15.1, minbrc:60, maxbrc:90,             kinwgt:100, expwgt:0, dmgfall:3000, ammocost:20, fdid:128049442, fdname:'Hpt_Cannon_Gimbal_Small', eddbid:854 },
