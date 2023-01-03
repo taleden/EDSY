@@ -1719,7 +1719,7 @@ var eddb = {
 		wpnx_os : { name:'Oversized', pwrdraw:5, damage:3, mats:{ mesc:5, meco:3, rut:1 }, fdname:'special_weapon_damage' },
 		wpnx_pemu : { name:'Penetrator Munitions', special:'Target module damage', mats:{ gaal:5, elar:3, zir:3 }, fdname:'special_penetrator_munitions' },
 		wpnx_pepa : { name:'Penetrator Payload', special:'Target module damage', mats:{ meco:3, tun:3, anbuscda:5, sel:3 }, fdname:'special_deep_cut_payload' },
-		wpnx_phse : { name:'Phasing Sequence', damage:-10, special:'Damage slightly bypasses shields', mats:{ focr:5, abshpaan:3, nio:3, confco:3 }, fdname:'special_phasing_sequence' }, // TODO: get exact mechanics
+		wpnx_phse : { name:'Phasing Sequence', damage:-10, special:'10% of damage bypasses shields', mats:{ focr:5, abshpaan:3, nio:3, confco:3 }, fdname:'special_phasing_sequence' }, // TODO: get exact mechanics
 		wpnx_plsl : { name:'Plasma Slug', damage:-10, ammomax:-100, special:'Reload from ship fuel', mats:{ heex:3, moemfi:2, refocr:2, mer:4 }, fdname:'special_plasma_slug' },
 		hrgx_plsl : { name:'Plasma Slug', damage:-10, thmload:-40, ammomax:-100, special:'Reload from ship fuel', mats:{ heex:3, moemfi:2, refocr:2, mer:4 }, fdname:'special_plasma_slug_cooled' },
 		wpnx_raca : { name:'Radiant Canister', special:'Area heat increased and sensors disrupted', mats:{ pol:1, phal:3, hedipl:4 }, fdname:'special_radiant_canister' },
