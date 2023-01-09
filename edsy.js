@@ -609,9 +609,9 @@ window.edsy = new (function() {
 	*/
 	
 	
-	var getJumpFuelCost = function(mass, dist, fsdOpt, fsdMul, fsdExp) {
+	var getJumpFuelCost = function(mass, dist, fsdOpt, fsdMul, fsdExp, jmpBst) {
 		// https://forums.frontier.co.uk/showthread.php?p=643461#post643461
-		return fsdMul * pow(dist * mass / fsdOpt, fsdExp);
+		return fsdMul * pow(max(0, dist - jmpBst) * mass / fsdOpt, fsdExp);
 	}; // getJumpFuelCost()
 	
 	
@@ -7562,32 +7562,36 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		// it's a little hacky, but stick on all the builtin stored modules (which are specially named with leading spaces)
 		var item = 'edsy_modules' + (current.beta ? '_beta' : '');
 		var data = (window.localStorage.getItem(item) || '').split('/').concat([
-			"0W0o120W151k1w1v1j1b0i0W18130h131X1r1p1q1f1Z=FLIqG02G0050ypD4sPc8y00C_00Gu00", // 2B Enzyme, HC+Caustic
-			"0W0o150l16140W111O0W1D1f1p1p1f1i1b0i0W18130h1I16=HL3gG03G0090zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", // 2E/FD AX Missile, HC+RF
-			"0W0p130l16140W111O0W1D1f1p1p1f1i1b0i0W18130h1I16=HL4wG03G0090zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", // 3C/FD AX Missile, HC+RF
-			"0W0n140l160W171r1X1o1a1f1X1k0W171X1r1p1p0i0W1I16=GLXCG02G0092_156_00A_00Ew7sHD00L800P600T800YsPc", // 1D/F Guardian Gauss, RF (Salvation)
-			"0W0o120l160W171r1X1o1a1f1X1k0W171X1r1p1p0i0W1I16=GLYSG02G0092_156_00A_00Ew7sHD00L800P600T800YsPc", // 2B/F Guardian Gauss, RF (Salvation)
-			"0W0n140l160W171r1X1o1a1f1X1k0W1G1i1X1p1j1X0i0W1F13=GLXFG02G0060vBo4zHx8y00Cw00H800KvLL", // 1D/F Guardian Plasma, OC (Salvation)
-			"0W0o120l160W171r1X1o1a1f1X1k0W1G1i1X1p1j1X0i0W1F13=GLYVG02G0060vBo4zHx8y00Cw00H800KvLL", // 2B/F Guardian Plasma, OC (Salvation)
-			"0W0n140l160W171r1X1o1a1f1X1k0W1J1e1X1o1a0i0W1C1I=GLXIG02G0090y0051Cp98HlDFm0H058K_7YP4J9V700YpXu", // 1D/F Guardian Shard, LR (Salvation)
-			"0W0o110l160W171r1X1o1a1f1X1k0W1J1e1X1o1a0i0W1C1I=GLYOG02G0090y0051Cp98HkDFm0H058K_7YP4JBV700YpXu", // 2A/F Guardian Shard, LR (Salvation)
-		//	"0W0o110l160W171r1X1o1a1f1X1k0W1J1e1X1o1a0i0W13170W1o1b1t1X1o1a0W1C1I0r=GLYOG02G0080y0051Cp993DDFm0H058L800Op7uV700", // 2A/F Guardian Shard, LR5 (CG reward)
-			"0W0n140l160W111Y1o1X1p1f1l1k0W121i1X1p1q1b1o0i0W13170W1o1b1t1X1o1a=FJprG02G0062y006y00Ey00Iy00L800P800", // 1D/F Abrasion Blaster, ? (CG reward)
-			"0W0n140l160W1D1f1k1f1k1d0W1C1X1p1b1o0i0W13170W1o1b1t1X1o1a=FJpqG02G0072y006y00AkPcEy00Iy00L800PBLL", // 1D/F Mining Laser, ? (CG reward)
-			"0W0o150l160W1D1r1i1q1f0j1Z1X1k1k1l1k0i0W1I160i0W1G1J=GHewG0CS007Uy00Yuaab600f466n600soPcv400", // 2E/F Multi-cannon, RF, PS (CG reward)
-			"0W0o120W1J1b1b1h1b1o0i0W1C1N0h18130i0W1K13=FK4lG03Q0072-Cp6ypDAsPcIwPcUoPcX000b000", // 2B Seeker, LW+HC, TC
-			"0W0o120l160W1I1X1f1i0i0W1C1I0h18130i0W1613=FKZyG03I0080-Cp8zCpT000Yyv4b000f000iu00r900", // 2B/F Rail, LR+HC, FC
-			"0W0m160W15131D0i0W1C1N0h1J1e=FCTqG03G0032_pD50009000", // 0F ECM, LW+Sh // TODO: verify
-			"0W0m190W181J0i0W11131u0o=GCjwG02G002P000S_00", // 0I HS, ACx2
-			"0W0m110W1B1N1J0i0W161J0h1C1I=FDwoG03G0056y008y00GzCpMupDQ_Pc", // 0A KWS, FS+LR
-			"0W0m190l1K0W1G140i0W1C1N0h161l1Z=FCzYG05G0042_pD6y00GkPcL000", // 0I/T PD, LW+Foc
-			"0W0p110W1G1G0i0W111I0h1F13=FA5UG03G0040sPc4-cQ8yAFCqAF", // 3A PP, AR+OC
-			"0W0s110W161J140i0W191I0h1612=FAfQG05G0060upD6upD8qpDE_PcGzcQKsPc", // 6A FSD, IR+FB
-			"0W0r110W161J140i0W191I0h1612=FAdsG05G0060upD6upD8qpDE_PcGzcQKsPc", // 5A FSD, IR+FB
-			"0W0q110W161J140i0W191I0h1612=FAcIG05G0060upD6upD8qpDE_PcGzcQKsPc", // 4A FSD, IR+FB
-			"0W0p110W161J140i0W191I0h1612=FAakG05G0060upD6upD8qpDE_PcGzcQKsPc", // 3A FSD, IR+FB
-			"0W0p110W1J170i0W1B1I0h1K1I=F7PcG05G0044sPc8wPccupDgvcQ", // 3A SG, KR+TR
-			"0W0n190W141J1J0i0W151I1u0o=F2jwG09G001P000", // 1I DSS, ERx2
+		//	hashEncodeS(" 2B Enzyme, HC+Caustic (CG reward)")+"=FLIqG02G0050ypD4sPc8y00C_00Gu00", // CG reward // TODO: get sample to test import
+			hashEncodeS(" 2E/FD AX Missile, HC+RF")+"=HL3gG03G0090zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", // sirius tech broker
+			hashEncodeS(" 3C/FD AX Missile, HC+RF")+"=HL4wG03G0090zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", // sirius tech broker
+			hashEncodeS(" 1D/F Guardian Gauss, RF+HC")+"=GLXCG02G0092_156_00A_00Ew7sHD00L800P600T800YsPc", // Salvation tech broker (Bright Sentinel, Mbooni)
+			hashEncodeS(" 2B/F Guardian Gauss, RF+HC")+"=GLYSG02G0092_156_00A_00Ew7sHD00L800P600T800YsPc", // Salvation tech broker (Bright Sentinel, Mbooni)
+			hashEncodeS(" 1D/F Guardian Plasma, OC+Foc")+"=GLXFG02G0060vBo4zHx8y00Cw00H800KvLL", // Salvation tech broker (Bright Sentinel, Mbooni)
+			hashEncodeS(" 2B/F Guardian Plasma, OC+Foc")+"=GLYVG02G0060vBo4zHx8y00Cw00H800KvLL", // Salvation tech broker (Bright Sentinel, Mbooni)
+			hashEncodeS(" 1D/F Guardian Shard, LR+Foc, Pen")+"=GLXIG02G0090y0051Cp98HlDFm0H058K_7YP4J9V700YpXu", // Salvation tech broker (Bright Sentinel, Mbooni)
+			hashEncodeS(" 2A/F Guardian Shard, LR+Foc, Pen")+"=GLYOG02G0090y0051Cp98HkDFm0H058K_7YP4JBV700YpXu", // Salvation tech broker (Bright Sentinel, Mbooni)
+		//	hashEncodeS(" 2A/F Guardian Shard, LR5 (CG reward)")+"=GLYOG02G0080y0051Cp993DDFm0H058L800Op7uV700", // CG reward // TODO: get sample to test import
+		//	hashEncodeS(" 1D/F Abrasion Blaster, LR (CG reward)")+"=FJprG02G0062y006y00Ey00Iy00L800P800", // CG reward // TODO: get sample to test import
+		//	hashEncodeS(" 1D/F Mining Laser, LR, IR (CG reward)")+"=HJpqG03H0072y006y00AkPcEy00I_ezL800PBLL", // CG reward
+			hashEncodeS(" 2B Seeker \"V1\", LW+HC, TC")+"=FK4lG03Q0072-Cp6ypDAsPcIwPcUoPcX000b000", // human tech broker
+		//	hashEncodeS(" 2B Seeker, HC+RF, DM (CG reward)")+"", // TODO
+		//	hashEncodeS(" 2E/F Multi-cannon, RF, PS (CG reward)")+"=GHewG0CS007Uy00Yuaab600f466n600soPcv400", // CG reward
+		//	hashEncodeS(" 2B/F Rail, LR+HC, FC (CG reward)")+"=FKZyG03I0080-Cp8zCpT000Yyv4b000f000iu00r900", // TODO: CG reward? // TODO: get sample to test import
+			
+		//	hashEncodeS(" 0F ECM, LW+Shd (CG reward)")+"=FCTqG03G0032_pD50009000", // TODO: CG reward? // TODO: get sample to test import
+			hashEncodeS(" 0I HS \"Sirius\", ACx2")+"=GCjwG02G002P000S_00", // sirus tech broker
+		//	hashEncodeS(" 0A KWS, FS+LR (CG reward)")+"=FDwoG03G0056y008y00GzCpMupDQ_Pc", // TODO: CG reward? // TODO: get sample to test import
+		//	hashEncodeS(" 0I/T PD, Foc+LW (CG reward)")+"=FCzYG05G0042_pD6y00GkPcL000", // TODO: CG reward? // TODO: get sample to test import
+			
+		//	hashEncodeS(" 3A PP, AR+OC (CG reward)")+"=FA5UG03G0040sPc4-cQ8yAFCqAF", // TODO: CG reward? // TODO: get sample to test import
+		//	hashEncodeS(" 3A FSD, IR+FB (CG reward)")+"=FAakG05G0060upD6upD8qpDE_PcGzcQKsPc", // CG reward // TODO: get sample to test import
+		//	hashEncodeS(" 4A FSD, IR+FB (CG reward)")+"=FAcIG05G0060upD6upD8qpDE_PcGzcQKsPc", // CG reward // TODO: get sample to test import
+			hashEncodeS(" 5A FSD \"V1\", IR+FB")+"=FAdsG05G0060upD6upD8qpDE_PcGzcQKsPc", // human tech broker
+		//	hashEncodeS(" 6A FSD, IR+FB (CG reward)")+"=FAfQG05G0060upD6upD8qpDE_PcGzcQKsPc", // CG reward // TODO: get sample to test import
+			
+		//	hashEncodeS(" 3A SG, KR+TR (CG reward)")+"=F7PcG05G0044sPc8wPccupDgvcQ", // TODO: CG reward? // TODO: get sample to test import
+			hashEncodeS(" 1I DSS \"V1\", ERx2")+"=F2jwG09G001P000", // human tech broker
 		]);
 		for (var i = 0;  i < data.length;  i++) {
 			var entry = data[i].split('=');
