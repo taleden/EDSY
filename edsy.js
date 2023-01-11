@@ -2,7 +2,7 @@
 EDSY was created using assets and imagery from Elite Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
 It is not endorsed by nor reflects the views or opinions of Frontier Developments and no employee of Frontier Developments was involved in the making of it.
 
-Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2022 taleden
+Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2023 taleden
 and is provided under a Creative Commons Attribution-NonCommercial 4.0 International License (http://creativecommons.org/licenses/by-nc/4.0/).
 
 The Elite Dangerous game logic and data in this file remains the property of Frontier Developments plc, and is used here as authorized by
@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308119903,308119901,308149901,308149906]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20221228;
+	var VERSIONS = [308119903,308119901,308149901,308149907]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20230111;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
