@@ -7364,7 +7364,15 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var slot = current.fit.getSlot(slotgroup, slotnum);
 		var modid = slot.getModuleID();
 		if (GROUP_LABEL[slotgroup]) {
-			setUIPickerModule(modid, '', modid && (current.tab === 'SLOT'));
+			var namehash = '';
+			var modulehash = slot.getStoredHash();
+			for (var nh in (current.stored.moduleNamehashStored[modid] || EMPTY_OBJ)) {
+				if (current.stored.moduleNamehashStored[modid][nh].modulehash === modulehash) {
+					namehash = nh;
+					break;
+				}
+			}
+			setUIPickerModule(modid, namehash, modid && (current.tab === 'SLOT'));
 		} else {
 			setUIPickerModule();
 		}
@@ -7687,13 +7695,22 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var modid = slot.getModuleID();
 		var modulehash = slot.getStoredHash();
 		var stockhash = cache.moduleHash[modid] || '';
-		if (setmodule && namehash) {
-			select.value = namehash;
-		} else if (setmodule || select.selectedIndex <= 0) {
+		if (setmodule) {
+			if (!namehash && modid && modulehash !== stockhash) {
+				for (var nh in (current.stored.moduleNamehashStored[modid] || EMPTY_OBJ)) {
+					if (current.stored.moduleNamehashStored[modid][nh].modulehash === modulehash) {
+						namehash = nh;
+						break;
+					}
+				}
+			}
+			select.value = namehash || '';
+		}
+		if (select.selectedIndex <= 0) {
 			select.selectedIndex = ((modid && modulehash === stockhash) ? 0 : -1);
 		}
 		namehash = select.value || '';
-		var storedhash = (namehash ? current.stored.moduleNamehashStored[0][namehash] : stockhash);
+		var storedhash = (namehash ? current.stored.moduleNamehashStored[0][namehash].modulehash : stockhash);
 		var builtin = hashDecodeS(namehash).startsWith(" ");
 		
 		select.disabled = (current.outfitting_focus === 'module' || current.group === 'ship' || !modid);
@@ -7942,8 +7959,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var cost = slot.getCost();
 		var base = slot.getBaseCost();
 		var actual = slot.hasActualCost();
-		var discounts = (current.outfitting_focus === 'slot') ? slot.getDiscounts() : 0;
-		var disabled = (current.outfitting_focus === 'slot') ? (base < 1) : true;
+		var discounts = slot.getDiscounts();
+		var disabled = (base < 1);
 		var el = document.forms.details.elements.cost;
 		el.value = formatNumText(cost, 0);
 		el.size = max(cost, base).toString().length + 1;
@@ -7965,28 +7982,34 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	
 	var setUIDetailsCost = function(cost) {
-		if (current.outfitting_focus !== 'slot')
+		var slot = getUIOutfittingSlot();
+		if (!slot)
 			return false;
-		var slot = current.fit.getSlot(current.group, current.slot);
 		if (!slot.setCost(cost))
 			return false;
-		updateUIFitStoredBuildControls();
-		updateUIFitSlot(current.group, current.slot);
-		updateUIStats();
+		if (current.outfitting_focus === 'slot') {
+			updateUIFitStoredBuildControls();
+			updateUIFitSlot(current.group, current.slot);
+			updateUIStats();
+		}
+		updateUIDetailsStoredModuleControls();
 		updateUIDetailsCost();
 		return true;
 	}; // setUIDetailsCost()
 	
 	
 	var setUIDetailsDiscounts = function(discounts) {
-		if (current.outfitting_focus !== 'slot')
+		var slot = getUIOutfittingSlot();
+		if (!slot)
 			return false;
-		var slot = current.fit.getSlot(current.group, current.slot);
 		if (!slot.setDiscounts(discounts))
 			return false;
-		updateUIFitStoredBuildControls();
-		updateUIFitSlot(current.group, current.slot);
-		updateUIStats();
+		if (current.outfitting_focus === 'slot') {
+			updateUIFitStoredBuildControls();
+			updateUIFitSlot(current.group, current.slot);
+			updateUIStats();
+		}
+		updateUIDetailsStoredModuleControls();
 		updateUIDetailsCost();
 		return true;
 	}; // setUIDetailsDiscounts()
