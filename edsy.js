@@ -1821,7 +1821,7 @@ window.edsy = new (function() {
 				// identify modified attrs
 				var attrs = [];
 				for (var attr in attrflag) {
-					if ((cache.attribute[attr] || EMPTY_OBJ).fdattr && this.getEffectiveAttrModifier(attr)) {
+					if (this.getEffectiveAttrModifier(attr)) {
 						if (attr === 'damage') {
 							attrs.push('dps');
 							if (isFinite(this.getBaseAttrValue('rof')))
@@ -1839,11 +1839,13 @@ window.edsy = new (function() {
 					attrs.sort(sortAttributes);
 					var obj_eng_mod = obj_eng["Modifiers"] = [];
 					for (var a = 0;  a < attrs.length;  a++) {
-						obj_eng_mod.push({
-							"Label": cache.attribute[attrs[a]].fdattr,
-							"Value": parseFloat(this.getEffectiveAttrValue(attrs[a]).toFixed(6)),
-							"OriginalValue": parseFloat(this.getBaseAttrValue(attrs[a]).toFixed(6)),
-						});
+						if ((cache.attribute[attr] || EMPTY_OBJ).fdattr) {
+							obj_eng_mod.push({
+								"Label": cache.attribute[attrs[a]].fdattr,
+								"Value": parseFloat(this.getEffectiveAttrValue(attrs[a]).toFixed(6)),
+								"OriginalValue": parseFloat(this.getBaseAttrValue(attrs[a]).toFixed(6)),
+							});
+						}
 					}
 				}
 			}
@@ -3499,6 +3501,7 @@ else if(current.dev && abs(base - slot.getBaseAttrValue(attr)) > 0.00001) consol
 												var modifier = getAttrModifier(attr, base, parseFloat(modjson.Value));
 												if (!isModuleAttrModifiable(module, attr)) {
 													// ignore unmodifiable attributes, Journal includes them all the time (mass on lightweight bulkheads, shotspd, etc)
+if (false && current.dev) console.log(modulejson.Item+' '+attr+':'+modifier+' unmodifiable');
 												} else if (!slot.setEffectiveAttrModifier(attr, modifier)) {
 													if (errors) errors.push(modulejson.Slot + ': Invalid modifier: ' + modjson.Label + '=' + modjson.Value);
 												} else {
