@@ -3370,6 +3370,7 @@ window.edsy = new (function() {
 		
 		// get the hull and module costs
 		if ('HullValue' in json) {
+			// this does not seem to be modified by HullHealth
 			var slot = build.getSlot('ship', 'hull');
 			if (!slot.setCost((json.HullValue || 0) + extravalue)) {
 				if (errors) errors.push('Invalid hull value: ' + json.HullValue + '+' + extravalue);
@@ -3422,8 +3423,9 @@ window.edsy = new (function() {
 								if (!current.option.experimental && !slot.setModuleID(modid)) {
 									if (errors) errors.push(modulejson.Slot + ': ' + getModuleLabel(slot.getModule()) + ' requires Experimental Mode');
 								}
-								if ('Value' in modulejson) {
-									modulesValueExpected -= modulejson.Value;
+								// module Value is penalized by Health!
+								if (('Value' in modulejson) && modulejson['Health']) {
+									modulesValueExpected -= modulejson.Value / modulejson.Health;
 									if (!slot.setCost(modulejson.Value)) {
 										if (errors) errors.push(modulejson.Slot + ': Invalid value: ' + modulejson.Value);
 									}
