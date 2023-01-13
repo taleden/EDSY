@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308119903,308119901,308149901,308149907]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20230111;
+	var VERSIONS = [308119903,308119901,308149901,308149908]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20230113;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -1818,34 +1818,31 @@ window.edsy = new (function() {
 					attrflag[modifiable[a]] = true;
 				for (var attr in (expeffect || EMPTY_OBJ))
 					attrflag[attr] = true;
+				if (attrflag['damage']) {
+					attrflag['dps'] = true;
+					if (!isFinite(this.getBaseAttrValue('rof')))
+						delete attrflag['damage'];
+				}
+				if (attrflag['bstint']) {
+					attrflag['dps'] = true;
+					attrflag['rof'] = true;
+				}
 				// identify modified attrs
 				var attrs = [];
 				for (var attr in attrflag) {
-					if (this.getEffectiveAttrModifier(attr)) {
-						if (attr === 'damage') {
-							attrs.push('dps');
-							if (isFinite(this.getBaseAttrValue('rof')))
-								attrs.push('damage');
-						} else if (attr === 'bstint') {
-							attrs.push('dps');
-							attrs.push('rof');
-						} else {
-							attrs.push(attr);
-						}
-					}
+					if ((cache.attribute[attr] || EMPTY_OBJ).fdattr && this.getEffectiveAttrModifier(attr))
+						attrs.push(attr);
 				}
 				// sort and export modified attrs
 				if (attrs.length > 0) {
 					attrs.sort(sortAttributes);
 					var obj_eng_mod = obj_eng["Modifiers"] = [];
 					for (var a = 0;  a < attrs.length;  a++) {
-						if ((cache.attribute[attr] || EMPTY_OBJ).fdattr) {
-							obj_eng_mod.push({
-								"Label": cache.attribute[attrs[a]].fdattr,
-								"Value": parseFloat(this.getEffectiveAttrValue(attrs[a]).toFixed(6)),
-								"OriginalValue": parseFloat(this.getBaseAttrValue(attrs[a]).toFixed(6)),
-							});
-						}
+						obj_eng_mod.push({
+							"Label": cache.attribute[attrs[a]].fdattr,
+							"Value": parseFloat(this.getEffectiveAttrValue(attrs[a]).toFixed(6)),
+							"OriginalValue": parseFloat(this.getBaseAttrValue(attrs[a]).toFixed(6)),
+						});
 					}
 				}
 			}
@@ -3504,6 +3501,10 @@ else if(current.dev && abs(base - slot.getBaseAttrValue(attr)) > 0.00001) consol
 												if (!isModuleAttrModifiable(module, attr)) {
 													// ignore unmodifiable attributes, Journal includes them all the time (mass on lightweight bulkheads, shotspd, etc)
 if (false && current.dev) console.log(modulejson.Item+' '+attr+':'+modifier+' unmodifiable');
+												} else if (abs(slot.getEffectiveAttrModifier(attr) - modifier) < 0.000005) {
+if (false && current.dev) console.log(json.Ship+' '+modulejson.Item+' '+attr+' rolled '+slot.getEffectiveAttrModifier(attr)+', skipping specified '+modifier);
+													if (bpmods) delete bpmods[attr];
+													if (bpmods && attr === 'rof') delete bpmods['bstint'];
 												} else if (!slot.setEffectiveAttrModifier(attr, modifier)) {
 													if (errors) errors.push(modulejson.Slot + ': Invalid modifier: ' + modjson.Label + '=' + modjson.Value);
 												} else {
