@@ -82,7 +82,7 @@ window.edsy = new (function() {
 	//	882161 : { name:"2A/F Grd Shard, LR5",                   modulehash:"GLYOG02G0080y0051Cp993DDFm0H058L800Op7uV700",     available:0 }, // TODO: CG reward? // TODO: get sample to test import
 		811410 : { name:"1D/F Abrasion Blaster, LR",             modulehash:"FJprG02G0062y006y00Ey00Iy00L800P800",             available:0 }, // CG reward // TODO: get sample to test import
 		811400 : { name:"1D/F Mining Laser, LR, Incen",          modulehash:"HJpqmF5j3H0072y006y00AkPcEy00I_ezL800PBLL",       available:1 }, // Torval Mining Ltd tech broker
-		822230 : { name:"2B Seeker \"V1\", LW+HC, ThermCas",     modulehash:"FK4lG-3Q0072-Cp6ypDAsPcIwPcUoPcX000b000",         available:1 }, // human tech broker // TODO: get sample to test import
+		822230 : { name:"2B Seeker \"V1\", HC+LW, ThermCas",     modulehash:"HK4lG-3Q_W42-Cp6ypDAsPcIwPc",                     available:1 }, // human tech broker
 		822231 : { name:"2B Seeker, HC+RF, Drag",                modulehash:"HK4lG-2R00612008u00GwghUsPcX400b400",             available:0 }, // CG reward // TODO: get sample to test import
 		722500 : { name:"2E/F Multi-cannon, RF+HC, Phasing",     modulehash:"HHewm1WaCS007Uy00Yuaab600f466n600soPcv400",       available:0 }, // CG reward
 		842200 : { name:"2B/F Rail, LR+HC, FeedCas",             modulehash:"FKZyG03I0080-Cp8zCpT000Yyv4b000f000iu00r900",     available:0 }, // CG reward // TODO: get sample to test import
@@ -1990,7 +1990,7 @@ window.edsy = new (function() {
 					bproll1 = 0;
 					expid1 = '';
 				} else if (bproll1 <= 0) {
-					steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Conv', desc:(blueprint.name + ' G' + bpgrade1 + ' (legacy)'), cost:{} });
+					steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Conv', bpid:bpid1, bpgrade:bpgrade1, desc:(blueprint.name + ' G' + bpgrade1 + ' (legacy)'), cost:{} });
 					bpgrade1--;
 					bproll1 = 1;
 				}
@@ -2003,7 +2003,7 @@ window.edsy = new (function() {
 						var cost = {};
 						for (var mat in mats)
 							cost[mat] = rolls * mats[mat];
-						steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Eng', desc:(blueprint.name + ' G' + bpgrade1 + ' x' + rolls), cost:cost });
+						steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Eng', bpid:bpid2, bpgrade:bpgrade1, rolls:rolls, desc:(blueprint.name + ' G' + bpgrade1 + ' x' + rolls), cost:cost });
 					}
 					bpgrade1++;
 					bproll1 = 0;
@@ -2015,7 +2015,7 @@ window.edsy = new (function() {
 			var mtype2 = (slot2.getSlotGroup() === 'hardpoint') ? 'wpn' : slot2.getModuleMtype();
 			if (expeffect && expid1 != expid2 && limexpeffect !== '' && (limexpeffect === 'all' || (','+limexpeffect+',').indexOf(mtype2) != -1)) {
 				var cost = clone({}, expeffect.mats);
-				steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Exp', desc:expeffect.name, cost:cost });
+				steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Exp', expid:expid2, desc:expeffect.name, cost:cost });
 			}
 		}
 		
