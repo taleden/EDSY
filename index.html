@@ -14,8 +14,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 -->
 		<title>EDSY</title>
 		<meta name="application-name" content="EDSY">
-		<meta name="edsy-versions-html" id="edsy_versions_html" content="308119903,308119901,308119901,308119901"><!-- HTML,CSS,DB,JS -->
-		<meta name="last-modified" id="last_modified" content="20221104">
+		<meta name="edsy-versions-html" id="edsy_versions_html" content="308149909,308149909,308119901,308149909"><!-- HTML,CSS,DB,JS -->
+		<meta name="last-modified" id="last_modified" content="20230125">
 		<meta name="author" content="taleden">
 		<meta name="description" content="EDSY is a ship outfitting tool for Elite Dangerous">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1093,6 +1093,24 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 								</dl>
 							</div>
 							<div>
+								<b>Builtin Stored Modules</b>
+								&mdash;
+								Select which pre-engineered (or otherwise limited availability) modules to display as built-in stored modules.
+								<dl>
+									<dd><select name="builtin">
+										<option value="none">None</option>
+										<option value="some">Some (all Tech Broker, selected CG rewards)</option>
+										<option value="all">All</option>
+									</select></dd>
+								</dl>
+								<table id="options_builtin">
+									<tr>
+										<td id="options_builtin_hardpoints"></td>
+										<td id="options_builtin_other"></td>
+									</tr>
+								</table>
+							</div>
+							<div>
 								<label class="checkbox left"><input type="checkbox" name="onlybest"><div><div class="check"></div><span>Hide Small Modules</span></div></label>
 								&mdash; Display only the largest size class of each available module type in the SLOT view of the module browser.
 							</div>
@@ -1121,7 +1139,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 							<div>
 								<b>Appearance</b>
 								&mdash; Customize EDSY's fonts and colors.
-								<table>
+								<table id="options_appearance">
 									<tbody>
 										<tr>
 											<th>Text Font</th>

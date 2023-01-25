@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308119903,308119901,308149901,308149908]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20230113;
+	var VERSIONS = [308149909,308149909,308149901,308149909]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20230125;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -69,6 +69,44 @@ window.edsy = new (function() {
 	var HTML_ICON_TAG = { G:HTML_ICON['guardian'] };
 	var CSS_FONTS = ['caps','text','fixed'];
 	var CSS_COLORS = ['orange','red','blue','green','yellow'];
+	var BUILTIN_STORED_MODULES = {
+		872200 : { name:"2B Enzyme Missile, HC+Caustic",         modulehash:"FLIqG02G0050ypD4sPc8y00C_00Gu00",                 available:0 }, // CG reward // TODO: get sample to test import
+		862500 : { name:"2E/FD AX Missile, HC+RF",               modulehash:"HL3gG-3G_W90zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", available:1 }, // Sirius tech broker
+		863300 : { name:"3C/FD AX Missile, HC+RF",               modulehash:"HL4wG-3G_W90zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", available:1 }, // Sirius tech broker // TODO: get sample to test import
+		881400 : { name:"1D/F Grd Gauss, RF+HC",                 modulehash:"HLXCG-2G0092_166_00A_00Ew7ZHD00L800P600T800YsPc", available:1 }, // Salvation tech broker
+		882200 : { name:"2B/F Grd Gauss, RF+HC",                 modulehash:"HLYSG-2G0092_166_00A_00Ew7ZHD00L800P600T800YsPc", available:1 }, // Salvation tech broker
+		881430 : { name:"1D/F Grd Plasma, OC+Foc",               modulehash:"HLXFG-2Gxq60vBh4zHx8y00Cw00H800KvLL",             available:1 }, // Salvation tech broker
+		882230 : { name:"2B/F Grd Plasma, OC+Foc",               modulehash:"HLYVG-2Gxq60vBh4zHx8y00Cw00H800KvLL",             available:1 }, // Salvation tech broker // TODO: get sample to test import
+		881460 : { name:"1D/F Grd Shard, LR+Foc, Pen",           modulehash:"HLXIG-2G0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", available:1 }, // Salvation tech broker
+		882160 : { name:"2A/F Grd Shard, LR+Foc, Pen",           modulehash:"HLYOG-2G0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", available:1 }, // Salvation tech broker // TODO: get sample to test import
+	//	882161 : { name:"2A/F Grd Shard, LR5",                   modulehash:"GLYOG02G0080y0051Cp993DDFm0H058L800Op7uV700",     available:0 }, // TODO: CG reward? // TODO: get sample to test import
+		811410 : { name:"1D/F Abrasion Blaster, LR",             modulehash:"FJprG02G0062y006y00Ey00Iy00L800P800",             available:0 }, // CG reward // TODO: get sample to test import
+		811400 : { name:"1D/F Mining Laser, LR, Incen",          modulehash:"HJpqmF5j3H0072y006y00AkPcEy00I_ezL800PBLL",       available:1 }, // Torval Mining Ltd tech broker
+		822230 : { name:"2B Seeker \"V1\", LW+HC, ThermCas",     modulehash:"FK4lG-3Q0072-Cp6ypDAsPcIwPcUoPcX000b000",         available:1 }, // human tech broker // TODO: get sample to test import
+		822231 : { name:"2B Seeker, HC+RF, Drag",                modulehash:"HK4lG-2R00612008u00GwghUsPcX400b400",             available:0 }, // CG reward // TODO: get sample to test import
+		722500 : { name:"2E/F Multi-cannon, RF+HC, Phasing",     modulehash:"HHewm1WaCS007Uy00Yuaab600f466n600soPcv400",       available:0 }, // CG reward
+		842200 : { name:"2B/F Rail, LR+HC, FeedCas",             modulehash:"FKZyG03I0080-Cp8zCpT000Yyv4b000f000iu00r900",     available:0 }, // CG reward // TODO: get sample to test import
+		
+		510600 : { name:"0F ECM, LW+Shd",                        modulehash:"FCTqG03G0032_pD50009000",                         available:0 }, // CG reward // TODO: get sample to test import
+		520900 : { name:"0I Heat Sink \"Sirius\", ACx2",         modulehash:"HCjwG-2G002P000S_00",                             available:1 }, // Sirus tech broker
+		570100 : { name:"0A KWS, FS+LR",                         modulehash:"FDwoG03G0056y008y00GzCpMupDQ_Pc",                 available:0 }, // CG reward // TODO: get sample to test import
+		530900 : { name:"0I/T Point Defence, Foc+LW",            modulehash:"FCzYG05G0042_pD6y00GkPcL000",                     available:0 }, // CG reward // TODO: get sample to test import
+		
+		413100 : { name:"3A Power Plant, AR+OC",                 modulehash:"FA5UG03G0040sPc4-cQ8yAFCqAF",                     available:0 }, // CG reward // TODO: get sample to test import
+		413101 : { name:"3A Power Plant, OC",                    modulehash:"HA5UG-7G0036upD8ypDCvcQ",                         available:0 }, // CG reward // TODO: get sample to test import
+		414101 : { name:"4A Power Plant, OC",                    modulehash:"HA72G-7G0036upD8ypDCvcQ",                         available:0 }, // CG reward // TODO: get sample to test import
+		415101 : { name:"5A Power Plant, OC",                    modulehash:"HA8cG-7G0036upD8ypDCvcQ",                         available:0 }, // CG reward // TODO: get sample to test import
+		433100 : { name:"3A FSD, IR+FB",                         modulehash:"HAakG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             available:0 }, // CG reward // TODO: get sample to test import
+		434100 : { name:"4A FSD, IR+FB",                         modulehash:"HAcIG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             available:0 }, // CG reward // TODO: get sample to test import
+		435100 : { name:"5A FSD \"V1\", IR+FB",                  modulehash:"HAdsG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             available:1 }, // human tech broker
+		436100 : { name:"6A FSD, IR+FB",                         modulehash:"HAfQG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             available:0 }, // CG reward // TODO: get sample to test import
+		
+		  1510 : { name:"1E Anti-Corrosion Cargo (1T)",          modulehash:"H02N00",                                          available:0 }, // CG reward
+		  1610 : { name:"1F Anti-Corrosion Cargo (2T)",          modulehash:"H02X00",                                          available:0 }, // CG reward
+		
+		303100 : { name:"3A Shield Gen, KR+TR",                  modulehash:"F7PcG05G0044sPc8wPccupDgvcQ",                     available:0 }, // CG reward // TODO: get sample to test import
+		111300 : { name:"1I DSS \"V1\", ERx2",                   modulehash:"H2jwG-9G_W1P000",                                 available:1 }, // human tech broker
+	};
 	
 	var cache = {
 		attribute: {},
@@ -85,6 +123,7 @@ window.edsy = new (function() {
 		shipModules: {},
 		groupMtypes: {},
 		mtypeModules: {},
+		mtypeBuiltins: {},
 		mtypeSizeGaps: {},
 		mtypeBlueprints: {},
 		mtypeExpeffects: {},
@@ -132,6 +171,7 @@ window.edsy = new (function() {
 		pickerNameNamehash: {},
 		option: {
 			insurance: 9500,
+			builtin: 'some',
 			onlybest: false,
 			experimental: false,
 			show1: true,
@@ -4307,6 +4347,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	
 	var initCache = function() {
+		// initialize default builtin options
+		for (var bmodid in BUILTIN_STORED_MODULES) {
+			var opt = 'builtin' + bmodid;
+			current.option[opt] = (BUILTIN_STORED_MODULES[bmodid].available ? true : false);
+		}
+		
 		// store default CSS options
 		var compStyle = getComputedStyle(document.documentElement);
 		for (var i = 0;  i < CSS_FONTS.length;  i++) {
@@ -4357,6 +4403,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		// identify and sort mtypes for each group
 		cache.groupMtypes = {};
 		cache.mtypeModules = {};
+		cache.mtypeBuiltins = {};
 		for (var g = 0;  g < GROUPS.length;  g++) {
 			var group = GROUPS[g];
 			cache.groupMtypes[group] = [];
@@ -4367,6 +4414,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 						if (mtype === 'cft') continue;
 						cache.groupMtypes[group].push(mtype);
 						cache.mtypeModules[mtype] = [];
+						cache.mtypeBuiltins[mtype] = [];
 					}
 				}
 			} else if (group === 'military') {
@@ -4375,6 +4423,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				for (var mtype in eddb.group[group].mtypes) {
 					cache.groupMtypes[group].push(mtype);
 					cache.mtypeModules[mtype] = [];
+					cache.mtypeBuiltins[mtype] = [];
 				}
 				cache.groupMtypes[group].sort(sortMtypes);
 			}
@@ -4404,6 +4453,15 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 						cache.mtypeSizeGaps[mtype][c] = [];
 					cache.mtypeSizeGaps[mtype][c].push(u);
 				}
+			}
+		}
+		
+		// sort mtype builtins
+		for (var bmodid in BUILTIN_STORED_MODULES) {
+			var modid = Slot.getStoredHashModuleID(BUILTIN_STORED_MODULES[bmodid].modulehash);
+			var mtype = eddb.module[modid].mtype;
+			if (cache.mtypeBuiltins[mtype]) {
+				cache.mtypeBuiltins[mtype].push(bmodid);
 			}
 		}
 		
@@ -7576,43 +7634,27 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		if (!cache.feature.storage)
 			return false;
 		
-		// it's a little hacky, but stick on all the builtin stored modules (which are specially named with leading spaces)
+		// populate builtin stored modules (which are specially named with leading spaces)
+		if (current.option.builtin !== 'none') {
+			for (var bmodid in BUILTIN_STORED_MODULES) {
+				var builtin = BUILTIN_STORED_MODULES[bmodid];
+				if (current.option.builtin === 'all' || builtin.available || current.option['builtin'+bmodid]) {
+					var name = " "+builtin.name;
+					var namehash = hashEncodeS(name);
+					var stored = {
+						modid:Slot.getStoredHashModuleID(builtin.modulehash),
+						namehash:namehash,
+						name:name,
+						modulehash:builtin.modulehash
+					};
+					current.stored.moduleNamehashStored[0][namehash] = stored;
+				}
+			}
+		}
+		
+		// load regular stored modules
 		var item = 'edsy_modules' + (current.beta ? '_beta' : '');
-		var data = (window.localStorage.getItem(item) || '').split('/').concat([
-		//	hashEncodeS(" 2B Enzyme, HC+Caustic (CG reward)")+"=FLIqG02G0050ypD4sPc8y00C_00Gu00", // CG reward // TODO: get sample to test import
-			hashEncodeS(" 2E/FD AX Missile, HC+RF")+"=HL3gG-3G_W90zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", // sirius tech broker
-			hashEncodeS(" 3C/FD AX Missile, HC+RF")+"=HL4wG-3G_W90zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", // sirius tech broker // TODO: get sample to test import
-			hashEncodeS(" 1D/F Guardian Gauss, RF+HC")+"=HLXCG-2G0092_166_00A_00Ew7ZHD00L800P600T800YsPc", // Salvation tech broker
-			hashEncodeS(" 2B/F Guardian Gauss, RF+HC")+"=HLYSG-2G0092_166_00A_00Ew7ZHD00L800P600T800YsPc", // Salvation tech broker
-			hashEncodeS(" 1D/F Guardian Plasma, OC+Foc")+"=HLXFG-2Gxq60vBh4zHx8y00Cw00H800KvLL", // Salvation tech broker
-			hashEncodeS(" 2B/F Guardian Plasma, OC+Foc")+"=HLYVG-2Gxq60vBh4zHx8y00Cw00H800KvLL", // Salvation tech broker // TODO: get sample to test import
-			hashEncodeS(" 1D/F Guardian Shard, LR+Foc, Pen")+"=HLXIG-2G0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", // Salvation tech broker
-			hashEncodeS(" 2A/F Guardian Shard, LR+Foc, Pen")+"=HLYOG-2G0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", // Salvation tech broker // TODO: get sample to test import
-		//	hashEncodeS(" 2A/F Guardian Shard, LR5 (CG reward)")+"=GLYOG02G0080y0051Cp993DDFm0H058L800Op7uV700", // TODO: CG reward? // TODO: get sample to test import
-		//	hashEncodeS(" 1D/F Abrasion Blaster, LR (CG reward)")+"=FJprG02G0062y006y00Ey00Iy00L800P800", // CG reward // TODO: get sample to test import
-		//	hashEncodeS(" 1D/F Mining Laser, LR, Incen (CG reward)")+"=HJpqmF5j3H0072y006y00AkPcEy00I_ezL800PBLL", // CG reward
-			hashEncodeS(" 2B Seeker \"V1\", LW+HC, ThermCas")+"=FK4lG03Q0072-Cp6ypDAsPcIwPcUoPcX000b000", // human tech broker // TODO: get sample to test import
-		//	hashEncodeS(" 2B Seeker, HC+RF, Drag (CG reward)")+"=", // CG reward // TODO: get sample
-		//	hashEncodeS(" 2E/F Multi-cannon, RF+HC, Phasing (CG reward)")+"=HHewm1WaCS007Uy00Yuaab600f466n600soPcv400", // CG reward
-		//	hashEncodeS(" 2B/F Rail, LR+HC, FeedCas (CG reward)")+"=FKZyG03I0080-Cp8zCpT000Yyv4b000f000iu00r900", // CG reward // TODO: get sample to test import
-			
-		//	hashEncodeS(" 0F ECM, LW+Shd (CG reward)")+"=FCTqG03G0032_pD50009000", // CG reward // TODO: get sample to test import
-			hashEncodeS(" 0I HS \"Sirius\", ACx2")+"=HCjwG-2G002P000S_00", // sirus tech broker
-		//	hashEncodeS(" 0A KWS, FS+LR (CG reward)")+"=FDwoG03G0056y008y00GzCpMupDQ_Pc", // CG reward // TODO: get sample to test import
-		//	hashEncodeS(" 0I/T PD, Foc+LW (CG reward)")+"=FCzYG05G0042_pD6y00GkPcL000", // CG reward // TODO: get sample to test import
-			
-		//	hashEncodeS(" 3A PP, AR+OC (CG reward)")+"=FA5UG03G0040sPc4-cQ8yAFCqAF", // CG reward
-		//	hashEncodeS(" 3A PP, OC (CG reward)")+"=", // CG reward // TODO: get sample
-		//	hashEncodeS(" 4A PP, OC (CG reward)")+"=", // CG reward // TODO: get sample
-		//	hashEncodeS(" 5A PP, OC (CG reward)")+"=", // CG reward // TODO: get sample
-		//	hashEncodeS(" 3A FSD, IR+FB (CG reward)")+"=HAakG-5G_W60upD6upD8qpDE_PcGzcQKsPc", // CG reward // TODO: get sample to test import
-		//	hashEncodeS(" 4A FSD, IR+FB (CG reward)")+"=HAcIG-5G_W60upD6upD8qpDE_PcGzcQKsPc", // CG reward // TODO: get sample to test import
-			hashEncodeS(" 5A FSD \"V1\", IR+FB")+"=HAdsG-5G_W60upD6upD8qpDE_PcGzcQKsPc", // human tech broker
-		//	hashEncodeS(" 6A FSD, IR+FB (CG reward)")+"=HAfQG-5G_W60upD6upD8qpDE_PcGzcQKsPc", // CG reward // TODO: get sample to test import
-			
-		//	hashEncodeS(" 3A SG, KR+TR (CG reward)")+"=F7PcG05G0044sPc8wPccupDgvcQ", // CG reward // TODO: get sample to test import
-			hashEncodeS(" 1I DSS \"V1\", ERx2")+"=H2jwG-9G_W1P000", // human tech broker
-		]);
+		var data = (window.localStorage.getItem(item) || '').split('/');
 		for (var i = 0;  i < data.length;  i++) {
 			var entry = data[i].split('=');
 			if (entry.length === 2) {
@@ -7628,6 +7670,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				current.stored.moduleNamehashStored[0][namehash] = stored;
 			}
 		}
+		
 		for (var namehash in current.stored.moduleNamehashStored[0]) {
 			var stored = current.stored.moduleNamehashStored[0][namehash];
 			if (!current.stored.moduleNamehashStored[stored.modid])
@@ -9198,12 +9241,50 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			var span = rows[i].getElementsByTagName('SPAN')[0];
 			span.innerText = span.innerText.replace(/[0-9\.]+ *%/, formatPctText(parseFloat(input.value) / 10000, 1));
 		}
+		
+		var divBuiltinHardpoints = document.getElementById('options_builtin_hardpoints');
+		while (divBuiltinHardpoints.lastChild)
+			divBuiltinHardpoints.removeChild(divBuiltinHardpoints.lastChild);
+		var divBuiltinOther = document.getElementById('options_builtin_other');
+		while (divBuiltinOther.lastChild)
+			divBuiltinOther.removeChild(divBuiltinOther.lastChild);
+		for (var g = 0;  g < GROUPS.length;  g++) {
+			var group = GROUPS[g];
+			for (var t = 0;  t < (cache.groupMtypes[group] || EMPTY_ARR).length;  t++) {
+				var mtype = cache.groupMtypes[group][t];
+				for (var b = 0;  b < (cache.mtypeBuiltins[mtype] || EMPTY_ARR).length;  b++) {
+					var bmodid = cache.mtypeBuiltins[mtype][b];
+					var label = document.createElement('label');
+					label.className = "checkbox left";
+					var input = document.createElement('input');
+					input.type = 'checkbox';
+					input.name = 'builtin' + bmodid;
+					input.disabled = !!BUILTIN_STORED_MODULES[bmodid].available;
+					label.appendChild(input);
+					var divWrapper = document.createElement('div');
+					var divCheck = document.createElement('div');
+					divCheck.className = "check";
+					divWrapper.appendChild(divCheck);
+					var span = document.createElement('span');
+					span.innerText = BUILTIN_STORED_MODULES[bmodid].name;
+					divWrapper.appendChild(span);
+					label.appendChild(divWrapper);
+					((group === 'hardpoint') ? divBuiltinHardpoints : divBuiltinOther).appendChild(label);
+				}
+			}
+		}
 	}; // initUIOptions()
 	
 	
 	var updateUIOptions = function() {
 		// validate options settings
 		current.option.insurance = parseInt(current.option.insurance);
+		if (!{none:1,some:1,all:1}[current.option.builtin])
+			current.option.builtin = 'some';
+		for (var bmodid in BUILTIN_STORED_MODULES) {
+			var opt = 'builtin' + bmodid;
+			current.option[opt] = !!current.option[opt];
+		}
 		current.option.onlybest = !!current.option.onlybest;
 		current.option.experimental = !!current.option.experimental;
 		current.option.show1 = !!current.option.show1;
@@ -9252,6 +9333,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		// update options controls
 		var elements = document.forms.options.elements;
 		elements.insurance.value = current.option.insurance;
+		elements.builtin.value = current.option.builtin;
+		for (var bmodid in BUILTIN_STORED_MODULES) {
+			var opt = 'builtin' + bmodid;
+			elements[opt].checked = BUILTIN_STORED_MODULES[bmodid].available || current.option[opt];
+		}
+		document.getElementById('options_builtin').style.display = ((current.option.builtin === 'some') ? '' : 'none');
 		elements.onlybest.checked = current.option.onlybest;
 		elements.experimental.checked = current.option.experimental;
 		elements.show1.checked = current.option.show1;
@@ -10592,6 +10679,11 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	var onUIOptionsChange = function(e) {
 		var elements = document.forms.options.elements;
 		current.option.insurance = parseInt(elements.insurance.value);
+		current.option.builtin = elements.builtin.value;
+		for (var bmodid in BUILTIN_STORED_MODULES) {
+			var opt = 'builtin' + bmodid;
+			current.option[opt] = elements[opt].checked;
+		}
 		current.option.onlybest = elements.onlybest.checked;
 		current.option.experimental = elements.experimental.checked;
 		current.option.show1 = elements.show1.checked;
@@ -10612,6 +10704,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		updateUIOptions();
 		
 		updateUILayout();
+		readStoredModules();
+		updateUIModulePickerStoredModules();
+		updateUIDetailsStoredModules();
+		updateUIDetailsStoredModuleControls();
 		updateUIDetailsModifications();
 		updateUIStatsPanels();
 		updateUIStatsTotals();
@@ -10729,6 +10825,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	
 	var onStorageEvent = function(e) {
+		readStoredOptions();
+		updateUIOptions();
 		readStoredImports();
 		readStoredBuilds();
 		updateUIShipyardStoredBuilds();
