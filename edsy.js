@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308149909,308149909,308149901,308149909]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20230125;
+	var VERSIONS = [308149909,308149909,308149910,308149910]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20230126;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -101,8 +101,8 @@ window.edsy = new (function() {
 		435100 : { name:"5A FSD \"V1\", IR+FB",                  modulehash:"HAdsG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             available:1 }, // human tech broker
 		436100 : { name:"6A FSD, IR+FB",                         modulehash:"HAfQG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             available:0 }, // CG reward // TODO: get sample to test import
 		
-		  1510 : { name:"1E Anti-Corrosion Cargo (1T)",          modulehash:"H02N00",                                          available:0 }, // CG reward
-		  1610 : { name:"1F Anti-Corrosion Cargo (2T)",          modulehash:"H02X00",                                          available:0 }, // CG reward
+		  5510 : { name:"5E Anti-Corrosion Cargo (32T)",         modulehash:"H08d00",                                          available:0 }, // CG reward
+		  6510 : { name:"6E Anti-Corrosion Cargo (64T)",         modulehash:"H0AB00",                                          available:0 }, // CG reward
 		
 		303100 : { name:"3A Shield Gen, KR+TR",                  modulehash:"F7PcG05G0044sPc8wPccupDgvcQ",                     available:0 }, // CG reward // TODO: get sample to test import
 		111300 : { name:"1I DSS \"V1\", ERx2",                   modulehash:"H2jwG-9G_W1P000",                                 available:1 }, // human tech broker
