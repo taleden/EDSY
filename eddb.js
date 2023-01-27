@@ -11,7 +11,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 'use strict';
 var eddb = {
 	version : 308149907,
-	edsy_versions_db : [308119901,308119901,308149910,308149910], /* HTML,CSS,DB,JS */
+	edsy_versions_db : [308119901,308149910,308149910,308149910], /* HTML,CSS,DB,JS */
 	edsy_lastmodified_db : 20230126,
 	ship : {
 		 1 : {
@@ -1806,8 +1806,8 @@ var eddb = {
 			{ mtypes:{cs:1} },
 			{ mtypes:{cft:1} }
 		],
-		military  : { mtypes:{ihrp:1, isrp:1, imahrp:1, imrp:1, iscb:1} },
-		internal  : { mtypes:{iafmu:1, icr:1, iclc:1, idlc:1, ifh:1, ifa:1, ifsdb:1, ifsdi:1, ifs:1, cft:1, iftlc:1, ihblc:1, ihrp:1, isrp:1, imahrp:1, imrp:1, imlc:1, ipc:1, ipvh:1, iplc:1, inlc:1, ir:1, irlc:1, islc:1, iscb:1, isg:1, /*isbs:1,*/ iss:1} },
+		military  : { mtypes:{iex:1, ihrp:1, isrp:1, imahrp:1, imrp:1, iscb:1} },
+		internal  : { mtypes:{iafmu:1, icr:1, iclc:1, idlc:1, iex:1, ifh:1, ifa:1, ifsdb:1, ifsdi:1, ifs:1, cft:1, iftlc:1, ihblc:1, ihrp:1, isrp:1, imahrp:1, imrp:1, imlc:1, ipc:1, ipvh:1, iplc:1, inlc:1, ir:1, irlc:1, islc:1, iscb:1, isg:1, /*isbs:1,*/ iss:1} },
 	}, // eddb.group{}
 	limit : {
 		'hex'    : 4,
@@ -2193,6 +2193,11 @@ var eddb = {
 		//	modifiable:['mass','integ','pwrdraw','boottime'],
 		},
 		
+		iex : {
+			name:'Experimental',
+			modulenames:{},
+		},
+		
 		ifh : {
 			name:'Fighter Hangars',
 			modulenames:{},
@@ -2551,6 +2556,7 @@ var eddb = {
 		
 		58061 : { mtype:'uex',  cost:  63000, name:'Shutdown Field Neutraliser',class:0, rating:'F', mass:1.30, integ:35, pwrdraw:0.20, passive:1, boottime:0, barrierrng:3000, barrierdur:1, barrierpwr:0.25, barriercool:10, fdid:128771884, fdname:'Hpt_AntiUnknownShutdown_Tiny', eddbid:1622 },
 		58050 : { mtype:'uex',  cost: 365700, name:'Xeno Scanner',              class:0, rating:'E', mass:1.30, integ:56, pwrdraw:0.20,            boottime:2, scanrng: 500, maxangle:23.00, scantime:10, limit:'uex', fdid:128793115, fdname:'Hpt_XenoScanner_Basic_Tiny', eddbid:1616 },
+		58030 : { mtype:'uex',  cost: 745950, name:'Enhanced Xeno Scanner',     class:0, rating:'C', mass:1.30, integ:56, pwrdraw:0.80,            boottime:2, scanrng:2000, maxangle:23.00, scantime:10, limit:'uex', fdid:128808878, fdname:'Hpt_XenoScannerMk2_Basic_Tiny', eddbid:null }, // TODO: eddbid
 		
 		52090 : { mtype:'uhsl', cost:   3500, name:'Heat Sink Launcher',        class:0, rating:'I', mass:1.30, integ:45, pwrdraw:0.20, passive:1, boottime:0, distdraw:2.00, rof:0.2, bstint:5.00, ammoclip:1, ammomax:2, rldtime:10.0, hsdur:10, thmdrain:100.0, ammocost:25, fdid:128049519, fdname:'Hpt_HeatSinkLauncher_Turret_Tiny', eddbid:886 },
 		
@@ -3003,6 +3009,9 @@ var eddb = {
 		29350 : { mtype:'idlc', cost:  16200, name:'Decontamination Limpet Controller', class:3, rating:'E', mass:  2.00, integ: 51, pwrdraw:0.20, boottime:10, maxlimpet: 2, lpactrng: 880, limpettime:300, maxspd:200, lmprepcap: 70, fdid:128793942, fdname:'Int_DroneControl_Decontamination_Size3_Class1', eddbid:1633 },
 		29550 : { mtype:'idlc', cost: 145800, name:'Decontamination Limpet Controller', class:5, rating:'E', mass: 20.00, integ: 96, pwrdraw:0.50, boottime:10, maxlimpet: 3, lpactrng:1300, limpettime:300, maxspd:200, lmprepcap:120, fdid:128793943, fdname:'Int_DroneControl_Decontamination_Size5_Class1', eddbid:1634 },
 		29750 : { mtype:'idlc', cost:1312200, name:'Decontamination Limpet Controller', class:7, rating:'E', mass:128.00, integ:157, pwrdraw:0.97, boottime:10, maxlimpet: 4, lpactrng:2040, limpettime:300, maxspd:200, lmprepcap:180, fdid:128793944, fdname:'Int_DroneControl_Decontamination_Size7_Class1', eddbid:1635 },
+		
+		
+		13360 : { mtype:'iex', cost:2000000, name:'Experimental Weapon Stabiliser', class:3, rating:'F', mass:  8.00, pwrdraw:1.50, powerlock:1, limit:'iex', unlimit:'hex', unlimitcount:1, fdid:129019260, fdname:'Int_ExpModuleStabiliser_Size3_Class3', eddbid:null }, // TODO: fdid,fdname,eddbid
 		
 		
 		 7540 : { mtype:'ifh', cost: 575660, name:'Fighter Hangar', class:5, rating:'D', mass:20.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1}, ammocost: 1030, limit:'ifh', fdid:128727930, fdname:'Int_FighterBay_Size5_Class1', eddbid:1562 },
