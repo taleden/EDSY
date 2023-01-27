@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308149909,308149910,308149910,308149910]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20230126;
+	var VERSIONS = [308149909,308149910,308149911,308149911]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20230127;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -2395,6 +2395,7 @@ window.edsy = new (function() {
 				wepchg_sustain_cur: 0,
 				wepchg_sustain_max: 0,
 				lmprepcap_max: 0,
+				unlimit: {},
 			};
 			var kinmod_ihrp = 1;
 			var thmmod_ihrp = 1;
@@ -2531,6 +2532,8 @@ window.edsy = new (function() {
 								stats.thmload_cfsd += slot.getEffectiveAttrValue('fsdheat');
 							} else if (mtypeid === 'idlc' || mtypeid === 'imlc' || mtypeid === 'irlc') {
 								stats.lmprepcap_max = max(stats.lmprepcap_max, slot.getEffectiveAttrValue('lmprepcap'));
+							} else if (mtypeid === 'iex') {
+								stats.unlimit[module.unlimit] = (stats.unlimit[module.unlimit] || 0) + (module.unlimitcount || 0);
 							} else if (mtypeid === 'iscb') {
 								var scbheat = slot.getEffectiveAttrValue('scbheat');
 								var spinup = slot.getEffectiveAttrValue('spinup');
@@ -7125,19 +7128,19 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // updateUIFitPowerDist()
 	
 	
-	var emptyUIFitLimitedSlots = function(slotgroup, slotnum) {
+	var emptyUIFitLimitedSlots = function(limit, slotgroup, slotnum) {
 		var slot = current.fit.getSlot(slotgroup, slotnum);
-		var limit = slot ? (slot.getModule() || EMPTY_OBJ).limit : null;
+		if (!limit)
+			limit = slot ? (slot.getModule() || EMPTY_OBJ).limit : null;
 		var limitSlots = current.fit.getLimitedSlots();
-		if (eddb.limit[limit]) {
-			if (limitSlots[limit] && !current.option.experimental) {
-				for (var s = limitSlots[limit].length - 1;  s >= 0 && limitSlots[limit].length > eddb.limit[limit];  s--) {
-					var slotlim = limitSlots[limit][s];
-					if (slotlim.getSlotGroup() != slotgroup || slotlim.getSlotNum() != slotnum) {
-						if (slotlim.setModuleID(0)) {
-							updateUIFitSlot(slotlim.getSlotGroup(), slotlim.getSlotNum());
-							limitSlots[limit].splice(s, 1);
-						}
+		if (eddb.limit[limit] && limitSlots[limit] && !current.option.experimental) {
+			var limitmax = eddb.limit[limit] + (current.fit.getStat('unlimit')[limit] || 0);
+			for (var s = limitSlots[limit].length - 1;  s >= 0 && limitSlots[limit].length > limitmax;  s--) {
+				var slotlim = limitSlots[limit][s];
+				if (slotlim.getSlotGroup() != slotgroup || slotlim.getSlotNum() != slotnum) {
+					if (slotlim.setModuleID(0)) {
+						updateUIFitSlot(slotlim.getSlotGroup(), slotlim.getSlotNum());
+						limitSlots[limit].splice(s, 1);
 					}
 				}
 			}
@@ -7154,7 +7157,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		for (var slotgroup in GROUP_LABEL) {
 			for (var slotnum = 0;  slot = current.fit.getSlot(slotgroup, slotnum);  slotnum++) {
 				var limit = (slot.getModule() || EMPTY_OBJ).limit;
-				document.getElementById('outfitting_fit_module_' + slotgroup + '_' + slotnum).classList.toggle('overlimit', (limitSlots[limit] || EMPTY_ARR).length > (eddb.limit[limit] || 99));
+				var limitmax = (eddb.limit[limit] || 99) + (current.fit.getStat('unlimit')[limit] || 0);
+				document.getElementById('outfitting_fit_module_' + slotgroup + '_' + slotnum).classList.toggle('overlimit', (limitSlots[limit] || EMPTY_ARR).length > limitmax);
 			}
 		}
 	}; // updateUIFitLimitedSlots()
@@ -7449,7 +7453,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	var setCurrentFitSlotModule = function(slotgroup, slotnum, modid, namehash, storedhash) {
 		var slot = current.fit.getSlot(slotgroup, slotnum);
-		var limitOld = (slot.getModule() || EMPTY_OBJ).limit;
+		var module = slot.getModule();
+		var limitOld = (module || EMPTY_OBJ).limit;
+		var unlimitOld = (module || EMPTY_OBJ).unlimit;
 		var ok;
 		if (namehash || storedhash) {
 			ok = slot.setStoredHash(storedhash || current.stored.moduleNamehashStored[0][namehash].modulehash, null, current.option.experimental);
@@ -7459,12 +7465,18 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		if (!ok)
 			return false;
-		var limitNew = (slot.getModule() || EMPTY_OBJ).limit;
+		module = slot.getModule();
+		var limitNew = (module || EMPTY_OBJ).limit;
+		var unlimitNew = (module || EMPTY_OBJ).unlimit;
 		updateUIFitStoredBuildControls();
 		updateUIFitSlot(slotgroup, slotnum);
 		if (eddb.limit[limitNew]) {
-			emptyUIFitLimitedSlots(slotgroup, slotnum);
-		} else if (eddb.limit[limitOld]) {
+			emptyUIFitLimitedSlots(limitNew, slotgroup, slotnum);
+		}
+		if (eddb.limit[unlimitOld]) {
+			emptyUIFitLimitedSlots(unlimitOld);
+		}
+		if (eddb.limit[limitOld] || eddb.limit[unlimitNew]) {
 			updateUIFitLimitedSlots();
 		}
 		updateUIStats();
@@ -7494,15 +7506,23 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	
 	var copyCurrentFitSlotModule = function(slotgroup1, slotnum1, slotgroup2, slotnum2) {
-		var limitOld = (current.fit.getSlot(slotgroup2, slotnum2).getModule() || EMPTY_OBJ).limit;
+		var module1 = current.fit.getSlot(slotgroup2, slotnum2).getModule();
+		var limitOld = (module1 || EMPTY_OBJ).limit;
+		var unlimitOld = (module1 || EMPTY_OBJ).unlimit;
 		if (!current.fit.copySlot(slotgroup1, slotnum1, slotgroup2, slotnum2))
 			return false;
-		var limitNew = (current.fit.getSlot(slotgroup2, slotnum2).getModule() || EMPTY_OBJ).limit;
+		var module2 = current.fit.getSlot(slotgroup2, slotnum2).getModule();
+		var limitNew = (module2 || EMPTY_OBJ).limit;
+		var unlimitNew = (module2 || EMPTY_OBJ).unlimit;
 		updateUIFitStoredBuildControls();
 		updateUIFitSlot(slotgroup2, slotnum2);
 		if (eddb.limit[limitNew]) {
-			emptyUIFitLimitedSlots(slotgroup2, slotnum2);
-		} else if (eddb.limit[limitOld]) {
+			emptyUIFitLimitedSlots(limitNew, slotgroup2, slotnum2);
+		}
+		if (eddb.limit[unlimitOld]) {
+			emptyUIFitLimitedSlots(unlimitOld);
+		}
+		if (eddb.limit[limitOld] || eddb.limit[unlimitNew]) {
 			updateUIFitLimitedSlots();
 		}
 		updateUIStats();

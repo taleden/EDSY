@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 308149907,
-	edsy_versions_db : [308119901,308149910,308149910,308149910], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20230126,
+	version : 308149911,
+	edsy_versions_db : [308119901,308149910,308149911,308149911], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20230127,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1816,6 +1816,7 @@ var eddb = {
 		'ucs'    : 1,
 		'upwa'   : 1,
 		'ufsws'  : 1,
+		'iex'    : 1,
 		'ifh'    : 1,
 		'ifa_dc' : 1,
 		'ifa_sc' : 1,
@@ -3011,7 +3012,7 @@ var eddb = {
 		29750 : { mtype:'idlc', cost:1312200, name:'Decontamination Limpet Controller', class:7, rating:'E', mass:128.00, integ:157, pwrdraw:0.97, boottime:10, maxlimpet: 4, lpactrng:2040, limpettime:300, maxspd:200, lmprepcap:180, fdid:128793944, fdname:'Int_DroneControl_Decontamination_Size7_Class1', eddbid:1635 },
 		
 		
-		13360 : { mtype:'iex', cost:2000000, name:'Experimental Weapon Stabiliser', class:3, rating:'F', mass:  8.00, pwrdraw:1.50, powerlock:1, limit:'iex', unlimit:'hex', unlimitcount:1, fdid:129019260, fdname:'Int_ExpModuleStabiliser_Size3_Class3', eddbid:null }, // TODO: fdid,fdname,eddbid
+		13360 : { mtype:'iex', cost:2000000, name:'Experimental Weapon Stabiliser', class:3, rating:'F', mass:  8.00, pwrdraw:1.50, powerlock:1, limit:'iex', unlimit:'hex', unlimitcount:1, fdid:129019260, fdname:'Int_ExpModuleStabiliser_Size3_Class3', eddbid:null }, // TODO: eddbid
 		
 		
 		 7540 : { mtype:'ifh', cost: 575660, name:'Fighter Hangar', class:5, rating:'D', mass:20.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1}, ammocost: 1030, limit:'ifh', fdid:128727930, fdname:'Int_FighterBay_Size5_Class1', eddbid:1562 },
