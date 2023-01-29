@@ -10961,10 +10961,6 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		current.dev = (window.location.protocol === 'file:') || (window.location.pathname.indexOf('/dev/') >= 0);
 		current.beta = current.dev || (window.location.pathname.indexOf('/beta/') >= 0);
 		current.locale = ((window.navigator.languages || EMPTY_ARR)[0] || window.navigator.userLanguage || window.navigator.language || window.navigator.browserLanguage || window.navigator.systemLanguage || undefined);
-		if (current.dev && console.profile) {
-			console.profile();
-			setTimeout((function() { console.endProfile(); }), 10000);
-		}
 		
 		// add popup events now, in case we need them for the version sync
 		document.getElementById('popup_modal').addEventListener('keydown', onUIModalKeydownCapture, true);
