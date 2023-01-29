@@ -11012,31 +11012,40 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // initUIEventHandlers()
 	
 	
-	var onCodeOnlyLoaded = function() {
-		// sniff env and locale
-		current.dev = (window.location.protocol === 'file:') || (window.location.pathname.indexOf('/dev/') >= 0);
-		current.beta = current.dev || (window.location.pathname.indexOf('/beta/') >= 0);
-		current.locale = ((window.navigator.languages || EMPTY_ARR)[0] || window.navigator.userLanguage || window.navigator.language || window.navigator.browserLanguage || window.navigator.systemLanguage || undefined);
-		current.locale = ((window.navigator.languages || EMPTY_ARR)[0] || window.navigator.userLanguage || window.navigator.language || window.navigator.browserLanguage || window.navigator.systemLanguage || undefined);
+	var initUIFinal = function() {
+		// set initial UI state
+		setUIPageTab('shipyard');
+		setUIShipyardTab('ships');
+		setUIModuleTab('SLOT');
+		updateUIFitColumns();
+		setUIAnalysisTab('retrofit');
 		
-		// disable browser features
-		cache.feature.history = false;
-		cache.feature.file = false;
-		cache.feature.storage = false;
-		cache.feature.requestFullscreen = false;
-		cache.feature.cancelFullscreen = false;
+		// check for initial import or build hash
+		var buffer_storage, buffer_cookie;
+		if (buffer_storage = (window.sessionStorage && window.sessionStorage.getItem('edsy_import_buffer'))) {
+			window.sessionStorage.removeItem('edsy_import_buffer');
+		}
+		if (buffer_cookie = getCookie('edsy_import_buffer')) {
+			document.cookie = 'edsy_import_buffer=; domain=.edsy.org; path=' + (current.dev ? '/dev' : '/');
+			document.cookie = 'edsy_import_buffer=; domain=.edsy.org; path=' + (current.dev ? '/dev' : '/') + '; max-age=0; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+		}
+		current.hashlock = true;
+		setCurrentFit(new Build(1, true), '');
+		current.hashlock = false;
+		if (buffer_storage && importData(buffer_storage)) {
+		} else if (buffer_cookie && importData(buffer_cookie)) {
+		} else if (window.location.hash.length > 0 && processURLHash(window.location, true)) {
+		}
+		setUIOutfittingPanels('slots',  'slots', 'details');
 		
-		// initialize cache
-		initCache();
-	}; // onCodeOnlyLoaded()
+		// after all the current content is finished rendering, check the layout
+		updateUIFullscreen();
+		setTimeout(updateUILayout, 1);
+		setTimeout(updateUIStatsPanels, 2);
+	}; // initUIFinal()
 	
 	
 	var onDOMContentLoaded = function(e) {
-		// sniff env and locale
-		current.dev = (window.location.protocol === 'file:') || (window.location.pathname.indexOf('/dev/') >= 0);
-		current.beta = current.dev || (window.location.pathname.indexOf('/beta/') >= 0);
-		current.locale = ((window.navigator.languages || EMPTY_ARR)[0] || window.navigator.userLanguage || window.navigator.language || window.navigator.browserLanguage || window.navigator.systemLanguage || undefined);
-		
 		// add popup events now, in case we need them for the version sync
 		document.getElementById('popup_modal').addEventListener('keydown', onUIModalKeydownCapture, true);
 		document.getElementById('popup_modal').addEventListener('click', onUIModalClick);
@@ -11074,65 +11083,65 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		cache.feature.requestFullscreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
 		cache.feature.cancelFullscreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
 		
-		// initialize cache and UI
-		initCache();
-		initUIShipyardShips();
-		initUIShipyardStoredBuilds();
-		initUIModulePicker();
-		initUIFitSlots();
-		initUIDetails();
-		initUIAnalysisRetrofit();
-		initUIOptions();
-		
-		// initialize storage
-		readStoredOptions();
-		updateUIOptions();
-		readStoredImports();
-		readStoredBuilds();
-		updateUIShipyardStoredBuilds();
-		updateUIAnalysisStoredBuilds();
-		readStoredModules();
-		updateUIModulePickerStoredModules();
-		
-		// register event handlers
-		initUIEventHandlers();
-		
-		// set initial UI state
-		setUIPageTab('shipyard');
-		setUIShipyardTab('ships');
-		setUIModuleTab('SLOT');
-		updateUIFitColumns();
-		setUIAnalysisTab('retrofit');
-		
-		// check for initial import or build hash
-		var buffer_storage, buffer_cookie;
-		if (buffer_storage = (window.sessionStorage && window.sessionStorage.getItem('edsy_import_buffer'))) {
-			window.sessionStorage.removeItem('edsy_import_buffer');
-		}
-		if (buffer_cookie = getCookie('edsy_import_buffer')) {
-			document.cookie = 'edsy_import_buffer=; domain=.edsy.org; path=' + (current.dev ? '/dev' : '/');
-			document.cookie = 'edsy_import_buffer=; domain=.edsy.org; path=' + (current.dev ? '/dev' : '/') + '; max-age=0; expires=Thu, 01 Jan 1970 00:00:01 GMT';
-		}
-		current.hashlock = true;
-		setCurrentFit(new Build(1, true), '');
-		current.hashlock = false;
-		if (buffer_storage && importData(buffer_storage)) {
-		} else if (buffer_cookie && importData(buffer_cookie)) {
-		} else if (window.location.hash.length > 0 && processURLHash(window.location, true)) {
-		}
-		setUIOutfittingPanels('slots',  'slots', 'details');
-		
-		// after all the current content is finished rendering, check the layout
-		updateUIFullscreen();
-		setTimeout(updateUILayout, 1);
-		setTimeout(updateUIStatsPanels, 2);
+		// process remaining initialization asynchronously so that the loading animation can run
+		var steps = [
+			// initialize UI
+			initUIShipyardShips,
+			initUIShipyardStoredBuilds,
+			initUIModulePicker,
+			initUIFitSlots,
+			initUIDetails,
+			initUIAnalysisRetrofit,
+			initUIOptions,
+			
+			// initialize storage
+			readStoredOptions,
+			updateUIOptions,
+			readStoredImports,
+			readStoredBuilds,
+			updateUIShipyardStoredBuilds,
+			updateUIAnalysisStoredBuilds,
+			readStoredModules,
+			updateUIModulePickerStoredModules,
+			
+			// finalize and launch UI
+			initUIEventHandlers,
+			initUIFinal,
+		];
+		var timings = [];
+		var init = function() {
+			var step = steps.shift();
+			var t0 = Date.now();
+			step();
+			timings.push(step.name+':'+(Date.now()-t0));
+			if (steps.length > 0)
+				setTimeout(init, 0);
+			else if (current.dev)
+				console.log(timings.join(',\n'));
+		};
+		setTimeout(init, 0);
 	}; // onDOMContentLoaded()
 	
 	
+	// sniff env and locale
+	current.dev = (window.location.protocol === 'file:') || (window.location.pathname.indexOf('/dev/') >= 0);
+	current.beta = current.dev || (window.location.pathname.indexOf('/beta/') >= 0);
+	current.locale = ((window.navigator.languages || EMPTY_ARR)[0] || window.navigator.userLanguage || window.navigator.language || window.navigator.browserLanguage || window.navigator.systemLanguage || undefined);
+	
+	// initialize browser features
+	cache.feature.history = false;
+	cache.feature.file = false;
+	cache.feature.storage = false;
+	cache.feature.requestFullscreen = false;
+	cache.feature.cancelFullscreen = false;
+	
+	// initialize cache
+	initCache();
+	
+	// if we're in interactive mode, queue the remaining UI init
 	if (document.title === 'EDSY') {
 		window.addEventListener('DOMContentLoaded', onDOMContentLoaded);
 	} else {
-		onCodeOnlyLoaded();
 		this.Build = Build;
 		this.Slot = Slot;
 	}
