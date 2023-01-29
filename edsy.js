@@ -10865,6 +10865,11 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // onLinkEmailClick()
 	
 	
+	/*
+	* UI INIT
+	*/
+	
+	
 	var verifyVersionSync = function() {
 		var vH,vC,vD,vJ;
 		var dH,dC,dD,dJ;
@@ -10938,8 +10943,80 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // verifyVersionSync()
 	
 	
+	var initUIEventHandlers = function() {
+		window.addEventListener('resize', onWindowResize);
+		if (cache.feature.history)
+			window.addEventListener('hashchange', onWindowHashChange);
+		if (cache.feature.storage)
+			window.addEventListener('storage', onStorageEvent);
+		document.body.addEventListener('click', onBodyClickCapture, true);
+		document.body.addEventListener('focus', onBodyFocus);
+		if (cache.feature.file) {
+			document.addEventListener('dragenter', onDocumentDragEnter);
+			document.addEventListener('dragover', onDocumentDragOver);
+			document.addEventListener('drop', onDocumentDrop);
+		}
+		for (var f = 0;  f < document.forms.length;  f++)
+			document.forms[f].addEventListener('submit', onFormSubmit);
+		document.getElementById('window_maximize').addEventListener('click', onUIMaximizeButtonClick);
+		document.getElementById('window_minimize').addEventListener('click', onUIMinimizeButtonClick);
+		document.getElementById('page_tabs').addEventListener('change', onUIPageHeaderChange);
+		document.getElementById('page_body_shipyard').addEventListener('contextmenu', onUIContextMenu);
+		document.getElementById('shipyard_tabs').addEventListener('change', onUIShipyardTabChange);
+		document.getElementById('shipyard_ships_container').addEventListener('click', onUIShipyardShipsClick);
+		document.getElementById('shipyard_storedbuilds_container').addEventListener('click', onUIShipyardStoredBuildsClick);
+		document.getElementById('page_body_outfitting').addEventListener('contextmenu', onUIContextMenu);
+		document.getElementById('outfitting_modules_tabs').addEventListener('change', onUIModuleTabChange);
+		document.getElementById('outfitting_modules_container').addEventListener('change', onUIModulePickerChange);
+		document.getElementById('outfitting_modules_container').addEventListener('click', onUIModulePickerClick);
+		document.getElementById('outfitting_modules_container').addEventListener('dblclick', onUIModulePickerDblClick);
+		document.getElementById('outfitting_modules_container').addEventListener('dragstart', onUIModulePickerDragStart);
+		document.getElementById('outfitting_modules_container').addEventListener('dragend', onUIModulePickerDragEnd);
+		document.getElementById('outfitting_modules_container').addEventListener('drop', onUIModulePickerDrop);
+		document.getElementById('outfitting_modules_buttons').addEventListener('click', onUIModuleButtonsClick);
+		document.getElementById('outfitting_stored_container').addEventListener('click', onUIFitSettingsStoredClick);
+		document.getElementById('outfitting_stored_container').addEventListener('change', onUIFitSettingsStoredChange);
+		document.getElementById('outfitting_cols_container').addEventListener('change', onUIFitSettingsColsChange);
+		document.getElementById('outfitting_ops_container').addEventListener('click', onUIFitSettingsOpsClick);
+		document.getElementById('outfitting_fit_slots').addEventListener('mousedown', onUIFitSlotsMouseDown);
+		document.getElementById('outfitting_fit_slots').addEventListener('change', onUIFitSlotsChange);
+		document.getElementById('outfitting_fit_slots').addEventListener('click', onUIFitSlotsClick);
+		document.getElementById('outfitting_fit_slots').addEventListener('contextmenu', onUIFitSlotsContextMenu);
+		document.getElementById('outfitting_fit_slots').addEventListener('dblclick', onUIFitSlotsDblClick);
+		document.getElementById('outfitting_fit_slots').addEventListener('dragstart', onUIFitSlotsDragStart);
+		document.getElementById('outfitting_fit_slots').addEventListener('dragend', onUIFitSlotsDragEnd);
+		document.getElementById('outfitting_fit_slots').addEventListener('drop', onUIFitSlotsDrop);
+		document.forms.fit.elements.export_inara.addEventListener('click', onUIFitExportInaraButtonClick);
+		document.getElementById('outfitting_details_settings').addEventListener('change', onUIDetailsSettingsChange);
+		document.getElementById('outfitting_details_settings').addEventListener('click', onUIDetailsSettingsClick);
+		document.getElementById('outfitting_details_module').addEventListener('change', onUIDetailsModuleChange);
+		document.getElementById('engineering_roll').addEventListener('touchstart', onUIDetailsRollTouchStart);
+		document.getElementById('engineering_roll').addEventListener('mousedown', onUIDetailsRollMouseDown);
+		document.forms.details.elements.blueprint_roll_preset1.addEventListener('click', onUIDetailsRollButtonClick);
+		document.forms.details.elements.blueprint_roll_preset2.addEventListener('click', onUIDetailsRollButtonClick);
+		document.forms.details.elements.blueprint_roll_preset3.addEventListener('click', onUIDetailsRollButtonClick);
+		document.getElementById('outfitting_details_buttons').addEventListener('click', onUIDetailsButtonsClick);
+		document.getElementById('outfitting_bottom').addEventListener('change', onUIBottomChange);
+		document.forms.stats.elements.stats_cur_fuel.addEventListener('wheel', onUIStatsInputWheel);
+		document.forms.stats.elements.stats_cur_fuel.addEventListener('change', onUIStatsInputChange);
+		document.forms.stats.elements.stats_cur_cargo.addEventListener('wheel', onUIStatsInputWheel);
+		document.forms.stats.elements.stats_cur_cargo.addEventListener('change', onUIStatsInputChange);
+		document.getElementById('outfitting_fit_crewdist').addEventListener('click', onUIPowerDistClick);
+		document.getElementById('outfitting_fit_powerdist').addEventListener('click', onUIPowerDistClick);
+		document.getElementById('analysis_tabs').addEventListener('change', onUIAnalysisTabChange);
+		document.getElementById('page_body_options').addEventListener('change', onUIOptionsChange);
+		document.getElementById('page_body_options').addEventListener('click', onUIOptionsClick);
+		document.getElementById('options_backup').addEventListener('click', onUIOptionsBackupClick);
+		document.getElementById('options_restore').addEventListener('click', onUIOptionsRestoreClick);
+		document.getElementById('contact_email').addEventListener('click', onLinkEmailClick);
+	}; // initUIEventHandlers()
+	
+	
 	var onCodeOnlyLoaded = function() {
-		// sniff locale
+		// sniff env and locale
+		current.dev = (window.location.protocol === 'file:') || (window.location.pathname.indexOf('/dev/') >= 0);
+		current.beta = current.dev || (window.location.pathname.indexOf('/beta/') >= 0);
+		current.locale = ((window.navigator.languages || EMPTY_ARR)[0] || window.navigator.userLanguage || window.navigator.language || window.navigator.browserLanguage || window.navigator.systemLanguage || undefined);
 		current.locale = ((window.navigator.languages || EMPTY_ARR)[0] || window.navigator.userLanguage || window.navigator.language || window.navigator.browserLanguage || window.navigator.systemLanguage || undefined);
 		
 		// disable browser features
@@ -10950,8 +11027,6 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		cache.feature.cancelFullscreen = false;
 		
 		// initialize cache
-		current.dev = (window.location.protocol === 'file:') || (window.location.pathname.indexOf('/dev/') >= 0);
-		current.beta = current.dev || (window.location.pathname.indexOf('/beta/') >= 0);
 		initCache();
 	}; // onCodeOnlyLoaded()
 	
@@ -11020,71 +11095,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		updateUIModulePickerStoredModules();
 		
 		// register event handlers
-		window.addEventListener('resize', onWindowResize);
-		if (cache.feature.history)
-			window.addEventListener('hashchange', onWindowHashChange);
-		if (cache.feature.storage)
-			window.addEventListener('storage', onStorageEvent);
-		document.body.addEventListener('click', onBodyClickCapture, true);
-		document.body.addEventListener('focus', onBodyFocus);
-		if (cache.feature.file) {
-			document.addEventListener('dragenter', onDocumentDragEnter);
-			document.addEventListener('dragover', onDocumentDragOver);
-			document.addEventListener('drop', onDocumentDrop);
-		}
-		for (var f = 0;  f < document.forms.length;  f++)
-			document.forms[f].addEventListener('submit', onFormSubmit);
-		document.getElementById('window_maximize').addEventListener('click', onUIMaximizeButtonClick);
-		document.getElementById('window_minimize').addEventListener('click', onUIMinimizeButtonClick);
-		document.getElementById('page_tabs').addEventListener('change', onUIPageHeaderChange);
-		document.getElementById('page_body_shipyard').addEventListener('contextmenu', onUIContextMenu);
-		document.getElementById('shipyard_tabs').addEventListener('change', onUIShipyardTabChange);
-		document.getElementById('shipyard_ships_container').addEventListener('click', onUIShipyardShipsClick);
-		document.getElementById('shipyard_storedbuilds_container').addEventListener('click', onUIShipyardStoredBuildsClick);
-		document.getElementById('page_body_outfitting').addEventListener('contextmenu', onUIContextMenu);
-		document.getElementById('outfitting_modules_tabs').addEventListener('change', onUIModuleTabChange);
-		document.getElementById('outfitting_modules_container').addEventListener('change', onUIModulePickerChange);
-		document.getElementById('outfitting_modules_container').addEventListener('click', onUIModulePickerClick);
-		document.getElementById('outfitting_modules_container').addEventListener('dblclick', onUIModulePickerDblClick);
-		document.getElementById('outfitting_modules_container').addEventListener('dragstart', onUIModulePickerDragStart);
-		document.getElementById('outfitting_modules_container').addEventListener('dragend', onUIModulePickerDragEnd);
-		document.getElementById('outfitting_modules_container').addEventListener('drop', onUIModulePickerDrop);
-		document.getElementById('outfitting_modules_buttons').addEventListener('click', onUIModuleButtonsClick);
-		document.getElementById('outfitting_stored_container').addEventListener('click', onUIFitSettingsStoredClick);
-		document.getElementById('outfitting_stored_container').addEventListener('change', onUIFitSettingsStoredChange);
-		document.getElementById('outfitting_cols_container').addEventListener('change', onUIFitSettingsColsChange);
-		document.getElementById('outfitting_ops_container').addEventListener('click', onUIFitSettingsOpsClick);
-		document.getElementById('outfitting_fit_slots').addEventListener('mousedown', onUIFitSlotsMouseDown);
-		document.getElementById('outfitting_fit_slots').addEventListener('change', onUIFitSlotsChange);
-		document.getElementById('outfitting_fit_slots').addEventListener('click', onUIFitSlotsClick);
-		document.getElementById('outfitting_fit_slots').addEventListener('contextmenu', onUIFitSlotsContextMenu);
-		document.getElementById('outfitting_fit_slots').addEventListener('dblclick', onUIFitSlotsDblClick);
-		document.getElementById('outfitting_fit_slots').addEventListener('dragstart', onUIFitSlotsDragStart);
-		document.getElementById('outfitting_fit_slots').addEventListener('dragend', onUIFitSlotsDragEnd);
-		document.getElementById('outfitting_fit_slots').addEventListener('drop', onUIFitSlotsDrop);
-		document.forms.fit.elements.export_inara.addEventListener('click', onUIFitExportInaraButtonClick);
-		document.getElementById('outfitting_details_settings').addEventListener('change', onUIDetailsSettingsChange);
-		document.getElementById('outfitting_details_settings').addEventListener('click', onUIDetailsSettingsClick);
-		document.getElementById('outfitting_details_module').addEventListener('change', onUIDetailsModuleChange);
-		document.getElementById('engineering_roll').addEventListener('touchstart', onUIDetailsRollTouchStart);
-		document.getElementById('engineering_roll').addEventListener('mousedown', onUIDetailsRollMouseDown);
-		document.forms.details.elements.blueprint_roll_preset1.addEventListener('click', onUIDetailsRollButtonClick);
-		document.forms.details.elements.blueprint_roll_preset2.addEventListener('click', onUIDetailsRollButtonClick);
-		document.forms.details.elements.blueprint_roll_preset3.addEventListener('click', onUIDetailsRollButtonClick);
-		document.getElementById('outfitting_details_buttons').addEventListener('click', onUIDetailsButtonsClick);
-		document.getElementById('outfitting_bottom').addEventListener('change', onUIBottomChange);
-		document.forms.stats.elements.stats_cur_fuel.addEventListener('wheel', onUIStatsInputWheel);
-		document.forms.stats.elements.stats_cur_fuel.addEventListener('change', onUIStatsInputChange);
-		document.forms.stats.elements.stats_cur_cargo.addEventListener('wheel', onUIStatsInputWheel);
-		document.forms.stats.elements.stats_cur_cargo.addEventListener('change', onUIStatsInputChange);
-		document.getElementById('outfitting_fit_crewdist').addEventListener('click', onUIPowerDistClick);
-		document.getElementById('outfitting_fit_powerdist').addEventListener('click', onUIPowerDistClick);
-		document.getElementById('analysis_tabs').addEventListener('change', onUIAnalysisTabChange);
-		document.getElementById('page_body_options').addEventListener('change', onUIOptionsChange);
-		document.getElementById('page_body_options').addEventListener('click', onUIOptionsClick);
-		document.getElementById('options_backup').addEventListener('click', onUIOptionsBackupClick);
-		document.getElementById('options_restore').addEventListener('click', onUIOptionsRestoreClick);
-		document.getElementById('contact_email').addEventListener('click', onLinkEmailClick);
+		initUIEventHandlers();
 		
 		// set initial UI state
 		setUIPageTab('shipyard');
