@@ -1964,7 +1964,7 @@ window.edsy = new (function() {
 		// if we have an old module and it's different, or it's insufficiently discounted and not too engineered, sell it
 		if (modid1) {
 			if ((modid1 != modid2) || (discmod1 > max(cache.discountMod[limdisc], discmod2) && (!bpid2 || bpid1 != bpid2 || bpgrade1 <= limdisceng))) {
-				steps.push({ sgrp:sgrp1, sid:shipid1, mid:((sgrp1 === 'ship') ? 0 : modid1), num:modidNum[modid1], act:'Sell', desc:(formatPctText(1 - discmod1, 1) + ' discount'), cost:{'':-slot1.getCost()} });
+				steps.push({ sgrp:sgrp1, sid:shipid1, mid:((sgrp1 === 'ship') ? 0 : modid1), num:modidNum[modid1], act:'Sell', discmod:discmod1, desc:(formatPctText(1 - discmod1, 1) + ' discount'), cost:{'':-slot1.getCost()} });
 				slot1 = null;
 				modid1 = bpgrade1 = bproll1 = 0;
 				bpid1 = expid1 = '';
@@ -1975,7 +1975,7 @@ window.edsy = new (function() {
 		if (modid2) {
 			// if we have no matching old module, buy one
 			if (modid1 != modid2) {
-				steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Buy', desc:(formatPctText(1 - discmod2, 1) + ' discount'), cost:{'':slot2.getCost()} });
+				steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Buy', discmod:discmod2, desc:(formatPctText(1 - discmod2, 1) + ' discount'), cost:{'':slot2.getCost()} });
 				modid1 = modid2;
 				bpgrade1 = bproll1 = 0;
 				bpid1 = expid1 = '';
@@ -8881,15 +8881,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		els.retrofit_setup_bproll.selectedIndex = 20;
 		*/
 		
-		els.retrofit_steps_xref.addEventListener('click', onUIAnalysisRetrofitStepsXrefClick);
-		els.retrofit_steps_copy.addEventListener('click', onUIAnalysisRetrofitStepsCopyClick);
 		var tbody = document.getElementById('analysis_retrofit_steps_table').tBodies[0];
 		cache.template.analysis_retrofit_steps_row = tbody.removeChild(tbody.rows[0]);
 		els.retrofit_steps_show_all.addEventListener('change', onUIAnalysisRetrofitStepsShowChange);
 		
-		els.retrofit_costs_copy.addEventListener('click', onUIAnalysisRetrofitCostsCopyClick);
 		var tbody = document.getElementById('analysis_retrofit_costs_table').tBodies[0];
 		cache.template.analysis_retrofit_costs_row = tbody.removeChild(tbody.rows[1]);
+		
+		els.retrofit_export.addEventListener('click', onUIAnalysisRetrofitExportClick);
 		
 		addUIAnalysisRetrofitBuild('');
 	}; // initUIAnalysisRetrofit()
@@ -9054,8 +9053,27 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			parseFloat(els.retrofit_setup_rolls5.value)
 		];
 		
+		// initialize retrofit report and store metadata
+		current.retrofit = {
+			options: {
+				rebuy_max_discount: parseFloat((1 - cache.discountMod[parseInt(els.retrofit_setup_discount.value)]).toFixed(6)),
+				rebuy_max_bpgrade: parseInt(els.retrofit_setup_disceng.value),
+				eng_max_bpgrade: parseInt(els.retrofit_setup_bpgrade.value),
+				eng_max_bproll: parseFloat(els.retrofit_setup_bproll.value),
+				eng_est_rolls: [
+					0,
+					parseFloat(els.retrofit_setup_rolls1.value),
+					parseFloat(els.retrofit_setup_rolls2.value),
+					parseFloat(els.retrofit_setup_rolls3.value),
+					parseFloat(els.retrofit_setup_rolls4.value),
+					parseFloat(els.retrofit_setup_rolls5.value)
+				],
+				exp_filter: els.retrofit_setup_expeffect.value
+			},
+			jobs: []
+		};
+		
 		// generate all retrofit reports
-		current.retrofit = [];
 		var checkboxes = document.getElementById('analysis_retrofit_builds_table').tBodies[0].getElementsByTagName('INPUT');
 		for (var i = 0;  i < checkboxes.length;  i++) {
 			if (checkboxes[i].checked && checkboxes[i].name.startsWith('retrofit_builds_show_')) {
@@ -9066,7 +9084,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				var stored2 = current.stored.shipNamehashStored[0][namehash2];
 				var build1 = (stored1 ? Build.fromHash(stored1.buildhash) : (namehash1 ? null : current.fit));
 				var build2 = (stored2 ? Build.fromHash(stored2.buildhash) : (namehash2 ? null : current.fit));
-				current.retrofit.push({ name:(stored2 ? stored2.name : '(Current Build)'), steps:build2.getRetrofitData(build1, limdisc, limdisceng, limbpgrade, limbproll, limexpeffect, limrolls) });
+				var steps = build2.getRetrofitData(build1, limdisc, limdisceng, limbpgrade, limbproll, limexpeffect, limrolls);
+				current.retrofit.jobs.push({ name:(stored2 ? stored2.name : '(Current Build)'), baseline:(stored1 ? stored1.name : (namehash1 ? '(Stock Ship)' : '(Current Build')), sid:build2.getShipID(), steps:steps });
 			}
 		}
 		
@@ -9076,12 +9095,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			table.removeChild(table.tBodies[table.tBodies.length - 1]);
 		
 		// print new results
-		table.classList.toggle('single', current.retrofit.length < 2);
-		for (var i = 0;  i < current.retrofit.length;  i++) {
+		table.classList.toggle('single', current.retrofit.jobs.length < 2);
+		for (var i = 0;  i < current.retrofit.jobs.length;  i++) {
 			var tbody = document.createElement('TBODY');
 			table.appendChild(tbody);
-			var nameHTML = encodeHTML(current.retrofit[i].name);
-			var steps = current.retrofit[i].steps;
+			var nameHTML = encodeHTML(current.retrofit.jobs[i].name);
+			var steps = current.retrofit.jobs[i].steps;
 			for (var s = 0;  s < steps.length;  s++) {
 				var ship = eddb.ship[steps[s].sid];
 				var module = cache.shipModules[steps[s].sid][steps[s].mid] || eddb.module[steps[s].mid];
@@ -9144,8 +9163,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		// tally up results
 		var matTotal = {'':0};
 		var els = document.forms.analysis.elements;
-		for (var i = 0;  i < current.retrofit.length;  i++) {
-			var steps = current.retrofit[i].steps;
+		for (var i = 0;  i < current.retrofit.jobs.length;  i++) {
+			var steps = current.retrofit.jobs[i].steps;
 			for (var s = 0;  s < steps.length;  s++) {
 				var checkbox = els['retrofit_steps_show_' + i + '_' + s];
 				if (checkbox.checked) {
@@ -9175,78 +9194,256 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // updateUIAnalysisRetrofitMaterials()
 	
 	
-	var onUIAnalysisRetrofitStepsXrefClick = function(e) {
-		e.stopPropagation();
-		e.preventDefault();
+	var showUIRetrofitExportPopup = function(stepsText, matsText, reportJSON, eddbURL) {
+		var trigger = document.getElementById('retrofit_export');
+		var table = showUITablePopup(null, trigger, false, false, false);
+		table.className = '';
+		while (table.lastChild)
+			table.removeChild(table.lastChild);
+		var tbody = document.createElement('tbody');
 		
-		var table = document.getElementById('analysis_retrofit_steps_table');
-		var keyFlag = {};
-		var keyList = {};
-		for (var r = 0;  r < table.rows.length;  r++) {
-			var row = table.rows[r];
-			var inputs = row.cells[0].getElementsByTagName('INPUT');
-			if (!inputs[0].checked || !inputs[1])
-				continue;
-			var tokens = inputs[1].value.split('=');
-			if (tokens[1] && (!keyFlag[tokens[0]] || !keyFlag[tokens[0]][tokens[1]])) {
-				if (!keyFlag[tokens[0]]) {
-					keyFlag[tokens[0]] = {};
-					keyList[tokens[0]] = [];
-				}
-				keyFlag[tokens[0]][tokens[1]] = true;
-				keyList[tokens[0]].push(tokens[1]);
-			}
-		}
-		var url = '';
-		for (var key in keyList) {
-			url += (url ? '&' : '?') + key + '=' + keyList[key].join(',');
-		}
-		url = 'https://eddb.io/station' + url;
-		window.open(url, '_blank') || window.location.assign(url);
-	}; // onUIAnalysisRetrofitStepsXrefClick()
-	
-	
-	var onUIAnalysisRetrofitStepsCopyClick = function(e) {
-		e.stopPropagation();
-		e.preventDefault();
+		var tr = document.createElement('tr');
+		var td = document.createElement('td');
+		td.appendChild(document.createTextNode('Checklist'));
+		tr.appendChild(td);
+		var td = document.createElement('td');
+		td.className = 'export';
+		var div = document.createElement('div');
+		div.className = 'export';
+		var textarea = document.createElement('textarea');
+		textarea.cols = 50;
+		textarea.rows = 8;
+		textarea.className = 'export';
+		textarea.name = 'export_checklist';
+		textarea.value = stepsText;
+		textarea.addEventListener('focus', onUIPopupExportFieldFocus);
+		div.appendChild(textarea);
+		td.appendChild(div);
+		tr.appendChild(td);
+		var td = document.createElement('td');
+		var button = document.createElement('button');
+		button.innerHTML = HTML_ICON['clipboard'];
+		button.addEventListener('click', onUIPopupExportCopyButtonClick);
+		td.appendChild(button);
+		tr.appendChild(td);
+		tbody.appendChild(tr);
 		
-		var table = document.getElementById('analysis_retrofit_steps_table');
-		var lines = [];
-		var fields = [];
-		for (var r = 0;  r < table.rows.length;  r++) {
-			var row = table.rows[r];
-			if (!row.cells[0].getElementsByTagName('INPUT')[0].checked)
-				continue;
-			for (var c = 1;  c < row.cells.length;  c++) {
-				fields[c-1] = row.cells[c].innerText;
-			}
-			lines.push(fields.join('\t'));
-		}
-		lines.push('');
-		setClipboardString(lines.join('\n'));
-	}; // onUIAnalysisRetrofitStepsCopyClick()
+		var tr = document.createElement('tr');
+		var td = document.createElement('td');
+		td.appendChild(document.createTextNode('Materials'));
+		tr.appendChild(td);
+		var td = document.createElement('td');
+		td.className = 'export';
+		var div = document.createElement('div');
+		div.className = 'export';
+		var textarea = document.createElement('textarea');
+		textarea.cols = 50;
+		textarea.rows = 8;
+		textarea.className = 'export';
+		textarea.name = 'export_materials';
+		textarea.value = matsText;
+		textarea.addEventListener('focus', onUIPopupExportFieldFocus);
+		div.appendChild(textarea);
+		td.appendChild(div);
+		tr.appendChild(td);
+		var td = document.createElement('td');
+		var button = document.createElement('button');
+		button.innerHTML = HTML_ICON['clipboard'];
+		button.addEventListener('click', onUIPopupExportCopyButtonClick);
+		td.appendChild(button);
+		tr.appendChild(td);
+		tbody.appendChild(tr);
+		
+		var tr = document.createElement('tr');
+		var td = document.createElement('td');
+		td.appendChild(document.createTextNode('JSON'));
+		tr.appendChild(td);
+		var td = document.createElement('td');
+		td.className = 'export';
+		var div = document.createElement('div');
+		div.className = 'export';
+		var input = document.createElement('input');
+		input.type = 'text';
+		input.size = 50;
+		input.className = 'export';
+		input.name = 'export_json';
+		input.value = reportJSON;
+		input.addEventListener('focus', onUIPopupExportFieldFocus);
+		div.appendChild(input);
+		td.appendChild(div);
+		tr.appendChild(td);
+		var td = document.createElement('td');
+		var button = document.createElement('button');
+		button.innerHTML = HTML_ICON['clipboard'];
+		button.addEventListener('click', onUIPopupExportCopyButtonClick);
+		td.appendChild(button);
+		tr.appendChild(td);
+		tbody.appendChild(tr);
+		
+		var tr = document.createElement('tr');
+		var td = document.createElement('td');
+		td.appendChild(document.createTextNode('External'));
+		tr.appendChild(td);
+		var td = document.createElement('td');
+		td.className = 'export';
+		var div = document.createElement('div');
+		div.className = 'export';
+		var link = document.createElement('a');
+		link.className = 'button';
+		link.href = eddbURL;
+		link.target = '_blank';
+		link.innerHTML = '<img src="eddbio.png" class="iconsvg"> Search EDDB.io';
+		div.appendChild(link);
+		td.appendChild(div);
+		tr.appendChild(td);
+		var td = document.createElement('td');
+		tr.appendChild(td);
+		tbody.appendChild(tr);
+		
+		table.appendChild(tbody);
+		document.forms.popup.elements.export_checklist.focus();
+		document.forms.popup.elements.export_checklist.select();
+		return true;
+	}; // showUIRetrofitExportPopup()
 	
 	
-	var onUIAnalysisRetrofitCostsCopyClick = function(e) {
+	var onUIAnalysisRetrofitExportClick = function(e) {
 		e.stopPropagation();
 		e.preventDefault();
-		var table = document.getElementById('analysis_retrofit_costs_table');
-		var lines = [];
-		var fields = [];
-		for (var r = 0;  r < table.rows.length;  r++) {
-			var row = table.rows[r];
-			if (row.cells.length === 2) {
-				lines.push('Credits\t\t\t' + row.cells[1].innerText);
-			} else {
-				for (var c = 0;  c < row.cells.length;  c++) {
-					fields[c] = row.cells[c].innerText;
+		if (!current.retrofit || current.retrofit.jobs.length < 1)
+			return;
+		
+		// compile all enabled retrofit steps
+		var els = document.forms.analysis.elements;
+		var exportJSON = {
+			retrofitOptions: current.retrofit.options,
+			retrofits: [],
+		};
+		var cols = ['Build','Module','Action','Details'];
+		var stepsText = [cols.join('\t')];
+		var eddbShips = {};
+		var eddbModules = {};
+		var matTotal = {'':0};
+		for (var i = 0;  i < current.retrofit.jobs.length;  i++) {
+			var retroJSON = {
+				target    : current.retrofit.jobs[i].name,
+				baseline  : current.retrofit.jobs[i].baseline,
+				ship      : eddb.ship[current.retrofit.jobs[i].sid].fdname,
+				steps     : [],
+				cost      : 0,
+				materials : {},
+			};
+			exportJSON.retrofits.push(retroJSON);
+			cols[0] = current.retrofit.jobs[i].name;
+			var steps = current.retrofit.jobs[i].steps;
+			for (var s = 0;  s < steps.length;  s++) {
+				var ship = eddb.ship[steps[s].sid];
+				var module = cache.shipModules[steps[s].sid][steps[s].mid] || eddb.module[steps[s].mid];
+				var checkbox = els['retrofit_steps_show_' + i + '_' + s];
+				
+				var stepJSON = { enabled:!!checkbox.checked };
+				if (steps[s].sgrp === 'ship') {
+					stepJSON.ship = ship.fdname;
+					if (steps[s].act === 'Sell') {
+						stepJSON.action = 'sell';
+						stepJSON.discount = parseFloat((1 - steps[s].discmod).toFixed(6));
+					} else if (steps[s].act === 'Buy') {
+						stepJSON.action = 'buy';
+						stepJSON.discount = parseFloat((1 - steps[s].discmod).toFixed(6));
+					}
+				} else {
+					stepJSON.module = module.fdname;
+					stepJSON.index = steps[s].num;
+					if (steps[s].act === 'Sell') {
+						stepJSON.action = 'sell';
+						stepJSON.discount = parseFloat((1 - steps[s].discmod).toFixed(6));
+					} else if (steps[s].act === 'Buy') {
+						stepJSON.action = 'buy';
+						stepJSON.discount = parseFloat((1 - steps[s].discmod).toFixed(6));
+					} else if (steps[s].act === 'Conv') {
+						stepJSON.action = 'convert';
+						stepJSON.blueprint = eddb.blueprint[steps[s].bpid].fdname;
+						stepJSON.grade = steps[s].bpgrade;
+					} else if (steps[s].act === 'Eng') {
+						stepJSON.action = 'engineer';
+						stepJSON.blueprint = eddb.blueprint[steps[s].bpid].fdname;
+						stepJSON.grade = steps[s].bpgrade;
+						stepJSON.rolls = steps[s].rolls;
+					} else if (steps[s].act === 'Exp') {
+						stepJSON.action = 'experimental';
+						stepJSON.experimental = eddb.expeffect[steps[s].expid].fdname;
+					}
 				}
-				lines.push(fields.join('\t'));
+				if (stepJSON.action)
+					retroJSON.steps.push(stepJSON);
+				else if (current.dev) console.log('invalid retrofit step: '+JSON.stringify(steps[s]));
+				
+				if (checkbox.checked) {
+					cols[1] = ((steps[s].sgrp === 'ship') ? ship.name : (getModuleLabel(module) + (steps[s].num ? (' #' + steps[s].num) : '')));
+					cols[2] = steps[s].act;
+					cols[3] = (steps[s].desc || '');
+					stepsText.push(cols.join('\t'));
+					
+					if (steps[s].act === 'Buy') {
+						if (steps[s].sgrp === 'ship') {
+							eddbShips[ship.eddbid || 0] = true;
+						} else {
+							eddbModules[module.eddbid || 0] = true;
+						}
+					}
+					
+					retroJSON.cost += (steps[s].cost[''] || 0);
+					for (var mat in steps[s].cost) {
+						matTotal[mat] = (matTotal[mat] || 0) + steps[s].cost[mat];
+						var material = eddb.material[mat];
+						if (material)
+							retroJSON.materials[material.fdname] = (retroJSON.materials[material.fdname] || 0) + steps[s].cost[mat];
+					}
+				}
 			}
 		}
-		lines.push('');
-		setClipboardString(lines.join('\n'));
-	}; // onUIAnalysisRetrofitCostsCopyClick()
+		stepsText.push('');
+		delete eddbShips[0];
+		delete eddbModules[0];
+		
+		// compile materials report
+		cols = ['Item','Type','Lvl','Qty'];
+		var matsText = [cols.join('\t')];
+		cols = ['Credits','','',(matTotal[''] || 0)];
+		matsText.push(cols.join('\t'));
+		delete matTotal[''];
+		var mats = Object.keys(matTotal);
+		mats.sort(sortMaterials);
+		for (var i = 0;  i < mats.length;  i++) {
+			var material = eddb.material[mats[i]];
+			if (material) {
+				cols[0] = material.name;
+				cols[1] = eddb.mattype[material.mattype].abbr;
+				cols[2] = material.rarity;
+				cols[3] = ceil(matTotal[mats[i]]).toFixed(0);
+				matsText.push(cols.join('\t'));
+			}
+		}
+		
+		// finalize eddb.io link
+		var eddbURL = '';
+		var ids = Object.keys(eddbShips);
+		if (ids.length > 0) {
+			ids.sort();
+			eddbURL += (eddbURL ? '&' : '?') + 's=' + ids.join(',');
+		}
+		ids = Object.keys(eddbModules);
+		if (ids.length > 0) {
+			ids.sort();
+			eddbURL += (eddbURL ? '&' : '?') + 'm=' + ids.join(',');
+		}
+		if (eddbURL) {
+			eddbURL = 'https://eddb.io/station' + eddbURL;
+		}
+		
+		// show popup
+		showUIRetrofitExportPopup(stepsText.join('\n'), matsText.join('\n'), JSON.stringify(exportJSON), eddbURL);
+	}; // onUIAnalysisRetrofitExportClick()
 	
 	
 	/*
