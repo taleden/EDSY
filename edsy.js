@@ -9403,22 +9403,16 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	
 	var onBodyClickCapture = function(e) {
-		var colsFocus = document.getElementById('outfitting_cols_focus');
-		var opsFocus = document.getElementById('outfitting_ops_focus');
-		if (!colsFocus.checked && !opsFocus.checked)
-			return;
-		var colsCont = document.getElementById('outfitting_cols_container');
-		var opsCont = document.getElementById('outfitting_ops_container');
-		for (var el = e.target;  el && el !== e.currentTarget;  el = el.parentNode) {
-			if (el === colsCont)
-				colsCont = null;
-			if (el === opsCont)
-				opsCont = null;
+		var input;
+		// if any popout is open, and we didn't click inside it, close it
+		var popouts = document.getElementsByClassName('popout');
+		var p = popouts.length;
+		while (p--) {
+			for (input = popouts[p].firstChild;  input && (!input.classList || !input.classList.contains('toggleinput'));  input = input.nextSibling)
+				;
+			if (input && input.checked && !popouts[p].contains(e.target))
+				input.checked = false;
 		}
-		if (colsCont)
-			colsFocus.checked = false;
-		if (opsCont)
-			opsFocus.checked = false;
 	}; // onBodyClickCapture()
 	
 	
@@ -10052,7 +10046,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			return;
 		
 		e.preventDefault();
-		document.getElementById('outfitting_ops_focus').checked = false;
+		document.getElementById('outfitting_ops_toggle').checked = false;
 		switch (el.id) {
 		case 'outfitting_fit_import':
 			showUIImportPopup();
@@ -10976,8 +10970,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		document.getElementById('outfitting_modules_buttons').addEventListener('click', onUIModuleButtonsClick);
 		document.getElementById('outfitting_stored_container').addEventListener('click', onUIFitSettingsStoredClick);
 		document.getElementById('outfitting_stored_container').addEventListener('change', onUIFitSettingsStoredChange);
-		document.getElementById('outfitting_cols_container').addEventListener('change', onUIFitSettingsColsChange);
-		document.getElementById('outfitting_ops_container').addEventListener('click', onUIFitSettingsOpsClick);
+		document.getElementById('outfitting_cols_popout').addEventListener('change', onUIFitSettingsColsChange);
+		document.getElementById('outfitting_ops_popout').addEventListener('click', onUIFitSettingsOpsClick);
 		document.getElementById('outfitting_fit_slots').addEventListener('mousedown', onUIFitSlotsMouseDown);
 		document.getElementById('outfitting_fit_slots').addEventListener('change', onUIFitSlotsChange);
 		document.getElementById('outfitting_fit_slots').addEventListener('click', onUIFitSlotsClick);

@@ -630,6 +630,53 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 }
 
 
+.popout {
+	position: relative;
+}
+
+.popout > .toggleinput + LABEL {
+	display: inline-block;
+	border: 1px solid var(--colororange3);
+	background-color: var(--colororange1);
+	padding: 0 0.2em;
+	color: var(--colororange4);
+	cursor: pointer;
+}
+.popout > .toggleinput:checked + LABEL {
+	border-color: var(--colororange5);
+	background-color: var(--colororange5);
+	color: var(--colorblack);
+}
+.popout > .toggleinput:active + LABEL {
+	border-color: var(--colorwhite);
+	background-color: var(--colorwhite);
+	color: var(--colorblack);
+}
+.popout > .toggleinput:disabled + LABEL {
+	border-color: var(--colorgrey1);
+	background-color: var(--colorgrey1);
+	color: var(--colorgrey4);
+	cursor: auto;
+}
+
+.popout > .toggleinput ~ DIV {
+	display: none;
+	flex-direction: column;
+	position: absolute;
+	top: 100%;
+	right: 0;
+	box-shadow: 0 0 2em 1em rgba(0, 0, 0, 0.75);
+	clip-path: inset(0 -2em -2em -2em);
+	border: 2px solid var(--colororange5);
+	padding: 0.25em 0.5em;
+	background-color: var(--colorblack);
+	z-index: 2;
+}
+.popout > .toggleinput:checked ~ DIV {
+	display: flex;
+}
+
+
 /*
 * MAIN BLOCK LAYOUT
 */
@@ -1423,20 +1470,6 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_settings > * {
 	flex: 0 0 auto;
 }
-
-#outfitting_fit_settings SELECT {
-	flex: 0 1 auto;
-	min-width: 5em;
-	font-size: 0.75rem;
-}
-
-#outfitting_fit_settings BUTTON {
-	margin: 0 0.125rem;
-	padding: 3px;
-	line-height: 0;
-	white-space: nowrap;
-}
-
 #outfitting_fit_settings > SPAN {
 	flex: 1 0 auto;
 	font: var(--fonttext);
@@ -1447,6 +1480,19 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	display: flex;
 	flex-direction: row;
 	align-items: flex-start;
+}
+
+#outfitting_stored_container SELECT {
+	flex: 0 1 auto;
+	min-width: 5em;
+	font-size: 0.75rem;
+}
+
+#outfitting_stored_container BUTTON {
+	margin: 0 0.125rem;
+	padding: 3px;
+	line-height: 0;
+	white-space: nowrap;
 }
 
 #outfitting_fit_settings .togglebutton INPUT + DIV {
@@ -1467,63 +1513,30 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	color: var(--colorblack);
 }
 
-#outfitting_cols_container,
-#outfitting_ops_container {
-	position: relative;
+#outfitting_fit_settings .popout {
 	align-self: stretch;
 	font-size: 0.875rem;
 	margin-left: 0.25rem;
 }
 
-#outfitting_cols_label,
-#outfitting_ops_label {
-	display: inline-block;
+#outfitting_fit_settings .popout > .toggleinput + LABEL {
 	margin-bottom: 2px;
-	border: 1px solid var(--colororange3);
-	background-color: var(--colororange1);
-	padding: 0 0.2em;
-	color: var(--colororange4);
-	cursor: pointer;
-}
-#outfitting_cols_focus:checked + #outfitting_cols_label,
-#outfitting_ops_focus:checked + #outfitting_ops_label {
-	border-color: var(--colororange5);
-	background-color: var(--colororange5);
-	color: var(--colorblack);
-}
-#outfitting_cols_focus:active + #outfitting_cols_label,
-#outfitting_ops_focus:active + #outfitting_ops_label {
-	border-color: var(--colorwhite);
-	background-color: var(--colorwhite);
-	color: var(--colorblack);
 }
 
-#outfitting_cols_popout,
-#outfitting_ops_popout {
-	display: none;
-	position: absolute;
-	top: 100%;
-	right: 0;
+#outfitting_fit_settings .popout > .toggleinput ~ DIV {
 	margin-top: -2px;
-	box-shadow: 0 0 2em 1em rgba(0, 0, 0, 0.75);
-	clip-path: inset(0 -2em -2em -2em);
-	border: 2px solid var(--colororange5);
-	padding: 0.25em 0.5em;
-	background-color: var(--colorblack);
-	z-index: 2;
 }
-#outfitting_cols_focus:checked ~ #outfitting_cols_popout {
-	display: flex;
+
+#outfitting_cols_popout > .toggleinput:checked ~ DIV {
 	flex-direction: row;
 }
-#outfitting_ops_focus:checked ~ #outfitting_ops_popout {
-	display: flex;
-	flex-direction: column;
-}
 
-#outfitting_ops_popout BUTTON {
+.popout > .toggleinput ~ DIV BUTTON {
+	flex: 1 0 auto;
+	align-self: stretch;
 	margin: 0.25rem;
 	text-align: left;
+	white-space: nowrap;
 }
 
 
@@ -3051,7 +3064,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	flex-direction: row;
 }
 
-#analysis_retrofit_container .analysis_retrofit_divider HEADER {
+#analysis_retrofit_container .analysis_retrofit_divider > HEADER {
 	flex: 1 0 auto;
 	background-color: var(--colorgrey4);
 	color: var(--colorblack);
@@ -3059,7 +3072,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	font-weight: bold;
 }
 
-#analysis_retrofit_container .analysis_retrofit_divider BUTTON {
+#analysis_retrofit_container .analysis_retrofit_divider > BUTTON {
 	flex: 0 0 auto;
 	align-self: center;
 	margin-left: 0.25em;
@@ -3100,6 +3113,22 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 
 #analysis_retrofit_setup INPUT {
 	text-align: center;
+}
+
+#analysis_retrofit_container .analysis_retrofit_footer {
+	flex: 0 0 auto;
+	border-top: 2px solid var(--colororange3);
+	padding-top: 0.25em;
+	display: flex;
+	flex-direction: row;
+}
+
+#analysis_retrofit_container .analysis_retrofit_footer BUTTON {
+	flex: 1 0 auto;
+	align-self: center;
+	margin: 0 0.25em;
+	padding: 0.125rem;
+	line-height: 0;
 }
 
 
@@ -3199,8 +3228,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 		margin: 1px;
 	}
 	
-	#outfitting_cols_label SPAN,
-	#outfitting_ops_label SPAN {
+	#outfitting_fit_settings .popout > LABEL SPAN {
 		display: none;
 	}
 	
@@ -3210,8 +3238,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 
 @media only screen and (min-width: 30em) {
-	#outfitting_cols_label SPAN,
-	#outfitting_ops_label SPAN {
+	#outfitting_fit_settings .popout > LABEL SPAN {
 		display: inline;
 	}
 }
