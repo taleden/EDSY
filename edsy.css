@@ -338,6 +338,9 @@ TEXTAREA::-webkit-scrollbar-thumb {
 .iconsvg.blueprint {
 	color: var(--colorblue5);
 }
+.iconsvg.powerplay {
+	color: var(--coloryellow4);
+}
 
 .togglebutton {
 	display: inline-block;

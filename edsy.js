@@ -63,10 +63,11 @@ window.edsy = new (function() {
 		'dumbfire'   : '<svg class="iconsvg dumbfire"><use xlink:href="#icon_dumbfire"/></svg>',
 		'seeker'     : '<svg class="iconsvg seeker"><use xlink:href="#icon_seeker"/></svg>',
 		'guardian'   : '<svg class="iconsvg guardian tinted"><use xlink:href="#icon_guardian"/></svg>',
+		'powerplay'  : '<svg class="iconsvg powerplay tinted"><use xlink:href="#icon_powerplay"/></svg>',
 	};
 	var HTML_ICON_MOUNT = { F:HTML_ICON['fixed'], G:HTML_ICON['gimballed'], T:HTML_ICON['turreted'] };
 	var HTML_ICON_MISSILE = { D:HTML_ICON['dumbfire'], S:HTML_ICON['seeker'] };
-	var HTML_ICON_TAG = { G:HTML_ICON['guardian'] };
+	var HTML_ICON_TAG = { G:HTML_ICON['guardian'], P:HTML_ICON['powerplay'] };
 	var CSS_FONTS = ['caps','text','fixed'];
 	var CSS_COLORS = ['orange','red','blue','green','yellow'];
 	var BUILTIN_STORED_MODULES = {
