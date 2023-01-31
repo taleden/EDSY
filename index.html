@@ -200,8 +200,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 			<div id="page_body" class="">
 				<form id="page_body_shipyard" name="shipyard" class="">
 					<div id="shipyard_tabs">
-						<label class="togglebutton"><input name="tab" type="radio" value="ships"><div>Shipyard</div></label>
-						<label class="togglebutton"><input name="tab" type="radio" value="storedbuilds"><div>Stored</div></label>
+						<label class="togglebutton"><input name="tab" type="radio" value="ships"><div class="togglebox">Shipyard</div></label>
+						<label class="togglebutton"><input name="tab" type="radio" value="storedbuilds"><div class="togglebox">Stored</div></label>
 					</div>
 					<div id="shipyard_container">
 						<div id="shipyard_ships_container"></div>
@@ -212,15 +212,15 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 					<div id="outfitting_top" class="">
 						<form id="outfitting_modules" name="modules" class="">
 							<div id="outfitting_modules_tabs">
-								<label class="togglebutton"><input name="tab" type="radio" value="ALL"><div>ALL</div></label>
-								<label class="togglebutton"><input name="tab" type="radio" value="STORED"><div>STR</div></label>
-								<label class="togglebutton"><input name="tab" type="radio" value="hardpoint"><div>HPT</div></label>
-								<label class="togglebutton"><input name="tab" type="radio" value="utility"><div>UTL</div></label>
-								<label class="togglebutton"><input name="tab" type="radio" value="component"><div>COR</div></label>
-								<label class="togglebutton"><input name="tab" type="radio" value="military"><div>MIL</div></label>
-								<label class="togglebutton"><input name="tab" type="radio" value="internal"><div>OPT</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="ALL"><div class="togglebox">ALL</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="STORED"><div class="togglebox">STR</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="hardpoint"><div class="togglebox">HPT</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="utility"><div class="togglebox">UTL</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="component"><div class="togglebox">COR</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="military"><div class="togglebox">MIL</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="internal"><div class="togglebox">OPT</div></label>
 								<span></span>
-								<label class="togglebutton"><input name="tab" type="radio" value="SLOT"><div>SLOT</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="SLOT"><div class="togglebox">SLOT</div></label>
 							</div>
 							<div id="outfitting_modules_container" class=""></div>
 							<div id="outfitting_modules_buttons">
@@ -245,10 +245,10 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 									<input type="checkbox" id="outfitting_cols_toggle" class="toggleinput">
 									<label for="outfitting_cols_toggle"><svg class="iconsvg eye"><use xlink:href="#icon_eye"/></svg><span> SHOW</span></label>
 									<div>
-										<label class="togglebutton"><input name="outfitting_show_mass" type="checkbox" value="1"><div>Mass</div></label>
-										<label class="togglebutton"><input name="outfitting_show_power" type="checkbox" value="1"><div>Power</div></label>
-										<label class="togglebutton"><input name="outfitting_show_attrs" type="checkbox" value="1"><div>Attrs</div></label>
-										<label class="togglebutton"><input name="outfitting_show_price" type="checkbox" value="1"><div>Price</div></label>
+										<label class="togglebutton"><input name="outfitting_show_mass" type="checkbox" value="1"><div class="togglebox">Mass</div></label>
+										<label class="togglebutton"><input name="outfitting_show_power" type="checkbox" value="1"><div class="togglebox">Power</div></label>
+										<label class="togglebutton"><input name="outfitting_show_attrs" type="checkbox" value="1"><div class="togglebox">Attrs</div></label>
+										<label class="togglebutton"><input name="outfitting_show_price" type="checkbox" value="1"><div class="togglebox">Price</div></label>
 									</div>
 								</div>
 								<div id="outfitting_ops_popout" class="popout">
@@ -258,6 +258,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 										<button id="outfitting_fit_import"><svg class="iconsvg import"><use xlink:href="#icon_import"/></svg> Import...</button>
 										<button id="outfitting_fit_export"><svg class="iconsvg export"><use xlink:href="#icon_export"/></svg> Export...</button>
 										<button id="outfitting_fit_xref"><svg class="iconsvg xref"><use xlink:href="#icon_xref"/></svg> Search EDDB</button>
+										<button id="outfitting_fit_discounts"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg> Clone Discounts</button>
 									</div>
 								</div>
 							</div>
@@ -302,36 +303,10 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 											<input type="text" name="cost" value="">
 											<span>CR</span>
 											<span id="details_cost_mod"></span>
-											<!-- TODO details cost popout?
-											<input type="checkbox" id="details_cost_focus" class="toggleinput">
-											<label id="details_cost_label" for="details_cost_focus"><svg class="iconsvg menudots"><use xlink:href="#icon_menudots"/></svg></label>
-											<div id="details_cost_popout">
-												<div class="details_cost_popout_row">
-													<label class="togglebutton"><input name="discount" type="checkbox" value="4"><div id="details_cost_4">-0%</div></label>
-													<label class="togglebutton"><input name="discount" type="checkbox" value="2"><div id="details_cost_2">-0%</div></label>
-													<label class="togglebutton"><input name="discount" type="checkbox" value="1"><div id="details_cost_1">-0%</div></label>
-												</div>
-												<div class="details_cost_popout_row">
-													<label class="togglebutton"><input name="discount" type="checkbox" value="32"><div id="details_cost_32">-0%</div></label>
-													<label class="togglebutton"><input name="discount" type="checkbox" value="16"><div id="details_cost_16">-0%</div></label>
-													<label class="togglebutton"><input name="discount" type="checkbox" value="8"><div id="details_cost_8">-0%</div></label>
-												</div>
-												<div class="details_cost_popout_row">
-													<label class="togglebutton"><input name="discount" type="checkbox" value="0"><div id="details_cost_0">Actual</div></label>
-													<label class="togglebutton"><input name="discount" type="checkbox" value="63"><div id="details_cost_63">Free</div></label>
-												</div>
-											</div>
-											<!-- -->
-											<label class="togglebutton"><input name="discount" type="checkbox" value="0"><div id="details_cost_0">Actual</div></label>
+											<label class="togglebutton"><input name="discount" type="checkbox" value="0"><div class="togglebox">Actual</div></label>
 										</div>
-										<div class="details_cost_row">
-											<label class="togglebutton"><input name="discount" type="checkbox" value="1"><div id="details_cost_1">-0%</div></label>
-											<label class="togglebutton"><input name="discount" type="checkbox" value="2"><div id="details_cost_2">-0%</div></label>
-											<label class="togglebutton"><input name="discount" type="checkbox" value="4"><div id="details_cost_4">-0%</div></label>
-											<label class="togglebutton"><input name="discount" type="checkbox" value="8"><div id="details_cost_8">-0%</div></label>
-											<label class="togglebutton"><input name="discount" type="checkbox" value="16"><div id="details_cost_16">-0%</div></label>
-											<label class="togglebutton"><input name="discount" type="checkbox" value="32"><div id="details_cost_32">-0%</div></label>
-											<label class="togglebutton"><input name="discount" type="checkbox" value="63"><div id="details_cost_63">Free</div></label>
+										<div class="details_cost_row" id="details_cost_discounts">
+											<label class="togglebutton"><input name="discount" type="checkbox" value="0"><div class="togglebox"></div></label>
 										</div>
 									</div>
 									<div id="details_engineering">
@@ -882,8 +857,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 				</div>
 				<form id="page_body_analysis" name="analysis" class="">
 					<div id="analysis_tabs">
-						<label class="togglebutton"><input name="tab" type="radio" value="retrofit"><div>Retrofit</div></label>
-						<label class="togglebutton"><input name="tab" type="radio" value="compare"><!-- TODO <div>Compare</div> --></label>
+						<label class="togglebutton"><input name="tab" type="radio" value="retrofit"><div class="togglebox">Retrofit</div></label>
+						<label class="togglebutton"><input name="tab" type="radio" value="compare"><!-- TODO <div class="togglebox">Compare</div> --></label>
 					</div>
 					<div id="analysis_container">
 						<div id="analysis_compare_container"></div>
@@ -1073,7 +1048,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 									</div>
 								</div>
 							</div>
-							<button name="retrofit_export" id="retrofit_export" class="text"><svg class="iconsvg export"><use xlink:href="#icon_export"/></svg> Export Retrofit Report</button>
+							<button name="retrofit_export" id="retrofit_export" class="text"><svg class="iconsvg export"><use xlink:href="#icon_export"/></svg> Export Retrofit Report ...</button>
 						</div>
 					</div>
 				</form>
@@ -1088,6 +1063,15 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 									<dd><label class="checkbox left"><input type="radio" name="insurance" value="9500"><div><div class="radio"></div><span>95.0% (Standard)</span></div></label></dd>
 									<dd><label class="checkbox left"><input type="radio" name="insurance" value="9625"><div><div class="radio"></div><span>96.3% (Beta backer)</span></div></label></dd>
 									<dd><label class="checkbox left"><input type="radio" name="insurance" value="9750"><div><div class="radio"></div><span>97.5% (Alpha backer)</span></div></label></dd>
+								</dl>
+							</div>
+							<div id="options_discounts">
+								<b>Default Discounts</b>
+								&mdash; Select the default discounts to apply to new builds and modules.
+								<dl>
+									<dd id="options_discounts_bits">
+										<label class="togglebutton"><input name="discount" type="checkbox" value="0"><div class="togglebox">-0%</div></label>
+									</dd>
 								</dl>
 							</div>
 							<div>

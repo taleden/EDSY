@@ -171,6 +171,7 @@ window.edsy = new (function() {
 		pickerNameNamehash: {},
 		option: {
 			insurance: 9500,
+			discounts: 0,
 			builtin: 'some',
 			onlybest: false,
 			experimental: false,
@@ -928,7 +929,7 @@ window.edsy = new (function() {
 		
 		
 		setDiscounts: function(discounts) {
-			this.discounts = (discounts & 0x3F);
+			this.discounts = (this.getBaseCost() ? (discounts & 0x3F) : 0);
 			this.cost = 0;
 			this.clearStats();
 			return true;
@@ -2042,11 +2043,12 @@ window.edsy = new (function() {
 				hatch : new Slot(this, 'ship', 'hatch', SHIP_HATCH_ID),
 			},
 		};
+		this.slots.ship.hull.setDiscounts(current.option.discounts);
 		for (var slotgroup in ship.slots) {
 			this.slots[slotgroup] = [];
 			for (var slotnum = 0;  slotnum < ship.slots[slotgroup].length;  slotnum++) {
 				var modid = ((slotgroup === 'component' || stock) ? ship.stock[slotgroup][slotnum] : 0);
-				var discounts = 0;
+				var discounts = current.option.discounts;
 				if (modid < 0) {
 					modid = -modid;
 					discounts = 0x3F;
@@ -7114,6 +7116,24 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // updateUIFitShip()
 	
 	
+	var updateUIFitDiscounts = function(discounts) {
+		var slot;
+		for (var slotgroup in GROUP_LABEL) {
+			for (var slotnum = 0;  slot = current.fit.getSlot(slotgroup, slotnum);  slotnum++) {
+				slot.setDiscounts(discounts);
+			}
+		}
+		if (current.outfitting_focus === 'slot') {
+			updateUIFitStoredBuildControls();
+			updateUIFitSlot(current.group, current.slot);
+			updateUIStats();
+		}
+		updateUIDetailsStoredModuleControls();
+		updateUIDetailsCost();
+		return true;
+	}; // updateUIFitDiscounts()
+	
+	
 	var updateUIFitPowerDist = function() {
 		var maxcrew = (current.fit.getSlot('ship', 'hull').getEffectiveAttrValue('crew') - 1);
 		var crew = current.fit.getCrewDist();
@@ -7462,6 +7482,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			modid = slot.getModuleID();
 		} else {
 			ok = slot.setModuleID(modid, current.option.experimental);
+			if (ok)
+				slot.setDiscounts(current.option.discounts);
 		}
 		if (!ok)
 			return false;
@@ -7588,9 +7610,15 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	
 	var initUIDetails = function() {
-		for (var i = 0;  i < DISCOUNTS.length;  i++) {
-			var bit = (1 << (DISCOUNTS.length - 1 - i));
-			document.getElementById('details_cost_' + bit).innerHTML = formatPctHTML(1 - cache.discountMod[bit], (DISCOUNTS[i] % 1 ? 1 : 0));
+		var container = document.getElementById('details_cost_discounts');
+		while (container.lastElementChild)
+			cache.template.details_cost_discounts_label = container.removeChild(container.lastElementChild);
+		for (var i = 0;  i <= DISCOUNTS.length;  i++) {
+			var bit = min(1 << i, 0x3F);
+			var label = cache.template.details_cost_discounts_label.cloneNode(true);
+			label.getElementsByTagName('INPUT')[0].value = bit;
+			label.getElementsByTagName('DIV')[0].innerHTML = (bit == 0x3F) ? 'FREE' : formatPctHTML(1 - cache.discountMod[bit], (DISCOUNTS[DISCOUNTS.length - 1 - i] % 1 ? 1 : 0));
+			container.appendChild(label);
 		}
 		
 		var table = document.createElement('table');
@@ -7923,6 +7951,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		} else {
 			var modid = slot.getModuleID();
 			ok = slot.setModuleID(modid);
+			if (ok)
+				slot.setDiscounts(current.option.discounts);
 		}
 		if (!ok)
 			return false;
@@ -9459,6 +9489,18 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			span.innerText = span.innerText.replace(/[0-9\.]+ *%/, formatPctText(parseFloat(input.value) / 10000, 1));
 		}
 		
+		var container = document.getElementById('options_discounts_bits');
+		while (container.lastElementChild)
+			cache.template.options_discounts_bits_label = container.removeChild(container.lastElementChild);
+		for (var i = 0;  i <= DISCOUNTS.length;  i++) {
+			var bit = min(1 << i, 0x3F);
+			var label = cache.template.options_discounts_bits_label.cloneNode(true);
+			label.getElementsByTagName('INPUT')[0].value = bit;
+			label.getElementsByTagName('DIV')[0].innerHTML = (bit == 0x3F) ? 'FREE' : formatPctHTML(1 - cache.discountMod[bit], (DISCOUNTS[DISCOUNTS.length - 1 - i] % 1 ? 1 : 0));
+			container.appendChild(label);
+			container.appendChild(document.createTextNode(' '));
+		}
+		
 		var divBuiltinHardpoints = document.getElementById('options_builtin_hardpoints');
 		while (divBuiltinHardpoints.lastChild)
 			divBuiltinHardpoints.removeChild(divBuiltinHardpoints.lastChild);
@@ -9496,6 +9538,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	var updateUIOptions = function() {
 		// validate options settings
 		current.option.insurance = parseInt(current.option.insurance);
+		current.option.discounts = min(max(parseInt(current.option.discounts), 0), 0x3F);
 		if (!{none:1,some:1,all:1}[current.option.builtin])
 			current.option.builtin = 'some';
 		for (var bmodid in BUILTIN_STORED_MODULES) {
@@ -9550,6 +9593,13 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		// update options controls
 		var elements = document.forms.options.elements;
 		elements.insurance.value = current.option.insurance;
+		var inputs = document.getElementById('options_discounts_bits').getElementsByTagName('INPUT');
+		for (var i = 0;  i < inputs.length;  i++) {
+			if (inputs[i].name === 'discount') {
+				var bit = parseInt(inputs[i].value);
+				inputs[i].checked = (((current.option.discounts & bit) == bit) && ((current.option.discounts == 0x3F) == (bit == 0x3F)));
+			}
+		}
 		elements.builtin.value = current.option.builtin;
 		for (var bmodid in BUILTIN_STORED_MODULES) {
 			var opt = 'builtin' + bmodid;
@@ -10257,6 +10307,11 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			var url = current.fit.getEDDBURL();
 			window.open(url, '_blank') || window.location.assign(url);
 			break;
+			
+		case 'outfitting_fit_discounts':
+			var discounts = current.fit.getSlot(current.group, current.slot).getDiscounts();
+			updateUIFitDiscounts(discounts);
+			break;
 		}
 	}; // onUIFitSettingsOpsClick()
 	
@@ -10890,6 +10945,13 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	var onUIOptionsChange = function(e) {
 		var elements = document.forms.options.elements;
 		current.option.insurance = parseInt(elements.insurance.value);
+		var inputs = document.getElementById('options_discounts_bits').getElementsByTagName('INPUT');
+		current.option.discounts = 0;
+		for (var i = 0;  i < inputs.length;  i++) {
+			if (inputs[i].name === 'discount' && inputs[i].checked && (inputs[i] == e.target || inputs[i].value != 0x3F)) {
+				current.option.discounts |= parseInt(inputs[i].value);
+			}
+		}
 		current.option.builtin = elements.builtin.value;
 		for (var bmodid in BUILTIN_STORED_MODULES) {
 			var opt = 'builtin' + bmodid;

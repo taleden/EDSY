@@ -362,6 +362,34 @@ INPUT.toggleinput {
 	cursor: default;
 }
 
+.togglebutton INPUT + DIV.togglebox {
+	border: 1px solid var(--colororange3);
+	background-color: var(--colororange1);
+	color: var(--colororange4);
+	padding: 0 0.2em;
+	text-align: center;
+}
+.togglebutton INPUT:checked + DIV.togglebox {
+	border-color: var(--colororange5);
+	background-color: var(--colororange5);
+	color: var(--colorblack);
+}
+.togglebutton INPUT:active + DIV.togglebox {
+	border-color: var(--colorwhite);
+	background-color: var(--colorwhite);
+	color: var(--colorblack);
+}
+.togglebutton INPUT:disabled + DIV.togglebox {
+	border-color: var(--colorgrey3);
+	background-color: var(--colorgrey1);
+	color: var(--colorgrey4);
+}
+.togglebutton INPUT:disabled:checked + DIV.togglebox {
+	border-color: var(--colorgrey3);
+	background-color: var(--colorgrey3);
+	color: var(--colorblack);
+}
+
 .togglebutton ABBR {
 	cursor: inherit;
 }
@@ -983,22 +1011,9 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 	flex: 1 0 0px;
 }
 
-#shipyard_tabs .togglebutton INPUT + DIV {
-	border: 1px solid var(--colororange3);
+#shipyard_tabs .togglebutton INPUT + DIV.togglebox {
 	border-bottom: none;
 	padding: 0 0.5em;
-	background-color: var(--colororange1);
-	color: var(--colororange4);
-}
-#shipyard_tabs .togglebutton INPUT:checked + DIV {
-	border-color: var(--colororange5);
-	background-color: var(--colororange5);
-	color: var(--colorblack);
-}
-#shipyard_tabs .togglebutton INPUT:active + DIV {
-	border-color: var(--colorwhite);
-	background-color: var(--colorwhite);
-	color: var(--colorblack);
 }
 
 #page_body_shipyard:not(.ships) #shipyard_ships_container,
@@ -1099,23 +1114,9 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 	flex: 1 0 0px;
 }
 
-#outfitting_modules_tabs .togglebutton INPUT + DIV {
-	border: 1px solid var(--colororange3);
+#outfitting_modules_tabs .togglebutton INPUT + DIV.togglebox {
 	border-bottom: none;
-	padding: 0 0.2em;
-	background-color: var(--colororange1);
-	color: var(--colororange4);
 	font-size: 0.875rem;
-}
-#outfitting_modules_tabs .togglebutton INPUT:checked + DIV {
-	border-color: var(--colororange5);
-	background-color: var(--colororange5);
-	color: var(--colorblack);
-}
-#outfitting_modules_tabs .togglebutton INPUT:active + DIV {
-	border-color: var(--colorwhite);
-	background-color: var(--colorwhite);
-	color: var(--colorblack);
 }
 
 
@@ -1495,22 +1496,8 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	white-space: nowrap;
 }
 
-#outfitting_fit_settings .togglebutton INPUT + DIV {
+#outfitting_fit_settings .togglebutton INPUT + DIV.togglebox {
 	margin: 0 0 2px 2px;
-	border: 1px solid var(--colororange3);
-	background-color: var(--colororange1);
-	padding: 0 0.2em;
-	color: var(--colororange4);
-}
-#outfitting_fit_settings .togglebutton INPUT:checked + DIV {
-	border-color: var(--colororange5);
-	background-color: var(--colororange5);
-	color: var(--colorblack);
-}
-#outfitting_fit_settings .togglebutton INPUT:active + DIV {
-	border-color: var(--colorwhite);
-	background-color: var(--colorwhite);
-	color: var(--colorblack);
 }
 
 #outfitting_fit_settings .popout {
@@ -2313,33 +2300,6 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	flex: 1 0 auto;
 }
 
-#details_cost .togglebutton INPUT + DIV {
-	border: 1px solid var(--colororange3);
-	padding: 0 0.25em;
-	background-color: var(--colororange1);
-	color: var(--colororange4);
-	text-align: center;
-}
-#details_cost .togglebutton INPUT:checked + DIV {
-	border-color: var(--colororange5);
-	background-color: var(--colororange5);
-	color: var(--colorblack);
-}
-#details_cost .togglebutton INPUT:active + DIV {
-	border-color: var(--colorwhite);
-	background-color: var(--colorwhite);
-	color: var(--colorblack);
-}
-#details_cost .togglebutton INPUT:disabled + DIV {
-	border-color: var(--colorgrey3);
-	background-color: var(--colorgrey1);
-	color: var(--colorgrey4);
-}
-#details_cost .togglebutton INPUT:disabled:checked + DIV {
-	background-color: var(--colorgrey3);
-	color: var(--colorblack);
-}
-
 #details_cost .togglebutton INPUT + DIV SMALL {
 	font-size: 0.5rem;
 }
@@ -2989,22 +2949,9 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	flex: 1 0 0px;
 }
 
-#analysis_tabs .togglebutton INPUT + DIV {
-	border: 1px solid var(--colororange3);
+#analysis_tabs .togglebutton INPUT + DIV.togglebox {
 	border-bottom: none;
 	padding: 0 0.5em;
-	background-color: var(--colororange1);
-	color: var(--colororange4);
-}
-#analysis_tabs .togglebutton INPUT:checked + DIV {
-	border-color: var(--colororange5);
-	background-color: var(--colororange5);
-	color: var(--colorblack);
-}
-#analysis_tabs .togglebutton INPUT:active + DIV {
-	border-color: var(--colorwhite);
-	background-color: var(--colorwhite);
-	color: var(--colorblack);
 }
 
 #page_body_analysis:not(.compare) #analysis_compare_container,
