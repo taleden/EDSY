@@ -11,7 +11,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 'use strict';
 window.edsy = new (function() {
 	var VERSIONS = [308149912,308149912,308149911,308149912]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20230130;
+	var LASTMODIFIED = 20230131;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -2127,7 +2127,7 @@ window.edsy = new (function() {
 		}, // setInaraXref()
 		
 		
-		getEDDBURL: function() {
+		getEDDBioURL: function() {
 			var sid = this.getShipID();
 			
 			// pre-flag stock modules that will come with the ship anyway
@@ -2154,16 +2154,15 @@ window.edsy = new (function() {
 					for (var slotnum = 0;  slot = this.getSlot(slotgroup, slotnum);  slotnum++) {
 						var mid = slot.getModuleID();
 						var module = cache.shipModules[sid][mid] || eddb.module[mid];
-						var eddbid = module ? module.eddbid : 0;
-						if (eddbid && !idFlag[eddbid]) {
-							idFlag[eddbid] = true;
-							idList.push(eddbid);
+						if (module && module.eddbid && !idFlag[module.eddbid] && module.tag !== 'P') {
+							idFlag[module.eddbid] = true;
+							idList.push(module.eddbid);
 						}
 					}
 				}
 			}
 			return ('https://eddb.io/station?m=' + idList.join(',') + (eddb.ship[sid].eddbid ? ('&s=' + eddb.ship[sid].eddbid) : ''));
-		}, // getEDDBURL()
+		}, // getEDDBioURL()
 		
 		
 		getCrewDist: function(dist) {
@@ -5240,43 +5239,47 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		tr.appendChild(td);
 		tbody.appendChild(tr);
 		
+		var export_eddbio = current.fit.getEDDBioURL();
 		var export_inara = current.fit.getInaraURL();
 		var export_edomh = current.fit.exportEDOMH();
-		
-		if (export_inara || export_edomh) {
-			var tr = document.createElement('tr');
-			var td = document.createElement('td');
-			td.appendChild(document.createTextNode('Export'));
-			tr.appendChild(td);
-			var td = document.createElement('td');
-			td.className = 'export';
-			var div = document.createElement('div');
-			div.className = 'export';
-			if (export_inara) {
-				var button = document.createElement('button');
-				button.className = 'text';
-				button.name = 'export_inara';
-				button.innerHTML = '<img src="inara.png"> Inara';
-				button.addEventListener('click', onUIFitExportInaraButtonClick);
-				div.appendChild(button);
-			}
-			if (export_edomh) {
-				var url = JSON.stringify(export_edomh);
-				url = b64Encode(pako.deflate(url, {to:'string'}));
-				url = "edomh://edsy/?" + url;
-				var link = document.createElement('a');
-				link.className = 'button';
-				link.href = url;
-				link.target = '_blank';
-				link.innerHTML = '<img src="edomh.png" class="iconsvg"> EDOMH';
-				div.appendChild(link);
-			}
-			td.appendChild(div);
-			tr.appendChild(td);
-			var td = document.createElement('td');
-			tr.appendChild(td);
-			tbody.appendChild(tr);
+
+		var tr = document.createElement('tr');
+		var td = document.createElement('td');
+		td.appendChild(document.createTextNode('External'));
+		tr.appendChild(td);
+		var td = document.createElement('td');
+		td.className = 'export';
+		var div = document.createElement('div');
+		div.className = 'export';
+		var link = document.createElement('a');
+		link.className = 'button text';
+		if (export_eddbio) {
+			link.href = export_eddbio;
+			link.target = '_blank';
 		}
+		link.innerHTML = '<img src="eddbio.png" class="iconsvg"> EDDB.io';
+		div.appendChild(link);
+		if (export_inara) {
+			var button = document.createElement('button');
+			button.className = 'text';
+			button.name = 'export_inara';
+			button.innerHTML = '<img src="inara.png"> Inara';
+			button.addEventListener('click', onUIFitExportInaraButtonClick);
+			div.appendChild(button);
+		}
+		var link = document.createElement('a');
+		link.className = 'button text';
+		if (export_edomh) {
+			link.href = "edomh://edsy/?" + b64Encode(pako.deflate(JSON.stringify(export_edomh), {to:'string'}));;
+			link.target = '_blank';
+		}
+		link.innerHTML = '<img src="edomh.png" class="iconsvg"> EDOMH';
+		div.appendChild(link);
+		td.appendChild(div);
+		tr.appendChild(td);
+		var td = document.createElement('td');
+		tr.appendChild(td);
+		tbody.appendChild(tr);
 		
 		table.appendChild(tbody);
 		document.forms.popup.elements.export_url.focus();
@@ -10339,11 +10342,6 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			
 		case 'outfitting_fit_export':
 			showUIExportPopup();
-			break;
-			
-		case 'outfitting_fit_xref':
-			var url = current.fit.getEDDBURL();
-			window.open(url, '_blank') || window.location.assign(url);
 			break;
 			
 		case 'outfitting_fit_discounts':

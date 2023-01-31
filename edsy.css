@@ -11,7 +11,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 
 :root {
 	--edsy-versions-css: v-308149912-308149912-308149910-308149912; /* HTML,CSS,DB,JS */
-	--edsy-lastmodified-css: d-20230130;
+	--edsy-lastmodified-css: d-20230131;
 	
 	--colorblack: black;
 	--colorwhite: white;
@@ -167,6 +167,9 @@ A.button:not(:link):not(:visited) {
 	background-color: var(--colorgrey1);
 	color: var(--colorgrey4);
 	cursor: default;
+}
+A.button.text {
+	font: var(--fonttext);
 }
 
 DL {
