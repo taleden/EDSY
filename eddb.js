@@ -3013,7 +3013,7 @@ var eddb = {
 		
 		
 		13360 : { mtype:'iex', cost:2000000, name:'Experimental Weapon Stabiliser', class:3, rating:'F', mass:  8.00, pwrdraw:1.50, powerlock:1, limit:'iex', unlimit:'hex', unlimitcount:1, fdid:129019260, fdname:'Int_ExpModuleStabiliser_Size3_Class3', eddbid:null }, // TODO: eddbid
-		13560 : { mtype:'iex', cost:4000000, name:'Experimental Weapon Stabiliser', class:5, rating:'F', mass: 20.00, pwrdraw:3.00, powerlock:1, limit:'iex', unlimit:'hex', unlimitcount:1, fdid:129019261, fdname:'Int_ExpModuleStabiliser_Size5_Class3', eddbid:null }, // TODO: eddbid
+		13560 : { mtype:'iex', cost:4000000, name:'Experimental Weapon Stabiliser', class:5, rating:'F', mass: 20.00, pwrdraw:3.00, powerlock:1, limit:'iex', unlimit:'hex', unlimitcount:2, fdid:129019261, fdname:'Int_ExpModuleStabiliser_Size5_Class3', eddbid:null }, // TODO: eddbid
 		
 		
 		 7540 : { mtype:'ifh', cost: 575660, name:'Fighter Hangar', class:5, rating:'D', mass:20.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1}, ammocost: 1030, limit:'ifh', fdid:128727930, fdname:'Int_FighterBay_Size5_Class1', eddbid:1562 },
