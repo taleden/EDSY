@@ -9317,17 +9317,17 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var div = document.createElement('div');
 		div.className = 'export';
 		var link = document.createElement('a');
-		link.className = 'button';
+		link.className = 'button text';
 		link.href = eddbioURL;
 		link.target = '_blank';
 		link.innerHTML = '<img src="eddbio.png" class="iconsvg"> EDDB.io';
 		div.appendChild(link);
 		var link = document.createElement('a');
-		link.className = 'button';
+		link.className = 'button text';
 		if (edomhURL)
 			link.href = edomhURL;
 		link.target = '_blank';
-		link.innerHTML = '<img src="edomh.png" class="iconsvg"> ' + (edomhURL ? 'EDOMH' : '<abbr title="EDOMH does not support direct import of multiple ships">EDOMH<svg class="iconsvg warning"><use xlink:href="#icon_warning"/></svg></abbr>');
+		link.innerHTML = '<img src="edomh.png" class="iconsvg"> ' + ((edomhURL !== null) ? 'EDOMH' : '<abbr title="EDOMH does not support direct import of multiple ships">EDOMH<svg class="iconsvg warning"><use xlink:href="#icon_warning"/></svg></abbr>');
 		div.appendChild(link);
 		td.appendChild(div);
 		tr.appendChild(td);
