@@ -123,6 +123,10 @@ ABBR.attribute {
 	font: var(--fonttext);
 	line-height: 0.8571;
 }
+A.button ABBR {
+	margin: 0;
+	border: none;
+}
 
 SMALL {
 	font-size: 75%;
@@ -134,7 +138,8 @@ SMALL {
 	color: inherit;
 }
 
-A {
+A:link,
+A:visited {
 	color: var(--colorblue4);
 	text-decoration: none;
 }
@@ -157,6 +162,11 @@ A.button:hover {
 A.button:active {
 	background-color: var(--colorwhite);
 	color: var(--colorblack);
+}
+A.button:not(:link):not(:visited) {
+	background-color: var(--colorgrey1);
+	color: var(--colorgrey4);
+	cursor: default;
 }
 
 DL {
@@ -3002,11 +3012,6 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	white-space: nowrap;
 }
 
-#analysis_retrofit_container BUTTON.text {
-	flex: 0 0 auto;
-	margin: 0.25em;
-}
-
 #analysis_retrofit_container .analysis_retrofit_divider {
 	flex: 0 0 auto;
 	margin-bottom: 0.25em;
@@ -3065,17 +3070,16 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	text-align: center;
 }
 
-#analysis_retrofit_container .analysis_retrofit_footer {
+#analysis_retrofit_container .analysis_retrofit_buttons {
 	flex: 0 0 auto;
-	border-top: 2px solid var(--colororange3);
-	padding-top: 0.25em;
 	display: flex;
 	flex-direction: row;
+	margin: 0.25em 0;
 }
 
-#analysis_retrofit_container .analysis_retrofit_footer BUTTON {
+#analysis_retrofit_container .analysis_retrofit_buttons BUTTON {
 	flex: 1 0 auto;
-	align-self: center;
+	align-self: stretch;
 	margin: 0 0.25em;
 	padding: 0.125rem;
 	line-height: 0;

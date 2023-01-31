@@ -2005,7 +2005,7 @@ window.edsy = new (function() {
 						var cost = {};
 						for (var mat in mats)
 							cost[mat] = rolls * mats[mat];
-						steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Eng', bpid:bpid2, bpgrade:bpgrade1, rolls:rolls, desc:(blueprint.name + ' G' + bpgrade1 + ' x' + rolls), cost:cost });
+						steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Eng', bpid:bpid2, bpgrade:bpgrade1, bproll:limit, rolls:rolls, desc:(blueprint.name + ' G' + bpgrade1 + ' x' + rolls), cost:cost });
 					}
 					bpgrade1++;
 					bproll1 = 0;
@@ -8922,6 +8922,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		els.retrofit_export.addEventListener('click', onUIAnalysisRetrofitExportClick);
 		
 		addUIAnalysisRetrofitBuild('');
+		document.getElementById('retrofit_export').disabled = true;
 	}; // initUIAnalysisRetrofit()
 	
 	
@@ -9155,6 +9156,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		
 		updateUIAnalysisRetrofitMaterials();
+		document.getElementById('retrofit_export').disabled = (current.retrofit.jobs.length < 1);
 	}; // updateUIAnalysisRetrofit()
 	
 	
@@ -9225,7 +9227,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // updateUIAnalysisRetrofitMaterials()
 	
 	
-	var showUIRetrofitExportPopup = function(stepsText, matsText, reportJSON, eddbURL) {
+	var showUIRetrofitExportPopup = function(stepsText, matsText, reportJSON, eddbioURL, edomhURL) {
 		var trigger = document.getElementById('retrofit_export');
 		var table = showUITablePopup(null, trigger, false, false, false);
 		table.className = '';
@@ -9321,9 +9323,16 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		div.className = 'export';
 		var link = document.createElement('a');
 		link.className = 'button';
-		link.href = eddbURL;
+		link.href = eddbioURL;
 		link.target = '_blank';
-		link.innerHTML = '<img src="eddbio.png" class="iconsvg"> Search EDDB.io';
+		link.innerHTML = '<img src="eddbio.png" class="iconsvg"> EDDB.io';
+		div.appendChild(link);
+		var link = document.createElement('a');
+		link.className = 'button';
+		if (edomhURL)
+			link.href = edomhURL;
+		link.target = '_blank';
+		link.innerHTML = '<img src="edomh.png" class="iconsvg"> ' + (edomhURL ? 'EDOMH' : '<abbr title="EDOMH does not support direct import of multiple ships">EDOMH<svg class="iconsvg warning"><use xlink:href="#icon_warning"/></svg></abbr>');
 		div.appendChild(link);
 		td.appendChild(div);
 		tr.appendChild(td);
@@ -9352,8 +9361,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		};
 		var cols = ['Build','Module','Action','Details'];
 		var stepsText = [cols.join('\t')];
-		var eddbShips = {};
-		var eddbModules = {};
+		var eddbioShips = {};
+		var eddbioModules = {};
 		var matTotal = {'':0};
 		for (var i = 0;  i < current.retrofit.jobs.length;  i++) {
 			var retroJSON = {
@@ -9399,6 +9408,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 						stepJSON.action = 'engineer';
 						stepJSON.blueprint = eddb.blueprint[steps[s].bpid].fdname;
 						stepJSON.grade = steps[s].bpgrade;
+						stepJSON.progress = steps[s].bproll;
 						stepJSON.rolls = steps[s].rolls;
 					} else if (steps[s].act === 'Exp') {
 						stepJSON.action = 'experimental';
@@ -9416,10 +9426,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					stepsText.push(cols.join('\t'));
 					
 					if (steps[s].act === 'Buy') {
-						if (steps[s].sgrp === 'ship') {
-							eddbShips[ship.eddbid || 0] = true;
-						} else {
-							eddbModules[module.eddbid || 0] = true;
+						if (steps[s].sgrp === 'ship' && ship.eddbid) {
+							eddbioShips[ship.eddbid] = true;
+						} else if (steps[s].sgrp !== 'ship' && module.eddbid && module.tag !== 'P') {
+							eddbioModules[module.eddbid] = true;
 						}
 					}
 					
@@ -9434,8 +9444,6 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			}
 		}
 		stepsText.push('');
-		delete eddbShips[0];
-		delete eddbModules[0];
 		
 		// compile materials report
 		cols = ['Item','Type','Lvl','Qty'];
@@ -9457,23 +9465,60 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		
 		// finalize eddb.io link
-		var eddbURL = '';
-		var ids = Object.keys(eddbShips);
+		var eddbioURL = '';
+		var ids = Object.keys(eddbioShips);
 		if (ids.length > 0) {
 			ids.sort();
-			eddbURL += (eddbURL ? '&' : '?') + 's=' + ids.join(',');
+			eddbioURL += (eddbioURL ? '&' : '?') + 's=' + ids.join(',');
 		}
-		ids = Object.keys(eddbModules);
+		ids = Object.keys(eddbioModules);
 		if (ids.length > 0) {
 			ids.sort();
-			eddbURL += (eddbURL ? '&' : '?') + 'm=' + ids.join(',');
+			eddbioURL += (eddbioURL ? '&' : '?') + 'm=' + ids.join(',');
 		}
-		if (eddbURL) {
-			eddbURL = 'https://eddb.io/station' + eddbURL;
+		if (eddbioURL) {
+			eddbioURL = 'https://eddb.io/station' + eddbioURL;
+		}
+		
+		// create EDOMH link, if possible
+		var edomhURL = null;
+		if (exportJSON.retrofits.length == 1) {
+			var json = exportJSON.retrofits[0];
+			var obj = {
+				"version": 1,
+				"ship": (json.ship || '').toLowerCase(),
+				"name": (json.target || ''),
+				"items": [],
+			};
+			// iterate backwards to retain only the final engineering step for each module
+			var m=null, i=null;
+			for (var s = json.steps.length - 1;  s >= 0;  s--) {
+				if (json.steps[s].action === 'engineer' && (m !== json.steps[s].module || i !== json.steps[s].index)) {
+					m = json.steps[s].module;
+					i = json.steps[s].index;
+					obj.items.push({
+						"item": (json.steps[s].module || '').toLowerCase(),
+						"blueprint": (json.steps[s].blueprint || '').toLowerCase(),
+						"grade": json.steps[s].grade,
+						"highestGradePercentage": (json.steps[s].progress ? parseFloat(json.steps[s].progress.toFixed(6)) : 0),
+					});
+				} else if (json.steps[s].action === 'experimental') {
+					obj.items.push({
+						"item": (json.steps[s].module || '').toLowerCase(),
+						"blueprint": (json.steps[s].experimental || '').toLowerCase(),
+					});
+				}
+			}
+			// encode
+			if (obj.items.length > 0) {
+				edomhURL = "edomh://edsy/?" + b64Encode(pako.deflate(JSON.stringify(obj), {to:'string'}));
+			} else {
+				edomhURL = '';
+			}
 		}
 		
 		// show popup
-		showUIRetrofitExportPopup(stepsText.join('\n'), matsText.join('\n'), JSON.stringify(exportJSON), eddbURL);
+		showUIRetrofitExportPopup(stepsText.join('\n'), matsText.join('\n'), JSON.stringify(exportJSON), eddbioURL, edomhURL);
 	}; // onUIAnalysisRetrofitExportClick()
 	
 	
