@@ -9144,14 +9144,6 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				tbody.appendChild(tr);
 				els.retrofit_steps_show_.addEventListener('change', onUIAnalysisRetrofitStepsShowChange);
 				els.retrofit_steps_show_.name += (i + '_' + s);
-				if (steps[s].act !== 'Buy') {
-					els.retrofit_steps_xref_.value = '';
-				} else if (steps[s].sgrp === 'ship') {
-					els.retrofit_steps_xref_.value = 's=' + (ship.eddbid || '');
-				} else {
-					els.retrofit_steps_xref_.value = 'm=' + (module.eddbid || '');
-				}
-				els.retrofit_steps_xref_.name += (i + '_' + s);
 			}
 		}
 		
