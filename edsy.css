@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 
 :root {
-	--edsy-versions-css: v-308149912-308149912-308149910-308149912; /* HTML,CSS,DB,JS */
-	--edsy-lastmodified-css: d-20230131;
+	--edsy-versions-css: v-308149912-308149913-308149913-308149912; /* HTML,CSS,DB,JS */
+	--edsy-lastmodified-css: d-20230202;
 	
 	--colorblack: black;
 	--colorwhite: white;
@@ -1202,7 +1202,7 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 #outfitting_modules.component .row.empty,
 #outfitting_modules.military .group:not(.internal),
 #outfitting_modules.military .group > HEADER,
-#outfitting_modules.military .mtype:not(.iex):not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb),
+#outfitting_modules.military .mtype:not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb),
 #outfitting_modules.military .row.stored,
 #outfitting_modules.internal .group:not(.internal),
 #outfitting_modules.internal .group > HEADER,
@@ -1228,7 +1228,7 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 #outfitting_modules.SLOT #outfitting_modules_picker.component_SS .mtype:not(.cs),
 #outfitting_modules.SLOT #outfitting_modules_picker.component_FT .mtype:not(.cft),
 #outfitting_modules.SLOT #outfitting_modules_picker.military .group:not(.internal),
-#outfitting_modules.SLOT #outfitting_modules_picker.military .mtype:not(.iex):not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb),
+#outfitting_modules.SLOT #outfitting_modules_picker.military .mtype:not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb),
 #outfitting_modules.SLOT #outfitting_modules_picker.internal .group:not(.internal) {
 	display: none;
 }
@@ -1413,7 +1413,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_modules_picker.component_FT .group:not(.internal) .togglebutton INPUT + DIV,
 #outfitting_modules_picker.component_FT .mtype:not(.cft) .togglebutton INPUT + DIV,
 #outfitting_modules_picker.military .group:not(.internal) .togglebutton INPUT + DIV,
-#outfitting_modules_picker.military .mtype:not(.iex):not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.military .mtype:not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb) .togglebutton INPUT + DIV,
 #outfitting_modules_picker.internal .group:not(.internal) .togglebutton INPUT + DIV {
 	background-color: var(--colorgrey1);
 	color: var(--colorgrey5);
@@ -1431,7 +1431,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_modules_picker.component_FT .group:not(.internal) .togglebutton INPUT:checked + DIV,
 #outfitting_modules_picker.component_FT .mtype:not(.cft) .togglebutton INPUT:checked + DIV,
 #outfitting_modules_picker.military .group:not(.internal) .togglebutton INPUT:checked + DIV,
-#outfitting_modules_picker.military .mtype:not(.iex):not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.military .mtype:not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb) .togglebutton INPUT:checked + DIV,
 #outfitting_modules_picker.internal .group:not(.internal) .togglebutton INPUT:checked + DIV {
 	border-color: var(--colorgrey5);
 }
@@ -1448,7 +1448,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #page_body_outfitting.focusmodule #outfitting_modules_picker.component_FT .group:not(.internal) .togglebutton INPUT:checked + DIV,
 #page_body_outfitting.focusmodule #outfitting_modules_picker.component_FT .mtype:not(.cft) .togglebutton INPUT:checked + DIV,
 #page_body_outfitting.focusmodule #outfitting_modules_picker.military .group:not(.internal) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.focusmodule #outfitting_modules_picker.military .mtype:not(.iex):not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.military .mtype:not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb) .togglebutton INPUT:checked + DIV,
 #page_body_outfitting.focusmodule #outfitting_modules_picker.internal .group:not(.internal) .togglebutton INPUT:checked + DIV {
 	background-color: var(--colorgrey5);
 	color: var(--colorblack);
@@ -1466,7 +1466,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_modules_picker.component_FT .group:not(.internal) .togglebutton INPUT + DIV .iconsvg.tinted,
 #outfitting_modules_picker.component_FT .mtype:not(.cft) .togglebutton INPUT + DIV .iconsvg.tinted,
 #outfitting_modules_picker.military .group:not(.internal) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.military .mtype:not(.iex):not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb) .togglebutton INPUT + DIV .iconsvg.tinted,
+#outfitting_modules_picker.military .mtype:not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb) .togglebutton INPUT + DIV .iconsvg.tinted,
 #outfitting_modules_picker.internal .group:not(.internal) .togglebutton INPUT + DIV .iconsvg.tinted {
 	color: inherit;
 }
