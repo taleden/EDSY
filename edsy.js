@@ -654,13 +654,13 @@ window.edsy = new (function() {
 	
 	
 	var getJumpFuelCost = function(mass, dist, fsdOpt, fsdMul, fsdExp, jmpBst) {
-		// https://forums.frontier.co.uk/showthread.php?p=643461#post643461
+		// https://forums.frontier.co.uk/threads/mass-effect-on-hyperspace-range.32734/#post-643461
 		return fsdMul * pow(max(0, dist - jmpBst) * mass / fsdOpt, fsdExp);
 	}; // getJumpFuelCost()
 	
 	
 	var getJumpDistance = function(mass, fuel, fsdOpt, fsdMul, fsdExp, jmpBst) {
-		// https://forums.frontier.co.uk/showthread.php?p=643461#post643461
+		// https://forums.frontier.co.uk/threads/mass-effect-on-hyperspace-range.32734/#post-643461
 		return pow(fuel / fsdMul, 1 / fsdExp) * fsdOpt / mass + jmpBst;
 	}; // getJumpDistance()
 	
@@ -677,14 +677,14 @@ window.edsy = new (function() {
 	
 	
 	var getMassCurveMultiplier = function(mass, minMass, optMass, maxMass, minMul, optMul, maxMul) {
-		// https://forums.frontier.co.uk/showthread.php/300225-The-One-Formula-To-Rule-Them-All-The-Mechanics-of-Shield-and-Thruster-Mass-Curves
+		// https://forums.frontier.co.uk/threads/the-one-formula-to-rule-them-all-the-mechanics-of-shield-and-thruster-mass-curves.300225/
 		return (minMul + pow(min(1.0, (maxMass - mass) / (maxMass - minMass)), log((optMul - minMul) / (maxMul - minMul)) / log((maxMass - optMass) / (maxMass - minMass))) * (maxMul - minMul));
 	}; // getMassCurveMultiplier()
 	
 	
 	var getEffectiveDamageResistance = function(baseres, extrares, exemptres, bestres) {
-		// https://forums.frontier.co.uk/showthread.php/266235-Kinetic-Resistance-Calculation?p=4230114&viewfull=1#post4230114
-		// https://forums.frontier.co.uk/showthread.php/286097-Shield-Booster-Mod-Calculator?p=4998592&viewfull=1#post4998592
+		// https://forums.frontier.co.uk/threads/kinetic-resistance-calculation.266235/post-4230114
+		// https://forums.frontier.co.uk/threads/shield-booster-mod-calculator.286097/post-4998592
 		/* old
 		var threshold = 30;
 		var rawres = 1 - ((1 - baseres / 100) * (1 - extrares / 100));
@@ -705,7 +705,7 @@ window.edsy = new (function() {
 	
 	
 	var getEffectiveShieldBoostMultiplier = function(shieldbst) {
-		// https://forums.frontier.co.uk/showthread.php/314820-(very)-Experimental-shield-change?p=4895068&viewfull=1#post4895068
+		// https://forums.frontier.co.uk/threads/very-experimental-shield-change.314820/post-4895068
 		var i = (1 + (shieldbst / 100));
 	//	i = min(i, (1 - exp(-0.7 * i)) * 2.5); // proposed during 2.3 beta, but not implemented
 		return i;
@@ -713,7 +713,7 @@ window.edsy = new (function() {
 	
 	
 	var getPipDamageResistance = function(sys) {
-		// https://forums.frontier.co.uk/showthread.php/341916-2-3-The-Commanders-Changelog
+		// https://forums.frontier.co.uk/threads/2-3-the-commanders-changelog.341916/
 		return 60 * pow(sys / MAX_POWER_DIST, 0.85);
 	}; // getPipDamageResistance()
 	
