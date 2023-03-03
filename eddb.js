@@ -12,7 +12,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 var eddb = {
 	version : 308149913,
 	edsy_versions_db : [308149912,308149913,308149913,308149912], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20230202,
+	edsy_lastmodified_db : 20230303,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1634,7 +1634,7 @@ var eddb = {
 		
 		ucl_ammo : { name:'Ammo Capacity', maxgrade:1, mass:[100], ammomax:[50,80], rldtime:[10], mats:[ {mesc:1} ], fdname:'Misc_ChaffCapacity' }, // fake grade 2 to calibrate grade 1 minimum
 		
-		uhsl_ammo : { name:'Ammo Capacity', maxgrade:1, mass:[100], ammomax:[50,80], rldtime:[50], mats:[ {mesc:1, van:1, nio:1} ], fdname:'Misc_HeatSinkCapacity' }, // fake grade 2 to calibrate grade 1 minimum
+		uhsl_ammo : { name:'Ammo Capacity', maxgrade:1, mass:[100], ammomax:[40,60], rldtime:[50], mats:[ {mesc:1, van:1, nio:1} ], fdname:'Misc_HeatSinkCapacity' }, // fake grade 2 to calibrate grade 1 minimum // TODO: make sure new 40,60 range is still correct for low-roll heat sinks vs old 50,80
 		
 		upd_ammo : { name:'Ammo Capacity', maxgrade:1, mass:[100], ammomax:[50,80], rldtime:[10], mats:[ {mesc:1, van:1, nio:1} ], fdname:'Misc_PointDefenseCapacity' }, // fake grade 2 to calibrate grade 1 minimum
 		
@@ -2560,6 +2560,7 @@ var eddb = {
 		58030 : { mtype:'uex',  cost: 745950, name:'Enhanced Xeno Scanner',     class:0, rating:'C', mass:1.30, integ:56, pwrdraw:0.80,            boottime:2, scanrng:2000, maxangle:23.00, scantime:10, limit:'uex', fdid:128808878, fdname:'Hpt_XenoScannerMk2_Basic_Tiny', eddbid:1838 },
 		
 		52090 : { mtype:'uhsl', cost:   3500, name:'Heat Sink Launcher',        class:0, rating:'I', mass:1.30, integ:45, pwrdraw:0.20, passive:1, boottime:0, distdraw:2.00, rof:0.2, bstint:5.00, ammoclip:1, ammomax:2, rldtime:10.0, hsdur:10, thmdrain:100.0, ammocost:25, fdid:128049519, fdname:'Hpt_HeatSinkLauncher_Turret_Tiny', eddbid:886 },
+		52091 : { mtype:'uhsl', cost:  50000, name:'Caustic Sink Launcher',     class:0, rating:'I', mass:1.70, integ:45, pwrdraw:0.60, passive:1, boottime:0, distdraw:2.00, rof:0.2, bstint:5.00, ammoclip:1, ammomax:5, rldtime:10.0,                           ammocost:10, fdid:null, fdname:'Hpt_CausticSinkLauncher_Turret_Tiny', eddbid:null }, // Rescue Ship tech broker // verify: cost // TODO: fdid, fdname, eddbid
 		
 		57050 : { mtype:'ukws', cost:  13540, name:'Kill Warrant Scanner',      class:0, rating:'E', mass:1.30, integ:32, pwrdraw:0.20,            boottime:2, scanrng:2000, maxangle:15.00, scantime:10, limit:'ukws', fdid:128662530, fdname:'Hpt_CrimeScanner_Size0_Class1', eddbid:1237 },
 		57040 : { mtype:'ukws', cost:  40630, name:'Kill Warrant Scanner',      class:0, rating:'D', mass:1.30, integ:24, pwrdraw:0.40,            boottime:2, scanrng:2500, maxangle:15.00, scantime:10, limit:'ukws', fdid:128662531, fdname:'Hpt_CrimeScanner_Size0_Class2', eddbid:1238 },
