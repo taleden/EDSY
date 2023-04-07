@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308149912,308149912,308149911,308149912]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20230131;
+	var VERSIONS = [308149912,308149912,308149911,308149914]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20230407;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -2109,11 +2109,11 @@ window.edsy = new (function() {
 		}, // setNameTag()
 		
 		
-		getInaraURL: function() {
+		getInaraBuildURL: function() {
 			if (!this.inaraAcct || !this.inaraShip)
 				return null;
 			return ('https://inara.cz/cmdr-fleet/'+this.inaraAcct+'/'+this.inaraShip+'/');
-		}, // getInaraURL()
+		}, // getInaraBuildURL()
 		
 		
 		setInaraXref: function(acct, ship) {
@@ -2125,6 +2125,43 @@ window.edsy = new (function() {
 			this.inaraShip = ship;
 			return true;
 		}, // setInaraXref()
+		
+		
+		getInaraSearchURL: function() {
+			var sid = this.getShipID();
+			
+			// pre-flag stock modules that will come with the ship anyway
+			var ship = eddb.ship[sid];
+			var fdidFlag = {};
+			for (var slotgroup in this.slots) {
+				if (slotgroup !== 'ship') {
+					for (var slotnum = 0;  slotnum < ship.slots[slotgroup].length;  slotnum++) {
+						var mid = abs(ship.stock[slotgroup][slotnum]);
+						var module = cache.shipModules[sid][mid] || eddb.module[mid];
+						if (module && module.fdid) {
+							fdidFlag[module.fdid] = true;
+						}
+					}
+				}
+			}
+			
+			// identify all other modules in this build
+			var fdidList = [];
+			for (var slotgroup in this.slots) {
+				if (slotgroup !== 'ship') {
+					var slot;
+					for (var slotnum = 0;  slot = this.getSlot(slotgroup, slotnum);  slotnum++) {
+						var mid = slot.getModuleID();
+						var module = cache.shipModules[sid][mid] || eddb.module[mid];
+						if (module && module.fdid && !fdidFlag[module.fdid] && module.tag !== 'P') {
+							fdidFlag[module.fdid] = true;
+							fdidList.push(module.fdid);
+						}
+					}
+				}
+			}
+			return ('https://inara.cz/inapi/outfitsearch.php?m=' + fdidList.join(',') + (eddb.ship[sid].fdid ? ('&s=' + eddb.ship[sid].fdid) : ''));
+		}, // getInaraSearchURL()
 		
 		
 		getEDDBioURL: function() {
@@ -5239,10 +5276,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		tr.appendChild(td);
 		tbody.appendChild(tr);
 		
-		var export_eddbio = current.fit.getEDDBioURL();
-		var export_inara = current.fit.getInaraURL();
-		var export_edomh = current.fit.exportEDOMH();
-
+		var url_inara_search = current.fit.getInaraSearchURL();
+		var url_inara_export = current.fit.getInaraBuildURL();
+		var url_edomh_export = current.fit.exportEDOMH();
+		
 		var tr = document.createElement('tr');
 		var td = document.createElement('td');
 		td.appendChild(document.createTextNode('External'));
@@ -5253,24 +5290,24 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		div.className = 'export';
 		var link = document.createElement('a');
 		link.className = 'button text';
-		if (export_eddbio) {
-			link.href = export_eddbio;
+		if (url_inara_search) {
+			link.href = url_inara_search;
 			link.target = '_blank';
 		}
-		link.innerHTML = '<img src="eddbio.png" class="iconsvg"> EDDB.io';
+		link.innerHTML = '<img src="inara.png"> Search Inara';
 		div.appendChild(link);
-		if (export_inara) {
+		if (url_inara_export) {
 			var button = document.createElement('button');
 			button.className = 'text';
 			button.name = 'export_inara';
-			button.innerHTML = '<img src="inara.png"> Inara';
+			button.innerHTML = '<img src="inara.png"> Update Inara';
 			button.addEventListener('click', onUIFitExportInaraButtonClick);
 			div.appendChild(button);
 		}
 		var link = document.createElement('a');
 		link.className = 'button text';
-		if (export_edomh) {
-			link.href = "edomh://edsy/?" + b64Encode(pako.deflate(JSON.stringify(export_edomh), {to:'string'}));;
+		if (url_edomh_export) {
+			link.href = "edomh://edsy/?" + b64Encode(pako.deflate(JSON.stringify(url_edomh_export), {to:'string'}));;
 			link.target = '_blank';
 		}
 		link.innerHTML = '<img src="edomh.png" class="iconsvg"> EDOMH';
@@ -6670,7 +6707,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		updateUIFitStoredBuildControls(true, namehash);
 		document.forms.fit.elements.shipname.value = fit.getName();
 		document.forms.fit.elements.shipnametag.value = fit.getNameTag();
-		var inaraURL = fit.getInaraURL();
+		var inaraURL = fit.getInaraBuildURL();
 		document.getElementById('fit_header_export').style.display = (inaraURL ? '' : 'none');
 		document.forms.fit.elements.export_inara.style.display = (inaraURL ? '' : 'none');
 		updateUIFitPowerDist();
@@ -9222,7 +9259,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // updateUIAnalysisRetrofitMaterials()
 	
 	
-	var showUIRetrofitExportPopup = function(stepsText, matsText, reportJSON, eddbioURL, edomhURL) {
+	var showUIRetrofitExportPopup = function(stepsText, matsText, reportJSON, inaraURL, edomhURL) {
 		var trigger = document.getElementById('retrofit_export');
 		var table = showUITablePopup(null, trigger, false, false, false);
 		table.className = '';
@@ -9318,9 +9355,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		div.className = 'export';
 		var link = document.createElement('a');
 		link.className = 'button text';
-		link.href = eddbioURL;
+		link.href = inaraURL;
 		link.target = '_blank';
-		link.innerHTML = '<img src="eddbio.png" class="iconsvg"> EDDB.io';
+		link.innerHTML = '<img src="inara.png"> Inara';
 		div.appendChild(link);
 		var link = document.createElement('a');
 		link.className = 'button text';
@@ -9356,8 +9393,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		};
 		var cols = ['Build','Module','Action','Details'];
 		var stepsText = [cols.join('\t')];
-		var eddbioShips = {};
-		var eddbioModules = {};
+		var fdidShips = {};
+		var fdidModules = {};
 		var matTotal = {'':0};
 		for (var i = 0;  i < current.retrofit.jobs.length;  i++) {
 			var retroJSON = {
@@ -9421,10 +9458,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					stepsText.push(cols.join('\t'));
 					
 					if (steps[s].act === 'Buy') {
-						if (steps[s].sgrp === 'ship' && ship.eddbid) {
-							eddbioShips[ship.eddbid] = true;
-						} else if (steps[s].sgrp !== 'ship' && module.eddbid && module.tag !== 'P') {
-							eddbioModules[module.eddbid] = true;
+						if (steps[s].sgrp === 'ship' && ship.fdid) {
+							fdidShips[ship.fdid] = true;
+						} else if (steps[s].sgrp !== 'ship' && module.fdid && module.tag !== 'P') {
+							fdidModules[module.fdid] = true;
 						}
 					}
 					
@@ -9459,20 +9496,20 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			}
 		}
 		
-		// finalize eddb.io link
-		var eddbioURL = '';
-		var ids = Object.keys(eddbioShips);
+		// finalize Inara link
+		var inaraURL = '';
+		var ids = Object.keys(fdidShips);
 		if (ids.length > 0) {
 			ids.sort();
-			eddbioURL += (eddbioURL ? '&' : '?') + 's=' + ids.join(',');
+			inaraURL += (inaraURL ? '&' : '?') + 's=' + ids.join(',');
 		}
-		ids = Object.keys(eddbioModules);
+		ids = Object.keys(fdidModules);
 		if (ids.length > 0) {
 			ids.sort();
-			eddbioURL += (eddbioURL ? '&' : '?') + 'm=' + ids.join(',');
+			inaraURL += (inaraURL ? '&' : '?') + 'm=' + ids.join(',');
 		}
-		if (eddbioURL) {
-			eddbioURL = 'https://eddb.io/station' + eddbioURL;
+		if (inaraURL) {
+			inaraURL = 'https://inara.cz/inapi/outfitsearch.php' + inaraURL;
 		}
 		
 		// create EDOMH link, if possible
@@ -9513,7 +9550,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		
 		// show popup
-		showUIRetrofitExportPopup(stepsText.join('\n'), matsText.join('\n'), JSON.stringify(exportJSON), eddbioURL, edomhURL);
+		showUIRetrofitExportPopup(stepsText.join('\n'), matsText.join('\n'), JSON.stringify(exportJSON), inaraURL, edomhURL);
 	}; // onUIAnalysisRetrofitExportClick()
 	
 	
@@ -10306,7 +10343,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		if (e.target.name === 'outfitting_fit_stored') {
 			var inaraAcct = current.fit.inaraAcct;
 			var inaraShip = current.fit.inaraShip;
-			var inaraURL = current.fit.getInaraURL();
+			var inaraURL = current.fit.getInaraBuildURL();
 			if (setCurrentFitNameHash(e.target.value)) {
 				if (current.fit.setInaraXref(inaraAcct, inaraShip) && inaraURL) {
 					// TODO: not like this :X
@@ -10482,7 +10519,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	var onUIFitExportInaraButtonClick = function(e) {
 		e.preventDefault();
 		e.stopPropagation();
-		var inaraURL = current.fit.getInaraURL();
+		var inaraURL = current.fit.getInaraBuildURL();
 		if (!inaraURL)
 			return;
 		var form = document.createElement('form');
