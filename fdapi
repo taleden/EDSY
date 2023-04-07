@@ -111,9 +111,10 @@ try:
 	
 	
 	class FDAPIHandler:
-		EDSY_USERAGENT = 'EDCD-EDSY-3.5.3.4.1'
+		EDSY_USERAGENT = 'EDCD-EDSY-3.8.14.4.13'
 		EDSY_CLIENTID = '398bde95-e204-4b08-b837-eff7b5304ddb'
 		EDSY_URL_REDIRECT = 'https://edsy.org/dev/fdapi' if DEV else 'https://edsy.org/fdapi'
+		EDSY_SCOPE = 'auth capi' if DEV else 'capi'
 		FDAPI_TIMEOUT = 10
 		FDAPI_URL_AUTH = 'https://auth.frontierstore.net/auth'
 		FDAPI_URL_TOKEN = 'https://auth.frontierstore.net/token'
@@ -464,13 +465,13 @@ try:
 				self.SetCookie(COOKIE_VERIFIER, verifier_masked, SECS_PER_HOUR)
 				authurl = (
 					self.FDAPI_URL_AUTH +
-					'?scope=capi' +
+					'?scope=' + urllib.parse.quote_plus(self.EDSY_SCOPE) +
 					'&audience=all' +
-					'&client_id=' + self.EDSY_CLIENTID +
+					'&client_id=' + urllib.parse.quote_plus(self.EDSY_CLIENTID) +
 					'&response_type=code' +
-					'&code_challenge=' + challenge +
+					'&code_challenge=' + urllib.parse.quote_plus(challenge) +
 					'&code_challenge_method=S256' +
-					'&state=' + state +
+					'&state=' + urllib.parse.quote_plus(state) +
 					'&redirect_uri=' + urllib.parse.quote_plus(self.EDSY_URL_REDIRECT)
 				)
 			except Exception as exc:
