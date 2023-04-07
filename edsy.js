@@ -8721,23 +8721,26 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				var heatlevelBase = getEquilibriumHeatLevel(heatdismax, thmloadBase);
 				var time10 = getTimeUntilHeatLevel(heatcap, heatdismax, thmload, heatlevelBase, 1.0);
 				if (duration && (time10 > duration)) {
-					el.innerHTML = formatPctHTML(getHeatLevelAtTime(heatcap, heatdismax, thmload, heatlevelBase, duration) / 1.5, 0);
+					var heatpct = getHeatLevelAtTime(heatcap, heatdismax, thmload, heatlevelBase, duration) / 1.5;
+					el.innerHTML = ('<abbr title="' + formatPctText(heatpct, 6) + '">' + formatPctHTML(heatpct, 1) + '</abbr>');
 				} else {
 					var time15 = (heatcap / 2) / (thmload - heatdismax); // displayed heatlevel 66% -> 100% is actual heatlevel 1.0 -> 1.5
 					if (duration && ((time10 + time15) > duration)) {
-						el.innerHTML = formatPctHTML((2 + ((duration - time10) / time15)) / 3, 0);
+						var heatpct = (2 + ((duration - time10) / time15)) / 3;
+						el.innerHTML = ('<abbr title="' + formatPctText(heatpct, 6) + '">' + formatPctHTML(heatpct, 1) + '</abbr>');
 					} else if (duration) {
 						duration -= time10 + time15;
 						var heatlevelPeak = 1.5 + (duration * (thmload - heatdismax) / heatcap);
 						var timeCool = (heatlevelPeak - 1.5) / ((heatdismax - thmloadBase) / heatcap);
-						el.innerHTML = ('<abbr class="error" title="Peak heat level ' + formatPctText(heatlevelPeak / 1.5, 0) + '; over 100% for ' + formatNumText(duration + timeCool, 1) + 's">' + formatTimeHTML(time10 + time15, true) + '</abbr>');
+						el.innerHTML = ('<abbr class="error" title="Peak heat level ' + formatPctText(heatlevelPeak / 1.5, 1) + '; over 100% for ' + formatNumText(duration + timeCool, 1) + 's">' + formatTimeHTML(time10 + time15, true) + '</abbr>');
 					} else {
 						el.innerHTML = formatTimeHTML(time10 + time15, true);
 						el.className = 'error';
 					}
 				}
 			} else {
-				el.innerHTML = formatPctHTML(getEquilibriumHeatLevel(heatdismax, thmload) / 1.5, 0);
+				var heatpct = getEquilibriumHeatLevel(heatdismax, thmload) / 1.5;
+				el.innerHTML = ('<abbr title="' + formatPctText(heatpct, 6) + '">' + formatPctHTML(heatpct, 1) + '</abbr>');
 			}
 		} else {
 			el.innerHTML = '<small class="semantic">N/A</small>';
