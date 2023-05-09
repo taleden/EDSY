@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 308149913,
-	edsy_versions_db : [308149912,308149913,308149914,308149912], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20230407,
+	version : 308149915,
+	edsy_versions_db : [308149912,308149913,308149915,308149912], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20230509,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -2556,6 +2556,7 @@ var eddb = {
 		51060 : { mtype:'uec',  cost:  12500, name:'Electronic Countermeasure', class:0, rating:'F', mass:1.30, integ:20, pwrdraw:0.20, passive:1, boottime:0, ecmrng:3000, ecmdur:3, ecmpwr:4.00, ecmheat:4.0, ecmcool:10, fdid:128049516, fdname:'Hpt_ElectronicCountermeasure_Tiny', eddbid:885 },
 		
 		58061 : { mtype:'uex',  cost:  63000, name:'Shutdown Field Neutraliser',class:0, rating:'F', mass:1.30, integ:35, pwrdraw:0.20, passive:1, boottime:0, barrierrng:3000, barrierdur:1, barrierpwr:0.25, barriercool:10, fdid:128771884, fdname:'Hpt_AntiUnknownShutdown_Tiny', eddbid:1622 },
+		58052 : { mtype:'uex',  cost:      0, name:'Thargoid Pulse Neutraliser',class:0, rating:'E', mass:3.00, integ:70, pwrdraw:0.40, passive:1, boottime:0, barrierrng:   0, barrierdur:2, barrierpwr:0.33, barriercool:10, fdid:129022663, fdname:'Hpt_AntiUnknownShutdown_Tiny_V2', eddbid:null }, // Rescue Ship tech broker // verify: cost // TODO: eddbid
 		58050 : { mtype:'uex',  cost: 365700, name:'Xeno Scanner',              class:0, rating:'E', mass:1.30, integ:56, pwrdraw:0.20,            boottime:2, scanrng: 500, maxangle:23.00, scantime:10, limit:'uex', fdid:128793115, fdname:'Hpt_XenoScanner_Basic_Tiny', eddbid:1616 },
 		58030 : { mtype:'uex',  cost: 745950, name:'Enhanced Xeno Scanner',     class:0, rating:'C', mass:1.30, integ:56, pwrdraw:0.80,            boottime:2, scanrng:2000, maxangle:23.00, scantime:10, limit:'uex', fdid:128808878, fdname:'Hpt_XenoScannerMk2_Basic_Tiny', eddbid:1838 },
 		
