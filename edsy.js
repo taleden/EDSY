@@ -22,9 +22,7 @@ window.edsy = new (function() {
 	var TOLERANCE_TOUCH = 10;
 	var WEAPON_CHARGE = 0.0;
 	var GROUPS = ['hardpoint','utility','component','military','internal'];
-	var GROUP_LABEL = { hardpoint:'Hardpoints', utility:'Utility Mounts', component:'Core Internal', military:'Military', internal:'Optional Internal' };
 	var CORE_SLOT_FDNAME = ['Armour', 'PowerPlant', 'MainEngines', 'FrameShiftDrive', 'LifeSupport', 'PowerDistributor', 'Radar', 'FuelTank'];
-	var CORE_SLOT_NAME = ['Bulkhead', 'Power Plant', 'Thruster', 'Frame Shift Drive', 'Life Support', 'Power Distributor', 'Sensors', 'Fuel Tank'];
 	var CORE_SLOT_ABBR = ['BH','PP','TH','FD','LS','PD','SS','FT'];
 	var CORE_ABBR_SLOT = { BH:0,PP:1,TH:2,FD:3,LS:4,PD:5,SS:6,FT:7,
 	                            RB:1,TM:2,FH:3,EC:4,PC:5,     FS:7 };
@@ -108,6 +106,7 @@ window.edsy = new (function() {
 		303100 : { name:"3A Shield Gen, KR+TR",                  modulehash:"F7PcG05G0044sPc8wPccupDgvcQ",                     available:0 }, // CG reward // TODO: get sample to test import
 		111300 : { name:"1I DSS \"V1\", ERx2",                   modulehash:"H2jwG-9G_W1P000",                                 available:1 }, // human tech broker
 	};
+	var LANGS = ["en"]; // TODO ["en","zh","cs","fr","de","hu","it","ja","pt","ru","es"];
 	
 	var cache = {
 		attribute: {},
@@ -134,11 +133,14 @@ window.edsy = new (function() {
 		discounts: [],
 		option: {},
 		template: {},
+		lang: null,
+		translation: {},
 	};
 	var current = {
 		dev: false,
 		beta: false,
 		locale: undefined,
+		lang: undefined,
 		hashlock: false,
 		popup: {
 			element: null,
@@ -2471,7 +2473,8 @@ window.edsy = new (function() {
 			var wepcap = this.getSlot('component', CORE_ABBR_SLOT.PD).getEffectiveAttrValue('wepcap');
 			var weapons = [];
 			var slot_isg = null;
-			for (var slotgroup in GROUP_LABEL) {
+			for (var sg = 0;  sg < GROUPS.length;  sg++) {
+				var slotgroup = GROUPS[sg];
 				for (var slotnum = 0;  slot = this.getSlot(slotgroup, slotnum);  slotnum++) {
 					if (module = slot.getModule()) {
 						var mtypeid = module.mtype;
@@ -2714,7 +2717,8 @@ window.edsy = new (function() {
 			// collect slots for each group (but combine military with internal for this purpose)
 			var groupSlots1 = {};
 			var groupSlots2 = {};
-			for (var slotgroup in GROUP_LABEL) {
+			for (var sg = 0;  sg < GROUPS.length;  sg++) {
+				var slotgroup = GROUPS[sg];
 				var compgroup = ((slotgroup === 'military') ? 'internal' : slotgroup);
 				groupSlots1[compgroup] = groupSlots1[compgroup] || [];
 				groupSlots2[compgroup] = groupSlots2[compgroup] || [];
@@ -4687,46 +4691,46 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // sortPrepLength()
 	
 	var UI_SHIPYARD_COL = {
-		label           : { header:'Build',           abbr:'Stored build label',                                        css:'text',sort:[String],       nochange:1,              render:function(build) { return build.getName(); } },
-		name_ship       : { header:'Ship',            abbr:'Ship hull name',                                            css:'text',sort:[String],       nochange:1,              shipattr:'name' },
-		cost            : { header:'Price',                                                                             css:'tar', sort:[parseNumText], attr:'cost',    scale:0, buildstat:'cost' },
-		szcls           : { header:'Sz',              abbr:'Landing pad size',                                          css:'tac', sort:[sortPrepRevAlpha],                      render:function(build) { return '?SML'[(eddb.ship[build.getShipID()] || EMPTY_OBJ).class || 0]; } },
-		crew            : { header:'Crw',                                                                               css:'tar', sort:[parseNumText], attr:'crew',             shipattr:'crew' },
-		masslock        : { header:'MLF',                                                                               css:'tar', sort:[parseNumText], attr:'masslock',         shipattr:'masslock' },
-		mass_hull       : { header:'Hull',            abbr:'Hull mass',                        colgroup:'Mass',         css:'tar', sort:[parseNumText], attr:'mass',    scale:0, buildstat:'mass_hull' },
-		mass_unl        : { header:'Unl',             abbr:'Unladen mass',                     colgroup:'Mass',         css:'tar', sort:[parseNumText], attr:'mass',    scale:0, buildstat:'mass_unladen' },
-		mass_ldn        : { header:'Ldn',             abbr:'Laden mass',                       colgroup:'Mass',         css:'tar', sort:[parseNumText], attr:'mass',    scale:0, buildstat:'mass_laden' },
-		jump_unl        : { header:'Unl',             abbr:'Unladen jump range',               colgroup:'Jump',         css:'tar', sort:[parseNumText],                 scale:1, buildstat:'_jump_unladen' },
-		jump_ldn        : { header:'Ldn',             abbr:'Laden jump range',                 colgroup:'Jump',         css:'tar', sort:[parseNumText],                 scale:1, buildstat:'_jump_laden' },
-		range_unl       : { header:'Unl',             abbr:'Unladen fuel tank range',          colgroup:'Range',        css:'tar', sort:[parseNumText],                 scale:1, buildstat:'_range_unladen' },
-		range_ldn       : { header:'Ldn',             abbr:'Laden fuel tank range',            colgroup:'Range',        css:'tar', sort:[parseNumText],                 scale:1, buildstat:'_range_laden' },
-		topspd          : { header:'Spd',             abbr:'Thruster speed',                   colgroup:' ',            css:'tar', sort:[parseNumText], attr:'topspd',           buildstat:'_speed' },
-		bstspd          : { header:'Bst',             abbr:'Boost speed',                      colgroup:' ',            css:'tar', sort:[parseNumText], attr:'bstspd',           buildstat:'_boost' },
-		shields         : { header:'Shd',             abbr:'Shield strength',                  colgroup:'  ',           css:'tar', sort:[parseNumText], attr:'shields',          buildstat:'_shields' },
-		armour          : { header:'Arm',             abbr:'Armour strength',                  colgroup:'  ',           css:'tar', sort:[parseNumText], attr:'armour',           buildstat:'_armour' },
-		hardness        : { header:'Hrd',                                                      colgroup:'  ',           css:'tar', sort:[parseNumText], attr:'hardness',         shipattr:'hardness' },
-		fuelcap         : { header:'Fuel',                                                     colgroup:' ',            css:'tar', sort:[parseNumText], attr:'fuelcap', scale:0, buildstat:'fuelcap' },
-		cargocap        : { header:'Crgo',                                                     colgroup:' ',            css:'tar', sort:[parseNumText], attr:'cargocap',         buildstat:'cargocap' },
-		cabincap        : { header:'Psgr',                                                     colgroup:' ',            css:'tar', sort:[parseNumText], attr:'cabincap',         buildstat:'cabincap' },
-		slots_hardpoint : { header:'Hardpoints',      abbr:'Hardpoint mount sizes',            colgroup:'Module Slots', css:'tal', sort:[sortPrepRevAlpha,sortPrepLength],       render:function(build) { return formatShipyardSlots(build, 'hardpoint', 'USMLH'); } },
-		slots_utility   : { header:'Utl',             abbr:'Number of utility mounts',         colgroup:'Module Slots ',css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.utility.length; } },
-		slots_core_0    : { header:CORE_SLOT_ABBR[0], abbr:(CORE_SLOT_NAME[0] + ' slot size'), colgroup:'Module Slots', css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[0]; } },
-		slots_core_1    : { header:CORE_SLOT_ABBR[1], abbr:(CORE_SLOT_NAME[1] + ' slot size'), colgroup:'Module Slots', css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[1]; } },
-		slots_core_2    : { header:CORE_SLOT_ABBR[2], abbr:(CORE_SLOT_NAME[2] + ' slot size'), colgroup:'Module Slots', css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[2]; } },
-		slots_core_3    : { header:CORE_SLOT_ABBR[3], abbr:(CORE_SLOT_NAME[3] + ' slot size'), colgroup:'Module Slots', css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[3]; } },
-		slots_core_4    : { header:CORE_SLOT_ABBR[4], abbr:(CORE_SLOT_NAME[4] + ' slot size'), colgroup:'Module Slots', css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[4]; } },
-		slots_core_5    : { header:CORE_SLOT_ABBR[5], abbr:(CORE_SLOT_NAME[5] + ' slot size'), colgroup:'Module Slots', css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[5]; } },
-		slots_core_6    : { header:CORE_SLOT_ABBR[6], abbr:(CORE_SLOT_NAME[6] + ' slot size'), colgroup:'Module Slots', css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[6]; } },
-		slots_core_7    : { header:CORE_SLOT_ABBR[7], abbr:(CORE_SLOT_NAME[7] + ' slot size'), colgroup:'Module Slots', css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[7]; } },
-		slots_military  : { header:'Mil',             abbr:'Military internal slot sizes',     colgroup:'Module Slots ',css:'tal', sort:[String,sortPrepLength],                 render:function(build) { return formatShipyardSlots(build, 'military');} },
-		slots_internal  : { header:'Opt Internal',    abbr:'Optional internal slot sizes',     colgroup:'Module Slots', css:'tal', sort:[String,sortPrepLength],                 render:function(build) { return formatShipyardSlots(build, 'internal');} },
-		dps             : { header:'DPS',             abbr:'Total DPS',                        colgroup:'Weapons',      css:'tar', sort:[parseNumText], attr:'dps',     scale:1, buildstat:'dps' },
-		dps_abs         : { header:'Abs',             abbr:'Absolute DPS portion',             colgroup:'Weapons',      css:'tar', sort:[parseNumText],                          render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_abs') / dps, 0) : ''); } },
-		dps_kin         : { header:'Kin',             abbr:'Kinetic DPS portion',              colgroup:'Weapons',      css:'tar', sort:[parseNumText],                          render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_kin') / dps, 0) : ''); } },
-		dps_thm         : { header:'Thm',             abbr:'Thermal DPS portion',              colgroup:'Weapons',      css:'tar', sort:[parseNumText],                          render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_thm') / dps, 0) : ''); } },
-		dps_exp         : { header:'Exp',             abbr:'Explosive DPS portion',            colgroup:'Weapons',      css:'tar', sort:[parseNumText],                          render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_exp') / dps, 0) : ''); } },
-		dps_axe         : { header:'AXe',             abbr:'Anti-Xeno DPS portion',            colgroup:'Weapons',      css:'tar', sort:[parseNumText],                          render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_axe') / dps, 0) : ''); } },
-		dps_cau         : { header:'Cau',             abbr:'Caustic DPS portion',              colgroup:'Weapons',      css:'tar', sort:[parseNumText],                          render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_cau') / dps, 0) : ''); } },
+		label           : { header:'ui-shipyard-build-label',         abbr:'ui-shipyard-build-desc',                                               css:'text',sort:[String],       nochange:1,              render:function(build) { return build.getName(); } },
+		name_ship       : { header:'ui-shipyard-ship-label',          abbr:'ui-shipyard-ship-desc',                                                css:'text',sort:[String],       nochange:1,              shipattr:'name' },
+		cost            : { header:'ui-shipyard-cost-label',                                                                                       css:'tar', sort:[parseNumText], attr:'cost',    scale:0, buildstat:'cost' },
+		szcls           : { header:'ui-shipyard-size-label',          abbr:'ui-shipyard-size-desc',                                                css:'tac', sort:[sortPrepRevAlpha],                      render:function(build) { return '?SML'[(eddb.ship[build.getShipID()] || EMPTY_OBJ).class || 0]; } },
+		crew            : { header:'ui-shipyard-crew-label',                                                                                       css:'tar', sort:[parseNumText], attr:'crew',             shipattr:'crew' },
+		masslock        : { header:'ui-shipyard-masslock-label',                                                                                   css:'tar', sort:[parseNumText], attr:'masslock',         shipattr:'masslock' },
+		mass_hull       : { header:'ui-shipyard-mass-hull-label',     abbr:'ui-shipyard-mass-hull-desc',     colgroup:'ui-shipyard-mass-label',    css:'tar', sort:[parseNumText], attr:'mass',    scale:0, buildstat:'mass_hull' },
+		mass_unl        : { header:'ui-shipyard-mass-unladen-label',  abbr:'ui-shipyard-mass-unladen-desc',  colgroup:'ui-shipyard-mass-label',    css:'tar', sort:[parseNumText], attr:'mass',    scale:0, buildstat:'mass_unladen' },
+		mass_ldn        : { header:'ui-shipyard-mass-laden-label',    abbr:'ui-shipyard-mass-laden-desc',    colgroup:'ui-shipyard-mass-label',    css:'tar', sort:[parseNumText], attr:'mass',    scale:0, buildstat:'mass_laden' },
+		jump_unl        : { header:'ui-shipyard-jump-unladen-label',  abbr:'ui-shipyard-jump-unladen-desc',  colgroup:'ui-shipyard-jump-label',    css:'tar', sort:[parseNumText],                 scale:1, buildstat:'_jump_unladen' },
+		jump_ldn        : { header:'ui-shipyard-jump-laden-label',    abbr:'ui-shipyard-jump-laden-desc',    colgroup:'ui-shipyard-jump-label',    css:'tar', sort:[parseNumText],                 scale:1, buildstat:'_jump_laden' },
+		range_unl       : { header:'ui-shipyard-range-unladen-label', abbr:'ui-shipyard-range-unladen-desc', colgroup:'ui-shipyard-range-label',   css:'tar', sort:[parseNumText],                 scale:1, buildstat:'_range_unladen' },
+		range_ldn       : { header:'ui-shipyard-range-laden-label',   abbr:'ui-shipyard-range-laden-desc',   colgroup:'ui-shipyard-range-label',   css:'tar', sort:[parseNumText],                 scale:1, buildstat:'_range_laden' },
+		topspd          : { header:'ui-shipyard-speed-label',         abbr:'ui-shipyard-speed-desc',         colgroup:' ',                         css:'tar', sort:[parseNumText], attr:'topspd',           buildstat:'_speed' },
+		bstspd          : { header:'ui-shipyard-boost-label',         abbr:'ui-shipyard-boost-desc',         colgroup:' ',                         css:'tar', sort:[parseNumText], attr:'bstspd',           buildstat:'_boost' },
+		shields         : { header:'ui-shipyard-shield-label',        abbr:'ui-shipyard-shield-desc',        colgroup:'  ',                        css:'tar', sort:[parseNumText], attr:'shields',          buildstat:'_shields' },
+		armour          : { header:'ui-shipyard-armour-label',        abbr:'ui-shipyard-armour-desc',        colgroup:'  ',                        css:'tar', sort:[parseNumText], attr:'armour',           buildstat:'_armour' },
+		hardness        : { header:'ui-shipyard-hardness-label',                                             colgroup:'  ',                        css:'tar', sort:[parseNumText], attr:'hardness',         shipattr:'hardness' },
+		fuelcap         : { header:'ui-shipyard-fuel-label',                                                 colgroup:' ',                         css:'tar', sort:[parseNumText], attr:'fuelcap', scale:0, buildstat:'fuelcap' },
+		cargocap        : { header:'ui-shipyard-cargo-label',                                                colgroup:' ',                         css:'tar', sort:[parseNumText], attr:'cargocap',         buildstat:'cargocap' },
+		cabincap        : { header:'ui-shipyard-passenger-label',                                            colgroup:' ',                         css:'tar', sort:[parseNumText], attr:'cabincap',         buildstat:'cabincap' },
+		slots_hardpoint : { header:'ui-shipyard-hardpoint-label',     abbr:'ui-shipyard-hardpoint-desc',     colgroup:'ui-shipyard-slots-label',   css:'tal', sort:[sortPrepRevAlpha,sortPrepLength],       render:function(build) { return formatShipyardSlots(build, 'hardpoint', 'USMLH'); } },
+		slots_utility   : { header:'ui-shipyard-utility-label',       abbr:'ui-shipyard-utility-desc',       colgroup:'ui-shipyard-slots-label ',  css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.utility.length; } },
+		slots_core_0    : { header:'ui-shipyard-core-bh-label',       abbr:'ui-shipyard-core-bh-desc',       colgroup:'ui-shipyard-slots-label',   css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[0]; } },
+		slots_core_1    : { header:'ui-shipyard-core-pp-label',       abbr:'ui-shipyard-core-pp-desc',       colgroup:'ui-shipyard-slots-label',   css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[1]; } },
+		slots_core_2    : { header:'ui-shipyard-core-th-label',       abbr:'ui-shipyard-core-th-desc',       colgroup:'ui-shipyard-slots-label',   css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[2]; } },
+		slots_core_3    : { header:'ui-shipyard-core-fd-label',       abbr:'ui-shipyard-core-fd-desc',       colgroup:'ui-shipyard-slots-label',   css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[3]; } },
+		slots_core_4    : { header:'ui-shipyard-core-ls-label',       abbr:'ui-shipyard-core-ls-desc',       colgroup:'ui-shipyard-slots-label',   css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[4]; } },
+		slots_core_5    : { header:'ui-shipyard-core-pd-label',       abbr:'ui-shipyard-core-pd-desc',       colgroup:'ui-shipyard-slots-label',   css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[5]; } },
+		slots_core_6    : { header:'ui-shipyard-core-ss-label',       abbr:'ui-shipyard-core-ss-desc',       colgroup:'ui-shipyard-slots-label',   css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[6]; } },
+		slots_core_7    : { header:'ui-shipyard-core-ft-label',       abbr:'ui-shipyard-core-ft-desc',       colgroup:'ui-shipyard-slots-label',   css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[7]; } },
+		slots_military  : { header:'ui-shipyard-military-label',      abbr:'ui-shipyard-military-desc',      colgroup:'ui-shipyard-slots-label ',  css:'tal', sort:[String,sortPrepLength],                 render:function(build) { return formatShipyardSlots(build, 'military');} },
+		slots_internal  : { header:'ui-shipyard-internal-label',      abbr:'ui-shipyard-internal-desc',      colgroup:'ui-shipyard-slots-label',   css:'tal', sort:[String,sortPrepLength],                 render:function(build) { return formatShipyardSlots(build, 'internal');} },
+		dps             : { header:'ui-shipyard-dps-label',           abbr:'ui-shipyard-dps-desc',           colgroup:'ui-shipyard-weapons-label', css:'tar', sort:[parseNumText], attr:'dps',     scale:1, buildstat:'dps' },
+		dps_abs         : { header:'ui-shipyard-dps-absolute-label',  abbr:'ui-shipyard-dps-absolute-desc',  colgroup:'ui-shipyard-weapons-label', css:'tar', sort:[parseNumText],                          render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_abs') / dps, 0) : ''); } },
+		dps_kin         : { header:'ui-shipyard-dps-kinetic-label',   abbr:'ui-shipyard-dps-kinetic-desc',   colgroup:'ui-shipyard-weapons-label', css:'tar', sort:[parseNumText],                          render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_kin') / dps, 0) : ''); } },
+		dps_thm         : { header:'ui-shipyard-dps-thermal-label',   abbr:'ui-shipyard-dps-thermal-desc',   colgroup:'ui-shipyard-weapons-label', css:'tar', sort:[parseNumText],                          render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_thm') / dps, 0) : ''); } },
+		dps_exp         : { header:'ui-shipyard-dps-explosive-label', abbr:'ui-shipyard-dps-explosive-desc', colgroup:'ui-shipyard-weapons-label', css:'tar', sort:[parseNumText],                          render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_exp') / dps, 0) : ''); } },
+		dps_axe         : { header:'ui-shipyard-dps-antixeno-label',  abbr:'ui-shipyard-dps-antixeno-desc',  colgroup:'ui-shipyard-weapons-label', css:'tar', sort:[parseNumText],                          render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_axe') / dps, 0) : ''); } },
+		dps_cau         : { header:'ui-shipyard-dps-caustic-label',   abbr:'ui-shipyard-dps-caustic-desc',   colgroup:'ui-shipyard-weapons-label', css:'tar', sort:[parseNumText],                          render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_cau') / dps, 0) : ''); } },
 	}; // UI_SHIPYARD_COL{}
 	
 	var UI_SHIPYARD_SHIPS_COLS = [
@@ -4780,7 +4784,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			var button = document.createElement('button');
 			button.style.margin = '0.5em';
 			button.style.padding = '0.125em 0.25em';
-			button.innerHTML = 'Copy from Live Site';
+			button.setAttribute("edsy-text", "ui-shipyard-copy-live");
+			button.innerText = cache.translation['ui-shipyard-copy-live'];
 			button.addEventListener('click', onUIShipyardStoredCopyLiveClick);
 			document.getElementById('shipyard_storedbuilds_container').appendChild(button);
 		}
@@ -4790,7 +4795,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	var onUIShipyardStoredCopyLiveClick = function(e) {
 		e.stopPropagation();
 		e.preventDefault();
-		if (current.beta && confirm('Copy builds from live site storage?\nAny matching beta or dev site builds will be overwritten.')) {
+		if (current.beta && confirm(cache.translation['ui-shipyard-copy-live-confirm'])) {
 			readStoredBuilds(true);
 			updateUIShipyardStoredBuilds();
 			updateUIFitStoredBuilds();
@@ -4815,7 +4820,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					th.colSpan = colspan;
 					th.className = (colgroup ? 'colgroup' : '');
 					var span = document.createElement('span');
-					span.innerHTML = (colgroup || '');
+					if (colgroup) {
+						span.setAttribute("edsy-text", colgroup);
+						span.innerText = cache.translation[colgroup];
+					}
 					th.appendChild(span);
 					tr.appendChild(th);
 				}
@@ -4836,8 +4844,13 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			if (col.header) {
 				var span = document.createElement('span');
 				var abbr = document.createElement('abbr');
-				abbr.innerHTML = col.header;
-				abbr.title = (col.abbr || (cache.attribute[col.attr] || EMPTY_OBJ).desc || '');
+				abbr.setAttribute("edsy-text", col.header);
+				abbr.innerText = cache.translation[col.header];
+				var key = col.abbr || (col.attr ? ("attr-" + col.attr + "-desc") : null);
+				if (key) {
+					abbr.setAttribute("edsy-title", key);
+					abbr.title = cache.translation[key];
+				}
 				span.appendChild(abbr);
 				if (col.sort) {
 					var label = document.createElement('label');
@@ -4859,6 +4872,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		thead.appendChild(tr);
 		
+		updateTranslations(thead);
 		return thead;
 	}; // createUIShipyardHeader()
 	
@@ -5109,7 +5123,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		document.getElementById('outfitting_fit_ship_hull').className = (isNaN(modid) ? '' : 'dragerror');
 		document.getElementById('outfitting_fit_ship_hatch').className = (isNaN(modid) ? '' : 'dragerror');
-		for (var slotgroup in GROUP_LABEL) {
+		for (var sg = 0;  sg < GROUPS.length;  sg++) {
+			var slotgroup = GROUPS[sg];
 			var slot;
 			for (var slotnum = 0;  slot = current.fit.getSlot(slotgroup, slotnum);  slotnum++) {
 				var tr = document.getElementById('outfitting_fit_slot_' + slotgroup + '_' + slotnum);
@@ -6243,7 +6258,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			divGroup.id = 'outfitting_modules_group_' + group;
 			divGroup.className = 'group ' + group;
 			var header = document.createElement('header');
-			header.innerHTML = GROUP_LABEL[GROUPS[g]];
+			header.innerHTML = cache.translation["ui-slotgroup-" + GROUPS[g]];
 			divGroup.appendChild(header);
 			
 			for (var t = 0;  t < cache.groupMtypes[group].length;  t++) {
@@ -6495,7 +6510,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			th.className = 'outfitting_fit_module';
 			var div = document.createElement('div');
 			var span = document.createElement('span');
-			span.innerHTML = GROUP_LABEL[group];
+			span.innerHTML = cache.translation["ui-slotgroup-" + group];
 			div.appendChild(span);
 			th.appendChild(div);
 			tr.appendChild(th);
@@ -6714,7 +6729,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		updateUIFitShip();
 		updateUIFitSlot('ship', 'hull');
 		updateUIFitSlot('ship', 'hatch');
-		for (var slotgroup in GROUP_LABEL) {
+		for (var sg = 0;  sg < GROUPS.length;  sg++) {
+			var slotgroup = GROUPS[sg];
 			for (var slotnum = 0;  fit.getSlot(slotgroup, slotnum);  slotnum++) {
 				updateUIFitSlot(slotgroup, slotnum);
 			}
@@ -7128,7 +7144,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		
 		// create or update slot rows
-		for (var slotgroup in GROUP_LABEL) {
+		for (var sg = 0;  sg < GROUPS.length;  sg++) {
+			var slotgroup = GROUPS[sg];
 			var tbody = document.getElementById('outfitting_fit_' + slotgroup);
 			var tr;
 			var slotnum = 0;
@@ -7159,7 +7176,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	var updateUIFitDiscounts = function(discounts) {
 		var slot;
-		for (var slotgroup in GROUP_LABEL) {
+		for (var sg = 0;  sg < GROUPS.length;  sg++) {
+			var slotgroup = GROUPS[sg];
 			for (var slotnum = 0;  slot = current.fit.getSlot(slotgroup, slotnum);  slotnum++) {
 				slot.setDiscounts(discounts);
 			}
@@ -7215,7 +7233,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		if (!limitSlots)
 			limitSlots = current.fit.getLimitedSlots();
 		var slot;
-		for (var slotgroup in GROUP_LABEL) {
+		for (var sg = 0;  sg < GROUPS.length;  sg++) {
+			var slotgroup = GROUPS[sg];
 			for (var slotnum = 0;  slot = current.fit.getSlot(slotgroup, slotnum);  slotnum++) {
 				var limit = (slot.getModule() || EMPTY_OBJ).limit;
 				var limitmax = (eddb.limit[limit] || 99) + (current.fit.getStat('unlimit')[limit] || 0);
@@ -7482,7 +7501,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		document.getElementById('outfitting_modules_picker').className = (
 			slotgroup +
 			((slotgroup === 'component') ? (' component_' + CORE_SLOT_ABBR[slotnum]) : '') +
-			(GROUP_LABEL[slotgroup] ? (' size' + ship.slots[slotgroup][slotnum]) : ('_' + slotnum)) +
+			((GROUPS.indexOf(slotgroup) >= 0) ? (' size' + ship.slots[slotgroup][slotnum]) : ('_' + slotnum)) +
 			(reserved ? ' reserved' : '')
 		);
 		if (reserved) {
@@ -7492,7 +7511,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		var slot = current.fit.getSlot(slotgroup, slotnum);
 		var modid = slot.getModuleID();
-		if (GROUP_LABEL[slotgroup]) {
+		if (GROUPS.indexOf(slotgroup) >= 0) {
 			var namehash = '';
 			var modulehash = slot.getStoredHash();
 			for (var nh in (current.stored.moduleNamehashStored[modid] || EMPTY_OBJ)) {
@@ -10676,7 +10695,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			var slotgroup = tokens[0];
 			var slotnum = tokens[1];
 			var modid = current.fit.getSlot(slotgroup, slotnum).getModuleID();
-			if (!GROUP_LABEL[slotgroup] || slotgroup === 'component' || !modid) {
+			if ((GROUPS.indexOf(slotgroup) < 0) || slotgroup === 'component' || !modid) {
 				e.preventDefault();
 				return;
 			}
@@ -11272,6 +11291,58 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // verifyVersionSync()
 	
 	
+	var loadTranslations = async function() {
+		var lang = current.lang;
+		if (cache.lang == lang)
+			return;
+		
+		var response = await fetch("lang-" + lang + ".jsonc");
+		if (!response.ok) {
+			if (lang != LANGS[0]) {
+				current.lang = LANGS[0];
+				loadTranslations();
+			}
+			throw new Error("failed to load " + lang + " translations");
+		}
+		var text = await response.text();
+		text = text.replace(/(\/\/[^"]*|\/\*[^"]*\*\/\s*)$/gm, '');
+		cache.lang = lang;
+		cache.translation = JSON.parse(text);
+	}; // loadTranslations()
+	
+	
+	var updateTranslations = function(doc) {
+		var total = 0, found = 0, matched = 0, mismatched = {};
+		var attrs = { "edsy-text": "innerText", "edsy-title": "title" };
+		for (var keyattr in attrs) {
+			var setattr = attrs[keyattr];
+			(doc || document).querySelectorAll("["+keyattr+"]").forEach(function (el) {
+				total++;
+				var key = el.getAttribute(keyattr);
+				var value = cache.translation[key];
+				if (value !== undefined) {
+					found++;
+					if (el[setattr] == value) {
+						matched++;
+						if (current.dev) el[setattr] = cache.lang;
+					} else {
+						mismatched[key] = 1;
+						el[setattr] = value;
+					}
+				} else console.log("WARNING: no translation for '" + key + "'");
+			});
+		}
+		if (current.dev) {
+			(doc || document).querySelectorAll("abbr[title]").forEach(function (el) {
+				if (!el.hasAttribute("edsy-title"))
+					console.log("WARNING: <ABBR> "+el.outerHTML+" has no localization");
+			});
+			console.log("updateTranslations(): " + total + " total, " + found + " found, " + matched + " matched (" + (total - matched) + " discrepancies)");
+			console.log(Object.keys(mismatched).join("\n"));
+		}
+	}; // updateTranslations()
+	
+	
 	var initUIEventHandlers = function() {
 		window.addEventListener('resize', onWindowResize);
 		if (cache.feature.history)
@@ -11373,7 +11444,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		setTimeout(updateUIStatsPanels, 2);
 	}; // initUIFinal()
 	
-	
+
 	var onDOMContentLoaded = function(e) {
 		// add popup events now, in case we need them for the version sync
 		document.getElementById('popup_modal').addEventListener('keydown', onUIModalKeydownCapture, true);
@@ -11414,6 +11485,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		
 		// process remaining initialization asynchronously so that the loading animation can run
 		var steps = [
+			loadTranslations,
+			updateTranslations,
+			
 			// initialize UI
 			initUIShipyardShips,
 			initUIShipyardStoredBuilds,
@@ -11438,10 +11512,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			initUIFinal,
 		];
 		var timings = [];
-		var init = function() {
+		var init = async function() {
 			var step = steps.shift();
 			var t0 = Date.now();
-			step();
+			await step();
 			timings.push(step.name+':'+(Date.now()-t0));
 			if (steps.length > 0)
 				setTimeout(init, 0);
@@ -11456,6 +11530,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	current.dev = (window.location.protocol === 'file:') || (window.location.pathname.indexOf('/dev/') >= 0);
 	current.beta = current.dev || (window.location.pathname.indexOf('/beta/') >= 0);
 	current.locale = ((window.navigator.languages || EMPTY_ARR)[0] || window.navigator.userLanguage || window.navigator.language || window.navigator.browserLanguage || window.navigator.systemLanguage || undefined);
+	current.lang = (current.locale ? current.locale.substr(0,2) : undefined);
+	if (LANGS.indexOf(current.lang) < 0)
+		current.lang = LANGS[0];
 	
 	// initialize browser features
 	cache.feature.history = false;
