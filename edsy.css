@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 
 :root {
-	--edsy-versions-css: v-308149912-308149913-308149913-308149912; /* HTML,CSS,DB,JS */
-	--edsy-lastmodified-css: d-20230202;
+	--edsy-versions-css: v-308159902-308159902-308159902-308159902; /* HTML,CSS,DB,JS */
+	--edsy-lastmodified-css: d-20230601;
 	
 	--colorblack: black;
 	--colorwhite: white;
@@ -49,6 +49,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 	--fontcaps: 1rem 'EuroCaps', 'Verdana', 'Geneva', sans-serif;
 	--fonttext: 0.875rem 'Sintony', 'Helvetica', 'Arial', sans-serif;
 	--fontfixed: 0.875rem 'Telegrama', 'Courier New', 'Courier', monospace;
+	
+	--textempty: '(empty)';
 }
 
 @font-face {
@@ -648,7 +650,9 @@ TABLE.striped SMALL:not(.semantic) {
 TABLE.striped BUTTON {
 	background-color: transparent;
 }
+TABLE.striped A.label,
 TABLE.striped BUTTON.label {
+	display: block;
 	width: 100%;
 	max-width: 100%;
 	font: var(--fonttext);
@@ -1303,7 +1307,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 #outfitting_modules_picker .togglebutton INPUT + DIV:empty::after {
 	display: inline;
-	content: '(empty)';
+	content: var(--textempty);
 }
 #outfitting_modules_picker .togglebutton INPUT:checked + DIV {
 	border-color: var(--colororange5);
@@ -1879,7 +1883,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 
 #outfitting_fit_slots .togglebutton INPUT + DIV SPAN:empty::after {
 	display: inline;
-	content: '(empty)';
+	content: var(--textempty);
 	color: var(--colororange3);
 }
 
