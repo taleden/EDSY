@@ -14,8 +14,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 -->
 		<title edsy-text="edsy">EDSY</title>
 		<meta name="application-name" content="EDSY">
-		<meta name="edsy-versions-html" id="edsy_versions_html" content="308149912,308149912,308119901,308149912"><!-- HTML,CSS,DB,JS -->
-		<meta name="last-modified" id="last_modified" content="20230131">
+		<meta name="edsy-versions-html" id="edsy_versions_html" content="308159902,308159902,308159902,308159902"><!-- HTML,CSS,DB,JS -->
+		<meta name="last-modified" id="last_modified" content="20230601">
 		<meta name="author" content="taleden">
 		<meta name="description" content="EDSY is a ship outfitting tool for Elite Dangerous">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -343,9 +343,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 												</div>
 											</div>
 											<div id="engineering_rollbuttons">
-												<button name="blueprint_roll_preset1" value="0.5" edsy-text="50-percent">50%</button>
-												<button name="blueprint_roll_preset2" value="0.8" edsy-text="80-percent">80%</button>
-												<button name="blueprint_roll_preset3" value="1.0" edsy-text="100-percent">100%</button>
+												<button name="blueprint_roll_preset1" value="0.5" edsy-vals="{&quot;number&quot;:0.5,&quot;number%&quot;:true}" edsy-text="interp-number">50%</button>
+												<button name="blueprint_roll_preset2" value="0.8" edsy-vals="{&quot;number&quot;:0.8,&quot;number%&quot;:true}" edsy-text="interp-number">80%</button>
+												<button name="blueprint_roll_preset3" value="1.0" edsy-vals="{&quot;number&quot;:1.0,&quot;number%&quot;:true}" edsy-text="interp-number">100%</button>
 											</div>
 										</div>
 										<div id="details_special"></div>
@@ -354,7 +354,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 							</div>
 							<div id="outfitting_details_buttons">
 								<button id="outfitting_details_button_back" name="back" edsy-text="ui-button-back">Back</button>
-								<button id="outfitting_details_button_replace" name="replace"></button>
+								<button id="outfitting_details_button_replace" name="replace">Replace</button>
 							</div>
 						</form>
 					</div>
@@ -910,27 +910,27 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 													<option value="5" selected edsy-text="ui-retrofit-settings-blueprint-grade5">grade 5</option>
 												</select></td>
 												<td><select name="retrofit_setup_bproll">
-													<option value="0" edsy-text="0-percent">0%</option>
-													<option value="0.05" edsy-text="5-percent">5%</option>
-													<option value="0.10" edsy-text="10-percent">10%</option>
-													<option value="0.15" edsy-text="15-percent">15%</option>
-													<option value="0.20" edsy-text="20-percent">20%</option>
-													<option value="0.25" edsy-text="25-percent">25%</option>
-													<option value="0.30" edsy-text="30-percent">30%</option>
-													<option value="0.35" edsy-text="35-percent">35%</option>
-													<option value="0.40" edsy-text="40-percent">40%</option>
-													<option value="0.45" edsy-text="45-percent">45%</option>
-													<option value="0.50" edsy-text="50-percent">50%</option>
-													<option value="0.55" edsy-text="55-percent">55%</option>
-													<option value="0.60" edsy-text="60-percent">60%</option>
-													<option value="0.65" edsy-text="65-percent">65%</option>
-													<option value="0.70" edsy-text="70-percent">70%</option>
-													<option value="0.75" edsy-text="75-percent">75%</option>
-													<option value="0.80" edsy-text="80-percent">80%</option>
-													<option value="0.85" edsy-text="85-percent">85%</option>
-													<option value="0.90" edsy-text="90-percent">90%</option>
-													<option value="0.95" edsy-text="95-percent">95%</option>
-													<option value="1" selected edsy-text="100-percent">100%</option>
+													<option value="0"    edsy-vals="{&quot;number&quot;:0.00,&quot;number%&quot;:true}" edsy-text="interp-number">0%</option>
+													<option value="0.05" edsy-vals="{&quot;number&quot;:0.05,&quot;number%&quot;:true}" edsy-text="interp-number">5%</option>
+													<option value="0.10" edsy-vals="{&quot;number&quot;:0.10,&quot;number%&quot;:true}" edsy-text="interp-number">10%</option>
+													<option value="0.15" edsy-vals="{&quot;number&quot;:0.15,&quot;number%&quot;:true}" edsy-text="interp-number">15%</option>
+													<option value="0.20" edsy-vals="{&quot;number&quot;:0.20,&quot;number%&quot;:true}" edsy-text="interp-number">20%</option>
+													<option value="0.25" edsy-vals="{&quot;number&quot;:0.25,&quot;number%&quot;:true}" edsy-text="interp-number">25%</option>
+													<option value="0.30" edsy-vals="{&quot;number&quot;:0.30,&quot;number%&quot;:true}" edsy-text="interp-number">30%</option>
+													<option value="0.35" edsy-vals="{&quot;number&quot;:0.35,&quot;number%&quot;:true}" edsy-text="interp-number">35%</option>
+													<option value="0.40" edsy-vals="{&quot;number&quot;:0.40,&quot;number%&quot;:true}" edsy-text="interp-number">40%</option>
+													<option value="0.45" edsy-vals="{&quot;number&quot;:0.45,&quot;number%&quot;:true}" edsy-text="interp-number">45%</option>
+													<option value="0.50" edsy-vals="{&quot;number&quot;:0.50,&quot;number%&quot;:true}" edsy-text="interp-number">50%</option>
+													<option value="0.55" edsy-vals="{&quot;number&quot;:0.55,&quot;number%&quot;:true}" edsy-text="interp-number">55%</option>
+													<option value="0.60" edsy-vals="{&quot;number&quot;:0.60,&quot;number%&quot;:true}" edsy-text="interp-number">60%</option>
+													<option value="0.65" edsy-vals="{&quot;number&quot;:0.65,&quot;number%&quot;:true}" edsy-text="interp-number">65%</option>
+													<option value="0.70" edsy-vals="{&quot;number&quot;:0.70,&quot;number%&quot;:true}" edsy-text="interp-number">70%</option>
+													<option value="0.75" edsy-vals="{&quot;number&quot;:0.75,&quot;number%&quot;:true}" edsy-text="interp-number">75%</option>
+													<option value="0.80" edsy-vals="{&quot;number&quot;:0.80,&quot;number%&quot;:true}" edsy-text="interp-number">80%</option>
+													<option value="0.85" edsy-vals="{&quot;number&quot;:0.85,&quot;number%&quot;:true}" edsy-text="interp-number">85%</option>
+													<option value="0.90" edsy-vals="{&quot;number&quot;:0.90,&quot;number%&quot;:true}" edsy-text="interp-number">90%</option>
+													<option value="0.95" edsy-vals="{&quot;number&quot;:0.95,&quot;number%&quot;:true}" edsy-text="interp-number">95%</option>
+													<option value="1"    edsy-vals="{&quot;number&quot;:1.00,&quot;number%&quot;:true}" edsy-text="interp-number">100%</option>
 												</select></td>
 											</tr>
 											<tr>
@@ -1167,6 +1167,16 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 										</tr>
 									</tbody>
 								</table>
+							</div>
+							<div>
+								<b edsy-text="ui-options-language">Language</b>
+								&mdash;
+								<span edsy-text="ui-options-language-desc">Select your language/locale.</span>
+								<dl>
+									<dd><select name="language">
+										<option value="" edsy-text="ui-options-language-default">(Browser Default)</option>
+									</select></dd>
+								</dl>
 							</div>
 							<div>
 								<button id="options_backup" name="backup" edsy-text="ui-options-backup">Backup All Data</button>
