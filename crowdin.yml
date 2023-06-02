@@ -1,0 +1,5 @@
+files:
+  - source: /lang-en.jsonc
+    translation: /lang-%two_letters_code%.jsonc
+  - source: /lang-en.json
+    translation: /lang-%two_letters_code%.json
