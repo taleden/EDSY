@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 308159901,
-	edsy_versions_db : [308149912,308149913,308159901,308149912], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20230509,
+	version : 308159902,
+	edsy_versions_db : [308149912,308149913,308159902,308149912], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20230602,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -2559,6 +2559,7 @@ var eddb = {
 		58052 : { mtype:'uex',  cost:      0, name:'Thargoid Pulse Neutraliser',class:0, rating:'E', mass:3.00, integ:70, pwrdraw:0.40, passive:1, boottime:0, barrierrng:   0, barrierdur:2, barrierpwr:0.33, barriercool:10, fdid:129022663, fdname:'Hpt_AntiUnknownShutdown_Tiny_V2', eddbid:null }, // Rescue Ship tech broker // verify: cost // TODO: eddbid
 		58050 : { mtype:'uex',  cost: 365700, name:'Xeno Scanner',              class:0, rating:'E', mass:1.30, integ:56, pwrdraw:0.20,            boottime:2, scanrng: 500, maxangle:23.00, scantime:10, limit:'uex', fdid:128793115, fdname:'Hpt_XenoScanner_Basic_Tiny', eddbid:1616 },
 		58030 : { mtype:'uex',  cost: 745950, name:'Enhanced Xeno Scanner',     class:0, rating:'C', mass:1.30, integ:56, pwrdraw:0.80,            boottime:2, scanrng:2000, maxangle:23.00, scantime:10, limit:'uex', fdid:128808878, fdname:'Hpt_XenoScannerMk2_Basic_Tiny', eddbid:1838 },
+		58031 : { mtype:'uex',  cost: 850000, name:'Pulse Wave Xeno Scanner',   class:0, rating:'C', mass:3.00,integ:100, pwrdraw:1.00,            boottime:2, scanrng:1000, maxangle:23.00, scantime:10, limit:'uex', fdid:129022952, fdname:'Hpt_XenoScanner_Advanced_Tiny', eddbid:null }, // TODO: eddbid
 		
 		52090 : { mtype:'uhsl', cost:   3500, name:'Heat Sink Launcher',        class:0, rating:'I', mass:1.30, integ:45, pwrdraw:0.20, passive:1, boottime:0, distdraw:2.00, rof:0.2, bstint:5.00, ammoclip:1, ammomax:2, rldtime:10.0, hsdur:10, thmdrain:100.0, ammocost:25, fdid:128049519, fdname:'Hpt_HeatSinkLauncher_Turret_Tiny', eddbid:886 },
 		52091 : { mtype:'uhsl', cost:  50000, name:'Caustic Sink Launcher',     class:0, rating:'I', mass:1.70, integ:45, pwrdraw:0.60, passive:1, boottime:0, distdraw:2.00, rof:0.2, bstint:5.00, ammoclip:1, ammomax:5, rldtime:10.0,                           ammocost:10, fdid:129019262, fdname:'Hpt_CausticSinkLauncher_Turret_Tiny', eddbid:null }, // Rescue Ship tech broker // verify: cost // TODO: eddbid
