@@ -3340,7 +3340,7 @@ var eddb = {
 		27710 : { mtype:'irlc', cost:6998400, namekey:27110, name:'Repair Limpet Controller', class:7, rating:'A', mass: 80.00, integ:183, pwrdraw:0.83, boottime:10, maxlimpet: 4, lpactrng:2380, limpettime:300, maxspd:200, lmprepcap:450, fdid:128777346, fdname:'Int_DroneControl_Repair_Size7_Class5', eddbid:1613 },
 		
 		
-		28150 : { mtype:'islc', cost:1749600, name:'Research Limpet Controller', class:1, rating:'E', mass:  1.30, integ: 20, pwrdraw:0.40, boottime:0, maxlimpet: 1, lpactrng:2000, limpettime:300, maxspd:200, fdid:128793116, fdname:'Int_DroneControl_UnkVesselResearch', eddbid:1617 },
+		28150 : { mtype:'islc', cost:1749600, name:'Research Limpet Controller', class:1, rating:'E', mass:  1.30, integ: 20, pwrdraw:0.40, boottime:0, maxlimpet: 1, lpactrng:5000, limpettime:300, maxspd:200, fdid:128793116, fdname:'Int_DroneControl_UnkVesselResearch', eddbid:1617 },
 		
 		
 		31150 : { mtype:'iscb', cost:     520, namekey:31110, name:'Shield Cell Bank', class:1, rating:'E', mass:  1.30, integ: 32, pwrdraw:0.41, boottime:25, spinup:5, scbdur: 1.0, shieldrnfps:12.0, scbheat:170.0, ammoclip:1, ammomax:3, ammocost:300, fdid:128064298, fdname:'Int_ShieldCellBank_Size1_Class1', eddbid:1151 },
