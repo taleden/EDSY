@@ -74,12 +74,14 @@ window.edsy = new (function() {
 		872200 : { name:"2B Enzyme Missile, HC+Caustic",         modulehash:"FLIqG02G0050ypD4sPc8y00C_00Gu00",                 available:0 }, // CG reward // TODO: get sample to test import
 		862500 : { name:"2E/FD AX Missile, HC+RF",               modulehash:"HL3gG-3G_W90zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", available:1 }, // Sirius tech broker
 		863300 : { name:"3C/FD AX Missile, HC+RF",               modulehash:"HL4wG-3G_W90zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", available:1 }, // Sirius tech broker // TODO: get sample to test import
-		881400 : { name:"1D/F Grd Gauss, RF+HC",                 modulehash:"HLXCG-2G0092_166_00A_00Ew7ZHD00L800P600T800YsPc", available:1 }, // Salvation tech broker
-		882200 : { name:"2B/F Grd Gauss, RF+HC",                 modulehash:"HLYSG-2G0092_166_00A_00Ew7ZHD00L800P600T800YsPc", available:1 }, // Salvation tech broker
-		881430 : { name:"1D/F Grd Plasma, OC+Foc",               modulehash:"HLXFG-2Gxq60vBh4zHx8y00Cw00H800KvLL",             available:1 }, // Salvation tech broker
-		882230 : { name:"2B/F Grd Plasma, OC+Foc",               modulehash:"HLYVG-2Gxq60vBh4zHx8y00Cw00H800KvLL",             available:1 }, // Salvation tech broker // TODO: get sample to test import
-		881460 : { name:"1D/F Grd Shard, LR+Foc, Pen",           modulehash:"HLXIG-2G0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", available:1 }, // Salvation tech broker
-		882160 : { name:"2A/F Grd Shard, LR+Foc, Pen",           modulehash:"HLYOG-2G0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", available:1 }, // Salvation tech broker // TODO: get sample to test import
+		862500 : { name:"2E/G Enh. AX Multi-Cannon, OC, AL",     modulehash:"HL3nG-3H0038_00CoPcL600",                         available:1 }, // Azimuth tech broker
+		863300 : { name:"3C/G Enh. AX Multi-Cannon, OC, AL",     modulehash:"HL51G-3H0038_00CoPcL600",                         available:1 }, // Azimuth tech broker
+		881400 : { name:"1D/F Grd Gauss, RF+HC",                 modulehash:"HLXCG-2G0092_166_00A_00Ew7ZHD00L800P600T800YsPc", available:1 }, // Azimuth tech broker
+		882200 : { name:"2B/F Grd Gauss, RF+HC",                 modulehash:"HLYSG-2G0092_166_00A_00Ew7ZHD00L800P600T800YsPc", available:1 }, // Azimuth tech broker
+		881430 : { name:"1D/F Grd Plasma, OC+Foc",               modulehash:"HLXFG-2Gxq60vBh4zHx8y00Cw00H800KvLL",             available:1 }, // Azimuth tech broker
+		882230 : { name:"2B/F Grd Plasma, OC+Foc",               modulehash:"HLYVG-2Gxq60vBh4zHx8y00Cw00H800KvLL",             available:1 }, // Azimuth tech broker // TODO: get sample to test import
+		881460 : { name:"1D/F Grd Shard, LR+Foc, Pen",           modulehash:"HLXIG-2G0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", available:1 }, // Azimuth tech broker
+		882160 : { name:"2A/F Grd Shard, LR+Foc, Pen",           modulehash:"HLYOG-2G0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", available:1 }, // Azimuth tech broker
 	//	882161 : { name:"2A/F Grd Shard, LR5",                   modulehash:"GLYOG02G0080y0051Cp993DDFm0H058L800Op7uV700",     available:0 }, // TODO: CG reward? // TODO: get sample to test import
 		811410 : { name:"1D/F Abrasion Blaster, LR",             modulehash:"FJprG02G0062y006y00Ey00Iy00L800P800",             available:0 }, // CG reward // TODO: get sample to test import
 		811400 : { name:"1D/F Mining Laser, LR, Incen",          modulehash:"HJpqmF5j3H0072y006y00AkPcEy00I_ezL800PBLL",       available:1 }, // Torval Mining Ltd tech broker
