@@ -74,8 +74,8 @@ window.edsy = new (function() {
 		872200 : { name:"2B Enzyme Missile, HC+Caustic",         modulehash:"FLIqG02G0050ypD4sPc8y00C_00Gu00",                 available:0 }, // CG reward // TODO: get sample to test import
 		862500 : { name:"2E/FD AX Missile, HC+RF",               modulehash:"HL3gG-3G_W90zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", available:1 }, // Sirius tech broker
 		863300 : { name:"3C/FD AX Missile, HC+RF",               modulehash:"HL4wG-3G_W90zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", available:1 }, // Sirius tech broker // TODO: get sample to test import
-		862500 : { name:"2E/G Enh. AX Multi-Cannon, OC, AL",     modulehash:"HL3nG-3H0038_00CoPcL600",                         available:1 }, // Azimuth tech broker
-		863300 : { name:"3C/G Enh. AX Multi-Cannon, OC, AL",     modulehash:"HL51G-3H0038_00CoPcL600",                         available:1 }, // Azimuth tech broker
+		862500 : { name:"2E/G Enh. AX Multi-Cannon, OC, AL",     modulehash:"HL3nG-3H0038_00CoPcL600",                         available:1 }, // Azimuth / Rescue ship tech broker
+		863300 : { name:"3C/G Enh. AX Multi-Cannon, OC, AL",     modulehash:"HL51G-3H0038_00CoPcL600",                         available:1 }, // Azimuth / Rescue ship tech broker
 		881400 : { name:"1D/F Grd Gauss, RF+HC",                 modulehash:"HLXCG-2G0092_166_00A_00Ew7ZHD00L800P600T800YsPc", available:1 }, // Azimuth tech broker
 		882200 : { name:"2B/F Grd Gauss, RF+HC",                 modulehash:"HLYSG-2G0092_166_00A_00Ew7ZHD00L800P600T800YsPc", available:1 }, // Azimuth tech broker
 		881430 : { name:"1D/F Grd Plasma, OC+Foc",               modulehash:"HLXFG-2Gxq60vBh4zHx8y00Cw00H800KvLL",             available:1 }, // Azimuth tech broker
