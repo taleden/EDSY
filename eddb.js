@@ -3019,8 +3019,8 @@ var eddb = {
 		29750 : { mtype:'idlc', cost:1312200, name:'Decontamination Limpet Controller', class:7, rating:'E', mass:128.00, integ:157, pwrdraw:0.97, boottime:10, maxlimpet: 4, lpactrng:2040, limpettime:300, maxspd:200, lmprepcap:180, fdid:128793944, fdname:'Int_DroneControl_Decontamination_Size7_Class1', eddbid:1635 },
 		
 		
-		13360 : { mtype:'iex', cost:2000000, name:'Experimental Weapon Stabiliser', class:3, rating:'F', mass:  8.00, pwrdraw:1.50, powerlock:1, limit:'iex', unlimit:'hex', unlimitcount:1, fdid:129019260, fdname:'Int_ExpModuleStabiliser_Size3_Class3', eddbid:1836 },
-		13560 : { mtype:'iex', cost:4000000, name:'Experimental Weapon Stabiliser', class:5, rating:'F', mass: 20.00, pwrdraw:3.00, powerlock:1, limit:'iex', unlimit:'hex', unlimitcount:2, fdid:129019261, fdname:'Int_ExpModuleStabiliser_Size5_Class3', eddbid:1837 },
+		13360 : { mtype:'iex', cost:2000000, name:'Experimental Weapon Stabiliser', class:3, rating:'F', mass:  8.00, pwrdraw:1.50, powerlock:0/*TODO: temporary workaround?*/, limit:'iex', unlimit:'hex', unlimitcount:1, fdid:129019260, fdname:'Int_ExpModuleStabiliser_Size3_Class3', eddbid:1836 },
+		13560 : { mtype:'iex', cost:4000000, name:'Experimental Weapon Stabiliser', class:5, rating:'F', mass: 20.00, pwrdraw:3.00, powerlock:0/*TODO: temporary workaround?*/, limit:'iex', unlimit:'hex', unlimitcount:2, fdid:129019261, fdname:'Int_ExpModuleStabiliser_Size5_Class3', eddbid:1837 },
 		
 		
 		 7540 : { mtype:'ifh', cost: 575660, name:'Fighter Hangar', class:5, rating:'D', mass:20.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1}, ammocost: 1030, limit:'ifh', fdid:128727930, fdname:'Int_FighterBay_Size5_Class1', eddbid:1562 },
