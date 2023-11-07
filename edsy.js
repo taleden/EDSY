@@ -2512,6 +2512,8 @@ window.edsy = new (function() {
 							caumin_ihrp = min(caumin_ihrp, caumod);
 						} else if (mtypeid === 'iscb') {
 							stats.cost_restock += (slot.getEffectiveAttrValue('ammoclip') + slot.getEffectiveAttrValue('ammomax')) * (slot.getEffectiveAttrValue('ammocost') || 0);
+						} else if (mtypeid === 'iex') {
+							stats.unlimit[module.unlimit] = (stats.unlimit[module.unlimit] || 0) + (module.unlimitcount || 0);
 						}
 						
 						var pwrdraw = slot.getEffectiveAttrValue('pwrdraw');
@@ -2573,8 +2575,6 @@ window.edsy = new (function() {
 								stats.thmload_cfsd += slot.getEffectiveAttrValue('fsdheat');
 							} else if (mtypeid === 'idlc' || mtypeid === 'imlc' || mtypeid === 'irlc') {
 								stats.lmprepcap_max = max(stats.lmprepcap_max, slot.getEffectiveAttrValue('lmprepcap'));
-							} else if (mtypeid === 'iex') {
-								stats.unlimit[module.unlimit] = (stats.unlimit[module.unlimit] || 0) + (module.unlimitcount || 0);
 							} else if (mtypeid === 'iscb') {
 								var scbheat = slot.getEffectiveAttrValue('scbheat');
 								var spinup = slot.getEffectiveAttrValue('spinup');
