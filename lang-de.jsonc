@@ -1,7 +1,7 @@
 {
   "language-en": "Englisch (English)",
   "language-cs": "Tschechisch (Čeština)",
-  "language-de": "Deutsch"
+  "language-de": "Deutsch",
   "language-es": "Spanisch (Español)",
   "language-fr": "Französisch (Français)",
   "language-hu": "Ungarisch (Magyar)",
@@ -836,7 +836,7 @@
   "blueprint-dec_g": "Decorative Green",
   "blueprint-dec_r": "Decorative Red",
   "blueprint-dec_y": "Decorative Yellow",
-  "blueprint-ifsdi_eca": "Erw.
+  "blueprint-ifsdi_eca": "Expanded Capture Arc",
   "blueprint-ifsdi_lr": "Ferndistanz-FSA-Unterbrecher",
   "blueprint-ihrp_br": "Detonationsresistente Rumpfhüllenverstärkung",
   "blueprint-ihrp_hd": "Schwere Rumpfhüllenverstärkung",
@@ -850,9 +850,9 @@
   "blueprint-isg_rf": "Verstärkte Schilde",
   "blueprint-isg_tr": "Thermalresistente Schilde",
   "blueprint-iss_er": "Erweiterter Sonden-Scanradius",
-  "blueprint-misc_lw": "Div.
-  "blueprint-misc_rf": "Div.
-  "blueprint-misc_sh": "Div.
+  "blueprint-misc_lw": "Lightweight",
+  "blueprint-misc_rf": "Reinforced",
+  "blueprint-misc_sh": "Shielded",
   "blueprint-scan_fs": "Schnellscanner",
   "blueprint-scan_lr": "Long Range",
   "blueprint-scan_wa": "Wide Angle",

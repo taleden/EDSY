@@ -1,5 +1,5 @@
 {
-  "language-en": "English",
+  "language-en": "English (English)",
   "language-cs": "Czech (Čeština)",
   "language-de": "German (Deutsch)",
   "language-es": "Spanish (Español)",
@@ -9,7 +9,7 @@
   "language-ja": "Japanese (日本語)",
   "language-pt": "Portuguese, Brazilian (Português, Brasileiro)",
   "language-ru": "Russian (Русский)",
-  "language-zh": "Chinese, Simplified (简体中文)",
+  "language-zh": "简体中文",
   "edsy": "EDSY",
   "ui-shipyard": "Shipyard",
   "ui-outfitting": "Outfitting",

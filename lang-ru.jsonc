@@ -1,5 +1,5 @@
 {
-  "language-en": "English",
+  "language-en": "English (English)",
   "language-cs": "Czech (Čeština)",
   "language-de": "German (Deutsch)",
   "language-es": "Spanish (Español)",
@@ -8,7 +8,7 @@
   "language-it": "Italian (Italiano)",
   "language-ja": "Japanese (日本語)",
   "language-pt": "Portuguese, Brazilian (Português, Brasileiro)",
-  "language-ru": "Russian (Русский)",
+  "language-ru": "Русский",
   "language-zh": "Chinese, Simplified (简体中文)",
   "edsy": "EDSY",
   "ui-shipyard": "Shipyard",
@@ -662,14 +662,14 @@
   "mtype-upd": "Point Defence",
   "mtype-upwa": "Pulse Wave Analyser",
   "mtype-usb": "Shield Boosters",
-  "module-150": "Груз.
-  "module-250": "Груз.
-  "module-350": "Груз.
-  "module-450": "Груз.
-  "module-550": "Груз.
-  "module-650": "Груз.
-  "module-750": "Груз.
-  "module-850": "Груз.
+  "module-150": "Грузовой стеллаж",
+  "module-250": "Грузовой стеллаж",
+  "module-350": "Грузовой стеллаж",
+  "module-450": "Грузовой стеллаж",
+  "module-550": "Грузовой стеллаж",
+  "module-650": "Грузовой стеллаж",
+  "module-750": "Грузовой стеллаж",
+  "module-850": "Грузовой стеллаж",
   "module-151": "Коррозийно-устойчивый грузовой стеллаж",
   "module-161": "Коррозийно-устойчивый грузовой стеллаж",
   "module-251": "Коррозийно-устойчивый грузовой стеллаж",
@@ -683,7 +683,7 @@
   "module-3152": "Помощь в гиперкрейсерском режиме",
   "module-4140": "Усилитель корпуса",
   "module-4141": "Усилитель корпуса Стражей",
-  "module-5270": "Гараж планет.
+  "module-5270": "Гараж планет.",
   "module-6250": "Каюта пассажира ЭК",
   "module-6251": "Prisoner Cells",
   "module-6340": "Каюта пассажира БК",
@@ -736,7 +736,7 @@
   "module-42211": "Маневровые двигатели",
   "module-42211-abbr": "Enhanced Performance",
   "module-42210": "Маневровые двигатели",
-  "module-44110": "Сист.
+  "module-44110": "Life Support",
   "module-45110": "Распределитель питания",
   "module-45111": "Распределитель питания Стражей",
   "module-46110": "Сенсоры",
@@ -771,26 +771,28 @@
   "module-62160": "Импульсный лазер",
   "module-62254": "Лазер «Диверсант»",
   "module-70140": "Орудие",
-  "module-71150": "Залп.
+  "module-71150": "Fragment Cannon",
   "module-71334": "«Миротворец»",
   "module-72144": "«Убийца»",
   "module-72160": "Многоствольное орудие",
-  "module-72163": "ПРОДВ.
+  "module-72163": "ПРОДВ. Многоствольное орудие",
   "module-80190": "Установщик мин",
   "module-80191": "Шоковая мина",
-  "module-81127": "Вытесн.
+  "module-81127": "Sub-surface Displacement Missile",
   "module-81140": "Проходочный лазер",
   "module-81141": "Абразивный бластер",
   "module-81141-abbr": "Abrasion",
   "module-81144": "«Копье шахтера»",
   "module-81225": "Сейсмический заряд",
   "module-81225-abbr": "Seismic",
-  "module-82126": "ПРОДВ.
+  "module-82120": "Missile Rack",
+  "module-82123": "Seeker Missile Rack",
+  "module-82126": "Advanced Missile Rack",
   "module-82123": "Блок ракет с самонаведением",
   "module-82120": "Блок ракет",
   "module-82224": "«Гончие»",
   "module-82225": "FSD-разрушитель",
-  "module-83230": "Уск.
+  "module-83230": "Ускоритель",
   "module-83324": "Улучшенный ускоритель",
   "module-84140": "Рельсотрон",
   "module-86253": "Многоствольное орудие АИ",

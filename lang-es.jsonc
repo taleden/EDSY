@@ -1,6 +1,6 @@
 {
   "language-en": "Inglés (English)",
-  "language-cs": "Checo (Čeština)
+  "language-cs": "Checo (Čeština)",
   "language-de": "Alemán (Deutsch)",
   "language-es": "Español",
   "language-fr": "Francés (Français)",
@@ -838,7 +838,7 @@
   "blueprint-dec_y": "Decorative Yellow",
   "blueprint-ifsdi_eca": "Arco de captura de interdictor de MDD extendido",
   "blueprint-ifsdi_lr": "Interdictor de MDD de largo alcance",
-  "blueprint-ihrp_br": "Refuerzo estruct.
+  "blueprint-ihrp_br": "Refuerzo estructural de resistencia explosiva",
   "blueprint-ihrp_hd": "Refuerzo estructural de alta resistencia",
   "blueprint-ihrp_kr": "Refuerzo estructural de resistencia cinética",
   "blueprint-ihrp_lw": "Refuerzo estructural aligerado",
