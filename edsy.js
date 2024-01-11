@@ -11721,7 +11721,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		if (cache.lang == lang)
 			return;
 		
-		var response = await fetch("lang-" + lang + ".jsonc");
+		var file = "lang-" + lang + ".jsonc";
+		var response = await fetch(file);
 		if (!response.ok) {
 			if (lang != LANGS[0]) {
 				current.lang = LANGS[0];
@@ -11731,8 +11732,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		var text = await response.text();
 		text = text.replace(/(\/\/[^"]*|\/\*[^"]*\*\/\s*)$/gm, '');
+		try {
+			var translation = JSON.parse(text);
+		} catch (exc) {
+			throw new Error("failed to parse " + lang + " translations from " + file + ": " + exc);
+			return;
+		}
 		cache.lang = lang;
-		cache.translation = JSON.parse(text);
+		cache.translation = translation;
 	}; // loadTranslations()
 	
 	
@@ -11762,6 +11769,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	var updateTranslations = function(doc) {
 		var attrs = { "edsy-text": "innerText", "edsy-title": "title" };
+		var t0 = Date.now();
 		if (!doc)
 			document.documentElement.style.setProperty('--textempty', "'"+getTranslation('note-empty')+"'");
 		for (var keyattr in attrs) {
@@ -11785,6 +11793,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				} else if (current.dev) console.log("WARNING: no translation for '" + key + "'");
 			});
 		}
+		var t1 = Date.now();
+		if (!doc && current.dev) console.log("updateTranslations(): '" + cache.lang + "' completed in " + (t1-t0) + "s");
 	}; // updateTranslations()
 	
 	
