@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308149912,308149912,308149911,308149914]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20230407;
+	var VERSIONS = [308159902,308159902,308179901,308179901]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20240111;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -22,9 +22,7 @@ window.edsy = new (function() {
 	var TOLERANCE_TOUCH = 10;
 	var WEAPON_CHARGE = 0.0;
 	var GROUPS = ['hardpoint','utility','component','military','internal'];
-	var GROUP_LABEL = { hardpoint:'Hardpoints', utility:'Utility Mounts', component:'Core Internal', military:'Military', internal:'Optional Internal' };
 	var CORE_SLOT_FDNAME = ['Armour', 'PowerPlant', 'MainEngines', 'FrameShiftDrive', 'LifeSupport', 'PowerDistributor', 'Radar', 'FuelTank'];
-	var CORE_SLOT_NAME = ['Bulkhead', 'Power Plant', 'Thruster', 'Frame Shift Drive', 'Life Support', 'Power Distributor', 'Sensors', 'Fuel Tank'];
 	var CORE_SLOT_ABBR = ['BH','PP','TH','FD','LS','PD','SS','FT'];
 	var CORE_ABBR_SLOT = { BH:0,PP:1,TH:2,FD:3,LS:4,PD:5,SS:6,FT:7,
 	                            RB:1,TM:2,FH:3,EC:4,PC:5,     FS:7 };
@@ -44,6 +42,7 @@ window.edsy = new (function() {
 //	var BPROLL_LIMIT = 0.95;
 	var DISCOUNTS = [30,20,15,10,5,2.5];
 	var HASH_VERSION = 17;
+	/* TODO DELETE
 	var HTML_ICON = {
 		'unknown'    : '<svg class="iconsvg unknown"><use xlink:href="#icon_unknown"/></svg>',
 		'ignore'     : '<svg class="iconsvg ignore"><use xlink:href="#icon_ignore"/></svg>',
@@ -68,12 +67,18 @@ window.edsy = new (function() {
 	var HTML_ICON_MOUNT = { F:HTML_ICON['fixed'], G:HTML_ICON['gimballed'], T:HTML_ICON['turreted'] };
 	var HTML_ICON_MISSILE = { D:HTML_ICON['dumbfire'], S:HTML_ICON['seeker'] };
 	var HTML_ICON_TAG = { G:HTML_ICON['guardian'], P:HTML_ICON['powerplay'] };
+	*/
+	var ICON_MOUNT = { F:'fixed', G:'gimballed', T:'turreted' };
+	var ICON_MISSILE = { D:'dumbfire', S:'seeker' };
+	var ICON_TAG = { G:'guardian', P:'powerplay' };
 	var CSS_FONTS = ['caps','text','fixed'];
 	var CSS_COLORS = ['orange','red','blue','green','yellow'];
 	var BUILTIN_STORED_MODULES = {
 		872200 : { name:"2B Enzyme Missile, HC+Caustic",         modulehash:"FLIqG02G0050ypD4sPc8y00C_00Gu00",                 available:0 }, // CG reward // TODO: get sample to test import
 		862500 : { name:"2E/FD AX Missile, HC+RF",               modulehash:"HL3gG-3G_W90zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", available:1 }, // Sirius tech broker
 		863300 : { name:"3C/FD AX Missile, HC+RF",               modulehash:"HL4wG-3G_W90zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", available:1 }, // Sirius tech broker // TODO: get sample to test import
+		862570 : { name:"2E/G EAXMC \"Azimuth\", OC, AL",        modulehash:"HL51G-3H0030_004oPcD600",                         available:1 }, // Salvation tech broker
+		863370 : { name:"3C/G EAXMC \"Azimuth\", OC, AL",        modulehash:"HL3nG-3H0030_004oPcD600",                         available:1 }, // Salvation tech broker
 		881400 : { name:"1D/F Grd Gauss, RF+HC",                 modulehash:"HLXCG-2G0092_166_00A_00Ew7ZHD00L800P600T800YsPc", available:1 }, // Salvation tech broker
 		882200 : { name:"2B/F Grd Gauss, RF+HC",                 modulehash:"HLYSG-2G0092_166_00A_00Ew7ZHD00L800P600T800YsPc", available:1 }, // Salvation tech broker
 		881430 : { name:"1D/F Grd Plasma, OC+Foc",               modulehash:"HLXFG-2Gxq60vBh4zHx8y00Cw00H800KvLL",             available:1 }, // Salvation tech broker
@@ -108,15 +113,38 @@ window.edsy = new (function() {
 		303100 : { name:"3A Shield Gen, KR+TR",                  modulehash:"F7PcG05G0044sPc8wPccupDgvcQ",                     available:0 }, // CG reward // TODO: get sample to test import
 		111300 : { name:"1I DSS \"V1\", ERx2",                   modulehash:"H2jwG-9G_W1P000",                                 available:1 }, // human tech broker
 	};
+	var LANGS = ["en","zh","cs","fr","de","hu","it","ja","pt","ru","es"]; // TODO cn? ko? pl?
+	var UNIT_ABBR_TRANSLATIONS = {
+		"%": "unit-percent-abbr",
+		"&deg;": "unit-degrees-abbr",
+		"&deg;/s": "unit-degrees-per-second-abbr",
+		"Cr": "unit-credits-abbr",
+		"Cr/T": "unit-credits-per-ton-abbr",
+		"KM": "unit-kilometers-abbr",
+		"LS": "unit-lightseconds-abbr",
+		"LY": "unit-lightyears-abbr",
+		"M": "unit-meters-abbr",
+		"M/s": "unit-meters-per-second-abbr",
+		"MJ/s": "unit-megajoules-per-second",
+		"MW": "unit-megawatts-abbr",
+		"MW/s": "unit-megawatts-per-second-abbr",
+		"T": "unit-tons-abbr",
+		"T/s": "unit-tons-per-second-abbr",
+		"h": "unit-hours-abbr",
+		"m": "unit-minutes-abbr",
+		"s": "unit-seconds-abbr",
+		"/s": "unit-per-second-abbr",
+		"x": "unit-multiplier-abbr",
+	};
 	
 	var cache = {
+		reEscapeHTML: new RegExp('[&<>"\'/°]', 'g'),
+		fnEscapeHTML: function(m) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&apos;','/':'&sol;','°':'&deg;'}[m] || m; },
 		attribute: {},
 		formatNumText: {},
 		formatPctText: {},
 		reSpacePercent: new RegExp('[ \u00A0]+(%)'),
-		reTrailingPointZero: null,
-		reDecimalSep: null,
-		reThousandSep: null,
+		parseNumText: null,
 		feature: {},
 		ships: [],
 		shipBuild: {},
@@ -134,11 +162,16 @@ window.edsy = new (function() {
 		discounts: [],
 		option: {},
 		template: {},
+		icon: {},
+		lang: null,
+		translation: {},
+		reTranslationValue: new RegExp('\{([A-Za-z0-9_-]+)\}', 'g'),
 	};
 	var current = {
 		dev: false,
 		beta: false,
 		locale: undefined,
+		lang: undefined,
 		hashlock: false,
 		popup: {
 			element: null,
@@ -182,6 +215,7 @@ window.edsy = new (function() {
 			hidestats: true,
 			// fonts generated from CSS_FONTS
 			// colors generated from CSS_COLORS
+			language: '',
 		},
 		page: null,
 		shipyard_tab: null,
@@ -335,7 +369,7 @@ window.edsy = new (function() {
 	
 	
 	var encodeHTML = function(text) {
-		return text.replace(/\&/g, '&amp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/\"/g, '&quot;').replace(/\'/g, '&apos;').replace(/\//g, '&sol;');
+		return text.replaceAll(cache.reEscapeHTML, cache.fnEscapeHTML);
 	}; // encodeHTML()
 	
 	
@@ -355,6 +389,27 @@ window.edsy = new (function() {
 		return c;
 	}; // getCookies()
 	
+	/* TODO not needed?
+	var appendTextLines = function(el, text, lines) {
+		lines = lines || ceil(text.length / 80);
+		while (lines > 1) {
+			var i = (text.length / lines) | 0;
+			for (var j = 0;  j <= i;  j++) {
+				if (text[i+j] == ' ') {
+					el.append(text.slice(0, i+j), document.createElement('br'));
+					text = text.slice(i+j+1);
+					break;
+				} else if (text[i-j] == ' ') {
+					el.append(text.slice(0, i-j), document.createElement('br'));
+					text = text.slice(i-j+1);
+					break;
+				}
+			}
+			lines--;
+		}
+		el.append(text);
+	}; // appendTextLines()
+	*/
 	
 	var formatNumText = ((window.Intl && window.Intl.NumberFormat)
 		? (
@@ -380,16 +435,35 @@ window.edsy = new (function() {
 	
 	
 	var parseNumText = function(text) {
-		if (!cache.reDecimalSep) {
-			var sep = formatNumText(1.234,3).substring(1,2);
-			cache.reDecimalSep = new RegExp('\\' + sep);
-			sep = formatNumText(1234,0).substring(1,2);
-			if (!sep.match(/\d/))
-				cache.reThousandSep = new RegExp('\\' + sep, 'g');
+		if (!cache.parseNumText) {
+			if (window.Intl && window.Intl.NumberFormat) {
+				// based on Mike Bostock's solution: https://observablehq.com/@mbostock/localized-number-parsing
+				var parts = (new window.Intl.NumberFormat(current.locale, {useGrouping:true, minimumIntegerDigits:10, minimumFractionDigits:1})).formatToParts(123456789);
+				var n = 0, map = {};
+				for (var p = 0;  p < parts.length;  p++) {
+					switch (parts[p].type) {
+					case 'integer':  for (var i = 0;  i < parts[p].value.length;  i++) map[parts[p].value[i]] = n++;  break;
+					case 'group':    map[parts[p].value] = "";   break;
+					case 'decimal':  map[parts[p].value] = ".";  break;
+					}
+				}
+				var search = new RegExp('[' + Object.keys(map).join('').replace(/([\.\(\)\[\]\-])/g,'\\$1') + ']', 'g');
+				cache.parseNumText = function(text) {
+					return (text = text.trim().replace(search, function(s) { return map[s]; })) ? parseFloat(text) : NaN
+				};
+			} else {
+				var sep = formatNumText(1.2,1).substring(1,2);
+				var reDecimalSep = new RegExp('\\' + sep);
+				sep = formatNumText(111111111,0).replace(new RegExp(formatNumText(1,0),'g'),'')[0];
+				var reThousandSep = sep ? (new RegExp('\\' + sep, 'g')) : null;
+				cache.parseNumText = function(text) {
+					if (reThousandSep)
+						text = text.replace(reThousandSep, '');
+					return parseFloat(text.replace(reDecimalSep, '.').trim());
+				}
+			}
 		}
-		if (cache.reThousandSep)
-			text = text.replace(cache.reThousandSep, '');
-		return parseFloat(text.replace(cache.reDecimalSep, '.').trim());
+		return cache.parseNumText(text);
 	}; // parseNumText()
 	
 	
@@ -411,20 +485,34 @@ window.edsy = new (function() {
 	var formatNumHTML = function(num, dec) {
 		if (num === undefined)
 			return '';
+		var vals = {'number':num, 'number#':dec, 'number!':(isNaN(num) ? 0 : (isFinite(num) ? undefined : ((num < 0) ? -1 : 1)))};
 		var text = ((isFinite(num) || isNaN(num)) ? formatNumText(((num === num) ? num : 0), dec) : '&infin;');
 		if (num !== num)
-			text = '<abbr class="unknown" title="Unknown!">' + text.replace(/0/g,'?') + '</abbr>';
-		return text;
+			text = text.replace(/0/g,'?');
+		var html = '<span'
+			+ ' edsy-vals="' + encodeHTML(JSON.stringify(vals)) + '"'
+			+ ' edsy-text="interp-number"'
+			+ '>' + text + '</span>';
+		if (num !== num)
+			html = '<abbr class="unknown" edsy-title="unknown" title="Unknown!">' + html + '</abbr>';
+		return html;
 	}; // formatNumHTML()
 	
 	
 	var formatPctHTML = function(num, dec) {
 		if (num === undefined)
 			return '';
+		var vals = {'number':num, 'number#':dec, 'number%':true, 'number!':(isNaN(num) ? 0 : (isFinite(num) ? undefined : ((num < 0) ? -1 : 1)))};
 		var text = ((isFinite(num) || isNaN(num)) ? formatPctText(((num === num) ? num : 0), dec).replace('%', '<small class="semantic">%</small>') : '&infin;');
 		if (num !== num)
-			text = '<abbr class="unknown" title="Unknown!">' + text.replace(/0/g,'?') + '</abbr>';
-		return text;
+			text = text.replace(/0/g,'?');
+		var html = '<span'
+			+ ' edsy-vals="' + encodeHTML(JSON.stringify(vals)) + '"'
+			+ ' edsy-text="interp-number"'
+			+ '>' + text + '</span>';
+		if (num !== num)
+			html = '<abbr class="unknown" edsy-title="unknown" title="Unknown!">' + html + '</abbr>';
+		return html;
 	}; // formatPctHTML()
 	
 	
@@ -442,15 +530,15 @@ window.edsy = new (function() {
 	//	return ((sec >= 10) ? ((h ? (h.toFixed(0) + ':') : '') + ((h && m < 10) ? '0' : '') + m.toFixed(0) + ':' + (((h || m) && s < 10) ? '0' : '') + s.toFixed(0)) : s.toFixed(1));
 		
 		if (brief) {
-			if (h) return (((h < 10) ? formatNumText(h+(m/60), 1) : formatNumText(h, 0)) + '<small class="semantic">h</small>');
-			if (m) return (((m < 10) ? formatNumText(m+(s/60), 1) : formatNumText(m, 0)) + '<small class="semantic">m</small>');
-			return (((h && !m) ? '0<small class="semantic">m</small>' : '') + formatNumText(s, (sec < 10) ? 1 : 0) + '<small class="semantic">s</small>');
+			if (h) return (((h < 10) ? formatNumHTML(h+(m/60), 1) : formatNumHTML(h, 0)) + '<small class="semantic" edsy-text="unit-hours-abbr">h</small>');
+			if (m) return (((m < 10) ? formatNumHTML(m+(s/60), 1) : formatNumHTML(m, 0)) + '<small class="semantic" edsy-text="unit-minutes-abbr">m</small>');
+			return (((h && !m) ? '0<small class="semantic">m</small>' : '') + formatNumHTML(s, (sec < 10) ? 1 : 0) + '<small class="semantic" edsy-text="unit-seconds-abbr">s</small>');
 		}
 		var html = '';
-		if (h) html += (formatNumText(h, 0) + '<small class="semantic">h</small>');
-		if (m) html += (formatNumText(m, 0) + '<small class="semantic">m</small>');
-		if (h && !m) html += '0<small class="semantic">m</small>';
-		html += (formatNumText(s, (sec < 10) ? 1 : 0) + '<small class="semantic">s</small>');
+		if (h) html += (formatNumHTML(h, 0) + '<small class="semantic" edsy-text="unit-hours-abbr">h</small>');
+		if (m) html += (formatNumHTML(m, 0) + '<small class="semantic" edsy-text="unit-minutes-abbr">m</small>');
+		if (h && !m) html += '0<small class="semantic" edsy-text="unit-minutes-abbr">m</small>';
+		html += (formatNumHTML(s, (sec < 10) ? 1 : 0) + '<small class="semantic" edsy-text="unit-seconds-abbr">s</small>');
 		return html;
 	}; // formatTimeHTML()
 	
@@ -459,20 +547,40 @@ window.edsy = new (function() {
 		if (num !== num || !isFinite(num))
 			return formatNumHTML(num, 0);
 		if (!brief)
-			return (formatNumHTML(num, 0) + '<small>CR</small>');
+			return (formatNumHTML(num, 0) + '<small edsy-text="unit-credits-abbr">Cr</small>');
 		var n = num;
 		var k = 0;
-		while (brief && n > 1000) {
+		while (brief && n > 1000 && k < 4) {
 			n /= 1000;
 			k++;
 		}
-		return ('<abbr title="' + formatNumHTML(num, 0) + ' CR">' + formatNumText(n, (n < 10) ? 2 : ((n < 100) ? 1 : 0)) + (['',' K',' M',' B',' T'][k] || '') + '</abbr><small>CR</small>');
+		var d = (n < 10) ? 2 : ((n < 100) ? 1 : 0);
+		// apparently the KMBT suffixes are pretty universal and don't need to be localized?
+		var s = (['','K','M','B','T'][k] || '');
+		return [
+			'<abbr',
+			' edsy-vals-title="', encodeHTML(JSON.stringify({'number':num})), '"',
+			' edsy-title="interp-number-credits-abbr"',
+			' title="', formatNumText(num, 0), ' Cr"',
+			' edsy-vals="', encodeHTML(JSON.stringify({'number':n,'number#':d,'suffix':s})), '"',
+			' edsy-text="interp-number-suffix"',
+			'>',
+			formatNumHTML(n, d), ' ', s,
+			'</abbr>',
+			'<small edsy-text="unit-credits-abbr">Cr</small>'
+		].join('');
 	}; // formatPriceHTML()
 	
 	
-	var formatAttrLabelHTML = function(attr, abbr, desc) {
+	var formatAttrLabelHTML = function(attr) {
 		var attribute = (cache.attribute[attr] || EMPTY_OBJ);
-		return '<abbr class="attribute" title="' + (desc || attribute.desc || '') + '">' + (abbr || attribute.abbr || attr) + ':</abbr>';
+		return [
+			'<abbr class="attribute"',
+			' edsy-title="attr-', attr, '-desc"',
+			' title="' + (attribute.desc || '') + '"',
+			' edsy-text="attr-', attr, '-abbr"',
+			'>' + (attribute.abbr || attr) + '</abbr>:'
+		].join('');
 	}; // formatAttrLabelHTML()
 	
 	
@@ -486,7 +594,7 @@ window.edsy = new (function() {
 			return formatPctHTML(value / 100, dec);
 		if (attribute.time)
 			return formatTimeHTML(value);
-		return (((dec !== undefined) ? formatNumHTML(value, dec) : value) + ((attribute.unit && isFinite(value)) ? ('<small>' + attribute.unit + '</small>') : ''));
+		return (((dec !== undefined) ? formatNumHTML(value, dec) : value) + ((attribute.unit && isFinite(value)) ? ('<small edsy-text="' + (UNIT_ABBR_TRANSLATIONS[attribute.unit] || '') + '">' + attribute.unit + '</small>') : ''));
 	}; // formatAttrHTML()
 	
 	
@@ -1732,16 +1840,16 @@ window.edsy = new (function() {
 			
 			// slot tag, module label, powered, priority
 			switch (this.getSlotGroup()) {
-			case 'hardpoint':  line = 'USMLH'[this.getSlotSize()];        break;
-			case 'utility':    line = 'U';                                break;
-			case 'component':  line = CORE_SLOT_ABBR[this.getSlotNum()];  break;
-			case 'military':   line = 'MC';                               break;
-			case 'internal':   line = this.getSlotSize();                 break;
+			case 'hardpoint':  line = getTranslation('size-'+this.getSlotSize()+'-abbr');              break;
+			case 'utility':    line = getTranslation('size-0-abbr');                                   break;
+			case 'component':  line = getTranslation('ui-slot-component-'+this.getSlotNum()+'-abbr');  break;
+			case 'military':   line = getTranslation('ui-slot-military-abbr');                         break;
+			case 'internal':   line = formatNumText(this.getSlotSize(),0);                             break;
 			default:           return '';
 			}
 			line += ': ' + getModuleLabel(module);
 			if (this.getEffectiveAttrValue('pwrdraw'))
-				line += ' [' + (this.getPowered() ? '+' : '-') + this.getPriority() + ']';
+				line += ' [' + (this.getPowered() ? '+' : '-') + formatNumText(this.getPriority(),0) + ']';
 			buffer.push(line);
 			
 			// module modification?
@@ -1749,8 +1857,23 @@ window.edsy = new (function() {
 				var tag = ((this.getSlotGroup() === 'component' || this.getSlotGroup() === 'military') ? '**: ' : '*: ');
 				var blueprint = eddb.blueprint[this.bpid];
 				var expeffect = eddb.expeffect[this.expid];
-				if (blueprint || expeffect)
-					buffer.push(tag + (blueprint ? (blueprint.name + ' ' + this.bpgrade + (this.bproll ? (' ' + formatPctText(this.bproll, 1)) : '')) : '(No Blueprint)') + (expeffect ? (', ' + expeffect.name) : ''));
+				if (blueprint || expeffect) {
+					buffer.push(
+						tag
+						+ (blueprint
+							? (
+								getTranslation('blueprint-'+this.bpid) + ' '
+								+ getTranslation('interp-grade-abbr-number', {'number':this.bpgrade})
+								+ (this.bproll ? (' ' + formatPctText(this.bproll, 1)) : '')
+							)
+							: getTranslation('option-no-blueprint')
+						)
+						+ (expeffect
+							? (', ' + getTranslation('expeffect-'+this.expid))
+							: ''
+						)
+					);
+				}
 				// gather relevant attrs: either directly or indirectly modifiable (via expeffect)
 				var attrflag = {};
 				var modifiable = ((eddb.mtype[this.module.mtype] || EMPTY_OBJ).modifiable || EMPTY_ARR);
@@ -1780,7 +1903,7 @@ window.edsy = new (function() {
 					line = '';
 					for (var a = 0;  a < attrs.length;  a++) {
 						var attr = attrs[a];
-						var text = '; ' + cache.attribute[attr].name + ' ' + getModuleAttrModifierText(module, attr, this.getEffectiveAttrModifier(attr));
+						var text = '; ' + getTranslation('attr-'+attr) + ' ' + getModuleAttrModifierText(module, attr, this.getEffectiveAttrModifier(attr));
 						if (line && (line.length + text.length > 65)) {
 							buffer.push(tag + line.slice(2));
 							line = '';
@@ -1966,7 +2089,7 @@ window.edsy = new (function() {
 		// if we have an old module and it's different, or it's insufficiently discounted and not too engineered, sell it
 		if (modid1) {
 			if ((modid1 != modid2) || (discmod1 > max(cache.discountMod[limdisc], discmod2) && (!bpid2 || bpid1 != bpid2 || bpgrade1 <= limdisceng))) {
-				steps.push({ sgrp:sgrp1, sid:shipid1, mid:((sgrp1 === 'ship') ? 0 : modid1), num:modidNum[modid1], act:'Sell', discmod:discmod1, desc:(formatPctText(1 - discmod1, 1) + ' discount'), cost:{'':-slot1.getCost()} });
+				steps.push({ sgrp:sgrp1, sid:shipid1, mid:((sgrp1 === 'ship') ? 0 : modid1), num:modidNum[modid1], act:'Sell', discmod:discmod1, cost:{'':-slot1.getCost()} });
 				slot1 = null;
 				modid1 = bpgrade1 = bproll1 = 0;
 				bpid1 = expid1 = '';
@@ -1977,7 +2100,7 @@ window.edsy = new (function() {
 		if (modid2) {
 			// if we have no matching old module, buy one
 			if (modid1 != modid2) {
-				steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Buy', discmod:discmod2, desc:(formatPctText(1 - discmod2, 1) + ' discount'), cost:{'':slot2.getCost()} });
+				steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Buy', discmod:discmod2, cost:{'':slot2.getCost()} });
 				modid1 = modid2;
 				bpgrade1 = bproll1 = 0;
 				bpid1 = expid1 = '';
@@ -1992,7 +2115,7 @@ window.edsy = new (function() {
 					bproll1 = 0;
 					expid1 = '';
 				} else if (bproll1 <= 0) {
-					steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Conv', bpid:bpid1, bpgrade:bpgrade1, desc:(blueprint.name + ' G' + bpgrade1 + ' (legacy)'), cost:{} });
+					steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Conv', bpid:bpid1, bpgrade:bpgrade1, cost:{} });
 					bpgrade1--;
 					bproll1 = 1;
 				}
@@ -2005,7 +2128,7 @@ window.edsy = new (function() {
 						var cost = {};
 						for (var mat in mats)
 							cost[mat] = rolls * mats[mat];
-						steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Eng', bpid:bpid2, bpgrade:bpgrade1, bproll:limit, rolls:rolls, desc:(blueprint.name + ' G' + bpgrade1 + ' x' + rolls), cost:cost });
+						steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Eng', bpid:bpid2, bpgrade:bpgrade1, bproll:limit, rolls:rolls, cost:cost });
 					}
 					bpgrade1++;
 					bproll1 = 0;
@@ -2017,7 +2140,7 @@ window.edsy = new (function() {
 			var mtype2 = (slot2.getSlotGroup() === 'hardpoint') ? 'wpn' : slot2.getModuleMtype();
 			if (expeffect && expid1 != expid2 && limexpeffect !== '' && (limexpeffect === 'all' || (','+limexpeffect+',').indexOf(mtype2) != -1)) {
 				var cost = clone({}, expeffect.mats);
-				steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Exp', expid:expid2, desc:expeffect.name, cost:cost });
+				steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Exp', expid:expid2, cost:cost });
 			}
 		}
 		
@@ -2471,7 +2594,8 @@ window.edsy = new (function() {
 			var wepcap = this.getSlot('component', CORE_ABBR_SLOT.PD).getEffectiveAttrValue('wepcap');
 			var weapons = [];
 			var slot_isg = null;
-			for (var slotgroup in GROUP_LABEL) {
+			for (var sg = 0;  sg < GROUPS.length;  sg++) {
+				var slotgroup = GROUPS[sg];
 				for (var slotnum = 0;  slot = this.getSlot(slotgroup, slotnum);  slotnum++) {
 					if (module = slot.getModule()) {
 						var mtypeid = module.mtype;
@@ -2714,7 +2838,8 @@ window.edsy = new (function() {
 			// collect slots for each group (but combine military with internal for this purpose)
 			var groupSlots1 = {};
 			var groupSlots2 = {};
-			for (var slotgroup in GROUP_LABEL) {
+			for (var sg = 0;  sg < GROUPS.length;  sg++) {
+				var slotgroup = GROUPS[sg];
 				var compgroup = ((slotgroup === 'military') ? 'internal' : slotgroup);
 				groupSlots1[compgroup] = groupSlots1[compgroup] || [];
 				groupSlots2[compgroup] = groupSlots2[compgroup] || [];
@@ -2832,7 +2957,7 @@ window.edsy = new (function() {
 			var buffer = [];
 			
 			// ship hull and cargo hatch
-			var line = '[' + ship.name;
+			var line = '[' + getTranslation('ship-'+this.shipid);
 			if (this.nametag || this.name) {
 				line += ',';
 				if (this.nametag)
@@ -2843,7 +2968,7 @@ window.edsy = new (function() {
 			line += ']';
 			var slot = this.getSlot('ship', 'hatch');
 			if (slot.getModule())
-				line += ' [' + (slot.getPowered() ? '+' : '-') + slot.getPriority() + ']';
+				line += ' [' + (slot.getPowered() ? '+' : '-') + formatNumText(slot.getPriority(),0) + ']';
 			buffer.push(line);
 			
 			// slots
@@ -2867,39 +2992,44 @@ window.edsy = new (function() {
 			buffer.push('');
 			buffer.push('---');
 			buffer.push('');
+			var stats = [];
 			var mass = this.getStat('mass');
 			var fuel = this.getStat('fuelcap');
 			var cargo = this.getStat('cargocap');
+			stats.push([getTranslation('attr-mass'),    (formatNumText(mass, 2) + ' ' + getTranslation('unit-tons-abbr') + ' ' + getTranslation('empty'))]);
+			stats.push([null,                           (formatNumText(mass + fuel + cargo, 2) + ' ' + getTranslation('unit-tons-abbr') + ' ' + getTranslation('full'))]);
+			stats.push([getTranslation('stat-fuel'),    (formatNumText(fuel, 0) + ' ' + getTranslation('unit-tons-abbr'))]);
+			stats.push([getTranslation('stat-cargo'),   (formatNumText(cargo, 0) + ' ' + getTranslation('unit-tons-abbr'))]);
 			var cabin = this.getStat('cabincap');
-			buffer.push('Mass  : ' + formatNumText(mass, 2) + ' T empty');
-			buffer.push('        ' + formatNumText(mass + fuel + cargo, 2) + ' T full');
-			buffer.push('Fuel  : ' + formatNumText(fuel, 0) + ' T');
-			buffer.push('Cargo : ' + formatNumText(cargo, 0) + ' T');
-			buffer.push('Cabins: ' + formatNumText(cabin, 0));
+			stats.push([getTranslation('stat-cabins'),  (formatNumText(cabin, 0))]);
 			var speed = this.getStat('_speed');
 			var boost = this.getStat('_boost');
-			buffer.push('Speed : ' + formatNumText(speed, 0) + ' m/s (' + formatNumText(boost, 0) + ' boost)');
+			stats.push([getTranslation('stat-speed'),   (formatNumText(speed, 0) + ' ' + getTranslation('unit-meters-per-second-abbr') +  ' (' + formatNumText(boost, 0) + ' ' + getTranslation('boost') + ')')]);
 			var jumpUnladen = this.getStat('_jump_unladen');
 			var jumpLaden = this.getStat('_jump_laden');
-			buffer.push('Range : ' + formatNumText(jumpUnladen, 2) + ' LY unladen');
-			buffer.push('        ' + formatNumText(jumpLaden, 2) + ' LY laden');
+			stats.push([getTranslation('stat-range'),   (formatNumText(jumpUnladen, 2) + ' ' + getTranslation('unit-lightyears-abbr') +  ' ' + getTranslation('unladen'))]);
+			stats.push([null,                           (formatNumText(jumpLaden, 2) + ' ' + getTranslation('unit-lightyears-abbr') +  ' ' + getTranslation('laden'))]);
 			var pwrcap = this.getStat('pwrcap');
 			var pwrdraw = this.getStat('pwrdraw_ret')[0];
-			buffer.push('Power : ' + formatNumText(pwrdraw, 2) + ' MW retracted (' + formatPctText(pwrdraw / pwrcap, 0) + ')');
+			stats.push([getTranslation('stat-power'),   (formatNumText(pwrdraw, 2) + ' ' + getTranslation('unit-megawatts-abbr') +  ' ' + getTranslation('retracted') + ' (' + formatPctText(pwrdraw / pwrcap, 0) + ')')]);
 			var pwrdraw = this.getStat('pwrdraw_dep')[0];
-			buffer.push('        ' + formatNumText(pwrdraw, 2) + ' MW deployed (' + formatPctText(pwrdraw / pwrcap, 0) + ')');
-			buffer.push('        ' + formatNumText(pwrcap, 2) + ' MW available');
+			stats.push([null,                           (formatNumText(pwrdraw, 2) + ' ' + getTranslation('unit-megawatts-abbr') +  ' ' + getTranslation('deployed') + ' (' + formatPctText(pwrdraw / pwrcap, 0) + ')')]);
+			stats.push([null,                           (formatNumText(pwrcap, 2) + ' ' + getTranslation('unit-megawatts-abbr') +  ' ' + getTranslation('available'))]);
 			var shields = this.getStat('_shields');
-			buffer.push('Shield: ' + (shields ? formatNumText(shields, 1) : 'none'));
+			stats.push([getTranslation('attr-shields'), (shields ? formatNumText(shields, 1) : getTranslation('none'))]);
 			var armour = this.getStat('_armour');
-			buffer.push('Armour: ' + (armour ? formatNumText(armour, 1) : 'none'));
+			stats.push([getTranslation('attr-armour'),  (armour ? formatNumText(armour, 1) : getTranslation('none'))]);
 			var dps = this.getStat('dps');
-			buffer.push('Damage: ' + (dps ? (formatNumText(dps, 1) + ' burst DPS') : 'none'));
+			stats.push([getTranslation('attr-damage'),  (dps ? (formatNumText(dps, 1) + ' ' + getTranslation('stat-burst-dps')) : getTranslation('none'))]);
 			var cost = this.getStat('cost');
-			buffer.push('Price : ' + formatNumText(cost, 0) + ' CR');
-			buffer.push('Re-Buy: ' + formatNumText(cost * 0.05, 0) + ' CR @ 95% insurance');
-			buffer.push('');
+			stats.push([getTranslation('stat-price'),   (formatNumText(cost, 0) + ' ' + getTranslation('unit-credits-abbr'))]);
+			stats.push([getTranslation('stat-rebuy'),   (formatNumText(cost * 0.05, 0) + ' ' + getTranslation('unit-credits-abbr') + ' @ ' + formatPctText(0.95,0) + ' ' + getTranslation('insurance'))]);
 			
+			var l = 0;
+			for (var s = 0;  s < stats.length;  s++)
+				l = max(l, (stats[s][0] || '').length);
+			for (var s = 0;  s < stats.length;  s++)
+				buffer.push((stats[s][0] || '').padEnd(l) + ': ' + stats[s][1]);
 			return buffer.join('\n');
 		}, // exportText()
 		
@@ -3636,7 +3766,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 						}
 					}
 				}
-				if (errors) errors.push('Module values not specified; applying estimated '+formatPctText(1 - cache.discountMod[discounts], 1)+' discount');
+				if (errors) errors.push(getTranslation('interp-estimated-percent-discount', {'percent':(1 - cache.discountMod[discounts]),'percent%':true,'percent#':1}));
 			}
 		}
 		
@@ -3900,24 +4030,42 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // getAttrModifierDifference()
 	
 	
-	var getModuleLabel = function(module, abbrev, icons) {
-		var label = '' + module.class + module.rating;
-		if (module.mount || module.missile || module.cabincls) {
-			label += '/' +
-				(module.mount   ? (icons ? (HTML_ICON_MOUNT[  module.mount  ] || HTML_ICON['unknown']) : module.mount  ) : '') +
-				(module.missile ? (icons ? (HTML_ICON_MISSILE[module.missile] || HTML_ICON['unknown']) : module.missile) : '') +
-				(module.cabincls || '')
-			;
-		}
-		if (module.tag && icons)
-			label += (HTML_ICON_TAG[module.tag] || HTML_ICON['unknown']);
-		var name = module.name;
-		if (abbrev) {
-			name = ((eddb.mtype[module.mtype] || EMPTY_OBJ).modulenames || EMPTY_OBJ)[name] || name;
-			name = (typeof name === 'string') ? name : '';
-		}
-		return label + ((label && name) ? ' ' : '') + name;
+	var getModuleLabel = function(module) {
+		return (
+			module.class
+			+ module.rating
+			+ ((module.mount || module.missile || module.cabincls) ? '/' : '')
+			+ (module.mount || '')
+			+ (module.missile || '')
+			+ (module.cabincls || '')
+			+ ' '
+			+ module.name
+		);
 	}; // getModuleLabel()
+	
+	
+	var getModuleLabelDOM = function(module, abbrev, icons) {
+		var df = document.createDocumentFragment();
+		df.append(''+module.class, createTranslatedElement('span', 'rating-'+module.rating.toLowerCase()));
+		if (module.mount || module.missile || module.cabincls)
+			df.appendChild(createTranslatedElement('span', 'divider'));
+		if (module.mount)
+			df.appendChild(icons ? (cache.icon[ICON_MOUNT[  module.mount  ]] || cache.icon['unknown']).cloneNode(true) : createTranslatedElement('span', 'mount-'  +module.mount.toLowerCase()  +'-abbr'));
+		if (module.missile)
+			df.appendChild(icons ? (cache.icon[ICON_MISSILE[module.missile]] || cache.icon['unknown']).cloneNode(true) : createTranslatedElement('span', 'missile-'+module.missile.toLowerCase()+'-abbr'));
+		if (module.cabincls)
+			df.appendChild(createTranslatedElement('span', 'cabincls-'+module.cabincls.toLowerCase()+'-abbr'));
+		if (module.tag && icons)
+			df.appendChild((cache.icon[ICON_TAG[module.tag]] || cache.icon['unknown']).cloneNode(true));
+		var key = 'module-' + (module.namekey || module.id);
+		if (abbrev) {
+			abbrev = ((eddb.mtype[module.mtype] || EMPTY_OBJ).modulenames || EMPTY_OBJ)[module.name];
+			key = ((typeof abbrev === 'string') ? (key+'-abbr') : (abbrev ? '' : key));
+		}
+		if (key)
+			df.append((df.firstChild ? ' ' : ''), createTranslatedElement('span', key));
+		return df;
+	}; // getModuleLabelDOM()
 	
 	
 	var getModuleAttrs = function(module) {
@@ -4055,11 +4203,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		var decimals = -ceil(log(step) / LN10 - 0.000001);
 		if (decimals > 0) {
-			if (!cache.reTrailingPointZero) {
-				var sep = formatNumText(1.234,3).substring(1,2);
-				cache.reTrailingPointZero = new RegExp('(\\'+sep+'[0-9]*?[1-9])0+$|\\'+sep+'0*$');
-			}
-			var text = formatNumText(value, decimals).replace(cache.reTrailingPointZero, '$1');
+			decimals = (parseFloat(value.toFixed(decimals)).toString().split('.')[1] || '').length;
+			var text = formatNumText(value, decimals);
+			
 		} else {
 			var step = pow(10, -decimals);
 			var text = formatNumText(((value / step + 0.5) | 0) * step, 0);
@@ -4096,9 +4242,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			if (attribute.modset || attribute.modadd) {
 				text += formatNumText(value - base, (attribute.step >= 1) ? 0 : 2);
 			} else if (attribute.modmod || attribute.unit === '%') {
-				text += formatNumText(value - base, 1) + '%';
+				text += formatPctText((value - base) / 100.0, 1);
 			} else {
-				text += formatNumText(((value / base) - 1) * 100, 1) + '%';
+				text += formatPctText(((value / base) - 1), 1);
 			}
 		}
 		return text;
@@ -4117,7 +4263,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		if (!attribute || isNaN(textvalue))
 			return undefined;
 		var base = getModuleAttrValue(module, attr);
-		if (text.slice(-1) === '%' && (attribute.unit !== '%' || textvalue[0] === '+' || textvalue[0] === '-')) {
+		if (text.slice(-1) === '%' && (attribute.unit !== '%' || text[0] === '+' || text[0] === '-')) {
 			var value = base * (1 + textvalue / 100);
 		} else {
 			var value = base + textvalue;
@@ -4206,22 +4352,22 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var m1 = eddb.material[mat1];
 		var m2 = eddb.material[mat2];
 		if (!m1 || !m2) return (m1 ? 1 : (m2 ? -1 : 0));
-		var v1 = m1.name;
-		var v2 = m2.name;
+		var v1 = getTranslation('material-'+mat1) || m1.name;
+		var v2 = getTranslation('material-'+mat2) || m2.name;
 		return (v1 < v2) ? -1 : ((v1 > v2) ? 1 : 0);
 	}; // sortMaterials();
 	
 	
 	var sortShipIDs = function(shipid1, shipid2) {
-		var v1 = eddb.ship[shipid1].name;
-		var v2 = eddb.ship[shipid2].name;
+		var v1 = getTranslation('ship-'+shipid1) || eddb.ship[shipid1].name;
+		var v2 = getTranslation('ship-'+shipid2) || eddb.ship[shipid2].name;
 		return (v1 < v2) ? -1 : ((v1 > v2) ? 1 : 0);
 	}; // sortShipIDs()
 	
 	
 	var sortMtypes = function(mtype1, mtype2) {
-		var v1 = (eddb.mtype[mtype1].sortname || eddb.mtype[mtype1].name);
-		var v2 = (eddb.mtype[mtype2].sortname || eddb.mtype[mtype2].name);
+		var v1 = (eddb.mtype[mtype1].sortname || getTranslation('mtype-'+mtype1) || eddb.mtype[mtype1].name);
+		var v2 = (eddb.mtype[mtype2].sortname || getTranslation('mtype-'+mtype2) || eddb.mtype[mtype2].name);
 		return (v1 < v2) ? -1 : ((v1 > v2) ? 1 : 0);
 	}; // sortMtypes()
 	
@@ -4259,8 +4405,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		// if experimental, by name
 		if (m1.mtype === 'hex' || m1.mtype === 'uex') {
-			v1 = m1.name;
-			v2 = m2.name;
+			v1 = getTranslation('module-'+(m1.namekey || modid1)) || m1.name;
+			v2 = getTranslation('module-'+(m2.namekey || modid2)) || m2.name;
 			if (v1 != v2) return ((v1 < v2) ? -1 : (v1 > v2) ? 1 : 0);
 		}
 		// by tag
@@ -4276,8 +4422,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		v2 = 0 - (m2.rating || ' ').charCodeAt(0);
 		if (v1 != v2) return v1 - v2;
 		// by name
-		v1 = m1.name;
-		v2 = m2.name;
+		v1 = getTranslation('module-'+(m1.namekey || modid1)) || m1.name;
+		v2 = getTranslation('module-'+(m2.namekey || modid2)) || m2.name;
 		if (v1 != v2) return ((v1 < v2) ? -1 : (v1 > v2) ? 1 : 0);
 		// by cost
 		v1 = 0 - (m1.cost || 0);
@@ -4289,15 +4435,15 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	
 	var sortBlueprints = function(bpid1, bpid2) {
-		var v1 = (eddb.blueprint[bpid1] || EMPTY_OBJ).name;
-		var v2 = (eddb.blueprint[bpid2] || EMPTY_OBJ).name;
+		var v1 = getTranslation('blueprint-'+bpid1) || (eddb.blueprint[bpid1] || EMPTY_OBJ).name;
+		var v2 = getTranslation('blueprint-'+bpid2) || (eddb.blueprint[bpid2] || EMPTY_OBJ).name;
 		return (v1 < v2) ? -1 : ((v1 > v2) ? 1 : 0);
 	}; // sortBlueprints()
 	
 	
 	var sortExpeffects = function(expid1, expid2) {
-		var v1 = (eddb.expeffect[expid1] || EMPTY_OBJ).name;
-		var v2 = (eddb.expeffect[expid2] || EMPTY_OBJ).name;
+		var v1 = getTranslation('expeffect-'+expid1) || (eddb.expeffect[expid1] || EMPTY_OBJ).name;
+		var v2 = getTranslation('expeffect-'+expid2) || (eddb.expeffect[expid2] || EMPTY_OBJ).name;
 		return (v1 < v2) ? -1 : ((v1 > v2) ? 1 : 0);
 	}; // sortExpeffects()
 	
@@ -4370,8 +4516,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				c = sortMtypes(m1.mtype, m2.mtype);
 				if (c) return c;
 				// by name
-				v1 = m1.name;
-				v2 = m2.name;
+				v1 = getTranslation('module-'+(m1.namekey || slot1.getModuleID())) || m1.name;
+				v2 = getTranslation('module-'+(m2.namekey || slot2.getModuleID())) || m2.name;
 				if (v1 != v2) return ((v1 < v2) ? -1 : (v1 > v2) ? 1 : 0);
 				// by cost
 				v1 = 0 - (m1.cost || 0);
@@ -4418,6 +4564,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		// identify and sort ships
 		cache.ships = Object.keys(eddb.ship);
 		cache.ships.sort(sortShipIDs);
+		for (var sid in eddb.ship)
+			eddb.ship[sid].id = sid;
+		
+		// tag modules
+		for (var mid in eddb.module)
+			eddb.module[mid].id = mid;
 		
 		// initialize attribute cache
 		for (var i = 0;  i < eddb.attributes.length;  i++) {
@@ -4534,6 +4686,18 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		cache.discounts = Object.keys(cache.discountMod);
 		cache.discounts.sort(sortDiscounts);
+		
+		// create DOM templates for each defined SVG icon
+		var div = document.createElement('div');
+		document.getElementById('svg_defs').querySelectorAll('symbol').forEach(function (sym) {
+			var id = sym.id;
+			if (id.startsWith('icon_')) {
+				var name = id.substring(5);
+				// have to use a div shim because creating the svg element directly seems to break the <use xlink:href> somehow, so it renders no icon
+				div.innerHTML = '<svg class="iconsvg ' + name + '"><use xlink:href="#' + id + '"/></svg>';
+				cache.icon[name] = div.removeChild(div.firstChild);
+			}
+		});
 	}; // initCache()
 	
 	
@@ -4560,6 +4724,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			document.addEventListener('click', onDocumentClickFocus, true);
 			document.addEventListener('focus', onDocumentClickFocus, true);
 		}
+		updateTranslations(element);
 		element.style.display = 'block';
 		current.popup.element = element;
 		current.popup.trigger = trigger;
@@ -4579,7 +4744,11 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var status = document.getElementById('popup_status');
 		var okay = document.forms.popup.elements.okay;
 		var cancel = document.forms.popup.elements.cancel;
-		labelarea.innerHTML = html || '';
+		if (typeof html === 'string') {
+			labelarea.innerHTML = html;
+		} else {
+			labelarea.replaceChildren(html);
+		}
 		textarea.removeAttribute('style');
 		table.style.display = 'none';
 		status.innerHTML = '';
@@ -4622,7 +4791,11 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var status = document.getElementById('popup_status');
 		var okay = document.forms.popup.elements.okay;
 		var cancel = document.forms.popup.elements.cancel;
-		labelarea.innerHTML = html || '';
+		if (typeof html === 'string') {
+			labelarea.innerHTML = html;
+		} else {
+			labelarea.replaceChildren(html);
+		}
 		textarea.style.display = 'none';
 		table.style.display = '';
 		status.innerHTML = '';
@@ -4661,72 +4834,59 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	*/
 	
 	
-	var formatShipyardSlots = function(build, slotgroup, map) {
+	var formatShipyardSlots = function(build, slotgroup, asSize) {
 		var sizes = eddb.ship[build.getShipID()].slots[slotgroup].slice(0);
 		sizes.sort(sortNumbersDesc);
-		if (map) {
-			var i = sizes.length;
-			while (i-- > 0)
-				sizes[i] = (map[sizes[i] || 0] || '?');
-		}
-		return sizes.join(' ');
+		if (!asSize)
+			return sizes.join(' ');
+		var df = document.createDocumentFragment();
+		for (var i = 0;  i < sizes.length;  i++)
+			df.append((i ? ' ' : ''), createTranslatedElement('span', 'size-'+sizes[i]+'-abbr'));
+		return df;
 	}; // formatShipyardSlots()
 	
 	
-	var sortPrepRevAlpha = function(t) {
-		var s = '';
-		for (var i = 0;  i < t.length;  i++) {
-			s += String.fromCharCode(65535 - t.charCodeAt(i));
-		//	s += HASH_NUM_CHR[62 - HASH_NUM_CHR.indexOf(t[i])];
-		}
-		return s;
-	}; // sortPrepReverseAlpha()
-	
-	var sortPrepLength = function(t) {
-		return t.length;
-	}; // sortPrepLength()
-	
 	var UI_SHIPYARD_COL = {
-		label           : { header:'Build',           abbr:'Stored build label',                                        css:'text',sort:[String],       nochange:1,              render:function(build) { return build.getName(); } },
-		name_ship       : { header:'Ship',            abbr:'Ship hull name',                                            css:'text',sort:[String],       nochange:1,              shipattr:'name' },
-		cost            : { header:'Price',                                                                             css:'tar', sort:[parseNumText], attr:'cost',    scale:0, buildstat:'cost' },
-		szcls           : { header:'Sz',              abbr:'Landing pad size',                                          css:'tac', sort:[sortPrepRevAlpha],                      render:function(build) { return '?SML'[(eddb.ship[build.getShipID()] || EMPTY_OBJ).class || 0]; } },
-		crew            : { header:'Crw',                                                                               css:'tar', sort:[parseNumText], attr:'crew',             shipattr:'crew' },
-		masslock        : { header:'MLF',                                                                               css:'tar', sort:[parseNumText], attr:'masslock',         shipattr:'masslock' },
-		mass_hull       : { header:'Hull',            abbr:'Hull mass',                        colgroup:'Mass',         css:'tar', sort:[parseNumText], attr:'mass',    scale:0, buildstat:'mass_hull' },
-		mass_unl        : { header:'Unl',             abbr:'Unladen mass',                     colgroup:'Mass',         css:'tar', sort:[parseNumText], attr:'mass',    scale:0, buildstat:'mass_unladen' },
-		mass_ldn        : { header:'Ldn',             abbr:'Laden mass',                       colgroup:'Mass',         css:'tar', sort:[parseNumText], attr:'mass',    scale:0, buildstat:'mass_laden' },
-		jump_unl        : { header:'Unl',             abbr:'Unladen jump range',               colgroup:'Jump',         css:'tar', sort:[parseNumText],                 scale:1, buildstat:'_jump_unladen' },
-		jump_ldn        : { header:'Ldn',             abbr:'Laden jump range',                 colgroup:'Jump',         css:'tar', sort:[parseNumText],                 scale:1, buildstat:'_jump_laden' },
-		range_unl       : { header:'Unl',             abbr:'Unladen fuel tank range',          colgroup:'Range',        css:'tar', sort:[parseNumText],                 scale:1, buildstat:'_range_unladen' },
-		range_ldn       : { header:'Ldn',             abbr:'Laden fuel tank range',            colgroup:'Range',        css:'tar', sort:[parseNumText],                 scale:1, buildstat:'_range_laden' },
-		topspd          : { header:'Spd',             abbr:'Thruster speed',                   colgroup:' ',            css:'tar', sort:[parseNumText], attr:'topspd',           buildstat:'_speed' },
-		bstspd          : { header:'Bst',             abbr:'Boost speed',                      colgroup:' ',            css:'tar', sort:[parseNumText], attr:'bstspd',           buildstat:'_boost' },
-		shields         : { header:'Shd',             abbr:'Shield strength',                  colgroup:'  ',           css:'tar', sort:[parseNumText], attr:'shields',          buildstat:'_shields' },
-		armour          : { header:'Arm',             abbr:'Armour strength',                  colgroup:'  ',           css:'tar', sort:[parseNumText], attr:'armour',           buildstat:'_armour' },
-		hardness        : { header:'Hrd',                                                      colgroup:'  ',           css:'tar', sort:[parseNumText], attr:'hardness',         shipattr:'hardness' },
-		fuelcap         : { header:'Fuel',                                                     colgroup:' ',            css:'tar', sort:[parseNumText], attr:'fuelcap', scale:0, buildstat:'fuelcap' },
-		cargocap        : { header:'Crgo',                                                     colgroup:' ',            css:'tar', sort:[parseNumText], attr:'cargocap',         buildstat:'cargocap' },
-		cabincap        : { header:'Psgr',                                                     colgroup:' ',            css:'tar', sort:[parseNumText], attr:'cabincap',         buildstat:'cabincap' },
-		slots_hardpoint : { header:'Hardpoints',      abbr:'Hardpoint mount sizes',            colgroup:'Module Slots', css:'tal', sort:[sortPrepRevAlpha,sortPrepLength],       render:function(build) { return formatShipyardSlots(build, 'hardpoint', 'USMLH'); } },
-		slots_utility   : { header:'Utl',             abbr:'Number of utility mounts',         colgroup:'Module Slots ',css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.utility.length; } },
-		slots_core_0    : { header:CORE_SLOT_ABBR[0], abbr:(CORE_SLOT_NAME[0] + ' slot size'), colgroup:'Module Slots', css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[0]; } },
-		slots_core_1    : { header:CORE_SLOT_ABBR[1], abbr:(CORE_SLOT_NAME[1] + ' slot size'), colgroup:'Module Slots', css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[1]; } },
-		slots_core_2    : { header:CORE_SLOT_ABBR[2], abbr:(CORE_SLOT_NAME[2] + ' slot size'), colgroup:'Module Slots', css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[2]; } },
-		slots_core_3    : { header:CORE_SLOT_ABBR[3], abbr:(CORE_SLOT_NAME[3] + ' slot size'), colgroup:'Module Slots', css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[3]; } },
-		slots_core_4    : { header:CORE_SLOT_ABBR[4], abbr:(CORE_SLOT_NAME[4] + ' slot size'), colgroup:'Module Slots', css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[4]; } },
-		slots_core_5    : { header:CORE_SLOT_ABBR[5], abbr:(CORE_SLOT_NAME[5] + ' slot size'), colgroup:'Module Slots', css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[5]; } },
-		slots_core_6    : { header:CORE_SLOT_ABBR[6], abbr:(CORE_SLOT_NAME[6] + ' slot size'), colgroup:'Module Slots', css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[6]; } },
-		slots_core_7    : { header:CORE_SLOT_ABBR[7], abbr:(CORE_SLOT_NAME[7] + ' slot size'), colgroup:'Module Slots', css:'tac', sort:[parseNumText],                          render:function(build) { return eddb.ship[build.getShipID()].slots.component[7]; } },
-		slots_military  : { header:'Mil',             abbr:'Military internal slot sizes',     colgroup:'Module Slots ',css:'tal', sort:[String,sortPrepLength],                 render:function(build) { return formatShipyardSlots(build, 'military');} },
-		slots_internal  : { header:'Opt Internal',    abbr:'Optional internal slot sizes',     colgroup:'Module Slots', css:'tal', sort:[String,sortPrepLength],                 render:function(build) { return formatShipyardSlots(build, 'internal');} },
-		dps             : { header:'DPS',             abbr:'Total DPS',                        colgroup:'Weapons',      css:'tar', sort:[parseNumText], attr:'dps',     scale:1, buildstat:'dps' },
-		dps_abs         : { header:'Abs',             abbr:'Absolute DPS portion',             colgroup:'Weapons',      css:'tar', sort:[parseNumText],                          render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_abs') / dps, 0) : ''); } },
-		dps_kin         : { header:'Kin',             abbr:'Kinetic DPS portion',              colgroup:'Weapons',      css:'tar', sort:[parseNumText],                          render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_kin') / dps, 0) : ''); } },
-		dps_thm         : { header:'Thm',             abbr:'Thermal DPS portion',              colgroup:'Weapons',      css:'tar', sort:[parseNumText],                          render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_thm') / dps, 0) : ''); } },
-		dps_exp         : { header:'Exp',             abbr:'Explosive DPS portion',            colgroup:'Weapons',      css:'tar', sort:[parseNumText],                          render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_exp') / dps, 0) : ''); } },
-		dps_axe         : { header:'AXe',             abbr:'Anti-Xeno DPS portion',            colgroup:'Weapons',      css:'tar', sort:[parseNumText],                          render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_axe') / dps, 0) : ''); } },
-		dps_cau         : { header:'Cau',             abbr:'Caustic DPS portion',              colgroup:'Weapons',      css:'tar', sort:[parseNumText],                          render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_cau') / dps, 0) : ''); } },
+		label           : { header:'ui-shipyard-build-label',         abbr:'ui-shipyard-build-desc',                                               css:'text',                     nochange:1,              render:function(build) { return build.getName(); } },
+		name_ship       : { header:'ui-shipyard-ship-label',          abbr:'ui-shipyard-ship-desc',                                                css:'text',                     nochange:1,              shipattr:'name' },
+		cost            : { header:'ui-shipyard-cost-label',                                                                                       css:'tar', sortnum:true,        attr:'cost',    scale:0, buildstat:'cost' },
+		szcls           : { header:'ui-shipyard-size-label',          abbr:'ui-shipyard-size-desc',                                                css:'tac', sortnum:true,                                 shipattr:'class', render:function(build) { return createTranslatedElement('span', 'size-'+((eddb.ship[build.getShipID()] || EMPTY_OBJ).class || 0)+'-abbr'); } },
+		crew            : { header:'ui-shipyard-crew-label',                                                                                       css:'tar', sortnum:true,        attr:'crew',             shipattr:'crew' },
+		masslock        : { header:'ui-shipyard-masslock-label',                                                                                   css:'tar', sortnum:true,        attr:'masslock',         shipattr:'masslock' },
+		mass_hull       : { header:'ui-shipyard-mass-hull-label',     abbr:'ui-shipyard-mass-hull-desc',     colgroup:'ui-shipyard-mass-label',    css:'tar', sortnum:true,        attr:'mass',    scale:0, buildstat:'mass_hull' },
+		mass_unl        : { header:'ui-shipyard-mass-unladen-label',  abbr:'ui-shipyard-mass-unladen-desc',  colgroup:'ui-shipyard-mass-label',    css:'tar', sortnum:true,        attr:'mass',    scale:0, buildstat:'mass_unladen' },
+		mass_ldn        : { header:'ui-shipyard-mass-laden-label',    abbr:'ui-shipyard-mass-laden-desc',    colgroup:'ui-shipyard-mass-label',    css:'tar', sortnum:true,        attr:'mass',    scale:0, buildstat:'mass_laden' },
+		jump_unl        : { header:'ui-shipyard-jump-unladen-label',  abbr:'ui-shipyard-jump-unladen-desc',  colgroup:'ui-shipyard-jump-label',    css:'tar', sortnum:true,                        scale:1, buildstat:'_jump_unladen' },
+		jump_ldn        : { header:'ui-shipyard-jump-laden-label',    abbr:'ui-shipyard-jump-laden-desc',    colgroup:'ui-shipyard-jump-label',    css:'tar', sortnum:true,                        scale:1, buildstat:'_jump_laden' },
+		range_unl       : { header:'ui-shipyard-range-unladen-label', abbr:'ui-shipyard-range-unladen-desc', colgroup:'ui-shipyard-range-label',   css:'tar', sortnum:true,                        scale:1, buildstat:'_range_unladen' },
+		range_ldn       : { header:'ui-shipyard-range-laden-label',   abbr:'ui-shipyard-range-laden-desc',   colgroup:'ui-shipyard-range-label',   css:'tar', sortnum:true,                        scale:1, buildstat:'_range_laden' },
+		topspd          : { header:'ui-shipyard-speed-label',         abbr:'ui-shipyard-speed-desc',         colgroup:' ',                         css:'tar', sortnum:true,        attr:'topspd',           buildstat:'_speed' },
+		bstspd          : { header:'ui-shipyard-boost-label',         abbr:'ui-shipyard-boost-desc',         colgroup:' ',                         css:'tar', sortnum:true,        attr:'bstspd',           buildstat:'_boost' },
+		shields         : { header:'ui-shipyard-shield-label',        abbr:'ui-shipyard-shield-desc',        colgroup:'  ',                        css:'tar', sortnum:true,        attr:'shields',          buildstat:'_shields' },
+		armour          : { header:'ui-shipyard-armour-label',        abbr:'ui-shipyard-armour-desc',        colgroup:'  ',                        css:'tar', sortnum:true,        attr:'armour',           buildstat:'_armour' },
+		hardness        : { header:'ui-shipyard-hardness-label',                                             colgroup:'  ',                        css:'tar', sortnum:true,        attr:'hardness',         shipattr:'hardness' },
+		fuelcap         : { header:'ui-shipyard-fuel-label',                                                 colgroup:' ',                         css:'tar', sortnum:true,        attr:'fuelcap', scale:0, buildstat:'fuelcap' },
+		cargocap        : { header:'ui-shipyard-cargo-label',                                                colgroup:' ',                         css:'tar', sortnum:true,        attr:'cargocap',         buildstat:'cargocap' },
+		cabincap        : { header:'ui-shipyard-passenger-label',                                            colgroup:' ',                         css:'tar', sortnum:true,        attr:'cabincap',         buildstat:'cabincap' },
+		slots_hardpoint : { header:'ui-shipyard-hardpoint-label',     abbr:'ui-shipyard-hardpoint-desc',     colgroup:'ui-shipyard-slots-label',   css:'tal', sortalt:true,                                 render:function(build) { return formatShipyardSlots(build, 'hardpoint', true); }, sortkey:function(build) { return formatShipyardSlots(build, 'hardpoint');} },
+		slots_utility   : { header:'ui-shipyard-utility-label',       abbr:'ui-shipyard-utility-desc',       colgroup:'ui-shipyard-slots-label ',  css:'tac', sortnum:true,                                 render:function(build) { return eddb.ship[build.getShipID()].slots.utility.length; } },
+		slots_core_0    : { header:'ui-shipyard-core-bh-label',       abbr:'ui-shipyard-core-bh-desc',       colgroup:'ui-shipyard-slots-label',   css:'tac', sortnum:true,                                 render:function(build) { return eddb.ship[build.getShipID()].slots.component[0]; } },
+		slots_core_1    : { header:'ui-shipyard-core-pp-label',       abbr:'ui-shipyard-core-pp-desc',       colgroup:'ui-shipyard-slots-label',   css:'tac', sortnum:true,                                 render:function(build) { return eddb.ship[build.getShipID()].slots.component[1]; } },
+		slots_core_2    : { header:'ui-shipyard-core-th-label',       abbr:'ui-shipyard-core-th-desc',       colgroup:'ui-shipyard-slots-label',   css:'tac', sortnum:true,                                 render:function(build) { return eddb.ship[build.getShipID()].slots.component[2]; } },
+		slots_core_3    : { header:'ui-shipyard-core-fd-label',       abbr:'ui-shipyard-core-fd-desc',       colgroup:'ui-shipyard-slots-label',   css:'tac', sortnum:true,                                 render:function(build) { return eddb.ship[build.getShipID()].slots.component[3]; } },
+		slots_core_4    : { header:'ui-shipyard-core-ls-label',       abbr:'ui-shipyard-core-ls-desc',       colgroup:'ui-shipyard-slots-label',   css:'tac', sortnum:true,                                 render:function(build) { return eddb.ship[build.getShipID()].slots.component[4]; } },
+		slots_core_5    : { header:'ui-shipyard-core-pd-label',       abbr:'ui-shipyard-core-pd-desc',       colgroup:'ui-shipyard-slots-label',   css:'tac', sortnum:true,                                 render:function(build) { return eddb.ship[build.getShipID()].slots.component[5]; } },
+		slots_core_6    : { header:'ui-shipyard-core-ss-label',       abbr:'ui-shipyard-core-ss-desc',       colgroup:'ui-shipyard-slots-label',   css:'tac', sortnum:true,                                 render:function(build) { return eddb.ship[build.getShipID()].slots.component[6]; } },
+		slots_core_7    : { header:'ui-shipyard-core-ft-label',       abbr:'ui-shipyard-core-ft-desc',       colgroup:'ui-shipyard-slots-label',   css:'tac', sortnum:true,                                 render:function(build) { return eddb.ship[build.getShipID()].slots.component[7]; } },
+		slots_military  : { header:'ui-shipyard-military-label',      abbr:'ui-shipyard-military-desc',      colgroup:'ui-shipyard-slots-label ',  css:'tal', sortalt:true,                                 render:function(build) { return formatShipyardSlots(build, 'military');} },
+		slots_internal  : { header:'ui-shipyard-internal-label',      abbr:'ui-shipyard-internal-desc',      colgroup:'ui-shipyard-slots-label',   css:'tal', sortalt:true,                                 render:function(build) { return formatShipyardSlots(build, 'internal');} },
+		dps             : { header:'ui-shipyard-dps-label',           abbr:'ui-shipyard-dps-desc',           colgroup:'ui-shipyard-weapons-label', css:'tar', sortnum:true,        attr:'dps',     scale:1, buildstat:'dps' },
+		dps_abs         : { header:'ui-shipyard-dps-absolute-label',  abbr:'ui-shipyard-dps-absolute-desc',  colgroup:'ui-shipyard-weapons-label', css:'tar', sortnum:true,                                 render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_abs') / dps, 0) : ''); }, sortkey:function(build) { return (build.getStat('dps_abs') || 0) / (build.getStat('dps') || 0.000001); } },
+		dps_kin         : { header:'ui-shipyard-dps-kinetic-label',   abbr:'ui-shipyard-dps-kinetic-desc',   colgroup:'ui-shipyard-weapons-label', css:'tar', sortnum:true,                                 render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_kin') / dps, 0) : ''); }, sortkey:function(build) { return (build.getStat('dps_kin') || 0) / (build.getStat('dps') || 0.000001); } },
+		dps_thm         : { header:'ui-shipyard-dps-thermal-label',   abbr:'ui-shipyard-dps-thermal-desc',   colgroup:'ui-shipyard-weapons-label', css:'tar', sortnum:true,                                 render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_thm') / dps, 0) : ''); }, sortkey:function(build) { return (build.getStat('dps_thm') || 0) / (build.getStat('dps') || 0.000001); } },
+		dps_exp         : { header:'ui-shipyard-dps-explosive-label', abbr:'ui-shipyard-dps-explosive-desc', colgroup:'ui-shipyard-weapons-label', css:'tar', sortnum:true,                                 render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_exp') / dps, 0) : ''); }, sortkey:function(build) { return (build.getStat('dps_exp') || 0) / (build.getStat('dps') || 0.000001); } },
+		dps_axe         : { header:'ui-shipyard-dps-antixeno-label',  abbr:'ui-shipyard-dps-antixeno-desc',  colgroup:'ui-shipyard-weapons-label', css:'tar', sortnum:true,                                 render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_axe') / dps, 0) : ''); }, sortkey:function(build) { return (build.getStat('dps_axe') || 0) / (build.getStat('dps') || 0.000001); } },
+		dps_cau         : { header:'ui-shipyard-dps-caustic-label',   abbr:'ui-shipyard-dps-caustic-desc',   colgroup:'ui-shipyard-weapons-label', css:'tar', sortnum:true,                                 render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_cau') / dps, 0) : ''); }, sortkey:function(build) { return (build.getStat('dps_cau') || 0) / (build.getStat('dps') || 0.000001); } },
 	}; // UI_SHIPYARD_COL{}
 	
 	var UI_SHIPYARD_SHIPS_COLS = [
@@ -4757,7 +4917,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			var shipid = cache.ships[s];
 			var tr = createUIShipyardRow(UI_SHIPYARD_SHIPS_COLS);
 			tr.id = 'shipyard_ship_' + shipid;
-			tr.cells[0].innerHTML = '<button name="shipyard_ship" value="' + shipid + '" class="label">' + eddb.ship[shipid].name + '</button>';
+			var a = createTranslatedElement('a', 'ship-'+shipid);
+			a.href = '#/L=' + cache.shipBuild[shipid].getHash();
+			a.className = 'label';
+			tr.cells[0].appendChild(a);
 			updateUIShipyardRow(UI_SHIPYARD_SHIPS_COLS, tr, cache.shipBuild[shipid]);
 			tbody.appendChild(tr);
 		}
@@ -4767,6 +4930,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	
 	var initUIShipyardStoredBuilds = function() {
+		var container = document.getElementById('shipyard_storedbuilds_container');
 		var table = document.createElement('table');
 		table.id = 'shipyard_storedbuilds_table';
 		table.className = 'striped';
@@ -4775,29 +4939,17 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var tbody = document.createElement('tbody');
 		tbody.id = 'shipyard_storedbuilds_tbody';
 		table.appendChild(tbody);
-		document.getElementById('shipyard_storedbuilds_container').appendChild(table);
+		container.appendChild(table);
 		if (current.beta) {
-			var button = document.createElement('button');
+			var div = document.createElement('div');
+			var button = createTranslatedElement('button', 'ui-shipyard-copy-live');
 			button.style.margin = '0.5em';
 			button.style.padding = '0.125em 0.25em';
-			button.innerHTML = 'Copy from Live Site';
 			button.addEventListener('click', onUIShipyardStoredCopyLiveClick);
-			document.getElementById('shipyard_storedbuilds_container').appendChild(button);
+			div.appendChild(button);
+			container.appendChild(div);
 		}
 	}; // initUIShipyardStoredBuilds()
-	
-	
-	var onUIShipyardStoredCopyLiveClick = function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-		if (current.beta && confirm('Copy builds from live site storage?\nAny matching beta or dev site builds will be overwritten.')) {
-			readStoredBuilds(true);
-			updateUIShipyardStoredBuilds();
-			updateUIFitStoredBuilds();
-			updateUIAnalysisStoredBuilds();
-			writeStoredBuilds();
-		}
-	}; // onUIShipyardStoredCopyLiveClick()
 	
 	
 	var createUIShipyardHeader = function(columns, tab) {
@@ -4814,8 +4966,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					var th = document.createElement('th');
 					th.colSpan = colspan;
 					th.className = (colgroup ? 'colgroup' : '');
-					var span = document.createElement('span');
-					span.innerHTML = (colgroup || '');
+					var span = createTranslatedElement('span', colgroup);
 					th.appendChild(span);
 					tr.appendChild(th);
 				}
@@ -4835,25 +4986,24 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			colgroup = col.colgroup;
 			if (col.header) {
 				var span = document.createElement('span');
-				var abbr = document.createElement('abbr');
-				abbr.innerHTML = col.header;
-				abbr.title = (col.abbr || (cache.attribute[col.attr] || EMPTY_OBJ).desc || '');
-				span.appendChild(abbr);
-				if (col.sort) {
-					var label = document.createElement('label');
-					label.className = 'togglebutton';
-					var input = document.createElement('input');
-					input.type = 'radio';
-					input.name = 'shipyard_' + tab + '_col';
-					input.value = c;
-					label.appendChild(input);
-					var div = document.createElement('div');
-					div.appendChild(span);
-					label.appendChild(div);
-					th.appendChild(label);
-				} else {
-					th.appendChild(span);
+				var abbr = createTranslatedElement('abbr', col.header);
+				var key = col.abbr || (col.attr ? ("attr-" + col.attr + "-desc") : null);
+				if (key) {
+					abbr.setAttribute("edsy-title", key);
+					abbr.title = getTranslation(key);
 				}
+				span.appendChild(abbr);
+				var label = document.createElement('label');
+				label.className = 'togglebutton';
+				var input = document.createElement('input');
+				input.type = 'radio';
+				input.name = 'shipyard_' + tab + '_col';
+				input.value = c;
+				label.appendChild(input);
+				var div = document.createElement('div');
+				div.appendChild(span);
+				label.appendChild(div);
+				th.appendChild(label);
 			}
 			tr.appendChild(th);
 		}
@@ -4879,25 +5029,41 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	var updateUIShipyardRow = function(columns, tr, build) {
 		var shipslot = (build ? build.getSlot('ship', 'hull') : null);
-		var html, value;
+		var value, render, sort;
 		for (var c = 0;  c < columns.length;  c++) {
 			var col = UI_SHIPYARD_COL[columns[c]];
 			if (col && !col.nochange) {
-				if (!build) {
-					html = '';
-				} else if (col.render) {
-					html = col.render(build);
-				} else {
-					if (col.buildstat) {
-						value = build.getStat(col.buildstat);
-					} else if (col.shipattr && shipslot) {
-						value = shipslot.getEffectiveAttrValue(col.shipattr);
-					} else {
-						value = '';
-					}
-					html = formatAttrHTML(col.attr, value, col.scale);
+				value = undefined;
+				render = sort = '';
+				if (col.shipattr && shipslot) {
+					value = shipslot.getEffectiveAttrValue(col.shipattr);
 				}
-				tr.cells[c].innerHTML = html;
+				if (col.buildstat) {
+					value = build.getStat(col.buildstat);
+				}
+				if (value !== undefined) {
+					render = formatAttrHTML(col.attr, value, col.scale);
+					sort = value.toFixed(col.scale || 0);
+				}
+				if (col.render) {
+					render = col.render(build);
+					if (typeof render === 'string') {
+						sort = ''+render;
+					} else if (typeof render === 'number') {
+						sort = ''+render;
+						render = formatNumHTML(render, col.scale || 0);
+					}
+				}
+				if (col.sortkey) {
+					sort = col.sortkey(build);
+				}
+				
+				if (typeof render === 'string') {
+					tr.cells[c].innerHTML = ''+render;
+				} else {
+					tr.cells[c].replaceChildren(render);
+				}
+				tr.cells[c].setAttribute('edsy-sort', sort || '');
 			}
 		}
 		return true;
@@ -4938,9 +5104,24 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			if (!tr) {
 				tr = createUIShipyardRow(UI_SHIPYARD_STOREDBUILD_COLS);
 				tr.id = 'shipyard_storedbuild.' + namehash;
-				tr.cells[0].innerHTML = '<button name="storedbuild_reload" value="'+namehash+'" class="label" title="'+encodeHTML(stored.name)+'">'+encodeHTML(stored.name)+'</button>';
-				tr.cells[1].innerHTML = '<button name="storedbuild_rename" value="'+namehash+'">' + HTML_ICON['rename'] + '</button><button name="storedbuild_delete" value="'+namehash+'">'+ HTML_ICON['delete'] + '</button>';
-				tr.cells[2].innerHTML = eddb.ship[build.getShipID()].name;
+				var a = document.createElement('a');
+				a.href = '#/L=' + build.getHash();
+				a.className = 'label';
+				a.setAttribute('edsy-namehash', namehash);
+				a.title = stored.name;
+				a.innerHTML = encodeHTML(stored.name);
+				tr.cells[0].appendChild(a);
+				var button = document.createElement('button');
+				button.name = 'storedbuild_rename';
+				button.value = namehash;
+				button.appendChild(cache.icon['rename'].cloneNode(true));
+				tr.cells[1].appendChild(button);
+				var button = document.createElement('button');
+				button.name = 'storedbuild_delete';
+				button.value = namehash;
+				button.appendChild(cache.icon['delete'].cloneNode(true));
+				tr.cells[1].appendChild(button);
+				tr.cells[2].appendChild(createTranslatedElement('span', 'ship-'+build.getShipID()));
 				tbody.appendChild(tr);
 			} else if (sorted) {
 				tbody.appendChild(tr);
@@ -4957,11 +5138,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // updateUIShipyardStoredBuild()
 	
 	
-	var sortUIShipyardTable = function(table, columns, col, desc, alt) {
+	var sortUIShipyardTable = function(table, columns, col) {
 		if (!table || !columns)
 			return null;
 		
 		// identify sort column, direction, and mode
+		var desc, alt;
 		var state = (current.tableSort[table.id] || {});
 		if (col === undefined) {
 			col = min(max(state.col || 0, 0), columns.length - 1);
@@ -4969,20 +5151,18 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			alt = !!state.alt;
 		} else {
 			col = min(max(col, 0), columns.length - 1);
-			if (desc === undefined) {
-				if (col != state.col) {
-					desc = false;
-					alt = false;
-				} else if (!state.desc) {
-					desc = true;
-					alt = state.alt;
+			if (col != state.col) {
+				desc = false;
+				alt = false;
+			} else if (!state.desc) {
+				desc = true;
+				alt = state.alt;
+			} else {
+				desc = false;
+				if (!state.alt && (UI_SHIPYARD_COL[columns[col]] || EMPTY_OBJ).sortalt) {
+					alt = true;
 				} else {
-					desc = false;
-					if (!state.alt && ((UI_SHIPYARD_COL[columns[col]] || EMPTY_OBJ).sort || EMPTY_ARR).length > 1) {
-						alt = true;
-					} else {
-						alt = false;
-					}
+					alt = false;
 				}
 			}
 			state.col = col;
@@ -4991,16 +5171,17 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		
 		// sort rows
+		var sortnum = (UI_SHIPYARD_COL[columns[col]] || EMPTY_OBJ).sortnum;
+		var sortalt = (UI_SHIPYARD_COL[columns[col]] || EMPTY_OBJ).sortalt;
 		var list = [];
-		var sort1 = ((UI_SHIPYARD_COL[columns[col]] || EMPTY_OBJ).sort || EMPTY_ARR)[0];
-		var sort2 = ((UI_SHIPYARD_COL[columns[col]] || EMPTY_OBJ).sort || EMPTY_ARR)[1];
 		var tbody = table.tBodies[0];
 		for (var r = 0;  r < tbody.rows.length;  r++) {
 			var row = tbody.rows[r];
-			var text = row.cells[col].innerText;
-			var key1 = (sort1 ? sort1(text) : undefined);
-			var key2 = (sort2 ? sort2(text) : undefined);
-			list.push({ row:row, key:(alt ? key2 : key1), key2:(alt ? key1 : key2) });
+			var key = (row.cells[col].getAttribute('edsy-sort') || row.cells[col].innerText);
+			if (sortnum)
+				key = parseNumText(key);
+			var key2 = sortalt ? key.length : 0;
+			list.push({ row:row, key:(alt ? key2 : key), key2:(alt ? key : key2) });
 		}
 		list.sort(desc ? sortObjKeyDesc : sortObjKeyAsc);
 		for (var r = 0;  r < list.length;  r++) {
@@ -5016,6 +5197,114 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		document.forms.shipyard.elements.tab.value = tab;
 		document.forms.shipyard.className = tab;
 	}; // setUIShipyardTab()
+	
+	
+	var onUIShipyardTabChange = function(e) {
+		if (e.target.name === 'tab' && e.target.checked) {
+			setUIShipyardTab(e.target.value);
+		}
+	}; // onUIShipyardTabChange()
+	
+	
+	var onUIShipyardShipsClick = function(e) {
+		var el = e.target;
+		while (el && el.tagName !== 'A' && el.tagName !== 'BUTTON' && el.tagName !== 'INPUT') {
+			el = el.parentNode;
+		}
+		if (!el || el.disabled) {
+		} else if (el.tagName === 'A') {
+			e.stopPropagation();
+			e.preventDefault();
+			var tokens = (el.getAttribute('edsy-text') || '').split('-');
+			if (tokens[0] === 'ship') {
+				setCurrentFit(new Build(parseInt(tokens[1]), true), '');
+				setUIPageTab('outfitting');
+				updateUIAnalysisStoredBuilds();
+			}
+		} else if (el.tagName === 'BUTTON') {
+			e.stopPropagation();
+			e.preventDefault();
+			var tokens = el.name.split('_');
+			if (tokens[1] === 'ship') {
+				setCurrentFit(new Build(el.value, true), '');
+				setUIPageTab('outfitting');
+				updateUIAnalysisStoredBuilds();
+			}
+		} else {
+			var table = el;
+			while (table && table.tagName !== 'TABLE')
+				table = table.parentNode;
+			var state = sortUIShipyardTable(table, UI_SHIPYARD_SHIPS_COLS, parseInt(el.value));
+			if (state) {
+				el.classList.toggle('asc', !state.desc);
+				el.classList.toggle('desc', !!state.desc);
+				el.classList.toggle('key1', !state.alt);
+				el.classList.toggle('key2', !!state.alt);
+			}
+		}
+	}; // onUIShipyardShipsClick()
+	
+	
+	var onUIShipyardStoredBuildsClick = function(e) {
+		var el = e.target;
+		while (el && el.tagName !== 'A' && el.tagName !== 'BUTTON' && el.tagName !== 'INPUT') {
+			el = el.parentNode;
+		}
+		if (!el || el.disabled) {
+		} else if (el.tagName === 'A') {
+			e.stopPropagation();
+			e.preventDefault();
+			var namehash = el.getAttribute('edsy-namehash');
+			if (namehash) {
+				setCurrentFitNameHash(namehash);
+				setUIPageTab('outfitting');
+				updateUIAnalysisStoredBuilds();
+			}
+		} else if (el.tagName === 'BUTTON') {
+			e.stopPropagation();
+			e.preventDefault();
+			var tokens = el.name.split('_');
+			switch (tokens[1]) {
+			case 'reload':
+				setCurrentFitNameHash(el.value);
+				setUIPageTab('outfitting');
+				updateUIAnalysisStoredBuilds();
+				break;
+				
+			case 'rename':
+				renameStoredBuild(el.value);
+				break;
+				
+			case 'delete':
+				deleteStoredBuild(el.value);
+				break;
+			}
+		} else {
+			var table = el;
+			while (table && table.tagName !== 'TABLE')
+				table = table.parentNode;
+			var state = sortUIShipyardTable(table, UI_SHIPYARD_STOREDBUILD_COLS, parseInt(el.value));
+			if (state) {
+				el.classList.toggle('asc', !state.desc);
+				el.classList.toggle('desc', !!state.desc);
+				el.classList.toggle('key1', !state.alt);
+				el.classList.toggle('key2', !!state.alt);
+			}
+		}
+	}; // onUIShipyardStoredBuildsClick()
+	
+	
+	var onUIShipyardStoredCopyLiveClick = function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		if (current.beta && confirm(getTranslation('ui-shipyard-copy-live-confirm'))) {
+			readStoredBuilds(true);
+			updateUIShipyardStoredBuilds();
+			updateUIFitStoredBuilds();
+			updateUIAnalysisStoredBuilds();
+			writeStoredBuilds();
+		}
+	}; // onUIShipyardStoredCopyLiveClick()
 	
 	
 	/*
@@ -5068,7 +5357,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			return false;
 		current.outfitting_focus = focus;
 		document.getElementById('page_body_outfitting').className = 'focus' + focus;
-		document.getElementById('outfitting_details_button_replace').innerHTML = ((focus === 'module') ? 'Install' : 'Replace');
+		var el = document.getElementById('outfitting_details_button_replace');
+		var mode = (focus === 'module') ? 'Install' : 'Replace';
+		el.setAttribute('edsy-text', 'ui-button-'+mode.toLowerCase());
+		el.innerText = mode;
 		return true;
 	}; // setUIOutfittingFocus()
 	
@@ -5109,7 +5401,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		document.getElementById('outfitting_fit_ship_hull').className = (isNaN(modid) ? '' : 'dragerror');
 		document.getElementById('outfitting_fit_ship_hatch').className = (isNaN(modid) ? '' : 'dragerror');
-		for (var slotgroup in GROUP_LABEL) {
+		for (var sg = 0;  sg < GROUPS.length;  sg++) {
+			var slotgroup = GROUPS[sg];
 			var slot;
 			for (var slotnum = 0;  slot = current.fit.getSlot(slotgroup, slotnum);  slotnum++) {
 				var tr = document.getElementById('outfitting_fit_slot_' + slotgroup + '_' + slotnum);
@@ -5148,14 +5441,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var tbody = document.createElement('tbody');
 		
 		var tr = document.createElement('tr');
-		var td = document.createElement('td');
-		td.appendChild(document.createTextNode('Build'));
+		var td = createTranslatedElement('td', 'ui-export-build');
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		td.colSpan = 2;
-		var span = document.createElement('span');
+		var span = createTranslatedElement('span', 'ship-'+current.fit.getShipID());
 		span.className = 'text';
-		span.innerText = eddb.ship[current.fit.getShipID()].name;
 		td.appendChild(span);
 		var shipname = current.fit.getName();
 		var shiptag = current.fit.getNameTag();
@@ -5164,8 +5455,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		tbody.appendChild(tr);
 		
 		var tr = document.createElement('tr');
-		var td = document.createElement('td');
-		td.appendChild(document.createTextNode('URL'));
+		var td = createTranslatedElement('td', 'ui-export-url');
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		td.className = 'export';
@@ -5183,24 +5473,22 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		var button = document.createElement('button');
-		button.innerHTML = HTML_ICON['clipboard'];
+		button.appendChild(cache.icon['clipboard'].cloneNode(true));
 		button.addEventListener('click', onUIPopupExportCopyButtonClick);
 		td.appendChild(button);
 		tr.appendChild(td);
 		tbody.appendChild(tr);
 		
 		var tr = document.createElement('tr');
-		var td = document.createElement('td');
-		td.appendChild(document.createTextNode('Short'));
+		var td = createTranslatedElement('td', 'ui-export-short');
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		td.className = 'export';
 		var div = document.createElement('div');
 		div.className = 'export';
-		var button = document.createElement('button');
+		var button = createTranslatedElement('button', 'ui-button-generate');
 		button.name = 'export_short_gen_button';
 		button.className = 'text';
-		button.innerHTML = 'Generate';
 		button.addEventListener('click', onUIPopupExportShortButtonClick);
 		div.appendChild(button);
 		var input = document.createElement('input');
@@ -5218,15 +5506,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var button = document.createElement('button');
 		button.name = 'export_short_button';
 		button.style.display = 'none';
-		button.innerHTML = HTML_ICON['clipboard'];
+		button.appendChild(cache.icon['clipboard'].cloneNode(true));
 		button.addEventListener('click', onUIPopupExportCopyButtonClick);
 		td.appendChild(button);
 		tr.appendChild(td);
 		tbody.appendChild(tr);
 		
 		var tr = document.createElement('tr');
-		var td = document.createElement('td');
-		td.appendChild(document.createTextNode('Text'));
+		var td = createTranslatedElement('td', 'ui-export-text');
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		td.className = 'export';
@@ -5244,15 +5531,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		var button = document.createElement('button');
-		button.innerHTML = HTML_ICON['clipboard'];
+		button.appendChild(cache.icon['clipboard'].cloneNode(true));
 		button.addEventListener('click', onUIPopupExportCopyButtonClick);
 		td.appendChild(button);
 		tr.appendChild(td);
 		tbody.appendChild(tr);
 		
 		var tr = document.createElement('tr');
-		var td = document.createElement('td');
-		td.appendChild(document.createTextNode('SLEF'));
+		var td = createTranslatedElement('td', 'ui-export-slef');
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		td.className = 'export';
@@ -5270,7 +5556,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		var button = document.createElement('button');
-		button.innerHTML = HTML_ICON['clipboard'];
+		button.appendChild(cache.icon['clipboard'].cloneNode(true));
 		button.addEventListener('click', onUIPopupExportCopyButtonClick);
 		td.appendChild(button);
 		tr.appendChild(td);
@@ -5281,8 +5567,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var url_edomh_export = current.fit.exportEDOMH();
 		
 		var tr = document.createElement('tr');
-		var td = document.createElement('td');
-		td.appendChild(document.createTextNode('External'));
+		var td = createTranslatedElement('td', 'ui-export-external');
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		td.className = 'export';
@@ -5294,13 +5579,15 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			link.href = url_inara_search;
 			link.target = '_blank';
 		}
-		link.innerHTML = '<img src="inara.png"> Search Inara';
+		var img = document.createElement('img');
+		img.src = 'inara.png';
+		link.append(img, ' ', createTranslatedElement('span', 'ui-export-search-inara'));
 		div.appendChild(link);
 		if (url_inara_export) {
 			var button = document.createElement('button');
 			button.className = 'text';
 			button.name = 'export_inara';
-			button.innerHTML = '<img src="inara.png"> Update Inara';
+			button.append(img.cloneNode(true), ' ', createTranslatedElement('span', 'ui-export-update-inara'));
 			button.addEventListener('click', onUIFitExportInaraButtonClick);
 			div.appendChild(button);
 		}
@@ -5310,7 +5597,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			link.href = "edomh://edsy/?" + b64Encode(pako.deflate(JSON.stringify(url_edomh_export), {to:'string'}));;
 			link.target = '_blank';
 		}
-		link.innerHTML = '<img src="edomh.png" class="iconsvg"> EDOMH';
+		var img = document.createElement('img');
+		img.src = 'edomh.png';
+		link.append(img, ' ', createTranslatedElement('span', 'ui-export-edomh'));
 		div.appendChild(link);
 		td.appendChild(div);
 		tr.appendChild(td);
@@ -5338,30 +5627,37 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				cmdr64[c] = c64;
 			}
 		}
-		var html = [
-			'You can import your current ship (and any others used today) directly from the Frontier API.<br>You must log in with Frontier to grant access, but EDSY will never see your password.',
-			'<ul>',
-		];
+		var df = document.createDocumentFragment();
+		df.appendChild(createTranslatedElement('span', 'ui-import-header1-desc'));
+		df.appendChild(document.createElement('br'));
+		df.appendChild(createTranslatedElement('span', 'ui-import-header2-desc'));
+		var ul = document.createElement('ul');
 		if (cmdrs.length > 0) {
 			cmdrs.sort();
-			for (i = 0;  i < cmdrs.length;  i++)
-				html.push('<li><button name="fdapi_import" value="' + encodeHTML(cmdr64[cmdrs[i]]) + '">Import</button> <button name="fdapi_delete" value="' + encodeHTML(cmdr64[cmdrs[i]]) + '">Remove</button> CMDR ' + encodeHTML(cmdrs[i]) + '</li>');
+			for (i = 0;  i < cmdrs.length;  i++) {
+				var li = document.createElement('li');
+				var buttonI = createTranslatedElement('button', 'ui-button-import');
+				buttonI.name = 'fdapi_import';
+				buttonI.value = cmdr64[cmdrs[i]];
+				var buttonR = createTranslatedElement('button', 'ui-button-remove');
+				buttonR.name = 'fdapi_delete';
+				buttonR.value = cmdr64[cmdrs[i]];
+				li.append(buttonI, ' ', buttonR, ' ', createTranslatedElement('span', 'ui-import-cmdr'), cmdrs[i]);
+				ul.appendChild(li);
+			}
 		}
-		html.push('<li><a href="fdapi?auth=A">Authorize ' + (cmdrs.length ? 'Another ' : '') + 'Account <svg class="iconsvg xref"><use xlink:href="#icon_xref"/></svg></a></li>');
-		html.push('</ul>');
-		html.push('You can also import loadout(s) by pasting them below or dropping a file onto the page.');
+		var li = document.createElement('li');
+		var a = document.createElement('a');
+		a.href = 'fdapi?auth=A';
+		a.appendChild(createTranslatedElement('span', 'ui-import-authorize'+(cmdrs.length ? '-another' : '')));
+		a.append(' ', cache.icon['xref'].cloneNode(true));
+		li.appendChild(a);
+		ul.appendChild(li);
+		df.appendChild(ul);
+		df.appendChild(createTranslatedElement('span', 'ui-import-footer-desc'));
 		showUITextPopup(
-				html.join("\n"),
-				(
-					'Supported import formats include:\n\n' +
-					'* EDSY URL(s)\n' +
-					'* EDSY backup export\n' +
-					// TODO: text exports?
-					// TODO: coriolis
-					'* SLEF JSON data (from Inara, Coriolis, etc)\n' +
-					'* Journal JSONL data with "Loadout" event(s)\n' +
-					'* Frontier API Profile JSON data (via EDAPI, EDCE, EDMC, etc)\n'
-				),
+				df,
+				getTranslation('ui-import-textbox-notes'),
 				null, false,
 				importData, true
 		);
@@ -5393,40 +5689,46 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 //request={status:500};response={};
 				if (request.status == 200) {
 					if (!response) {
-						alert("EDSY-FDAPI connector error");
+						alert(getTranslation('ui-import-error-connector'));
 					} else if (response['location']) {
+						var df = document.createDocumentFragment();
+						df.append(createTranslatedElement('span', 'ui-import-error-redirect'));
+						var ul = document.createElement('ul');
+						var li = document.createElement('li');
+						var a = document.createElement('a');
+						a.href = response['location'];
+						a.append(createTranslatedElement('ui-import-reauthorize'), ' ', cache.icon['xref'].cloneNode(true));
+						li.appendChild(a);
+						ul.appendChild(li);
+						df.appendChild(ul);
 						showUITextPopup(
-								(
-									'EDSY\'s API access for this account has expired or been reset.' +
-									'<ul><li><a href="' + encodeHTML(response['location']) + '">Re-Authorize Account <svg class="iconsvg xref"><use xlink:href="#icon_xref"/></svg></a></li></ul>'
-								),
+								df,
 								null,
 								null, true,
 								false, true
 						);
-					} else if (response.status == 206 && confirm('Frontier API returned incomplete data.\n\nThis is common after long sessions; re-try?')) {
+					} else if (response.status == 206 && confirm(getTranslation('ui-import-retry'))) {
 					//	setTimeout(function() { importFromAPI(cmdr64); }, 1);
 						importFromAPI(cmdr64);
 					} else if (response['import']) {
 						importData(response['import']);
 					} else {
-						alert("Frontier API returned no builds.\n\nThis may happen if you haven't played lately,\nor it may be a temporary error.");
+						alert(getTranslation('ui-import-no-data'));
 					}
 				} else {
 					var status = (response || EMPTY_OBJ)['status'];
-					var message = (status ? ('Frontier API error ' + request.status + '/' + status) : ('EDSY-FDAPI connector error ' + request.status));
-					showUITextPopup(
-							(
-								message +
-								'<br><br>' +
-								'You can try re-authorizing EDSY\'s API access, but if the<br>' +
-								'error persists then there may be a temporary API outage.' +
-								'<ul><li><a href="fdapi?auth=I">Re-Authorize Account <svg class="iconsvg xref"><use xlink:href="#icon_xref"/></svg></a></li></ul>'
-							),
-							null,
-							null, true,
-							false, true
-					);
+					var message = (status ? (getTranslation('ui-import-error-api') + ' ' + request.status + '/' + status) : (getTranslation('ui-import-error-connector') + ' ' + request.status));
+					var df = document.createDocumentFragment();
+					df.append(message, document.createElement('br'), document.createElement('br'), createTranslatedElement('span', 'ui-import-error-desc'));
+					var ul = document.createElement('ul');
+					var li = document.createElement('li');
+					var a = document.createElement('a');
+					a.href = 'fdapi?auth=I';
+					a.append(createTranslatedElement('ui-import-reauthorize'), ' ', cache.icon['xref'].cloneNode(true));
+					li.appendChild(a);
+					ul.appendChild(li);
+					df.appendChild(ul);
+					showUITextPopup(df, null, null, true, false, true);
 				}
 			}
 		}; // onreadystatechange()
@@ -5434,7 +5736,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			request.onreadystatechange = function() {};
 			request.abort();
 		}; // onCancel()
-		showUITextPopup('Querying Frontier API ...<br><center><img src="loading.svg"></center>', null, null, true, null, onCancel);
+		var df = document.createDocumentFragment();
+		df.append(createTranslatedElement('span', 'ui-import-querying'), document.createElement('br'));
+		var center = document.createElement('center');
+		var img = document.createElement('img');
+		img.src = 'loading.svg';
+		center.appendChild(img);
+		df.appendChild(center);
+		showUITextPopup(df, null, null, true, null, onCancel);
 		request.open('GET', 'fdapi?c=' + encodeURIComponent(cmdr64), true);
 		request.timeout = 10000;
 		request.send();
@@ -5447,40 +5756,40 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		
 		var th = document.createElement('th');
 		th.className = 'colgroup stickytopleft';
-		var abbr = document.createElement('abbr');
-		abbr.innerHTML = 'Ship';
+		var abbr = createTranslatedElement('abbr', 'ui-import-ship-label');
+		abbr.setAttribute('edsy-title', 'ui-import-ship-desc');
 		abbr.title = 'Ship type';
 		th.appendChild(abbr);
 		tr.appendChild(th);
 		
 		var th = document.createElement('th');
 		th.className = 'colgroup tac stickytop';
-		var abbr = document.createElement('abbr');
-		abbr.innerHTML = '#';
+		var abbr = createTranslatedElement('abbr', 'ui-import-number-label');
+		abbr.setAttribute('edsy-title', 'ui-import-number-desc');
 		abbr.title = 'Ship purchase number';
 		th.appendChild(abbr);
 		tr.appendChild(th);
 		
 		var th = document.createElement('th');
 		th.className = 'colgroup stickytop';
-		var abbr = document.createElement('abbr');
-		abbr.innerHTML = 'Name';
+		var abbr = createTranslatedElement('abbr', 'ui-import-name-label');
+		abbr.setAttribute('edsy-title', 'ui-import-name-desc');
 		abbr.title = 'Ship name';
 		th.appendChild(abbr);
 		tr.appendChild(th);
 		
 		var th = document.createElement('th');
 		th.className = 'colgroup stickytop';
-		var abbr = document.createElement('abbr');
-		abbr.innerHTML = 'ID';
+		var abbr = createTranslatedElement('abbr', 'ui-import-id-label');
+		abbr.setAttribute('edsy-title', 'ui-import-id-desc');
 		abbr.title = 'Ship ID tag';
 		th.appendChild(abbr);
 		tr.appendChild(th);
 		
 		var th = document.createElement('th');
 		th.className = 'colgroup stickytop tac';
-		var abbr = document.createElement('abbr');
-		abbr.innerHTML = 'Err';
+		var abbr = createTranslatedElement('abbr', 'ui-import-errors-label');
+		abbr.setAttribute('edsy-title', 'ui-import-errors-desc');
 		abbr.title = 'Import errors';
 		th.appendChild(abbr);
 		tr.appendChild(th);
@@ -5492,12 +5801,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			var button = document.createElement('button');
 			button.className = 'import_' + actions[a];
 			button.name = 'import_' + actions[a];
-			button.innerHTML = HTML_ICON[actions[a]];
+			button.appendChild(cache.icon[actions[a]].cloneNode(true));
 			button.addEventListener('click', onUIPopupImportButtonClick);
 			th.appendChild(button);
 		}
-		var abbr = document.createElement('abbr');
-		abbr.innerHTML = 'Label';
+		var abbr = createTranslatedElement('abbr', 'ui-import-stored-label');
+		abbr.setAttribute('edsy-title', 'ui-import-stored-desc');
 		abbr.title = 'Stored build label';
 		th.appendChild(abbr);
 		tr.appendChild(th);
@@ -5506,7 +5815,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		th.className = 'colgroup first stickytop';
 		var button = document.createElement('button');
 		button.name = 'import_load_none';
-		button.innerHTML = HTML_ICON['import'];
+		button.appendChild(cache.icon['import'].cloneNode(true));
 		button.addEventListener('click', onUIPopupImportButtonClick);
 		th.appendChild(button);
 		tr.appendChild(th);
@@ -5527,14 +5836,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		
 		var tr = document.createElement('tr');
 		
-		var td = document.createElement('td');
+		var td = createTranslatedElement('td', (build ? ('ship-'+shipid) : ''));
 		td.className = 'colgroup text stickyleft';
-		td.innerHTML = (build ? eddb.ship[shipid].name : '');
 		tr.appendChild(td);
 		
-		var td = document.createElement('td');
+		var td = createTranslatedElement('td', 'interp-number', {'number':(fleetid || undefined)});
 		td.className = 'colgroup tac';
-		td.innerHTML = (fleetid || '');
 		tr.appendChild(td);
 		
 		var td = document.createElement('td');
@@ -5550,12 +5857,11 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var td = document.createElement('td');
 		td.className = 'colgroup tac';
 		if (builderrors.length > 0) {
-			var abbr = document.createElement('abbr');
-			abbr.innerHTML = builderrors.length;
+			var abbr = createTranslatedElement('abbr', 'interp-number', {'number':builderrors.length});
 			abbr.title = builderrors.join('\n');
 			td.appendChild(abbr);
 		} else {
-			td.innerHTML = '0';
+			td.innerHTML = formatNumHTML(0);
 		}
 		tr.appendChild(td);
 		
@@ -5591,12 +5897,11 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			var label = document.createElement('label');
 			label.className = 'togglebutton';
 			label.htmlFor = input.id;
-			label.innerHTML = HTML_ICON[actions[a]];
+			label.appendChild(cache.icon[actions[a]].cloneNode(true));
 			div.appendChild(label);
 		}
-		var span = document.createElement('span');
+		var span = createTranslatedElement('span', 'ui-import-ignore');
 		span.className = 'import_ignore_label';
-		span.innerHTML = 'Not saved';
 		div.appendChild(span);
 		div.appendChild(select);
 		var input = document.createElement('input');
@@ -5608,7 +5913,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var abbr = document.createElement('abbr');
 		abbr.id = 'import_warning_' + index;
 		abbr.style.display = 'none';
-		abbr.innerHTML = HTML_ICON['warning'];
+		abbr.appendChild(cache.icon['warning'].cloneNode(true));
 		abbr.title = '';
 		div.appendChild(abbr);
 		td.appendChild(div);
@@ -5627,7 +5932,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var label = document.createElement('label');
 		label.className = 'togglebutton';
 		label.htmlFor = input.id;
-		label.innerHTML = HTML_ICON['import'];
+		label.appendChild(cache.icon['import'].cloneNode(true));
 		td.appendChild(label);
 		tr.appendChild(td);
 		
@@ -5657,6 +5962,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			imports: null,
 			buildlist: [],
 			modules: null,
+			warning: document.createDocumentFragment(),
 		};
 		var curindex = -1;
 		
@@ -5696,7 +6002,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			}
 		} else if (line1.match(/^\[[ a-z0-9_-]+(,[^\[\]]+)?\] *(\[[^\[\]]+\])?$/i)) { // plain text
 			// TODO: plain text import? does anybody actually use it?
-			errors.push('Plain text import is not yet implemented');
+			errors.push(getTranslation('ui-import-error-text'));
 		} else if (line1[0] === '[' || line1[0] === '{') {
 			var json = null;
 			try {
@@ -5753,13 +6059,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 						if (build) {
 							curindex = index;
 							if (slefApp.toUpperCase() === 'INARA') {
-								importdata.warning = 'Inara builds may have small inaccuracies in engineered module attributes';
+								importdata.warning.append(createTranslatedElement('span', 'ui-import-warning-inara'));
 							}
 						}
 					}
 				} else if (((json['$schema'] || ((json[0] || EMPTY_OBJ)['$schema'])) || '').indexOf('coriolis.io') >= 0) { // Coriolis detailed export
-					// TODO: coriolis import
-					errors.push('Coriolis import is not yet implemented');
+					errors.push(getTranslation('ui-import-error-coriolis'));
 				} else if (json['event'] || (json[0] || EMPTY_OBJ)['event']) { // journal event(s)
 					if (isNaN(json.length)) {
 						json = [ json ];
@@ -5821,34 +6126,35 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 							var build = Build.fromCAPI(shipobj, builderrors);
 							var importhash = build ? ('fdapi|' + build.getShipID() + '|' + max(0,fleetids[i]) + '|' + hashEncodeS(build.getName().toUpperCase()) + '|' + hashEncodeS(build.getNameTag().toUpperCase())) : null;
 							importdata.buildlist[index] = { index:index, importhash:importhash, fleetid:fleetids[i], namehash:null, build:build, builderrors:builderrors };
-							importdata.warning = 'These FDAPI builds may erroneously show legacy blueprints on all engineered modules';
+							importdata.warning.append(createTranslatedElement('span', 'ui-import-warning-fdapi'));
 							if (build && fleetids[i] == fleetid)
 								curindex = index;
 						}
 					}
 				} else {
-					errors.push('Unrecognized JSON format');
+					errors.push(getTranslation('ui-import-error-unrecognized-json'));
 				}
 			} else {
-				errors.push('Invalid JSON encoding');
+				errors.push(getTranslation('ui-import-error-invalid-json'));
 				if (msieURLtrunc)
-					errors.push('URL likely truncated by Windows and/or Internet Explorer');
+					errors.push(getTranslation('ui-import-error-truncated'));
 			}
 		} else {
-			errors.push('Unrecognized format');
+			errors.push(getTranslation('ui-import-error-unrecognized'));
 		}
 		
 		// see what we got
 		var imported = false;
 		if (importdata.buildlist.length > 0 || importdata.imports || importdata.modules) {
 			current.importdata = importdata;
-			var html = 'Found ' + importdata.buildlist.length + ' build(s). Choose which to save to your stored builds, and/or which to load now, if any.';
+			var html = createTranslatedElement('span', 'interp-found-number-builds', {'number':importdata.buildlist.length});
 			var trigger = document.getElementById('outfitting_fit_import');
 			var table = showUITablePopup(html, trigger, true, importDataOkay, importDataCancel);
 			table.className = 'striped';
 			while (table.lastChild)
 				table.removeChild(table.lastChild);
-			table.appendChild(createUIImportedBuildHeader());
+			var thead = createUIImportedBuildHeader();
+			table.appendChild(thead);
 			var tbody = document.createElement('tbody');
 			for (var i = 0;  i < importdata.buildlist.length;  i++) {
 				var importbuild = importdata.buildlist[i];
@@ -5863,6 +6169,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				tbody.appendChild(createUIImportedBuildRow(importbuild, importdata.buildlist.length > 1));
 			}
 			table.appendChild(tbody);
+			updateTranslations(table);
 			var el = document.getElementById('import_load_' + curindex);
 			if (el && !el.disabled)
 				el.checked = true;
@@ -5876,8 +6183,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					numModulesOW += (current.stored.moduleNamehashStored[0][namehash] ? 1 : 0);
 				}
 			}
+			
+			var status = document.getElementById('popup_status');
 			if (extras) {
-				var status = document.getElementById('popup_status');
 				var label = document.createElement('label');
 				label.className = 'checkbox left';
 				var input = document.createElement('input');
@@ -5888,18 +6196,16 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				var div = document.createElement('div');
 				var divCheck = document.createElement('div');
 				divCheck.className = 'check';
-				div.appendChild(divCheck);
-				div.appendChild(document.createTextNode(' Also store imported preferences and ' + numModules + ' imported modules (overwriting ' + numModulesOW + ').'));
+				div.append(divCheck, ' ', createTranslatedElement('span', 'interp-import-number-modules-overwrite', {'number':numModules, 'overwrite':numModulesOW}));
 				label.appendChild(div);
 				status.appendChild(label);
 			}
-			
-			if (importdata.warning) {
-				var status = document.getElementById('popup_status');
+			if (importdata.warning.firstChild) {
 				var div = document.createElement('div');
-				div.innerHTML = HTML_ICON['warning'] + ' ' + importdata.warning;
+				div.append(cache.icon['warning'].cloneNode(true), ' ', importdata.warning);
 				status.appendChild(div);
 			}
+			updateTranslations(status);
 			
 			imported = true;
 		/* always use bulk import window
@@ -5916,8 +6222,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			}
 		*/
 		} else {
-			errors.push('No builds found');
-			alert('Import failed:\n\n' + errors.join('\n'));
+			errors.push(getTranslation('ui-import-no-builds'));
+			alert(getTranslation('ui-import-failed') + '\n\n' + errors.join('\n'));
 		}
 		return imported;
 		/*
@@ -5951,14 +6257,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			} else if (input_action.value === 'save') {
 				namehash = label_save.value.trim();
 				if (!namehash) {
-					message = 'Select a label for the stored build.';
+					message = 'message-build-save';
 				}
 			} else if (input_action.value === 'saveas') {
 				namehash = hashEncodeS(label_saveas.value.trim());
 				if (!namehash) {
-					message = 'Specify a label for the stored build.';
+					message = 'message-build-save';
 				} else if (current.stored.shipNamehashStored[0][namehash]) {
-					message = 'The specified stored build label already exists; it will be overwritten.';
+					message = 'message-build-overwrite';
 					input_action.value = 'save';
 					label_save.value = namehash;
 					if (label_save.selectedIndex < 1) {
@@ -5974,13 +6280,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				// don't store this build
 				importbuild.namehash = namehash;
 			} else if (namehashIndex[namehash]) {
-				message = 'Cannot import multiple builds with the same label.';
+				message = 'ui-import-error-duplicate';
 			} else {
 				namehashIndex[namehash] = i;
 				importbuild.namehash = namehash;
 			}
 			var warning = document.getElementById('import_warning_' + i);
-			warning.title = message;
+			warning.setAttribute('edsy-title', message);
+			warning.title = getTranslation(message);
 			warning.style.display = message ? 'block' : 'none';
 			ok = ok && !message;
 		}
@@ -6062,9 +6369,11 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			updateUIDetailsStoredModules();
 			updateUIDetailsStoredModuleControls();
 			updateUIAnalysisStoredBuilds();
+			if (cache.lang != current.lang)
+				loadTranslations().then(updateTranslations);
 			current.importdata = null;
 		} else {
-			var html = 'Some choices were invalid; hover over the warning icon for details.';
+			var html = createTranslatedElement('span', 'ui-import-warning-invalid');
 			var trigger = document.getElementById('outfitting_fit_import');
 			showUITablePopup(html, trigger, true, importDataOkay, importDataCancel);
 		}
@@ -6225,7 +6534,6 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		input.name = 'module';
 		input.value = '0.';
 		var div = document.createElement('div');
-		div.innerHTML = '';
 		label.appendChild(input);
 		label.appendChild(div);
 		label.htmlFor = input.id;
@@ -6242,8 +6550,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			var divGroup = document.createElement('div');
 			divGroup.id = 'outfitting_modules_group_' + group;
 			divGroup.className = 'group ' + group;
-			var header = document.createElement('header');
-			header.innerHTML = GROUP_LABEL[GROUPS[g]];
+			var header = createTranslatedElement('header', 'ui-slotgroup-'+GROUPS[g]);
 			divGroup.appendChild(header);
 			
 			for (var t = 0;  t < cache.groupMtypes[group].length;  t++) {
@@ -6253,8 +6560,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				var typeSizeMax = 0;
 				var divType = document.createElement('div');
 				divType.id = 'outfitting_modules_mtype_' + mtype;
-				var header = document.createElement('header');
-				header.innerHTML = eddb.mtype[mtype].name;
+				var header = createTranslatedElement('header', 'mtype-'+mtype);
 				divType.appendChild(header);
 				
 				var divRow, divFlex, moduleSize, moduleAbbrev;
@@ -6292,7 +6598,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 						input.name = 'module';
 						input.value = mID + '.';
 						var div = document.createElement('div');
-						div.innerHTML = HTML_ICON['warning'] + getModuleLabel(module, true, true);
+						div.append(cache.icon['warning'].cloneNode(true), getModuleLabelDOM(module, true, true));
 						label.appendChild(input);
 						label.appendChild(div);
 						label.htmlFor = input.id;
@@ -6378,7 +6684,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				input.name = 'module';
 				input.value = stored.modid + '.' + namehash;
 				var div = document.createElement('div');
-				div.innerHTML = HTML_ICON['warning'] + HTML_ICON['engineer'] + encodeHTML(stored.name);
+				div.innerHTML = encodeHTML(stored.name); // TODO translated builtin stored module names
+				div.prepend(cache.icon['engineer'].cloneNode(true));
+				div.prepend(cache.icon['warning'].cloneNode(true));
 				label.appendChild(input);
 				label.appendChild(div);
 				label.htmlFor = input.id;
@@ -6494,8 +6802,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			var th = document.createElement('th');
 			th.className = 'outfitting_fit_module';
 			var div = document.createElement('div');
-			var span = document.createElement('span');
-			span.innerHTML = GROUP_LABEL[group];
+			var span = createTranslatedElement('span', 'ui-slotgroup-'+group);
 			div.appendChild(span);
 			th.appendChild(div);
 			tr.appendChild(th);
@@ -6516,9 +6823,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					var select = document.createElement('select');
 					select.name = 'hardpoint_attr' + (i + 1);
 					for (var a = 0;  a < attrs.length;  a++) {
-						var option = document.createElement('option');
+						var option = createTranslatedElement('option', 'attr-'+attrs[a]+'-abbr');
 						option.value = attrs[a];
-						option.text = (attrs[a] === 'maximumrng' ? 'Range' : (attrs[a] === 'ammoclip' ? 'Ammo' : attrs[a].toUpperCase()));
 						select.appendChild(option);
 					}
 					select.selectedIndex = i * 6; // dps,maximumrng
@@ -6533,47 +6839,46 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		} else {
 			var th = document.createElement('th');
 			th.className = 'outfitting_fit_class';
-			var abbr = document.createElement('abbr');
-			abbr.innerHTML = 'CL';
+			var abbr = createTranslatedElement('abbr', 'ui-slots-class-abbr');
+			abbr.setAttribute('edsy-title', 'ui-slots-class-desc');
 			abbr.title = 'Slot size class';
 			th.appendChild(abbr);
 			tr.appendChild(th);
 			
 			var th = document.createElement('th');
 			th.className = 'outfitting_fit_module';
-			var div = document.createElement('div');
-			div.innerHTML = 'Module';
+			var div = createTranslatedElement('div', 'ui-slots-module-abbr');
 			th.appendChild(div);
 			tr.appendChild(th);
 			
 			var th = document.createElement('th');
 			th.className = 'outfitting_fit_mass';
-			var abbr = document.createElement('abbr');
-			abbr.innerHTML = 'Mass';
+			var abbr = createTranslatedElement('abbr', 'ui-slots-mass-abbr');
+			abbr.setAttribute('edsy-title', 'ui-slots-mass-desc');
 			abbr.title = 'Hull or module mass (in tons)';
 			th.appendChild(abbr);
 			tr.appendChild(th);
 			
 			var th = document.createElement('th');
 			th.className = 'outfitting_fit_pwrdraw';
-			var abbr = document.createElement('abbr');
-			abbr.innerHTML = 'P<span class="outfitting_fit_pwrdraw">o</span>w<span class="outfitting_fit_pwrdraw">e</span>r';
+			var abbr = createTranslatedElement('abbr', 'ui-slots-power-abbr');
+			abbr.setAttribute('edsy-title', 'ui-slots-power-desc');
 			abbr.title = 'Module power output or draw (in megawatts), powered status, and power priority group';
 			th.appendChild(abbr);
 			tr.appendChild(th);
 			
 			var th = document.createElement('th');
 			th.className = 'outfitting_fit_attrs';
-			var abbr = document.createElement('abbr');
-			abbr.innerHTML = 'Attributes';
+			var abbr = createTranslatedElement('abbr', 'ui-slots-attributes-abbr');
+			abbr.setAttribute('edsy-title', 'ui-slots-attributes-desc');
 			abbr.title = 'Important attributes of each module type';
 			th.appendChild(abbr);
 			tr.appendChild(th);
 			
 			var th = document.createElement('th');
 			th.className = 'outfitting_fit_price';
-			var abbr = document.createElement('abbr');
-			abbr.innerHTML = 'Price';
+			var abbr = createTranslatedElement('abbr', 'ui-slots-price-abbr');
+			abbr.setAttribute('edsy-title', 'ui-slots-price-desc');
 			abbr.title = 'Hull or module price (in credits); for hulls, this excludes all stock modules';
 			th.appendChild(abbr);
 			tr.appendChild(th);
@@ -6604,10 +6909,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		input.name = 'slot';
 		input.value = group_slot;
 		var div = document.createElement('div');
+		div.appendChild(cache.icon['warning'].cloneNode(true)); // dynamically hidden
 		var span = document.createElement('span');
 		span.id = 'outfitting_fit_name_' + group_slot;
 		div.appendChild(span);
-		div.insertAdjacentHTML('afterbegin', HTML_ICON['warning']); // dynamically hidden
 		label.appendChild(input);
 		label.appendChild(div);
 		label.htmlFor = input.id;
@@ -6654,7 +6959,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		button.id = 'outfitting_fit_priority_' + group_slot;
 		button.name = 'priority_' + group_slot;
 		button.className = 'outfitting_fit_priority';
-		button.innerHTML = '0';
+		button.innerHTML = formatNumHTML(0);
 		td.appendChild(button);
 		tr.appendChild(td);
 		
@@ -6714,7 +7019,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		updateUIFitShip();
 		updateUIFitSlot('ship', 'hull');
 		updateUIFitSlot('ship', 'hatch');
-		for (var slotgroup in GROUP_LABEL) {
+		for (var sg = 0;  sg < GROUPS.length;  sg++) {
+			var slotgroup = GROUPS[sg];
 			for (var slotnum = 0;  fit.getSlot(slotgroup, slotnum);  slotnum++) {
 				updateUIFitSlot(slotgroup, slotnum);
 			}
@@ -6735,7 +7041,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		if (!ok || errors.length > 0) {
 			// TODO: pretty popup
 			alert(
-				(ok ? 'Build hash loaded with errors.' : 'Invalid build hash.') +
+				getTranslation(ok ? 'message-hash-errors' : 'message-hash-invalid') +
 				((errors.length > 0) ? ('\n\n* ' + errors.join('\n* ')) : '')
 			);
 		}
@@ -6971,12 +7277,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		if (saveas || !namehash) {
 			var name = hashDecodeS(namehash) || eddb.ship[current.fit.getShipID()].name;
 			do {
-				name = prompt("Enter a label to save the current build", name);
+				name = prompt(getTranslation('message-build-save'), name);
 				if (name === null)
 					return false;
 				name = (name || '').trim();
 				namehash = hashEncodeS(name);
-			} while (!name || (current.stored.shipNamehashStored[0][namehash] && !confirm("A build labeled\n\n    "+name+"\n\nalready exists. Overwrite?")));
+			} while (!name || (current.stored.shipNamehashStored[0][namehash] && !confirm(getTranslation('interp-build-name-overwrite', {'name':name}))));
 		}
 		var buildhash = current.fit.getHash();
 		var shipid = current.fit.getShipID();
@@ -7010,14 +7316,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var oldnamehash = namehash;
 		var name = stored.name;
 		do {
-			name = prompt("Enter a new label for the stored build", name);
+			name = prompt(getTranslation('message-build-rename'), name);
 			if (name === null)
 				return false;
 			name = (name || '').trim();
 			namehash = hashEncodeS(name);
 			if (namehash === oldnamehash)
 				return false;
-		} while (!name || (current.stored.shipNamehashStored[0][namehash] && !confirm("A build labeled\n\n    "+name+"\n\nalready exists. Overwrite?")));
+		} while (!name || (current.stored.shipNamehashStored[0][namehash] && !confirm(getTranslation('interp-build-name-overwrite', {'name':name}))));
 		stored.namehash = namehash;
 		stored.name = name;
 		current.stored.shipNamehashStored[0][namehash] = current.stored.shipNamehashStored[stored.shipid][namehash] = stored;
@@ -7046,7 +7352,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		if (!namehash || !stored)
 			return false;
 		var name = stored.name;
-		if (!confirm("The stored build labeled\n\n    "+name+"\n\nwill be deleted. Are you sure?"))
+		if (!confirm(getTranslation('interp-build-name-delete', {'name':name})))
 			return false;
 		delete current.stored.shipNamehashStored[0][namehash];
 		delete current.stored.shipNamehashStored[stored.shipid][namehash];
@@ -7084,6 +7390,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		document.getElementById('outfitting_fit_crewdist_sys').disabled = (crew < 2);
 		document.getElementById('outfitting_fit_crewdist_eng').disabled = (crew < 2);
 		document.getElementById('outfitting_fit_crewdist_wep').disabled = (crew < 2);
+		document.getElementById('outfitting_fit_class_ship_hull').setAttribute('edsy-text', 'size-'+(ship.class || 0)+'-abbr');
 		document.getElementById('outfitting_fit_class_ship_hull').innerHTML = '?SML'[ship.class || 0];
 		
 		// mark undersized or reserved modules
@@ -7128,7 +7435,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		
 		// create or update slot rows
-		for (var slotgroup in GROUP_LABEL) {
+		for (var sg = 0;  sg < GROUPS.length;  sg++) {
+			var slotgroup = GROUPS[sg];
 			var tbody = document.getElementById('outfitting_fit_' + slotgroup);
 			var tr;
 			var slotnum = 0;
@@ -7138,11 +7446,21 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					tbody.appendChild(tr = createUIFitSlotRow(slotgroup, slotnum));
 				}
 				tr.style.display = '';
-				var html = ((slotgroup === 'hardpoint') ? 'USMLH'[szcls || 0] : (szcls || ''));
-				if (((ship.reserved || EMPTY_OBJ)[slotgroup] || EMPTY_OBJ)[slotnum]) {
-					html = '<abbr title="This slot is restricted to specific module types.">' + html + '*</abbr>';
+				var span = document.createElement('span');
+				if (slotgroup === 'hardpoint') {
+					span.setAttribute('edsy-text', 'size-'+(szcls || 0)+'-abbr');
+					span.setAttribute('edsy-vals', '');
+				} else {
+					span.setAttribute('edsy-text', 'interp-number');
+					span.setAttribute('edsy-vals', (szcls ? JSON.stringify({'number':szcls}) : ''));
 				}
-				document.getElementById('outfitting_fit_class_' + slotgroup + '_' + slotnum).innerHTML = html;
+				if (((ship.reserved || EMPTY_OBJ)[slotgroup] || EMPTY_OBJ)[slotnum]) {
+					var abbr = document.createElement('abbr');
+					abbr.setAttribute('edsy-title', 'ui-slots-restricted');
+					abbr.appendChild(span);
+					span = abbr;
+				}
+				document.getElementById('outfitting_fit_class_' + slotgroup + '_' + slotnum).replaceChildren(span);
 				slotnum++;
 			}
 			if (slotnum == 0) {
@@ -7159,7 +7477,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	var updateUIFitDiscounts = function(discounts) {
 		var slot;
-		for (var slotgroup in GROUP_LABEL) {
+		for (var sg = 0;  sg < GROUPS.length;  sg++) {
+			var slotgroup = GROUPS[sg];
 			for (var slotnum = 0;  slot = current.fit.getSlot(slotgroup, slotnum);  slotnum++) {
 				slot.setDiscounts(discounts);
 			}
@@ -7215,7 +7534,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		if (!limitSlots)
 			limitSlots = current.fit.getLimitedSlots();
 		var slot;
-		for (var slotgroup in GROUP_LABEL) {
+		for (var sg = 0;  sg < GROUPS.length;  sg++) {
+			var slotgroup = GROUPS[sg];
 			for (var slotnum = 0;  slot = current.fit.getSlot(slotgroup, slotnum);  slotnum++) {
 				var limit = (slot.getModule() || EMPTY_OBJ).limit;
 				var limitmax = (eddb.limit[limit] || 99) + (current.fit.getStat('unlimit')[limit] || 0);
@@ -7229,11 +7549,22 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var group_slot = slotgroup + '_' + slotnum;
 		var slot = current.fit.getSlot(slotgroup, slotnum);
 		var modid = slot.getModuleID();
+		
 		var el = document.getElementById('outfitting_fit_module_' + group_slot);
 		el.classList.toggle('notallowed', !slot.isModuleIDAllowed(modid));
 		el.classList.toggle('notenough', !slot.isEnough());
-		var label = (group_slot === 'ship_hull') ? eddb.ship[modid].name : (modid ? getModuleLabel(slot.getModule(), false, true) : '');
-		document.getElementById('outfitting_fit_name_' + group_slot).innerHTML = ((slot.isModified() ? HTML_ICON['engineer'] : '') + label);
+		
+		var el = document.getElementById('outfitting_fit_name_' + group_slot);
+		if (group_slot === 'ship_hull') {
+			el.setAttribute('edsy-text', 'ship-'+modid);
+			el.innerText = getTranslation('ship-'+modid);
+		} else if (modid) {
+			el.replaceChildren(getModuleLabelDOM(slot.getModule(), false, true));
+		} else {
+			el.replaceChildren();
+		}
+		if (slot.isModified())
+			el.prepend(cache.icon['engineer'].cloneNode(true));
 		
 		var value = slot.getEffectiveAttrValue('mass') || 0;
 		var direction = getAttrModifierDirection('mass', slot.getEffectiveAttrModifier('mass'));
@@ -7244,7 +7575,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var value = slot.getEffectiveAttrValue('pwrdraw') || 0;
 		var direction = getAttrModifierDirection('pwrdraw', slot.getEffectiveAttrModifier('pwrdraw'));
 		if (value) {
-			document.getElementById('outfitting_fit_pwrdraw_' + group_slot).innerHTML = ('-' + formatAttrHTML('pwrdraw', value));
+			document.getElementById('outfitting_fit_pwrdraw_' + group_slot).innerHTML = formatAttrHTML('pwrdraw', -value);
 			document.getElementById('outfitting_fit_powered_' + group_slot).disabled = !!slot.getPowerLock();
 			document.getElementById('outfitting_fit_powered_' + group_slot).checked = slot.getPowered();
 			document.getElementById('outfitting_fit_priority_' + group_slot).disabled = !!slot.getPowerLock();
@@ -7323,7 +7654,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 						var direction = getAttrModifierDirection(attr, slot.getEffectiveAttrModifier(attr));
 						var direction2 = getAttrModifierDirection('dmgfall', slot.getEffectiveAttrModifier('dmgfall'));
 						attrhtml.push(
-							formatAttrLabelHTML(attr, null, 'Falloff and maximum ranges (in meters)') +
+							formatAttrLabelHTML('dmgfall-maximumrng') +
 							' <span class="' + (direction2 > 0 ? 'modgood' : (direction2 < 0 ? 'modbad' : '')) + '">' + formatNumHTML(value2) +
 							'</span><small class="semantic">/</small><span class="' + (direction > 0 ? 'modgood' : (direction < 0 ? 'modbad' : '')) + '">' +
 							formatAttrHTML(attr, value) + '</span>'
@@ -7347,7 +7678,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 						var direction = getAttrModifierDirection('ammomax', slot.getEffectiveAttrModifier('ammomax'));
 						var direction2 = getAttrModifierDirection('ammoclip', slot.getEffectiveAttrModifier('ammoclip'));
 						attrhtml.push(
-							formatAttrLabelHTML('ammomax', null, 'Ammo clip size and maximum reserve ammo') +
+							formatAttrLabelHTML('ammoclip-ammomax') +
 							' <span class="' + (direction2 > 0 ? 'modgood' : (direction2 < 0 ? 'modbad' : '')) + '">' + formatNumHTML(value) +
 							'</span>+<span class="' + (direction > 0 ? 'modgood' : (direction < 0 ? 'modbad' : '')) + '">' +
 							formatAttrHTML('ammomax', value2) + '</span>'
@@ -7371,7 +7702,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				var directionE = getAttrModifierDirection('expres', slot.getEffectiveAttrModifier('expres'));
 				if (valueK || valueT || valueE) {
 					attrhtml.push(
-						formatAttrLabelHTML(null, 'Res', 'Resistance to kinetic/thermal/explosive damage') +
+						formatAttrLabelHTML('kinres-thmres-expres') +
 						' <span class="' + (directionK > 0 ? 'modgood' : (directionK < 0 ? 'modbad' : '')) + '">' + formatNumHTML(valueK, 1) + '</span>' +
 						'<small class="semantic">/</small><span class="' + (directionT > 0 ? 'modgood' : (directionT < 0 ? 'modbad' : '')) + '">' + formatNumHTML(valueT, 1) + '</span>' +
 						'<small class="semantic">/</small><span class="' + (directionE > 0 ? 'modgood' : (directionE < 0 ? 'modbad' : '')) + '">' + formatNumHTML(valueE, 1) + '</span>' +
@@ -7386,7 +7717,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				var value2 = slot.getBaseAttrValue(attr) * slot.getBaseAttrValue('scbdur');
 				var direction = value - value2;
 				if (value) {
-					attrhtml.push(formatAttrLabelHTML(attr, null, 'Total shield recharge') + ' <span class="' + (direction > 0 ? 'modgood' : (direction < 0 ? 'modbad' : '')) + '">' + formatNumHTML(value, 0) + '</span>');
+					attrhtml.push(formatAttrLabelHTML('shieldrnfps-scbdur') + ' <span class="' + (direction > 0 ? 'modgood' : (direction < 0 ? 'modbad' : '')) + '">' + formatNumHTML(value, 0) + '</span>');
 				}
 				attr = null;
 				break;
@@ -7396,7 +7727,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				var value2 = slot.getBaseAttrValue(attr) * slot.getBaseAttrValue('hsdur');
 				var direction = value - value2;
 				if (value) {
-					attrhtml.push(formatAttrLabelHTML(attr, null, 'Total thermal drain') + ' <span class="' + (direction > 0 ? 'modgood' : (direction < 0 ? 'modbad' : '')) + '">' + formatNumHTML(value, 0) + '</span>');
+					attrhtml.push(formatAttrLabelHTML('thmdrain-hsdur') + ' <span class="' + (direction > 0 ? 'modgood' : (direction < 0 ? 'modbad' : '')) + '">' + formatNumHTML(value, 0) + '</span>');
 				}
 				attr = null;
 				break;
@@ -7407,7 +7738,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				var value2 = slot.getBaseAttrValue(attr) * slot.getBaseAttrValue('repairrtg');
 				var direction = value - value2;
 				if (value) {
-					attrhtml.push(formatAttrLabelHTML(attr, 'Rep', 'Total repair capacity') + ' <span class="' + (direction > 0 ? 'modgood' : (direction < 0 ? 'modbad' : '')) + '">' + formatAttrHTML(attr, value) + '</span>');
+					attrhtml.push(formatAttrLabelHTML('repcap-repairrtg') + ' <span class="' + (direction > 0 ? 'modgood' : (direction < 0 ? 'modbad' : '')) + '">' + formatAttrHTML(attr, value) + '</span>');
 				}
 				attr = null;
 				break;
@@ -7423,7 +7754,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				var directionW = getAttrModifierDirection('wepcap', slot.getEffectiveAttrModifier('wepcap'));
 				if (valueS || valueE || valueW) {
 					attrhtml.push(
-						formatAttrLabelHTML(null, 'Cap', 'System/engine/weapon capacitor capacity (in megawatts) and recharge rate (in megawatts per second)') +
+						formatAttrLabelHTML('syscap-engcap-wepcap') +
 						' <span class="' + (directionS > 0 ? 'modgood' : (directionS < 0 ? 'modbad' : '')) + '">' + formatNumHTML(valueS, 0) + '</span>' +
 						'<small class="semantic">/</small><span class="' + (directionE > 0 ? 'modgood' : (directionE < 0 ? 'modbad' : '')) + '">' + formatNumHTML(valueE, 0) + '</span>' +
 						'<small class="semantic">/</small><span class="' + (directionW > 0 ? 'modgood' : (directionW < 0 ? 'modbad' : '')) + '">' + formatNumHTML(valueW, 0) + '</span>' +
@@ -7436,7 +7767,6 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					var directionE = getAttrModifierDirection('engchg', slot.getEffectiveAttrModifier('engchg'));
 					var directionW = getAttrModifierDirection('wepchg', slot.getEffectiveAttrModifier('wepchg'));
 					attrhtml.push(
-					//	formatAttrLabelHTML(null, 'Chg', 'System/engine/weapon capacitor recharge rate (in megawatts per second)') +
 						' +<span class="' + (directionS > 0 ? 'modgood' : (directionS < 0 ? 'modbad' : '')) + '">' + formatNumHTML(valueS, 1) + '</span>' +
 						'<small class="semantic">/</small><span class="' + (directionE > 0 ? 'modgood' : (directionE < 0 ? 'modbad' : '')) + '">' + formatNumHTML(valueE, 1) + '</span>' +
 						'<small class="semantic">/</small><span class="' + (directionW > 0 ? 'modgood' : (directionW < 0 ? 'modbad' : '')) + '">' + formatNumHTML(valueW, 1) + '</span>' +
@@ -7469,6 +7799,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		el.innerHTML = ((base !== undefined) ? formatPriceHTML(value) : '');
 		el.classList.toggle('modgood', direction > 0);
 		el.classList.toggle('modbad', direction < 0);
+		updateTranslations(document.getElementById('outfitting_fit_slot_' + group_slot));
 	}; // updateUIFitSlot()
 	
 	
@@ -7482,7 +7813,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		document.getElementById('outfitting_modules_picker').className = (
 			slotgroup +
 			((slotgroup === 'component') ? (' component_' + CORE_SLOT_ABBR[slotnum]) : '') +
-			(GROUP_LABEL[slotgroup] ? (' size' + ship.slots[slotgroup][slotnum]) : ('_' + slotnum)) +
+			((GROUPS.indexOf(slotgroup) >= 0) ? (' size' + ship.slots[slotgroup][slotnum]) : ('_' + slotnum)) +
 			(reserved ? ' reserved' : '')
 		);
 		if (reserved) {
@@ -7492,7 +7823,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		var slot = current.fit.getSlot(slotgroup, slotnum);
 		var modid = slot.getModuleID();
-		if (GROUP_LABEL[slotgroup]) {
+		if (GROUPS.indexOf(slotgroup) >= 0) {
 			var namehash = '';
 			var modulehash = slot.getStoredHash();
 			for (var nh in (current.stored.moduleNamehashStored[modid] || EMPTY_OBJ)) {
@@ -7658,7 +7989,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			var bit = min(1 << i, 0x3F);
 			var label = cache.template.details_cost_discounts_label.cloneNode(true);
 			label.getElementsByTagName('INPUT')[0].value = bit;
-			label.getElementsByTagName('DIV')[0].innerHTML = (bit == 0x3F) ? 'FREE' : formatPctHTML(1 - cache.discountMod[bit], (DISCOUNTS[DISCOUNTS.length - 1 - i] % 1 ? 1 : 0));
+			if (bit == 0x3F) {
+				label.getElementsByTagName('DIV')[0].setAttribute('edsy-text', 'ui-details-discount-free');
+				label.getElementsByTagName('DIV')[0].innerHTML = 'FREE'
+			} else {
+				label.getElementsByTagName('DIV')[0].innerHTML = formatPctHTML(1 - cache.discountMod[bit], (DISCOUNTS[DISCOUNTS.length - 1 - i] % 1 ? 1 : 0));
+			}
 			container.appendChild(label);
 		}
 		
@@ -7875,12 +8211,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		if (saveas || !namehash) {
 			var name = hashDecodeS(namehash) || getModuleLabel(slot.getModule());
 			do {
-				name = prompt("Enter a label to save the current module", name);
+				name = prompt(getTranslation('message-module-save'), name);
 				if (name === null)
 					return false;
 				name = (name || '').trim();
 				namehash = hashEncodeS(name);
-			} while (!name || (current.stored.moduleNamehashStored[0][namehash] && !confirm("A module labeled\n\n    "+name+"\n\nalready exists. Overwrite?")));
+			} while (!name || (current.stored.moduleNamehashStored[0][namehash] && !confirm(getTranslation('interp-module-name-overwrite', {'name':name}))));
 		}
 		var stored = {
 			modid:modid,
@@ -7889,7 +8225,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			modulehash:modulehash
 		};
 		if (stored.name.startsWith(" ")) {
-			alert("Cannot overwrite a builtin module");
+			alert(getTranslation('message-module-overwrite-builtin'));
 			return false;
 		}
 		if (!current.stored.moduleNamehashStored[modid])
@@ -7919,14 +8255,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var oldnamehash = namehash;
 		var name = stored.name;
 		do {
-			name = prompt("Enter a new label for the stored module", name);
+			name = prompt(getTranslation('message-module-rename'), name);
 			if (name === null)
 				return false;
 			name = (name || '').trim();
 			namehash = hashEncodeS(name);
 			if (namehash === oldnamehash)
 				return false;
-		} while (!name || (current.stored.moduleNamehashStored[0][namehash] && !confirm("A module labeled\n\n    "+name+"\n\nalready exists. Overwrite?")));
+		} while (!name || (current.stored.moduleNamehashStored[0][namehash] && !confirm(getTranslation('interp-module-name-overwrite', {'name':name}))));
 		stored.namehash = namehash;
 		stored.name = name;
 		current.stored.moduleNamehashStored[0][namehash] = current.stored.moduleNamehashStored[stored.modid][namehash] = stored;
@@ -7956,7 +8292,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		if (!namehash || !stored || stored.name.startsWith(" "))
 			return false;
 		var name = stored.name;
-		if (!confirm("The stored module labeled\n\n    "+name+"\n\nwill be deleted. Are you sure?"))
+		if (!confirm(getTranslation('interp-module-name-delete', {'name':name})))
 			return false;
 		delete current.stored.moduleNamehashStored[0][namehash];
 		delete current.stored.moduleNamehashStored[stored.modid][namehash];
@@ -8012,9 +8348,33 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var module = slot.getModule();
 		
 		// set displayed label
-		var label = (module ? (module.mtype ? getModuleLabel(module, false, true) : module.name) : ((current.outfitting_focus === 'slot') ? '(Empty Slot)' : '(No Module)'));
-		document.getElementById('outfitting_details_label').innerHTML = label;
-		document.getElementById('details_rank').innerHTML = ((module && (module.rank > 0)) ? ((module.faction || 'unknown') + ' rank ' + module.rank + ' (' + eddb.rank[module.faction][module.rank] + ')') : '');
+		var el = document.getElementById('outfitting_details_label');
+		if (module) {
+			if (slot.getSlotGroup() === 'ship' && slot.getSlotNum() === 'hull') {
+				el.setAttribute('edsy-text', 'ship-'+modid);
+				el.innerText = module.name;
+			} else {
+				el.removeAttribute('edsy-text');
+				el.replaceChildren(getModuleLabelDOM(module, false, true));
+			}
+		} else if (current.outfitting_focus === 'slot') {
+			el.setAttribute('edsy-text', 'note-empty-slot');
+			el.innerText = '(Empty Slot)';
+		} else {
+			el.setAttribute('edsy-text', 'option-no-module');
+			el.innerText = '(No Module)';
+		}
+		document.getElementById('details_rank').innerHTML = '';
+		if (module && (module.rank > 0)) {
+			document.getElementById('details_rank').append(
+				createTranslatedElement('span', (module.faction ? ('faction-'+module.faction) : 'unknown')),
+				' ',
+				createTranslatedElement('span', 'interp-rank-number', {'number':module.rank}),
+				' (',
+				createTranslatedElement('span', 'rank-'+module.faction+'-'+module.rank),
+				')'
+			);
+		}
 		
 		// show or hide sections
 		document.getElementById('details_cost').style.display = (module ? 'block' : 'none');
@@ -8033,6 +8393,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				while (select.options.length <= o)
 					select.options.add(document.createElement('option'));
 				select.options[o].value = idlist[i];
+				select.options[o].setAttribute('edsy-text', 'blueprint-'+idlist[i]);
 				select.options[o].text = iddata[idlist[i]].name;
 				select.options[o].disabled = (module.noblueprints && (module.noblueprints['*'] || module.noblueprints[idlist[i]]))
 				o++;
@@ -8050,6 +8411,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				while (select.options.length <= o)
 					select.options.add(document.createElement('option'));
 				select.options[o].value = idlist[i];
+				select.options[o].setAttribute('edsy-text', 'expeffect-'+idlist[i]);
 				select.options[o].text = iddata[idlist[i]].name;
 				select.options[o].disabled = (module.noexpeffects && (module.noexpeffects['*'] || module.noexpeffects[idlist[i]]))
 				o++;
@@ -8069,13 +8431,16 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			var attribute = cache.attribute[attr];
 			
 			var abbr = document.getElementById('outfitting_details_abbr_' + r);
+			abbr.setAttribute('edsy-text', 'attr-'+attr);
 			abbr.innerHTML = attribute.name;
+			abbr.setAttribute('edsy-title', 'attr-'+attr+'-desc');
 			abbr.title = (attribute.desc || '');
 			
 			var input = document.getElementById('outfitting_details_input_' + r);
 			input.name = attr;
 			
 			var unit = document.getElementById('outfitting_details_unit_' + r);
+			unit.setAttribute('edsy-text', (attribute.unit ? UNIT_ABBR_TRANSLATIONS[attribute.unit] : ''));
 			unit.innerHTML = (attribute.unit || '');
 			
 			tbody.rows[r].style.display = '';
@@ -8088,6 +8453,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		// set displayed cost and modification data
 		updateUIDetailsCost();
 		updateUIDetailsModifications();
+		updateTranslations(document.getElementById('outfitting_details_module'));
 		return true;
 	}; // updateUIDetailsModule()
 	
@@ -8182,7 +8548,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		} else {
 			select.selectedIndex = -1;
 		}
-		document.getElementById('details_special').innerHTML = ((eddb.expeffect[expid] || EMPTY_OBJ).special || '');
+		var special = (eddb.expeffect[expid] || EMPTY_OBJ).special;
+		document.getElementById('details_special').setAttribute('edsy-text', (special ? ('expeffect-'+expid+'-special') : ''));
+		document.getElementById('details_special').innerHTML = special || '';
 		
 		var maxgrade = (bpid ? eddb.blueprint[bpid].maxgrade : 0);
 		for (var g = 1;  g <= MAX_BLUEPRINT_GRADE;  g++) {
@@ -8209,6 +8577,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				moddisplay.innerHTML = getModuleAttrModifierHTML(module, attr, modifier);
 			}
 		}
+		updateTranslations(document.getElementById('outfitting_details_module'));
 		return true;
 	}; // updateUIDetailsModifications()
 	
@@ -8228,7 +8597,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		} else if (bproll <= 0) {
 			className = 'invalid';
 			disabled = false;
-			value = 'N/A';
+			value = getTranslation('n-a');
 		} else {
 			className = '';
 			disabled = false;
@@ -8452,6 +8821,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		updateUIStatsWpn();
 		
 		updateUIFitHash();
+		updateTranslations(document.getElementById('outfitting_stats_container'));
 	}; // updateUIStats()
 	
 	
@@ -8479,7 +8849,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		document.getElementById('outfitting_stats_max_psgr').innerHTML = formatAttrHTML('cabincap', cabincap, 0);
 		
 		// TODO: prices in a separate function
-		var htmlNA = '<small class="semantic">N/A</small>';
+		var htmlNA = '<small class="semantic" edsy-text="n-a">N/A</small>';
 		var cost_vehicle = current.fit.getStat('cost_vehicle');
 		var cost_restock = current.fit.getStat('cost_restock');
 		var cost_rearm = current.fit.getStat('cost_rearm');
@@ -8508,6 +8878,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			pwrdraw_ret_ttl += pwrdraw_ret[p];
 			var width = (90.0 * pwrdraw_ret[p] / pwrcap);
 			var abbr = document.getElementById('outfitting_stats_power_ret_' + p);
+			abbr.setAttribute('edsy-vals', JSON.stringify({'pwrdraw':pwrdraw_ret_ttl, 'pwrdraw#':2, 'pwrcap':pwrcap, 'pwrcap#':2, 'percent':(pwrdraw_ret_ttl/pwrcap), 'percent#':1, 'percent%':true}));
+			abbr.setAttribute('edsy-title', 'interp-pwrdraw-pwrcap-megawatts-percent');
 			abbr.title = (formatNumText(pwrdraw_ret_ttl, 2) + ' / ' + formatNumText(pwrcap, 2) + ' MW (' + formatPctText(pwrdraw_ret_ttl / pwrcap, 1) + ')');
 			abbr.style.display = (width > 0.0) ? '' : 'none';
 			abbr.style.width = width.toFixed(3) + '%';
@@ -8516,6 +8888,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			pwrdraw_dep_ttl += pwrdraw_dep[p];
 			var width = (90.0 * pwrdraw_dep[p] / pwrcap);
 			var abbr = document.getElementById('outfitting_stats_power_dep_' + p);
+			abbr.setAttribute('edsy-vals', JSON.stringify({'pwrdraw':pwrdraw_dep_ttl, 'pwrdraw#':2, 'pwrcap':pwrcap, 'pwrcap#':2, 'percent':(pwrdraw_dep_ttl/pwrcap), 'percent#':1, 'percent%':true}));
+			abbr.setAttribute('edsy-title', 'interp-pwrdraw-pwrcap-megawatts-percent');
 			abbr.title = (formatNumText(pwrdraw_dep_ttl, 2) + ' / ' + formatNumText(pwrcap, 2) + ' MW (' + formatPctText(pwrdraw_dep_ttl / pwrcap, 1) + ')');
 			abbr.style.display = (width > 0.0) ? '' : 'none';
 			abbr.style.width = width.toFixed(3) + '%';
@@ -8538,8 +8912,20 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		document.getElementById('outfitting_stats_power_dep').innerHTML = (formatNumHTML(pwrdraw_dep[0], 2) + ' <small class="semantic">/</small> ' + formatAttrHTML('pwrcap', pwrcap, 2) + ' (' + formatPctHTML(pwrdraw_dep[0] / pwrcap, 1) + ')');
 		document.getElementById('outfitting_stats_power_dep').className = ((pwrdraw_dep[0] > (1 + pwrbst) * pwrcap) ? 'error' : '');
 		*/
-		document.getElementById('outfitting_stats_power_ret').innerHTML = ('<abbr class="' + ((pwrdraw_ret[0] > (1 + pwrbst) * pwrcap) ? 'error' : '') + '" title="' + formatNumText(pwrdraw_ret[0], 2) + ' / ' + formatNumText(pwrcap, 2) + ' MW">' + formatPctHTML(pwrdraw_ret[0] / pwrcap, 1) + '</abbr>');
-		document.getElementById('outfitting_stats_power_dep').innerHTML = ('<abbr class="' + ((pwrdraw_dep[0] > (1 + pwrbst) * pwrcap) ? 'error' : '') + '" title="' + formatNumText(pwrdraw_dep[0], 2) + ' / ' + formatNumText(pwrcap, 2) + ' MW">' + formatPctHTML(pwrdraw_dep[0] / pwrcap, 1) + '</abbr>');
+		var abbr = createTranslatedElement('abbr', 'interp-number', {'number':(pwrdraw_ret[0]/pwrcap), 'number#':1, 'number%':true});
+		abbr.className = ((pwrdraw_ret[0] > (1 + pwrbst) * pwrcap) ? 'error' : '');
+		abbr.setAttribute('edsy-vals-title', JSON.stringify({'pwrdraw':pwrdraw_ret[0], 'pwrdraw#':2, 'pwrcap':pwrcap, 'pwrcap#':2, 'percent':(pwrdraw_ret[0]/pwrcap), 'percent#':1, 'percent%':true}));
+		abbr.setAttribute('edsy-title', 'interp-pwrdraw-pwrcap-megawatts-percent');
+		abbr.title = formatNumText(pwrdraw_ret[0], 2) + ' / ' + formatNumText(pwrcap, 2) + ' MW (' + formatPctText(pwrdraw_ret[0] / pwrcap, 1) + ')';
+		abbr.innerHTML = formatPctHTML(pwrdraw_ret[0] / pwrcap, 1);
+		document.getElementById('outfitting_stats_power_ret').replaceChildren(abbr);
+		var abbr = createTranslatedElement('abbr', 'interp-number', {'number':(pwrdraw_dep[0]/pwrcap), 'number#':1, 'number%':true});
+		abbr.className = ((pwrdraw_dep[0] > (1 + pwrbst) * pwrcap) ? 'error' : '');
+		abbr.setAttribute('edsy-vals-title', JSON.stringify({'pwrdraw':pwrdraw_dep[0], 'pwrdraw#':2, 'pwrcap':pwrcap, 'pwrcap#':2, 'percent':(pwrdraw_dep[0]/pwrcap), 'percent#':1, 'percent%':true}));
+		abbr.setAttribute('edsy-title', 'interp-pwrdraw-pwrcap-megawatts-percent');
+		abbr.title = formatNumText(pwrdraw_dep[0], 2) + ' / ' + formatNumText(pwrcap, 2) + ' MW (' + formatPctText(pwrdraw_dep[0] / pwrcap, 1) + ')';
+		abbr.innerHTML = formatPctHTML(pwrdraw_dep[0] / pwrcap, 1);
+		document.getElementById('outfitting_stats_power_dep').replaceChildren(abbr);
 	}; // updateUIStatsPower()
 	
 	
@@ -8571,14 +8957,15 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var scpNavRng = fuelcap / scooprate;
 		
 		// update displays
-		var htmlNA = '<small class="semantic">N/A</small>';
-		document.getElementById('outfitting_stats_cur_jump'    ).innerHTML = formatNumHTML(curNavJmp, 2) + '<small>LY</small>';
-		document.getElementById('outfitting_stats_laden_jump'  ).innerHTML = formatNumHTML(ldnNavJmp, 2) + '<small>LY</small>';
-		document.getElementById('outfitting_stats_unladen_jump').innerHTML = formatNumHTML(unlNavJmp, 2) + '<small>LY</small>';
-		document.getElementById('outfitting_stats_max_jump'    ).innerHTML = formatNumHTML(maxNavJmp, 2) + '<small>LY</small>';
-		document.getElementById('outfitting_stats_cur_range'    ).innerHTML = formatNumHTML(curNavRng, 2) + '<small>LY</small>';
-		document.getElementById('outfitting_stats_laden_range'  ).innerHTML = formatNumHTML(ldnNavRng, 2) + '<small>LY</small>';
-		document.getElementById('outfitting_stats_unladen_range').innerHTML = formatNumHTML(unlNavRng, 2) + '<small>LY</small>';
+		var htmlNA = '<small class="semantic" edsy-text="n-a">N/A</small>';
+		var htmlLY = '<small edsy-text"unit-lightyears-abbr">LY</small';
+		document.getElementById('outfitting_stats_cur_jump'    ).innerHTML = formatNumHTML(curNavJmp, 2) + htmlLY;
+		document.getElementById('outfitting_stats_laden_jump'  ).innerHTML = formatNumHTML(ldnNavJmp, 2) + htmlLY;
+		document.getElementById('outfitting_stats_unladen_jump').innerHTML = formatNumHTML(unlNavJmp, 2) + htmlLY;
+		document.getElementById('outfitting_stats_max_jump'    ).innerHTML = formatNumHTML(maxNavJmp, 2) + htmlLY;
+		document.getElementById('outfitting_stats_cur_range'    ).innerHTML = formatNumHTML(curNavRng, 2) + htmlLY;
+		document.getElementById('outfitting_stats_laden_range'  ).innerHTML = formatNumHTML(ldnNavRng, 2) + htmlLY;
+		document.getElementById('outfitting_stats_unladen_range').innerHTML = formatNumHTML(unlNavRng, 2) + htmlLY;
 		document.getElementById('outfitting_stats_scoop_jump' ).innerHTML = (scooprate ? formatTimeHTML(scpNavJmp, true) : htmlNA);
 		document.getElementById('outfitting_stats_scoop_range').innerHTML = (scooprate ? formatTimeHTML(scpNavRng, true) : htmlNA);
 		document.getElementById('outfitting_stats_scoop_speed').innerHTML = (scooprate ? formatAttrHTML('scooprate', scooprate) : htmlNA);
@@ -8635,9 +9022,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var maxHndRotMul = getMassCurveMultiplier(mass                          , minmass, optmass, maxmass, minmulrot, optmulrot, maxmulrot) / 100;
 		
 		// update nav displays
-		var htmlErrorTH = '<abbr class="error" title="Thruster has insufficient maximum mass">ERR</abbr>';
-		var htmlErrorPD = '<abbr class="error" title="Power distributor has insufficient ENG capacitor to boost">ERR</abbr>';
-		var htmlBoost5 = '<abbr class="" title="Can boost as often as possible"><small class="semantic">&lt; </small>5<small class="semantic">s</small></abbr>';
+		var htmlErrorTH = '<abbr class="error" edsy-title="ui-stats-nav-error-thruster" title="Thruster has insufficient maximum mass" edsy-text="ui-stats-nav-error-abbr">ERR</abbr>';
+		var htmlErrorPD = '<abbr class="error" edsy-title="ui-stats-nav-error-distributor" title="Power distributor has insufficient ENG capacitor to boost" edsy-text="ui-stats-nav-error-abbr">ERR</abbr>';
+		var htmlBoost5 = '<abbr class="" edsy-title="ui-stats-nav-boost-often" title="Can boost as often as possible"><small class="semantic">&lt; </small>' + formatNumHTML(5) + '<small class="semantic" edsy-text="unit-seconds-abbr">s</small></abbr>';
 		document.getElementById('outfitting_stats_cur_speed'    ).innerHTML = (isNaN(curNavSpdMul) ? htmlErrorTH : formatAttrHTML('topspd', curNavSpdMul * topspd * (powerdistEngMul + minthrust * (1 - powerdistEngMul))));
 		document.getElementById('outfitting_stats_laden_speed'  ).innerHTML = (isNaN(ldnNavSpdMul) ? htmlErrorTH : formatAttrHTML('topspd', ldnNavSpdMul * topspd));
 		document.getElementById('outfitting_stats_unladen_speed').innerHTML = (isNaN(unlNavSpdMul) ? htmlErrorTH : formatAttrHTML('topspd', unlNavSpdMul * topspd));
@@ -8715,24 +9102,24 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		if (thmload > 0) {
 			thmload += thmloadBase;
 			if (thmloadBase > heatdismax) {
-				el.innerHTML = '<small class="semantic">N/A</small>';
+				el.innerHTML = '<small class="semantic" edsy-text="n-a">N/A</small>';
 				el.className = 'error';
 			} else if (thmload > heatdismax) {
 				var heatlevelBase = getEquilibriumHeatLevel(heatdismax, thmloadBase);
 				var time10 = getTimeUntilHeatLevel(heatcap, heatdismax, thmload, heatlevelBase, 1.0);
 				if (duration && (time10 > duration)) {
 					var heatpct = getHeatLevelAtTime(heatcap, heatdismax, thmload, heatlevelBase, duration) / 1.5;
-					el.innerHTML = ('<abbr title="' + formatPctText(heatpct, 6) + '">' + formatPctHTML(heatpct, 1) + '</abbr>');
+					el.innerHTML = ('<abbr edsy-vals="' + encodeHTML(JSON.stringify({'number':heatpct,'number#':6,'number%':true})) + '" edsy-title="interp-number" title="' + formatPctText(heatpct, 6) + '">' + formatPctHTML(heatpct, 1) + '</abbr>');
 				} else {
 					var time15 = (heatcap / 2) / (thmload - heatdismax); // displayed heatlevel 66% -> 100% is actual heatlevel 1.0 -> 1.5
 					if (duration && ((time10 + time15) > duration)) {
 						var heatpct = (2 + ((duration - time10) / time15)) / 3;
-						el.innerHTML = ('<abbr title="' + formatPctText(heatpct, 6) + '">' + formatPctHTML(heatpct, 1) + '</abbr>');
+						el.innerHTML = ('<abbr edsy-vals="' + encodeHTML(JSON.stringify({'number':heatpct,'number#':6,'number%':true})) + '" edsy-title="interp-number" title="' + formatPctText(heatpct, 6) + '">' + formatPctHTML(heatpct, 1) + '</abbr>');
 					} else if (duration) {
 						duration -= time10 + time15;
 						var heatlevelPeak = 1.5 + (duration * (thmload - heatdismax) / heatcap);
 						var timeCool = (heatlevelPeak - 1.5) / ((heatdismax - thmloadBase) / heatcap);
-						el.innerHTML = ('<abbr class="error" title="Peak heat level ' + formatPctText(heatlevelPeak / 1.5, 1) + '; over 100% for ' + formatNumText(duration + timeCool, 1) + 's">' + formatTimeHTML(time10 + time15, true) + '</abbr>');
+						el.innerHTML = ('<abbr class="error" edsy-vals="' + encodeHTML(JSON.stringify({'number':(heatlevelPeak/1.5),'number#':1,'number%':true,'seconds':(duration + timeCool),'seconds#':1})) + '" edsy-title="interp-peak-heat-number-overheat-seconds" title="Peak heat level ' + formatPctText(heatlevelPeak / 1.5, 1) + '; over 100% for ' + formatNumText(duration + timeCool, 1) + 's">' + formatTimeHTML(time10 + time15, true) + '</abbr>');
 					} else {
 						el.innerHTML = formatTimeHTML(time10 + time15, true);
 						el.className = 'error';
@@ -8740,10 +9127,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				}
 			} else {
 				var heatpct = getEquilibriumHeatLevel(heatdismax, thmload) / 1.5;
-				el.innerHTML = ('<abbr title="' + formatPctText(heatpct, 6) + '">' + formatPctHTML(heatpct, 1) + '</abbr>');
+				el.innerHTML = ('<abbr edsy-vals="' + encodeHTML(JSON.stringify({'number':heatpct,'number#':6,'number%':true})) + '" edsy-title="interp-number" title="' + formatPctText(heatpct, 6) + '">' + formatPctHTML(heatpct, 1) + '</abbr>');
 			}
 		} else {
-			el.innerHTML = '<small class="semantic">N/A</small>';
+			el.innerHTML = '<small class="semantic" edsy-text="n-a">N/A</small>';
 		}
 	}; // updateUIStatsThmLevel()
 	
@@ -8776,7 +9163,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var expShdRes = current.fit.getStat('_sexpres') / 100;
 		var cauShdRes = current.fit.getStat('_scaures') / 100;
 		var rawShdStr = current.fit.getStat('_shields');
-		var ammomaxText = formatNumText(shieldrnfps_ammomax / shieldrnfps, (shieldrnfps_ammomax % shieldrnfps) ? 1 : 0);
+		var ammomaxHTML = formatNumHTML(shieldrnfps_ammomax / shieldrnfps, (shieldrnfps_ammomax % shieldrnfps) ? 1 : 0);
 		var powerdistSysMul = pow(powerdist_sys / MAX_POWER_DIST, 1.1);
 		var bgenFastTime = min((rawShdStr / 2 / bgenrate), (syscap / max(0, bgenrate * distdraw_mj - syschg * powerdistSysMul)));
 		var bgenSlowTime = (rawShdStr / 2 - bgenrate * bgenFastTime) / min(bgenrate, (syschg * powerdistSysMul) / distdraw_mj);
@@ -8787,8 +9174,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var genSlowTime = (rawShdStr / 2) / min(genrate, (syschg * powerdistSysMul) / distdraw_mj);
 		
 		// update displays
-		var htmlNA = '<small class="semantic">N/A</small>';
-		var htmlErrorSG = '<abbr class="error" title="Shield Generator has insufficient maximum mass">ERR</abbr>';
+		var htmlNA = '<small class="semantic" edsy-text="n-a">N/A</small>';
+		var htmlErrorSG = '<abbr class="error" edsy-title="ui-stats-shield-error-generator" title="Shield Generator has insufficient maximum mass" edsy-text="ui-stats-shield-error-abbr">ERR</abbr>';
 		document.getElementById('outfitting_stats_abs_shield_resist').innerHTML = (!hasSG ? htmlNA : (!isEnough ? htmlErrorSG : formatPctHTML(absShdRes, 1)));
 		document.getElementById('outfitting_stats_kin_shield_resist').innerHTML = (!hasSG ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('kinres', kinShdRes * 100)));
 		document.getElementById('outfitting_stats_thm_shield_resist').innerHTML = (!hasSG ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('thmres', thmShdRes * 100)));
@@ -8803,7 +9190,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	//	document.getElementById('outfitting_stats_kin_shield_regen').innerHTML = (!hasSG ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('genrate', genrate / (1 - absShdRes) / (1 - kinShdRes))));
 	//	document.getElementById('outfitting_stats_thm_shield_regen').innerHTML = (!hasSG ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('genrate', genrate / (1 - absShdRes) / (1 - thmShdRes))));
 	//	document.getElementById('outfitting_stats_exp_shield_regen').innerHTML = (!hasSG ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('genrate', genrate / (1 - absShdRes) / (1 - expShdRes))));
-		document.getElementById('outfitting_stats_raw_shield_reinf').innerHTML = (!(hasSG && shieldrnfps) ? htmlNA : (!isEnough ? htmlErrorSG : (ammomaxText + '<small class="semantic">&times;</small>' + formatAttrHTML('shieldrnfps', shieldrnfps))));
+		document.getElementById('outfitting_stats_raw_shield_reinf').innerHTML = (!(hasSG && shieldrnfps) ? htmlNA : (!isEnough ? htmlErrorSG : (ammomaxHTML + '<small class="semantic">&times;</small>' + formatAttrHTML('shieldrnfps', shieldrnfps))));
 		document.getElementById('outfitting_stats_abs_shield_reinf').innerHTML = (!(hasSG && shieldrnfps) ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('shieldrnfps', shieldrnfps_ammomax / (1 - absShdRes))));
 		document.getElementById('outfitting_stats_kin_shield_reinf').innerHTML = (!(hasSG && shieldrnfps) ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('shieldrnfps', shieldrnfps_ammomax / (1 - absShdRes) / (1 - kinShdRes))));
 		document.getElementById('outfitting_stats_thm_shield_reinf').innerHTML = (!(hasSG && shieldrnfps) ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('shieldrnfps', shieldrnfps_ammomax / (1 - absShdRes) / (1 - thmShdRes))));
@@ -8841,7 +9228,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var cauArmRep = (rawArmRep / (1 - cauArmRes / 100));
 		
 		// update displays
-		var htmlNA = '<small class="semantic">N/A</small>';
+		var htmlNA = '<small class="semantic" edsy-text="n-a">N/A</small>';
 		document.getElementById('outfitting_stats_raw_armour_hardness').innerHTML = formatNumHTML(hardness, 0);
 		document.getElementById('outfitting_stats_mod_armour_protect').innerHTML = (integ_imrp ? formatAttrHTML('dmgprot', mrpArmRes) : htmlNA);
 		document.getElementById('outfitting_stats_kin_armour_resist').innerHTML = formatAttrHTML('kinres', kinArmRes);
@@ -8886,7 +9273,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var ammWpnDur = min(ammotime_nocap, ((ammotime_wepcap <= wepcap_burst_max) ? ammotime_wepcap : (wepcap_burst_max + (ammotime_wepcap - wepcap_burst_max) / maxWpnSus)));
 		
 		// update displays
-		var htmlNA = '<small class="semantic">N/A</small>';
+		var htmlNA = '<small class="semantic" edsy-text="n-a">N/A</small>';
 		document.getElementById('outfitting_stats_wpn_raw_burst').innerHTML = (dps ? formatAttrHTML('dps', dps, 1) : htmlNA);
 		document.getElementById('outfitting_stats_wpn_abs_burst').innerHTML = (dps ? formatPctHTML(dps_abs / dps, 0) : htmlNA);
 		document.getElementById('outfitting_stats_wpn_thm_burst').innerHTML = (dps ? formatPctHTML(dps_thm / dps, 0) : htmlNA);
@@ -8921,16 +9308,24 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		for (var i = 0;  i < discounts.length;  i++) {
 			var discountbits = discounts[i];
 			var discountmod = cache.discountMod[discountbits];
-			var text = formatPctText(1 - discountmod, ((discountbits & 0x1) && (discountmod > 0)) ? 1 : 0);
+			var option = els.retrofit_setup_discount.options[i];
+			option.value = discountbits;
+			var dec = ((discountbits & 0x1) && (discountmod > 0)) ? 1 : 0;
 			if (discountmod == 1) {
-				text += ' (never)';
+				option.setAttribute('edsy-text', 'ui-retrofit-settings-rebuy-discounted-never');
+				option.innerText = '0% (never)';
 			} else if (discountmod == 0) {
-				text += ' (always)';
+				option.setAttribute('edsy-text', 'ui-retrofit-settings-rebuy-discounted-always');
+				option.innerText = '100% (always)';
 			} else if (discountbits != 0x1 && discountbits & 0x1) {
-				text += ' (2.5% + ' + formatPctText(1 - cache.discountMod[discountbits & ~0x1], 0) + ')';
+				option.setAttribute('edsy-vals', JSON.stringify({'number':(1-discountmod),'number#':dec,'number%':true,'a':0.025,'a#':1,'a%':true,'b':(1 - cache.discountMod[discountbits & ~0x1]),'b%':true}));
+				option.setAttribute('edsy-text', 'interp-number-added-a-b');
+				option.innerText = formatPctText(1 - discountmod, dec) + ' (2.5% + ' + formatPctText(1 - cache.discountMod[discountbits & ~0x1], 0) + ')';
+			} else {
+				option.setAttribute('edsy-vals', JSON.stringify({'number':(1-discountmod),'number#':dec,'number%':true}));
+				option.setAttribute('edsy-text', 'interp-number');
+				option.innerText = formatPctText(1 - discountmod, dec);
 			}
-			els.retrofit_setup_discount.options[i].value = discountbits;
-			els.retrofit_setup_discount.options[i].text = text;
 		}
 		els.retrofit_setup_discount.selectedIndex = discounts.length - 1;
 		
@@ -9111,6 +9506,51 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // onUIAnalysisRetrofitSetupRunClick()
 	
 	
+	var getRetrofitStepDescription = function(step, dom) {
+		var vals=[], text=[];
+		switch (step.act) {
+		case 'Sell':
+		case 'Buy':
+			vals.push({'number':(1 - step.discmod),'number%':true,'number#':1});
+			text.push('interp-number-discount');
+			break;
+		case 'Conv':
+			vals.push(null);
+			text.push('blueprint-'+step.bpid);
+			vals.push({'number':step.bpgrade});
+			text.push('interp-grade-abbr-number');
+			vals.push(null);
+			text.push('note-legacy');
+			break;
+		case 'Eng':
+			vals.push(null);
+			text.push('blueprint-'+step.bpid);
+			vals.push({'number':step.bpgrade});
+			text.push('interp-grade-abbr-number');
+			var dec = (step.rolls.toString().split('.')[1] || '').length;
+			vals.push({'number':step.rolls,'number#':dec});
+			text.push('interp-multiplier-abbr-number');
+			break;
+		case 'Exp':
+			vals.push(null);
+			text.push('expeffect-'+step.expid);
+			break;
+		}
+		if (dom) {
+			var df = document.createDocumentFragment();
+			for (var i = 0;  i < vals.length && i < text.length;  i++) {
+				if (i > 0)
+					df.append(' ');
+				df.append(createTranslatedElement('span', text[i], vals[i]));
+			}
+			return df;
+		}
+		for (var i = 0;  i < vals.length && i < text.length;  i++)
+			text[i] = getTranslation(text[i], vals[i]);
+		return text.join(' ');
+	}; // getRetrofitStepDescription()
+	
+	
 	var updateUIAnalysisRetrofit = function() {
 		// gather settings
 		var els = document.forms.analysis.elements;
@@ -9160,7 +9600,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				var build1 = (stored1 ? Build.fromHash(stored1.buildhash) : (namehash1 ? null : current.fit));
 				var build2 = (stored2 ? Build.fromHash(stored2.buildhash) : (namehash2 ? null : current.fit));
 				var steps = build2.getRetrofitData(build1, limdisc, limdisceng, limbpgrade, limbproll, limexpeffect, limrolls);
-				current.retrofit.jobs.push({ name:(stored2 ? stored2.name : '(Current Build)'), baseline:(stored1 ? stored1.name : (namehash1 ? '(Stock Ship)' : '(Current Build')), sid:build2.getShipID(), steps:steps });
+				current.retrofit.jobs.push({ name:(stored2 ? stored2.name : false), baseline:(stored1 ? stored1.name : (namehash1 ? true : false)), sid:build2.getShipID(), steps:steps });
 			}
 		}
 		
@@ -9172,23 +9612,38 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		// print new results
 		table.classList.toggle('single', current.retrofit.jobs.length < 2);
 		for (var i = 0;  i < current.retrofit.jobs.length;  i++) {
-			var tbody = document.createElement('TBODY');
+			var tbody = document.createElement('tbody');
 			table.appendChild(tbody);
-			var nameHTML = encodeHTML(current.retrofit.jobs[i].name);
+			var jobKey = ((current.retrofit.jobs[i].name === false) ? 'option-current-build' : ((current.retrofit.jobs[i].name === true) ? 'option-stock-ship' : ''));
+			var jobText = ((current.retrofit.jobs[i].name === false) ? '(Current Build)' : ((current.retrofit.jobs[i].name === true) ? '(Stock Ship)' : current.retrofit.jobs[i].name));
 			var steps = current.retrofit.jobs[i].steps;
 			for (var s = 0;  s < steps.length;  s++) {
 				var ship = eddb.ship[steps[s].sid];
 				var module = cache.shipModules[steps[s].sid][steps[s].mid] || eddb.module[steps[s].mid];
 				var tr = cache.template.analysis_retrofit_steps_row.cloneNode(true);
-				tr.cells[1].innerHTML = nameHTML;
-				tr.cells[2].innerHTML = encodeHTML((steps[s].sgrp === 'ship') ? ship.name : (getModuleLabel(module) + (steps[s].num ? (' #' + steps[s].num) : '')));
+				if (jobKey)
+					tr.cells[1].setAttribute('edsy-text', jobKey);
+				tr.cells[1].innerHTML = encodeHTML(jobText);
+				if (steps[s].sgrp === 'ship') {
+					tr.cells[2].setAttribute('edsy-text', 'ship-'+steps[s].sid);
+					tr.cells[2].innerText = ship.name;
+				} else {
+					tr.cells[2].replaceChildren(getModuleLabelDOM(module));
+				}
+				if (steps[s].num) {
+					var span = createTranslatedElement('span', 'interp-index-abbr-number', {'number':steps[s].num});
+					span.innerHTML = '#' + formatNumText(steps[s].num,0);
+					tr.cells[2].append(' ', span);
+				}
+				tr.cells[3].setAttribute('edsy-text', 'ui-retrofit-action-'+steps[s].act.toLowerCase()+'-abbr');
 				tr.cells[3].innerHTML = steps[s].act;
-				tr.cells[4].innerHTML = encodeHTML(steps[s].desc || '');
+				tr.cells[4].replaceChildren(getRetrofitStepDescription(steps[s], true));
 				tbody.appendChild(tr);
 				els.retrofit_steps_show_.addEventListener('change', onUIAnalysisRetrofitStepsShowChange);
 				els.retrofit_steps_show_.name += (i + '_' + s);
 			}
 		}
+		updateTranslations(table);
 		
 		updateUIAnalysisRetrofitMaterials();
 		document.getElementById('retrofit_export').disabled = (current.retrofit.jobs.length < 1);
@@ -9253,8 +9708,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		for (var i = 0;  i < mats.length;  i++) {
 			var material = eddb.material[mats[i]];
 			var tr = cache.template.analysis_retrofit_costs_row.cloneNode(true);
+			tr.cells[0].setAttribute('edsy-text', 'material-'+mats[i]);
 			tr.cells[0].innerHTML = encodeHTML(material.name);
+			tr.cells[1].setAttribute('edsy-text', 'mattype-'+material.mattype+'-abbr');
 			tr.cells[1].innerHTML = encodeHTML(eddb.mattype[material.mattype].abbr);
+			tr.cells[2].setAttribute('edsy-vals', JSON.stringify({'number':material.rarity}));
+			tr.cells[2].setAttribute('edsy-text', 'interp-grade-abbr-number');
 			tr.cells[2].innerHTML = encodeHTML('G' + material.rarity);
 			tr.cells[3].innerHTML = formatNumHTML(ceil(matTotal[mats[i]]), 0);
 			tbody.appendChild(tr);
@@ -9271,8 +9730,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var tbody = document.createElement('tbody');
 		
 		var tr = document.createElement('tr');
-		var td = document.createElement('td');
-		td.appendChild(document.createTextNode('Checklist'));
+		var td = createTranslatedElement('td', 'ui-retrofit-export-checklist')
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		td.className = 'export';
@@ -9290,15 +9748,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		var button = document.createElement('button');
-		button.innerHTML = HTML_ICON['clipboard'];
+		button.appendChild(cache.icon['clipboard'].cloneNode(true));
 		button.addEventListener('click', onUIPopupExportCopyButtonClick);
 		td.appendChild(button);
 		tr.appendChild(td);
 		tbody.appendChild(tr);
 		
 		var tr = document.createElement('tr');
-		var td = document.createElement('td');
-		td.appendChild(document.createTextNode('Materials'));
+		var td = createTranslatedElement('td', 'ui-retrofit-export-materials');
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		td.className = 'export';
@@ -9316,15 +9773,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		var button = document.createElement('button');
-		button.innerHTML = HTML_ICON['clipboard'];
+		button.appendChild(cache.icon['clipboard'].cloneNode(true));
 		button.addEventListener('click', onUIPopupExportCopyButtonClick);
 		td.appendChild(button);
 		tr.appendChild(td);
 		tbody.appendChild(tr);
 		
 		var tr = document.createElement('tr');
-		var td = document.createElement('td');
-		td.appendChild(document.createTextNode('JSON'));
+		var td = createTranslatedElement('td', 'ui-retrofit-export-json');
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		td.className = 'export';
@@ -9342,15 +9798,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		var button = document.createElement('button');
-		button.innerHTML = HTML_ICON['clipboard'];
+		button.appendChild(cache.icon['clipboard'].cloneNode(true));
 		button.addEventListener('click', onUIPopupExportCopyButtonClick);
 		td.appendChild(button);
 		tr.appendChild(td);
 		tbody.appendChild(tr);
 		
 		var tr = document.createElement('tr');
-		var td = document.createElement('td');
-		td.appendChild(document.createTextNode('External'));
+		var td = createTranslatedElement('td', 'ui-retrofit-export-external');
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		td.className = 'export';
@@ -9360,14 +9815,27 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		link.className = 'button text';
 		link.href = inaraURL;
 		link.target = '_blank';
-		link.innerHTML = '<img src="inara.png"> Inara';
+		var img = document.createElement('img');
+		img.src = 'inara.png';
+		link.append(img, ' ', createTranslatedElement('span', 'ui-export-search-inara'));
 		div.appendChild(link);
 		var link = document.createElement('a');
 		link.className = 'button text';
-		if (edomhURL)
-			link.href = edomhURL;
 		link.target = '_blank';
-		link.innerHTML = '<img src="edomh.png" class="iconsvg"> ' + ((edomhURL !== null) ? 'EDOMH' : '<abbr title="EDOMH does not support direct import of multiple ships">EDOMH<svg class="iconsvg warning"><use xlink:href="#icon_warning"/></svg></abbr>');
+		var img = document.createElement('img');
+		img.src = 'edomh.png';
+		img.className = 'iconsvg';
+		var span = createTranslatedElement('span', 'ui-export-edomh');
+		if (edomhURL) {
+			link.href = edomhURL;
+		} else {
+			var abbr = document.createElement('abbr');
+			abbr.setAttribute('edsy-title', 'ui-retrofit-export-warning-edomh-multiple');
+			abbr.title = getTranslation('ui-retrofit-export-warning-edomh-multiple');
+			abbr.append(span, cache.icon['warning'].cloneNode(true));
+			span = abbr;
+		}
+		link.append(img, ' ', span);
 		div.appendChild(link);
 		td.appendChild(div);
 		tr.appendChild(td);
@@ -9394,22 +9862,32 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			retrofitOptions: current.retrofit.options,
 			retrofits: [],
 		};
-		var cols = ['Build','Module','Action','Details'];
+		var cols = [
+			getTranslation('ui-retrofit-checklist-build'),
+			getTranslation('ui-retrofit-checklist-module'),
+			getTranslation('ui-retrofit-checklist-action'),
+			getTranslation('ui-retrofit-checklist-details')
+		];
 		var stepsText = [cols.join('\t')];
 		var fdidShips = {};
 		var fdidModules = {};
 		var matTotal = {'':0};
 		for (var i = 0;  i < current.retrofit.jobs.length;  i++) {
+			
+			var target = current.retrofit.jobs[i].name;
+			target = ((target === false) ? getTranslation('option-current-build') : ((target === true) ? getTranslation('option-stock-ship') : target));
+			var baseline = current.retrofit.jobs[i].baseline;
+			baseline = ((baseline === false) ? getTranslation('option-current-build') : ((baseline === true) ? getTranslation('option-stock-ship') : baseline));
 			var retroJSON = {
-				target    : current.retrofit.jobs[i].name,
-				baseline  : current.retrofit.jobs[i].baseline,
+				target    : target,
+				baseline  : baseline,
 				ship      : eddb.ship[current.retrofit.jobs[i].sid].fdname,
 				steps     : [],
 				cost      : 0,
 				materials : {},
 			};
 			exportJSON.retrofits.push(retroJSON);
-			cols[0] = current.retrofit.jobs[i].name;
+			cols[0] = target;
 			var steps = current.retrofit.jobs[i].steps;
 			for (var s = 0;  s < steps.length;  s++) {
 				var ship = eddb.ship[steps[s].sid];
@@ -9455,9 +9933,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				else if (current.dev) console.log('invalid retrofit step: '+JSON.stringify(steps[s]));
 				
 				if (checkbox.checked) {
-					cols[1] = ((steps[s].sgrp === 'ship') ? ship.name : (getModuleLabel(module) + (steps[s].num ? (' #' + steps[s].num) : '')));
-					cols[2] = steps[s].act;
-					cols[3] = (steps[s].desc || '');
+					cols[1] = ((steps[s].sgrp === 'ship') ? getTranslation('ship-'+steps[s].sid) : (getModuleLabel(module) + (steps[s].num ? (' ' + getTranslation('interp-index-abbr-number', {'number':steps[s].num})) : '')));
+					cols[2] = getTranslation('ui-retrofit-action-'+steps[s].act.toLowerCase()+'-abbr');
+					cols[3] = getRetrofitStepDescription(steps[s], false);
 					stepsText.push(cols.join('\t'));
 					
 					if (steps[s].act === 'Buy') {
@@ -9481,9 +9959,19 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		stepsText.push('');
 		
 		// compile materials report
-		cols = ['Item','Type','Lvl','Qty'];
+		cols = [
+			getTranslation('ui-retrofit-materials-item'),
+			getTranslation('ui-retrofit-materials-type'),
+			getTranslation('ui-retrofit-materials-level'),
+			getTranslation('ui-retrofit-materials-quantity')
+		];
 		var matsText = [cols.join('\t')];
-		cols = ['Credits','','',(matTotal[''] || 0)];
+		cols = [
+			getTranslation('ui-retrofit-materials-credits'),
+			'',
+			'',
+			formatNumText(matTotal[''] || 0)
+		];
 		matsText.push(cols.join('\t'));
 		delete matTotal[''];
 		var mats = Object.keys(matTotal);
@@ -9491,10 +9979,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		for (var i = 0;  i < mats.length;  i++) {
 			var material = eddb.material[mats[i]];
 			if (material) {
-				cols[0] = material.name;
-				cols[1] = eddb.mattype[material.mattype].abbr;
-				cols[2] = material.rarity;
-				cols[3] = ceil(matTotal[mats[i]]).toFixed(0);
+				cols[0] = getTranslation('material-'+mats[i]);
+				cols[1] = getTranslation('mattype-'+material.mattype+'-abbr');
+				cols[2] = getTranslation('interp-grade-abbr-number', {'number':material.rarity});
+				cols[3] = formatNumText(ceil(matTotal[mats[i]]));
 				matsText.push(cols.join('\t'));
 			}
 		}
@@ -9577,7 +10065,11 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			var bit = min(1 << i, 0x3F);
 			var label = cache.template.options_discounts_bits_label.cloneNode(true);
 			label.getElementsByTagName('INPUT')[0].value = bit;
-			label.getElementsByTagName('DIV')[0].innerHTML = (bit == 0x3F) ? 'FREE' : formatPctHTML(1 - cache.discountMod[bit], (DISCOUNTS[DISCOUNTS.length - 1 - i] % 1 ? 1 : 0));
+			if (bit == 0x3F) {
+				label.getElementsByTagName('DIV')[0].replaceChildren(createTranslatedElement('span', 'ui-options-discounts-free'));
+			} else {
+				label.getElementsByTagName('DIV')[0].innerHTML = formatPctHTML(1 - cache.discountMod[bit], (DISCOUNTS[DISCOUNTS.length - 1 - i] % 1 ? 1 : 0));
+			}
 			container.appendChild(label);
 			container.appendChild(document.createTextNode(' '));
 		}
@@ -9606,12 +10098,19 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					divCheck.className = "check";
 					divWrapper.appendChild(divCheck);
 					var span = document.createElement('span');
-					span.innerText = BUILTIN_STORED_MODULES[bmodid].name;
+					span.innerText = BUILTIN_STORED_MODULES[bmodid].name; // TODO translation
 					divWrapper.appendChild(span);
 					label.appendChild(divWrapper);
 					((group === 'hardpoint') ? divBuiltinHardpoints : divBuiltinOther).appendChild(label);
 				}
 			}
+		}
+		
+		var select = document.forms.options.elements.language;
+		for (var l = 0;  l < LANGS.length;  l++) {
+			var option = createTranslatedElement('option', 'language-'+LANGS[l]);
+			option.value = LANGS[l];
+			select.options.add(option);
 		}
 	}; // initUIOptions()
 	
@@ -9647,6 +10146,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					current.option[opt] = '';
 			}
 		}
+		if (LANGS.indexOf(current.option.language) < 0)
+			current.option.language = '';
 		
 		// apply options settings
 		document.body.classList.toggle('onlybest', current.option.onlybest);
@@ -9670,6 +10171,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				docstyle.setProperty('--'+opt, current.option[opt] || cache.option[opt]);
 			}
 		}
+		current.lang = current.option.language || (current.locale ? current.locale.substr(0,2) : undefined);
+		if (LANGS.indexOf(current.lang) < 0)
+			current.lang = LANGS[0];
 		
 		// update options controls
 		var elements = document.forms.options.elements;
@@ -9704,6 +10208,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				elements[opt].value = current.option[opt] || cache.option[opt];
 			}
 		}
+		elements.language.value = current.option.language;
 	}; // updateUIOptions()
 	
 	
@@ -9895,7 +10400,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	var onUIPopupExportShortButtonClick = function(e) {
 		document.forms.popup.elements.export_short_gen_button.disabled = true;
-		document.forms.popup.elements.export_short_gen_button.innerHTML = 'Generating ...';
+		document.forms.popup.elements.export_short_gen_button.innerText = getTranslation('ui-export-generating');
 		var request = new XMLHttpRequest();
 		request.onreadystatechange = function() {
 			if (request.readyState == 4) {
@@ -9965,83 +10470,6 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		e.stopPropagation();
 		return false;
 	}; // onUIContextMenu()
-	
-	
-	var onUIShipyardTabChange = function(e) {
-		if (e.target.name === 'tab' && e.target.checked) {
-			setUIShipyardTab(e.target.value);
-		}
-	}; // onUIShipyardTabChange()
-	
-	
-	var onUIShipyardShipsClick = function(e) {
-		var el = e.target;
-		while (el && el.tagName !== 'BUTTON' && el.tagName !== 'INPUT') {
-			el = el.parentNode;
-		}
-		if (!el || el.disabled) {
-		} else if (el.tagName === 'BUTTON') {
-			e.stopPropagation();
-			e.preventDefault();
-			var tokens = el.name.split('_');
-			if (tokens[1] === 'ship') {
-				setCurrentFit(new Build(el.value, true), '');
-				setUIPageTab('outfitting');
-				updateUIAnalysisStoredBuilds();
-			}
-		} else {
-			var table = el;
-			while (table && table.tagName !== 'TABLE')
-				table = table.parentNode;
-			var state = sortUIShipyardTable(table, UI_SHIPYARD_SHIPS_COLS, parseInt(el.value));
-			if (state) {
-				el.classList.toggle('asc', !state.desc);
-				el.classList.toggle('desc', !!state.desc);
-				el.classList.toggle('key1', !state.alt);
-				el.classList.toggle('key2', !!state.alt);
-			}
-		}
-	}; // onUIShipyardShipsClick()
-	
-	
-	var onUIShipyardStoredBuildsClick = function(e) {
-		var el = e.target;
-		while (el && el.tagName !== 'BUTTON' && el.tagName !== 'INPUT') {
-			el = el.parentNode;
-		}
-		if (!el || el.disabled) {
-		} else if (el.tagName === 'BUTTON') {
-			e.stopPropagation();
-			e.preventDefault();
-			var tokens = el.name.split('_');
-			switch (tokens[1]) {
-			case 'reload':
-				setCurrentFitNameHash(el.value);
-				setUIPageTab('outfitting');
-				updateUIAnalysisStoredBuilds();
-				break;
-				
-			case 'rename':
-				renameStoredBuild(el.value);
-				break;
-				
-			case 'delete':
-				deleteStoredBuild(el.value);
-				break;
-			}
-		} else {
-			var table = el;
-			while (table && table.tagName !== 'TABLE')
-				table = table.parentNode;
-			var state = sortUIShipyardTable(table, UI_SHIPYARD_STOREDBUILD_COLS, parseInt(el.value));
-			if (state) {
-				el.classList.toggle('asc', !state.desc);
-				el.classList.toggle('desc', !!state.desc);
-				el.classList.toggle('key1', !state.alt);
-				el.classList.toggle('key2', !!state.alt);
-			}
-		}
-	}; // onUIShipyardStoredBuildsClick()
 	
 	
 	var onUIModuleTabChange = function(e) {
@@ -10676,7 +11104,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			var slotgroup = tokens[0];
 			var slotnum = tokens[1];
 			var modid = current.fit.getSlot(slotgroup, slotnum).getModuleID();
-			if (!GROUP_LABEL[slotgroup] || slotgroup === 'component' || !modid) {
+			if ((GROUPS.indexOf(slotgroup) < 0) || slotgroup === 'component' || !modid) {
 				e.preventDefault();
 				return;
 			}
@@ -11050,6 +11478,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				current.option[opt] = elements[opt].value;
 			}
 		}
+		current.option.language = elements.language.value;
 		updateUIOptions();
 		
 		updateUILayout();
@@ -11062,6 +11491,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		updateUIStatsTotals();
 		
 		writeStoredOptions();
+		
+		if (cache.lang != current.lang)
+			loadTranslations().then(updateTranslations);
 	}; // onUIOptionsChange()
 	
 	
@@ -11073,7 +11505,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		} else if (el.name === 'colormatrix') {
 			e.stopPropagation();
 			e.preventDefault();
-			var xml = prompt("Paste your <GUIColour><Default> color matrix here:", '');
+			var xml = prompt(getTranslation('ui-options-appearance-colormatrix-prompt'), '');
 			if (!xml)
 				return;
 			var matrix = {};
@@ -11087,7 +11519,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				}
 			}
 			if (!matrix.red || !matrix.green || !matrix.blue) {
-				alert('Error: Invalid color matrix');
+				alert(getTranslation('ui-options-appearance-colormatrix-error'));
 				return;
 			}
 			for (var i = 0;  i < CSS_COLORS.length;  i++) {
@@ -11142,7 +11574,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		var json = JSON.stringify(obj, null, 2);
 		showUITextPopup(
-				'Below is a JSON object encoding all stored builds, modules, and other preferences, suitable for backup or transfer to another device or browser.',
+				getTranslation('ui-options-backup-prompt'),
 				json,
 				e.target, false,
 				true, false
@@ -11185,6 +11617,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		updateUIModulePickerStoredModules();
 		updateUIDetailsStoredModules();
 		updateUIDetailsStoredModuleControls();
+		if (cache.lang != current.lang)
+			loadTranslations().then(updateTranslations);
 	}; // onStorageEvent()
 	
 	
@@ -11246,8 +11680,18 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		
 		// fill in the current version and update date
 		var v = ('0000000000' + max(vH[0], vC[1], vD[2], vJ[3])).slice(-10);
-		document.getElementById('version_label').innerHTML = ('v' + parseInt(v.slice(0,2)) + '.' + parseInt(v.slice(2,4)) + '.' + parseInt(v.slice(4,6)) + (['-','a','b','rc'][parseInt(v.slice(6,8))] || '.') + parseInt(v.slice(8,10)));
 		var d = '' + max(dH, dC, dD, dJ) + '00000000';
+		document.getElementById('version_label').setAttribute('edsy-vals', JSON.stringify({
+			'a':parseInt(v.slice(0,2)),
+			'b':parseInt(v.slice(2,4)),
+			'c':parseInt(v.slice(4,6)),
+			'rc':(['-','a','b','rc'][parseInt(v.slice(6,8))] || '.'),
+			'd':parseInt(v.slice(8,10)),
+			'date':(d.slice(0,4) + '-' + d.slice(4,6) + '-' + d.slice(6,8)),
+		}));
+		document.getElementById('version_label').setAttribute('edsy-text', 'interp-version-abcd');
+		document.getElementById('version_label').innerHTML = ('v' + parseInt(v.slice(0,2)) + '.' + parseInt(v.slice(2,4)) + '.' + parseInt(v.slice(4,6)) + (['-','a','b','rc'][parseInt(v.slice(6,8))] || '.') + parseInt(v.slice(8,10)));
+		document.getElementById('version_label').setAttribute('edsy-title', 'interp-updated-date');
 		document.getElementById('version_label').title = ('updated ' + d.slice(0,4) + '-' + d.slice(4,6) + '-' + d.slice(6,8));
 		
 		// cross check expected versions
@@ -11272,6 +11716,88 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // verifyVersionSync()
 	
 	
+	var loadTranslations = async function() {
+		var lang = current.lang;
+		if (cache.lang == lang)
+			return;
+		
+		var file = "lang-" + lang + ".jsonc";
+		var response = await fetch(file);
+		if (!response.ok) {
+			if (lang != LANGS[0]) {
+				current.lang = LANGS[0];
+				await loadTranslations();
+			}
+			throw new Error("failed to load " + lang + " translations");
+		}
+		var text = await response.text();
+		text = text.replace(/(\/\/[^"]*|\/\*[^"]*\*\/\s*)$/gm, '');
+		try {
+			var translation = JSON.parse(text);
+		} catch (exc) {
+			throw new Error("failed to parse " + lang + " translations from " + file + ": " + exc);
+			return;
+		}
+		cache.lang = lang;
+		cache.translation = translation;
+	}; // loadTranslations()
+	
+	
+	var getTranslation = function(key, values) {
+		var text = cache.translation[key];
+		if (text && values) {
+			text = text.replaceAll(cache.reTranslationValue, function(match, group1) {
+				var v = values[group1];
+				return (v === null || typeof v === 'number')
+					? (values[group1+'%'] ? formatPctText : formatNumText)((values[group1+'!'] * Infinity) || v, values[group1+'#'] || 0)
+					: (v ? v.toString() : '')
+			});
+		}
+		return text;
+	}; // getTranslation()
+	
+	
+	var createTranslatedElement = function(name, key, values) {
+		var el = document.createElement(name || 'span');
+		if (values)
+			el.setAttribute('edsy-vals', JSON.stringify(values));
+		el.setAttribute('edsy-text', key || '');
+		el.innerHTML = encodeHTML(getTranslation(key, values));
+		return el;
+	}; // createTranslatedElement()
+	
+	
+	var updateTranslations = function(doc) {
+		var attrs = { "edsy-text": "innerText", "edsy-title": "title" };
+		var t0 = Date.now();
+		if (!doc)
+			document.documentElement.style.setProperty('--textempty', "'"+getTranslation('note-empty')+"'");
+		for (var keyattr in attrs) {
+			var setattr = attrs[keyattr];
+			(doc || document).querySelectorAll("["+keyattr+"]").forEach(function (el) {
+				var key = el.getAttribute(keyattr);
+				var vals = ((keyattr === 'edsy-title') ? el.getAttribute('edsy-vals-title') : '') || el.getAttribute("edsy-vals");
+				if (vals === '') {
+					vals = {};
+				} else if (vals) {
+					try {
+						vals = JSON.parse(vals);
+					} catch (exc) {
+						if (current.dev) console.log("WARNING: invalid translation edsy-vals " + vals);
+						vals = null;
+					}
+				}
+				var text = getTranslation(key, vals);
+				if (text !== undefined) {
+					el[setattr] = text;
+				} else if (current.dev) console.log("WARNING: no translation for '" + key + "'");
+			});
+		}
+		var t1 = Date.now();
+		if (!doc && current.dev) console.log("updateTranslations(): '" + cache.lang + "' completed in " + (t1-t0) + "s");
+	}; // updateTranslations()
+	
+	
 	var initUIEventHandlers = function() {
 		window.addEventListener('resize', onWindowResize);
 		if (cache.feature.history)
@@ -11290,7 +11816,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		document.getElementById('window_maximize').addEventListener('click', onUIMaximizeButtonClick);
 		document.getElementById('window_minimize').addEventListener('click', onUIMinimizeButtonClick);
 		document.getElementById('page_tabs').addEventListener('change', onUIPageHeaderChange);
-		document.getElementById('page_body_shipyard').addEventListener('contextmenu', onUIContextMenu);
+		// document.getElementById('page_body_shipyard').addEventListener('contextmenu', onUIContextMenu); // why?
 		document.getElementById('shipyard_tabs').addEventListener('change', onUIShipyardTabChange);
 		document.getElementById('shipyard_ships_container').addEventListener('click', onUIShipyardShipsClick);
 		document.getElementById('shipyard_storedbuilds_container').addEventListener('click', onUIShipyardStoredBuildsClick);
@@ -11373,7 +11899,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		setTimeout(updateUIStatsPanels, 2);
 	}; // initUIFinal()
 	
-	
+
 	var onDOMContentLoaded = function(e) {
 		// add popup events now, in case we need them for the version sync
 		document.getElementById('popup_modal').addEventListener('keydown', onUIModalKeydownCapture, true);
@@ -11385,7 +11911,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		if (!verifyVersionSync()) {
 			document.forms.popup.addEventListener('submit', onFormSubmit);
 			showUITextPopup(
-					"<h1>A new version is available!</h1><h3>Click Okay to update, or force-refresh in your browser (ctrl+F5, Apple+r, Command+r, etc)</h3>",
+					("<h1>" + getTranslation('message-version') + "</h1><h3>" + getTranslation('message-version-desc') + "</h3>"),
 					"",
 					null, true,
 					function() { window.location.reload(true); }, null
@@ -11414,6 +11940,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		
 		// process remaining initialization asynchronously so that the loading animation can run
 		var steps = [
+			loadTranslations,
+			
 			// initialize UI
 			initUIShipyardShips,
 			initUIShipyardStoredBuilds,
@@ -11435,18 +11963,53 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			
 			// finalize and launch UI
 			initUIEventHandlers,
+			loadTranslations,
+			updateTranslations,
 			initUIFinal,
 		];
 		var timings = [];
-		var init = function() {
+		var init = async function() {
 			var step = steps.shift();
 			var t0 = Date.now();
-			step();
+			await step();
 			timings.push(step.name+':'+(Date.now()-t0));
-			if (steps.length > 0)
+			if (steps.length > 0) {
 				setTimeout(init, 0);
-			else if (current.dev)
+			} else if (current.dev) {
 				console.log(timings.join(',\n'));
+				/* TODO DELETE translation testing
+				for (var datatype in {ship:1,attributes:1,mattype:1,material:1,blueprint:1,expeffect:1,mtype:1,module:1}) {
+					var n=0, m=0;
+					for (var id in eddb[datatype]) {
+						var obj = eddb[datatype][id];
+						if (datatype == 'attributes' && !obj.attr)
+							continue
+						n++;
+						var key = (datatype == 'attributes' ? 'attr' : datatype) + '-' + (obj.namekey || obj.attr || id);
+						if (cache.translation[key] != obj.name) {
+							console.log(key+' => '+cache.translation[key]+' != '+obj.name);
+							m++;
+						}
+						if (obj.abbr) {
+							n++;
+							if (cache.translation[key+'-abbr'] != obj.abbr)
+								m++;
+						}
+						if (obj.desc) {
+							n++;
+							if (cache.translation[key+'-desc'] != obj.desc)
+								m++;
+						}
+						if (obj.special) {
+							n++;
+							if (cache.translation[key+'-special'] != obj.special)
+								m++;
+						}
+					}
+					console.log(datatype+': '+n+' total, '+m+' mismatch');
+				}
+				*/
+			}
 		};
 		setTimeout(init, 0);
 	}; // onDOMContentLoaded()
@@ -11456,6 +12019,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	current.dev = (window.location.protocol === 'file:') || (window.location.pathname.indexOf('/dev/') >= 0);
 	current.beta = current.dev || (window.location.pathname.indexOf('/beta/') >= 0);
 	current.locale = ((window.navigator.languages || EMPTY_ARR)[0] || window.navigator.userLanguage || window.navigator.language || window.navigator.browserLanguage || window.navigator.systemLanguage || undefined);
+	current.lang = (current.locale ? current.locale.substr(0,2) : undefined);
+	if (LANGS.indexOf(current.lang) < 0)
+		current.lang = LANGS[0];
 	
 	// initialize browser features
 	cache.feature.history = false;

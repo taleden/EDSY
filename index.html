@@ -12,10 +12,10 @@ and is provided under a Creative Commons Attribution-NonCommercial 4.0 Internati
 The Elite Dangerous game logic and data in this file remains the property of Frontier Developments plc, and is used here as authorized by
 Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerous-media-usage-rules.510879/).
 -->
-		<title>EDSY</title>
+		<title edsy-text="edsy">EDSY</title>
 		<meta name="application-name" content="EDSY">
-		<meta name="edsy-versions-html" id="edsy_versions_html" content="308149912,308149912,308119901,308149912"><!-- HTML,CSS,DB,JS -->
-		<meta name="last-modified" id="last_modified" content="20230131">
+		<meta name="edsy-versions-html" id="edsy_versions_html" content="308159902,308159902,308159902,308159902"><!-- HTML,CSS,DB,JS -->
+		<meta name="last-modified" id="last_modified" content="20230601">
 		<meta name="author" content="taleden">
 		<meta name="description" content="EDSY is a ship outfitting tool for Elite Dangerous">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -188,15 +188,15 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 		<div id="page">
 			<div id="page_header">
 				<header id="header_title">
-					<a href="">EDSY</a>
+					<a href="" edsy-text="edsy">EDSY</a>
 					<button id="window_maximize"><svg class="iconsvg maximize"><use xlink:href="#icon_maximize"/></svg></button>
 					<button id="window_minimize"><svg class="iconsvg minimize"><use xlink:href="#icon_minimize"/></svg></button>
 				</header>
 				<form id="page_tabs" name="header">
-					<label class="togglebutton"><input name="tab" type="radio" value="shipyard"><div><svg class="iconsvg shipyard"><use xlink:href="#icon_shipyard"/></svg><span>Shipyard</span></div></label>
-					<label class="togglebutton"><input name="tab" type="radio" value="outfitting"><div><svg class="iconsvg turreted"><use xlink:href="#icon_turreted"/></svg><span>Outfitting</span></div></label>
-					<label class="togglebutton"><input name="tab" type="radio" value="analysis"><div><svg class="iconsvg analysis"><use xlink:href="#icon_analysis"/></svg><span>Analysis</span></div></label>
-					<label class="togglebutton"><input name="tab" type="radio" value="options"><div><svg class="iconsvg unknown"><use xlink:href="#icon_unknown"/></svg><svg class="iconsvg repair"><use xlink:href="#icon_repair"/></svg><span>Help</span></div></label>
+					<label class="togglebutton"><input name="tab" type="radio" value="shipyard"><div><svg class="iconsvg shipyard"><use xlink:href="#icon_shipyard"/></svg><span edsy-text="ui-shipyard">Shipyard</span></div></label>
+					<label class="togglebutton"><input name="tab" type="radio" value="outfitting"><div><svg class="iconsvg turreted"><use xlink:href="#icon_turreted"/></svg><span edsy-text="ui-outfitting">Outfitting</span></div></label>
+					<label class="togglebutton"><input name="tab" type="radio" value="analysis"><div><svg class="iconsvg analysis"><use xlink:href="#icon_analysis"/></svg><span edsy-text="ui-analysis">Analysis</span></div></label>
+					<label class="togglebutton"><input name="tab" type="radio" value="options"><div><svg class="iconsvg unknown"><use xlink:href="#icon_unknown"/></svg><svg class="iconsvg repair"><use xlink:href="#icon_repair"/></svg><span edsy-text="ui-help">Help</span></div></label>
 				</form>
 				<div id="header_version">
 					<abbr id="version_label" title=""></abbr>
@@ -206,8 +206,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 			<div id="page_body" class="">
 				<form id="page_body_shipyard" name="shipyard" class="">
 					<div id="shipyard_tabs">
-						<label class="togglebutton"><input name="tab" type="radio" value="ships"><div class="togglebox">Shipyard</div></label>
-						<label class="togglebutton"><input name="tab" type="radio" value="storedbuilds"><div class="togglebox">Stored</div></label>
+						<label class="togglebutton"><input name="tab" type="radio" value="ships"><div class="togglebox" edsy-text="ui-shipyard">Shipyard</div></label>
+						<label class="togglebutton"><input name="tab" type="radio" value="storedbuilds"><div class="togglebox" edsy-text="ui-stored">Stored</div></label>
 					</div>
 					<div id="shipyard_container">
 						<div id="shipyard_ships_container"></div>
@@ -218,27 +218,27 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 					<div id="outfitting_top" class="">
 						<form id="outfitting_modules" name="modules" class="">
 							<div id="outfitting_modules_tabs">
-								<label class="togglebutton"><input name="tab" type="radio" value="ALL"><div class="togglebox">ALL</div></label>
-								<label class="togglebutton"><input name="tab" type="radio" value="STORED"><div class="togglebox">STR</div></label>
-								<label class="togglebutton"><input name="tab" type="radio" value="hardpoint"><div class="togglebox">HPT</div></label>
-								<label class="togglebutton"><input name="tab" type="radio" value="utility"><div class="togglebox">UTL</div></label>
-								<label class="togglebutton"><input name="tab" type="radio" value="component"><div class="togglebox">COR</div></label>
-								<label class="togglebutton"><input name="tab" type="radio" value="military"><div class="togglebox">MIL</div></label>
-								<label class="togglebutton"><input name="tab" type="radio" value="internal"><div class="togglebox">OPT</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="ALL"><div class="togglebox" edsy-text="ui-modules-all">ALL</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="STORED"><div class="togglebox" edsy-text="ui-modules-stored">STR</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="hardpoint"><div class="togglebox" edsy-text="ui-modules-hardpoint">HPT</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="utility"><div class="togglebox" edsy-text="ui-modules-utility">UTL</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="component"><div class="togglebox" edsy-text="ui-modules-core">COR</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="military"><div class="togglebox" edsy-text="ui-modules-military">MIL</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="internal"><div class="togglebox" edsy-text="ui-modules-optional">OPT</div></label>
 								<span></span>
-								<label class="togglebutton"><input name="tab" type="radio" value="SLOT"><div class="togglebox">SLOT</div></label>
+								<label class="togglebutton"><input name="tab" type="radio" value="SLOT"><div class="togglebox" edsy-text="ui-modules-slot">SLOT</div></label>
 							</div>
 							<div id="outfitting_modules_container" class=""></div>
 							<div id="outfitting_modules_buttons">
-								<button id="outfitting_modules_button_back" name="back">Back</button>
-								<button id="outfitting_modules_button_details" name="details">Details</button>
+								<button id="outfitting_modules_button_back" name="back" edsy-text="ui-button-back">Back</button>
+								<button id="outfitting_modules_button_details" name="details" edsy-text="ui-button-details">Details</button>
 							</div>
 						</form>
 						<form id="outfitting_fit" name="fit" class="">
 							<div id="outfitting_fit_settings">
 								<div id="outfitting_stored_container">
 									<select id="outfitting_fit_stored" name="outfitting_fit_stored">
-										<option value="">(Stock)</option>
+										<option value="" edsy-text="option-stock">(Stock)</option>
 									</select>
 									<button id="outfitting_fit_stored_reload"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg></button>
 									<button id="outfitting_fit_stored_save"><svg class="iconsvg save"><use xlink:href="#icon_save"/></svg></button>
@@ -249,34 +249,34 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 								<span></span>
 								<div id="outfitting_cols_popout" class="popout">
 									<input type="checkbox" id="outfitting_cols_toggle" class="toggleinput">
-									<label for="outfitting_cols_toggle"><svg class="iconsvg eye"><use xlink:href="#icon_eye"/></svg><span> SHOW</span></label>
+									<label for="outfitting_cols_toggle"><svg class="iconsvg eye"><use xlink:href="#icon_eye"/></svg> <span edsy-text="ui-slots-show">SHOW</span></label>
 									<div>
-										<label class="togglebutton"><input name="outfitting_show_mass" type="checkbox" value="1"><div class="togglebox">Mass</div></label>
-										<label class="togglebutton"><input name="outfitting_show_power" type="checkbox" value="1"><div class="togglebox">Power</div></label>
-										<label class="togglebutton"><input name="outfitting_show_attrs" type="checkbox" value="1"><div class="togglebox">Attrs</div></label>
-										<label class="togglebutton"><input name="outfitting_show_price" type="checkbox" value="1"><div class="togglebox">Price</div></label>
+										<label class="togglebutton"><input name="outfitting_show_mass" type="checkbox" value="1"><div class="togglebox" edsy-text="ui-slots-show-mass">Mass</div></label>
+										<label class="togglebutton"><input name="outfitting_show_power" type="checkbox" value="1"><div class="togglebox" edsy-text="ui-slots-show-power">Power</div></label>
+										<label class="togglebutton"><input name="outfitting_show_attrs" type="checkbox" value="1"><div class="togglebox" edsy-text="ui-slots-show-attributes">Attrs</div></label>
+										<label class="togglebutton"><input name="outfitting_show_price" type="checkbox" value="1"><div class="togglebox" edsy-text="ui-slots-show-price">Price</div></label>
 									</div>
 								</div>
 								<div id="outfitting_ops_popout" class="popout">
 									<input type="checkbox" id="outfitting_ops_toggle" class="toggleinput">
-									<label for="outfitting_ops_toggle"><svg class="iconsvg menudots"><use xlink:href="#icon_menudots"/></svg><span>OPS</span></label>
+									<label for="outfitting_ops_toggle"><svg class="iconsvg menudots"><use xlink:href="#icon_menudots"/></svg><span edsy-text="ui-slots-operations">OPS</span></label>
 									<div>
-										<button id="outfitting_fit_import"><svg class="iconsvg import"><use xlink:href="#icon_import"/></svg> Import...</button>
-										<button id="outfitting_fit_export"><svg class="iconsvg export"><use xlink:href="#icon_export"/></svg> Export...</button>
-										<button id="outfitting_fit_discounts"><svg class="iconsvg copy"><use xlink:href="#icon_copy"/></svg> Clone Discounts</button>
+										<button id="outfitting_fit_import"><svg class="iconsvg import"><use xlink:href="#icon_import"/></svg> <span edsy-text="ui-slots-operations-import">Import...</span></button>
+										<button id="outfitting_fit_export"><svg class="iconsvg export"><use xlink:href="#icon_export"/></svg> <span edsy-text="ui-slots-operations-export">Export...</span></button>
+										<button id="outfitting_fit_discounts"><svg class="iconsvg copy"><use xlink:href="#icon_copy"/></svg> <span edsy-text="ui-slots-operations-clone">Clone Discounts</span></button>
 									</div>
 								</div>
 							</div>
 							<div id="outfitting_fit_slots" class="">
 								<div id="outfitting_fit_header">
 									<div class="grow">
-										<span>Name:</span>
+										<span edsy-text="ui-slots-name">Name:</span>
 										<input name="shipname" type="text" maxlength=22>
 									</div>
 									<div>
-										<span>ID:</span>
+										<span edsy-text="ui-slots-id">ID:</span>
 										<input name="shipnametag" type="text" maxlength=6>
-										<span id="fit_header_export">Export:</span>
+										<span id="fit_header_export" edsy-text="ui-slots-export">Export:</span>
 										<button name="export_inara"><img src="inara.png"></button>
 									</div>
 								</div>
@@ -291,7 +291,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 						<form id="outfitting_details" name="details">
 							<div id="outfitting_details_settings">
 								<select id="outfitting_details_stored" name="outfitting_details_stored">
-									<option value="">(Stock)</option>
+									<option value="" edsy-text="option-stock">(Stock)</option>
 								</select>
 								<button id="outfitting_details_stored_reload"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg></button>
 								<button id="outfitting_details_stored_save"><svg class="iconsvg save"><use xlink:href="#icon_save"/></svg></button>
@@ -306,9 +306,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 									<div id="details_cost">
 										<div class="details_cost_row">
 											<input type="text" name="cost" value="">
-											<span>CR</span>
+											<span edsy-text="unit-credits-abbr">Cr</span>
 											<span id="details_cost_mod"></span>
-											<label class="togglebutton"><input name="discount" type="checkbox" value="0"><div class="togglebox">Actual</div></label>
+											<label class="togglebutton"><input name="discount" type="checkbox" value="0"><div class="togglebox" edsy-text="ui-details-discount-actual">Actual</div></label>
 										</div>
 										<div class="details_cost_row" id="details_cost_discounts">
 											<label class="togglebutton"><input name="discount" type="checkbox" value="0"><div class="togglebox"></div></label>
@@ -317,9 +317,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 									<div id="details_engineering">
 										<div id="engineering_controls">
 											<div id="engineering_selects">
-												<select name="blueprint"><option value="">(No Blueprint)</option></select>
+												<select name="blueprint"><option value="" edsy-text="option-no-blueprint">(No Blueprint)</option></select>
 												<div class="togglebutton">
-													<span>Grade</span>
+													<span edsy-text="ui-details-blueprint-grade">Grade</span>
 													<input id="blueprint_grade_1" name="blueprint_grade" type="radio" value="1">
 													<input id="blueprint_grade_2" name="blueprint_grade" type="radio" value="2">
 													<input id="blueprint_grade_3" name="blueprint_grade" type="radio" value="3">
@@ -331,7 +331,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 													<label for="blueprint_grade_4"><svg class="iconsvg engineer"><use xlink:href="#icon_engineer"/></svg><svg class="iconsvg engineered"><use xlink:href="#icon_engineered"/></svg></label>
 													<label for="blueprint_grade_5"><svg class="iconsvg engineer"><use xlink:href="#icon_engineer"/></svg><svg class="iconsvg engineered"><use xlink:href="#icon_engineered"/></svg></label>
 												</div>
-												<select name="expeffect"><option value="">(No Experimental Effect)</option></select>
+												<select name="expeffect"><option value="" edsy-text="option-no-expeffect">(No Experimental Effect)</option></select>
 											</div>
 											<div id="engineering_roll">
 												<div class="outer">
@@ -343,9 +343,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 												</div>
 											</div>
 											<div id="engineering_rollbuttons">
-												<button name="blueprint_roll_preset1" value="0.5">50%</button>
-												<button name="blueprint_roll_preset2" value="0.8">80%</button>
-												<button name="blueprint_roll_preset3" value="1.0">100%</button>
+												<button name="blueprint_roll_preset1" value="0.5" edsy-vals="{&quot;number&quot;:0.5,&quot;number%&quot;:true}" edsy-text="interp-number">50%</button>
+												<button name="blueprint_roll_preset2" value="0.8" edsy-vals="{&quot;number&quot;:0.8,&quot;number%&quot;:true}" edsy-text="interp-number">80%</button>
+												<button name="blueprint_roll_preset3" value="1.0" edsy-vals="{&quot;number&quot;:1.0,&quot;number%&quot;:true}" edsy-text="interp-number">100%</button>
 											</div>
 										</div>
 										<div id="details_special"></div>
@@ -353,8 +353,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 								</div>
 							</div>
 							<div id="outfitting_details_buttons">
-								<button id="outfitting_details_button_back" name="back">Back</button>
-								<button id="outfitting_details_button_replace" name="replace"></button>
+								<button id="outfitting_details_button_back" name="back" edsy-text="ui-button-back">Back</button>
+								<button id="outfitting_details_button_replace" name="replace">Replace</button>
 							</div>
 						</form>
 					</div>
@@ -370,109 +370,75 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 						<input type="checkbox" id="stats_toggle_8" class="toggleinput stats_toggle" value="1" checked>
 						<div id="stats_show_handle">
 							<label for="stats_show" class="stats_show_label">
-								<div class="show">&#9650; &#9650; &#9650;  SHOW STATS  &#9650; &#9650; &#9650;</div>
-								<div class="hide">&#9660; &#9660; &#9660;  HIDE STATS  &#9660; &#9660; &#9660;</div>
+								<div class="show">&#9650; &#9650; &#9650;  <span edsy-text="ui-stats-show">SHOW STATS</span>  &#9650; &#9650; &#9650;</div>
+								<div class="hide">&#9660; &#9660; &#9660;  <span edsy-text="ui-stats-hide">HIDE STATS</span>  &#9660; &#9660; &#9660;</div>
 							</label>
 						</div>
 						<div id="outfitting_stats">
 							<div id="stats_toggles_left" class="stats_toggles">
-								<label for="stats_toggle_1" class="stats_toggle_label stats_toggle_label_1"><abbr title="Totals and capacities">TTL</abbr></label>
-								<label for="stats_toggle_2" class="stats_toggle_label stats_toggle_label_2"><abbr title="Navigational (FSD and Thruster) statistics">NAV</abbr></label>
-								<label for="stats_toggle_3" class="stats_toggle_label stats_toggle_label_3"><abbr title="Handling statistics">HND</abbr></label>
-								<label for="stats_toggle_4" class="stats_toggle_label stats_toggle_label_4"><abbr title="Thermal statistics">THM</abbr></label>
+								<label for="stats_toggle_1" class="stats_toggle_label stats_toggle_label_1"><abbr edsy-title="ui-stats-totals-desc" title="Totals and capacities" edsy-text="ui-stats-totals-abbr">TTL</abbr></label>
+								<label for="stats_toggle_2" class="stats_toggle_label stats_toggle_label_2"><abbr edsy-title="ui-stats-nav-desc" title="Navigational (FSD and Thruster) statistics" edsy-text="ui-stats-nav-abbr">NAV</abbr></label>
+								<label for="stats_toggle_3" class="stats_toggle_label stats_toggle_label_3"><abbr edsy-title="ui-stats-handling-desc" title="Handling statistics" edsy-text="ui-stats-handling-abbr">HND</abbr></label>
+								<label for="stats_toggle_4" class="stats_toggle_label stats_toggle_label_4"><abbr edsy-title="ui-stats-thermal-desc" title="Thermal statistics" edsy-text="ui-stats-thermal-abbr">THM</abbr></label>
 							</div>
 							<div id="stats_toggles_right" class="stats_toggles">
-								<label for="stats_toggle_5" class="stats_toggle_label stats_toggle_label_5"><abbr title="Shield statistics">SHD</abbr></label>
-								<label for="stats_toggle_6" class="stats_toggle_label stats_toggle_label_6"><abbr title="Armour statistics">ARM</abbr></label>
-								<label for="stats_toggle_7" class="stats_toggle_label stats_toggle_label_7"><abbr title="Weapon statistics">WPN</abbr></label>
-								<label for="stats_toggle_8" class="stats_toggle_label stats_toggle_label_8"><abbr title="Prices">PRC</abbr></label>
+								<label for="stats_toggle_5" class="stats_toggle_label stats_toggle_label_5"><abbr edsy-title="ui-stats-shield-desc" title="Shield statistics" edsy-text="ui-stats-shield-abbr">SHD</abbr></label>
+								<label for="stats_toggle_6" class="stats_toggle_label stats_toggle_label_6"><abbr edsy-title="ui-stats-armour-desc" title="Armour statistics" edsy-text="ui-stats-armour-abbr">ARM</abbr></label>
+								<label for="stats_toggle_7" class="stats_toggle_label stats_toggle_label_7"><abbr edsy-title="ui-stats-weapon-desc" title="Weapon statistics" edsy-text="ui-stats-weapon-abbr">WPN</abbr></label>
+								<label for="stats_toggle_8" class="stats_toggle_label stats_toggle_label_8"><abbr edsy-title="ui-stats-price-desc" title="Prices" edsy-text="ui-stats-price-abbr">PRC</abbr></label>
 							</div>
 							<div id="outfitting_stats_wrapper">
 								<div id="outfitting_stats_container">
-									<!-- old powerbar design
-												<tr>
-													<th><abbr title="Power draw (in megawatts) with hardpoints retracted">RET</abbr></th>
-													<td colspan=4 id="outfitting_stats_power_ret"></td>
-												</tr>
-												<tr>
-													<td colspan=5
-														><div class="outfitting_stats_powerbar"
-															><span class="marker"></span
-															><span class="marker"></span
-															><div
-																><span class="overload"></span
-																><abbr id="outfitting_stats_power_ret_1">1</abbr
-																><abbr id="outfitting_stats_power_ret_2">2</abbr
-																><abbr id="outfitting_stats_power_ret_3">3</abbr
-																><abbr id="outfitting_stats_power_ret_4">4</abbr
-																><abbr id="outfitting_stats_power_ret_5">5</abbr
-															></div
-															><div
-																><span class="overload"></span
-																><abbr id="outfitting_stats_power_dep_1">1</abbr
-																><abbr id="outfitting_stats_power_dep_2">2</abbr
-																><abbr id="outfitting_stats_power_dep_3">3</abbr
-																><abbr id="outfitting_stats_power_dep_4">4</abbr
-																><abbr id="outfitting_stats_power_dep_5">5</abbr
-															></div
-														></div
-													></td>
-												</tr>
-												<tr>
-													<th><abbr title="Power draw (in megawatts) with hardpoints deployed">DEP</abbr></th>
-													<td colspan=4 id="outfitting_stats_power_dep"></td>
-												</tr>
-									-->
 									<div id="outfitting_stats_1" class="outfitting_stats_panel">
 										<table>
 											<thead>
 												<tr>
-													<th><label for="stats_toggle_1" class="stats_toggle_label stats_toggle_label_1"><abbr title="Totals and capacities">TTL</abbr></label></th>
-													<td><abbr title="Current mass and maximum laden mass (in tons)">MASS</abbr></td>
-													<td><abbr title="Current fuel and total capacity (in tons)">FUEL</abbr></td>
-													<td><abbr title="Current cargo and total capacity (in tons)">CRGO</abbr></td>
-													<td><abbr title="Total passenger capacity">PSGR</abbr></td>
+													<th><label for="stats_toggle_1" class="stats_toggle_label stats_toggle_label_1"><abbr edsy-title="ui-stats-totals-desc" title="Totals and capacities" edsy-text="ui-stats-totals-abbr">TTL</abbr></label></th>
+													<td><abbr edsy-title="ui-stats-totals-mass-desc" title="Current mass and maximum laden mass (in tons)" edsy-text="ui-stats-totals-mass-abbr">MASS</abbr></td>
+													<td><abbr edsy-title="ui-stats-totals-fuel-desc" title="Current fuel and total capacity (in tons)" edsy-text="ui-stats-totals-fuel-abbr">FUEL</abbr></td>
+													<td><abbr edsy-title="ui-stats-totals-cargo-desc" title="Current cargo and total capacity (in tons)" edsy-text="ui-stats-totals-cargo-abbr">CRGO</abbr></td>
+													<td><abbr edsy-title="ui-stats-totals-passenger-desc" title="Total passenger capacity" edsy-text="ui-stats-totals-passenger-abbr">PSGR</abbr></td>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
-													<th><abbr title="Current values used to calculate other statistics">CUR</abbr></th>
+													<th><abbr edsy-title="ui-stats-totals-current-desc" title="Current values used to calculate other statistics" edsy-text="ui-stats-totals-current-abbr">CUR</abbr></th>
 													<td id="outfitting_stats_cur_mass"></td>
-													<td><input type="text" name="stats_cur_fuel"><small>T</small></td>
-													<td><input type="text" name="stats_cur_cargo"><small>T</small></td>
+													<td><input type="text" name="stats_cur_fuel"><small edsy-text="unit-tons-abbr">T</small></td>
+													<td><input type="text" name="stats_cur_cargo"><small edsy-text="unit-tons-abbr">T</small></td>
 													<td></td>
 												</tr>
 												<tr>
-													<th><abbr title="Maximum value or capacity">MAX</abbr></th>
+													<th><abbr edsy-title="ui-stats-totals-maximum-desc" title="Maximum value or capacity" edsy-text="ui-stats-totals-maximum-abbr">MAX</abbr></th>
 													<td id="outfitting_stats_max_mass"></td>
 													<td id="outfitting_stats_max_fuel"></td>
 													<td id="outfitting_stats_max_cargo"></td>
 													<td id="outfitting_stats_max_psgr"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Crew power assignments">CRW</abbr></th>
+													<th><abbr edsy-title="ui-stats-totals-crew-desc" title="Crew power assignments" edsy-text="ui-stats-totals-crew-abbr">CRW</abbr></th>
 													<td colspan=4>
 														<div id="outfitting_fit_crewdist" class="outfitting_powerdist">
-															<button id="outfitting_fit_crewdist_avl" class="" name="crewdist_avl"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div>AVL</div></button>
-															<button id="outfitting_fit_crewdist_sys" class="" name="crewdist_sys"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div>SYS</div></button>
-															<button id="outfitting_fit_crewdist_eng" class="" name="crewdist_eng"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div>ENG</div></button>
-															<button id="outfitting_fit_crewdist_wep" class="" name="crewdist_wep"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div>WEP</div></button>
+															<button id="outfitting_fit_crewdist_avl" class="" name="crewdist_avl"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div edsy-text="ui-stats-totals-crew-available-abbr">AVL</div></button>
+															<button id="outfitting_fit_crewdist_sys" class="" name="crewdist_sys"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div edsy-text="ui-stats-totals-distributor-systems-abbr">SYS</div></button>
+															<button id="outfitting_fit_crewdist_eng" class="" name="crewdist_eng"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div edsy-text="ui-stats-totals-distributor-engines-abbr">ENG</div></button>
+															<button id="outfitting_fit_crewdist_wep" class="" name="crewdist_wep"><div class="crewpips"><span></span><span></span><span></span><span></span></div><div edsy-text="ui-stats-totals-distributor-weapons-abbr">WEP</div></button>
 														</div>
 													</td>
 												</tr>
 												<tr>
-													<th><abbr title="Power distributor settings">DST</abbr></th>
+													<th><abbr edsy-title="ui-stats-totals-distributor-desc" title="Power distributor settings" edsy-text="ui-stats-totals-distributor-abbr">DST</abbr></th>
 													<td colspan=4>
 														<div id="outfitting_fit_powerdist" class="outfitting_powerdist">
-															<button id="outfitting_fit_powerdist_rst" class="" name="powerdist_rst"><div class="powerpips"></div><div>RST</div></button>
-															<button id="outfitting_fit_powerdist_sys" class="" name="powerdist_sys"><div class="powerpips"><span></span><span></span><span></span><span></span></div><div>SYS</div></button>
-															<button id="outfitting_fit_powerdist_eng" class="" name="powerdist_eng"><div class="powerpips"><span></span><span></span><span></span><span></span></div><div>ENG</div></button>
-															<button id="outfitting_fit_powerdist_wep" class="" name="powerdist_wep"><div class="powerpips"><span></span><span></span><span></span><span></span></div><div>WEP</div></button>
+															<button id="outfitting_fit_powerdist_rst" class="" name="powerdist_rst"><div class="powerpips"></div><div edsy-text="ui-stats-totals-distributor-reset-abbr">RST</div></button>
+															<button id="outfitting_fit_powerdist_sys" class="" name="powerdist_sys"><div class="powerpips"><span></span><span></span><span></span><span></span></div><div edsy-text="ui-stats-totals-distributor-systems-abbr">SYS</div></button>
+															<button id="outfitting_fit_powerdist_eng" class="" name="powerdist_eng"><div class="powerpips"><span></span><span></span><span></span><span></span></div><div edsy-text="ui-stats-totals-distributor-engines-abbr">ENG</div></button>
+															<button id="outfitting_fit_powerdist_wep" class="" name="powerdist_wep"><div class="powerpips"><span></span><span></span><span></span><span></span></div><div edsy-text="ui-stats-totals-distributor-weapons-abbr">WEP</div></button>
 														</div>
 													</td>
 												</tr>
 												<tr>
-													<th><abbr title="Power draw (in megawatts) with hardpoints retracted">RET</abbr></th>
+													<th><abbr edsy-title="ui-stats-totals-retracted-desc" title="Power draw (in megawatts) with hardpoints retracted" edsy-text="ui-stats-totals-retracted-abbr">RET</abbr></th>
 													<td colspan=1 id="outfitting_stats_power_ret"></td>
 													<td colspan=3 class="nopad"
 														><div class="outfitting_stats_powerbar"
@@ -491,7 +457,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 													></td>
 												</tr>
 												<tr>
-													<th><abbr title="Power draw (in megawatts) with hardpoints deployed">DEP</abbr></th>
+													<th><abbr edsy-title="ui-stats-totals-deployed-desc" title="Power draw (in megawatts) with hardpoints deployed" edsy-text="ui-stats-totals-deployed-abbr">DEP</abbr></th>
 													<td colspan=1 id="outfitting_stats_power_dep"></td>
 													<td colspan=3 class="nopad"
 														><div class="outfitting_stats_powerbar"
@@ -516,17 +482,17 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 										<table>
 											<thead>
 												<tr>
-													<th><label for="stats_toggle_2" class="stats_toggle_label stats_toggle_label_2"><abbr title="Navigational (FSD and Thruster) statistics">NAV</abbr></label></th>
-													<td><abbr title="Single jump range (in light-years) and fuel scoop time to refuel per max-range jump">JMP</abbr></td>
-													<td><abbr title="Total jump range (in light-years) of max-range jumps on a full fuel tank, and fuel scoop time to refuel per tank">RNG</abbr></td>
-													<td><abbr title="Thruster speed (in meters per second) and fuel scoop rate (in tons per second)">SPD</abbr></td>
-													<td><abbr title="Boost speed (in meters per second)">BST</abbr></td>
-													<td><abbr title="Time for ENG capacitor to recharge for one boost">FRQ</abbr></td>
+													<th><label for="stats_toggle_2" class="stats_toggle_label stats_toggle_label_2"><abbr edsy-title="ui-stats-nav-desc" title="Navigational (FSD and Thruster) statistics" edsy-text="ui-stats-nav-abbr">NAV</abbr></label></th>
+													<td><abbr edsy-title="ui-stats-nav-jump-desc" title="Single jump range (in light-years) and fuel scoop time to refuel per max-range jump" edsy-text="ui-stats-nav-jump-abbr">JMP</abbr></td>
+													<td><abbr edsy-title="ui-stats-nav-range-desc" title="Total jump range (in light-years) of max-range jumps on a full fuel tank, and fuel scoop time to refuel per tank" edsy-text="ui-stats-nav-range-abbr">RNG</abbr></td>
+													<td><abbr edsy-title="ui-stats-nav-speed-desc" title="Thruster speed (in meters per second) and fuel scoop rate (in tons per second)" edsy-text="ui-stats-nav-speed-abbr">SPD</abbr></td>
+													<td><abbr edsy-title="ui-stats-nav-boost-desc" title="Boost speed (in meters per second)" edsy-text="ui-stats-nav-boost-abbr">BST</abbr></td>
+													<td><abbr edsy-title="ui-stats-nav-frequency-desc" title="Time for ENG capacitor to recharge for one boost" edsy-text="ui-stats-nav-frequency-abbr">FRQ</abbr></td>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
-													<th><abbr title="Current values using configured ENG pips, fuel and cargo settings">CUR</abbr></th>
+													<th><abbr edsy-title="ui-stats-nav-current-desc" title="Current values using configured ENG pips, fuel and cargo settings" edsy-text="ui-stats-nav-current-abbr">CUR</abbr></th>
 													<td id="outfitting_stats_cur_jump"></td>
 													<td id="outfitting_stats_cur_range"></td>
 													<td id="outfitting_stats_cur_speed"></td>
@@ -534,7 +500,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 													<td id="outfitting_stats_cur_boostfreq"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Values with 4 ENG pips, full fuel, and full cargo">LDN</abbr></th>
+													<th><abbr edsy-title="ui-stats-nav-laden-desc" title="Values with 4 ENG pips, full fuel, and full cargo" edsy-text="ui-stats-nav-laden-abbr">LDN</abbr></th>
 													<td id="outfitting_stats_laden_jump"></td>
 													<td id="outfitting_stats_laden_range"></td>
 													<td id="outfitting_stats_laden_speed"></td>
@@ -542,7 +508,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 													<td></td>
 												</tr>
 												<tr>
-													<th><abbr title="Values with 4 ENG pips, full fuel, and no cargo">UNL</abbr></th>
+													<th><abbr edsy-title="ui-stats-nav-unladen-desc" title="Values with 4 ENG pips, full fuel, and no cargo" edsy-text="ui-stats-nav-unladen-abbr">UNL</abbr></th>
 													<td id="outfitting_stats_unladen_jump"></td>
 													<td id="outfitting_stats_unladen_range"></td>
 													<td id="outfitting_stats_unladen_speed"></td>
@@ -550,7 +516,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 													<td></td>
 												</tr>
 												<tr>
-													<th><abbr title="Maximum values with 4 ENG pips, minimal or no fuel, and no cargo">MAX</abbr></th>
+													<th><abbr edsy-title="ui-stats-nav-maximum-desc" title="Maximum values with 4 ENG pips, minimal or no fuel, and no cargo" edsy-text="ui-stats-nav-maximum-abbr">MAX</abbr></th>
 													<td id="outfitting_stats_max_jump"></td>
 													<td></td>
 													<td id="outfitting_stats_max_speed"></td>
@@ -558,7 +524,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 													<td id="outfitting_stats_max_boostfreq"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Fuel scooping time per jump, time per tank, and rate">SCP</abbr></th>
+													<th><abbr edsy-title="ui-stats-nav-scoop-desc" title="Fuel scooping time per jump, time per tank, and rate" edsy-text="ui-stats-nav-scoop-abbr">SCP</abbr></th>
 													<td id="outfitting_stats_scoop_jump"></td>
 													<td id="outfitting_stats_scoop_range"></td>
 													<td id="outfitting_stats_scoop_speed"></td>
@@ -580,15 +546,15 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 										<table>
 											<thead>
 												<tr>
-													<th><label for="stats_toggle_3" class="stats_toggle_label stats_toggle_label_3"><abbr title="Handling statistics">HND</abbr></label></th>
-													<td><abbr title="Pitch (nose up/down) speed (in degrees per second) and 180-degree flip time">PIT</abbr></td>
-													<td><abbr title="Roll (tilt left/right) speed (in degrees per second) and 180-degree flip time">ROL</abbr></td>
-													<td><abbr title="Yaw (nose left/right) speed (in degrees per second) and 180-degree flip time">YAW</abbr></td>
+													<th><label for="stats_toggle_3" class="stats_toggle_label stats_toggle_label_3"><abbr edsy-title="ui-stats-handling-desc" title="Handling statistics" edsy-text="ui-stats-handling-abbr">HND</abbr></label></th>
+													<td><abbr edsy-title="ui-stats-handling-pitch-desc" title="Pitch (nose up/down) speed (in degrees per second) and 180-degree flip time" edsy-text="ui-stats-handling-pitch-abbr">PIT</abbr></td>
+													<td><abbr edsy-title="ui-stats-handling-roll-desc" title="Roll (tilt left/right) speed (in degrees per second) and 180-degree flip time" edsy-text="ui-stats-handling-roll-abbr">ROL</abbr></td>
+													<td><abbr edsy-title="ui-stats-handling-yaw-desc" title="Yaw (nose left/right) speed (in degrees per second) and 180-degree flip time" edsy-text="ui-stats-handling-yaw-abbr">YAW</abbr></td>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
-													<th rowspan=2 class="vam"><abbr title="Current values using configured ENG pips, fuel and cargo settings">CUR</abbr></th>
+													<th rowspan=2 class="vam"><abbr edsy-title="ui-stats-handling-current-desc" title="Current values using configured ENG pips, fuel and cargo settings" edsy-text="ui-stats-handling-current-abbr">CUR</abbr></th>
 													<td id="outfitting_stats_cur_pitch"></td>
 													<td id="outfitting_stats_cur_roll"></td>
 													<td id="outfitting_stats_cur_yaw"></td>
@@ -600,7 +566,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 													<td id="outfitting_stats_cur_yawtime"></td>
 												</tr>
 												<tr>
-													<th rowspan=2 class="vam"><abbr title="Maximum values with 4 ENG pips, minimal or no fuel, and no cargo">MAX</abbr></th>
+													<th rowspan=2 class="vam"><abbr edsy-title="ui-stats-handling-maximum-desc" title="Maximum values with 4 ENG pips, minimal or no fuel, and no cargo" edsy-text="ui-stats-handling-maximum-abbr">MAX</abbr></th>
 													<td id="outfitting_stats_max_pitch"></td>
 													<td id="outfitting_stats_max_roll"></td>
 													<td id="outfitting_stats_max_yaw"></td>
@@ -612,7 +578,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 													<td id="outfitting_stats_max_yawtime"></td>
 												</tr>
 												<tr>
-													<th rowspan=2 class="vam"><abbr title="Values during engine boost"><!-- TODO boost --></abbr></th>
+													<th rowspan=2 class="vam"><abbr edsy-title="ui-stats-handling-boost-desc" title="Values during engine boost"><!-- TODO boost --></abbr></th>
 													<td id="outfitting_stats_bst_pitch"></td>
 													<td id="outfitting_stats_bst_roll"></td>
 													<td id="outfitting_stats_bst_yaw"></td>
@@ -630,25 +596,25 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 										<table>
 											<thead>
 												<tr>
-													<th><label for="stats_toggle_4" class="stats_toggle_label stats_toggle_label_4"><abbr title="Thermal statistics">THM</abbr></label></th>
-													<td><abbr title="Heat level at equilibrium, or time from 66% to 100% heat if overheating">LVL</abbr></td>
+													<th><label for="stats_toggle_4" class="stats_toggle_label stats_toggle_label_4"><abbr edsy-title="ui-stats-thermal-desc" title="Thermal statistics" edsy-text="ui-stats-thermal-abbr">THM</abbr></label></th>
+													<td><abbr edsy-title="ui-stats-thermal-level-desc" title="Heat level at equilibrium, or time from 66% to 100% heat if overheating" edsy-text="ui-stats-thermal-level-abbr">LVL</abbr></td>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
-													<th><abbr title="Values at idle, with thermal load only from power draw and power plant efficiency">IDL</abbr></th>
+													<th><abbr edsy-title="ui-stats-thermal-idle-desc" title="Values at idle, with thermal load only from power draw and power plant efficiency" edsy-text="ui-stats-thermal-idle-abbr">IDL</abbr></th>
 													<td id="outfitting_stats_idl_heat"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Values under maximum thrust">THR</abbr></th>
+													<th><abbr edsy-title="ui-stats-thermal-thrust-desc" title="Values under maximum thrust" edsy-text="ui-stats-thermal-thrust-abbr">THR</abbr></th>
 													<td id="outfitting_stats_thr_heat"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Values under maximum thrust with FSD charging">FSD</abbr></th>
+													<th><abbr edsy-title="ui-stats-thermal-fsd-desc" title="Values under maximum thrust with FSD charging" edsy-text="ui-stats-thermal-fsd-abbr">FSD</abbr></th>
 													<td id="outfitting_stats_fsd_heat"></td>
 												</tr>
 												<tr>
-													<th rowspan=2 class="vam"><abbr title="Values under maximum thrust with all weapons firing, with a full and a nearly empty WEP capacitor">WEP</abbr></th>
+													<th rowspan=2 class="vam"><abbr edsy-title="ui-stats-thermal-weapons-desc" title="Values under maximum thrust with all weapons firing, with a full and a nearly empty WEP capacitor" edsy-text="ui-stats-thermal-weapons-abbr">WEP</abbr></th>
 													<td id="outfitting_stats_wpnfull_heat"></td>
 												</tr>
 												<tr>
@@ -656,7 +622,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 													<td id="outfitting_stats_wpnempty_heat"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Values under maximum thrust with SCBs firing">SCB</abbr></th>
+													<th><abbr edsy-title="ui-stats-thermal-scb-desc" title="Values under maximum thrust with SCBs firing" edsy-text="ui-stats-thermal-scb-abbr">SCB</abbr></th>
 													<td id="outfitting_stats_scb_heat"></td>
 												</tr>
 											</tbody>
@@ -666,53 +632,53 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 										<table>
 											<thead>
 												<tr>
-													<th><label for="stats_toggle_5" class="stats_toggle_label stats_toggle_label_5"><abbr title="Shield statistics">SHD</abbr></label></th>
-													<td><abbr title="Damage resistance (in %)">RES</abbr></td>
-													<td><abbr title="Raw and effective maximum strength (in megajoules)">STR</abbr></td>
-													<!-- <td><abbr title="Raw and effective regeneration rate (in megajoules per second)">RGN</abbr></td> -->
-													<td><abbr title="Raw and effective Shield Cell Bank reinforcement total (in megajoules)">RNF</abbr></td>
+													<th><label for="stats_toggle_5" class="stats_toggle_label stats_toggle_label_5"><abbr edsy-title="ui-stats-shield-desc" title="Shield statistics" edsy-text="ui-stats-shield-abbr">SHD</abbr></label></th>
+													<td><abbr edsy-title="ui-stats-shield-resist-desc" title="Damage resistance (in %)" edsy-text="ui-stats-shield-resist-abbr">RES</abbr></td>
+													<td><abbr edsy-title="ui-stats-shield-strength-desc" title="Raw and effective maximum strength (in megajoules)" edsy-text="ui-stats-shield-strength-abbr">STR</abbr></td>
+													<!-- <td><abbr edsy-title="ui-stats-shield-regen-desc" title="Raw and effective regeneration rate (in megajoules per second)" edsy-text="ui-stats-shield-regen-abbr">RGN</abbr></td> -->
+													<td><abbr edsy-title="ui-stats-shield-reinforce-desc" title="Raw and effective Shield Cell Bank reinforcement total (in megajoules)" edsy-text="ui-stats-shield-reinforce-abbr">RNF</abbr></td>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
-													<th><abbr title="Raw values">RAW</abbr></th>
+													<th><abbr edsy-title="ui-stats-shield-raw-desc" title="Raw values" edsy-text="ui-stats-shield-raw-abbr">RAW</abbr></th>
 													<td></td>
 													<td id="outfitting_stats_raw_shield_strength"></td>
 													<!-- <td id="outfitting_stats_raw_shield_regen"></td> -->
 													<td id="outfitting_stats_raw_shield_reinf"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Base resistance from SYS pips, and effective values vs. absolute and non-weapon damage">SYS</abbr></th>
+													<th><abbr edsy-title="ui-stats-shield-sys-desc" title="Base resistance from SYS pips, and effective values vs. absolute and non-weapon damage" edsy-text="ui-stats-shield-sys-abbr">SYS</abbr></th>
 													<td id="outfitting_stats_abs_shield_resist"></td>
 													<td id="outfitting_stats_abs_shield_strength"></td>
 													<!-- <td id="outfitting_stats_abs_shield_regen"></td> -->
 													<td id="outfitting_stats_abs_shield_reinf"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Kinetic resistance, and effective values vs. kinetic damage (including both KIN and SYS resistance)">KIN</abbr></th>
+													<th><abbr edsy-title="ui-stats-shield-kinetic-desc" title="Kinetic resistance, and effective values vs. kinetic damage (including both KIN and SYS resistance)" edsy-text="ui-stats-shield-kinetic-abbr">KIN</abbr></th>
 													<td id="outfitting_stats_kin_shield_resist"></td>
 													<td id="outfitting_stats_kin_shield_strength"></td>
 													<!-- <td id="outfitting_stats_kin_shield_regen"></td> -->
 													<td id="outfitting_stats_kin_shield_reinf"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Thermal resistance, and effective values vs. thermal damage (including both THM and SYS resistance)">THM</abbr></th>
+													<th><abbr edsy-title="ui-stats-shield-thermal-desc" title="Thermal resistance, and effective values vs. thermal damage (including both THM and SYS resistance)" edsy-text="ui-stats-shield-thermal-abbr">THM</abbr></th>
 													<td id="outfitting_stats_thm_shield_resist"></td>
 													<td id="outfitting_stats_thm_shield_strength"></td>
 													<!-- <td id="outfitting_stats_thm_shield_regen"></td> -->
 													<td id="outfitting_stats_thm_shield_reinf"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Explosive resistance, and effective values vs. explosive damage (including both EXP and SYS resistance)">EXP</abbr></th>
+													<th><abbr edsy-title="ui-stats-shield-explosive-desc" title="Explosive resistance, and effective values vs. explosive damage (including both EXP and SYS resistance)" edsy-text="ui-stats-shield-explosive-abbr">EXP</abbr></th>
 													<td id="outfitting_stats_exp_shield_resist"></td>
 													<td id="outfitting_stats_exp_shield_strength"></td>
 													<!-- <td id="outfitting_stats_exp_shield_regen"></td> -->
 													<td id="outfitting_stats_exp_shield_reinf"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Time to rebuild from 0% to 50%, including SYS pips and 16s delay, from a full SYS capacitor">BLD</abbr></th>
+													<th><abbr edsy-title="ui-stats-shield-rebuild-desc" title="Time to rebuild from 0% to 50%, including SYS pips and 16s delay, from a full SYS capacitor" edsy-text="ui-stats-shield-rebuild-abbr">BLD</abbr></th>
 													<td id="outfitting_stats_shield_build" class="other"></td>
-													<th><abbr title="Time to regenerate from 50% to 100%, including SYS pips, from an empty SYS capacitor">RGN</abbr></th>
+													<th><abbr edsy-title="ui-stats-shield-rebuildgen-desc" title="Time to regenerate from 50% to 100%, including SYS pips, from an empty SYS capacitor" edsy-text="ui-stats-shield-rebuildgen-abbr">RGN</abbr></th>
 													<!-- <td></td> -->
 													<td id="outfitting_stats_shield_regen" class="other"></td>
 												</tr>
@@ -723,45 +689,45 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 										<table>
 											<thead>
 												<tr>
-													<th><label for="stats_toggle_6" class="stats_toggle_label stats_toggle_label_6"><abbr title="Armour statistics">ARM</abbr></label></th>
-													<td><abbr title="Hull hardness, and damage resistance (in %)">RES</abbr></td>
-													<td><abbr title="Raw and effective integrity">INT</abbr></td>
-													<td><abbr title="Raw and effective Repair Limpet repair total, assuming full cargo of limpets">REP</abbr></td>
+													<th><label for="stats_toggle_6" class="stats_toggle_label stats_toggle_label_6"><abbr edsy-title="ui-stats-armour-desc" title="Armour statistics" edsy-text="ui-stats-armour-abbr">ARM</abbr></label></th>
+													<td><abbr edsy-title="ui-stats-armour-resist-desc" title="Hull hardness, and damage resistance (in %)" edsy-text="ui-stats-armour-resist-abbr">RES</abbr></td>
+													<td><abbr edsy-title="ui-stats-armour-integrity-desc" title="Raw and effective integrity" edsy-text="ui-stats-armour-integrity-abbr">INT</abbr></td>
+													<td><abbr edsy-title="ui-stats-armour-repair-desc" title="Raw and effective Repair Limpet repair total, assuming full cargo of limpets" edsy-text="ui-stats-armour-repair-abbr">REP</abbr></td>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
-													<th><abbr title="Raw values">RAW</abbr></th>
+													<th><abbr edsy-title="ui-stats-armour-raw-desc" title="Raw values" edsy-text="ui-stats-armour-raw-abbr">RAW</abbr></th>
 													<td id="outfitting_stats_raw_armour_hardness"></td>
 													<td id="outfitting_stats_raw_armour_integ"></td>
 													<td id="outfitting_stats_raw_armour_repair"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Module Reinforcement Packages total protection value (in %) and integrity">MRP</abbr></th>
+													<th><abbr edsy-title="ui-stats-armour-mrp-desc" title="Module Reinforcement Packages total protection value (in %) and integrity" edsy-text="ui-stats-armour-mrp-abbr">MRP</abbr></th>
 													<td id="outfitting_stats_mod_armour_protect"></td>
 													<td id="outfitting_stats_mod_armour_integ"></td>
 													<td></td>
 												</tr>
 												<tr>
-													<th><abbr title="Kinetic resistance, and effective values vs. kinetic damage (including resistance)">KIN</abbr></th>
+													<th><abbr edsy-title="ui-stats-armour-kinetic-desc" title="Kinetic resistance, and effective values vs. kinetic damage (including resistance)" edsy-text="ui-stats-armour-kinetic-abbr">KIN</abbr></th>
 													<td id="outfitting_stats_kin_armour_resist"></td>
 													<td id="outfitting_stats_kin_armour_integ"></td>
 													<td id="outfitting_stats_kin_armour_repair"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Thermal resistance, and effective values vs. thermal damage (including resistance)">THM</abbr></th>
+													<th><abbr edsy-title="ui-stats-armour-thermal-desc" title="Thermal resistance, and effective values vs. thermal damage (including resistance)" edsy-text="ui-stats-armour-thermal-abbr">THM</abbr></th>
 													<td id="outfitting_stats_thm_armour_resist"></td>
 													<td id="outfitting_stats_thm_armour_integ"></td>
 													<td id="outfitting_stats_thm_armour_repair"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Explosive resistance, and effective values vs. explosive damage (including resistance)">EXP</abbr></th>
+													<th><abbr edsy-title="ui-stats-armour-explosive-desc" title="Explosive resistance, and effective values vs. explosive damage (including resistance)" edsy-text="ui-stats-armour-explosive-abbr">EXP</abbr></th>
 													<td id="outfitting_stats_exp_armour_resist"></td>
 													<td id="outfitting_stats_exp_armour_integ"></td>
 													<td id="outfitting_stats_exp_armour_repair"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Caustic resistance, and effective values vs. caustic damage (including resistance)">CAU</abbr></th>
+													<th><abbr edsy-title="ui-stats-armour-caustic-desc" title="Caustic resistance, and effective values vs. caustic damage (including resistance)" edsy-text="ui-stats-armour-caustic-abbr">CAU</abbr></th>
 													<td id="outfitting_stats_cau_armour_resist"></td>
 													<td id="outfitting_stats_cau_armour_integ"></td>
 													<td id="outfitting_stats_cau_armour_repair"></td>
@@ -773,47 +739,47 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 										<table>
 											<thead>
 												<tr>
-													<th><label for="stats_toggle_7" class="stats_toggle_label stats_toggle_label_7"><abbr title="Weapon statistics">WPN</abbr></label></th>
-													<td><abbr title="Burst damage per second from all weapons, while WEP capacitor and ammo last">BST</abbr></td>
+													<th><label for="stats_toggle_7" class="stats_toggle_label stats_toggle_label_7"><abbr edsy-title="ui-stats-weapon-desc" title="Weapon statistics" edsy-text="ui-stats-weapon-abbr">WPN</abbr></label></th>
+													<td><abbr edsy-title="ui-stats-weapon-burst-desc" title="Burst damage per second from all weapons, while WEP capacitor and ammo last" edsy-text="ui-stats-weapon-burst-abbr">BST</abbr></td>
 													<td></td>
-													<td><abbr title="Burst damage duration until WEP capacitor or ammo are exhausted">DUR</abbr></td>
+													<td><abbr edsy-title="ui-stats-weapon-duration-desc" title="Burst damage duration until WEP capacitor or ammo are exhausted" edsy-text="ui-stats-weapon-duration-abbr">DUR</abbr></td>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
-													<th><abbr title="Raw damage per second">RAW</abbr></th>
+													<th><abbr edsy-title="ui-stats-weapon-raw-desc" title="Raw damage per second" edsy-text="ui-stats-weapon-raw-abbr">RAW</abbr></th>
 													<td id="outfitting_stats_wpn_raw_burst"></td>
-													<th><abbr title="Current capacitor duration using configured power distributor settings">CUR</abbr></th>
+													<th><abbr edsy-title="ui-stats-weapon-duration-current-desc" title="Current capacitor duration using configured power distributor settings" edsy-text="ui-stats-weapon-duration-current-abbr">CUR</abbr></th>
 													<td id="outfitting_stats_wpn_cur_dur"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Absolute damage proportion">ABS</abbr></th>
+													<th><abbr edsy-title="ui-stats-weapon-absolute-desc" title="Absolute damage proportion" edsy-text="ui-stats-weapon-absolute-abbr">ABS</abbr></th>
 													<td id="outfitting_stats_wpn_abs_burst"></td>
-													<th><abbr title="Maximum capacitor duration with 4 WEP pips">MAX</abbr></th>
+													<th><abbr edsy-title="ui-stats-weapon-duration-maximum-desc" title="Maximum capacitor duration with 4 WEP pips" edsy-text="ui-stats-weapon-duration-maximum-abbr">MAX</abbr></th>
 													<td id="outfitting_stats_wpn_max_dur"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Kinetic damage proportion">KIN</abbr></th>
+													<th><abbr edsy-title="ui-stats-weapon-kinetic-desc" title="Kinetic damage proportion" edsy-text="ui-stats-weapon-kinetic-abbr">KIN</abbr></th>
 													<td id="outfitting_stats_wpn_kin_burst"></td>
-													<th><abbr title="Ammo duration with 4 WEP pips">AMM</abbr></th>
+													<th><abbr edsy-title="ui-stats-weapon-duration-ammo-desc" title="Ammo duration with 4 WEP pips" edsy-text="ui-stats-weapon-duration-ammo-abbr">AMM</abbr></th>
 													<td id="outfitting_stats_wpn_amm_dur"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Thermal damage proportion">THM</abbr></th>
+													<th><abbr edsy-title="ui-stats-weapon-thermal-desc" title="Thermal damage proportion" edsy-text="ui-stats-weapon-thermal-abbr">THM</abbr></th>
 													<td id="outfitting_stats_wpn_thm_burst"></td>
 													<td></td>
-													<th class="header"><abbr title="Sustainable damage proportion once WEP capacitor is drained">SUS</abbr></th>
+													<th class="header"><abbr edsy-title="ui-stats-weapon-sustained-desc" title="Sustainable damage proportion once WEP capacitor is drained" edsy-text="ui-stats-weapon-sustained-abbr">SUS</abbr></th>
 												</tr>
 												<tr>
-													<th><abbr title="Explosive damage proportion">EXP</abbr></th>
+													<th><abbr edsy-title="ui-stats-weapon-explosive-desc" title="Explosive damage proportion" edsy-text="ui-stats-weapon-explosive-abbr">EXP</abbr></th>
 													<td id="outfitting_stats_wpn_exp_burst"></td>
-													<th><abbr title="Current value using configured power distributor settings">CUR</abbr></th>
+													<th><abbr edsy-title="ui-stats-weapon-sustained-current-desc" title="Current value using configured power distributor settings" edsy-text="ui-stats-weapon-sustained-current-abbr">CUR</abbr></th>
 													<td id="outfitting_stats_wpn_cur_sus"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Anti-xeno damage proportion">A-X</abbr></th>
+													<th><abbr edsy-title="ui-stats-weapon-antixeno-desc" title="Anti-xeno damage proportion" edsy-text="ui-stats-weapon-antixeno-abbr">A-X</abbr></th>
 													<td id="outfitting_stats_wpn_axe_burst"></td>
-													<th><abbr title="Maximum value with 4 WEP pips">MAX</abbr></th>
+													<th><abbr edsy-title="ui-stats-weapon-sustained-maximum-desc" title="Maximum value with 4 WEP pips" edsy-text="ui-stats-weapon-sustained-maximum-abbr">MAX</abbr></th>
 													<td id="outfitting_stats_wpn_max_sus"></td>
 												</tr>
 											</tbody>
@@ -823,33 +789,33 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 										<table>
 											<thead>
 												<tr>
-													<th><label for="stats_toggle_8" class="stats_toggle_label stats_toggle_label_8"><abbr title="Prices">PRC</abbr></label></th>
-													<td><abbr title="Price (in credits)">CR</abbr></td>
+													<th><label for="stats_toggle_8" class="stats_toggle_label stats_toggle_label_8"><abbr edsy-title="ui-stats-price-desc" title="Prices" edsy-text="ui-stats-price-abbr">PRC</abbr></label></th>
+													<td><abbr edsy-title="ui-stats-price-credits-desc" title="Price (in credits)" edsy-text="ui-stats-price-credits-abbr">CR</abbr></td>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
-													<th><abbr title="Refuel price for all tanks">RFL</abbr></th>
+													<th><abbr edsy-title="ui-stats-price-refuel-desc" title="Refuel price for all tanks" edsy-text="ui-stats-price-refuel-abbr">RFL</abbr></th>
 													<td id="outfitting_prc_fuel"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Replacement price for all vehicles">RPL</abbr></th>
+													<th><abbr edsy-title="ui-stats-price-replace-desc" title="Replacement price for all vehicles" edsy-text="ui-stats-price-replace-abbr">RPL</abbr></th>
 													<td id="outfitting_prc_vehicle"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Restock price for all AFMUs, SCBs and utility mounts">RSK</abbr></th>
+													<th><abbr edsy-title="ui-stats-price-restock-desc" title="Restock price for all AFMUs, SCBs and utility mounts" edsy-text="ui-stats-price-restock-abbr">RSK</abbr></th>
 													<td id="outfitting_prc_misc"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Rearm price for all hardpoint weapons">RAR</abbr></th>
+													<th><abbr edsy-title="ui-stats-price-rearm-desc" title="Rearm price for all hardpoint weapons" edsy-text="ui-stats-price-rearm-abbr">RAR</abbr></th>
 													<td id="outfitting_prc_ammo"></td>
 												</tr>
 												<tr>
-													<th><abbr title="Insurance rebuy price">RBY</abbr></th>
+													<th><abbr edsy-title="ui-stats-price-rebuy-desc" title="Insurance rebuy price" edsy-text="ui-stats-price-rebuy-abbr">RBY</abbr></th>
 													<td id="outfitting_stats_rebuy"></td><!-- TODO rename -->
 												</tr>
 												<tr>
-													<th><abbr title="Total buy price">BUY</abbr></th>
+													<th><abbr edsy-title="ui-stats-price-buy-desc" title="Total buy price" edsy-text="ui-stats-price-buy-abbr">BUY</abbr></th>
 													<td id="outfitting_stats_price"></td><!-- TODO rename -->
 												</tr>
 											</tbody>
@@ -862,8 +828,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 				</div>
 				<form id="page_body_analysis" name="analysis" class="">
 					<div id="analysis_tabs">
-						<label class="togglebutton"><input name="tab" type="radio" value="retrofit"><div class="togglebox">Retrofit</div></label>
-						<label class="togglebutton"><input name="tab" type="radio" value="compare"><!-- TODO <div class="togglebox">Compare</div> --></label>
+						<label class="togglebutton"><input name="tab" type="radio" value="retrofit"><div class="togglebox" edsy-text="ui-retrofit">Retrofit</div></label>
+						<label class="togglebutton"><input name="tab" type="radio" value="compare"><!-- TODO <div class="togglebox" edsy-text="ui-compare">Compare</div> --></label>
 					</div>
 					<div id="analysis_container">
 						<div id="analysis_compare_container"></div>
@@ -871,15 +837,15 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 							<div class="analysis_retrofit_section">
 								<div id="analysis_retrofit_builds" class="analysis_retrofit_panel">
 									<div class="analysis_retrofit_divider">
-										<header>Builds</header>
+										<header edsy-text="ui-retrofit-builds">Builds</header>
 									</div>
 									<div class="scroller">
 										<table id="analysis_retrofit_builds_table" class="striped">
 											<thead>
 												<tr>
 													<td class="stickytop" width="0%"><label class="checkbox"><input type="checkbox" name="retrofit_builds_show_all" checked><div><div class="check"></div></div></label></td>
-													<th class="stickytop" width="50%">Target Build</th>
-													<th class="stickytop" width="50%">Base Build</th>
+													<th class="stickytop" width="50%" edsy-text="ui-retrofit-target-build">Target Build</th>
+													<th class="stickytop" width="50%" edsy-text="ui-retrofit-base-build">Base Build</th>
 													<td class="stickytop tar" width="0%"><button name="retrofit_builds_add"><svg class="iconsvg plus"><use xlink:href="#icon_plus"/></svg></button></td>
 												</tr>
 											</thead>
@@ -887,11 +853,11 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 												<tr>
 													<td><label class="checkbox"><input type="checkbox" name="retrofit_builds_show_" checked><div><div class="check"></div></div></label></td>
 													<td><select name="retrofit_builds_target_">
-														<option value="" selected>(Current Build)</option>
+														<option value="" selected edsy-text="option-current-build">(Current Build)</option>
 													</select></td>
 													<td><select name="retrofit_builds_base_">
-														<option value="	stock" selected>(Stock Ship)</option>
-														<option value="" selected>(Current Build)</option>
+														<option value="	stock" selected edsy-text="option-stock-ship">(Stock Ship)</option>
+														<option value="" selected edsy-text="option-current-build">(Current Build)</option>
 													</select></td>
 													<td class="tar"><button name="retrofit_builds_delete_"><svg class="iconsvg minus"><use xlink:href="#icon_minus"/></svg></button></td>
 												</tr>
@@ -914,61 +880,61 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 								</div>
 								<div id="analysis_retrofit_setup" class="analysis_retrofit_panel">
 									<div class="analysis_retrofit_divider">
-										<header>Settings</header>
+										<header edsy-text="ui-retrofit-settings">Settings</header>
 									</div>
 									<table>
 										<tbody>
 											<tr>
-												<td>Re-buy if discounted less than</td>
+												<td edsy-text="ui-retrofit-settings-rebuy-discounted">Re-buy if discounted less than</td>
 												<td colspan=2><select name="retrofit_setup_discount"></select></td>
 											</tr>
 											<tr>
-												<td>Re-buy if engineered up to</td>
+												<td edsy-text="ui-retrofit-settings-rebuy-engineered">Re-buy if engineered up to</td>
 												<td colspan=2><select name="retrofit_setup_disceng">
-													<option value="0" selected>grade 0 (unengineered)</option>
-													<option value="1">grade 1</option>
-													<option value="2">grade 2</option>
-													<option value="3">grade 3</option>
-													<option value="4">grade 4</option>
-													<option value="5">grade 5 (always)</option>
+													<option value="0" selected edsy-text="ui-retrofit-settings-rebuy-engineered-0">grade 0 (unengineered)</option>
+													<option value="1" edsy-text="ui-retrofit-settings-rebuy-engineered-1">grade 1</option>
+													<option value="2" edsy-text="ui-retrofit-settings-rebuy-engineered-2">grade 2</option>
+													<option value="3" edsy-text="ui-retrofit-settings-rebuy-engineered-3">grade 3</option>
+													<option value="4" edsy-text="ui-retrofit-settings-rebuy-engineered-4">grade 4</option>
+													<option value="5" edsy-text="ui-retrofit-settings-rebuy-engineered-5">grade 5 (always)</option>
 												</select></td>
 											</tr>
 											<tr>
-												<td>Apply blueprints up to</td>
+												<td edsy-text="ui-retrofit-settings-blueprint">Apply blueprints up to</td>
 												<td><select name="retrofit_setup_bpgrade">
-													<option value="0">grade 0 (ignore)</option>
-													<option value="1">grade 1</option>
-													<option value="2">grade 2</option>
-													<option value="3">grade 3</option>
-													<option value="4">grade 4</option>
-													<option value="5" selected>grade 5</option>
+													<option value="0" edsy-text="ui-retrofit-settings-blueprint-grade0">grade 0 (ignore)</option>
+													<option value="1" edsy-text="ui-retrofit-settings-blueprint-grade1">grade 1</option>
+													<option value="2" edsy-text="ui-retrofit-settings-blueprint-grade2">grade 2</option>
+													<option value="3" edsy-text="ui-retrofit-settings-blueprint-grade3">grade 3</option>
+													<option value="4" edsy-text="ui-retrofit-settings-blueprint-grade4">grade 4</option>
+													<option value="5" selected edsy-text="ui-retrofit-settings-blueprint-grade5">grade 5</option>
 												</select></td>
 												<td><select name="retrofit_setup_bproll">
-													<option value="0">0%</option>
-													<option value="0.05">5%</option>
-													<option value="0.10">10%</option>
-													<option value="0.15">15%</option>
-													<option value="0.20">20%</option>
-													<option value="0.25">25%</option>
-													<option value="0.30">30%</option>
-													<option value="0.35">35%</option>
-													<option value="0.40">40%</option>
-													<option value="0.45">45%</option>
-													<option value="0.50">50%</option>
-													<option value="0.55">55%</option>
-													<option value="0.60">60%</option>
-													<option value="0.65">65%</option>
-													<option value="0.70">70%</option>
-													<option value="0.75">75%</option>
-													<option value="0.80">80%</option>
-													<option value="0.85">85%</option>
-													<option value="0.90">90%</option>
-													<option value="0.95">95%</option>
-													<option value="1" selected>100%</option>
+													<option value="0"    edsy-vals="{&quot;number&quot;:0.00,&quot;number%&quot;:true}" edsy-text="interp-number">0%</option>
+													<option value="0.05" edsy-vals="{&quot;number&quot;:0.05,&quot;number%&quot;:true}" edsy-text="interp-number">5%</option>
+													<option value="0.10" edsy-vals="{&quot;number&quot;:0.10,&quot;number%&quot;:true}" edsy-text="interp-number">10%</option>
+													<option value="0.15" edsy-vals="{&quot;number&quot;:0.15,&quot;number%&quot;:true}" edsy-text="interp-number">15%</option>
+													<option value="0.20" edsy-vals="{&quot;number&quot;:0.20,&quot;number%&quot;:true}" edsy-text="interp-number">20%</option>
+													<option value="0.25" edsy-vals="{&quot;number&quot;:0.25,&quot;number%&quot;:true}" edsy-text="interp-number">25%</option>
+													<option value="0.30" edsy-vals="{&quot;number&quot;:0.30,&quot;number%&quot;:true}" edsy-text="interp-number">30%</option>
+													<option value="0.35" edsy-vals="{&quot;number&quot;:0.35,&quot;number%&quot;:true}" edsy-text="interp-number">35%</option>
+													<option value="0.40" edsy-vals="{&quot;number&quot;:0.40,&quot;number%&quot;:true}" edsy-text="interp-number">40%</option>
+													<option value="0.45" edsy-vals="{&quot;number&quot;:0.45,&quot;number%&quot;:true}" edsy-text="interp-number">45%</option>
+													<option value="0.50" edsy-vals="{&quot;number&quot;:0.50,&quot;number%&quot;:true}" edsy-text="interp-number">50%</option>
+													<option value="0.55" edsy-vals="{&quot;number&quot;:0.55,&quot;number%&quot;:true}" edsy-text="interp-number">55%</option>
+													<option value="0.60" edsy-vals="{&quot;number&quot;:0.60,&quot;number%&quot;:true}" edsy-text="interp-number">60%</option>
+													<option value="0.65" edsy-vals="{&quot;number&quot;:0.65,&quot;number%&quot;:true}" edsy-text="interp-number">65%</option>
+													<option value="0.70" edsy-vals="{&quot;number&quot;:0.70,&quot;number%&quot;:true}" edsy-text="interp-number">70%</option>
+													<option value="0.75" edsy-vals="{&quot;number&quot;:0.75,&quot;number%&quot;:true}" edsy-text="interp-number">75%</option>
+													<option value="0.80" edsy-vals="{&quot;number&quot;:0.80,&quot;number%&quot;:true}" edsy-text="interp-number">80%</option>
+													<option value="0.85" edsy-vals="{&quot;number&quot;:0.85,&quot;number%&quot;:true}" edsy-text="interp-number">85%</option>
+													<option value="0.90" edsy-vals="{&quot;number&quot;:0.90,&quot;number%&quot;:true}" edsy-text="interp-number">90%</option>
+													<option value="0.95" edsy-vals="{&quot;number&quot;:0.95,&quot;number%&quot;:true}" edsy-text="interp-number">95%</option>
+													<option value="1"    edsy-vals="{&quot;number&quot;:1.00,&quot;number%&quot;:true}" edsy-text="interp-number">100%</option>
 												</select></td>
 											</tr>
 											<tr>
-												<td>Rolls to complete each grade</td>
+												<td edsy-text="ui-retrofit-settings-rolls">Rolls to complete each grade</td>
 												<td colspan=2>
 													<input type="text" name="retrofit_setup_rolls1" size=2 value="1.5">
 													<input type="text" name="retrofit_setup_rolls2" size=2 value="2">
@@ -978,13 +944,13 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 												</td>
 											</tr>
 											<tr>
-												<td>Apply experimental effects</td>
+												<td edsy-text="ui-retrofit-settings-expeffects">Apply experimental effects</td>
 												<td colspan=2><select name="retrofit_setup_expeffect">
-													<option value="">never</option>
-													<option value="wpn">to weapons only</option>
-													<option value="wpn,cpp">to weapons and PPs</option>
-													<option value="wpn,cpp,cfsd">to weapons, PPs, and FSDs</option>
-													<option value="all" selected>always</option>
+													<option value="" edsy-text="ui-retrofit-settings-expeffects-never">never</option>
+													<option value="wpn" edsy-text="ui-retrofit-settings-expeffects-wpn">to weapons only</option>
+													<option value="wpn,cpp" edsy-text="ui-retrofit-settings-expeffects-wpn-pp">to weapons and PPs</option>
+													<option value="wpn,cpp,cfsd" edsy-text="ui-retrofit-settings-expeffects-wpn-pp-fsd">to weapons, PPs, and FSDs</option>
+													<option value="all" selected edsy-text="ui-retrofit-settings-expeffects-always">always</option>
 												</select></td>
 											</tr>
 										</tbody>
@@ -992,32 +958,32 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 								</div>
 							</div>
 							<div class="analysis_retrofit_buttons">
-								<button name="retrofit_builds_run">Generate Retrofit Report</button>
-								<button name="retrofit_export" id="retrofit_export"><svg class="iconsvg export"><use xlink:href="#icon_export"/></svg> Export Retrofit Report ...</button>
+								<button name="retrofit_builds_run" edsy-text="ui-retrofit-generate">Generate Retrofit Report</button>
+								<button name="retrofit_export" id="retrofit_export"><svg class="iconsvg export"><use xlink:href="#icon_export"/></svg> <span edsy-text="ui-retrofit-export">Export Retrofit Report ...</span></button>
 							</div>
 							<div class="analysis_retrofit_section">
 								<div id="analysis_retrofit_steps" class="analysis_retrofit_panel">
 									<div class="analysis_retrofit_divider">
-										<header>Checklist</header>
+										<header edsy-text="ui-retrofit-checklist">Checklist</header>
 									</div>
 									<div class="scroller">
 										<table id="analysis_retrofit_steps_table" class="striped">
 											<thead>
 												<tr>
 													<td width="0%" class="stickytop"><label class="checkbox"><input type="checkbox" name="retrofit_steps_show_all" checked><div><div class="check"></div></div></label></td>
-													<th class="stickytop retrofit_steps_build">Build</th>
-													<th class="stickytop">Module</th>
-													<th width="0%" class="stickytop">Act</th>
-													<th class="stickytop">Details</th>
+													<th class="stickytop retrofit_steps_build" edsy-text="ui-retrofit-checklist-build">Build</th>
+													<th class="stickytop" edsy-text="ui-retrofit-checklist-module">Module</th>
+													<th width="0%" class="stickytop" edsy-text="ui-retrofit-checklist-action">Act</th>
+													<th class="stickytop" edsy-text="ui-retrofit-checklist-details">Details</th>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
 													<td><label class="checkbox"><input type="checkbox" name="retrofit_steps_show_" checked><div><div class="check"></div></div></label></td>
-													<td class="retrofit_steps_build">Sidewinder</td>
-													<td>1C Lightweight Alloy</td>
-													<td>Eng</td>
-													<td>Heavy Duty G1 x5</td>
+													<td class="retrofit_steps_build"></td>
+													<td></td>
+													<td></td>
+													<td></td>
 												</tr>
 											</tbody>
 										</table>
@@ -1025,28 +991,28 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 								</div>
 								<div id="analysis_retrofit_costs" class="analysis_retrofit_panel">
 									<div class="analysis_retrofit_divider">
-										<header>Materials</header>
+										<header edsy-text="ui-retrofit-materials">Materials</header>
 									</div>
 									<div class="scroller">
 										<table id="analysis_retrofit_costs_table" class="striped">
 											<thead>
 												<tr>
-													<th width="100%" class="stickytop">Item</th>
-													<th width="0%" class="stickytop">Type</th>
-													<th width="0%" class="stickytop">Lvl</th>
-													<th width="0%" class="stickytop">Qty</th>
+													<th width="100%" class="stickytop" edsy-text="ui-retrofit-materials-item">Item</th>
+													<th width="0%" class="stickytop" edsy-text="ui-retrofit-materials-type">Type</th>
+													<th width="0%" class="stickytop" edsy-text="ui-retrofit-materials-level">Lvl</th>
+													<th width="0%" class="stickytop" edsy-text="ui-retrofit-materials-quantity">Qty</th>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
-													<td>Credits</td>
+													<td edsy-text="ui-retrofit-materials-credits">Credits</td>
 													<td colspan=3 class="tar">0</td>
 												</tr>
 												<tr>
-													<td>Proto Radiolic Alloy</td>
-													<td>Mfc</td>
-													<td>G5</td>
-													<td class="tar">3</td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td class="tar"></td>
 												</tr>
 											</tbody>
 										</table>
@@ -1059,19 +1025,21 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 				<form id="page_body_options" name="options">
 					<div id="options_container">
 						<section>
-							<header>Options</header>
+							<header edsy-text="ui-options">Options</header>
 							<div id="options_insurance">
-								<b>Insurance Level</b>
-								&mdash; Select your insurance coverage level to calculate rebuy costs.
+								<b edsy-text="ui-options-insurance">Insurance Level</b>
+								&mdash;
+								<span edsy-text="ui-options-insurance-desc">Select your insurance coverage level to calculate rebuy costs.</span>
 								<dl>
-									<dd><label class="checkbox left"><input type="radio" name="insurance" value="9500"><div><div class="radio"></div><span>95.0% (Standard)</span></div></label></dd>
-									<dd><label class="checkbox left"><input type="radio" name="insurance" value="9625"><div><div class="radio"></div><span>96.3% (Beta backer)</span></div></label></dd>
-									<dd><label class="checkbox left"><input type="radio" name="insurance" value="9750"><div><div class="radio"></div><span>97.5% (Alpha backer)</span></div></label></dd>
+									<dd><label class="checkbox left"><input type="radio" name="insurance" value="9500"><div><div class="radio"></div><span edsy-text="ui-options-insurance-standard">95.0% (Standard)</span></div></label></dd>
+									<dd><label class="checkbox left"><input type="radio" name="insurance" value="9625"><div><div class="radio"></div><span edsy-text="ui-options-insurance-beta">96.3% (Beta backer)</span></div></label></dd>
+									<dd><label class="checkbox left"><input type="radio" name="insurance" value="9750"><div><div class="radio"></div><span edsy-text="ui-options-insurance-alpha">97.5% (Alpha backer)</span></div></label></dd>
 								</dl>
 							</div>
 							<div id="options_discounts">
-								<b>Default Discounts</b>
-								&mdash; Select the default discounts to apply to new builds and modules.
+								<b edsy-text="ui-options-discounts">Default Discounts</b>
+								&mdash;
+								<span edsy-text="ui-options-discounts-desc">Select the default discounts to apply to new builds and modules.</span>
 								<dl>
 									<dd id="options_discounts_bits">
 										<label class="togglebutton"><input name="discount" type="checkbox" value="0"><div class="togglebox">-0%</div></label>
@@ -1079,14 +1047,14 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 								</dl>
 							</div>
 							<div>
-								<b>Builtin Stored Modules</b>
+								<b edsy-text="ui-options-builtins">Builtin Stored Modules</b>
 								&mdash;
-								Select which pre-engineered (or otherwise limited availability) modules to display as built-in stored modules.
+								<span edsy-text="ui-options-builtins-desc">Select which pre-engineered (or otherwise limited availability) modules to display as built-in stored modules.</span>
 								<dl>
 									<dd><select name="builtin">
-										<option value="none">None</option>
-										<option value="some">Some (all Tech Broker, selected CG rewards)</option>
-										<option value="all">All</option>
+										<option value="none" edsy-text="ui-options-builtins-none">None</option>
+										<option value="some" edsy-text="ui-options-builtins-some">Some (all Tech Broker, selected CG rewards)</option>
+										<option value="all" edsy-text="ui-options-builtins-all">All</option>
 									</select></dd>
 								</dl>
 								<table id="options_builtin">
@@ -1097,20 +1065,19 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 								</table>
 							</div>
 							<div>
-								<label class="checkbox left"><input type="checkbox" name="onlybest"><div><div class="check"></div><span>Hide Small Modules</span></div></label>
-								&mdash; Display only the largest size class of each available module type in the SLOT view of the module browser.
+								<label class="checkbox left"><input type="checkbox" name="onlybest"><div><div class="check"></div><span edsy-text="ui-options-hide-small">Hide Small Modules</span></div></label>
+								&mdash;
+								<span edsy-text="ui-options-hide-small-desc">Display only the largest size class of each available module type in the SLOT view of the module browser.</span>
 							</div>
 							<div>
-								<label class="checkbox left"><input type="checkbox" name="experimental"><div><div class="check"></div><span>Experimental Mode</span></div></label>
-								&mdash; Allow fitting modules that are too large for the slot, of a type not allowed by the ship or the slot, or
-								over the limit for modules of that type, and allow engineering modifiers and experimental effects without applying
-								any blueprint. This allows for theoretical "what-if" builds, but disallowed modules will be shown in red to signify
-								that it will not be possible to actually fit them in-game.
+								<label class="checkbox left"><input type="checkbox" name="experimental"><div><div class="check"></div><span edsy-text="ui-options-experimental-mode">Experimental Mode</span></div></label>
+								&mdash;
+								<span edsy-text="ui-options-experimental-mode-desc">Allow fitting modules that are too large for the slot, of a type not allowed by the ship or the slot, or over the limit for modules of that type, and allow engineering modifiers and experimental effects without applying any blueprint. This allows for theoretical "what-if" builds, but disallowed modules will be shown in red to signify that it will not be possible to actually fit them in-game.</span>
 							</div>
 							<div>
-								<b>Dynamic Outfitting Modes</b>
-								&mdash; Some of the three outfitting display panels are usually hidden at narrower browser widths;
-								you can override that behavior by disabling specific modes, but this may force the display to scroll horizontally.
+								<b edsy-text="ui-options-dynamic-layout">Dynamic Outfitting Modes</b>
+								&mdash;
+								<span edsy-text="ui-options-dynamic-layout-desc">Some of the three outfitting display panels are usually hidden at narrower browser widths; you can override that behavior by disabling specific modes, but this may force the display to scroll horizontally.</span>
 								<dl>
 									<dd><label class="checkbox left"><input type="checkbox" name="show1"><div><div class="check"></div><span>1-Panel Mode</span></div></label></dd>
 									<dd><label class="checkbox left"><input type="checkbox" name="show2"><div><div class="check"></div><span>2-Panel Mode</span></div></label></dd>
@@ -1118,42 +1085,43 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 								</dl>
 							</div>
 							<div>
-								<label class="checkbox left"><input type="checkbox" name="hidestats"><div><div class="check"></div><span>Dynamic Statistics Panels</span></div></label>
-								&mdash; Some of the least recently enabled statistics panels are usually hidden at narrower browser widths;
-								you can disable that behavior, but this may force the display to scroll horizontally.
+								<label class="checkbox left"><input type="checkbox" name="hidestats"><div><div class="check"></div><span edsy-text="ui-options-dynamic-stats">Dynamic Statistics Panels</span></div></label>
+								&mdash;
+								<span edsy-text="ui-options-dynamic-stats-desc">Some of the least recently enabled statistics panels are usually hidden at narrower browser widths; you can disable that behavior, but this may force the display to scroll horizontally.</span>
 							</div>
 							<div>
-								<b>Appearance</b>
-								&mdash; Customize EDSY's fonts and colors.
+								<b edsy-text="ui-options-appearance">Appearance</b>
+								&mdash;
+								<span edsy-text="ui-options-appearance-desc">Customize EDSY's fonts and colors.</span>
 								<table id="options_appearance">
 									<tbody>
 										<tr>
-											<th>Text Font</th>
+											<th edsy-text="ui-options-appearance-text">Text Font</th>
 											<td colspan=5><input type="text" name="fonttext"></td>
 											<td><button class="iconsvg" name="reset" value="fonttext"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg></button></td>
 										</tr>
 										<tr>
-											<th>Caps Font</th>
+											<th edsy-text="ui-options-appearance-caps">Caps Font</th>
 											<td colspan=5><input type="text" name="fontcaps"></td>
 											<td><button class="iconsvg" name="reset" value="fontcaps"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg></button></td>
 										</tr>
 										<tr>
-											<th>Fixed Font</th>
+											<th edsy-text="ui-options-appearance-fixed">Fixed Font</th>
 											<td colspan=5><input type="text" name="fontfixed"></td>
 											<td><button class="iconsvg" name="reset" value="fontfixed"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg></button></td>
 										</tr>
 										<tr>
 											<th></th>
 											<td colspan=2>
-												<button name="colormatrix">Apply GUI Color Matrix</button>
+												<button name="colormatrix" edsy-text="ui-options-appearance-colormatrix">Apply GUI Color Matrix</button>
 											</td>
 											<td colspan=3 class="tal">
-												<label class="checkbox left"><input type="checkbox" name="colorinvert"><div><div class="check"></div><span>Invert greys (black-on-white)</span></div></label>
+												<label class="checkbox left"><input type="checkbox" name="colorinvert"><div><div class="check"></div><span edsy-text="ui-options-appearance-invert">Invert greys (black-on-white)</span></div></label>
 											</td>
 											<td></td>
 										</tr>
 										<tr>
-											<th>Oranges</th>
+											<th edsy-text="ui-options-appearance-oranges">Oranges</th>
 											<td><div class="colorpicker"><input type="text" name="colororange1"><button class="colororange1"></button></div></td>
 											<td><div class="colorpicker"><input type="text" name="colororange2"><button class="colororange2"></button></div></td>
 											<td><div class="colorpicker"><input type="text" name="colororange3"><button class="colororange3"></button></div></td>
@@ -1162,7 +1130,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 											<td><button class="iconsvg" name="reset" value="colororange"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg></button></td>
 										</tr>
 										<tr>
-											<th>Reds</th>
+											<th edsy-text="ui-options-appearance-reds">Reds</th>
 											<td><div class="colorpicker"><input type="text" name="colorred1"><button class="colorred1"></button></div></td>
 											<td><div class="colorpicker"><input type="text" name="colorred2"><button class="colorred2"></button></div></td>
 											<td><div class="colorpicker"><input type="text" name="colorred3"><button class="colorred3"></button></div></td>
@@ -1171,7 +1139,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 											<td><button class="iconsvg" name="reset" value="colorred"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg></button></td>
 										</tr>
 										<tr>
-											<th>Blues</th>
+											<th edsy-text="ui-options-appearance-blues">Blues</th>
 											<td><div class="colorpicker"><input type="text" name="colorblue1"><button class="colorblue1"></button></div></td>
 											<td><div class="colorpicker"><input type="text" name="colorblue2"><button class="colorblue2"></button></div></td>
 											<td><div class="colorpicker"><input type="text" name="colorblue3"><button class="colorblue3"></button></div></td>
@@ -1180,7 +1148,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 											<td><button class="iconsvg" name="reset" value="colorblue"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg></button></td>
 										</tr>
 										<tr>
-											<th>Greens</th>
+											<th edsy-text="ui-options-appearance-greens">Greens</th>
 											<td><div class="colorpicker"><input type="text" name="colorgreen1"><button class="colorgreen1"></button></div></td>
 											<td><div class="colorpicker"><input type="text" name="colorgreen2"><button class="colorgreen2"></button></div></td>
 											<td><div class="colorpicker"><input type="text" name="colorgreen3"><button class="colorgreen3"></button></div></td>
@@ -1189,7 +1157,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 											<td><button class="iconsvg" name="reset" value="colorgreen"><svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg></button></td>
 										</tr>
 										<tr>
-											<th>Yellows</th>
+											<th edsy-text="ui-options-appearance-yellows">Yellows</th>
 											<td><div class="colorpicker"><input type="text" name="coloryellow1"><button class="coloryellow1"></button></div></td>
 											<td><div class="colorpicker"><input type="text" name="coloryellow2"><button class="coloryellow2"></button></div></td>
 											<td><div class="colorpicker"><input type="text" name="coloryellow3"><button class="coloryellow3"></button></div></td>
@@ -1201,28 +1169,37 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 								</table>
 							</div>
 							<div>
-								<button id="options_backup" name="backup">Backup All Data</button>
-								&mdash; Export all stored builds, modules, and other preferences in a structured format suitable for backup or transfer to another device or browser.
+								<b edsy-text="ui-options-language">Language</b>
+								&mdash;
+								<span edsy-text="ui-options-language-desc">Select your language/locale.</span>
+								<dl>
+									<dd><select name="language">
+										<option value="" edsy-text="ui-options-language-default">(Browser Default)</option>
+									</select></dd>
+								</dl>
 							</div>
 							<div>
-								<button id="options_restore" name="restore">Restore Data</button>
-								&mdash; Import stored builds, modules, and other preferences that were previously exported from another device or browser.
+								<button id="options_backup" name="backup" edsy-text="ui-options-backup">Backup All Data</button>
+								&mdash;
+								<span edsy-text="ui-options-backup-desc">Export all stored builds, modules, and other preferences in a structured format suitable for backup or transfer to another device or browser.</span>
+							</div>
+							<div>
+								<button id="options_restore" name="restore" edsy-text="ui-options-restore">Restore Data</button>
+								&mdash;
+								<span edsy-text="ui-options-restore-desc">Import stored builds, modules, and other preferences that were previously exported from another device or browser.</span>
 							</div>
 						</section>
 						<section>
-							<header>Contact Me</header>
+							<header edsy-text="ui-help-contact">Contact Me</header>
 							<ul>
-								<li><a href="https://discord.gg/5JSnnV4">discord</a></li>
-								<li><a href="https://forums.frontier.co.uk/threads/518673/">forum</a></li>
-								<li><a href="https://www.reddit.com/message/compose/?to=taleden&subject=EDSY">reddit</a></li>
-								<li><a href="#" id="contact_email">email</a></li>
+								<li><a href="https://discord.gg/5JSnnV4" edsy-text="ui-help-contact-discord">discord</a></li>
+								<li><a href="https://forums.frontier.co.uk/threads/518673/" edsy-text="ui-help-contact-forum">forum</a></li>
+								<li><a href="https://www.reddit.com/message/compose/?to=taleden&subject=EDSY" edsy-text="ui-help-contact-reddit">reddit</a></li>
+								<li><a href="#" id="contact_email" edsy-text="ui-help-contact-email">email</a></li>
 							</ul>
 						</section>
-						<footer>
-							EDSY was created using assets and imagery from <a href="http://www.elitedangerous.com/">Elite Dangerous</a>,
-							with the permission of <a href="http://frontier.co.uk/">Frontier Developments plc</a>, for non-commercial purposes.
-							It is not endorsed by nor reflects the views or opinions of Frontier Developments
-							and no employee of Frontier Developments was involved in the making of it.
+						<footer><!-- edsy-text="not-localized" -->
+							EDSY was created using assets and imagery from <a href="http://www.elitedangerous.com/">Elite Dangerous</a>, with the permission of <a href="http://frontier.co.uk/">Frontier Developments plc</a>, for non-commercial purposes. It is not endorsed by nor reflects the views or opinions of Frontier Developments and no employee of Frontier Developments was involved in the making of it.
 						</footer>
 					</div>
 				</form>
@@ -1241,8 +1218,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 					</div>
 					<div id="popup_controls">
 						<div id="popup_status"></div>
-						<button id="popup_cancel" name="cancel" value="cancel">Cancel</button>
-						<button id="popup_okay" name="okay" value="okay">Okay</button>
+						<button id="popup_cancel" name="cancel" value="cancel" edsy-text="ui-button-cancel">Cancel</button>
+						<button id="popup_okay" name="okay" value="okay" edsy-text="ui-button-okay">Okay</button>
 					</div>
 				</div>
 			</form>
