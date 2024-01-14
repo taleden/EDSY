@@ -165,6 +165,7 @@ window.edsy = new (function() {
 		icon: {},
 		lang: null,
 		translation: {},
+		translationDefault: {},
 		reTranslationValue: new RegExp('\{([A-Za-z0-9_-]+)\}', 'g'),
 	};
 	var current = {
@@ -4382,9 +4383,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // sortMtypes()
 	
 	
-	var sortModules = function(modid1, modid2) {
-		var m1 = eddb.module[modid1];
-		var m2 = eddb.module[modid2];
+	var sortModules = function(m1, m2) {
+		var modid1 = m1.id;
+		var modid2 = m2.id;
 		// by class (size)
 		var v1 = 0 + (m1.class || 0);
 		var v2 = 0 + (m2.class || 0);
@@ -4444,10 +4445,38 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // sortModules()
 	
 	
+	var sortModuleIDs = function(modid1, modid2) {
+		return sortModules(eddb.module[modid1], eddb.module[modid2]);
+	}; // sortModuleIDs()
+	
+	
+	var sortBuiltinIDs = function(bmodid1, bmodid2) {
+		var modid1 = Slot.getStoredHashModuleID(BUILTIN_STORED_MODULES[bmodid1].modulehash);
+		var modid2 = Slot.getStoredHashModuleID(BUILTIN_STORED_MODULES[bmodid2].modulehash);
+		var m1 = eddb.module[modid1];
+		var m2 = eddb.module[modid2];
+		// by allowed group
+		for (var g = 0;  g < GROUPS.length;  g++) {
+			var group = GROUPS[g];
+			var v1 = (cache.groupMtypes[group] || EMPTY_ARR).includes(m1.mtype);
+			var v2 = (cache.groupMtypes[group] || EMPTY_ARR).includes(m2.mtype);
+			if (v1 && !v2)
+				return -1;
+			if (!v1 && v2)
+				return 1;
+		}
+		// by mtype, module
+		var v = sortMtypes(m1.mtype, m2.mtype);
+		return v || sortModules(m1, m2);
+	}; // sortBuiltinIDs()
+	
+	
 	var sortBlueprints = function(bpid1, bpid2) {
-		var v1 = getTranslation('blueprint-'+bpid1) || (eddb.blueprint[bpid1] || EMPTY_OBJ).name;
-		var v2 = getTranslation('blueprint-'+bpid2) || (eddb.blueprint[bpid2] || EMPTY_OBJ).name;
-		return (v1 < v2) ? -1 : ((v1 > v2) ? 1 : 0);
+		var b1 = eddb.blueprint[bpid1];
+		var b2 = eddb.blueprint[bpid2];
+		var v1 = b1 ? (getTranslation('blueprint-'+bpid1) || b1.name) : undefined;
+		var v2 = b2 ? (getTranslation('blueprint-'+bpid2) || b2.name) : undefined;
+		return (v1 < v2) ? -1 : ((v1 > v2) ? 1 : (v1 ? -1 : (v2 ? 1 : 0)));
 	}; // sortBlueprints()
 	
 	
@@ -4571,9 +4600,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			}
 		}
 		
-		// identify and sort ships
+		// initialize and tag ships
 		cache.ships = Object.keys(eddb.ship);
-		cache.ships.sort(sortShipIDs);
 		for (var sid in eddb.ship)
 			eddb.ship[sid].id = sid;
 		
@@ -4581,7 +4609,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		for (var mid in eddb.module)
 			eddb.module[mid].id = mid;
 		
-		// initialize attribute cache
+		// initialize and tag attributes
 		for (var i = 0;  i < eddb.attributes.length;  i++) {
 			var attribute = eddb.attributes[i];
 			attribute._index = i;
@@ -4604,7 +4632,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			cache.shipHash[shipid] = build.getHash();
 		}
 		
-		// identify and sort mtypes for each group
+		// initialize mtypes for each group
 		cache.groupMtypes = {};
 		cache.mtypeModules = {};
 		cache.mtypeBuiltins = {};
@@ -4629,11 +4657,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					cache.mtypeModules[mtype] = [];
 					cache.mtypeBuiltins[mtype] = [];
 				}
-				cache.groupMtypes[group].sort(sortMtypes);
 			}
 		}
 		
-		// initialize stock module hashes and sort mtype modules
+		// initialize stock module hashes and find size gaps
 		cache.moduleHash = {};
 		for (var modid in eddb.module) {
 			cache.moduleHash[modid] = Slot.getModuleIDStoredHash(modid);
@@ -4644,7 +4671,6 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		cache.mtypeSizeGaps = {};
 		for (var mtype in cache.mtypeModules) {
-			cache.mtypeModules[mtype].sort(sortModules);
 			var classes = {};
 			for (var m = 0;  m < cache.mtypeModules[mtype].length;  m++) {
 				classes[eddb.module[cache.mtypeModules[mtype][m]].class] = 1;
@@ -4660,7 +4686,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			}
 		}
 		
-		// sort mtype builtins
+		// initialize mtype builtins
 		for (var bmodid in BUILTIN_STORED_MODULES) {
 			var modid = Slot.getStoredHashModuleID(BUILTIN_STORED_MODULES[bmodid].modulehash);
 			var mtype = eddb.module[modid].mtype;
@@ -4669,17 +4695,15 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			}
 		}
 		
-		// sort mtype blueprints and expeffects
+		// initialize mtype blueprints and expeffects
 		cache.mtypeBlueprints = {};
 		cache.mtypeExpeffects = {};
 		for (var mtype in eddb.mtype) {
 			if (eddb.mtype[mtype].blueprints) {
 				cache.mtypeBlueprints[mtype] = eddb.mtype[mtype].blueprints.slice(0);
-				cache.mtypeBlueprints[mtype].sort(sortBlueprints);
 			}
 			if (eddb.mtype[mtype].expeffects) {
 				cache.mtypeExpeffects[mtype] = eddb.mtype[mtype].expeffects.slice(0);
-				cache.mtypeExpeffects[mtype].sort(sortExpeffects);
 			}
 		}
 		
@@ -4709,6 +4733,26 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			}
 		});
 	}; // initCache()
+	
+	
+	var sortCache = function() {
+		cache.ships.sort(sortShipIDs);
+		for (var group in cache.groupMtypes) {
+			cache.groupMtypes[group].sort(sortMtypes);
+		}
+		for (var mtype in cache.mtypeModules) {
+			cache.mtypeModules[mtype].sort(sortModuleIDs);
+		}
+		for (var mtype in cache.mtypeBuiltins) {
+			cache.mtypeBuiltins[mtype].sort(sortBuiltinIDs);
+		}
+		for (var mtype in cache.mtypeBlueprints) {
+			cache.mtypeBlueprints[mtype].sort(sortBlueprints);
+		}
+		for (var mtype in cache.mtypeExpeffects[mtype]) {
+			cache.mtypeExpeffects[mtype].sort(sortExpeffects);
+		}
+	}; // sortCache()
 	
 	
 	/*
@@ -11770,11 +11814,17 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		cache.lang = lang;
 		cache.translation = translation;
+		// 'en' should be the first one loaded
+		cache.translationDefault = cache.translationDefault || translation;
 	}; // loadTranslations()
 	
 	
 	var getTranslation = function(key, values) {
 		var text = cache.translation[key];
+		if (text === undefined) {
+			text = cache.translationDefault[key];
+			if (current.dev) console.log("WARNING: no '" + cache.lang + "'" + ((text === undefined) ? " or default" : '') + " translation for '" + key + "'");
+ 		}
 		if (text && values) {
 			text = text.replaceAll(cache.reTranslationValue, function(match, group1) {
 				var v = values[group1];
@@ -11820,9 +11870,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				var text = getTranslation(key, vals);
 				if (text !== undefined) {
 					el[setattr] = text;
-				} else if (current.dev) console.log("WARNING: no translation for '" + key + "'");
+				}
 			});
 		}
+		sortUIShipyardTable(document.getElementById('shipyard_ships_table'), UI_SHIPYARD_SHIPS_COLS);
 		var t1 = Date.now();
 		if (!doc && current.dev) console.log("updateTranslations(): '" + cache.lang + "' completed in " + (t1-t0) + "s");
 	}; // updateTranslations()
@@ -11971,6 +12022,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		// process remaining initialization asynchronously so that the loading animation can run
 		var steps = [
 			loadTranslations,
+			sortCache,
 			
 			// initialize UI
 			initUIShipyardShips,
