@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 
 :root {
-	--edsy-versions-css: v-308159902-308159902-308159902-308159902; /* HTML,CSS,DB,JS */
-	--edsy-lastmodified-css: d-20230601;
+	--edsy-versions-css: v-308179903-308179903-308159902-308179903; /* HTML,CSS,DB,JS */
+	--edsy-lastmodified-css: d-20240113;
 	
 	--colorblack: black;
 	--colorwhite: white;
@@ -1301,7 +1301,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_modules_picker .togglebutton.fullname INPUT + DIV {
 	text-align: left;
 }
-#outfitting_modules_picker .row.stored.builtin .togglebutton INPUT + DIV {
+#outfitting_modules_picker .row.stored:not(.builtin) .togglebutton INPUT + DIV {
 	background-color: var(--coloryellow1);
 	color: var(--coloryellow5);
 }
@@ -1312,14 +1312,14 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_modules_picker .togglebutton INPUT:checked + DIV {
 	border-color: var(--colororange5);
 }
-#outfitting_modules_picker .row.stored.builtin .togglebutton INPUT:checked + DIV {
+#outfitting_modules_picker .row.stored:not(.builtin) .togglebutton INPUT:checked + DIV {
 	border-color: var(--coloryellow5);
 }
 #page_body_outfitting.focusmodule #outfitting_modules_picker .togglebutton INPUT:checked + DIV {
 	background-color: var(--colororange5);
 	color: var(--colorblack);
 }
-#page_body_outfitting.focusmodule #outfitting_modules_picker .row.stored.builtin .togglebutton INPUT:checked + DIV {
+#page_body_outfitting.focusmodule #outfitting_modules_picker .row.stored:not(.builtin) .togglebutton INPUT:checked + DIV {
 	background-color: var(--coloryellow5);
 }
 #outfitting_modules_picker .togglebutton INPUT:active + DIV,
@@ -1343,9 +1343,17 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_modules_picker .togglebutton INPUT.notenough + DIV .iconsvg.warning {
 	display: inline-block;
 }
+#outfitting_modules_picker .togglebutton INPUT + DIV .iconsvg.community,
+#outfitting_modules_picker .togglebutton INPUT + DIV .iconsvg.techbroker,
 #outfitting_modules_picker .togglebutton INPUT + DIV .iconsvg.engineer {
+	display: none;
 	float: right;
 	margin: 3px 0;
+}
+#outfitting_modules_picker .row.community .togglebutton INPUT + DIV .iconsvg.community,
+#outfitting_modules_picker .row.techbroker .togglebutton INPUT + DIV .iconsvg.techbroker,
+#outfitting_modules_picker .row.engineer .togglebutton INPUT + DIV .iconsvg.engineer {
+	display: inline-block;
 }
 #page_body_outfitting.focusmodule #outfitting_modules_picker .togglebutton INPUT:checked + DIV .iconsvg.tinted,
 #outfitting_modules_picker .togglebutton INPUT:active + DIV .iconsvg.tinted,
@@ -2267,6 +2275,13 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	background-color: var(--colorblack);
 	color: var(--colorgrey5);
 	font-weight: bold;
+}
+
+#outfitting_details_label .iconsvg.community,
+#outfitting_details_label .iconsvg.techbroker,
+#outfitting_details_label .iconsvg.engineer {
+	float: right;
+	margin: 3px 0;
 }
 
 #details_rank {

@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308159902,308159902,308179901,308179902]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20240112;
+	var VERSIONS = [308179903,308179903,308179901,308179903]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20240113;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -201,6 +201,7 @@ window.edsy = new (function() {
 			shipStoreds: { 0:[] },
 			moduleNamehashStored: { 0:{} },
 			moduleStoreds: { 0:[] },
+			modulehashStored: {},
 		},
 		pickerNameNamehash: {},
 		option: {
@@ -2055,6 +2056,15 @@ window.edsy = new (function() {
 		var modid = hashDecode(modulehash.slice(1, 4));
 		return (idmap.module[modid] || modid);
 	}; // getStoredHashModuleID()
+	
+	
+	Slot.isStoredHashModified = function(modulehash) {
+		var version = hashDecode(modulehash.slice(0,1));
+		if (version < 9)
+			return false;
+		var slotbits = hashDecode(modulehash.slice(4, 5));
+		return (slotbits & 0x10);
+	}; // isStoredHashModified()
 	
 	
 	Slot.getRetrofitData = function(slot1, slot2, modidNum, limdisc, limdisceng, limbpgrade, limbproll, limexpeffect, limrolls) {
@@ -6307,12 +6317,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 							modid:modid,
 							namehash:namehash,
 							name:name,
-							modulehash:modulehash
+							modulehash:modulehash,
+							engineer:Slot.isStoredHashModified(modulehash),
 						};
 						if (!current.stored.moduleNamehashStored[modid])
 							current.stored.moduleNamehashStored[modid] = {};
 						current.stored.moduleNamehashStored[0][namehash] = current.stored.moduleNamehashStored[modid][namehash] = stored;
 						current.stored.moduleStoreds[0] = current.stored.moduleStoreds[modid] = null;
+						current.stored.modulehashStored[modulehash] = stored;
 					}
 				}
 				for (var modid in current.stored.moduleNamehashStored) {
@@ -6672,7 +6684,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					classes += ' fitsize' + c;
 				}
 				if (stored.name.startsWith(" ")) {
-					classes += ' builtin';
+					classes += ' builtin' + (stored.community ? ' community' : '') + (stored.techbroker ? ' techbroker' : '');
+				}
+				if (stored.engineer) {
+					classes += ' engineer';
 				}
 				divRow.className = classes;
 				var label = document.createElement('label');
@@ -6685,6 +6700,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				input.value = stored.modid + '.' + namehash;
 				var div = document.createElement('div');
 				div.innerHTML = encodeHTML(stored.name); // TODO translated builtin stored module names
+				div.prepend(cache.icon['community'].cloneNode(true));
+				div.prepend(cache.icon['techbroker'].cloneNode(true));
 				div.prepend(cache.icon['engineer'].cloneNode(true));
 				div.prepend(cache.icon['warning'].cloneNode(true));
 				label.appendChild(input);
@@ -7824,14 +7841,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var slot = current.fit.getSlot(slotgroup, slotnum);
 		var modid = slot.getModuleID();
 		if (GROUPS.indexOf(slotgroup) >= 0) {
-			var namehash = '';
 			var modulehash = slot.getStoredHash();
-			for (var nh in (current.stored.moduleNamehashStored[modid] || EMPTY_OBJ)) {
-				if (current.stored.moduleNamehashStored[modid][nh].modulehash === modulehash) {
-					namehash = nh;
-					break;
-				}
-			}
+			var namehash = (current.stored.modulehashStored[modulehash] || EMPTY_OBJ).namehash || '';
 			setUIPickerModule(modid, namehash, modid && (current.tab === 'SLOT'));
 		} else {
 			setUIPickerModule();
@@ -8055,27 +8066,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	var readStoredModules = function() {
 		current.stored.moduleNamehashStored = { 0:{} };
 		current.stored.moduleStoreds = { 0:[] };
+		current.stored.modulehashStored = {};
 		
 		if (!cache.feature.storage)
 			return false;
-		
-		// populate builtin stored modules (which are specially named with leading spaces)
-		if (current.option.builtin !== 'none') {
-			for (var bmodid in BUILTIN_STORED_MODULES) {
-				var builtin = BUILTIN_STORED_MODULES[bmodid];
-				if (current.option.builtin === 'all' || builtin.available || current.option['builtin'+bmodid]) {
-					var name = " "+builtin.name;
-					var namehash = hashEncodeS(name);
-					var stored = {
-						modid:Slot.getStoredHashModuleID(builtin.modulehash),
-						namehash:namehash,
-						name:name,
-						modulehash:builtin.modulehash
-					};
-					current.stored.moduleNamehashStored[0][namehash] = stored;
-				}
-			}
-		}
 		
 		// load regular stored modules
 		var item = 'edsy_modules' + (current.beta ? '_beta' : '');
@@ -8090,9 +8084,33 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					modid:modid,
 					namehash:namehash,
 					name:hashDecodeS(namehash),
-					modulehash:modulehash
+					modulehash:modulehash,
+					engineer:Slot.isStoredHashModified(modulehash),
 				};
 				current.stored.moduleNamehashStored[0][namehash] = stored;
+				current.stored.modulehashStored[stored.modulehash] = stored;
+			}
+		}
+		
+		// populate builtin stored modules (which are specially named with leading spaces)
+		if (current.option.builtin !== 'none') {
+			for (var bmodid in BUILTIN_STORED_MODULES) {
+				var builtin = BUILTIN_STORED_MODULES[bmodid];
+				if (current.option.builtin === 'all' || builtin.available || current.option['builtin'+bmodid]) {
+					var name = " "+builtin.name;
+					var namehash = hashEncodeS(name);
+					var stored = {
+						modid:Slot.getStoredHashModuleID(builtin.modulehash),
+						namehash:namehash,
+						name:name,
+						modulehash:builtin.modulehash,
+						engineer:Slot.isStoredHashModified(builtin.modulehash),
+						community:!builtin.available,
+						techbroker:builtin.available,
+					};
+					current.stored.moduleNamehashStored[0][namehash] = stored;
+					current.stored.modulehashStored[stored.modulehash] = stored;
+				}
 			}
 		}
 		
@@ -8222,7 +8240,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			modid:modid,
 			namehash:namehash,
 			name:hashDecodeS(namehash),
-			modulehash:modulehash
+			modulehash:modulehash,
+			engineer:slot.isModified(),
 		};
 		if (stored.name.startsWith(" ")) {
 			alert(getTranslation('message-module-overwrite-builtin'));
@@ -8235,6 +8254,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		current.stored.moduleStoreds[0].sort(sortStoreds);
 		current.stored.moduleStoreds[modid] = Object.values(current.stored.moduleNamehashStored[modid]);
 		current.stored.moduleStoreds[modid].sort(sortStoreds);
+		current.stored.modulehashStored[modulehash] = stored;
 		writeStoredModules();
 		if (namehash !== oldnamehash) {
 			updateUIModulePickerStoredModules();
@@ -8272,6 +8292,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		current.stored.moduleStoreds[0].sort(sortStoreds);
 		current.stored.moduleStoreds[stored.modid] = Object.values(current.stored.moduleNamehashStored[stored.modid]);
 		current.stored.moduleStoreds[stored.modid].sort(sortStoreds);
+		current.stored.modulehashStored[stored.modulehash] = stored;
 		writeStoredModules();
 		updateUIModulePickerStoredModules();
 		var select = document.forms.details.elements.outfitting_details_stored;
@@ -8296,6 +8317,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			return false;
 		delete current.stored.moduleNamehashStored[0][namehash];
 		delete current.stored.moduleNamehashStored[stored.modid][namehash];
+		delete current.stored.modulehashStored[stored.modulehash];
 		current.stored.moduleStoreds[0] = Object.values(current.stored.moduleNamehashStored[0]);
 		current.stored.moduleStoreds[0].sort(sortStoreds);
 		current.stored.moduleStoreds[stored.modid] = Object.values(current.stored.moduleNamehashStored[stored.modid]);
@@ -8356,6 +8378,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			} else {
 				el.removeAttribute('edsy-text');
 				el.replaceChildren(getModuleLabelDOM(module, false, true));
+				if (slot.isModified()) el.appendChild(cache.icon['engineer']);
+				var stored = current.stored.modulehashStored[slot.getStoredHash()] || EMPTY_OBJ;
+				if (stored.techbroker) el.appendChild(cache.icon['techbroker']);
+				if (stored.community) el.appendChild(cache.icon['community']);
 			}
 		} else if (current.outfitting_focus === 'slot') {
 			el.setAttribute('edsy-text', 'note-empty-slot');
@@ -10098,7 +10124,11 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					divCheck.className = "check";
 					divWrapper.appendChild(divCheck);
 					var span = document.createElement('span');
-					span.innerText = BUILTIN_STORED_MODULES[bmodid].name; // TODO translation
+					span.append(
+						cache.icon[BUILTIN_STORED_MODULES[bmodid].available ? 'techbroker' : 'community'].cloneNode(true),
+						' ',
+						BUILTIN_STORED_MODULES[bmodid].name // TODO translation
+					);
 					divWrapper.appendChild(span);
 					label.appendChild(divWrapper);
 					((group === 'hardpoint') ? divBuiltinHardpoints : divBuiltinOther).appendChild(label);
