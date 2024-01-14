@@ -24,8 +24,8 @@
 	
 	// shipyard labels
 	"ui-shipyard-build-label": "Allestimento",
-	"ui-shipard-build-desc": "Nome dell'allestimento salvato",
-	"ui-shipard-ship-label": "Nave",
+	"ui-shipyard-build-desc": "Nome dell'allestimento salvato",
+	"ui-shipyard-ship-label": "Nave",
 	"ui-shipyard-ship-desc": "Nome del tipo di nave",
 	"ui-shipyard-cost-label": "Prezzo",
 	"ui-shipyard-size-label": "Dm",
@@ -882,6 +882,7 @@
 	"blueprint-ct_dt": "Dirty Tuning",
 	"blueprint-ct_str": "Strengthening",
 	"blueprint-dec_g": "Decorative Green",
+	"blueprint-dec_p": "Decorative Pink",
 	"blueprint-dec_r": "Decorative Red",
 	"blueprint-dec_y": "Decorative Yellow",
 	"blueprint-ifsdi_eca": "Expanded Capture Arc",
