@@ -189,6 +189,7 @@ window.edsy = new (function() {
 		},
 		drag: null,
 		resize: null,
+		queryTimeout: null,
 		pickerClick: {},
 		pickerTouch: {},
 		slotsClick: {},
@@ -2135,7 +2136,7 @@ window.edsy = new (function() {
 					if (bproll1 <= 0 || bproll1 < limit) {
 					//	var rolls = max(1, round(2 * log((1 - limit) / (1 - bproll1)) / log(1 - BPGRADE_PROGRESS[bpgrade1])) / 2);
 						var rolls = max(1, round(2 * (limit - bproll1) * limrolls[bpgrade1]) / 2);
-						var mats = blueprint.mats[bpgrade1 - 1];
+						var mats = (blueprint.mats || EMPTY_ARR)[bpgrade1 - 1] || EMPTY_OBJ;
 						var cost = {};
 						for (var mat in mats)
 							cost[mat] = rolls * mats[mat];
@@ -4481,8 +4482,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	
 	var sortExpeffects = function(expid1, expid2) {
-		var v1 = getTranslation('expeffect-'+expid1) || (eddb.expeffect[expid1] || EMPTY_OBJ).name;
-		var v2 = getTranslation('expeffect-'+expid2) || (eddb.expeffect[expid2] || EMPTY_OBJ).name;
+		var v1 = expid1 ? (getTranslation('expeffect-'+expid1) || (eddb.expeffect[expid1] || EMPTY_OBJ).name) : '';
+		var v2 = expid2 ? (getTranslation('expeffect-'+expid2) || (eddb.expeffect[expid2] || EMPTY_OBJ).name) : '';
 		return (v1 < v2) ? -1 : ((v1 > v2) ? 1 : 0);
 	}; // sortExpeffects()
 	
@@ -4847,8 +4848,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var cancel = document.forms.popup.elements.cancel;
 		if (typeof html === 'string') {
 			labelarea.innerHTML = html;
-		} else {
+		} else if (html) {
 			labelarea.replaceChildren(html);
+		} else {
+			labelarea.replaceChildren();
 		}
 		textarea.style.display = 'none';
 		table.style.display = '';
@@ -10539,6 +10542,121 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // onUIPageHeaderChange()
 	
 	
+	var onUIQueryMouseDown = function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		document.addEventListener('mousemove', onUIQueryMouseMove, true);
+		document.addEventListener('mouseup', onUIQueryMouseUp, true);
+		startQueryDrag(e.clientX, e.clientY);
+	}; // onUIQueryMouseDown()
+	
+	
+	var onUIQueryMouseMove = function(e) {
+		updateQueryPosition(e.clientX, e.clientY);
+	}; // onUIQueryMouseMove()
+	
+	
+	var onUIQueryMouseUp = function(e) {
+		document.removeEventListener('mousemove', onUIQueryMouseMove, true);
+		document.removeEventListener('mouseup', onUIQueryMouseUp, true);
+		stopQueryDrag(e.clientX, e.clientY);
+	}; // onUIQueryMouseUp()
+	
+	
+	var onUIQueryTouchStart = function(e) {
+		e.stopPropagation();
+		document.addEventListener('touchmove', onUIQueryTouchMove, true);
+		document.addEventListener('touchend', onUIQueryTouchEnd, true);
+		document.addEventListener('touchcancel', onUIQueryTouchCancel, true);
+		startQueryDrag(e.clientX, e.clientY);
+	}; // onUIQueryTouchStart()
+	
+	
+	var onUIQueryTouchMove = function(e) {
+		updateQueryPosition(e.clientX, e.clientY);
+	}; // onUIQueryTouchMove()
+	
+	
+	var onUIQueryTouchEnd = function(e) {
+		document.addEventListener('touchmove', onUIQueryTouchMove, true);
+		document.addEventListener('touchend', onUIQueryTouchEnd, true);
+		document.addEventListener('touchcancel', onUIQueryTouchCancel, true);
+		stopQueryDrag(e.clientX, e.clientY);
+	}; // onUIQueryTouchEnd()
+	
+	
+	var onUIQueryTouchCancel = function(e) {
+		return onUIQueryTouchEnd(e);
+	}; // onUIQueryTouchCancel()
+	
+	
+	var startQueryDrag = function(cx, cy) {
+		var glow = document.getElementById('query_glow');
+		glow.style.display = 'none';
+		var query = document.getElementById('query_tool');
+		query.style.position = 'absolute';
+		var info = document.getElementById('query_info');
+		info.style.display = 'none';
+		updateQueryPosition(cx, cy);
+	}; // startQueryDrag()
+	
+	
+	var updateQueryPosition = function(cx, cy) {
+		var query = document.getElementById('query_tool');
+		query.style.top = parseInt(cy - query.offsetHeight / 2) + 'px';
+		query.style.left = parseInt(cx - query.offsetWidth / 2) + 'px';
+		if (!current.queryTimeout)
+			current.queryTimeout = setTimeout(updateQueryPositionTimeout, 100, cx, cy);
+	}; // updateQueryPosition()
+	
+	
+	var updateQueryPositionTimeout = function(cx, cy) {
+		current.queryTimeout = null;
+		var glow = document.getElementById('query_glow');
+		var info = document.getElementById('query_info');
+		var els = document.elementsFromPoint(cx, cy);
+		for (var e = 0;  e < els.length;  e++) {
+			if (els[e].tagName === 'ABBR' && els[e].id !== 'query_tool') {
+				var rect = els[e].getBoundingClientRect();
+				glow.style.left = (rect.left + window.scrollX) + 'px';
+				glow.style.top = (rect.top + window.scrollY) + 'px';
+				glow.style.width = rect.width + 'px';
+				glow.style.height = rect.height + 'px';
+				glow.style.display = 'block';
+				if (cx < document.documentElement.clientWidth / 2) {
+					info.style.left = '80%';
+					info.style.right = '';
+				} else {
+					info.style.left = '';
+					info.style.right = '80%';
+				}
+				if (cy < document.documentElement.clientHeight / 2) {
+					info.style.top = '80%';
+					info.style.bottom = '';
+				} else {
+					info.style.top = '';
+					info.style.bottom = '80%';
+				}
+				info.innerHTML = '<b>' + els[e].innerText + '</b>: ' + els[e].title;
+				info.style.display = 'block';
+				return;
+			}
+		}
+		glow.style.display = 'none';
+		info.style.display = 'none';
+	}; // updateQueryPositionTimeout()
+	
+	
+	var stopQueryDrag = function(cx, cy) {
+		var glow = document.getElementById('query_glow');
+		glow.style.display = 'none';
+		var query = document.getElementById('query_tool');
+		query.style.position = 'static';
+		var info = document.getElementById('query_info');
+		info.style.display = 'none';
+	}; // stopQueryDrag()
+	
+	
 	var onUIContextMenu = function(e) {
 		e.preventDefault();
 		e.stopPropagation();
@@ -11875,7 +11993,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		sortUIShipyardTable(document.getElementById('shipyard_ships_table'), UI_SHIPYARD_SHIPS_COLS);
 		var t1 = Date.now();
-		if (!doc && current.dev) console.log("updateTranslations(): '" + cache.lang + "' completed in " + (t1-t0) + "s");
+		if (!doc && current.dev) console.log("updateTranslations(): '" + cache.lang + "' completed in " + (t1-t0) + "ms");
 	}; // updateTranslations()
 	
 	
@@ -11897,6 +12015,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		document.getElementById('window_maximize').addEventListener('click', onUIMaximizeButtonClick);
 		document.getElementById('window_minimize').addEventListener('click', onUIMinimizeButtonClick);
 		document.getElementById('page_tabs').addEventListener('change', onUIPageHeaderChange);
+		document.getElementById('query_tool').addEventListener('touchstart', onUIQueryTouchStart);
+		document.getElementById('query_tool').addEventListener('mousedown', onUIQueryMouseDown);
 		// document.getElementById('page_body_shipyard').addEventListener('contextmenu', onUIContextMenu); // why?
 		document.getElementById('shipyard_tabs').addEventListener('change', onUIShipyardTabChange);
 		document.getElementById('shipyard_ships_container').addEventListener('click', onUIShipyardShipsClick);
