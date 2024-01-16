@@ -5543,11 +5543,26 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		td.className = 'export';
 		var div = document.createElement('div');
 		div.className = 'export';
-		var button = createTranslatedElement('button', 'ui-button-generate');
-		button.name = 'export_short_gen_button';
+		var button = document.createElement('button');
+		button.append(
+			createTranslatedElement('span', 'ui-button-generate'),
+			' ',
+			'(v.gd)'
+		);
+		button.name = 'export_short_gen_button_v.gd';
 		button.className = 'text';
 		button.addEventListener('click', onUIPopupExportShortButtonClick);
 		div.appendChild(button);
+		var button = document.createElement('button');
+		button.append(
+			createTranslatedElement('span', 'ui-button-generate'),
+			' ',
+			'(ulvis.net)'
+		);
+		button.name = 'export_short_gen_button_ulvis.net';
+		button.className = 'text';
+		button.addEventListener('click', onUIPopupExportShortButtonClick);
+		div.append(' ', button);
 		var input = document.createElement('input');
 		input.style.display = 'none';
 		input.type = 'text';
@@ -10476,22 +10491,38 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	
 	var onUIPopupExportShortButtonClick = function(e) {
-		document.forms.popup.elements.export_short_gen_button.disabled = true;
-		document.forms.popup.elements.export_short_gen_button.innerText = getTranslation('ui-export-generating');
+		var service = e.currentTarget.name.split('_').pop();
+		var button = e.currentTarget;
+		button.disabled = true;
+		button.innerText = getTranslation('ui-export-generating') + service; // TODO
+		
 		var request = new XMLHttpRequest();
 		request.onreadystatechange = function() {
 			if (request.readyState == 4) {
-				document.forms.popup.elements.export_short_gen_button.style.display = 'none';
-				document.forms.popup.elements.export_short.style.display = 'inline-block';
-				document.forms.popup.elements.export_short_button.style.display = 'inline-block';
-				document.forms.popup.elements.export_short.value = request.responseText.split('\n',1)[0];
-				document.forms.popup.elements.export_short.focus();
-				document.forms.popup.elements.export_short.select();
+				if (request.status == 200) {
+					var div = button;
+					while (div && div.tagName !== 'DIV') {
+						div = div.parentNode;
+					}
+					var buttons = div.getElementsByTagName('BUTTON');
+					for (var b = 0;  b < buttons.length;  b++)
+						buttons[b].style.display = 'none';
+					document.forms.popup.elements.export_short.style.display = 'inline-block';
+					document.forms.popup.elements.export_short_button.style.display = 'inline-block';
+					document.forms.popup.elements.export_short.value = request.responseText.split('\n',1)[0];
+					document.forms.popup.elements.export_short.focus();
+					document.forms.popup.elements.export_short.select();
+				} else {
+					button.innerText = getTranslation('api-error');
+					console.log("ERROR: failed to get shortlink: " + request.status + ", " + request.responseText);
+				}
 			}
 		}; // onreadystatechange()
-		request.open('GET', 'shortlink?url=' + encodeURIComponent(current.fit.getEDSYURL()), true);
+		
+		request.open('POST', 'shortlink', true);
+		request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		request.timeout = 10000;
-		request.send();
+		request.send('service=' + encodeURIComponent(service) + '&url=' + encodeURIComponent(current.fit.getEDSYURL()));
 	}; // onUIPopupExportShortButtonClick()
 	
 	

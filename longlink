@@ -4,14 +4,14 @@
 EDSY was created using assets and imagery from Elite Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
 It is not endorsed by nor reflects the views or opinions of Frontier Developments and no employee of Frontier Developments was involved in the making of it.
 
-Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2021 taleden
+Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2024 taleden
 and is provided under a Creative Commons Attribution-NonCommercial 4.0 International License (http://creativecommons.org/licenses/by-nc/4.0/).
 
 The Elite Dangerous game logic and data in this file remains the property of Frontier Developments plc, and is used here as authorized by
 Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elite-dangerous-media-usage-rules.510879/).
 """
 
-import cgi, cgitb, os, requests, sys
+import cgi, cgitb, json, os, requests, sys
 from time import sleep
 cgitb.enable()
 
@@ -34,7 +34,7 @@ try:
 		inForm = cgi.FieldStorage()
 		slug = inForm.getfirst('slug') if ('slug' in inForm) else ''
 	#if path/form
-	if slug.startswith('v'):
+	if slug.startswith('v'): # v.gd
 		reqParams = {
 			'format': 'simple',
 			'shorturl': slug[1:],
@@ -55,6 +55,40 @@ try:
 				outHeaders['content-type'] = 'text/plain'
 				outBody.append('invalid shortlink')
 			#if edsy.org
+		else:
+			outHeaders['status'] = req.status_code
+			outHeaders['content-type'] = req.headers['content-type']
+			outBody.append(req.text)
+		#if 200
+	elif slug.startswith('u'): # ulvis.net
+		reqParams = {
+			'id': slug[1:],
+			'type': 'json',
+		}
+		req = requests.get('https://ulvis.net/API/read/get', params=reqParams, timeout=10)
+		if req.status_code == 502: # 502 Bad Gateway means rate limited
+			sleep(5)
+			req = requests.get('https://ulvis.net/API/read/get', params=reqParams, timeout=10)
+		#if 502
+		if req.status_code == 200:
+			try:
+				resp = json.loads(req.text)
+				urltokens = resp.get('data',{}).get('full','').split('/',3) if isinstance(resp, dict) else ['','','']
+				if (
+						isinstance(resp, dict) and resp.get('success') and isinstance(resp.get('data',None),dict) and
+						resp['data'].get('id') == slug[1:] and (len(urltokens) >= 3) and (urltokens[0] in {'http:','https:'}) and (urltokens[1] == '') and (urltokens[2] in {'edsy.org','www.edsy.org'})
+				):
+					outHeaders['status'] = 301
+					outHeaders['location'] = resp['data']['full']
+				else:
+					outHeaders['status'] = 400
+					outHeaders['content-type'] = 'text/plain'
+					outBody.append('invalid shortlink' + ((': ' + req.text) if DEV else ''))
+				#if edsy.org
+			except json.JSONDecodeError:
+				outHeaders['status'] = 400
+				outBody.append('got invalid response' + ((': ' + req.text) if DEV else ''))
+			#try
 		else:
 			outHeaders['status'] = req.status_code
 			outHeaders['content-type'] = req.headers['content-type']

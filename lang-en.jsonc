@@ -530,6 +530,7 @@
 	"message-module-overwrite-builtin": "Cannot overwrite a builtin module",
 	
 	// miscellaneous text
+	"api-error": "remote API error",
 	"available": "available",
 	"boost": "boost",
 	"deployed": "deployed",

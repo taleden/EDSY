@@ -4,14 +4,14 @@
 EDSY was created using assets and imagery from Elite Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
 It is not endorsed by nor reflects the views or opinions of Frontier Developments and no employee of Frontier Developments was involved in the making of it.
 
-Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2021 taleden
+Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2024 taleden
 and is provided under a Creative Commons Attribution-NonCommercial 4.0 International License (http://creativecommons.org/licenses/by-nc/4.0/).
 
 The Elite Dangerous game logic and data in this file remains the property of Frontier Developments plc, and is used here as authorized by
 Frontier Customer Services (https://forums.frontier.co.uk/index.php?threads/elite-dangerous-media-usage-rules.510879/).
 """
 
-import cgi, cgitb, os, requests, sys
+import cgi, cgitb, json, os, requests, sys
 from time import sleep
 cgitb.enable()
 
@@ -29,32 +29,76 @@ try:
 	}
 	outBody = list()
 	inForm = cgi.FieldStorage()
+	service = inForm.getfirst('service') if ('service' in inForm) else ''
 	url = inForm.getfirst('url') if ('url' in inForm) else ''
 	urltokens = url.split('/',3)
 	if (len(urltokens) >= 3) and (urltokens[0] in {'http:','https:'}) and (urltokens[1] == '') and (urltokens[2] in {'edsy.org','www.edsy.org'}):
-		reqParams = {
-			'format': 'simple',
-			'url': url,
-		}
-		req = requests.get('https://v.gd/create.php', params=reqParams, timeout=10)
-		if req.status_code == 502: # 502 Bad Gateway means rate limited
-			sleep(5)
+		if service == 'v.gd':
+			reqParams = {
+				'format': 'simple',
+				'url': url,
+			}
 			req = requests.get('https://v.gd/create.php', params=reqParams, timeout=10)
-		#if 502
-		if req.status_code == 200:
-			shorttokens = req.text.split('/',3)
-			if (len(shorttokens) >= 4) and (shorttokens[0] in {'http:','https:'}) and (shorttokens[1] == '') and (shorttokens[2] in {'v.gd','www.v.gd'}):
-				outHeaders['status'] = 200
-				outBody.append('https://edsy.org' + ('/dev/s/' if DEV else '/s/') + 'v' + shorttokens[3])
+			if req.status_code == 502: # 502 Bad Gateway means rate limited
+				sleep(5)
+				req = requests.get('https://v.gd/create.php', params=reqParams, timeout=10)
+			#if 502
+			if req.status_code == 200:
+				shorttokens = req.text.split('/',3)
+				if (len(shorttokens) >= 4) and (shorttokens[0] in {'http:','https:'}) and (shorttokens[1] == '') and (shorttokens[2] in {'v.gd','www.v.gd'}):
+					outHeaders['status'] = 200
+					outBody.append('https://edsy.org' + ('/dev/s/' if DEV else '/s/') + 'v' + shorttokens[3])
+				else:
+					outHeaders['status'] = 400
+					outBody.append('got invalid shortlink' + ((': ' + req.text) if DEV else ''))
+				#if v.gd
 			else:
-				outHeaders['status'] = 400
-				outBody.append('got invalid shortlink')
-			#if v.gd
+				outHeaders['status'] = req.status_code
+				outHeaders['content-type'] = req.headers['content-type']
+				outBody.append(req.text)
+			#if 200
+		elif service == 'ulvis.net':
+			reqParams = {
+				'url': url,
+				'type': 'json',
+				'private': 1,
+			}
+			req = requests.get('https://ulvis.net/API/write/get', params=reqParams, timeout=10)
+			if req.status_code == 502: # 502 Bad Gateway means rate limited
+				sleep(5)
+				req = requests.get('https://ulvis.net/API/write/get', params=reqParams, timeout=10)
+			#if 502
+			if req.status_code == 200:
+				try:
+					resp = json.loads(req.text)
+					if (
+							isinstance(resp, dict) and resp.get('success') and isinstance(resp.get('data',None),dict) and
+							'id' in resp['data'] and resp['data'].get('url','').startswith('https://ulvis.net/') and resp['data'].get('full') == url
+					):
+						outHeaders['status'] = 200
+						outBody.append('https://edsy.org' + ('/dev/s/' if DEV else '/s/') + 'u' + resp['data']['id'])
+					else:
+						outHeaders['status'] = 400
+						outBody.append('got invalid response' + ((': ' + req.text) if DEV else ''))
+						outBody.append(str(resp.get('success')))
+						outBody.append(str(type(resp.get('data'))))
+						outBody.append(resp.get('data',{}).get('url') + " =?= " + url)
+						outBody.append(resp.get('data',{}).get('full'))
+						outBody.append(resp.get('data',{}).get('id'))
+					#if ok
+				except json.JSONDecodeError:
+					outHeaders['status'] = 400
+					outBody.append('got invalid response' + ((': ' + req.text) if DEV else ''))
+				#try
+			else:
+				outHeaders['status'] = req.status_code
+				outHeaders['content-type'] = req.headers['content-type']
+				outBody.append(req.text)
+			#if 200
 		else:
-			outHeaders['status'] = req.status_code
-			outHeaders['content-type'] = req.headers['content-type']
-			outBody.append(req.text)
-		#if 200
+			outHeaders['status'] = 400
+			outBody.append('invalid service')
+		#if service
 	else:
 		outHeaders['status'] = 400
 		outBody.append(('invalid' if url else 'missing') + ' url')
