@@ -448,7 +448,8 @@
 	"ui-options-appearance-greens": "Greens",
 	"ui-options-appearance-yellows": "Yellows",
 	"ui-options-language": "Language",
-	"ui-options-language-desc": "Select your language/locale.",
+	"ui-options-language-desc": "Select your language/locale. Many languages have very incomplete translations;",
+	"ui-options-language-help": "you can help!",
 	"ui-options-language-default": "(Browser Default)",
 	"ui-options-backup": "Backup All Data",
 	"ui-options-backup-desc": "Export all stored builds, modules, and other preferences in a structured format suitable for backup or transfer to another device or browser.",
@@ -530,6 +531,7 @@
 	"message-module-overwrite-builtin": "Cannot overwrite a builtin module",
 	
 	// miscellaneous text
+	"api-error": "remote API error",
 	"available": "available",
 	"boost": "boost",
 	"deployed": "deployed",
