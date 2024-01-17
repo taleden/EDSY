@@ -11991,7 +11991,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		if (values)
 			el.setAttribute('edsy-vals', JSON.stringify(values));
 		el.setAttribute('edsy-text', key || '');
-		el.innerHTML = encodeHTML(getTranslation(key, values));
+		el.innerHTML = encodeHTML(getTranslation(key, values) || '');
 		return el;
 	}; // createTranslatedElement()
 	
