@@ -10,7 +10,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308179903,308179903,308179901,308179903]; /* HTML,CSS,DB,JS */
+	var VERSIONS = [308179904,308179904,308179901,308179904]; /* HTML,CSS,DB,JS */
 	var LASTMODIFIED = 20240117;
 	
 	var EMPTY_OBJ = {};
@@ -189,7 +189,7 @@ window.edsy = new (function() {
 		},
 		drag: null,
 		resize: null,
-		move: null,
+		query: null,
 		pickerClick: {},
 		pickerTouch: {},
 		slotsClick: {},
@@ -10590,29 +10590,35 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	var onUIQueryMouseUp = function(e) {
 		document.removeEventListener('mousemove', onUIQueryMouseMove, true);
 		document.removeEventListener('mouseup', onUIQueryMouseUp, true);
-		stopQueryDrag(e.clientX, e.clientY);
+		stopQueryDrag();
 	}; // onUIQueryMouseUp()
 	
 	
 	var onUIQueryTouchStart = function(e) {
 		e.stopPropagation();
-		document.addEventListener('touchmove', onUIQueryTouchMove, true);
-		document.addEventListener('touchend', onUIQueryTouchEnd, true);
-		document.addEventListener('touchcancel', onUIQueryTouchCancel, true);
-		startQueryDrag(e.clientX, e.clientY);
+		if (e.touches.length >= 1) {
+			document.addEventListener('touchmove', onUIQueryTouchMove, true);
+			document.addEventListener('touchend', onUIQueryTouchEnd, true);
+			document.addEventListener('touchcancel', onUIQueryTouchCancel, true);
+			startQueryDrag(e.touches[0].clientX, e.touches[0].clientY);
+		}
 	}; // onUIQueryTouchStart()
 	
 	
 	var onUIQueryTouchMove = function(e) {
-		updateQueryPosition(e.clientX, e.clientY);
+		if (current.query && e.touches.length >= 1) {
+			updateQueryPosition(e.touches[0].clientX, e.touches[0].clientY);
+		} else {
+			return onUIQueryTouchEnd(e);
+		}
 	}; // onUIQueryTouchMove()
 	
 	
 	var onUIQueryTouchEnd = function(e) {
-		document.addEventListener('touchmove', onUIQueryTouchMove, true);
-		document.addEventListener('touchend', onUIQueryTouchEnd, true);
-		document.addEventListener('touchcancel', onUIQueryTouchCancel, true);
-		stopQueryDrag(e.clientX, e.clientY);
+		document.removeEventListener('touchmove', onUIQueryTouchMove, true);
+		document.removeEventListener('touchend', onUIQueryTouchEnd, true);
+		document.removeEventListener('touchcancel', onUIQueryTouchCancel, true);
+		stopQueryDrag();
 	}; // onUIQueryTouchEnd()
 	
 	
@@ -10636,22 +10642,22 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var query = document.getElementById('query_tool');
 		query.style.top = parseInt(cy - query.offsetHeight / 2) + 'px';
 		query.style.left = parseInt(cx - query.offsetWidth / 2) + 'px';
-		if (!current.move) {
-			current.move = {};
+		if (!current.query) {
+			current.query = {};
 		}
-		current.move.x = cx;
-		current.move.y = cy;
-		if (!current.move.timeout) {
-			current.move.timeout = setTimeout(updateQueryPositionTimeout, 50);
+		current.query.x = cx;
+		current.query.y = cy;
+		if (!current.query.timeout) {
+			current.query.timeout = setTimeout(updateQueryPositionTimeout, 50);
 		}
 	}; // updateQueryPosition()
 	
 	
 	var updateQueryPositionTimeout = function() {
-		if (!current.move) return;
-		var cx = current.move.x;
-		var cy = current.move.y;
-		current.move = null;
+		if (!current.query) return;
+		current.query.timeout = null;
+		var cx = current.query.x;
+		var cy = current.query.y;
 		
 		var glow = document.getElementById('query_glow');
 		var info = document.getElementById('query_info');
@@ -10688,7 +10694,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // updateQueryPositionTimeout()
 	
 	
-	var stopQueryDrag = function(cx, cy) {
+	var stopQueryDrag = function() {
+		current.query = null;
 		var glow = document.getElementById('query_glow');
 		glow.style.display = 'none';
 		var query = document.getElementById('query_tool');

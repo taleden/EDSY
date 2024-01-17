@@ -10,7 +10,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 
 :root {
-	--edsy-versions-css: v-308179903-308179903-308159902-308179903; /* HTML,CSS,DB,JS */
+	--edsy-versions-css: v-308179904-308179904-308159902-308179904; /* HTML,CSS,DB,JS */
 	--edsy-lastmodified-css: d-20240115;
 	
 	--colorblack: black;
@@ -1010,17 +1010,17 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 	top: 0;
 	left: 0;
 	cursor: move;
-	border-radius: 0.5rem;
+	border-radius: 50%;
 	background-color: var(--coloryellow5);
 	color: var(--colorblack);
 	padding: 0.125rem;
 	text-decoration: none;
+	line-height: 13px;
 }
 
 #query_info {
 	display: none;
 	position: absolute;
-	z-index: 99;
 	border: 2px solid var(--colorblack);
 	background-color: var(--colorgrey5);
 	color: var(--colorblack);
@@ -3251,13 +3251,11 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	}
 }
 
-@media only screen and (min-width: 40em) {
+@media only screen and (min-width: 46em) {
 	#page_tabs SPAN {
 		display: inline;
 	}
-}
-
-@media only screen and (min-width: 46em) {
+	
 	BODY:not(.show2) #outfitting_top {
 		justify-content: center;
 	}
