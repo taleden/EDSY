@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'unsafe-inline';">
+		<link rel="stylesheet" type="text/css" href="edsy-mini.css">
+	</head>
+	<body>
+		<div id="page_modal">
+			<div id="page_box">
+				<h2>Updating EDSY...</h2>
+				<p>Your browser is attempting to reload the latest versions of all EDSY application resource files.</p>
+				<p>Progress:<span id="reload_progress"></span></p>
+				<div><a id="reload_button" class="button" href="index.html">Return to EDSY</a></div>
+			</div>
+		</div>
+		<script type="application/javascript">
+function reloadFile(url, re, label) {
+	window._edsy_reload = (window._edsy_reload || 0) + 1;
+	fetch(
+			url,
+			{ mode:"same-origin", credentials:"same-origin", cache:"reload" }
+	).then(
+			function(resp) { return resp.text(); }
+	).then(
+			function(text) {
+				window._edsy_reload = (window._edsy_reload || 0) - 1;
+				text = ((text.toLowerCase().match(re) || EMPTY_ARR)[1] || '');
+				console.log("got "+url+" v"+text);
+				var abbr = document.createElement('ABBR');
+				abbr.title = (text ? versionToString(text) : '?');
+				abbr.innerText = label;
+				document.getElementById('reload_progress').append(' ', abbr);
+				if (window._edsy_reload < 1) {
+					document.getElementById('reload_progress').append(' ... Complete!');
+					var a = document.getElementById('reload_button');
+					a.style.display = '';
+					a.innerText = 'Relaunch EDSY (in 3...)';
+					setTimeout(function() { a.innerText = 'Relaunch EDSY (in 2...)'; }, 1000);
+					setTimeout(function() { a.innerText = 'Relaunch EDSY (in 1...)'; }, 2000);
+					setTimeout(function() { a.innerText = 'Relaunch EDSY'; window.location = a.href; }, 3000);
+				}
+			}
+	);
+} // reloadFile()
+
+function versionToString(v) {
+	v = ('0000000000' + v).slice(-10);
+	return ('v' + parseInt(v.slice(0,2)) + '.' + parseInt(v.slice(2,4)) + '.' + parseInt(v.slice(4,6)) + (['-','a','b','rc'][parseInt(v.slice(6,8))] || '.') + parseInt(v.slice(8,10)));
+} // versionToString()
+
+function onDOMContentLoaded(e) {
+	document.getElementById('reload_button').style.display = 'none';
+	reloadFile("index.html", /<meta +name *= *"edsy-versions-html" [ a-z0-9="_-]*content *= *"([0-9]+)(?:,[0-9]+)*"/i, "HTML");
+	reloadFile("edsy.css", /^[ \t]*--edsy-versions-css *: *v-[0-9]+-?([0-9]+)(?:-[0-9]+)* *;/im, "CSS");
+	reloadFile("eddb.js", /^[ \t]*edsy_versions_db *: *\[(?: *[0-9]+ *,){2} *([0-9]+)(?: *, *[0-9]+)* *\] *,/im, "DB");
+	reloadFile("edsy.js", /^[ \t]*var +VERSIONS *= *\[(?: *[0-9]+ *,){3} *([0-9]+)(?: *, *[0-9]+)* *\] *;/im, "JS");
+} // onDOMContentLoaded()
+
+window.addEventListener('DOMContentLoaded', onDOMContentLoaded);
+		</script>
+	</body>
+</html>

@@ -67,6 +67,11 @@ P.center {
 	text-align: center;
 }
 
+H2 {
+	margin: 0.25rem 0.25rem 1rem 0.25rem;
+	padding: 0;
+}
+
 ABBR {
 	display: inline-block;
 	margin: 0.125rem 0;
@@ -141,7 +146,7 @@ SPAN.message {
 	min-height: 0;
 	max-height: 90%;
 	border: 0.125rem solid var(--color-orange-5);
-	padding: 0.25rem;
+	padding: 0.5rem;
 	background-color: black;
 }
 

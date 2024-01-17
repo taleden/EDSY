@@ -6443,9 +6443,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			updateUIDetailsStoredModules();
 			updateUIDetailsStoredModuleControls();
 			updateUIAnalysisStoredBuilds();
+			current.importdata = null;
 			if (cache.lang != current.lang)
 				loadTranslations().then(updateTranslations);
-			current.importdata = null;
 		} else {
 			var html = createTranslatedElement('span', 'ui-import-warning-invalid');
 			var trigger = document.getElementById('outfitting_fit_import');
@@ -11918,24 +11918,30 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		document.getElementById('version_label').title = ('updated ' + d.slice(0,4) + '-' + d.slice(4,6) + '-' + d.slice(6,8));
 		
 		// cross check expected versions
-		if (vH[0] >= max(vC[0], max(vD[0], vJ[0]))) {
-			if (vC[1] >= max(vH[1], max(vD[1], vJ[1]))) {
-				if (vD[2] >= max(vH[2], max(vC[2], vJ[2]))) {
-					if (vJ[3] >= max(vH[3], max(vC[3], vD[3]))) {
-						return true;
-					} else {
-						console.log('ERROR: EDSY JS version mismatch: ' + vH[3] + ' / ' + vC[3] + ' / ' + vD[3] + ' / (' + vJ[3] + ')');
-					}
-				} else {
-					console.log('ERROR: EDSY DB version mismatch: ' + vH[2] + ' / ' + vC[2] + ' / (' + vD[2] + ') / ' + vJ[2]);
-				}
-			} else {
-				console.log('ERROR: EDSY CSS version mismatch: ' + vH[1] + ' / (' + vC[1] + ') / ' + vD[1] + ' / ' + vJ[1]);
-			}
-		} else {
+		var vM = [
+			max(vC[0], max(vD[0], vJ[0])),
+			max(vH[1], max(vD[1], vJ[1])),
+			max(vH[2], max(vC[2], vJ[2])),
+			max(vH[3], max(vC[3], vD[3])),
+		];
+		var ok = true;
+		if (vH[0] < vM[0]) {
+			ok = false;
 			console.log('ERROR: EDSY HTML version mismatch: (' + vH[0] + ') / ' + vC[0] + ' / ' + vD[0] + ' / ' + vJ[0]);
 		}
-		return false;
+		if (vC[1] < vM[1]) {
+			ok = false;
+			console.log('ERROR: EDSY CSS version mismatch: ' + vH[1] + ' / (' + vC[1] + ') / ' + vD[1] + ' / ' + vJ[1]);
+		}
+		if (vD[2] < vM[2]) {
+			ok = false;
+			console.log('ERROR: EDSY DB version mismatch: ' + vH[2] + ' / ' + vC[2] + ' / (' + vD[2] + ') / ' + vJ[2]);
+		}
+		if (vJ[3] < vM[3]) {
+			ok = false;
+			console.log('ERROR: EDSY JS version mismatch: ' + vH[3] + ' / ' + vC[3] + ' / ' + vD[3] + ' / (' + vJ[3] + ')');
+		}
+		return ok;
 	}; // verifyVersionSync()
 	
 	
@@ -11997,6 +12003,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	
 	var updateTranslations = function(doc) {
+		// re-sort cache using new translations
+		sortCache();
+		
 		var attrs = { "edsy-text": "innerText", "edsy-title": "title" };
 		var t0 = Date.now();
 		if (!doc)
@@ -12146,7 +12155,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					("<h1>" + getTranslation('message-version') + "</h1><h3>" + getTranslation('message-version-desc') + "</h3>"),
 					"",
 					null, true,
-					function() { window.location.reload(true); }, null
+					function() { window.location = 'update.html'; }, null
 			);
 			return false;
 		}
@@ -12172,8 +12181,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		
 		// process remaining initialization asynchronously so that the loading animation can run
 		var steps = [
-			loadTranslations,
-			sortCache,
+			initCache,
 			
 			// initialize UI
 			initUIShipyardShips,
@@ -12247,7 +12255,6 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		setTimeout(init, 0);
 	}; // onDOMContentLoaded()
 	
-	
 	// sniff env and locale
 	current.dev = (window.location.protocol === 'file:') || (window.location.pathname.indexOf('/dev/') >= 0);
 	current.beta = current.dev || (window.location.pathname.indexOf('/beta/') >= 0);
@@ -12263,12 +12270,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	cache.feature.requestFullscreen = false;
 	cache.feature.cancelFullscreen = false;
 	
-	// initialize cache
-	initCache();
-	
 	// if we're in interactive mode, queue the remaining UI init
 	if (document.title === 'EDSY') {
-		window.addEventListener('DOMContentLoaded', onDOMContentLoaded);
+		window.addEventListener('DOMContentLoaded', function() { loadTranslations().then(onDOMContentLoaded); });
 	} else {
 		this.Build = Build;
 		this.Slot = Slot;
