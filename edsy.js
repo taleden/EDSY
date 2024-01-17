@@ -189,7 +189,7 @@ window.edsy = new (function() {
 		},
 		drag: null,
 		resize: null,
-		queryTimeout: null,
+		move: null,
 		pickerClick: {},
 		pickerTouch: {},
 		slotsClick: {},
@@ -10636,13 +10636,23 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var query = document.getElementById('query_tool');
 		query.style.top = parseInt(cy - query.offsetHeight / 2) + 'px';
 		query.style.left = parseInt(cx - query.offsetWidth / 2) + 'px';
-		if (!current.queryTimeout)
-			current.queryTimeout = setTimeout(updateQueryPositionTimeout, 100, cx, cy);
+		if (!current.move) {
+			current.move = {};
+		}
+		current.move.x = cx;
+		current.move.y = cy;
+		if (!current.move.timeout) {
+			current.move.timeout = setTimeout(updateQueryPositionTimeout, 50);
+		}
 	}; // updateQueryPosition()
 	
 	
-	var updateQueryPositionTimeout = function(cx, cy) {
-		current.queryTimeout = null;
+	var updateQueryPositionTimeout = function() {
+		if (!current.move) return;
+		var cx = current.move.x;
+		var cy = current.move.y;
+		current.move = null;
+		
 		var glow = document.getElementById('query_glow');
 		var info = document.getElementById('query_info');
 		var els = document.elementsFromPoint(cx, cy);
