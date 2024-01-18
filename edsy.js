@@ -87,7 +87,7 @@ window.edsy = new (function() {
 		303100 : { name:"3A Shield Gen, KR+TR",                  modulehash:"F7PcG05G0044sPc8wPccupDgvcQ",                     tag:'C' }, // CG reward // TODO: get sample to test import
 		111300 : { name:"1I DSS \"V1\", ERx2",                   modulehash:"H2jwG-9G_W1P000",                                 tag:'T' }, // human tech broker
 	};
-	var LANGS = ["en","zh","cs","fr","de","hu","it","ja","pt","ru","es"]; // TODO cn? ko? pl?
+	var LANGS = ["en","zh","cs","fr","de","hu","it","ja","pt","ru","es"]; // TODO cn? ko? nl? pl?
 	var UNIT_ABBR_TRANSLATIONS = {
 		"%": "unit-percent-abbr",
 		"&deg;": "unit-degrees-abbr",
@@ -4377,7 +4377,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var a2 = eddb.mtype[m2.mtype].modulenames[m2.name];
 		v2 = (a2 ? ((typeof a2 !== 'string') ? 0 : 1) : 2);
 		if (v1 != v2) return v1 - v2;
-		// by abbreviation
+		// by abbreviation // TODO: sort by translated abbreviation, not hardcoded english
 		if (v1 === 1 && a1 !== a2)
 			return (a1 < a2) ? -1 : 1;
 		// if non-unique, ...
@@ -10500,7 +10500,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var service = e.currentTarget.name.split('_').pop();
 		var button = e.currentTarget;
 		button.disabled = true;
-		button.innerText = getTranslation('ui-export-generating') + service; // TODO
+		button.innerText = getTranslation('ui-export-generating') + ' (' + service + ')';
 		
 		var request = new XMLHttpRequest();
 		request.onreadystatechange = function() {
@@ -12251,38 +12251,6 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				setTimeout(init, 0);
 			} else if (current.dev) {
 				console.log(timings.join(',\n'));
-				/* TODO DELETE translation testing
-				for (var datatype in {ship:1,attributes:1,mattype:1,material:1,blueprint:1,expeffect:1,mtype:1,module:1}) {
-					var n=0, m=0;
-					for (var id in eddb[datatype]) {
-						var obj = eddb[datatype][id];
-						if (datatype == 'attributes' && !obj.attr)
-							continue
-						n++;
-						var key = (datatype == 'attributes' ? 'attr' : datatype) + '-' + (obj.namekey || obj.attr || id);
-						if (cache.translation[key] != obj.name) {
-							console.log(key+' => '+cache.translation[key]+' != '+obj.name);
-							m++;
-						}
-						if (obj.abbr) {
-							n++;
-							if (cache.translation[key+'-abbr'] != obj.abbr)
-								m++;
-						}
-						if (obj.desc) {
-							n++;
-							if (cache.translation[key+'-desc'] != obj.desc)
-								m++;
-						}
-						if (obj.special) {
-							n++;
-							if (cache.translation[key+'-special'] != obj.special)
-								m++;
-						}
-					}
-					console.log(datatype+': '+n+' total, '+m+' mismatch');
-				}
-				*/
 			}
 		};
 		setTimeout(init, 0);
