@@ -42,76 +42,50 @@ window.edsy = new (function() {
 //	var BPROLL_LIMIT = 0.95;
 	var DISCOUNTS = [30,20,15,10,5,2.5];
 	var HASH_VERSION = 17;
-	/* TODO DELETE
-	var HTML_ICON = {
-		'unknown'    : '<svg class="iconsvg unknown"><use xlink:href="#icon_unknown"/></svg>',
-		'ignore'     : '<svg class="iconsvg ignore"><use xlink:href="#icon_ignore"/></svg>',
-		'warning'    : '<svg class="iconsvg warning tinted"><use xlink:href="#icon_warning"/></svg>',
-		'save'       : '<svg class="iconsvg save"><use xlink:href="#icon_save"/></svg>',
-		'saveas'     : '<svg class="iconsvg saveas"><use xlink:href="#icon_saveas"/></svg>',
-		'reload'     : '<svg class="iconsvg reload"><use xlink:href="#icon_reload"/></svg>',
-		'rename'     : '<svg class="iconsvg rename"><use xlink:href="#icon_rename"/></svg>',
-		'delete'     : '<svg class="iconsvg delete"><use xlink:href="#icon_delete"/></svg>',
-		'clipboard'  : '<svg class="iconsvg clipboard"><use xlink:href="#icon_clipboard"/></svg>',
-		'import'     : '<svg class="iconsvg import"><use xlink:href="#icon_import"/></svg>',
-		'export'     : '<svg class="iconsvg export"><use xlink:href="#icon_export"/></svg>',
-		'engineer'   : '<svg class="iconsvg engineer"><use xlink:href="#icon_engineer"/></svg>',
-		'fixed'      : '<svg class="iconsvg fixed"><use xlink:href="#icon_fixed"/></svg>',
-		'gimballed'  : '<svg class="iconsvg gimballed"><use xlink:href="#icon_gimballed"/></svg>',
-		'turreted'   : '<svg class="iconsvg turreted"><use xlink:href="#icon_turreted"/></svg>',
-		'dumbfire'   : '<svg class="iconsvg dumbfire"><use xlink:href="#icon_dumbfire"/></svg>',
-		'seeker'     : '<svg class="iconsvg seeker"><use xlink:href="#icon_seeker"/></svg>',
-		'guardian'   : '<svg class="iconsvg guardian tinted"><use xlink:href="#icon_guardian"/></svg>',
-		'powerplay'  : '<svg class="iconsvg powerplay tinted"><use xlink:href="#icon_powerplay"/></svg>',
-	};
-	var HTML_ICON_MOUNT = { F:HTML_ICON['fixed'], G:HTML_ICON['gimballed'], T:HTML_ICON['turreted'] };
-	var HTML_ICON_MISSILE = { D:HTML_ICON['dumbfire'], S:HTML_ICON['seeker'] };
-	var HTML_ICON_TAG = { G:HTML_ICON['guardian'], P:HTML_ICON['powerplay'] };
-	*/
 	var ICON_MOUNT = { F:'fixed', G:'gimballed', T:'turreted' };
 	var ICON_MISSILE = { D:'dumbfire', S:'seeker' };
-	var ICON_TAG = { G:'guardian', P:'powerplay' };
+	var ICON_TAG = { C:'community', G:'guardian', P:'powerplay', T:'techbroker' };
 	var CSS_FONTS = ['caps','text','fixed'];
 	var CSS_COLORS = ['orange','red','blue','green','yellow'];
 	var BUILTIN_STORED_MODULES = {
-		872200 : { name:"2B Enzyme Missile, HC+Caustic",         modulehash:"FLIqG02G0050ypD4sPc8y00C_00Gu00",                 available:0 }, // CG reward // TODO: get sample to test import
-		862500 : { name:"2E/FD AX Missile, HC+RF",               modulehash:"HL3gG-3G_W90zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", available:1 }, // Sirius tech broker
-		863300 : { name:"3C/FD AX Missile, HC+RF",               modulehash:"HL4wG-3G_W90zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", available:1 }, // Sirius tech broker // TODO: get sample to test import
-		862570 : { name:"2E/G EAXMC \"Azimuth\", OC, AL",        modulehash:"HL3nG-3H0038_00CoPcL600",                         available:1 }, // Azimuth / Rescue Ship tech broker
-		863370 : { name:"3C/G EAXMC \"Azimuth\", OC, AL",        modulehash:"HL51G-3H0038_00CoPcL600",                         available:1 }, // Azimuth / Rescue Ship tech broker
-		881400 : { name:"1D/F Grd Gauss, RF+HC",                 modulehash:"HLXCG-2G0092_166_00A_00Ew7ZHD00L800P600T800YsPc", available:1 }, // Salvation tech broker
-		882200 : { name:"2B/F Grd Gauss, RF+HC",                 modulehash:"HLYSG-2G0092_166_00A_00Ew7ZHD00L800P600T800YsPc", available:1 }, // Salvation tech broker
-		881430 : { name:"1D/F Grd Plasma, OC+Foc",               modulehash:"HLXFG-2Gxq60vBh4zHx8y00Cw00H800KvLL",             available:1 }, // Salvation tech broker
-		882230 : { name:"2B/F Grd Plasma, OC+Foc",               modulehash:"HLYVG-2Gxq60vBh4zHx8y00Cw00H800KvLL",             available:1 }, // Salvation tech broker // TODO: get sample to test import
-		881460 : { name:"1D/F Grd Shard, LR+Foc, Pen",           modulehash:"HLXIG-2G0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", available:1 }, // Salvation tech broker
-		882160 : { name:"2A/F Grd Shard, LR+Foc, Pen",           modulehash:"HLYOG-2G0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", available:1 }, // Salvation tech broker // TODO: get sample to test import
-	//	882161 : { name:"2A/F Grd Shard, LR5",                   modulehash:"GLYOG02G0080y0051Cp993DDFm0H058L800Op7uV700",     available:0 }, // TODO: CG reward? // TODO: get sample to test import
-		811410 : { name:"1D/F Abrasion Blaster, LR",             modulehash:"FJprG02G0062y006y00Ey00Iy00L800P800",             available:0 }, // CG reward // TODO: get sample to test import
-		811400 : { name:"1D/F Mining Laser, LR, Incen",          modulehash:"HJpqmF5j3H0072y006y00AkPcEy00I_ezL800PBLL",       available:1 }, // Torval Mining Ltd tech broker
-		822230 : { name:"2B Seeker \"V1\", HC+LW, ThermCas",     modulehash:"HK4lG-3Q_W42-Cp6ypDAsPcIwPc",                     available:1 }, // human tech broker
-		822231 : { name:"2B Seeker, HC+RF, Drag",                modulehash:"HK4lG-2R00612008u00GwghUsPcX400b400",             available:0 }, // CG reward // TODO: get sample to test import
-		722500 : { name:"2E/F Multi-cannon, RF+HC, Phasing",     modulehash:"HHewm1WaCS007Uy00Yuaab600f466n600soPcv400",       available:0 }, // CG reward
-		842200 : { name:"2B/F Rail, LR+HC, FeedCas",             modulehash:"FKZyG03I0080-Cp8zCpT000Yyv4b000f000iu00r900",     available:0 }, // CG reward // TODO: get sample to test import
+		872200 : { name:"2B Enzyme Missile, HC+Caustic",         modulehash:"FLIqG02G0050ypD4sPc8y00C_00Gu00",                 tag:'C' }, // CG reward // TODO: get sample to test import
+		862500 : { name:"2E/FD AX Missile, HC+RF",               modulehash:"HL3gG-3G_W90zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", tag:'T' }, // Sirius tech broker
+		863300 : { name:"3C/FD AX Missile, HC+RF",               modulehash:"HL4wG-3G_W90zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", tag:'T' }, // Sirius tech broker // TODO: get sample to test import
+		862570 : { name:"2E/G EAXMC \"Azimuth\", OC, AL",        modulehash:"HL3nG-3H0038_00CoPcL600",                         tag:'T' }, // Azimuth / Rescue Ship tech broker
+		863370 : { name:"3C/G EAXMC \"Azimuth\", OC, AL",        modulehash:"HL51G-3H0038_00CoPcL600",                         tag:'T' }, // Azimuth / Rescue Ship tech broker
+		881400 : { name:"1D/F Grd Gauss, RF+HC",                 modulehash:"HLXCG-2G0092_166_00A_00Ew7ZHD00L800P600T800YsPc", tag:'T' }, // Salvation tech broker
+		882200 : { name:"2B/F Grd Gauss, RF+HC",                 modulehash:"HLYSG-2G0092_166_00A_00Ew7ZHD00L800P600T800YsPc", tag:'T' }, // Salvation tech broker
+		881430 : { name:"1D/F Grd Plasma, OC+Foc",               modulehash:"HLXFG-2Gxq60vBh4zHx8y00Cw00H800KvLL",             tag:'T' }, // Salvation tech broker
+		882230 : { name:"2B/F Grd Plasma, OC+Foc",               modulehash:"HLYVG-2Gxq60vBh4zHx8y00Cw00H800KvLL",             tag:'T' }, // Salvation tech broker // TODO: get sample to test import
+		881460 : { name:"1D/F Grd Shard, LR+Foc, Pen",           modulehash:"HLXIG-2G0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", tag:'T' }, // Salvation tech broker
+		882160 : { name:"2A/F Grd Shard, LR+Foc, Pen",           modulehash:"HLYOG-2G0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", tag:'T' }, // Salvation tech broker // TODO: get sample to test import
+	//	882161 : { name:"2A/F Grd Shard, LR5",                   modulehash:"GLYOG02G0080y0051Cp993DDFm0H058L800Op7uV700",     tag:'C' }, // TODO: CG reward? // TODO: get sample to test import
+		811410 : { name:"1D/F Abrasion Blaster, LR",             modulehash:"FJprG02G0062y006y00Ey00Iy00L800P800",             tag:'C' }, // CG reward // TODO: get sample to test import
+		811400 : { name:"1D/F Mining Laser, LR, Incen",          modulehash:"HJpqmF5j3H0072y006y00AkPcEy00I_ezL800PBLL",       tag:'T' }, // Torval Mining Ltd tech broker
+		822230 : { name:"2B Seeker \"V1\", HC+LW, ThermCas",     modulehash:"HK4lG-3Q_W42-Cp6ypDAsPcIwPc",                     tag:'T' }, // human tech broker
+		822231 : { name:"2B Seeker, HC+RF, Drag",                modulehash:"HK4lG-2R00612008u00GwghUsPcX400b400",             tag:'C' }, // CG reward // TODO: get sample to test import
+		722500 : { name:"2E/F Multi-cannon, RF+HC, Phasing",     modulehash:"HHewm1WaCS007Uy00Yuaab600f466n600soPcv400",       tag:'C' }, // CG reward
+		842200 : { name:"2B/F Rail, LR+HC, FeedCas",             modulehash:"FKZyG03I0080-Cp8zCpT000Yyv4b000f000iu00r900",     tag:'C' }, // CG reward // TODO: get sample to test import
 		
-		510600 : { name:"0F ECM, LW+Shd",                        modulehash:"FCTqG03G0032_pD50009000",                         available:0 }, // CG reward // TODO: get sample to test import
-		520900 : { name:"0I Heat Sink \"Sirius\", ACx2",         modulehash:"HCjwG-2G002P000S_00",                             available:1 }, // Sirus tech broker
-		570100 : { name:"0A KWS, FS+LR",                         modulehash:"FDwoG03G0056y008y00GzCpMupDQ_Pc",                 available:0 }, // CG reward // TODO: get sample to test import
-		530900 : { name:"0I/T Point Defence, Foc+LW",            modulehash:"FCzYG05G0042_pD6y00GkPcL000",                     available:0 }, // CG reward // TODO: get sample to test import
+		510600 : { name:"0F ECM, LW+Shd",                        modulehash:"FCTqG03G0032_pD50009000",                         tag:'C' }, // CG reward // TODO: get sample to test import
+		520900 : { name:"0I Heat Sink \"Sirius\", ACx2",         modulehash:"HCjwG-2G002P000S_00",                             tag:'T' }, // Sirus tech broker
+		570100 : { name:"0A KWS, FS+LR",                         modulehash:"FDwoG03G0056y008y00GzCpMupDQ_Pc",                 tag:'C' }, // CG reward // TODO: get sample to test import
+		530900 : { name:"0I/T Point Defence, Foc+LW",            modulehash:"FCzYG05G0042_pD6y00GkPcL000",                     tag:'C' }, // CG reward // TODO: get sample to test import
 		
-		413100 : { name:"3A Power Plant, AR+OC",                 modulehash:"FA5UG03G0040sPc4-cQ8yAFCqAF",                     available:0 }, // CG reward // TODO: get sample to test import
-		413101 : { name:"3A Power Plant, OC",                    modulehash:"HA5UG-7G0036upD8ypDCvcQ",                         available:0 }, // CG reward // TODO: get sample to test import
-		414101 : { name:"4A Power Plant, OC",                    modulehash:"HA72G-7G0036upD8ypDCvcQ",                         available:0 }, // CG reward // TODO: get sample to test import
-		415101 : { name:"5A Power Plant, OC",                    modulehash:"HA8cG-7G0036upD8ypDCvcQ",                         available:0 }, // CG reward // TODO: get sample to test import
-		433100 : { name:"3A FSD, IR+FB",                         modulehash:"HAakG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             available:0 }, // CG reward // TODO: get sample to test import
-		434100 : { name:"4A FSD, IR+FB",                         modulehash:"HAcIG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             available:0 }, // CG reward // TODO: get sample to test import
-		435100 : { name:"5A FSD \"V1\", IR+FB",                  modulehash:"HAdsG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             available:1 }, // human tech broker
-		436100 : { name:"6A FSD, IR+FB",                         modulehash:"HAfQG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             available:0 }, // CG reward // TODO: get sample to test import
+		413100 : { name:"3A Power Plant, AR+OC",                 modulehash:"FA5UG03G0040sPc4-cQ8yAFCqAF",                     tag:'C' }, // CG reward // TODO: get sample to test import
+		413101 : { name:"3A Power Plant, OC",                    modulehash:"HA5UG-7G0036upD8ypDCvcQ",                         tag:'C' }, // CG reward // TODO: get sample to test import
+		414101 : { name:"4A Power Plant, OC",                    modulehash:"HA72G-7G0036upD8ypDCvcQ",                         tag:'C' }, // CG reward // TODO: get sample to test import
+		415101 : { name:"5A Power Plant, OC",                    modulehash:"HA8cG-7G0036upD8ypDCvcQ",                         tag:'C' }, // CG reward // TODO: get sample to test import
+		433100 : { name:"3A FSD, IR+FB",                         modulehash:"HAakG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             tag:'C' }, // CG reward // TODO: get sample to test import
+		434100 : { name:"4A FSD, IR+FB",                         modulehash:"HAcIG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             tag:'C' }, // CG reward // TODO: get sample to test import
+		435100 : { name:"5A FSD \"V1\", IR+FB",                  modulehash:"HAdsG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // human tech broker
+		436100 : { name:"6A FSD, IR+FB",                         modulehash:"HAfQG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             tag:'C' }, // CG reward // TODO: get sample to test import
 		
-		  5510 : { name:"5E Anti-Corrosion Cargo (32T)",         modulehash:"H08d00",                                          available:0 }, // CG reward
-		  6510 : { name:"6E Anti-Corrosion Cargo (64T)",         modulehash:"H0AB00",                                          available:0 }, // CG reward
+		  5510 : { name:"5E Anti-Corrosion Cargo (32T)",         modulehash:"H08d00",                                          tag:'C' }, // CG reward
+		  6510 : { name:"6E Anti-Corrosion Cargo (64T)",         modulehash:"H0AB00",                                          tag:'C' }, // CG reward
 		
-		303100 : { name:"3A Shield Gen, KR+TR",                  modulehash:"F7PcG05G0044sPc8wPccupDgvcQ",                     available:0 }, // CG reward // TODO: get sample to test import
-		111300 : { name:"1I DSS \"V1\", ERx2",                   modulehash:"H2jwG-9G_W1P000",                                 available:1 }, // human tech broker
+		303100 : { name:"3A Shield Gen, KR+TR",                  modulehash:"F7PcG05G0044sPc8wPccupDgvcQ",                     tag:'C' }, // CG reward // TODO: get sample to test import
+		111300 : { name:"1I DSS \"V1\", ERx2",                   modulehash:"H2jwG-9G_W1P000",                                 tag:'T' }, // human tech broker
 	};
 	var LANGS = ["en","zh","cs","fr","de","hu","it","ja","pt","ru","es"]; // TODO cn? ko? pl?
 	var UNIT_ABBR_TRANSLATIONS = {
@@ -391,6 +365,12 @@ window.edsy = new (function() {
 		}
 		return c;
 	}; // getCookies()
+	
+	
+	var createIcon = function(icon) {
+		return (cache.icon[icon] || cache.icon['unknown'] || document.createTextNode('?')).cloneNode(true);
+	}; // createIcon()
+	
 	
 	/* TODO not needed?
 	var appendTextLines = function(el, text, lines) {
@@ -2288,7 +2268,7 @@ window.edsy = new (function() {
 					for (var slotnum = 0;  slot = this.getSlot(slotgroup, slotnum);  slotnum++) {
 						var mid = slot.getModuleID();
 						var module = cache.shipModules[sid][mid] || eddb.module[mid];
-						if (module && module.fdid && !fdidFlag[module.fdid] && module.tag !== 'P') {
+						if (module && module.fdid && !fdidFlag[module.fdid] && module.tag !== 'C' && module.tag !== 'P' && module.tag !== 'T') {
 							fdidFlag[module.fdid] = true;
 							fdidList.push(module.fdid);
 						}
@@ -2326,7 +2306,7 @@ window.edsy = new (function() {
 					for (var slotnum = 0;  slot = this.getSlot(slotgroup, slotnum);  slotnum++) {
 						var mid = slot.getModuleID();
 						var module = cache.shipModules[sid][mid] || eddb.module[mid];
-						if (module && module.eddbid && !idFlag[module.eddbid] && module.tag !== 'P') {
+						if (module && module.eddbid && !idFlag[module.eddbid] && module.tag !== 'C' && module.tag !== 'P' && module.tag !== 'T') {
 							idFlag[module.eddbid] = true;
 							idList.push(module.eddbid);
 						}
@@ -4058,17 +4038,17 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	var getModuleLabelDOM = function(module, abbrev, icons) {
 		var df = document.createDocumentFragment();
+		if (module.tag && icons)
+			df.append(createIcon(ICON_TAG[module.tag]), ' ');
 		df.append(''+module.class, createTranslatedElement('span', 'rating-'+module.rating.toLowerCase()));
 		if (module.mount || module.missile || module.cabincls)
 			df.appendChild(createTranslatedElement('span', 'divider'));
 		if (module.mount)
-			df.appendChild(icons ? (cache.icon[ICON_MOUNT[  module.mount  ]] || cache.icon['unknown']).cloneNode(true) : createTranslatedElement('span', 'mount-'  +module.mount.toLowerCase()  +'-abbr'));
+			df.appendChild(icons ? createIcon(ICON_MOUNT[  module.mount  ]) : createTranslatedElement('span', 'mount-'  +module.mount.toLowerCase()  +'-abbr'));
 		if (module.missile)
-			df.appendChild(icons ? (cache.icon[ICON_MISSILE[module.missile]] || cache.icon['unknown']).cloneNode(true) : createTranslatedElement('span', 'missile-'+module.missile.toLowerCase()+'-abbr'));
+			df.appendChild(icons ? createIcon(ICON_MISSILE[module.missile]) : createTranslatedElement('span', 'missile-'+module.missile.toLowerCase()+'-abbr'));
 		if (module.cabincls)
 			df.appendChild(createTranslatedElement('span', 'cabincls-'+module.cabincls.toLowerCase()+'-abbr'));
-		if (module.tag && icons)
-			df.appendChild((cache.icon[ICON_TAG[module.tag]] || cache.icon['unknown']).cloneNode(true));
 		var key = 'module-' + (module.namekey || module.id);
 		if (abbrev) {
 			abbrev = ((eddb.mtype[module.mtype] || EMPTY_OBJ).modulenames || EMPTY_OBJ)[module.name];
@@ -4575,32 +4555,6 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	
 	var initCache = function() {
-		// initialize default builtin options
-		for (var bmodid in BUILTIN_STORED_MODULES) {
-			var opt = 'builtin' + bmodid;
-			current.option[opt] = (BUILTIN_STORED_MODULES[bmodid].available ? true : false);
-		}
-		
-		// store default CSS options
-		var compStyle = getComputedStyle(document.documentElement);
-		for (var i = 0;  i < CSS_FONTS.length;  i++) {
-			var opt = 'font' + CSS_FONTS[i];
-			cache.option[opt] = compStyle.getPropertyValue('--' + opt).trim();
-			current.option[opt] = '';
-		}
-		current.option.colorinvert = cache.option.colorinvert = false;
-		for (var n = 1;  n <= 5;  n++) {
-			var opt = 'colorgrey' + n;
-			cache.option[opt] = compStyle.getPropertyValue('--' + opt).trim();
-		}
-		for (var i = 0;  i < CSS_COLORS.length;  i++) {
-			for (var n = 1;  n <= 5;  n++) {
-				var opt = 'color' + CSS_COLORS[i] + n;
-				cache.option[opt] = compStyle.getPropertyValue('--' + opt).trim();
-				current.option[opt] = '';
-			}
-		}
-		
 		// initialize and tag ships
 		cache.ships = Object.keys(eddb.ship);
 		for (var sid in eddb.ship)
@@ -4721,6 +4675,37 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		cache.discounts = Object.keys(cache.discountMod);
 		cache.discounts.sort(sortDiscounts);
+		
+		// store default CSS options
+		var compStyle = getComputedStyle(document.documentElement);
+		for (var i = 0;  i < CSS_FONTS.length;  i++) {
+			var opt = 'font' + CSS_FONTS[i];
+			cache.option[opt] = compStyle.getPropertyValue('--' + opt).trim();
+			current.option[opt] = '';
+		}
+		current.option.colorinvert = cache.option.colorinvert = false;
+		for (var n = 1;  n <= 5;  n++) {
+			var opt = 'colorgrey' + n;
+			cache.option[opt] = compStyle.getPropertyValue('--' + opt).trim();
+		}
+		for (var i = 0;  i < CSS_COLORS.length;  i++) {
+			for (var n = 1;  n <= 5;  n++) {
+				var opt = 'color' + CSS_COLORS[i] + n;
+				cache.option[opt] = compStyle.getPropertyValue('--' + opt).trim();
+				current.option[opt] = '';
+			}
+		}
+		
+		// initialize default builtin options
+		var build = new Build(1);
+		var slot = build.getDetachedSlot();
+		for (var bmodid in BUILTIN_STORED_MODULES) {
+			// update modulehash of all builtin stored modules to the latest hash version, so that lookups by hash will work
+			slot.setStoredHash(BUILTIN_STORED_MODULES[bmodid].modulehash, null, true);
+			BUILTIN_STORED_MODULES[bmodid].modulehash = slot.getStoredHash();
+			var opt = 'builtin' + bmodid;
+			current.option[opt] = ((BUILTIN_STORED_MODULES[bmodid].tag === 'T') ? true : false);
+		}
 		
 		// create DOM templates for each defined SVG icon
 		var div = document.createElement('div');
@@ -5171,12 +5156,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				var button = document.createElement('button');
 				button.name = 'storedbuild_rename';
 				button.value = namehash;
-				button.appendChild(cache.icon['rename'].cloneNode(true));
+				button.appendChild(createIcon('rename'));
 				tr.cells[1].appendChild(button);
 				var button = document.createElement('button');
 				button.name = 'storedbuild_delete';
 				button.value = namehash;
-				button.appendChild(cache.icon['delete'].cloneNode(true));
+				button.appendChild(createIcon('delete'));
 				tr.cells[1].appendChild(button);
 				tr.cells[2].appendChild(createTranslatedElement('span', 'ship-'+build.getShipID()));
 				tbody.appendChild(tr);
@@ -5530,7 +5515,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		var button = document.createElement('button');
-		button.appendChild(cache.icon['clipboard'].cloneNode(true));
+		button.appendChild(createIcon('clipboard'));
 		button.addEventListener('click', onUIPopupExportCopyButtonClick);
 		td.appendChild(button);
 		tr.appendChild(td);
@@ -5578,7 +5563,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var button = document.createElement('button');
 		button.name = 'export_short_button';
 		button.style.display = 'none';
-		button.appendChild(cache.icon['clipboard'].cloneNode(true));
+		button.appendChild(createIcon('clipboard'));
 		button.addEventListener('click', onUIPopupExportCopyButtonClick);
 		td.appendChild(button);
 		tr.appendChild(td);
@@ -5603,7 +5588,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		var button = document.createElement('button');
-		button.appendChild(cache.icon['clipboard'].cloneNode(true));
+		button.appendChild(createIcon('clipboard'));
 		button.addEventListener('click', onUIPopupExportCopyButtonClick);
 		td.appendChild(button);
 		tr.appendChild(td);
@@ -5628,7 +5613,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		var button = document.createElement('button');
-		button.appendChild(cache.icon['clipboard'].cloneNode(true));
+		button.appendChild(createIcon('clipboard'));
 		button.addEventListener('click', onUIPopupExportCopyButtonClick);
 		td.appendChild(button);
 		tr.appendChild(td);
@@ -5722,7 +5707,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var a = document.createElement('a');
 		a.href = 'fdapi?auth=A';
 		a.appendChild(createTranslatedElement('span', 'ui-import-authorize'+(cmdrs.length ? '-another' : '')));
-		a.append(' ', cache.icon['xref'].cloneNode(true));
+		a.append(' ', createIcon('xref'));
 		li.appendChild(a);
 		ul.appendChild(li);
 		df.appendChild(ul);
@@ -5769,7 +5754,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 						var li = document.createElement('li');
 						var a = document.createElement('a');
 						a.href = response['location'];
-						a.append(createTranslatedElement('ui-import-reauthorize'), ' ', cache.icon['xref'].cloneNode(true));
+						a.append(createTranslatedElement('ui-import-reauthorize'), ' ', createIcon('xref'));
 						li.appendChild(a);
 						ul.appendChild(li);
 						df.appendChild(ul);
@@ -5796,7 +5781,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					var li = document.createElement('li');
 					var a = document.createElement('a');
 					a.href = 'fdapi?auth=I';
-					a.append(createTranslatedElement('ui-import-reauthorize'), ' ', cache.icon['xref'].cloneNode(true));
+					a.append(createTranslatedElement('ui-import-reauthorize'), ' ', createIcon('xref'));
 					li.appendChild(a);
 					ul.appendChild(li);
 					df.appendChild(ul);
@@ -5873,7 +5858,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			var button = document.createElement('button');
 			button.className = 'import_' + actions[a];
 			button.name = 'import_' + actions[a];
-			button.appendChild(cache.icon[actions[a]].cloneNode(true));
+			button.appendChild(createIcon(actions[a]));
 			button.addEventListener('click', onUIPopupImportButtonClick);
 			th.appendChild(button);
 		}
@@ -5887,7 +5872,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		th.className = 'colgroup first stickytop';
 		var button = document.createElement('button');
 		button.name = 'import_load_none';
-		button.appendChild(cache.icon['import'].cloneNode(true));
+		button.appendChild(createIcon('import'));
 		button.addEventListener('click', onUIPopupImportButtonClick);
 		th.appendChild(button);
 		tr.appendChild(th);
@@ -5969,7 +5954,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			var label = document.createElement('label');
 			label.className = 'togglebutton';
 			label.htmlFor = input.id;
-			label.appendChild(cache.icon[actions[a]].cloneNode(true));
+			label.appendChild(createIcon(actions[a]));
 			div.appendChild(label);
 		}
 		var span = createTranslatedElement('span', 'ui-import-ignore');
@@ -5985,7 +5970,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var abbr = document.createElement('abbr');
 		abbr.id = 'import_warning_' + index;
 		abbr.style.display = 'none';
-		abbr.appendChild(cache.icon['warning'].cloneNode(true));
+		abbr.appendChild(createIcon('warning'));
 		abbr.title = '';
 		div.appendChild(abbr);
 		td.appendChild(div);
@@ -6004,7 +5989,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var label = document.createElement('label');
 		label.className = 'togglebutton';
 		label.htmlFor = input.id;
-		label.appendChild(cache.icon['import'].cloneNode(true));
+		label.appendChild(createIcon('import'));
 		td.appendChild(label);
 		tr.appendChild(td);
 		
@@ -6274,7 +6259,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			}
 			if (importdata.warning.firstChild) {
 				var div = document.createElement('div');
-				div.append(cache.icon['warning'].cloneNode(true), ' ', importdata.warning);
+				div.append(createIcon('warning'), ' ', importdata.warning);
 				status.appendChild(div);
 			}
 			updateTranslations(status);
@@ -6677,7 +6662,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 						input.name = 'module';
 						input.value = mID + '.';
 						var div = document.createElement('div');
-						div.append(cache.icon['warning'].cloneNode(true), getModuleLabelDOM(module, true, true));
+						div.append(createIcon('warning'), getModuleLabelDOM(module, true, true));
 						label.appendChild(input);
 						label.appendChild(div);
 						label.htmlFor = input.id;
@@ -6751,7 +6736,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					classes += ' fitsize' + c;
 				}
 				if (stored.name.startsWith(" ")) {
-					classes += ' builtin' + (stored.community ? ' community' : '') + (stored.techbroker ? ' techbroker' : '');
+					classes += ' builtin';
 				}
 				if (stored.engineer) {
 					classes += ' engineer';
@@ -6767,10 +6752,11 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				input.value = stored.modid + '.' + namehash;
 				var div = document.createElement('div');
 				div.innerHTML = encodeHTML(stored.name); // TODO translated builtin stored module names
-				div.prepend(cache.icon['community'].cloneNode(true));
-				div.prepend(cache.icon['techbroker'].cloneNode(true));
-				div.prepend(cache.icon['engineer'].cloneNode(true));
-				div.prepend(cache.icon['warning'].cloneNode(true));
+				if (module.tag) div.prepend(createIcon(ICON_TAG[module.tag]));
+				if (stored.tag) div.prepend(createIcon(ICON_TAG[stored.tag]));
+				if (module.tag || stored.tag) div.prepend(' ');
+				div.prepend(createIcon('engineer'));
+				div.prepend(createIcon('warning'));
 				label.appendChild(input);
 				label.appendChild(div);
 				label.htmlFor = input.id;
@@ -6993,7 +6979,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		input.name = 'slot';
 		input.value = group_slot;
 		var div = document.createElement('div');
-		div.appendChild(cache.icon['warning'].cloneNode(true)); // dynamically hidden
+		div.appendChild(createIcon('warning')); // dynamically hidden
 		var span = document.createElement('span');
 		span.id = 'outfitting_fit_name_' + group_slot;
 		div.appendChild(span);
@@ -7648,7 +7634,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			el.replaceChildren();
 		}
 		if (slot.isModified())
-			el.prepend(cache.icon['engineer'].cloneNode(true));
+			el.prepend(createIcon('engineer'));
 		
 		var value = slot.getEffectiveAttrValue('mass') || 0;
 		var direction = getAttrModifierDirection('mass', slot.getEffectiveAttrModifier('mass'));
@@ -8163,7 +8149,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		if (current.option.builtin !== 'none') {
 			for (var bmodid in BUILTIN_STORED_MODULES) {
 				var builtin = BUILTIN_STORED_MODULES[bmodid];
-				if (current.option.builtin === 'all' || builtin.available || current.option['builtin'+bmodid]) {
+				if (current.option.builtin === 'all' || (builtin.tag !== 'C') || current.option['builtin'+bmodid]) {
 					var name = " "+builtin.name;
 					var namehash = hashEncodeS(name);
 					var stored = {
@@ -8172,8 +8158,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 						name:name,
 						modulehash:builtin.modulehash,
 						engineer:Slot.isStoredHashModified(builtin.modulehash),
-						community:!builtin.available,
-						techbroker:builtin.available,
+						tag:builtin.tag,
 					};
 					current.stored.moduleNamehashStored[0][namehash] = stored;
 					current.stored.modulehashStored[stored.modulehash] = stored;
@@ -8443,12 +8428,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				el.setAttribute('edsy-text', 'ship-'+modid);
 				el.innerText = module.name;
 			} else {
-				el.removeAttribute('edsy-text');
-				el.replaceChildren(getModuleLabelDOM(module, false, true));
-				if (slot.isModified()) el.appendChild(cache.icon['engineer']);
 				var stored = current.stored.modulehashStored[slot.getStoredHash()] || EMPTY_OBJ;
-				if (stored.techbroker) el.appendChild(cache.icon['techbroker']);
-				if (stored.community) el.appendChild(cache.icon['community']);
+				el.removeAttribute('edsy-text');
+				el.replaceChildren();
+				if (stored.tag) el.append(createIcon(ICON_TAG[stored.tag]), ' ');
+				el.appendChild(getModuleLabelDOM(module, false, true));
+				if (slot.isModified()) el.appendChild(createIcon('engineer'));
 			}
 		} else if (current.outfitting_focus === 'slot') {
 			el.setAttribute('edsy-text', 'note-empty-slot');
@@ -9841,7 +9826,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		var button = document.createElement('button');
-		button.appendChild(cache.icon['clipboard'].cloneNode(true));
+		button.appendChild(createIcon('clipboard'));
 		button.addEventListener('click', onUIPopupExportCopyButtonClick);
 		td.appendChild(button);
 		tr.appendChild(td);
@@ -9866,7 +9851,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		var button = document.createElement('button');
-		button.appendChild(cache.icon['clipboard'].cloneNode(true));
+		button.appendChild(createIcon('clipboard'));
 		button.addEventListener('click', onUIPopupExportCopyButtonClick);
 		td.appendChild(button);
 		tr.appendChild(td);
@@ -9891,7 +9876,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		tr.appendChild(td);
 		var td = document.createElement('td');
 		var button = document.createElement('button');
-		button.appendChild(cache.icon['clipboard'].cloneNode(true));
+		button.appendChild(createIcon('clipboard'));
 		button.addEventListener('click', onUIPopupExportCopyButtonClick);
 		td.appendChild(button);
 		tr.appendChild(td);
@@ -9925,7 +9910,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			var abbr = document.createElement('abbr');
 			abbr.setAttribute('edsy-title', 'ui-retrofit-export-warning-edomh-multiple');
 			abbr.title = getTranslation('ui-retrofit-export-warning-edomh-multiple');
-			abbr.append(span, cache.icon['warning'].cloneNode(true));
+			abbr.append(span, createIcon('warning'));
 			span = abbr;
 		}
 		link.append(img, ' ', span);
@@ -10034,7 +10019,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					if (steps[s].act === 'Buy') {
 						if (steps[s].sgrp === 'ship' && ship.fdid) {
 							fdidShips[ship.fdid] = true;
-						} else if (steps[s].sgrp !== 'ship' && module.fdid && module.tag !== 'P') {
+						} else if (steps[s].sgrp !== 'ship' && module.fdid && module.tag !== 'C' && module.tag !== 'P' && module.tag !== 'T') {
 							fdidModules[module.fdid] = true;
 						}
 					}
@@ -10183,7 +10168,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					var input = document.createElement('input');
 					input.type = 'checkbox';
 					input.name = 'builtin' + bmodid;
-					input.disabled = !!BUILTIN_STORED_MODULES[bmodid].available;
+					input.disabled = (BUILTIN_STORED_MODULES[bmodid].tag === 'T');
 					label.appendChild(input);
 					var divWrapper = document.createElement('div');
 					var divCheck = document.createElement('div');
@@ -10191,7 +10176,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					divWrapper.appendChild(divCheck);
 					var span = document.createElement('span');
 					span.append(
-						cache.icon[BUILTIN_STORED_MODULES[bmodid].available ? 'techbroker' : 'community'].cloneNode(true),
+						createIcon(ICON_TAG[BUILTIN_STORED_MODULES[bmodid].tag]),
 						' ',
 						BUILTIN_STORED_MODULES[bmodid].name // TODO translation
 					);
@@ -10301,7 +10286,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		elements.builtin.value = current.option.builtin;
 		for (var bmodid in BUILTIN_STORED_MODULES) {
 			var opt = 'builtin' + bmodid;
-			elements[opt].checked = BUILTIN_STORED_MODULES[bmodid].available || current.option[opt];
+			elements[opt].checked = (BUILTIN_STORED_MODULES[bmodid].tag === 'T') || current.option[opt];
 		}
 		document.getElementById('options_builtin').style.display = ((current.option.builtin === 'some') ? '' : 'none');
 		elements.onlybest.checked = current.option.onlybest;

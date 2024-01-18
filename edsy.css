@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 
 :root {
-	--edsy-versions-css: v-308179904-308179904-308159902-308179904; /* HTML,CSS,DB,JS */
-	--edsy-lastmodified-css: d-20240115;
+	--edsy-versions-css: v-308179904-308179905-308159902-308179904; /* HTML,CSS,DB,JS */
+	--edsy-lastmodified-css: d-20240118;
 	
 	--colorblack: black;
 	--colorwhite: white;
@@ -346,15 +346,26 @@ TEXTAREA::-webkit-scrollbar-thumb {
 	height: 13px;
 	line-height: 13px;
 }
-.iconsvg.warning {
-	color: var(--colorred3);
-}
-.iconsvg.guardian,
 .iconsvg.blueprint {
+	color: var(--colorblue5);
+}
+.iconsvg.community {
+	color: var(--colorgreen5);
+}
+.iconsvg.engineer {
+	color: var(--colororange5);
+}
+.iconsvg.guardian {
 	color: var(--colorblue5);
 }
 .iconsvg.powerplay {
 	color: var(--coloryellow4);
+}
+.iconsvg.techbroker {
+	color: var(--colorblue4);
+}
+.iconsvg.warning {
+	color: var(--colorred3);
 }
 
 .togglebutton {
@@ -1372,24 +1383,18 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	position: relative;
 	right: 0;
 }
-#outfitting_modules_picker .togglebutton INPUT.notenough + DIV .iconsvg.warning {
-	display: inline-block;
-}
-#outfitting_modules_picker .togglebutton INPUT + DIV .iconsvg.community,
-#outfitting_modules_picker .togglebutton INPUT + DIV .iconsvg.techbroker,
 #outfitting_modules_picker .togglebutton INPUT + DIV .iconsvg.engineer {
 	display: none;
 	float: right;
 	margin: 3px 0;
 }
-#outfitting_modules_picker .row.community .togglebutton INPUT + DIV .iconsvg.community,
-#outfitting_modules_picker .row.techbroker .togglebutton INPUT + DIV .iconsvg.techbroker,
+#outfitting_modules_picker .togglebutton INPUT.notenough + DIV .iconsvg.warning,
 #outfitting_modules_picker .row.engineer .togglebutton INPUT + DIV .iconsvg.engineer {
 	display: inline-block;
 }
-#page_body_outfitting.focusmodule #outfitting_modules_picker .togglebutton INPUT:checked + DIV .iconsvg.tinted,
-#outfitting_modules_picker .togglebutton INPUT:active + DIV .iconsvg.tinted,
-#outfitting_modules_picker .togglebutton.active INPUT + DIV .iconsvg.tinted {
+#outfitting_modules_picker .togglebutton INPUT:checked + DIV .iconsvg,
+#outfitting_modules_picker .togglebutton INPUT:active + DIV .iconsvg,
+#outfitting_modules_picker .togglebutton.active INPUT + DIV .iconsvg {
 	color: inherit;
 }
 
@@ -1431,16 +1436,16 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	background-color: var(--colorred5);
 	color: var(--colorblack);
 }
-#outfitting_modules_picker .togglebutton INPUT.notallowed + DIV .iconsvg.tinted,
-#outfitting_modules_picker.size1 .sized:not(.fitsize1) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.size2 .sized:not(.fitsize2) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.size3 .sized:not(.fitsize3) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.size4 .sized:not(.fitsize4) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.size5 .sized:not(.fitsize5) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.size6 .sized:not(.fitsize6) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.size7 .sized:not(.fitsize7) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.size8 .sized:not(.fitsize8) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.reserved .mtype:not(.reserved) .togglebutton INPUT + DIV .iconsvg.tinted {
+#outfitting_modules_picker .togglebutton INPUT.notallowed + DIV .iconsvg,
+#outfitting_modules_picker.size1 .sized:not(.fitsize1) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.size2 .sized:not(.fitsize2) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.size3 .sized:not(.fitsize3) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.size4 .sized:not(.fitsize4) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.size5 .sized:not(.fitsize5) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.size6 .sized:not(.fitsize6) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.size7 .sized:not(.fitsize7) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.size8 .sized:not(.fitsize8) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.reserved .mtype:not(.reserved) .togglebutton INPUT + DIV .iconsvg {
 	color: inherit;
 }
 
@@ -1497,21 +1502,21 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	background-color: var(--colorgrey5);
 	color: var(--colorblack);
 }
-#outfitting_modules_picker.hardpoint .group:not(.hardpoint) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.utility .group:not(.utility) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.component:not(.component_FT) .group:not(.component) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.component_BH .mtype:not(.cbh) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.component_PP .mtype:not(.cpp) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.component_TH .mtype:not(.ct) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.component_FD .mtype:not(.cfsd) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.component_LS .mtype:not(.cls) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.component_PD .mtype:not(.cpd) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.component_SS .mtype:not(.cs) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.component_FT .group:not(.internal) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.component_FT .mtype:not(.cft) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.military .group:not(.internal) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.military .mtype:not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb) .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_modules_picker.internal .group:not(.internal) .togglebutton INPUT + DIV .iconsvg.tinted {
+#outfitting_modules_picker.hardpoint .group:not(.hardpoint) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.utility .group:not(.utility) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.component:not(.component_FT) .group:not(.component) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.component_BH .mtype:not(.cbh) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.component_PP .mtype:not(.cpp) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.component_TH .mtype:not(.ct) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.component_FD .mtype:not(.cfsd) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.component_LS .mtype:not(.cls) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.component_PD .mtype:not(.cpd) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.component_SS .mtype:not(.cs) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.component_FT .group:not(.internal) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.component_FT .mtype:not(.cft) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.military .group:not(.internal) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.military .mtype:not(.ihrp):not(.isrp):not(.imahrp):not(.imrp):not(.iscb) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.internal .group:not(.internal) .togglebutton INPUT + DIV .iconsvg {
 	color: inherit;
 }
 
@@ -1977,16 +1982,16 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 
 #page_body_outfitting.focusslot #outfitting_fit_slots .togglebutton INPUT:checked + DIV SPAN:empty::after,
-#page_body_outfitting.focusslot #outfitting_fit_slots .togglebutton INPUT:checked + DIV .iconsvg.tinted,
+#page_body_outfitting.focusslot #outfitting_fit_slots .togglebutton INPUT:checked + DIV .iconsvg,
 #outfitting_fit_slots .togglebutton INPUT:active + DIV SPAN:empty::after,
 #outfitting_fit_slots .togglebutton.active INPUT + DIV SPAN:empty::after,
-#outfitting_fit_slots .togglebutton INPUT:active + DIV .iconsvg.tinted,
-#outfitting_fit_slots .togglebutton.active INPUT + DIV .iconsvg.tinted,
+#outfitting_fit_slots .togglebutton INPUT:active + DIV .iconsvg,
+#outfitting_fit_slots .togglebutton.active INPUT + DIV .iconsvg,
 #outfitting_fit_slots .notallowed .togglebutton INPUT + DIV SPAN:empty::after,
-#outfitting_fit_slots .notallowed .togglebutton INPUT + DIV .iconsvg.tinted,
+#outfitting_fit_slots .notallowed .togglebutton INPUT + DIV .iconsvg,
 #outfitting_fit_slots .overlimit .togglebutton INPUT + DIV SPAN:empty::after,
-#outfitting_fit_slots .overlimit .togglebutton INPUT + DIV .iconsvg.tinted,
-#outfitting_fit_slots .dragerror .togglebutton INPUT + DIV .iconsvg.tinted {
+#outfitting_fit_slots .overlimit .togglebutton INPUT + DIV .iconsvg,
+#outfitting_fit_slots .dragerror .togglebutton INPUT + DIV .iconsvg {
 	color: inherit;
 }
 
@@ -2309,8 +2314,6 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	font-weight: bold;
 }
 
-#outfitting_details_label .iconsvg.community,
-#outfitting_details_label .iconsvg.techbroker,
 #outfitting_details_label .iconsvg.engineer {
 	float: right;
 	margin: 3px 0;
