@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308179904,308179904,308179901,308179904]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20240117;
+	var VERSIONS = [308179904,308179904,308179901,308179905]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20240118;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -6444,8 +6444,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			updateUIDetailsStoredModuleControls();
 			updateUIAnalysisStoredBuilds();
 			current.importdata = null;
-			if (cache.lang != current.lang)
-				loadTranslations().then(updateTranslations);
+			loadTranslations(true); // async
 		} else {
 			var html = createTranslatedElement('span', 'ui-import-warning-invalid');
 			var trigger = document.getElementById('outfitting_fit_import');
@@ -6593,9 +6592,15 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	
 	var initUIModulePicker = function() {
-		// build picker DOM
-		var divPicker = document.createElement('div');
-		divPicker.id = 'outfitting_modules_picker';
+		// (re)build picker DOM
+		var divPicker = document.getElementById('outfitting_modules_picker');
+		if (divPicker) {
+			divPicker.parentNode.removeChild(divPicker);
+			divPicker.replaceChildren();
+		} else {
+			divPicker = document.createElement('div');
+			divPicker.id = 'outfitting_modules_picker';
+		}
 		
 		var divRow = document.createElement('div');
 		divRow.className = 'row empty';
@@ -10163,11 +10168,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		
 		var divBuiltinHardpoints = document.getElementById('options_builtin_hardpoints');
-		while (divBuiltinHardpoints.lastChild)
-			divBuiltinHardpoints.removeChild(divBuiltinHardpoints.lastChild);
+		divBuiltinHardpoints.replaceChildren();
 		var divBuiltinOther = document.getElementById('options_builtin_other');
-		while (divBuiltinOther.lastChild)
-			divBuiltinOther.removeChild(divBuiltinOther.lastChild);
+		divBuiltinOther.replaceChildren();
 		for (var g = 0;  g < GROUPS.length;  g++) {
 			var group = GROUPS[g];
 			for (var t = 0;  t < (cache.groupMtypes[group] || EMPTY_ARR).length;  t++) {
@@ -10175,6 +10178,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				for (var b = 0;  b < (cache.mtypeBuiltins[mtype] || EMPTY_ARR).length;  b++) {
 					var bmodid = cache.mtypeBuiltins[mtype][b];
 					var label = document.createElement('label');
+					label.id = 'options_builtin_' + bmodid;
 					label.className = "checkbox left";
 					var input = document.createElement('input');
 					input.type = 'checkbox';
@@ -10205,6 +10209,23 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			select.options.add(option);
 		}
 	}; // initUIOptions()
+	
+	
+	var sortUIOptionsBuiltins = function() {
+		var divBuiltinHardpoints = document.getElementById('options_builtin_hardpoints');
+		var divBuiltinOther = document.getElementById('options_builtin_other');
+		for (var g = 0;  g < GROUPS.length;  g++) {
+			var group = GROUPS[g];
+			for (var t = 0;  t < (cache.groupMtypes[group] || EMPTY_ARR).length;  t++) {
+				var mtype = cache.groupMtypes[group][t];
+				for (var b = 0;  b < (cache.mtypeBuiltins[mtype] || EMPTY_ARR).length;  b++) {
+					var bmodid = cache.mtypeBuiltins[mtype][b];
+					var label = document.getElementById('options_builtin_' + bmodid);
+					((group === 'hardpoint') ? divBuiltinHardpoints : divBuiltinOther).appendChild(label);
+				}
+			}
+		}
+	}; // sortUIOptionsBuiltins()
 	
 	
 	var updateUIOptions = function() {
@@ -11732,8 +11753,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		
 		writeStoredOptions();
 		
-		if (cache.lang != current.lang)
-			loadTranslations().then(updateTranslations);
+		loadTranslations(true); // async
 	}; // onUIOptionsChange()
 	
 	
@@ -11857,8 +11877,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		updateUIModulePickerStoredModules();
 		updateUIDetailsStoredModules();
 		updateUIDetailsStoredModuleControls();
-		if (cache.lang != current.lang)
-			loadTranslations().then(updateTranslations);
+		loadTranslations(true); // async
 	}; // onStorageEvent()
 	
 	
@@ -11962,7 +11981,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // verifyVersionSync()
 	
 	
-	var loadTranslations = async function() {
+	var loadTranslations = async function(update) {
 		var lang = current.lang;
 		if (cache.lang == lang)
 			return;
@@ -11972,9 +11991,11 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		if (!response.ok) {
 			if (lang != LANGS[0]) {
 				current.lang = LANGS[0];
-				await loadTranslations();
+				await loadTranslations(update);
+				return;
 			}
 			throw new Error("failed to load " + lang + " translations");
+			return;
 		}
 		var text = await response.text();
 		text = text.replace(/(\/\/[^"]*|\/\*[^"]*\*\/\s*)$/gm, '');
@@ -11988,6 +12009,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		cache.translation = translation;
 		// 'en' should be the first one loaded
 		cache.translationDefault = cache.translationDefault || translation;
+		
+		if (update)
+			await updateTranslations(); // async
 	}; // loadTranslations()
 	
 	
@@ -12020,13 +12044,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	
 	var updateTranslations = function(doc) {
-		// re-sort cache using new translations
-		sortCache();
-		
-		var attrs = { "edsy-text": "innerText", "edsy-title": "title" };
 		var t0 = Date.now();
-		if (!doc)
-			document.documentElement.style.setProperty('--textempty', "'"+getTranslation('note-empty')+"'");
+
+		var attrs = { "edsy-text": "innerText", "edsy-title": "title" };
 		for (var keyattr in attrs) {
 			var setattr = attrs[keyattr];
 			(doc || document).querySelectorAll("["+keyattr+"]").forEach(function (el) {
@@ -12048,7 +12068,18 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				}
 			});
 		}
-		sortUIShipyardTable(document.getElementById('shipyard_ships_table'), UI_SHIPYARD_SHIPS_COLS);
+		
+		// if updating the whole page, re-sort cache using new translations and re-draw UI elements based on those sorts
+		if (!doc) {
+			document.documentElement.style.setProperty('--textempty', "'"+getTranslation('note-empty')+"'");
+			sortCache();
+			sortUIShipyardTable(document.getElementById('shipyard_ships_table'), UI_SHIPYARD_SHIPS_COLS);
+			initUIModulePicker();
+			updateUIModulePickerStoredModules();
+			sortUIOptionsBuiltins();
+			updateUIDetailsModule();
+		}
+		
 		var t1 = Date.now();
 		if (!doc && current.dev) console.log("updateTranslations(): '" + cache.lang + "' completed in " + (t1-t0) + "ms");
 	}; // updateTranslations()
@@ -12289,7 +12320,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	// if we're in interactive mode, queue the remaining UI init
 	if (document.title === 'EDSY') {
-		window.addEventListener('DOMContentLoaded', function() { loadTranslations().then(onDOMContentLoaded); });
+		window.addEventListener('DOMContentLoaded', function() { loadTranslations(false).then(onDOMContentLoaded); });
 	} else {
 		this.Build = Build;
 		this.Slot = Slot;
