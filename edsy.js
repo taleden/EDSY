@@ -12030,7 +12030,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		if (cache.lang == lang)
 			return;
 		
-		var file = "lang-" + lang + ((lang == LANG_DEFAULT) ? ".jsonc" : ".json");
+		var file = "lang-" + lang + ".json";
 		var response = await fetch(file);
 		if (!response.ok) {
 			console.log("ERROR: failed to load '" + file + "': " + response.status + " " + response.statusText);
