@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308179904,308179904,308179901,308179905]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20240118;
+	var VERSIONS = [308179904,308179904,308179901,308179906]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20240119;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -139,14 +139,14 @@ window.edsy = new (function() {
 		icon: {},
 		lang: null,
 		translation: {},
-		translationDefault: {},
+		translationDefault: null,
 		reTranslationValue: new RegExp('\{([A-Za-z0-9_-]+)\}', 'g'),
 	};
 	var current = {
 		dev: false,
 		beta: false,
 		locale: undefined,
-		lang: undefined,
+		lang: LANGS[0],
 		hashlock: false,
 		popup: {
 			element: null,
@@ -12004,7 +12004,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var text = cache.translation[key];
 		if (text === undefined) {
 			text = cache.translationDefault[key];
-			if (current.dev) console.log("WARNING: no '" + cache.lang + "'" + ((text === undefined) ? " or default" : '') + " translation for '" + key + "'");
+			if (text === undefined && current.dev) console.log("WARNING: no default translation for '" + key + "'");
  		}
 		if (text && values) {
 			text = text.replaceAll(cache.reTranslationValue, function(match, group1) {
