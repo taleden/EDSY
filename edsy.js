@@ -87,7 +87,23 @@ window.edsy = new (function() {
 		303100 : { name:"3A Shield Gen, KR+TR",                  modulehash:"F7PcG05G0044sPc8wPccupDgvcQ",                     tag:'C' }, // CG reward // TODO: get sample to test import
 		111300 : { name:"1I DSS \"V1\", ERx2",                   modulehash:"H2jwG-9G_W1P000",                                 tag:'T' }, // human tech broker
 	};
-	var LANGS = ["en","zh","cs","fr","de","hu","it","ja","pt","ru","es"]; // TODO cn? ko? nl? pl?
+	var LANG_NAMES = { // TODO cn? ko? nl? pl?
+		"cs": "Čeština",
+		"de": "Deutsch",
+		"en": "English",
+		"es": "Español",
+		"fr": "Français",
+		"it": "Italiano",
+		"hu": "Magyar",
+	//	"nl": "Nederlands",
+		"ja": "日本語",
+		"pt": "Português, Brasileiro",
+		"ru": "Русский",
+		"zh": "简体中文",
+	};
+	var LANGS = Object.keys(LANG_NAMES);
+	var LANG_DEFAULT = 'en';
+	
 	var UNIT_ABBR_TRANSLATIONS = {
 		"%": "unit-percent-abbr",
 		"&deg;": "unit-degrees-abbr",
@@ -146,7 +162,7 @@ window.edsy = new (function() {
 		dev: false,
 		beta: false,
 		locale: undefined,
-		lang: LANGS[0],
+		lang: LANG_DEFAULT,
 		hashlock: false,
 		popup: {
 			element: null,
@@ -4555,6 +4571,13 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	
 	var initCache = function() {
+		// sort languages
+		LANGS.sort(function(l1,l2) {
+			var n1 = LANG_NAMES[l1];
+			var n2 = LANG_NAMES[l2];
+			return ((n1 > n2) ? -1 : ((n2 > n1) ? 1 : (n1 && n2) ? 0 : (n1 ? -1 : (n2 ? 1 : 0))));
+		});
+		
 		// initialize and tag ships
 		cache.ships = Object.keys(eddb.ship);
 		for (var sid in eddb.ship)
@@ -10189,8 +10212,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		
 		var select = document.forms.options.elements.language;
 		for (var l = 0;  l < LANGS.length;  l++) {
-			var option = createTranslatedElement('option', 'language-'+LANGS[l]);
+			var option = document.createElement('option');
 			option.value = LANGS[l];
+			option.append(
+				LANG_NAMES[LANGS[l]],
+				' (',
+				createTranslatedElement('option', 'language-'+LANGS[l]),
+				')'
+			);
 			select.options.add(option);
 		}
 	}; // initUIOptions()
@@ -10244,7 +10273,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					current.option[opt] = '';
 			}
 		}
-		if (LANGS.indexOf(current.option.language) < 0)
+		if (!LANG_NAMES[current.option.language])
 			current.option.language = '';
 		
 		// apply options settings
@@ -10270,8 +10299,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			}
 		}
 		current.lang = current.option.language || (current.locale ? current.locale.substr(0,2) : undefined);
-		if (LANGS.indexOf(current.lang) < 0)
-			current.lang = LANGS[0];
+		if (!LANG_NAMES[current.lang])
+			current.lang = LANG_DEFAULT;
 		
 		// update options controls
 		var elements = document.forms.options.elements;
@@ -11966,6 +11995,36 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // verifyVersionSync()
 	
 	
+	var initBrowser = function() {
+		// sniff env and locale
+		current.dev = (window.location.protocol === 'file:') || (window.location.pathname.indexOf('/dev/') >= 0);
+		current.beta = current.dev || (window.location.pathname.indexOf('/beta/') >= 0);
+		current.locale = ((window.navigator.languages || EMPTY_ARR)[0] || window.navigator.userLanguage || window.navigator.language || window.navigator.browserLanguage || window.navigator.systemLanguage || undefined);
+		current.lang = (current.locale ? current.locale.substr(0,2) : undefined);
+		if (!LANG_NAMES[current.lang])
+			current.lang = LANG_DEFAULT;
+		
+		// test for browser features
+		cache.feature.history = (window.history && window.history.replaceState);
+		cache.feature.file = (window.File && window.FileReader && window.FileList);
+		cache.feature.storage = (window.localStorage && window.localStorage.getItem && window.localStorage.setItem && window.localStorage.removeItem);
+		if (cache.feature.storage) {
+			try {
+				window.localStorage.setItem('edsy_localstorage_test', 'edsy_localstorage_test');
+				if (window.localStorage.getItem('edsy_localstorage_test') !== 'edsy_localstorage_test')
+					throw 'err';
+				window.localStorage.removeItem('edsy_localstorage_test');
+			} catch (err) {
+				cache.feature.storage = false;
+			}
+		}
+		var doc = window.document;
+		var docEl = doc.documentElement;
+		cache.feature.requestFullscreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+		cache.feature.cancelFullscreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+	}; // initBrowser()
+	
+	
 	var loadTranslations = async function(update) {
 		var lang = current.lang;
 		if (cache.lang == lang)
@@ -11974,12 +12033,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var file = "lang-" + lang + ".json";
 		var response = await fetch(file);
 		if (!response.ok) {
-			if (lang != LANGS[0]) {
-				current.lang = LANGS[0];
-				await loadTranslations(update);
-				return;
-			}
-			throw new Error("failed to load " + lang + " translations");
+			console.log("ERROR: failed to load '" + file + "': " + response.status + " " + response.statusText);
 			return;
 		}
 		var text = await response.text();
@@ -11987,7 +12041,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		try {
 			var translation = JSON.parse(text);
 		} catch (exc) {
-			throw new Error("failed to parse " + lang + " translations from " + file + ": " + exc);
+			console.log("failed to parse " + lang + " translations from " + file + ": " + exc.toString());
 			return;
 		}
 		cache.lang = lang;
@@ -12193,28 +12247,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			return false;
 		}
 		
-		// test for browser features
-		cache.feature.history = (window.history && window.history.replaceState);
-		cache.feature.file = (window.File && window.FileReader && window.FileList);
-		cache.feature.storage = (window.localStorage && window.localStorage.getItem && window.localStorage.setItem && window.localStorage.removeItem);
-		if (cache.feature.storage) {
-			try {
-				window.localStorage.setItem('edsy_localstorage_test', 'edsy_localstorage_test');
-				if (window.localStorage.getItem('edsy_localstorage_test') !== 'edsy_localstorage_test')
-					throw 'err';
-				window.localStorage.removeItem('edsy_localstorage_test');
-			} catch (err) {
-				cache.feature.storage = false;
-			}
-		}
-		var doc = window.document;
-		var docEl = doc.documentElement;
-		cache.feature.requestFullscreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
-		cache.feature.cancelFullscreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
-		
 		// process remaining initialization asynchronously so that the loading animation can run
 		var steps = [
 			initCache,
+			initBrowser,
 			
 			// initialize UI
 			initUIShipyardShips,
@@ -12255,14 +12291,6 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		};
 		setTimeout(init, 0);
 	}; // onDOMContentLoaded()
-	
-	// sniff env and locale
-	current.dev = (window.location.protocol === 'file:') || (window.location.pathname.indexOf('/dev/') >= 0);
-	current.beta = current.dev || (window.location.pathname.indexOf('/beta/') >= 0);
-	current.locale = ((window.navigator.languages || EMPTY_ARR)[0] || window.navigator.userLanguage || window.navigator.language || window.navigator.browserLanguage || window.navigator.systemLanguage || undefined);
-	current.lang = (current.locale ? current.locale.substr(0,2) : undefined);
-	if (LANGS.indexOf(current.lang) < 0)
-		current.lang = LANGS[0];
 	
 	// initialize browser features
 	cache.feature.history = false;

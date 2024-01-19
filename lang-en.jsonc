@@ -1,19 +1,19 @@
 {
-	// language names; all except the current language should be followed by the language name in its own language
+	// language names (this language's name for the specified language)
+	"language-cs": "Czech",
+	"language-de": "German",
 	"language-en": "English",
-	"language-cs": "Czech (Čeština)",
-	"language-de": "German (Deutsch)",
-	"language-es": "Spanish (Español)",
-	"language-fr": "French (Français)",
-	"language-hu": "Hungarian (Magyar)",
-	"language-it": "Italian (Italiano)",
-	"language-ja": "Japanese (日本語)",
-	"language-pt": "Portuguese, Brazilian (Português, Brasileiro)",
-	"language-ru": "Russian (Русский)",
-	"language-zh": "Chinese, Simplified (简体中文)",
+	"language-es": "Spanish",
+	"language-fr": "French",
+	"language-hu": "Hungarian",
+	"language-it": "Italian",
+	"language-ja": "Japanese",
+	"language-nl": "Dutch",
+	"language-pt": "Portuguese, Brazilian",
+	"language-ru": "Russian",
+	"language-zh": "Chinese, Simplified",
 	
 	// high-level UI tab labels
-	"edsy": "EDSY",
 	"ui-shipyard": "Shipyard",
 	"ui-outfitting": "Outfitting",
 	"ui-analysis": "Analysis",
