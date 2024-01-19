@@ -1,5 +1,5 @@
 {
-	// language names (this language's name for the specified language)
+
 	"language-cs": "Czech",
 	"language-de": "German",
 	"language-en": "English",
@@ -13,7 +13,7 @@
 	"language-ru": "Russian",
 	"language-zh": "Chinese, Simplified",
 	
-	// high-level UI tab labels
+
 	"ui-shipyard": "Shipyard",
 	"ui-outfitting": "Outfitting",
 	"ui-analysis": "Analysis",
@@ -22,7 +22,7 @@
 	"ui-retrofit": "Retrofit",
 	"ui-compare": "Compare",
 	
-	// shipyard labels
+
 	"ui-shipyard-build-label": "Build",
 	"ui-shipyard-build-desc": "Stored build label",
 	"ui-shipyard-ship-label": "Ship",
@@ -104,30 +104,30 @@
 	"ui-shipyard-copy-live": "Copy from Live Site",
 	"ui-shipyard-copy-live-confirm": "Copy builds from live site storage?\nAny matching beta or dev site builds will be overwritten.",
 	
-	// slot group labels and abbreviations
+
 	"ui-slotgroup-hardpoint": "Hardpoints",
 	"ui-slotgroup-utility": "Utility Mounts",
 	"ui-slotgroup-component": "Core Internal",
 	"ui-slotgroup-military": "Military",
 	"ui-slotgroup-internal": "Optional Internal",
 	
-	// slot size/type abbreviations
-	"ui-slot-size-0-abbr": "U", /* utility */
-	"ui-slot-size-1-abbr": "S", /* small */
-	"ui-slot-size-2-abbr": "M", /* medium */
-	"ui-slot-size-3-abbr": "L", /* large */
-	"ui-slot-size-4-abbr": "H", /* huge */
-	"ui-slot-component-0-abbr": "BH", /* bulkhead */
-	"ui-slot-component-1-abbr": "PP", /* power plant */
-	"ui-slot-component-2-abbr": "TH", /* thruster */
-	"ui-slot-component-3-abbr": "FD", /* frame shift drive */
-	"ui-slot-component-4-abbr": "LS", /* life support */
-	"ui-slot-component-5-abbr": "PD", /* power distributor */
-	"ui-slot-component-6-abbr": "SS", /* sensor suite */
-	"ui-slot-component-7-abbr": "FT", /* fuel tank */
-	"ui-slot-military-abbr": "MC", /* military compartment */
+
+	"ui-slot-size-0-abbr": "U",
+	"ui-slot-size-1-abbr": "S",
+	"ui-slot-size-2-abbr": "M",
+	"ui-slot-size-3-abbr": "L",
+	"ui-slot-size-4-abbr": "H",
+	"ui-slot-component-0-abbr": "BH",
+	"ui-slot-component-1-abbr": "PP",
+	"ui-slot-component-2-abbr": "TH",
+	"ui-slot-component-3-abbr": "FD",
+	"ui-slot-component-4-abbr": "LS",
+	"ui-slot-component-5-abbr": "PD",
+	"ui-slot-component-6-abbr": "SS",
+	"ui-slot-component-7-abbr": "FT",
+	"ui-slot-military-abbr": "MC",
 	
-	// outfitting module browser tab labels
+
 	"ui-modules-all": "ALL",
 	"ui-modules-stored": "STR",
 	"ui-modules-hardpoint": "HPT",
@@ -137,7 +137,7 @@
 	"ui-modules-optional": "OPT",
 	"ui-modules-slot": "SLOT",
 	
-	// outfitting slots popout menu labels
+
 	"ui-slots-show": "SHOW",
 	"ui-slots-show-mass": "Mass",
 	"ui-slots-show-power": "Power",
@@ -148,7 +148,7 @@
 	"ui-slots-operations-export": "Export...",
 	"ui-slots-operations-clone": "Clone Discounts",
 	
-	// outfitting slots labels
+
 	"ui-slots-name": "Name:",
 	"ui-slots-id": "ID:",
 	"ui-slots-export": "Export:",
@@ -165,12 +165,12 @@
 	"ui-slots-price-desc": "Hull or module price (in credits); for hulls, this excludes all stock modules",
 	"ui-slots-restricted": "This slot is restricted to specific module types.",
 	
-	// outfitting details labels
+
 	"ui-details-discount-actual": "Actual",
 	"ui-details-discount-free": "FREE",
 	"ui-details-blueprint-grade": "Grade",
 	
-	// button labels
+
 	"ui-button-back": "Back",
 	"ui-button-cancel": "Cancel",
 	"ui-button-details": "Details",
@@ -181,7 +181,7 @@
 	"ui-button-remove": "Remove",
 	"ui-button-replace": "Replace",
 	
-	// outfitting stats panels labels
+
 	"ui-stats-show": "SHOW STATS",
 	"ui-stats-hide": "HIDE STATS",
 	"ui-stats-totals-abbr": "TTL",
@@ -358,7 +358,7 @@
 	"ui-stats-price-buy-abbr": "BUY",
 	"ui-stats-price-buy-desc": "Total buy price",
 	
-	// retrofit analysis labels
+
 	"ui-retrofit-builds": "Builds",
 	"ui-retrofit-target-build": "Target Build",
 	"ui-retrofit-base-build": "Base Build",
@@ -410,7 +410,7 @@
 	"ui-retrofit-action-eng-abbr": "Eng",
 	"ui-retrofit-action-exp-abbr": "Exp",
 	
-	// options labels
+
 	"ui-options": "Options",
 	"ui-options-insurance": "Insurance Level",
 	"ui-options-insurance-desc": "Select your insurance coverage level to calculate rebuy costs.",
@@ -457,14 +457,14 @@
 	"ui-options-restore": "Restore Data",
 	"ui-options-restore-desc": "Import stored builds, modules, and other preferences that were previously exported from another device or browser.",
 	
-	// help labels
+
 	"ui-help-contact": "Contact Me",
 	"ui-help-contact-discord": "discord",
 	"ui-help-contact-forum": "forum",
 	"ui-help-contact-reddit": "reddit",
 	"ui-help-contact-email": "email",
 	
-	// export popup labels
+
 	"ui-export-build": "Build",
 	"ui-export-url": "URL",
 	"ui-export-short": "Short",
@@ -476,7 +476,7 @@
 	"ui-export-edomh": "EDOMH",
 	"ui-export-generating": "Generating ...",
 	
-	// import popup labels
+
 	"ui-import-header1-desc": "You can import your current ship (and any others used today) directly from the Frontier API.",
 	"ui-import-header2-desc": "You must log in with Frontier to grant access, but EDSY will never see your password.",
 	"ui-import-cmdr": "CMDR",
@@ -518,7 +518,7 @@
 	"ui-import-warning-invalid": "Some choices were invalid; hover over the warning icon(s) for details.",
 	"ui-import-error-duplicate": "Cannot import multiple builds with the same label.",
 	
-	// info/error messages
+
 	"message-version": "A new version is available!",
 	"message-version-desc": "Click Okay to update, or force-refresh in your browser (ctrl+F5, Apple+r, Command+r, etc)</h3>",
 	"message-hash-errors": "Build hash loaded with errors",
@@ -530,7 +530,7 @@
 	"message-module-rename": "Choose a new label for the stored module",
 	"message-module-overwrite-builtin": "Cannot overwrite a builtin module",
 	
-	// miscellaneous text
+
 	"api-error": "remote API error",
 	"available": "available",
 	"boost": "boost",
@@ -543,19 +543,19 @@
 	"n-a": "N/A",
 	"none": "none",
 	"note-empty": "(empty)",
-	"note-empty-slot": "(Empty Slot)", /* for annotating empty slots */
-	"note-legacy": "(legacy)", /* for annotating legacy engineering */
-	"option-current-build": "(Current Build)", /* for build selectors, to use the currently loaded build */
-	"option-no-blueprint": "(No Blueprint)", /* for blueprint selectors, to reset to none */
-	"option-no-expeffect": "(No Experimental Effect)", /* for expeffect selectors, to reset to none */
-	"option-no-module": "(No Module)", /* for module selectors, to choose nothing */
-	"option-stock": "(Stock)", /* for stored build/loadout selectors, to reset to stock */
-	"option-stock-ship": "(Stock Ship)", /* for build selectors, to use the stock ship build */	
+	"note-empty-slot": "(Empty Slot)",
+	"note-legacy": "(legacy)",
+	"option-current-build": "(Current Build)",
+	"option-no-blueprint": "(No Blueprint)",
+	"option-no-expeffect": "(No Experimental Effect)",
+	"option-no-module": "(No Module)",
+	"option-stock": "(Stock)",
+	"option-stock-ship": "(Stock Ship)",
 	"retracted": "retracted",
 	"unknown": "Unknown!",
 	"unladen": "unladen",
 	
-	// measurement units
+
 	"unit-credits-abbr": "Cr",
 	"unit-credits-per-ton-abbr": "Cr/T",
 	"unit-degrees-abbr": "°",
@@ -577,7 +577,7 @@
 	"unit-tons-abbr": "T",
 	"unit-tons-per-second-abbr": "T/s",
 	
-	// interpolated values
+
 	"interp-number": "{number}",
 	"interp-grade-abbr-number": "G{number}",
 	"interp-index-abbr-number": "#{number}",
@@ -600,7 +600,7 @@
 	"interp-version-abcd": "v{a}.{b}.{c}{rc}{d}",
 	"interp-updated-date": "updated {date}",
 	
-	// game ship names
+
 	"ship-1": "Sidewinder",
 	"ship-2": "Cobra Mk III",
 	"ship-3": "Imperial Clipper",
@@ -640,7 +640,7 @@
 	"ship-61": "Federal Corvette",
 	"ship-62": "Imperial Cutter",
 	
-	// game module group names
+
 	"mtype-cbh": "Bulkheads",
 	"mtype-cch": "Cargo Hatches",
 	"mtype-cfsd": "Frame Shift Drives",
@@ -708,7 +708,7 @@
 	"mtype-upwa": "Pulse Wave Analyser",
 	"mtype-usb": "Shield Boosters",
 	
-	// game module names
+
 	"module-150": "Cargo Rack (Cap: 2)",
 	"module-250": "Cargo Rack (Cap: 4)",
 	"module-350": "Cargo Rack (Cap: 8)",
@@ -859,7 +859,7 @@
 	"module-88143": "Guardian Plasma Charger",
 	"module-88146": "Guardian Shard Cannon",
 	
-	// game blueprint names
+
 	"blueprint-cbh_br": "Blast Resistant",
 	"blueprint-cbh_hd": "Heavy Duty",
 	"blueprint-cbh_kr": "Kinetic Resistant",
@@ -926,7 +926,7 @@
 	"blueprint-wpn_sr": "Short Range",
 	"blueprint-wpn_stu": "Sturdy",
 	
-	// game experimental effect names and special effect descriptions
+
 	"expeffect-cbhx_ap": "Angled Plating",
 	"expeffect-cbhx_dp": "Deep Plating",
 	"expeffect-cbhx_lp": "Layered Plating",
@@ -1044,7 +1044,7 @@
 	"expeffect-wpnx_tlb": "Target Lock Breaker",
 	"expeffect-wpnx_tlb-special": "Target loses target lock",
 	
-	// game ship/module attribute names, abbreviations, and long descriptions
+
 	"attr-absres": "Absolute Resistance",
 	"attr-absres-abbr": "AbR",
 	"attr-absres-desc": "Resistance to absolute/collision damage",
@@ -1562,7 +1562,7 @@
 	"attr-yaw-abbr": "Yaw",
 	"attr-yaw-desc": "Base yaw speed (in degrees per second) with outfitting mass equal to thruster optimal mass",
 	
-	// build stat names and abbreviations
+
 	"stat-burst-dps": "Burst DPS",
 	"stat-cabins": "Cabins",
 	"stat-cargo": "Cargo",
@@ -1573,7 +1573,7 @@
 	"stat-rebuy": "Re-Buy",
 	"stat-speed": "Speed",
 	
-	// game material type names and abbreviations
+
 	"mattype-enc": "Encoded",
 	"mattype-enc-abbr": "Enc",
 	"mattype-mfc": "Manufactured",
@@ -1581,7 +1581,7 @@
 	"mattype-raw": "Raw",
 	"mattype-raw-abbr": "Raw",
 	
-	// game material names
+
 	"material-abcoemda": "Abnormal Compact Emissions Data",
 	"material-abshpaan": "Aberrant Shield Pattern Analysis",
 	"material-adenca": "Adaptive Encryptors Capture",
@@ -1720,14 +1720,14 @@
 	"material-zin": "Zinc",
 	"material-zir": "Zirconium",
 	
-	// game faction names
+
 	"faction-alliance": "Alliance",
 	"faction-empire": "Empire",
 	"faction-federation": "Federation",
 	"faction-independent": "Independent",
 	"faction-thargoid": "Thargoid",
 	
-	// game faction rank names
+
 	"rank-empire-1": "Outsider",
 	"rank-empire-2": "Serf",
 	"rank-empire-3": "Master",
@@ -1757,7 +1757,7 @@
 	"rank-federation-13": "Vice Admiral",
 	"rank-federation-14": "Admiral",
 	
-	// game ship/slot size names and abbreviations
+
 	"size-0": "Utility",
 	"size-0-abbr": "U",
 	"size-1": "Small",
@@ -1769,7 +1769,7 @@
 	"size-4": "Huge",
 	"size-4-abbr": "H",
 	
-	// game letter ratings
+
 	"rating-a": "A",
 	"rating-b": "B",
 	"rating-c": "C",
@@ -1781,7 +1781,7 @@
 	"rating-i": "I",
 	"rating-j": "J",
 	
-	// game hardpoint mount types and abbreviations
+
 	"mount-f": "Fixed",
 	"mount-f-abbr": "F",
 	"mount-g": "Gimballed",
@@ -1789,13 +1789,13 @@
 	"mount-t": "Turreted",
 	"mount-t-abbr": "T",
 	
-	// game missile types and abbreviations
+
 	"missile-d": "Dumbfire",
 	"missile-d-abbr": "D",
 	"missile-s": "Seeker",
 	"missile-s-abbr": "S",
 	
-	// game cabin class types and abbreviations
+
 	"cabincls-p": "Prison",
 	"cabincls-p-abbr": "P",
 	"cabincls-e": "Economy",
