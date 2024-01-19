@@ -4575,7 +4575,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		LANGS.sort(function(l1,l2) {
 			var n1 = LANG_NAMES[l1];
 			var n2 = LANG_NAMES[l2];
-			return ((n1 > n2) ? -1 : ((n2 > n1) ? 1 : (n1 && n2) ? 0 : (n1 ? -1 : (n2 ? 1 : 0))));
+			return ((n1 < n2) ? -1 : ((n1 > n2) ? 1 : (n1 && n2) ? 0 : (n1 ? -1 : (n2 ? 1 : 0))));
 		});
 		
 		// initialize and tag ships
@@ -10217,7 +10217,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			option.append(
 				LANG_NAMES[LANGS[l]],
 				' (',
-				createTranslatedElement('option', 'language-'+LANGS[l]),
+				createTranslatedElement('span', 'language-'+LANGS[l]),
 				')'
 			);
 			select.options.add(option);
