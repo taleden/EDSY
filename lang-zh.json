@@ -1,11 +1,13 @@
 {
   "language-cs": "捷克语",
   "language-de": "德语",
+  "language-en": "英语",
   "language-es": "西班牙语",
   "language-fr": "法语",
   "language-hu": "匈牙利语",
   "language-it": "意大利语",
   "language-ja": "日语",
+  "language-nl": "荷兰语",
   "language-pt": "葡萄牙语, 巴西语",
   "language-ru": "俄语",
   "language-zh": "简体中文",
@@ -48,5 +50,15 @@
   "ui-shipyard-boost-desc": "加力速度",
   "ui-shipyard-shield-label": "盾",
   "ui-shipyard-shield-desc": "盾量",
-  "ui-shipyard-armour-label": "甲量"
+  "ui-shipyard-armour-label": "甲量",
+  "ui-shipyard-armour-desc": "甲量",
+  "ui-shipyard-hardness-label": "甲强度",
+  "ui-shipyard-fuel-label": "燃料",
+  "ui-shipyard-cargo-label": "货舱",
+  "ui-shipyard-passenger-label": "客舱",
+  "ui-shipyard-slots-label": "模组槽位",
+  "ui-shipyard-hardpoint-label": "挂载点",
+  "ui-shipyard-hardpoint-desc": "挂载点安装尺寸",
+  "ui-shipyard-utility-label": "功能",
+  "ui-shipyard-utility-desc": "功能部件挂载数"
 }
