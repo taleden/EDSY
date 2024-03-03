@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 308179905,
-	edsy_versions_db : [308159902,308159902,308179905,308179901], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20240118,
+	version : 308179907,
+	edsy_versions_db : [308159902,308159902,308179907,308179901], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20240303,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1354,6 +1354,7 @@ var eddb = {
 		{ attr:'scanratemod',fdattr:'DSS_RateMult',           abbr:'RteM', name:'Scan Rate Multiplier', unit:'%',                                   default:0, scale:1, modmod:100, desc:'Modifies time to scan stellar bodies' }, // TODO: delete?
 		{ attr:'proberad',   fdattr:'DSS_PatchRadius',        abbr:'PRad', name:'Probe Radius',         unit:'% ', /* space is kludgy but easy */   default:0, scale:1,             desc:'Modifies surface scan probe range' }, // iss
 		{ attr:'mlctype',                                     abbr:'Type', name:'Controller Type',      values:['','M','O','R','X','U'],            default:'',                     desc:'Multi Limpet Controller Type (mining/operations/rescue/xeno/universal)' }, // imlc
+		{ attr:'agzresist',                                   abbr:'AGZR', name:'Anti Guardian Zone Resistance', values:['','Active'],                   default:'',                     desc:'Resistance to Thargoid anti-Guardian field' },
 	], // eddb.attributes[]
 	fdfieldattr : {
 		BurstRate           : 'bstrof',
@@ -1796,7 +1797,7 @@ var eddb = {
 		isgx_tb : { name:'Thermo Block', genoptmul:-3, thmres:8, mats:{ woshem:5, flfocr:3, heva:1 }, fdname:'special_shield_thermic' },
 	}, // eddb.expeffect{}
 	group : {
-		hardpoint : { mtypes:{hel:1, hul:1, hc:1, hex:1, /*hexax:1,*/ hexxm:1, hexxc:1, hexgg:1, hexgp:1, hexgs:1, hexsc:1, hfc:1, hm:1, hmtl:1, hmtm:1, hmr:1, hmc:1, hpa:1, hpl:1, hrg:1, htp:1} },
+		hardpoint : { mtypes:{hel:1, hul:1, hc:1, hex:1, /*hexax:1,*/ hexxm:1, hexxc:1, hexgg:1, hexgp:1, hexgs:1, hexsc:1, hextp:1, hfc:1, hm:1, hmtl:1, hmtm:1, hmr:1, hmc:1, hpa:1, hpl:1, hrg:1, htp:1} },
 		utility   : { mtypes:{ucl:1, uec:1, uex:1, uhsl:1, ukws:1, ucs:1, upd:1, upwa:1, usb:1, ufsws:1} },
 		component : [
 			{ mtypes:{cbh:1} },
@@ -1918,6 +1919,13 @@ var eddb = {
 			sortname:'Experimental - Shock',
 			modulenames:{'Shock Cannon':1},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
+		},
+		
+		hextp : {
+			name:'Exp - Nanite Torpedoes',
+			sortname:'Experimental - Nanite Torpedoes',
+			modulenames:{'Guardian Nanite Torpedo Pylon':'Nanite Torpedo Pylon'},
+			keyattrs:['thmload','ammoclip'],
 		},
 		
 		hfc : {
@@ -2458,6 +2466,9 @@ var eddb = {
 		88218 : {mtype:'hexgs',cost: 1767000, namekey:88146, name:'Guardian Shard Cannon',        tag:'G', mount:'T', class:2, rating:'A', mass: 4.00, integ:42, pwrdraw:1.16, boottime:0,dps: 86.800, damage: 4.340, distdraw:0.570, thmload:1.09, pierce: 45, maximumrng:1700, shotspd:1133, rof:1.667, bstint:0.600,                      ammoclip: 5, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 3.5, minbrc:60, maxbrc:80, jitter:5.0, thmwgt:2.170/.0434, axewgt:2.170/.0434, dmgfall:1700, ammocost:  9, limit:'hex', fdid:128834001, fdname:'Hpt_Guardian_ShardCannon_Turret_Medium', eddbid:1756 }, // guardian tech broker // verify cost // TODO: 80% brcmul
 		88336 : {mtype:'hexgs',cost: 1461350, namekey:88146, name:'Guardian Shard Cannon',        tag:'G', mount:'F', class:3, rating:'C', mass: 8.00, integ:51, pwrdraw:1.68, boottime:0,dps:190.000, damage: 9.500, distdraw:1.400, thmload:2.20, pierce: 60, maximumrng:1700, shotspd:1133, rof:1.667, bstint:0.600,                      ammoclip: 5, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 7.6, minbrc:60, maxbrc:80, jitter:5.0, thmwgt:4.750/.0950, axewgt:4.750/.0950, dmgfall:1700, ammocost:  9, limit:'hex', fdid:128834778, fdname:'Hpt_Guardian_ShardCannon_Fixed_Large', eddbid:1760 }, // guardian tech broker // verify cost // TODO: 80% brcmul
 		88348 : {mtype:'hexgs',cost: 5865030, namekey:88146, name:'Guardian Shard Cannon',        tag:'G', mount:'T', class:3, rating:'D', mass: 8.00, integ:51, pwrdraw:1.39, boottime:0,dps:124.000, damage: 6.200, distdraw:1.200, thmload:1.98, pierce: 60, maximumrng:1700, shotspd:1133, rof:1.667, bstint:0.600,                      ammoclip: 5, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 5.0, minbrc:60, maxbrc:80, jitter:5.0, thmwgt:3.100/.0620, axewgt:3.100/.0620, dmgfall:1700, ammocost:  9, limit:'hex', fdid:128834779, fdname:'Hpt_Guardian_ShardCannon_Turret_Large', eddbid:1761 }, // guardian tech broker // verify cost // TODO: 80% brcmul
+		
+		88293 : {mtype:'hextp',cost:  843170, namekey:88293, name:'Guardian Nanite Torpedo Pylon', tag:'G', mount:'F', missile:'S', class:2, rating:'I', mass: 3.00, integ:50, pwrdraw:0.40, boottime:0, dps:0.0, damage:0.0, distdraw:0.0, thmload:35.00,                       shotspd:1000, rof:0.500, bstint:2.000,                      ammoclip: 1, ammomax:  64,            rldtime:3.0, brcdmg: 0.0,                       jitter:0.0, ammocost:15000, agzresist:'Active', fdname:'hpt_atventdisruptorpylon_fixed_medium' }, // TODO: fdid,eddbid
+		88393 : {mtype:'hextp',cost: 1627420, namekey:88293, name:'Guardian Nanite Torpedo Pylon', tag:'G', mount:'F', missile:'S', class:3, rating:'I', mass: 5.00, integ:80, pwrdraw:0.70, boottime:0, dps:0.0, damage:0.0, distdraw:0.0, thmload:35.00,                       shotspd:1000, rof:0.500, bstint:2.000,                      ammoclip: 1, ammomax: 128,            rldtime:3.0, brcdmg: 0.0,                       jitter:0.0, ammocost:15000, agzresist:'Active', fdname:'hpt_atventdisruptorpylon_fixed_large' }, // TODO: fdid,eddbid
 		
 		71150 : { mtype:'hfc', cost:   36000,                name:'Fragment Cannon',                       mount:'F', class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.45, boottime:0, dps:95.333, damage: 1.430, distdraw:0.210, thmload:0.41, pierce: 20, maximumrng:2000, shotspd: 667, rof:5.556, bstint:0.180,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 1.3, minbrc:40, maxbrc:80, jitter:5.0, kinwgt:100, thmwgt:0, dmgfall:1800, ammocost:17, fdid:128049448, fdname:'Hpt_Slugshot_Fixed_Small', eddbid:860 },
 		71151 : { mtype:'hfc', cost:   54720, namekey:71150, name:'Fragment Cannon',                       mount:'G', class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.59, boottime:0, dps:71.294, damage: 1.010, distdraw:0.260, thmload:0.44, pierce: 20, maximumrng:2000, shotspd: 667, rof:5.882, bstint:0.170,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 0.9, minbrc:40, maxbrc:80, jitter:5.0, kinwgt:100, thmwgt:0, dmgfall:1800, ammocost:17, fdid:128049451, fdname:'Hpt_Slugshot_Gimbal_Small', eddbid:863 },

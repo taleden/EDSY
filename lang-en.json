@@ -659,6 +659,7 @@
 	"mtype-hexsc": "Exp - Shock Cannons",
 	"mtype-hexxc": "Exp - Anti-Xeno Multi-Cannons",
 	"mtype-hexxm": "Exp - Anti-Xeno Missile Racks",
+	"mtype-hextp": "Exp - Nanite Torpedoes",
 	"mtype-hfc": "Fragment Cannons",
 	"mtype-hm": "Mines",
 	"mtype-hmc": "Multi-Cannons",
@@ -858,6 +859,8 @@
 	"module-88140": "Guardian Gauss Cannon",
 	"module-88143": "Guardian Plasma Charger",
 	"module-88146": "Guardian Shard Cannon",
+	"module-88293": "Guardian Nanite Torpedo Pylon",
+	"module-88293-abbr": "Nanite Torpedo Pylon",
 	
 
 	"blueprint-cbh_br": "Blast Resistant",
@@ -1054,6 +1057,9 @@
 	"attr-afmrepcap": "Repair Capacity",
 	"attr-afmrepcap-abbr": "Cap",
 	"attr-afmrepcap-desc": "Maximum repair material capacity",
+	"attr-agzresist": "Anti Guardian Zone Resistance",
+	"attr-agzresist-abbr": "AGZR",
+	"attr-agzresist-desc": "Resistance to Thargoid anti-Guardian field",
 	"attr-ammoclip": "Ammo Clip Size",
 	"attr-ammoclip-abbr": "Clip",
 	"attr-ammoclip-desc": "Maximum ammo per clip before reloading",
