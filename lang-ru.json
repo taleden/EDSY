@@ -229,7 +229,7 @@
   "ui-stats-shield-rebuildgen-abbr": "РГН",
   "ui-options-language": "Язык",
   "ui-import-cmdr": "КМДР",
-  "unit-tons-per-second-abbr": "Т/с",
+  "unit-tons-per-second-abbr": "Т\u2060/\u2060с",
   "mtype-ifs": "Топливозаборники",
   "mtype-iscb": "Щитонакопитель",
   "mtype-isg": "Щитогенератор",
