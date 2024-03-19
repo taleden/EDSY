@@ -10,7 +10,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308179904,308179904,308179907,308179906]; /* HTML,CSS,DB,JS */
+	var VERSIONS = [308179904,308179904,308179901,308179906]; /* HTML,CSS,DB,JS */
 	var LASTMODIFIED = 20240119;
 	
 	var EMPTY_OBJ = {};
