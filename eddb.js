@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 308179905,
-	edsy_versions_db : [308159902,308159902,308179905,308179901], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20240118,
+	version : 308179907,
+	edsy_versions_db : [308159902,308159902,308179907,308179901], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20240303,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1354,6 +1354,7 @@ var eddb = {
 		{ attr:'scanratemod',fdattr:'DSS_RateMult',           abbr:'RteM', name:'Scan Rate Multiplier', unit:'%',                                   default:0, scale:1, modmod:100, desc:'Modifies time to scan stellar bodies' }, // TODO: delete?
 		{ attr:'proberad',   fdattr:'DSS_PatchRadius',        abbr:'PRad', name:'Probe Radius',         unit:'% ', /* space is kludgy but easy */   default:0, scale:1,             desc:'Modifies surface scan probe range' }, // iss
 		{ attr:'mlctype',                                     abbr:'Type', name:'Controller Type',      values:['','M','O','R','X','U'],            default:'',                     desc:'Multi Limpet Controller Type (mining/operations/rescue/xeno/universal)' }, // imlc
+		{ attr:'agzresist',                                   abbr:'AGZR', name:'Anti Guardian Zone Resistance', values:['','Active'],                   default:'',                     desc:'Resistance to Thargoid anti-Guardian field' }, // hextp
 	], // eddb.attributes[]
 	fdfieldattr : {
 		BurstRate           : 'bstrof',
@@ -1796,7 +1797,7 @@ var eddb = {
 		isgx_tb : { name:'Thermo Block', genoptmul:-3, thmres:8, mats:{ woshem:5, flfocr:3, heva:1 }, fdname:'special_shield_thermic' },
 	}, // eddb.expeffect{}
 	group : {
-		hardpoint : { mtypes:{hel:1, hul:1, hc:1, hex:1, /*hexax:1,*/ hexxm:1, hexxc:1, hexgg:1, hexgp:1, hexgs:1, hexsc:1, hfc:1, hm:1, hmtl:1, hmtm:1, hmr:1, hmc:1, hpa:1, hpl:1, hrg:1, htp:1} },
+		hardpoint : { mtypes:{hel:1, hul:1, hc:1, hex:1, /*hexax:1,*/ hexxm:1, hexxc:1, hexgg:1, hexgp:1, hexgs:1, hexsc:1, hextp:1, hfc:1, hm:1, hmtl:1, hmtm:1, hmr:1, hmc:1, hpa:1, hpl:1, hrg:1, htp:1} },
 		utility   : { mtypes:{ucl:1, uec:1, uex:1, uhsl:1, ukws:1, ucs:1, upd:1, upwa:1, usb:1, ufsws:1} },
 		component : [
 			{ mtypes:{cbh:1} },
@@ -1918,6 +1919,13 @@ var eddb = {
 			sortname:'Experimental - Shock',
 			modulenames:{'Shock Cannon':1},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
+		},
+		
+		hextp : {
+			name:'Exp - Nanite Torpedoes',
+			sortname:'Experimental - Nanite Torpedoes',
+			modulenames:{'Guardian Nanite Torpedo Pylon':'Nanite Torpedo Pylon'},
+			keyattrs:['thmload','ammoclip'],
 		},
 		
 		hfc : {
@@ -2416,9 +2424,9 @@ var eddb = {
 		86262 : {mtype:'hexxm',cost: 2022700, namekey:86250, name:'AX Missile Rack',          mount:'T', missile:'D', class:2, rating:'F', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:28.5  , damage:57    , distdraw:0.080, thmload:1.50, pierce: 60, maximumrng:5000, shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.0, minbrc:80,maxbrc:100,             axewgt:37   /.57   , expwgt:20  /.57   ,               ammocost:235, limit:'hex', noblueprints:{'*':1}, fdid:128788704, fdname:'Hpt_ATDumbfireMissile_Turret_Medium', eddbid:1615 }, // TODO: exact damage
 		86330 : {mtype:'hexxm',cost: 1352250, namekey:86250, name:'AX Missile Rack',          mount:'F', missile:'D', class:3, rating:'C', mass: 8.00, integ:64, pwrdraw:1.62, boottime:0, dps:35    , damage:70    , distdraw:0.240, thmload:3.60, pierce: 60,                  shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.0, minbrc:80,maxbrc:100,             axewgt:43   /.70   , expwgt:27  /.70   ,               ammocost:235, limit:'hex',                       fdid:128788700, fdname:'Hpt_ATDumbfireMissile_Fixed_Large', eddbid:1623 }, // TODO: exact damage
 		86352 : {mtype:'hexxm',cost: 4056750, namekey:86250, name:'AX Missile Rack',          mount:'T', missile:'D', class:3, rating:'E', mass: 8.00, integ:64, pwrdraw:1.75, boottime:0, dps:28.5  , damage:57    , distdraw:0.140, thmload:1.90, pierce: 60, maximumrng:5000, shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.0, minbrc:80,maxbrc:100,             axewgt:37   /.57   , expwgt:20  /.57   ,               ammocost:235, limit:'hex', noblueprints:{'*':1}, fdid:128788705, fdname:'Hpt_ATDumbfireMissile_Turret_Large', eddbid:1624 }, // TODO: exact damage
-      	86241 : {mtype:'hexxm',cost:  681530,                name:'Enhanced AX Missile Rack', mount:'F', missile:'D', class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:1.30, boottime:0, dps:38.5  , damage:77    , distdraw:0.14 , thmload:2.4 , pierce: 60,                  shotspd:1250, rof:0.5  , bstint:2    ,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.0, minbrc:80,maxbrc:100,             axewgt:50   /.77   , expwgt:27  /.77   ,               ammocost:235, limit:'hex', noblueprints:{'*':1}, fdid:129022081, fdname:'Hpt_ATDumbfireMissile_Fixed_Medium_V2', eddbid:1833 }, // TODO: exact damage
+		86241 : {mtype:'hexxm',cost:  681530,                name:'Enhanced AX Missile Rack', mount:'F', missile:'D', class:2, rating:'D', mass: 4.00, integ:51, pwrdraw:1.30, boottime:0, dps:38.5  , damage:77    , distdraw:0.14 , thmload:2.4 , pierce: 60,                  shotspd:1250, rof:0.5  , bstint:2    ,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.0, minbrc:80,maxbrc:100,             axewgt:50   /.77   , expwgt:27  /.77   ,               ammocost:235, limit:'hex', noblueprints:{'*':1}, fdid:129022081, fdname:'Hpt_ATDumbfireMissile_Fixed_Medium_V2', eddbid:1833 }, // TODO: exact damage
 		86259 : {mtype:'hexxm',cost: 2666290, namekey:86241, name:'Enhanced AX Missile Rack', mount:'T', missile:'D', class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:1.30, boottime:0, dps:32    , damage:64    , distdraw:0.08 , thmload:1.5 , pierce: 60, maximumrng:5000, shotspd:1250, rof:0.5  , bstint:2    ,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0.0, minbrc:80,maxbrc:100,             axewgt:44   /.64   , expwgt:20  /.64   ,               ammocost:235, limit:'hex', noblueprints:{'*':1}, fdid:129022083, fdname:'Hpt_ATDumbfireMissile_Turret_Medium_V2', eddbid:1830 }, // TODO: exact stats
-      	86321 : {mtype:'hexxm',cost: 1703830, namekey:86241, name:'Enhanced AX Missile Rack', mount:'F', missile:'D', class:3, rating:'B', mass: 8.00, integ:64, pwrdraw:1.72, boottime:0, dps:38.5  , damage:77    , distdraw:0.24 , thmload:3.6 , pierce: 60,                  shotspd:1250, rof:0.5  , bstint:2    ,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.0, minbrc:80,maxbrc:100,             axewgt:50   /.77   , expwgt:27  /.77   ,               ammocost:235, limit:'hex', noblueprints:{'*':1}, fdid:129022079, fdname:'Hpt_ATDumbfireMissile_Fixed_Large_V2', eddbid:1832 }, // TODO: exact damage
+		86321 : {mtype:'hexxm',cost: 1703830, namekey:86241, name:'Enhanced AX Missile Rack', mount:'F', missile:'D', class:3, rating:'B', mass: 8.00, integ:64, pwrdraw:1.72, boottime:0, dps:38.5  , damage:77    , distdraw:0.24 , thmload:3.6 , pierce: 60,                  shotspd:1250, rof:0.5  , bstint:2    ,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.0, minbrc:80,maxbrc:100,             axewgt:50   /.77   , expwgt:27  /.77   ,               ammocost:235, limit:'hex', noblueprints:{'*':1}, fdid:129022079, fdname:'Hpt_ATDumbfireMissile_Fixed_Large_V2', eddbid:1832 }, // TODO: exact damage
 		86349 : {mtype:'hexxm',cost: 5347530, namekey:86241, name:'Enhanced AX Missile Rack', mount:'T', missile:'D', class:3, rating:'D', mass: 8.00, integ:64, pwrdraw:1.85, boottime:0, dps:32    , damage:64    , distdraw:0.14 , thmload:1.9 , pierce: 60, maximumrng:5000, shotspd:1250, rof:0.5  , bstint:2    ,                      ammoclip:12, ammomax: 128,            rldtime:5.0, brcdmg: 0.0, minbrc:80,maxbrc:100,             axewgt:44   /.64   , expwgt:20  /.64   ,               ammocost:235, limit:'hex', noblueprints:{'*':1}, fdid:129022082, fdname:'Hpt_ATDumbfireMissile_Turret_Large_V2', eddbid:1829 }, // TODO: exact stats
 		
 		86253 : {mtype:'hexxc',cost:  379000,                name:'AX Multi-Cannon',                       mount:'F', class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:0.46, boottime:0, dps:23.643, damage: 3.310, distdraw:0.110, thmload:0.18, pierce: 17, maximumrng:4000, shotspd:1600, rof:7.143, bstint:0.140,                     ammoclip:100, ammomax:2100,            rldtime:4.0, brcdmg: 2.8, minbrc:50, maxbrc:80,             axewgt:2.190/.03310, kinwgt:1.12/.03310, dmgfall:2000, ammocost:  1, limit:'hex', noblueprints:{'*':1}, fdid:128788701, fdname:'Hpt_ATMultiCannon_Fixed_Medium', eddbid:1618 }, // TODO: 85% brcmul
@@ -2458,6 +2466,9 @@ var eddb = {
 		88218 : {mtype:'hexgs',cost: 1767000, namekey:88146, name:'Guardian Shard Cannon',        tag:'G', mount:'T', class:2, rating:'A', mass: 4.00, integ:42, pwrdraw:1.16, boottime:0,dps: 86.800, damage: 4.340, distdraw:0.570, thmload:1.09, pierce: 45, maximumrng:1700, shotspd:1133, rof:1.667, bstint:0.600,                      ammoclip: 5, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 3.5, minbrc:60, maxbrc:80, jitter:5.0, thmwgt:2.170/.0434, axewgt:2.170/.0434, dmgfall:1700, ammocost:  9, limit:'hex', fdid:128834001, fdname:'Hpt_Guardian_ShardCannon_Turret_Medium', eddbid:1756 }, // guardian tech broker // verify cost // TODO: 80% brcmul
 		88336 : {mtype:'hexgs',cost: 1461350, namekey:88146, name:'Guardian Shard Cannon',        tag:'G', mount:'F', class:3, rating:'C', mass: 8.00, integ:51, pwrdraw:1.68, boottime:0,dps:190.000, damage: 9.500, distdraw:1.400, thmload:2.20, pierce: 60, maximumrng:1700, shotspd:1133, rof:1.667, bstint:0.600,                      ammoclip: 5, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 7.6, minbrc:60, maxbrc:80, jitter:5.0, thmwgt:4.750/.0950, axewgt:4.750/.0950, dmgfall:1700, ammocost:  9, limit:'hex', fdid:128834778, fdname:'Hpt_Guardian_ShardCannon_Fixed_Large', eddbid:1760 }, // guardian tech broker // verify cost // TODO: 80% brcmul
 		88348 : {mtype:'hexgs',cost: 5865030, namekey:88146, name:'Guardian Shard Cannon',        tag:'G', mount:'T', class:3, rating:'D', mass: 8.00, integ:51, pwrdraw:1.39, boottime:0,dps:124.000, damage: 6.200, distdraw:1.200, thmload:1.98, pierce: 60, maximumrng:1700, shotspd:1133, rof:1.667, bstint:0.600,                      ammoclip: 5, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 5.0, minbrc:60, maxbrc:80, jitter:5.0, thmwgt:3.100/.0620, axewgt:3.100/.0620, dmgfall:1700, ammocost:  9, limit:'hex', fdid:128834779, fdname:'Hpt_Guardian_ShardCannon_Turret_Large', eddbid:1761 }, // guardian tech broker // verify cost // TODO: 80% brcmul
+		
+		88299 : {mtype:'hextp',cost:  843170,                name:'Guardian Nanite Torpedo Pylon', tag:'G', mount:'F', missile:'S', class:2, rating:'I', mass: 3.00, integ:50, pwrdraw:0.40, boottime:0, dps:0.0, damage:0.0, distdraw:0.0, thmload:35.00,                       shotspd:1000, rof:0.500, bstint:2.000,                      ammoclip: 1, ammomax:  64,            rldtime:3.0, brcdmg: 0.0,                       jitter:0.0, ammocost:15000, agzresist:'Active', fdname:'hpt_atventdisruptorpylon_fixed_medium' }, // TODO: fdid,eddbid
+		88399 : {mtype:'hextp',cost: 1627420, namekey:88299, name:'Guardian Nanite Torpedo Pylon', tag:'G', mount:'F', missile:'S', class:3, rating:'I', mass: 5.00, integ:80, pwrdraw:0.70, boottime:0, dps:0.0, damage:0.0, distdraw:0.0, thmload:35.00,                       shotspd:1000, rof:0.500, bstint:2.000,                      ammoclip: 1, ammomax: 128,            rldtime:3.0, brcdmg: 0.0,                       jitter:0.0, ammocost:15000, agzresist:'Active', fdname:'hpt_atventdisruptorpylon_fixed_large' }, // TODO: fdid,eddbid
 		
 		71150 : { mtype:'hfc', cost:   36000,                name:'Fragment Cannon',                       mount:'F', class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.45, boottime:0, dps:95.333, damage: 1.430, distdraw:0.210, thmload:0.41, pierce: 20, maximumrng:2000, shotspd: 667, rof:5.556, bstint:0.180,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 1.3, minbrc:40, maxbrc:80, jitter:5.0, kinwgt:100, thmwgt:0, dmgfall:1800, ammocost:17, fdid:128049448, fdname:'Hpt_Slugshot_Fixed_Small', eddbid:860 },
 		71151 : { mtype:'hfc', cost:   54720, namekey:71150, name:'Fragment Cannon',                       mount:'G', class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.59, boottime:0, dps:71.294, damage: 1.010, distdraw:0.260, thmload:0.44, pierce: 20, maximumrng:2000, shotspd: 667, rof:5.882, bstint:0.170,                      ammoclip: 3, ammomax: 180, rounds:12, rldtime:5.0, brcdmg: 0.9, minbrc:40, maxbrc:80, jitter:5.0, kinwgt:100, thmwgt:0, dmgfall:1800, ammocost:17, fdid:128049451, fdname:'Hpt_Slugshot_Gimbal_Small', eddbid:863 },
