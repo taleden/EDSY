@@ -12,7 +12,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 var eddb = {
 	version : 308179907,
 	edsy_versions_db : [308159902,308159902,308179907,308179901], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20240303,
+	edsy_lastmodified_db : 20240320,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1354,7 +1354,7 @@ var eddb = {
 		{ attr:'scanratemod',fdattr:'DSS_RateMult',           abbr:'RteM', name:'Scan Rate Multiplier', unit:'%',                                   default:0, scale:1, modmod:100, desc:'Modifies time to scan stellar bodies' }, // TODO: delete?
 		{ attr:'proberad',   fdattr:'DSS_PatchRadius',        abbr:'PRad', name:'Probe Radius',         unit:'% ', /* space is kludgy but easy */   default:0, scale:1,             desc:'Modifies surface scan probe range' }, // iss
 		{ attr:'mlctype',                                     abbr:'Type', name:'Controller Type',      values:['','M','O','R','X','U'],            default:'',                     desc:'Multi Limpet Controller Type (mining/operations/rescue/xeno/universal)' }, // imlc
-		{ attr:'agzresist',                                   abbr:'AGZR', name:'Anti Guardian Zone Resistance', values:['','Active'],                   default:'',                     desc:'Resistance to Thargoid anti-Guardian field' }, // hextp
+		{ attr:'agzresist',                                   abbr:'AGZR', name:'Anti Guardian Zone Resistance', values:['','Active'],              default:'',                     desc:'Resistance to Thargoid anti-Guardian field' }, // hextp
 	], // eddb.attributes[]
 	fdfieldattr : {
 		BurstRate           : 'bstrof',

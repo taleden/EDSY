@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308179904,308179904,308179901,308179906]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20240119;
+	var VERSIONS = [308179904,308179907,308179901,308179907]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20240320;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -8125,6 +8125,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var td = document.createElement('td');
 		var span = document.createElement('span');
 		span.id = 'outfitting_details_unit_' + r;
+		span.className = 'outfitting_details_unit';
 		td.appendChild(span);
 		tr.appendChild(td);
 		

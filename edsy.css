@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 
 :root {
-	--edsy-versions-css: v-308179904-308179905-308159902-308179904; /* HTML,CSS,DB,JS */
-	--edsy-lastmodified-css: d-20240118;
+	--edsy-versions-css: v-308179904-308179907-308159902-308179907; /* HTML,CSS,DB,JS */
+	--edsy-lastmodified-css: d-20240320;
 	
 	--colorblack: black;
 	--colorwhite: white;
@@ -2641,6 +2641,10 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_details_module TD SPAN {
 	display: block;
 	padding-bottom: 2px;
+}
+
+#outfitting_details_module TD .outfitting_details_unit {
+	white-space: nowrap;
 }
 
 
