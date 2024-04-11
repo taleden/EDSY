@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 308179907,
-	edsy_versions_db : [308159902,308159902,308179907,308179901], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20240320,
+	version : 308189901,
+	edsy_versions_db : [308159902,308159902,308189901,308179901], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20240410,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1355,6 +1355,11 @@ var eddb = {
 		{ attr:'proberad',   fdattr:'DSS_PatchRadius',        abbr:'PRad', name:'Probe Radius',         unit:'% ', /* space is kludgy but easy */   default:0, scale:1,             desc:'Modifies surface scan probe range' }, // iss
 		{ attr:'mlctype',                                     abbr:'Type', name:'Controller Type',      values:['','M','O','R','X','U'],            default:'',                     desc:'Multi Limpet Controller Type (mining/operations/rescue/xeno/universal)' }, // imlc
 		{ attr:'agzresist',                                   abbr:'AGZR', name:'Anti Guardian Zone Resistance', values:['','Active'],              default:'',                     desc:'Resistance to Thargoid anti-Guardian field' }, // hextp
+		{ attr:'sco',                                         abbr:'SCO',    name:'Supercruise Overcharge', values:['','Available'],                default:'',                     desc:'Capable of activating Supercruise Overcharge mode' }, // cfsd
+		{ attr:'scospd',                                      abbr:'SCOSpd', name:'SCO Max Speed Increase', unit:'%',       min:0,                  default:0, scale:0,             desc:'Supercruise speed bonus during Overcharge mode' }, // cfsd
+		{ attr:'scoacc',                                      abbr:'SCOAcc', name:'SCO Max Acceleration Rate',              min:0,                  default:0, scale:3,             desc:'Supercruise acceleration rate bonus during Overcharge mode' }, // cfsd
+		{ attr:'scoheat',                                     abbr:'SCOHt',  name:'SCO Heat Generation Rate',               min:0,                  default:0, scale:3,             desc:'Additional thermal load during Overcharge mode' }, // cfsd
+		{ attr:'scoconint',                                   abbr:'SCOCnIn',name:'SCO Control Interference',               min:0,                  default:0, scale:3,             desc:'Control interference during Overcharge mode' }, // cfsd // TODO: clarify description
 	], // eddb.attributes[]
 	fdfieldattr : {
 		BurstRate           : 'bstrof',
@@ -2754,6 +2759,14 @@ var eddb = {
 	//	43830 : { mtype:'cfsd', cost:         , namekey:43210, name:'Frame Shift Drive', class:8, rating:'C', mass:      , integ:   , pwrdraw:    , boottime:10, fsdoptmass:      , fsdheat:    , maxfuel:     , fuelmul:0.008, fuelpower:2.90, fdid:128064135, fdname:'Int_Hyperdrive_Size8_Class3', eddbid:993 },
 	//	43820 : { mtype:'cfsd', cost:         , namekey:43210, name:'Frame Shift Drive', class:8, rating:'B', mass:      , integ:   , pwrdraw:    , boottime:10, fsdoptmass:      , fsdheat:    , maxfuel:     , fuelmul:0.010, fuelpower:2.90, fdid:128064136, fdname:'Int_Hyperdrive_Size8_Class4', eddbid:994 },
 	//	43810 : { mtype:'cfsd', cost:         , namekey:43210, name:'Frame Shift Drive', class:8, rating:'A', mass:      , integ:   , pwrdraw:    , boottime:10, fsdoptmass:      , fsdheat:    , maxfuel:     , fuelmul:0.012, fuelpower:2.90, fdid:128064137, fdname:'Int_Hyperdrive_Size8_Class5', eddbid:995 },
+		
+		43231 : { mtype:'cfsd', cost:    21360,                name:'Frame Shift Drive (SCO)', class:2, rating:'C', mass:  2.50, integ: 51, pwrdraw:0.20, boottime:10, fsdoptmass:  60.0, fsdheat:10.0, maxfuel: 0.60, fuelmul:0.008, fuelpower:2.00, sco:'Available', scospd:142, scoacc:0.090, scoheat:0.410, scoconint:0.240, fdid:null, fdname:null, eddbid:null }, // verify: maxfuel,fuelmul,fuelpower // TODO: fdid,fdname
+		43331 : { mtype:'cfsd', cost:    67720, namekey:43231, name:'Frame Shift Drive (SCO)', class:3, rating:'C', mass:  5.00, integ: 64, pwrdraw:0.30, boottime:10, fsdoptmass: 100.0, fsdheat:14.0, maxfuel: 1.20, fuelmul:0.008, fuelpower:2.15, sco:'Available', scospd:120, scoacc:0.070, scoheat:0.490, scoconint:0.290, fdid:null, fdname:null, eddbid:null }, // verify: maxfuel,fuelmul,fuelpower // TODO: fdid,fdname
+		43431 : { mtype:'cfsd', cost:   214680, namekey:43231, name:'Frame Shift Drive (SCO)', class:4, rating:'C', mass: 10.00, integ: 80, pwrdraw:0.30, boottime:10, fsdoptmass: 350.0, fsdheat:18.0, maxfuel: 2.00, fuelmul:0.008, fuelpower:2.30, sco:'Available', scospd:100, scoacc:0.060, scoheat:1.230, scoconint:0.350, fdid:null, fdname:null, eddbid:null }, // verify: maxfuel,fuelmul,fuelpower // TODO: fdid,fdname
+		43531 : { mtype:'cfsd', cost:   623820, namekey:43231, name:'Frame Shift Drive (SCO)', class:5, rating:'C', mass: 20.00, integ: 96, pwrdraw:0.45, boottime:10, fsdoptmass: 665.0, fsdheat:27.0, maxfuel: 3.30, fuelmul:0.008, fuelpower:2.45, sco:'Available', scospd: 80, scoacc:0.055, scoheat:1.400, scoconint:0.400, fdid:null, fdname:null, eddbid:null }, // verify: pwrdraw,maxfuel,fuelmul,fuelpower // TODO: fdid,fdname
+		43631 : { mtype:'cfsd', cost:  2157270, namekey:43231, name:'Frame Shift Drive (SCO)', class:6, rating:'C', mass: 40.00, integ:113, pwrdraw:0.50, boottime:10, fsdoptmass:1200.0, fsdheat:37.0, maxfuel: 5.30, fuelmul:0.008, fuelpower:2.60, sco:'Available', scospd: 62, scoacc:0.045, scoheat:1.800, scoconint:0.640, fdid:null, fdname:null, eddbid:null }, // verify: maxfuel,fuelmul,fuelpower // TODO: fdid,fdname
+		43731 : { mtype:'cfsd', cost:  6838550, namekey:43231, name:'Frame Shift Drive (SCO)', class:7, rating:'C', mass: 80.00, integ:131, pwrdraw:0.68, boottime:10, fsdoptmass:1710.0, fsdheat:43.0, maxfuel: 8.50, fuelmul:0.008, fuelpower:2.75, sco:'Available', scospd: 46, scoacc:0.040, scoheat:2.000, scoconint:0.670, fdid:null, fdname:null, eddbid:null }, // verify: pwrdraw,fsdoptmass,maxfuel,fuelmul,fuelpower // TODO: fdid,fdname
+	//	43831 : { mtype:'cfsd', cost:         , namekey:43231, name:'Frame Shift Drive (SCO)', class:8, rating:'C', mass:      , integ:   , pwrdraw:    , boottime:10, fsdoptmass:      , fsdheat:    , maxfuel:     , fuelmul:0.008, fuelpower:2.90, sco:'Available', scospd:   , scoacc:     , scoheat:     , scoconint:     , fdid:null, fdname:null, eddbid:null }, // verify: maxfuel,fuelmul,fuelpower // TODO: fdid,fdname
 		
 		
 		44150 : { mtype:'cls', cost:     520, namekey:44110, name:'Life Support', class:1, rating:'E', mass:  1.30, integ: 32, pwrdraw:0.32, boottime:1, emgcylife: 300, fdid:128064138, fdname:'Int_LifeSupport_Size1_Class1', eddbid:996 }, // verify price
