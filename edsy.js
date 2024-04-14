@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308179904,308179907,308179901,308179907]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20240320;
+	var VERSIONS = [308179904,308179907,308189903,308189903]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20240414;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -954,6 +954,7 @@ window.edsy = new (function() {
 			var module = eddb.module[modid];
 			if (module.class > slotsize) return false; // module is too large for the slot
 			if (module.class < slotsize && this.slotgroup === 'component' && (this.slotnum == CORE_ABBR_SLOT.LS || this.slotnum == CORE_ABBR_SLOT.SS)) return false; // module is too small for the slot (i.e. life support, sensors)
+			if (module.class < slotsize && module.noundersize) return false; // mtype can normally be undersized, but this module cannot (i.e. SCO FSD)
 			if (module.reserved && !module.reserved[shipid]) return false; // module does not allow the ship (i.e. fighter hangars, luxury cabins)
 			var shipreserved = ((ship.reserved || EMPTY_OBJ)[this.slotgroup] || EMPTY_OBJ)[this.slotnum];
 			if (shipreserved && !shipreserved[module.mtype]) return false; // slot does not allow the module type (i.e. Beluga/Orca/Dolphin cabins-only slots)
@@ -6671,7 +6672,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 							if (cache.mtypeSizeGaps[mtype] && cache.mtypeSizeGaps[mtype][moduleSize]) {
 								classes += ' size' + cache.mtypeSizeGaps[mtype][moduleSize].join(' size');
 							}
-							for (var c = ((mtype === 'cls' || mtype === 'cs') ? moduleSize : MAX_SLOT_CLASS);  c >= moduleSize;  c--) {
+							for (var c = ((mtype === 'cls' || mtype === 'cs' || module.noundersize) ? moduleSize : MAX_SLOT_CLASS);  c >= moduleSize;  c--) {
 								classes += ' fitsize' + c;
 							}
 							divRow.className = classes;
@@ -6755,7 +6756,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				if (cache.mtypeSizeGaps[mtypeid] && cache.mtypeSizeGaps[mtypeid][szcls]) {
 					classes += ' size' + cache.mtypeSizeGaps[mtypeid][szcls].join(' size');
 				}
-				for (var c = ((mtypeid === 'cls' || mtypeid === 'cs') ? szcls : MAX_SLOT_CLASS);  c >= szcls;  c--) {
+				for (var c = ((mtypeid === 'cls' || mtypeid === 'cs' || module.noundersize) ? szcls : MAX_SLOT_CLASS);  c >= szcls;  c--) {
 					classes += ' fitsize' + c;
 				}
 				if (stored.name.startsWith(" ")) {
