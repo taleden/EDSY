@@ -841,8 +841,8 @@ window.edsy = new (function() {
 		thmload /= heatcap;
 		var sqrtAdivB = sqrt(heatdismax / thmload);
 		var sqrtAmulB = sqrt(heatdismax * thmload);
-		var C = -atanh(heatlevel0 * sqrtAdivB) / sqrtAmulB
-		return ((atanh(heatlevel * sqrtAdivB) / sqrtAmulB) + C);
+	    var c_real=1/sqrtAmulB*1/2*(log(1+sqrtAdivB*heatlevel0)-log(abs(1-sqrtAdivB*heatlevel0 )));
+		return 1/sqrtAmulB*1/2*(log(1+sqrtAdivB*heatlevel)-log(abs(1-sqrtAdivB*heatlevel)))-c_real
 	}; // getTimeUntilHeatLevel()
 	
 	
@@ -856,9 +856,9 @@ window.edsy = new (function() {
 		thmload /= heatcap;
 		var sqrtAdivB = sqrt(heatdismax / thmload);
 		var sqrtAmulB = sqrt(heatdismax * thmload);
-		var C = -atanh(heatlevel0 * sqrtAdivB) / sqrtAmulB
-		return (tanh((seconds - C) * sqrtAmulB) / sqrtAdivB);
-	}; // getHeatLevelAtTime()
+	    var c_real=1/sqrtAmulB*1/2*(log(1+sqrtAdivB*heatlevel0)-log(abs(1-sqrtAdivB*heatlevel0 )));
+	    var c_imag=1/sqrtAmulB*1/2*(-atan2 (0, 1-sqrtAdivB*heatlevel0));
+		return sqrt(thmload/heatdismax)*(exp(4*sqrtAmulB*(seconds+c_real ) )-1)/(exp(4*sqrtAmulB*(seconds+c_real ))+2*exp(2*sqrtAmulB*(seconds+c_real )  )*cos(2*sqrtAmulB*c_imag)+1)
 	
 	
 	var getEffectiveWeaponThermalLoad = function(thmload, distdraw, wepcap, weplvl) {
