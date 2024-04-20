@@ -251,7 +251,10 @@ window.edsy = new (function() {
 		random = Math.random,
 		round = Math.round,
 		sign = Math.sign,
-		sqrt = Math.sqrt
+		sqrt = Math.sqrt,
+		cos=Math.cos,
+		tan=Math.tan,
+		arctan=Math.atan
 	;
 	var
 		atanh = Math.atanh || function(x) {
@@ -838,6 +841,15 @@ window.edsy = new (function() {
 		if (!thmload) {
 			var C = -1 / (heatdismax * heatlevel0);
 			return ((1 / (heatdismax * heatlevel)) + C);
+		} else if (thmload<0){
+		    thmload /= heatcap;
+		    var sqrtAdivB = sqrt(-heatdismax / thmload);
+		    var sqrtAmulB = sqrt(-heatdismax * thmload);
+
+		    var c=1/sqrtAmulB*arctan(sqrtAdivB*heatlevel0);
+
+		    return  -1/sqrtAmulB*arctan(sqrtAdivB*heatlevel)+c
+
 		}
 		thmload /= heatcap;
 		var sqrtAdivB = sqrt(heatdismax / thmload);
@@ -854,6 +866,14 @@ window.edsy = new (function() {
 		if (!thmload) {
 			var C = -1 / (heatdismax * heatlevel0);
 			return ((1 / (seconds - C)) / heatdismax);
+		} else if (thmload<0){
+		    thmload /= heatcap;
+		    var sqrtAdivB = sqrt(-heatdismax / thmload);
+		    var sqrtAmulB = sqrt(-heatdismax * thmload);
+
+		    var c=1/sqrtAmulB*arctan(sqrtAdivB*heatlevel0);
+		    return 1/sqrtAdivB*tan(sqrtAmulB*(-seconds+c));
+
 		}
 		thmload /= heatcap;
 		var sqrtAdivB = sqrt(heatdismax / thmload);
