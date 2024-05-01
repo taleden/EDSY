@@ -1189,7 +1189,6 @@
   "attr-fuelreserve-desc": "Tamanho do tanque de reserva (em toneladas)",
   "attr-fuelxfer": "Transferência de Combustível",
   "attr-fuelxfer-abbr": "TCom",
-  "attr-fuelxfer-desc": "Transferência máxima de drone de combustível (em toneladas)",
   "attr-genmaxmass": "Massa Máxima",
   "attr-genmaxmass-abbr": "MasX",
   "attr-genmaxmass-desc": "Massa máxima do casco da nave (em toneladas)",
