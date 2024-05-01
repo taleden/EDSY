@@ -1240,7 +1240,7 @@
 	"attr-fuelreserve-desc": "Reserve fuel tank size (in tons)",
 	"attr-fuelxfer": "Fuel Transfer",
 	"attr-fuelxfer-abbr": "Xfer",
-	"attr-fuelxfer-desc": "Maximum limpt fuel transfer amount (in tons)",
+	"attr-fuelxfer-desc": "Maximum limpet fuel transfer amount (in tons)",
 	"attr-genmaxmass": "Maximum Mass",
 	"attr-genmaxmass-abbr": "XMas",
 	"attr-genmaxmass-desc": "Maximum ship hull mass (in tons)",
