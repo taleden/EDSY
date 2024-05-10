@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [308179904,308179907,308189903,308189903]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20240414;
+	var VERSIONS = [308189904,308189904,308189904,308189904]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20240509;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -2700,7 +2700,7 @@ window.edsy = new (function() {
 								caumod_usb *= (1 - (slot.getEffectiveAttrValue('caures') / 100));
 							} else if (mtypeid === 'ct') {
 								stats.thmload_ct += slot.getEffectiveAttrValue('engheat');
-							} else if (mtypeid === 'cfsd') {
+							} else if (mtypeid === 'cfsd' || mtypeid === 'cfsdo') {
 								stats.thmload_cfsd += slot.getEffectiveAttrValue('fsdheat');
 							} else if (mtypeid === 'idlc' || mtypeid === 'imlc' || mtypeid === 'irlc') {
 								stats.lmprepcap_max = max(stats.lmprepcap_max, slot.getEffectiveAttrValue('lmprepcap'));

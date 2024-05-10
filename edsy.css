@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 
 :root {
-	--edsy-versions-css: v-308179904-308179907-308159902-308179907; /* HTML,CSS,DB,JS */
-	--edsy-lastmodified-css: d-20240320;
+	--edsy-versions-css: v-308189904-308189904-308189904-308189904; /* HTML,CSS,DB,JS */
+	--edsy-lastmodified-css: d-20240509;
 	
 	--colorblack: black;
 	--colorwhite: white;
@@ -1269,7 +1269,7 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 #outfitting_modules.SLOT #outfitting_modules_picker.component_BH .mtype:not(.cbh),
 #outfitting_modules.SLOT #outfitting_modules_picker.component_PP .mtype:not(.cpp),
 #outfitting_modules.SLOT #outfitting_modules_picker.component_TH .mtype:not(.ct),
-#outfitting_modules.SLOT #outfitting_modules_picker.component_FD .mtype:not(.cfsd),
+#outfitting_modules.SLOT #outfitting_modules_picker.component_FD .mtype:not(.cfsd):not(.cfsdo),
 #outfitting_modules.SLOT #outfitting_modules_picker.component_LS .mtype:not(.cls),
 #outfitting_modules.SLOT #outfitting_modules_picker.component_PD .mtype:not(.cpd),
 #outfitting_modules.SLOT #outfitting_modules_picker.component_SS .mtype:not(.cs),
@@ -1455,7 +1455,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_modules_picker.component_BH .mtype:not(.cbh) .togglebutton INPUT + DIV,
 #outfitting_modules_picker.component_PP .mtype:not(.cpp) .togglebutton INPUT + DIV,
 #outfitting_modules_picker.component_TH .mtype:not(.ct) .togglebutton INPUT + DIV,
-#outfitting_modules_picker.component_FD .mtype:not(.cfsd) .togglebutton INPUT + DIV,
+#outfitting_modules_picker.component_FD .mtype:not(.cfsd):not(.cfsdo) .togglebutton INPUT + DIV,
 #outfitting_modules_picker.component_LS .mtype:not(.cls) .togglebutton INPUT + DIV,
 #outfitting_modules_picker.component_PD .mtype:not(.cpd) .togglebutton INPUT + DIV,
 #outfitting_modules_picker.component_SS .mtype:not(.cs) .togglebutton INPUT + DIV,
@@ -1473,7 +1473,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_modules_picker.component_BH .mtype:not(.cbh) .togglebutton INPUT:checked + DIV,
 #outfitting_modules_picker.component_PP .mtype:not(.cpp) .togglebutton INPUT:checked + DIV,
 #outfitting_modules_picker.component_TH .mtype:not(.ct) .togglebutton INPUT:checked + DIV,
-#outfitting_modules_picker.component_FD .mtype:not(.cfsd) .togglebutton INPUT:checked + DIV,
+#outfitting_modules_picker.component_FD .mtype:not(.cfsd):not(.cfsdo) .togglebutton INPUT:checked + DIV,
 #outfitting_modules_picker.component_LS .mtype:not(.cls) .togglebutton INPUT:checked + DIV,
 #outfitting_modules_picker.component_PD .mtype:not(.cpd) .togglebutton INPUT:checked + DIV,
 #outfitting_modules_picker.component_SS .mtype:not(.cs) .togglebutton INPUT:checked + DIV,
@@ -1490,7 +1490,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #page_body_outfitting.focusmodule #outfitting_modules_picker.component_BH .mtype:not(.cbh) .togglebutton INPUT:checked + DIV,
 #page_body_outfitting.focusmodule #outfitting_modules_picker.component_PP .mtype:not(.cpp) .togglebutton INPUT:checked + DIV,
 #page_body_outfitting.focusmodule #outfitting_modules_picker.component_TH .mtype:not(.ct) .togglebutton INPUT:checked + DIV,
-#page_body_outfitting.focusmodule #outfitting_modules_picker.component_FD .mtype:not(.cfsd) .togglebutton INPUT:checked + DIV,
+#page_body_outfitting.focusmodule #outfitting_modules_picker.component_FD .mtype:not(.cfsd):not(.cfsdo) .togglebutton INPUT:checked + DIV,
 #page_body_outfitting.focusmodule #outfitting_modules_picker.component_LS .mtype:not(.cls) .togglebutton INPUT:checked + DIV,
 #page_body_outfitting.focusmodule #outfitting_modules_picker.component_PD .mtype:not(.cpd) .togglebutton INPUT:checked + DIV,
 #page_body_outfitting.focusmodule #outfitting_modules_picker.component_SS .mtype:not(.cs) .togglebutton INPUT:checked + DIV,
@@ -1508,7 +1508,7 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_modules_picker.component_BH .mtype:not(.cbh) .togglebutton INPUT + DIV .iconsvg,
 #outfitting_modules_picker.component_PP .mtype:not(.cpp) .togglebutton INPUT + DIV .iconsvg,
 #outfitting_modules_picker.component_TH .mtype:not(.ct) .togglebutton INPUT + DIV .iconsvg,
-#outfitting_modules_picker.component_FD .mtype:not(.cfsd) .togglebutton INPUT + DIV .iconsvg,
+#outfitting_modules_picker.component_FD .mtype:not(.cfsd):not(.cfsdo) .togglebutton INPUT + DIV .iconsvg,
 #outfitting_modules_picker.component_LS .mtype:not(.cls) .togglebutton INPUT + DIV .iconsvg,
 #outfitting_modules_picker.component_PD .mtype:not(.cpd) .togglebutton INPUT + DIV .iconsvg,
 #outfitting_modules_picker.component_SS .mtype:not(.cs) .togglebutton INPUT + DIV .iconsvg,
