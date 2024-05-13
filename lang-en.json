@@ -12,7 +12,7 @@
 	"language-pt": "Portuguese, Brazilian",
 	"language-ru": "Russian",
 	"language-zh": "Chinese, Simplified",
-	
+
 
 	"ui-shipyard": "Shipyard",
 	"ui-outfitting": "Outfitting",
@@ -21,7 +21,7 @@
 	"ui-stored": "Stored",
 	"ui-retrofit": "Retrofit",
 	"ui-compare": "Compare",
-	
+
 
 	"ui-shipyard-build-label": "Build",
 	"ui-shipyard-build-desc": "Stored build label",
@@ -103,14 +103,14 @@
 	"ui-shipyard-dps-caustic-desc": "Caustic DPS portion",
 	"ui-shipyard-copy-live": "Copy from Live Site",
 	"ui-shipyard-copy-live-confirm": "Copy builds from live site storage?\nAny matching beta or dev site builds will be overwritten.",
-	
+
 
 	"ui-slotgroup-hardpoint": "Hardpoints",
 	"ui-slotgroup-utility": "Utility Mounts",
 	"ui-slotgroup-component": "Core Internal",
 	"ui-slotgroup-military": "Military",
 	"ui-slotgroup-internal": "Optional Internal",
-	
+
 
 	"ui-slot-size-0-abbr": "U",
 	"ui-slot-size-1-abbr": "S",
@@ -126,7 +126,7 @@
 	"ui-slot-component-6-abbr": "SS",
 	"ui-slot-component-7-abbr": "FT",
 	"ui-slot-military-abbr": "MC",
-	
+
 
 	"ui-modules-all": "ALL",
 	"ui-modules-stored": "STR",
@@ -136,7 +136,7 @@
 	"ui-modules-military": "MIL",
 	"ui-modules-optional": "OPT",
 	"ui-modules-slot": "SLOT",
-	
+
 
 	"ui-slots-show": "SHOW",
 	"ui-slots-show-mass": "Mass",
@@ -147,7 +147,7 @@
 	"ui-slots-operations-import": "Import...",
 	"ui-slots-operations-export": "Export...",
 	"ui-slots-operations-clone": "Clone Discounts",
-	
+
 
 	"ui-slots-name": "Name:",
 	"ui-slots-id": "ID:",
@@ -164,12 +164,12 @@
 	"ui-slots-price-abbr": "Price",
 	"ui-slots-price-desc": "Hull or module price (in credits); for hulls, this excludes all stock modules",
 	"ui-slots-restricted": "This slot is restricted to specific module types.",
-	
+
 
 	"ui-details-discount-actual": "Actual",
 	"ui-details-discount-free": "FREE",
 	"ui-details-blueprint-grade": "Grade",
-	
+
 
 	"ui-button-back": "Back",
 	"ui-button-cancel": "Cancel",
@@ -180,7 +180,7 @@
 	"ui-button-okay": "Okay",
 	"ui-button-remove": "Remove",
 	"ui-button-replace": "Replace",
-	
+
 
 	"ui-stats-show": "SHOW STATS",
 	"ui-stats-hide": "HIDE STATS",
@@ -357,7 +357,7 @@
 	"ui-stats-price-rebuy-desc": "Insurance rebuy price",
 	"ui-stats-price-buy-abbr": "BUY",
 	"ui-stats-price-buy-desc": "Total buy price",
-	
+
 
 	"ui-retrofit-builds": "Builds",
 	"ui-retrofit-target-build": "Target Build",
@@ -409,7 +409,7 @@
 	"ui-retrofit-action-conv-abbr": "Conv",
 	"ui-retrofit-action-eng-abbr": "Eng",
 	"ui-retrofit-action-exp-abbr": "Exp",
-	
+
 
 	"ui-options": "Options",
 	"ui-options-insurance": "Insurance Level",
@@ -456,14 +456,14 @@
 	"ui-options-backup-prompt": "Below is a JSON object encoding all stored builds, modules, and other preferences, suitable for backup or transfer to another device or browser.",
 	"ui-options-restore": "Restore Data",
 	"ui-options-restore-desc": "Import stored builds, modules, and other preferences that were previously exported from another device or browser.",
-	
+
 
 	"ui-help-contact": "Contact Me",
 	"ui-help-contact-discord": "discord",
 	"ui-help-contact-forum": "forum",
 	"ui-help-contact-reddit": "reddit",
 	"ui-help-contact-email": "email",
-	
+
 
 	"ui-export-build": "Build",
 	"ui-export-url": "URL",
@@ -475,7 +475,7 @@
 	"ui-export-update-inara": "Update Inara",
 	"ui-export-edomh": "EDOMH",
 	"ui-export-generating": "Generating ...",
-	
+
 
 	"ui-import-header1-desc": "You can import your current ship (and any others used today) directly from the Frontier API.",
 	"ui-import-header2-desc": "You must log in with Frontier to grant access, but EDSY will never see your password.",
@@ -517,7 +517,7 @@
 	"ui-import-failed": "Import failed:",
 	"ui-import-warning-invalid": "Some choices were invalid; hover over the warning icon(s) for details.",
 	"ui-import-error-duplicate": "Cannot import multiple builds with the same label.",
-	
+
 
 	"message-version": "A new version is available!",
 	"message-version-desc": "Click Okay to update, or force-refresh in your browser (ctrl+F5, Apple+r, Command+r, etc)",
@@ -529,7 +529,7 @@
 	"message-module-save": "Choose a label for the stored module",
 	"message-module-rename": "Choose a new label for the stored module",
 	"message-module-overwrite-builtin": "Cannot overwrite a builtin module",
-	
+
 
 	"api-error": "remote API error",
 	"available": "available",
@@ -554,7 +554,7 @@
 	"retracted": "retracted",
 	"unknown": "Unknown!",
 	"unladen": "unladen",
-	
+
 
 	"unit-credits-abbr": "Cr",
 	"unit-credits-per-ton-abbr": "Cr/T",
@@ -576,7 +576,7 @@
 	"unit-seconds-abbr": "s",
 	"unit-tons-abbr": "T",
 	"unit-tons-per-second-abbr": "T/s",
-	
+
 
 	"interp-number": "{number}",
 	"interp-grade-abbr-number": "G{number}",
@@ -599,7 +599,7 @@
 	"interp-number-added-a-b": "{number} ({a} + {b})",
 	"interp-version-abcd": "v{a}.{b}.{c}{rc}{d}",
 	"interp-updated-date": "updated {date}",
-	
+
 
 	"ship-1": "Sidewinder",
 	"ship-2": "Cobra Mk III",
@@ -640,7 +640,7 @@
 	"ship-53": "Dolphin",
 	"ship-61": "Federal Corvette",
 	"ship-62": "Imperial Cutter",
-	
+
 
 	"mtype-cbh": "Bulkheads",
 	"mtype-cch": "Cargo Hatches",
@@ -710,7 +710,7 @@
 	"mtype-upd": "Point Defence",
 	"mtype-upwa": "Pulse Wave Analyser",
 	"mtype-usb": "Shield Boosters",
-	
+
 
 	"module-150": "Cargo Rack (Cap: 2)",
 	"module-250": "Cargo Rack (Cap: 4)",
@@ -865,7 +865,7 @@
 	"module-88146": "Guardian Shard Cannon",
 	"module-88299": "Guardian Nanite Torpedo Pylon",
 	"module-88299-abbr": "Nanite Torpedo Pylon",
-	
+
 
 	"blueprint-cbh_br": "Blast Resistant",
 	"blueprint-cbh_hd": "Heavy Duty",
@@ -932,7 +932,8 @@
 	"blueprint-wpn_rf": "Rapid Fire",
 	"blueprint-wpn_sr": "Short Range",
 	"blueprint-wpn_stu": "Sturdy",
-	
+	"blueprint-wpn_aagf": "Anti-Guardian Zone Resistance",
+
 
 	"expeffect-cbhx_ap": "Angled Plating",
 	"expeffect-cbhx_dp": "Deep Plating",
@@ -1050,7 +1051,7 @@
 	"expeffect-wpnx_thve-special": "Heat reduced when striking a target",
 	"expeffect-wpnx_tlb": "Target Lock Breaker",
 	"expeffect-wpnx_tlb-special": "Target loses target lock",
-	
+
 
 	"attr-absres": "Absolute Resistance",
 	"attr-absres-abbr": "AbR",
@@ -1571,7 +1572,7 @@
 	"attr-yaw": "Yaw Speed",
 	"attr-yaw-abbr": "Yaw",
 	"attr-yaw-desc": "Base yaw speed (in degrees per second) with outfitting mass equal to thruster optimal mass",
-	
+
 
 	"stat-burst-dps": "Burst DPS",
 	"stat-cabins": "Cabins",
@@ -1582,7 +1583,7 @@
 	"stat-range": "Range",
 	"stat-rebuy": "Re-Buy",
 	"stat-speed": "Speed",
-	
+
 
 	"mattype-enc": "Encoded",
 	"mattype-enc-abbr": "Enc",
@@ -1590,7 +1591,7 @@
 	"mattype-mfc-abbr": "Mfc",
 	"mattype-raw": "Raw",
 	"mattype-raw-abbr": "Raw",
-	
+
 
 	"material-abcoemda": "Abnormal Compact Emissions Data",
 	"material-abshpaan": "Aberrant Shield Pattern Analysis",
@@ -1729,14 +1730,14 @@
 	"material-ytt": "Yttrium",
 	"material-zin": "Zinc",
 	"material-zir": "Zirconium",
-	
+
 
 	"faction-alliance": "Alliance",
 	"faction-empire": "Empire",
 	"faction-federation": "Federation",
 	"faction-independent": "Independent",
 	"faction-thargoid": "Thargoid",
-	
+
 
 	"rank-empire-1": "Outsider",
 	"rank-empire-2": "Serf",
@@ -1766,7 +1767,7 @@
 	"rank-federation-12": "Rear Admiral",
 	"rank-federation-13": "Vice Admiral",
 	"rank-federation-14": "Admiral",
-	
+
 
 	"size-0": "Utility",
 	"size-0-abbr": "U",
@@ -1778,7 +1779,7 @@
 	"size-3-abbr": "L",
 	"size-4": "Huge",
 	"size-4-abbr": "H",
-	
+
 
 	"rating-a": "A",
 	"rating-b": "B",
@@ -1790,7 +1791,7 @@
 	"rating-h": "H",
 	"rating-i": "I",
 	"rating-j": "J",
-	
+
 
 	"mount-f": "Fixed",
 	"mount-f-abbr": "F",
@@ -1798,13 +1799,13 @@
 	"mount-g-abbr": "G",
 	"mount-t": "Turreted",
 	"mount-t-abbr": "T",
-	
+
 
 	"missile-d": "Dumbfire",
 	"missile-d-abbr": "D",
 	"missile-s": "Seeker",
 	"missile-s-abbr": "S",
-	
+
 
 	"cabincls-p": "Prison",
 	"cabincls-p-abbr": "P",
@@ -1816,6 +1817,6 @@
 	"cabincls-f-abbr": "F",
 	"cabincls-l": "Luxury",
 	"cabincls-l-abbr": "L",
-	
+
 	"": ""
 }

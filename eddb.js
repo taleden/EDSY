@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 308189904,
-	edsy_versions_db : [308189904,308189904,308189904,308189904], /* HTML,CSS,DB,JS */
+	version : 308189905,
+	edsy_versions_db : [308189904,308189904,308189905,308189904], /* HTML,CSS,DB,JS */
 	edsy_lastmodified_db : 20240510,
 	ship : {
 		 1 : {
@@ -1515,6 +1515,7 @@ var eddb = {
 		bor      : { name:'Boron', mattype:'raw', matgrp:7, rarity:3, fdid:128850246, fdname:'Boron' },
 		cad      : { name:'Cadmium', mattype:'raw', matgrp:3, rarity:3, fdid:128672330, fdname:'Cadmium' },
 		car      : { name:'Carbon', mattype:'raw', matgrp:1, rarity:1, fdid:128672322, fdname:'Carbon' },
+		cacr     : { name:'Caustic Crystal', mattype:'mfc', matgrp:0, rarity:4, fdid:null, fdname:'TG_CausticCrystal' }, // TODO: matgrp,fdid
 		chdi     : { name:'Chemical Distillery', mattype:'mfc', matgrp:1, rarity:3, fdid:128673906, fdname:'ChemicalDistillery' },
 		chma     : { name:'Chemical Manipulators', mattype:'mfc', matgrp:1, rarity:4, fdid:128673916, fdname:'ChemicalManipulators' },
 		chpr     : { name:'Chemical Processors', mattype:'mfc', matgrp:1, rarity:2, fdid:128673896, fdname:'ChemicalProcessors' },
@@ -1553,6 +1554,7 @@ var eddb = {
 		guteco   : { name:'Guardian Technology Component', mattype:'mfc', matgrp:0, rarity:3, fdid:128815025, fdname:'Guardian_TechComponent' },
 		guveblse : { name:'Guardian Vessel Blueprint Segment', mattype:'enc', matgrp:0, rarity:5, fdid:128815030, fdname:'Guardian_VesselBlueprint' },
 		guweblse : { name:'Guardian Weapon Blueprint Segment', mattype:'enc', matgrp:0, rarity:4, fdid:128815028, fdname:'Guardian_WeaponBlueprint' },
+		hasufr   : { name:'Hardened Surface Fragments', mattype:'mfc', matgrp:0, rarity:1, fdid:null, fdname:'TG_Abrasion03' }, // TODO: matgrp,fdid
 		hecowi   : { name:'Heat Conduction Wiring', mattype:'mfc', matgrp:3, rarity:1, fdid:128673882, fdname:'HeatConductionWiring' },
 		hedipl   : { name:'Heat Dispersion Plate', mattype:'mfc', matgrp:3, rarity:2, fdid:128673892, fdname:'HeatDispersionPlate' },
 		heex     : { name:'Heat Exchangers', mattype:'mfc', matgrp:3, rarity:3, fdid:128673902, fdname:'HeatExchangers' },
@@ -1611,6 +1613,7 @@ var eddb = {
 		stwaso   : { name:'Strange Wake Solutions', mattype:'enc', matgrp:2, rarity:3, fdid:128681625, fdname:'WakeSolutions' },
 		sul      : { name:'Sulphur', mattype:'raw', matgrp:3, rarity:1, fdid:128672323, fdname:'Sulphur' },
 		taenco   : { name:'Tagged Encryption Codes', mattype:'enc', matgrp:4, rarity:2, fdid:128681617, fdname:'EncryptionCodes' },
+		tacoch   : { name:'Tactical Core Chip', mattype:'mfc', matgrp:0, rarity:2, fdid:null, fdname:'UnknownCoreChip' }, // TODO: matgrp,fdid
 		tec      : { name:'Technetium', mattype:'raw', matgrp:2, rarity:4, fdid:128672340, fdname:'Technetium' },
 		tel      : { name:'Tellurium', mattype:'raw', matgrp:5, rarity:4, fdid:128672338, fdname:'Tellurium' },
 		teal     : { name:'Tempered Alloys', mattype:'mfc', matgrp:2, rarity:1, fdid:128673879, fdname:'TemperedAlloys' },
@@ -1663,6 +1666,7 @@ var eddb = {
 		wpn_rf : { name:'Rapid Fire', maxgrade:5, damage:[-1,-2,-3,-4,-5], distdraw:[0,-5,-15,-25,-35], bstint:[-8,-17,-26,-35,-44], rldtime:[-25,-35,-45,-55,-65], jitter:[0.5,0.5,0.5,0.5,0.5], mats:[ {mesc:1}, {mesc:1, hedipl:1}, {splefi:1, meeq:1, pral:1}, {mocofi:1, meco:1, thal:1}, {pral:1, confco:1, tec:1} ], fdname:'Weapon_RapidFire' },
 		wpn_sr : { name:'Short Range', maxgrade:5, damage:[27,39,51,63,75], thmload:[0,10,20,30,40], maximumrng:[-10,-20,-30,-40,-50], mats:[ {nic:1}, {nic:1, mocofi:1}, {nic:1, mocofi:1, elar:1}, {mocofi:1, elar:1, copo:1}, {crinfi:1, confco:1, bico:1} ], fdname:'Weapon_ShortRange' },
 		wpn_stu : { name:'Sturdy', maxgrade:5, mass:[20,40,60,80,100], integ:[100,150,200,250,300], thmload:[-10,-15,-20,-25,-30], pierce:[20,30,40,50,60], mats:[ {nic:1}, {nic:1, shem:1}, {nic:1, shem:1, tun:1}, {zin:1, tun:1, mol:1}, {hideco:1, mol:1, tec:1} ], fdname:'Weapon_Sturdy' },
+		wpn_aagf : { name:'Anti-Guardian Zone Resistance', maxgrade:1, damage:[-20], mats:[ {hasufr:2},{cacr:1},{tacoch:1} ], fdname:'GuardianWeapon_Sturdy' }, // verify: fdname
 		
 		scan_fs : { name:'Fast Scan', maxgrade:5, integ:[-10,-20,-30,-40,-50], scanrng:[-5,-10,-15,-20,-25], scantime:[-20,-35,-50,-65,-80], mats:[ {pho:1}, {pho:1, flfocr:1}, {pho:1, flfocr:1, opsyke:1}, {man:1, focr:1, atenar:1}, {ars:1, refocr:1, adenca:1} ], fdname:'Sensor_FastScan' },
 		scan_lr : { name:'Long Range', maxgrade:5, pwrdraw:[10,20,30,40,50], scanrng:[24,48,72,96,120], maxangle:[-10,-15,-20,-25,-30], mats:[ {iro:1}, {iro:1, hyca:1}, {iro:1, hyca:1, unemda:1}, {ger:1, elar:1, deemda:1}, {nio:1, poca:1, abcoemda:1} ], fdname:'Sensor_LongRange' },
@@ -1926,7 +1930,7 @@ var eddb = {
 			modulenames:{},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 			modifiable:['damage','distdraw','thmload','bstint','bstrof','bstsize','ammoclip','ammomax','dmgfall'],
-			blueprints:['wpn_rf'],
+			blueprints:['wpn_rf','wpn_aagf'],
 		},
 		
 		hexgp : {
@@ -1935,7 +1939,7 @@ var eddb = {
 			modulenames:{'Guardian Plasma Charger':1},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 			modifiable:['pwrdraw','damage','thmload','pierce','shotspd','ammoclip'],
-			blueprints:['wpn_oc'],
+			blueprints:['wpn_oc','wpn_aagf'],
 		},
 		
 		hexgs : {
@@ -1944,7 +1948,7 @@ var eddb = {
 			modulenames:{'Guardian Shard Cannon':1},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 			modifiable:['mass','pwrdraw','distdraw','thmload','pierce','maximumrng','shotspd','jitter','dmgfall'],
-			blueprints:['wpn_lr'],
+			blueprints:['wpn_lr','wpn_aagf'],
 		},
 		
 		hexsc : {
