@@ -1943,7 +1943,7 @@ var eddb = {
 			sortname:'Experimental - Guardian Shard',
 			modulenames:{'Guardian Shard Cannon':1},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
-			modifiable:['mass','pwrdraw','distdraw','thmload','pierce','maximumrng','shotspd','jitter','dmgfall'],
+			modifiable:['mass','pwrdraw','distdraw','thmload','pierce','maximumrng','shotspd','jitter','dmgfall','damage'],
 			blueprints:['wpn_lr'],
 		},
 		
