@@ -59,7 +59,7 @@ window.edsy = new (function() {
 		882230 : { name:"2B/F Grd Plasma, OC+Foc",               modulehash:"HLYVG-2Gxq60vBh4zHx8y00Cw00H800KvLL",             tag:'T' }, // Salvation tech broker // TODO: get sample to test import
 		881460 : { name:"1D/F Grd Shard, LR+Foc, Pen",           modulehash:"HLXIG-2G0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", tag:'T' }, // Salvation tech broker
 		882160 : { name:"2A/F Grd Shard, LR+Foc, Pen",           modulehash:"HLYOG-2G0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", tag:'T' }, // Salvation tech broker // TODO: get sample to test import
-	//	882161 : { name:"2A/F Grd Shard, LR5",                   modulehash:"GLYOG02G0080y0051Cp993DDFm0H058L800Op7uV700",     tag:'C' }, // TODO: CG reward? // TODO: get sample to test import
+		882161 : { name:"2A/F Grd Shard, LR5",                   modulehash:"GLYOmH7I03G0080y0051Cp993DDFm0H058L800Op77V700",  tag:'C' }, // CG reward // TODO: get sample to test import
 		811410 : { name:"1D/F Abrasion Blaster, LR",             modulehash:"FJprG02G0062y006y00Ey00Iy00L800P800",             tag:'C' }, // CG reward // TODO: get sample to test import
 		811400 : { name:"1D/F Mining Laser, LR, Incen",          modulehash:"HJpqmF5j3H0072y006y00AkPcEy00I_ezL800PBLL",       tag:'T' }, // Torval Mining Ltd tech broker
 		822230 : { name:"2B Seeker \"V1\", HC+LW, ThermCas",     modulehash:"HK4lG-3Q_W42-Cp6ypDAsPcIwPc",                     tag:'T' }, // human tech broker
