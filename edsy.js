@@ -3559,7 +3559,7 @@ window.edsy = new (function() {
 				// since the slot size could be misreported by the slot name, take the greater of that or the size of the actual slotted module, if any
 				if (modulejson) {
 					var fdname = (modulejson.Item || '').trim().toUpperCase();
-					var modid = fdevmap.shipModule[shipid][fdname] || fdevmap.module[fdname];
+					var modid = (fdevmap.shipModule[shipid] || EMPTY_OBJ)[fdname] || fdevmap.module[fdname];
 					var module = eddb.module[modid];
 					if (module)
 						slotSize[slotname] = max(slotSize[slotname], (module.class || 0) | 0);
@@ -3635,7 +3635,7 @@ window.edsy = new (function() {
 					var slot = build.getSlot(slotgroup, slotnum);
 					if (slot) {
 						var fdname = (modulejson.Item || '').trim().toUpperCase();
-						var modid = fdevmap.shipModule[shipid][fdname] || fdevmap.module[fdname];
+						var modid = (fdevmap.shipModule[shipid] || EMPTY_OBJ)[fdname] || fdevmap.module[fdname];
 						if (modid > 0) {
 							if (slot.setModuleID(modid, true)) {
 								if (!current.option.experimental && !slot.setModuleID(modid)) {
@@ -3816,7 +3816,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				if (engineerobj || modifierobj || modifierarr || specialobj) {
 					var modulename = (moduleobj["name"] || '').trim();
 					var fdname = modulename.toUpperCase();
-					var modid = fdevmap.shipModule[shipid][fdname] || fdevmap.module[fdname];
+					var modid = (fdevmap.shipModule[shipid] || EMPTY_OBJ)[fdname] || fdevmap.module[fdname];
 					var module = cache.shipModules[shipid][modid] || eddb.module[modid];
 					var eventengobj = {
 						"Engineer": (engineerobj || EMPTY_OBJ)["engineerName"],
