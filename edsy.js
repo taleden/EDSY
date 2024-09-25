@@ -41,7 +41,7 @@ window.edsy = new (function() {
 	var BPROLL_UPGRADE = 0.8;
 //	var BPROLL_LIMIT = 0.95;
 	var DISCOUNTS = [30,20,15,10,5,2.5];
-	var HASH_VERSION = 17;
+	var HASH_VERSION = 18;
 	var ICON_MOUNT = { F:'fixed', G:'gimballed', T:'turreted' };
 	var ICON_MISSILE = { D:'dumbfire', S:'seeker' };
 	var ICON_TAG = { C:'community', G:'guardian', P:'powerplay', T:'techbroker' };
@@ -60,6 +60,7 @@ window.edsy = new (function() {
 		881460 : { name:"1D/F Grd Shard, LR+Foc, Pen",           modulehash:"HLXIG-2G0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", tag:'T' }, // Salvation tech broker
 		882160 : { name:"2A/F Grd Shard, LR+Foc, Pen",           modulehash:"HLYOG-2G0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", tag:'T' }, // Salvation tech broker // TODO: get sample to test import
 		882161 : { name:"2A/F Grd Shard, LR5",                   modulehash:"GLYOmH7I03G0080y0051Cp993DDFm0H058L800Op77V700",  tag:'C' }, // CG reward // TODO: get sample to test import
+		
 		811410 : { name:"1D/F Abrasion Blaster, LR",             modulehash:"FJprG02G0062y006y00Ey00Iy00L800P800",             tag:'C' }, // CG reward // TODO: get sample to test import
 		811400 : { name:"1D/F Mining Laser, LR, Incen",          modulehash:"HJpqmF5j3H0072y006y00AkPcEy00I_ezL800PBLL",       tag:'T' }, // Torval Mining Ltd tech broker
 		822230 : { name:"2B Seeker \"V1\", HC+LW, ThermCas",     modulehash:"HK4lG-3Q_W42-Cp6ypDAsPcIwPc",                     tag:'T' }, // human tech broker
@@ -892,6 +893,7 @@ window.edsy = new (function() {
 		this.cost = 0;
 		this.powered = true;
 		this.priority = 1;
+		this.preeng = 0;
 		this.bpid = 0;
 		this.bpgrade = 0;
 		this.bproll = 0;
@@ -1016,6 +1018,7 @@ window.edsy = new (function() {
 			this.module = ((this.slotgroup === 'ship' && this.slotnum === 'hull') ? eddb.ship[modid] : this.build.getModule(modid));
 			this.discounts = 0;
 			this.cost = 0;
+			this.preeng = 0;
 			this.bpid = 0;
 			this.bpgrade = 0;
 			this.bproll = 0;
@@ -1109,6 +1112,18 @@ window.edsy = new (function() {
 			}
 			return this.setPriority(priority);
 		}, // changePriority()
+		
+		
+		setPreEngineered: function(preeng) {
+			this.preeng = preeng ? 1 : 0;
+			this.clearHash();
+			return true;
+		}, // setPreEngineered()
+		
+		
+		getPreEngineered: function() {
+			return this.preeng;
+		}, // getPreEngineered()
 		
 		
 		setBlueprint: function(bpid, bpgrade, bproll) {
@@ -1578,7 +1593,7 @@ window.edsy = new (function() {
 		
 		getHash: function(stored) {
 			/*
-			module hash format (HASH_VERSION=17):
+			module hash format (HASH_VERSION=18):
 				<3 chars / 18 bits>: module id (0..262143)
 				<1 char / 6 bits>: slot flags
 					0x20 <bit 1>: costed?
@@ -1594,7 +1609,7 @@ window.edsy = new (function() {
 					<1 char / 6 bits>: discount bits
 				engineered ?
 					<2 chars / 12 bits>: engineering flags
-						0x800 <bit 1>: unused
+						0x800 <bit 1>: preengineered
 						0x780 <bit 2-5>: blueprint index (0..15)
 						0x070 <bit 6-8>: blueprint grade (0..7)
 						0x00F <bit 9-12>: experimental index (0..15)
@@ -1624,22 +1639,23 @@ window.edsy = new (function() {
 				}
 				
 				var mtype = (eddb.mtype[this.module.mtype] || EMPTY_OBJ);
+				var preeng = (this.preeng ? 1 : 0);
 				var bpidx = ((mtype.blueprints || EMPTY_ARR).indexOf(this.bpid) + 1);
 				var expidx = ((mtype.expeffects || EMPTY_ARR).indexOf(this.expid) + 1);
 				var bproll = (((this.bproll * 4000) + 0.5) | 0);
 				var nummods = 0;
-				var modhash = '';
+				var modulehash = '';
 				if (mtype.modifiable && this.attrModifier) {
 					for (var a = 0;  a < mtype.modifiable.length;  a++) {
 						var attr = mtype.modifiable[a];
 						if (cache.attribute[attr] && this.attrModifier[attr] && this.attrOverride[attr]) {
 							nummods++;
-							modhash += hashEncode(((a & 0xF) << 20) | (float20Encode(this.attrModifier[attr]) & 0xFFFFF), 4);
+							modulehash += hashEncode(((a & 0xF) << 20) | (float20Encode(this.attrModifier[attr]) & 0xFFFFF), 4);
 						}
 					}
 				}
-				var engbits = (((bpidx & 0xF) << 7) | ((this.bpgrade & 0x7) << 4) | (expidx & 0xF));
-				var enghash = ((engbits || nummods) ? (hashEncode(engbits, 2) + hashEncode(bproll, 2) + hashEncode(nummods & 0x1F, 1) + modhash) : '');
+				var engbits = (((preeng & 0x1) << 11) | ((bpidx & 0xF) << 7) | ((this.bpgrade & 0x7) << 4) | (expidx & 0xF));
+				var enghash = ((engbits || nummods) ? (hashEncode(engbits, 2) + hashEncode(bproll, 2) + hashEncode(nummods & 0x1F, 1) + modulehash) : '');
 				
 				var slotbits = ((costed ? 0x20 : 0) | (enghash ? 0x10 : 0) | (this.getPowered() ? 0 : 0x8) | ((this.getPriority() - 1) & 0x7));
 				this.hash = (modidhash + hashEncode(slotbits, 1) + costhash + enghash);
@@ -1716,8 +1732,9 @@ window.edsy = new (function() {
 			var mtype = (eddb.mtype[mtypeid] || EMPTY_OBJ);
 			if (engineered) {
 				var engbits = ((version >= 9) ? hashDecode(hash.slice(i, (i += ((version >= 12 && version <= 14) ? 3 : 2)))) : 0);
-				var bpidx, bpid, bpgrade, expidx, expid, bproll, nummods;
+				var preeng, bpidx, bpid, bpgrade, expidx, expid, bproll, nummods;
 				if (version >= 15) {
+					preeng = (version >= 18) ? ((engbits >> 11) & 0x1) : !!cache.modulehashBuiltin[hash];
 					bpidx = ((engbits >> 7) & 0xF);
 					bpid = (idmap.blueprint[mtypeid] || mtype.blueprints || EMPTY_ARR)[bpidx - 1];
 					bpgrade = ((engbits >> 4) & 0x7);
@@ -1725,6 +1742,7 @@ window.edsy = new (function() {
 					bproll = hashDecode(hash.slice(i, (i += 2))) / 4000.0;
 					nummods = hashDecode(hash.slice(i, (i += 1)));
 				} else if (version >= 12) {
+					preeng = !!cache.modulehashBuiltin[hash];
 					var bprolled = ((version >= 14) ? (engbits & 0x20000) : false);
 					bpidx = ((engbits >> 13) & ((version >= 14) ? 0xF : 0x1F));
 					bpid = (idmap.blueprint[mtypeid] || mtype.blueprints || EMPTY_ARR)[bpidx - 1];
@@ -1733,6 +1751,7 @@ window.edsy = new (function() {
 					bproll = (bprolled ? max(MIN_BPROLL, (engbits & 0x1F) * 0.05) : 0);
 					nummods = (bprolled ? 0 : (engbits & 0x1F));
 				} else {
+					preeng = !!cache.modulehashBuiltin[hash];
 					bpidx = ((engbits >> 6) & 0x3F);
 					bpid = (bpidx ? (idmap.blueprint[mtypeid] || mtype.blueprints || EMPTY_ARR)[((bpidx % 10 + 0.5) | 0)] : 0);
 					bpgrade = ((bpidx / 10 + 0.5) | 0);
@@ -1744,6 +1763,7 @@ window.edsy = new (function() {
 				
 				// convert surface scanner blueprints
 				if (version < 13 && mtypeid === 'iss' && bpid && bpgrade > 0) {
+					preeng = 0;
 					bpid = 'iss_er';
 					bpgrade--;
 					bproll = 1.0;
@@ -1751,6 +1771,9 @@ window.edsy = new (function() {
 				}
 				
 				// set blueprint, grade, roll
+				if (!this.setPreEngineered(preeng)) {
+					if (errors) errors.push(errortag + 'Cannot set pre-engineered: '+preeng);
+				}
 				if (!this.setBlueprint(bpid, bpgrade, bproll)) {
 					if (errors) errors.push(errortag + 'Invalid blueprint: '+bpid+' G'+bpgrade+' @'+bproll);
 				}
@@ -2042,7 +2065,7 @@ window.edsy = new (function() {
 	
 	
 	Slot.getModuleIDStoredHash = function(modid) {
-		// HASH_VERSION=17
+		// HASH_VERSION=18
 		return (hashEncode(HASH_VERSION, 1) + hashEncode(modid & 0x1FFFF, 3) + hashEncode(0, 2)); // slotbits(!costed), discountbits
 	}; // getModuleIDStoredHash()
 	
@@ -2080,6 +2103,8 @@ window.edsy = new (function() {
 		var modid2 = slot2 ? slot2.getModuleID() : 0;
 		var discmod1 = slot1 ? cache.discountMod[slot1.getDiscounts()] : 1;
 		var discmod2 = slot2 ? cache.discountMod[slot2.getDiscounts()] : 1;
+		var preeng1 = slot1 ? slot1.getPreEngineered() : 0;
+		var preeng2 = slot2 ? slot2.getPreEngineered() : 0;
 		var bpid1 = slot1 ? slot1.getBlueprintID() : '';
 		var bpid2 = slot2 ? slot2.getBlueprintID() : '';
 		var bpgrade1 = slot1 ? slot1.getBlueprintGrade() : 0;
@@ -2095,12 +2120,12 @@ window.edsy = new (function() {
 		if (modid2 && sgrp2 !== 'ship' && modid1 != modid2)
 			modidNum[modid2] = (modidNum[modid2] || 0) + 1;
 		
-		// if we have an old module and it's different, or it's insufficiently discounted and not too engineered, sell it
+		// if we have an old module and it's different, or it's insufficiently discounted and not too engineered, or it's pre-engineered and we want different engineering, sell it
 		if (modid1) {
-			if ((modid1 != modid2) || (discmod1 > max(cache.discountMod[limdisc], discmod2) && (!bpid2 || bpid1 != bpid2 || bpgrade1 <= limdisceng))) {
+			if ((modid1 != modid2) || (discmod1 > max(cache.discountMod[limdisc], discmod2) && (!bpid2 || bpid1 != bpid2 || bpgrade1 <= limdisceng)) || (preeng1 && (bpid1 != bpid2 || bpgrade1 != bpgrade2 || bproll1 != bproll2))) {
 				steps.push({ sgrp:sgrp1, sid:shipid1, mid:((sgrp1 === 'ship') ? 0 : modid1), num:modidNum[modid1], act:'Sell', discmod:discmod1, cost:{'':-slot1.getCost()} });
 				slot1 = null;
-				modid1 = bpgrade1 = bproll1 = 0;
+				modid1 = preeng1 = bpgrade1 = bproll1 = 0;
 				bpid1 = expid1 = '';
 			}
 		}
@@ -2109,15 +2134,16 @@ window.edsy = new (function() {
 		if (modid2) {
 			// if we have no matching old module, buy one
 			if (modid1 != modid2) {
+				// TODO when buying a preeng, override the name
 				steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Buy', discmod:discmod2, cost:{'':slot2.getCost()} });
 				modid1 = modid2;
 				bpgrade1 = bproll1 = 0;
 				bpid1 = expid1 = '';
 			}
 			
-			// if we have a blueprint, roll it up
+			// if we have a blueprint that isn't pre-engineered, roll it up
 			var blueprint = eddb.blueprint[bpid2];
-			if (blueprint) {
+			if (blueprint && !preeng2) {
 				if (bpid1 != bpid2) {
 					bpid1 = bpid2;
 					bpgrade1 = 1;
@@ -3501,7 +3527,8 @@ window.edsy = new (function() {
 				idmap.module[86222] = 86262; // AX Missile Rack
 				idmap.module[86310] = 86330; // AX Missile Rack
 				idmap.module[86312] = 86352; // AX Missile Rack
-			case 17: // HASH_VERSION
+			case 17:
+			case 18: // HASH_VERSION
 			default:
 			}
 		}
@@ -3653,7 +3680,7 @@ window.edsy = new (function() {
 								var mtypeid = slot.getModule().mtype;
 								if (modulejson.Engineering) {
 									var fdname = (modulejson.Engineering.BlueprintName || '').trim().toUpperCase();
-									var bpid = fdevmap.mtypeBlueprint[mtypeid][fdname];
+									var bpid = (fdevmap.mtypeBlueprint[mtypeid] || EMPTY_OBJ)[fdname];
 									var bpgrade = 0;
 									var bproll = 0;
 									if (bpid) {
@@ -3752,6 +3779,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 												slot.setBlueprintRoll(0);
 											}
 										}
+									}
+									
+									// if the resulting modulehash matches a builtin, set the preeng flag
+									var preeng = !!cache.modulehashBuiltin[slot.getStoredHash()];
+									if (!slot.setPreEngineered(preeng)) {
+										if (errors) errors.push(modulejson.Slot + ': Invalid pre-engineered: ' + preeng);
 									}
 								}
 							} else if (errors) errors.push(modulejson.Slot + ': Invalid module: ' + modulejson.Item);
@@ -4670,13 +4703,29 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			}
 		}
 		
-		// initialize mtype builtins
+		// initialize mtype builtins, builtin modulehashes, and default builtin options
+		var build = new Build(1);
+		var slot = build.getDetachedSlot();
+		cache.modulehashBuiltin = {};
 		for (var bmodid in BUILTIN_STORED_MODULES) {
-			var modid = Slot.getStoredHashModuleID(BUILTIN_STORED_MODULES[bmodid].modulehash);
+			var storedhash = BUILTIN_STORED_MODULES[bmodid].modulehash;
+			var modid = Slot.getStoredHashModuleID(storedhash);
 			var mtype = eddb.module[modid].mtype;
 			if (cache.mtypeBuiltins[mtype]) {
 				cache.mtypeBuiltins[mtype].push(bmodid);
 			}
+			
+			// get current-version modulehashes of all builtin stored modules, with and without preeng flags, so that lookups will work
+			cache.modulehashBuiltin[storedhash] = bmodid;
+			slot.setStoredHash(storedhash, null, true);
+			slot.setPreEngineered(0);
+			cache.modulehashBuiltin[slot.getStoredHash()] = bmodid;
+			slot.setPreEngineered(1);
+			cache.modulehashBuiltin[slot.getStoredHash()] = bmodid;
+			BUILTIN_STORED_MODULES[bmodid].modulehash = slot.getStoredHash();
+			
+			var opt = 'builtin' + bmodid;
+			current.option[opt] = ((BUILTIN_STORED_MODULES[bmodid].tag === 'T') ? true : false);
 		}
 		
 		// initialize mtype blueprints and expeffects
@@ -4723,17 +4772,6 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				cache.option[opt] = compStyle.getPropertyValue('--' + opt).trim();
 				current.option[opt] = '';
 			}
-		}
-		
-		// initialize default builtin options
-		var build = new Build(1);
-		var slot = build.getDetachedSlot();
-		for (var bmodid in BUILTIN_STORED_MODULES) {
-			// update modulehash of all builtin stored modules to the latest hash version, so that lookups by hash will work
-			slot.setStoredHash(BUILTIN_STORED_MODULES[bmodid].modulehash, null, true);
-			BUILTIN_STORED_MODULES[bmodid].modulehash = slot.getStoredHash();
-			var opt = 'builtin' + bmodid;
-			current.option[opt] = ((BUILTIN_STORED_MODULES[bmodid].tag === 'T') ? true : false);
 		}
 		
 		// create DOM templates for each defined SVG icon
@@ -8637,13 +8675,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var mtypeid = slot.getModuleMtype();
 		var modifiable = slot.isModifiable();
 		var modified = slot.isModified();
+		var preeng = slot.getPreEngineered();
 		var bpid = slot.getBlueprintID();
 		var bpgrade = slot.getBlueprintGrade();
 		var bproll = slot.getBlueprintRoll();
 		var expid = slot.getExpeffectID();
 		
 		var select = document.forms.details.elements.blueprint;
-		select.disabled = !((modifiable && cache.mtypeBlueprints[mtypeid]) || bpid);
+		select.disabled = (preeng || !((modifiable && cache.mtypeBlueprints[mtypeid]) || bpid));
 		if (cache.mtypeBlueprints[mtypeid]) {
 			select.value = (bpid || '');
 		} else {
@@ -8661,7 +8700,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		document.getElementById('details_special').setAttribute('edsy-text', (special ? ('expeffect-'+expid+'-special') : ''));
 		document.getElementById('details_special').innerHTML = special || '';
 		
-		var maxgrade = (bpid ? eddb.blueprint[bpid].maxgrade : 0);
+		var maxgrade = ((bpid && !preeng) ? eddb.blueprint[bpid].maxgrade : 0);
 		for (var g = 1;  g <= MAX_BLUEPRINT_GRADE;  g++) {
 			document.getElementById('blueprint_grade_' + g).disabled = (g > maxgrade);
 		}
@@ -8680,7 +8719,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				var value = slot.getEffectiveAttrValue(attr);
 				input.value = getModuleAttrValueText(module, attr, value);
 				input.size = max(input.value.length, 3);
-				input.disabled = !((modifiable && isModuleAttrModifiable(module, attr) && (bpid || current.option.experimental)) || slot.getBaseAttrModifier(attr));
+				input.disabled = (preeng || !((modifiable && isModuleAttrModifiable(module, attr) && (bpid || current.option.experimental)) || slot.getBaseAttrModifier(attr)));
 				var moddisplay = document.getElementById('outfitting_details_mod_' + r);
 				moddisplay.className = (direction ? ((direction < 0) ? 'modbad' : 'modgood') : '') + (override ? ' modoverride' : '');
 				moddisplay.innerHTML = getModuleAttrModifierHTML(module, attr, modifier);
@@ -8721,6 +8760,21 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		document.forms.details.elements.blueprint_roll_preset2.disabled = disabled;
 		document.forms.details.elements.blueprint_roll_preset3.disabled = disabled;
 	}; // updateUIDetailsBlueprintRoll()
+	
+	
+	var setUIDetailsPreEngineered = function(preeng) {
+		var slot = getUIOutfittingSlot();
+		if (!slot)
+			return false;
+		if (!slot.setPreEngineered(preeng))
+			return false;
+		if (current.outfitting_focus === 'slot') {
+			updateUIFitStoredBuildControls();
+		}
+		updateUIDetailsStoredModuleControls();
+		updateUIDetailsModifications();
+		return true;
+	}; // setUIDetailsPreEngineered()
 	
 	
 	var setUIDetailsBlueprintID = function(bpid) {
@@ -11531,6 +11585,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					setUIDetailsDiscounts(slot.getDiscounts());
 				}
 			} 
+		} else if (e.target.name === 'pre_engineered') {
+			setUIDetailsPreEngineered(e.target.checked ? 1 : 0);
 		} else if (e.target.name === 'blueprint') {
 			setUIDetailsBlueprintID(e.target.value);
 		} else if (e.target.name === 'blueprint_grade') {
