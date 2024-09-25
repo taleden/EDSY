@@ -1698,7 +1698,7 @@ var eddb = {
 		wpn_rf : { name:'Rapid Fire', maxgrade:5, damage:[-1,-2,-3,-4,-5], distdraw:[0,-5,-15,-25,-35], bstint:[-8,-17,-26,-35,-44], rldtime:[-25,-35,-45,-55,-65], jitter:[0.5,0.5,0.5,0.5,0.5], mats:[ {mesc:1}, {mesc:1, hedipl:1}, {splefi:1, meeq:1, pral:1}, {mocofi:1, meco:1, thal:1}, {pral:1, confco:1, tec:1} ], fdname:'Weapon_RapidFire' },
 		wpn_sr : { name:'Short Range', maxgrade:5, damage:[27,39,51,63,75], thmload:[0,10,20,30,40], maximumrng:[-10,-20,-30,-40,-50], mats:[ {nic:1}, {nic:1, mocofi:1}, {nic:1, mocofi:1, elar:1}, {mocofi:1, elar:1, copo:1}, {crinfi:1, confco:1, bico:1} ], fdname:'Weapon_ShortRange' },
 		wpn_stu : { name:'Sturdy', maxgrade:5, mass:[20,40,60,80,100], integ:[100,150,200,250,300], thmload:[-10,-15,-20,-25,-30], pierce:[20,30,40,50,60], mats:[ {nic:1}, {nic:1, shem:1}, {nic:1, shem:1, tun:1}, {zin:1, tun:1, mol:1}, {hideco:1, mol:1, tec:1} ], fdname:'Weapon_Sturdy' },
-		wpn_aagf : { name:'Anti-Guardian Zone Resistance', maxgrade:1, mats:[ {hasufr:2},{cacr:1},{tacoch:1} ], fdname:'GuardianWeapon_Sturdy' }, // TODO: does this still exist? or only GuardianModule_Sturdy now?
+	//	wpn_aagf : { name:'Anti-Guardian Zone Resistance', maxgrade:1, mats:[ {hasufr:2},{cacr:1},{tacoch:1} ], fdname:'GuardianWeapon_Sturdy' }, // TODO: does this still exist? or only GuardianModule_Sturdy now?
 		
 		scan_fs : { name:'Fast Scan', maxgrade:5, integ:[-10,-20,-30,-40,-50], scanrng:[-5,-10,-15,-20,-25], scantime:[-20,-35,-50,-65,-80], mats:[ {pho:1}, {pho:1, flfocr:1}, {pho:1, flfocr:1, opsyke:1}, {man:1, focr:1, atenar:1}, {ars:1, refocr:1, adenca:1} ], fdname:'Sensor_FastScan' },
 		scan_lr : { name:'Long Range', maxgrade:5, pwrdraw:[10,20,30,40,50], scanrng:[24,48,72,96,120], maxangle:[-10,-15,-20,-25,-30], mats:[ {iro:1}, {iro:1, hyca:1}, {iro:1, hyca:1, unemda:1}, {ger:1, elar:1, deemda:1}, {nio:1, poca:1, abcoemda:1} ], fdname:'Sensor_LongRange' },
@@ -1962,7 +1962,7 @@ var eddb = {
 			modulenames:{},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 			modifiable:['damage','distdraw','thmload','bstint','bstrof','bstsize','ammoclip','ammomax','dmgfall'],
-			blueprints:['wpn_rf','wpn_aagf'],
+			blueprints:['wpn_rf','misc_agzr'],
 		},
 		
 		hexgp : {
@@ -1971,7 +1971,7 @@ var eddb = {
 			modulenames:{'Guardian Plasma Charger':1},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 			modifiable:['pwrdraw','damage','thmload','pierce','shotspd','ammoclip'],
-			blueprints:['wpn_oc','wpn_aagf'],
+			blueprints:['wpn_oc','misc_agzr'],
 		},
 		
 		hexgs : {
@@ -1980,7 +1980,7 @@ var eddb = {
 			modulenames:{'Guardian Shard Cannon':1},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 			modifiable:['mass','pwrdraw','distdraw','thmload','pierce','maximumrng','shotspd','jitter','dmgfall'],
-			blueprints:['wpn_lr','wpn_aagf'],
+			blueprints:['wpn_lr','misc_agzr'],
 		},
 		
 		hexsc : {

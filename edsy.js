@@ -3695,8 +3695,13 @@ if (false && current.dev) console.log(json.Ship+' '+modulejson.Item+' '+bpid+' g
 											} else if (modjson.Label === 'DamagePerSecond') {
 												modjson_dps = modjson;
 											} else if (attr) {
-												if (attr === 'damage')
+												if (attr === 'damage') {
 													modjson_dmg = modjson;
+													if (bpid === 'wpn_aagf' || bpid === 'misc_agzr') {
+														// Damage modifiers on Anti-Guardian Zone Resistance blueprints were retroactively removed
+														continue;
+													}
+												}
 												modlist.push(modjson);
 											}
 										}
@@ -6567,6 +6572,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 						fdevmap.mtypeBlueprint[mtypeid][modtype + '_SHIELDED'] = fdevmap.mtypeBlueprint[mtypeid]['MISC_SHIELDED'];
 					}
 				}
+				fdevmap.mtypeBlueprint[mtypeid]['GUARDIANWEAPON_STURDY'] = fdevmap.mtypeBlueprint[mtypeid]['GUARDIANMODULE_STURDY'];
 			}
 			
 			// expeffect mappings are (now) bi-directional
