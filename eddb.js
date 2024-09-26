@@ -1148,7 +1148,7 @@ var eddb = {
 		},
 		37 : {
 			fdid:129030534, fdname:'Type8', eddbid:null,
-			id:37, stype:'fr', name:'Type-8 Transporter', class:3, cost:36238840, retail:38453970,
+			id:37, stype:'fr', name:'Type-8 Transporter', class:2, cost:36238840, retail:38453970,
 			topspd:200, bstspd:340, mnv:1, shields:228, armour:440, mass:400, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:45, boostcost:9, pitch:28, yaw:18, roll:60, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:18, minyaw:16, // verify: minthrust,pitch,roll,raw,minpitch // TODO: *acc
 			heatcap:NaN, heatdismin:NaN, heatdismax:NaN, fuelcost:50, fuelreserve:0.52, hardness:58, masslock:NaN, crew:1, // verify: heatcap,heatdismin,heatdismax // TODO: masslock
