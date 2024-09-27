@@ -2423,6 +2423,22 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	margin: 2px;
 	color: var(--colororange4);
 }
+
+#engineering_selects .togglebutton INPUT:disabled + LABEL,
+#engineering_selects .togglebutton INPUT:disabled + * + LABEL,
+#engineering_selects .togglebutton INPUT:disabled + * + * + LABEL,
+#engineering_selects .togglebutton INPUT:disabled + * + * + * + LABEL,
+#engineering_selects .togglebutton INPUT:disabled + * + * + * + * + LABEL {
+	cursor: default;
+}
+#engineering_selects .togglebutton INPUT:disabled + LABEL .iconsvg,
+#engineering_selects .togglebutton INPUT:disabled + * + LABEL .iconsvg,
+#engineering_selects .togglebutton INPUT:disabled + * + * + LABEL .iconsvg,
+#engineering_selects .togglebutton INPUT:disabled + * + * + * + LABEL .iconsvg,
+#engineering_selects .togglebutton INPUT:disabled + * + * + * + * + LABEL .iconsvg {
+	color: var(--colorgrey4);
+}
+
 #engineering_selects .togglebutton LABEL .iconsvg.engineered {
 	display: none;
 }
@@ -2436,27 +2452,13 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #engineering_selects .togglebutton INPUT:checked + LABEL .iconsvg.engineered,
 #engineering_selects .togglebutton INPUT:checked + * + LABEL .iconsvg.engineered,
 #engineering_selects .togglebutton INPUT:checked + * + * + LABEL .iconsvg.engineered,
-#engineering_selects .togglebutton INPUT:checked + * + * + * + LABEL .iconsvg.engineered {
-	display: inline-block;
-}
+#engineering_selects .togglebutton INPUT:checked + * + * + * + LABEL .iconsvg.engineered,
 #engineering_selects .togglebutton INPUT:checked + * + * + * + * + LABEL .iconsvg.engineered {
 	display: inline-block;
-	color: var(--colororange5);
 }
 
-#engineering_selects .togglebutton INPUT:active + * + * + * + * + LABEL .iconsvg {
+#engineering_selects .togglebutton INPUT:active:not(:disabled) + * + * + * + * + LABEL .iconsvg {
 	color: var(--colorwhite);
-}
-
-#engineering_selects .togglebutton INPUT:disabled + * + * + * + * + LABEL {
-	cursor: default;
-}
-#engineering_selects .togglebutton INPUT:disabled + * + * + * + * + LABEL .iconsvg.engineer {
-	display: inline-block;
-	color: var(--colorgrey4);
-}
-#engineering_selects .togglebutton INPUT:disabled + * + * + * + * + LABEL .iconsvg.engineered {
-	display: none;
 }
 
 #engineering_roll {
@@ -2513,9 +2515,11 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #engineering_roll.invalid .inner:after {
 	background-color: var(--colorred2);
 }
-#engineering_roll.disabled .inner:before,
-#engineering_roll.disabled .inner:after {
+#engineering_roll.disabled .inner:before {
 	background-color: var(--colorgrey2);
+}
+#engineering_roll.disabled .inner:after {
+	background-color: var(--colorgrey4);
 }
 #engineering_roll .mask + .mask .inner {
 	transform-origin: right center;

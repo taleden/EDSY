@@ -8681,6 +8681,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var bproll = slot.getBlueprintRoll();
 		var expid = slot.getExpeffectID();
 		
+		document.forms.details.elements.pre_engineered.checked = !!preeng;
+		
 		var select = document.forms.details.elements.blueprint;
 		select.disabled = (preeng || !((modifiable && cache.mtypeBlueprints[mtypeid]) || bpid));
 		if (cache.mtypeBlueprints[mtypeid]) {
@@ -8704,9 +8706,15 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		for (var g = 1;  g <= MAX_BLUEPRINT_GRADE;  g++) {
 			document.getElementById('blueprint_grade_' + g).disabled = (g > maxgrade);
 		}
-		document.forms.details.elements.blueprint_grade.value = bpgrade.toFixed(0);
+		if (bpgrade) {
+			document.forms.details.elements.blueprint_grade.value = bpgrade.toFixed(0);
+		} else {
+			var icon = document.getElementById('blueprint_grade_' + document.forms.details.elements.blueprint_grade.value);
+			if (icon)
+				icon.checked = false;
+		}
 		
-		updateUIDetailsBlueprintRoll((bpid || modified) ? bproll : null);
+		updateUIDetailsBlueprintRoll();
 		
 		var module = slot.getModule();
 		if (module) {
@@ -8731,29 +8739,35 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	
 	var updateUIDetailsBlueprintRoll = function(bproll) {
-		if (bproll === undefined) {
-			var slot = getUIOutfittingSlot();
-			if (!slot)
-				return false;
-			bproll = (slot.getBlueprintID() || slot.isModified()) ? slot.getBlueprintRoll() : null;
-		}
+		var slot = getUIOutfittingSlot();
+		if (!slot)
+			return false;
+		var bpid = slot.getBlueprintID();
+		if (bproll === undefined)
+			bproll = (bpid ? slot.getBlueprintRoll() : 0);
+		var preeng = slot.getPreEngineered();
+		
 		var className, disabled, value;
-		if (bproll === null) {
+		if (!bpid || preeng) {
 			className = 'disabled';
 			disabled = true;
-			value = '';
 		} else if (bproll <= 0) {
 			className = 'invalid';
 			disabled = false;
-			value = getTranslation('n-a');
 		} else {
 			className = '';
 			disabled = false;
+		}
+		if (!bpid) {
+			value = '';
+		} else if (bproll <= 0) {
+			value = getTranslation('n-a');
+		} else {
 			value = formatPctText(bproll, 1);
-			document.getElementById('roll_ring1').style.transform = ('rotate(' + (min(max(bproll / 0.5    , 0), 1) * 180).toFixed(0) + 'deg)');
-			document.getElementById('roll_ring2').style.transform = ('rotate(' + (min(max(bproll / 0.5 - 1, 0), 1) * 180).toFixed(0) + 'deg)');
 		}
 		document.getElementById('engineering_roll').className = className;
+		document.getElementById('roll_ring1').style.transform = ('rotate(' + (min(max(bproll / 0.5    , 0), 1) * 180).toFixed(0) + 'deg)');
+		document.getElementById('roll_ring2').style.transform = ('rotate(' + (min(max(bproll / 0.5 - 1, 0), 1) * 180).toFixed(0) + 'deg)');
 		document.forms.details.elements.blueprint_roll.disabled = disabled;
 		document.forms.details.elements.blueprint_roll.value = value;
 		document.forms.details.elements.blueprint_roll_preset1.disabled = disabled;
@@ -8783,8 +8797,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			return false;
 		if (!((slot.getBlueprintID() && bpid) ? slot.setBlueprintID(bpid) : slot.setBlueprint(bpid, MAX_BLUEPRINT_GRADE, (bpid || !current.option.experimental) ? 1.0 : null)))
 			return false;
-		if (!bpid && !current.option.experimental)
-			slot.setExpeffectID('');
+		if (!bpid) {
+			slot.setBlueprintGrade(0);
+			slot.setBlueprintRoll(0);
+			if (!current.option.experimental)
+				slot.setExpeffectID('');
+		}
 		if (current.outfitting_focus === 'slot') {
 			updateUIFitStoredBuildControls();
 			updateUIFitSlot(current.group, current.slot);
