@@ -2103,8 +2103,8 @@ window.edsy = new (function() {
 		var modid2 = slot2 ? slot2.getModuleID() : 0;
 		var discmod1 = slot1 ? cache.discountMod[slot1.getDiscounts()] : 1;
 		var discmod2 = slot2 ? cache.discountMod[slot2.getDiscounts()] : 1;
-		var preeng1 = slot1 ? slot1.getPreEngineered() : 0;
-		var preeng2 = slot2 ? slot2.getPreEngineered() : 0;
+		var preeng1 = (slot1 && slot1.getPreEngineered()) ? cache.modulehashBuiltin[slot1.getStoredHash()] : 0;
+		var preeng2 = (slot2 && slot2.getPreEngineered()) ? cache.modulehashBuiltin[slot2.getStoredHash()] : 0;
 		var bpid1 = slot1 ? slot1.getBlueprintID() : '';
 		var bpid2 = slot2 ? slot2.getBlueprintID() : '';
 		var bpgrade1 = slot1 ? slot1.getBlueprintGrade() : 0;
@@ -2120,9 +2120,9 @@ window.edsy = new (function() {
 		if (modid2 && sgrp2 !== 'ship' && modid1 != modid2)
 			modidNum[modid2] = (modidNum[modid2] || 0) + 1;
 		
-		// if we have an old module and it's different, or it's insufficiently discounted and not too engineered, or it's pre-engineered and we want different engineering, sell it
+		// if we have an old module and it's different, or it's insufficiently discounted and not too engineered, or it's pre-engineered and we want different (pre-)engineering, sell it
 		if (modid1) {
-			if ((modid1 != modid2) || (discmod1 > max(cache.discountMod[limdisc], discmod2) && (!bpid2 || bpid1 != bpid2 || bpgrade1 <= limdisceng)) || (preeng1 && (bpid1 != bpid2 || bpgrade1 != bpgrade2 || bproll1 != bproll2))) {
+			if ((modid1 != modid2) || (discmod1 > max(cache.discountMod[limdisc], discmod2) && (!bpid2 || bpid1 != bpid2 || bpgrade1 <= limdisceng)) || (preeng1 && (preeng2 || bpid1 != bpid2 || bpgrade1 != bpgrade2 || bproll1 != bproll2))) {
 				steps.push({ sgrp:sgrp1, sid:shipid1, mid:((sgrp1 === 'ship') ? 0 : modid1), num:modidNum[modid1], act:'Sell', discmod:discmod1, cost:{'':-slot1.getCost()} });
 				slot1 = null;
 				modid1 = preeng1 = bpgrade1 = bproll1 = 0;
@@ -2134,8 +2134,7 @@ window.edsy = new (function() {
 		if (modid2) {
 			// if we have no matching old module, buy one
 			if (modid1 != modid2) {
-				// TODO when buying a preeng, override the name
-				steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Buy', discmod:discmod2, cost:{'':slot2.getCost()} });
+				steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), preeng:(preeng2 ? (BUILTIN_STORED_MODULES[preeng2] || EMPTY_OBJ).name : null), num:modidNum[modid2], act:'Buy', discmod:discmod2, cost:{'':slot2.getCost()} });
 				modid1 = modid2;
 				bpgrade1 = bproll1 = 0;
 				bpid1 = expid1 = '';
@@ -9690,8 +9689,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	var getRetrofitStepDescription = function(step, dom) {
 		var vals=[], text=[];
 		switch (step.act) {
-		case 'Sell':
 		case 'Buy':
+			if (step.preeng) {
+				vals.push(null);
+				text.push('pre-eng');
+				break;
+			}
+			// fall through
+		case 'Sell':
 			vals.push({'number':(1 - step.discmod),'number%':true,'number#':1});
 			text.push('interp-number-discount');
 			break;
@@ -9805,7 +9810,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				if (jobKey)
 					tr.cells[1].setAttribute('edsy-text', jobKey);
 				tr.cells[1].innerHTML = encodeHTML(jobText);
-				if (steps[s].sgrp === 'ship') {
+				if (steps[s].preeng) {
+					tr.cells[2].innerText = steps[s].preeng;
+				} else if (steps[s].sgrp === 'ship') {
 					tr.cells[2].setAttribute('edsy-text', 'ship-'+steps[s].sid);
 					tr.cells[2].innerText = ship.name;
 				} else {
