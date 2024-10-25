@@ -7708,7 +7708,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		document.getElementById('outfitting_fit_mass_' + group_slot).innerHTML = (value ? formatAttrHTML('mass', value) : '');
 		document.getElementById('outfitting_fit_mass_' + group_slot).className = (direction > 0 ? 'modgood' : (direction < 0 ? 'modbad' : ''));
 		
-		document.getElementById('outfitting_fit_power_' + group_slot).className = 'priority' + slot.getPriority() + (slot.getPowerLock() ? ' powerlock' : '');
+		document.getElementById('outfitting_fit_power_' + group_slot).className = 'priority' + slot.getPriority() + ' priority' + slot.getPriority() + ((slotgroup === 'hardpoint' || (slotgroup === 'utility' && !(eddb.module[modid] || EMPTY_OBJ).passive)) ? 'dep' : 'ret') + (slot.getPowerLock() ? ' powerlock' : '');
 		var value = slot.getEffectiveAttrValue('pwrdraw') || 0;
 		var direction = getAttrModifierDirection('pwrdraw', slot.getEffectiveAttrModifier('pwrdraw'));
 		if (value) {
@@ -9079,10 +9079,17 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				classes += ' priority' + p + 'err';
 			} else if (pwrdraw_dep_ttl > (1 + pwrbst) * pwrcap) {
 				classes += ' priority' + p + 'wrn';
-			} else if (pwrdraw_ret_ttl <= MAX_MALFUNCTION_PWRCAP * (1 + pwrbst) * pwrcap) {
-				classes += ' priority' + p + 'mfn';
-			} else if (pwrdraw_ret_ttl <= MAX_DAMAGED_PWRCAP * (1 + pwrbst) * pwrcap) {
-				classes += ' priority' + p + 'dmg';
+			} else {
+				if (pwrdraw_ret_ttl <= MAX_MALFUNCTION_PWRCAP * (1 + pwrbst) * pwrcap) {
+					classes += ' priority' + p + 'mfnret';
+				} else if (pwrdraw_ret_ttl <= MAX_DAMAGED_PWRCAP * (1 + pwrbst) * pwrcap) {
+					classes += ' priority' + p + 'dmgret';
+				}
+				if (pwrdraw_dep_ttl <= MAX_MALFUNCTION_PWRCAP * (1 + pwrbst) * pwrcap) {
+					classes += ' priority' + p + 'mfndep';
+				} else if (pwrdraw_dep_ttl <= MAX_DAMAGED_PWRCAP * (1 + pwrbst) * pwrcap) {
+					classes += ' priority' + p + 'dmgdep';
+				}
 			}
 		}
 		document.getElementById('outfitting_fit_slots').className = classes.substring(1);
