@@ -4,7 +4,7 @@
 EDSY was created using assets and imagery from Elite Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
 It is not endorsed by nor reflects the views or opinions of Frontier Developments and no employee of Frontier Developments was involved in the making of it.
 
-Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2019 taleden
+Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2024 taleden
 and is provided under a Creative Commons Attribution-NonCommercial 4.0 International License (http://creativecommons.org/licenses/by-nc/4.0/).
 
 The Elite Dangerous game logic and data in this file remains the property of Frontier Developments plc, and is used here as authorized by
@@ -111,10 +111,10 @@ try:
 	
 	
 	class FDAPIHandler:
-		EDSY_USERAGENT = 'EDCD-EDSY-3.8.14.4.13'
+		EDSY_USERAGENT = 'EDCD-EDSY-4.19.0.0.0'
 		EDSY_CLIENTID = '398bde95-e204-4b08-b837-eff7b5304ddb'
 		EDSY_URL_REDIRECT = 'https://edsy.org/dev/fdapi' if DEV else 'https://edsy.org/fdapi'
-		EDSY_SCOPE = 'auth capi' if DEV else 'capi'
+		EDSY_SCOPE = 'auth capi' # TODO: wish in vain for Frontier to fix their scope bug correctly rather than force all clients to request PII even when it's not needed or wanted
 		FDAPI_TIMEOUT = 10
 		FDAPI_URL_AUTH = 'https://auth.frontierstore.net/auth'
 		FDAPI_URL_TOKEN = 'https://auth.frontierstore.net/token'
