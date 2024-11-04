@@ -1672,7 +1672,7 @@ window.edsy = new (function() {
 		
 		setHash: function(hash, version, errors, experimental) {
 			var errortag;
-			if (errors) errortag = (this.slotgroup ? ('Slot ' + this.slotgroup + ' ' + ((this.slotgroup === 'component') ? CORE_SLOT_ABBR[this.slotnum].toLowerCase() : (isNaN(this.slotnum) ? this.slotnum : (this.slotnum + 1))) + ': ') : '');
+			if (errors) errortag = (this.slotgroup ? ('Slot ' + this.slotgroup + ' ' + ((this.slotgroup === 'component') ? CORE_SLOT_ABBR[this.slotnum].toLowerCase() : (isNaN(this.slotnum) ? this.slotnum : (this.slotnum * 1 + 1))) + ': ') : '');
 			if (this.slotgroup === 'ship' && this.slotnum === 'hull') {
 				if (errors) errors.push(errortag + 'Cannot change ship hull');
 				return false;
@@ -1956,21 +1956,21 @@ window.edsy = new (function() {
 				switch (this.slotgroup) {
 				case 'hardpoint':
 					var n = 0;
-					for (var s = this.slotnum;  s >= 0;  s--)
+					for (var s = this.slotnum * 1;  s >= 0;  s--)
 						n += (ship.slots.hardpoint[s] == slotsize);
 					slotname = (['Tiny','Small','Medium','Large','Huge'][slotsize] || 'Unknown') + 'Hardpoint' + n;
 					break;
 				case 'utility':
-					slotname = 'TinyHardpoint' + (this.slotnum + 1);
+					slotname = 'TinyHardpoint' + (this.slotnum * 1 + 1);
 					break;
 				case 'component':
-					slotname = CORE_SLOT_FDNAME[this.slotnum];
+					slotname = CORE_SLOT_FDNAME[this.slotnum * 1];
 					break;
 				case 'military':
-					slotname = 'Military' + ((this.slotnum < 9) ? '0' : '') + (this.slotnum + 1);
+					slotname = 'Military' + ((this.slotnum < 9) ? '0' : '') + (this.slotnum * 1 + 1);
 					break;
 				case 'internal':
-					slotname = 'Slot' + ((this.slotnum < 9) ? '0' : '') + (this.slotnum + 1) + '_Size' + slotsize;
+					slotname = 'Slot' + ((this.slotnum < 9) ? '0' : '') + (this.slotnum * 1 + 1) + '_Size' + slotsize;
 					break;
 				default:
 					return null;
@@ -9033,6 +9033,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	var updateUIStatsPower = function() {
 		// get primary stats
+		// TODO pwrbst
 		var pwrcap = current.fit.getStat('pwrcap');
 		var pwrbst = current.fit.getStat('pwrbst') / 100.0;
 		var pwrdraw_ret = current.fit.getStat('pwrdraw_ret');
@@ -9051,7 +9052,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			abbr.title = (formatNumText(pwrdraw_ret_ttl, 2) + ' / ' + formatNumText(pwrcap, 2) + ' MW (' + formatPctText(pwrdraw_ret_ttl / pwrcap, 1) + ')');
 			abbr.style.display = (width > 0.0) ? '' : 'none';
 			abbr.style.width = width.toFixed(3) + '%';
-			abbr.className = ((pwrdraw_ret_ttl <= MAX_MALFUNCTION_PWRCAP * (1 + pwrbst) * pwrcap) ? 'mfn' : ((pwrdraw_ret_ttl <= MAX_DAMAGED_PWRCAP * (1 + pwrbst) * pwrcap) ? 'dmg' : ((pwrdraw_ret_ttl <= (1 + pwrbst) * pwrcap) ? '' : 'err')));
+			abbr.className = ((pwrdraw_ret_ttl > (1 + pwrbst) * pwrcap) ? 'err' : ((pwrdraw_ret_ttl <= MAX_DAMAGED_PWRCAP * (1 + pwrbst) * pwrcap) ? 'dmg' : ((pwrdraw_ret_ttl <= MAX_MALFUNCTION_PWRCAP * (1 + pwrbst) * pwrcap) ? 'mfn' : '')));
 			
 			pwrdraw_dep_ttl += pwrdraw_dep[p];
 			var width = (90.0 * pwrdraw_dep[p] / pwrcap);
@@ -9061,7 +9062,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			abbr.title = (formatNumText(pwrdraw_dep_ttl, 2) + ' / ' + formatNumText(pwrcap, 2) + ' MW (' + formatPctText(pwrdraw_dep_ttl / pwrcap, 1) + ')');
 			abbr.style.display = (width > 0.0) ? '' : 'none';
 			abbr.style.width = width.toFixed(3) + '%';
-			abbr.className = ((pwrdraw_dep_ttl <= MAX_MALFUNCTION_PWRCAP * (1 + pwrbst) * pwrcap) ? 'mfn' : ((pwrdraw_dep_ttl <= MAX_DAMAGED_PWRCAP * (1 + pwrbst) * pwrcap) ? 'dmg' : ((pwrdraw_dep_ttl <= (1 + pwrbst) * pwrcap) ? '' : 'err')));
+			abbr.className = ((pwrdraw_dep_ttl > (1 + pwrbst) * pwrcap) ? 'err' : ((pwrdraw_dep_ttl <= MAX_DAMAGED_PWRCAP * (1 + pwrbst) * pwrcap) ? 'dmg' : ((pwrdraw_dep_ttl <= MAX_MALFUNCTION_PWRCAP * (1 + pwrbst) * pwrcap) ? 'mfn' : '')));
 			
 			if (pwrdraw_ret_ttl > (1 + pwrbst) * pwrcap) {
 				classes += ' priority' + p + 'err';
@@ -9229,6 +9230,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	var updateUIStatsThm = function() {
 		// get primary stats
+		// TODO pwrbst
 		var pwrcap = current.fit.getStat('pwrcap');
 		var pwrdraw_ret = current.fit.getStat('pwrdraw_ret');
 		var pwrdraw_dep = current.fit.getStat('pwrdraw_dep');
