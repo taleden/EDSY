@@ -2436,7 +2436,6 @@ window.edsy = new (function() {
 		
 		
 		setPowerDist: function(sys, eng, wep) {
-			// TODO: eng drains wep first in a tie? S,E,E,E -> 2,4,0 not 1.5,4,0.5
 			this.powerdist.sys = sys = min(max(sys | 0, 0                                           ), MAX_POWER_DIST);
 			this.powerdist.eng = eng = min(max(eng | 0, 0, (TOTAL_POWER_DIST - MAX_POWER_DIST) - sys), MAX_POWER_DIST, TOTAL_POWER_DIST - sys);
 			this.powerdist.wep = TOTAL_POWER_DIST - sys - eng;
@@ -2446,21 +2445,15 @@ window.edsy = new (function() {
 		
 		
 		changePowerDist: function(dist0, delta) {
-			// TODO: eng drains wep first in a tie? S,E,E,E -> 2,4,0 not 1.5,4,0.5
 			if (!(dist0 in this.powerdist))
 				return false;
-			var dist1 = ((dist0 === 'sys') ? 'eng' : 'sys');
-			var dist2 = ((dist0 === 'wep') ? 'eng' : 'wep');
+			var dist1 = ((dist0 === 'sys') ? 'eng' : ((dist0 === 'eng') ? 'wep' : 'sys'));
+			var dist2 = ((dist0 === 'sys') ? 'wep' : ((dist0 === 'eng') ? 'sys' : 'eng'));
 			if (delta < 0) {
 				var rem0 = min(-delta, this.powerdist[dist0]);
 				var add1 = min(rem0 >> 1, MAX_POWER_DIST - this.powerdist[dist1] - (this.crewdist[dist1] << 1));
 				var add2 = min(rem0 >> 1, MAX_POWER_DIST - this.powerdist[dist2] - (this.crewdist[dist2] << 1));
-				var extra = rem0 - add1 - add2;
-				if (this.powerdist[dist2] + (this.crewdist[dist2] << 1) < this.powerdist[dist1] + (this.crewdist[dist1] << 1)) {
-					add2 += extra;
-				} else {
-					add1 += extra;
-				}
+				add1 += rem0 - add1 - add2;
 				this.powerdist[dist0] -= rem0;
 				this.powerdist[dist1] += add1;
 				this.powerdist[dist2] += add2;
@@ -2468,12 +2461,7 @@ window.edsy = new (function() {
 				var add0 = min(delta, MAX_POWER_DIST - this.powerdist[dist0] - (this.crewdist[dist0] << 1));
 				var rem1 = min(add0 >> 1, this.powerdist[dist1]);
 				var rem2 = min(add0 >> 1, this.powerdist[dist2]);
-				var extra = add0 - rem1 - rem2;
-				if (this.powerdist[dist2] + (this.crewdist[dist2] << 1) > this.powerdist[dist1] + (this.crewdist[dist1] << 1)) {
-					rem2 += extra;
-				} else {
-					rem1 += extra;
-				}
+				rem1 += add0 - rem1 - rem2;
 				this.powerdist[dist0] += add0;
 				this.powerdist[dist1] -= rem1;
 				this.powerdist[dist2] -= rem2;
