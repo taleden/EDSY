@@ -9033,13 +9033,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	var updateUIStatsPower = function() {
 		// get primary stats
-		// TODO pwrbst
 		var pwrcap = current.fit.getStat('pwrcap');
-		var pwrbst = current.fit.getStat('pwrbst') / 100.0;
+		var pwrcap_pwrbst = pwrcap * (1 + (current.fit.getStat('pwrbst') / 100.0));
 		var pwrdraw_ret = current.fit.getStat('pwrdraw_ret');
 		var pwrdraw_dep = current.fit.getStat('pwrdraw_dep');
 		
 		// update displays
+		// pwrbst does not increase the displayed MW output of the plant, so %usage remains the same
+		// instead, %usage is allowed to go to (e.g.) 104% before overloading
 		var classes = '';
 		var pwrdraw_ret_ttl = 0;
 		var pwrdraw_dep_ttl = 0;
@@ -9052,7 +9053,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			abbr.title = (formatNumText(pwrdraw_ret_ttl, 2) + ' / ' + formatNumText(pwrcap, 2) + ' MW (' + formatPctText(pwrdraw_ret_ttl / pwrcap, 1) + ')');
 			abbr.style.display = (width > 0.0) ? '' : 'none';
 			abbr.style.width = width.toFixed(3) + '%';
-			abbr.className = ((pwrdraw_ret_ttl > (1 + pwrbst) * pwrcap) ? 'err' : ((pwrdraw_ret_ttl <= MAX_DAMAGED_PWRCAP * (1 + pwrbst) * pwrcap) ? 'dmg' : ((pwrdraw_ret_ttl <= MAX_MALFUNCTION_PWRCAP * (1 + pwrbst) * pwrcap) ? 'mfn' : '')));
+			abbr.className = ((pwrdraw_ret_ttl > pwrcap_pwrbst) ? 'err' : ((pwrdraw_ret_ttl <= MAX_DAMAGED_PWRCAP * pwrcap_pwrbst) ? 'dmg' : ((pwrdraw_ret_ttl <= MAX_MALFUNCTION_PWRCAP * pwrcap_pwrbst) ? 'mfn' : '')));
 			
 			pwrdraw_dep_ttl += pwrdraw_dep[p];
 			var width = (90.0 * pwrdraw_dep[p] / pwrcap);
@@ -9062,21 +9063,21 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			abbr.title = (formatNumText(pwrdraw_dep_ttl, 2) + ' / ' + formatNumText(pwrcap, 2) + ' MW (' + formatPctText(pwrdraw_dep_ttl / pwrcap, 1) + ')');
 			abbr.style.display = (width > 0.0) ? '' : 'none';
 			abbr.style.width = width.toFixed(3) + '%';
-			abbr.className = ((pwrdraw_dep_ttl > (1 + pwrbst) * pwrcap) ? 'err' : ((pwrdraw_dep_ttl <= MAX_DAMAGED_PWRCAP * (1 + pwrbst) * pwrcap) ? 'dmg' : ((pwrdraw_dep_ttl <= MAX_MALFUNCTION_PWRCAP * (1 + pwrbst) * pwrcap) ? 'mfn' : '')));
+			abbr.className = ((pwrdraw_dep_ttl > pwrcap_pwrbst) ? 'err' : ((pwrdraw_dep_ttl <= MAX_DAMAGED_PWRCAP * pwrcap_pwrbst) ? 'dmg' : ((pwrdraw_dep_ttl <= MAX_MALFUNCTION_PWRCAP * pwrcap_pwrbst) ? 'mfn' : '')));
 			
-			if (pwrdraw_ret_ttl > (1 + pwrbst) * pwrcap) {
+			if (pwrdraw_ret_ttl > pwrcap_pwrbst) {
 				classes += ' priority' + p + 'err';
-			} else if (pwrdraw_dep_ttl > (1 + pwrbst) * pwrcap) {
+			} else if (pwrdraw_dep_ttl > pwrcap_pwrbst) {
 				classes += ' priority' + p + 'wrn';
 			} else {
-				if (pwrdraw_ret_ttl <= MAX_MALFUNCTION_PWRCAP * (1 + pwrbst) * pwrcap) {
+				if (pwrdraw_ret_ttl <= MAX_MALFUNCTION_PWRCAP * pwrcap_pwrbst) {
 					classes += ' priority' + p + 'mfnret';
-				} else if (pwrdraw_ret_ttl <= MAX_DAMAGED_PWRCAP * (1 + pwrbst) * pwrcap) {
+				} else if (pwrdraw_ret_ttl <= MAX_DAMAGED_PWRCAP * pwrcap_pwrbst) {
 					classes += ' priority' + p + 'dmgret';
 				}
-				if (pwrdraw_dep_ttl <= MAX_MALFUNCTION_PWRCAP * (1 + pwrbst) * pwrcap) {
+				if (pwrdraw_dep_ttl <= MAX_MALFUNCTION_PWRCAP * pwrcap_pwrbst) {
 					classes += ' priority' + p + 'mfndep';
-				} else if (pwrdraw_dep_ttl <= MAX_DAMAGED_PWRCAP * (1 + pwrbst) * pwrcap) {
+				} else if (pwrdraw_dep_ttl <= MAX_DAMAGED_PWRCAP * pwrcap_pwrbst) {
 					classes += ' priority' + p + 'dmgdep';
 				}
 			}
@@ -9084,19 +9085,19 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		document.getElementById('outfitting_fit_slots').className = classes.substring(1);
 		/* TODO: powerdist in fit
 		document.getElementById('outfitting_stats_power_ret').innerHTML = (formatNumHTML(pwrdraw_ret[0], 2) + ' <small class="semantic">/</small> ' + formatAttrHTML('pwrcap', pwrcap, 2) + ' (' + formatPctHTML(pwrdraw_ret[0] / pwrcap, 1) + ')');
-		document.getElementById('outfitting_stats_power_ret').className = ((pwrdraw_ret[0] > (1 + pwrbst) * pwrcap) ? 'error' : '');
+		document.getElementById('outfitting_stats_power_ret').className = ((pwrdraw_ret[0] > pwrcap_pwrbst) ? 'error' : '');
 		document.getElementById('outfitting_stats_power_dep').innerHTML = (formatNumHTML(pwrdraw_dep[0], 2) + ' <small class="semantic">/</small> ' + formatAttrHTML('pwrcap', pwrcap, 2) + ' (' + formatPctHTML(pwrdraw_dep[0] / pwrcap, 1) + ')');
-		document.getElementById('outfitting_stats_power_dep').className = ((pwrdraw_dep[0] > (1 + pwrbst) * pwrcap) ? 'error' : '');
+		document.getElementById('outfitting_stats_power_dep').className = ((pwrdraw_dep[0] > pwrcap_pwrbst) ? 'error' : '');
 		*/
 		var abbr = createTranslatedElement('abbr', 'interp-number', {'number':(pwrdraw_ret[0]/pwrcap), 'number#':1, 'number%':true});
-		abbr.className = ((pwrdraw_ret[0] > (1 + pwrbst) * pwrcap) ? 'error' : '');
+		abbr.className = ((pwrdraw_ret[0] > pwrcap_pwrbst) ? 'error' : '');
 		abbr.setAttribute('edsy-vals-title', JSON.stringify({'pwrdraw':pwrdraw_ret[0], 'pwrdraw#':2, 'pwrcap':pwrcap, 'pwrcap#':2, 'percent':(pwrdraw_ret[0]/pwrcap), 'percent#':1, 'percent%':true}));
 		abbr.setAttribute('edsy-title', 'interp-pwrdraw-pwrcap-megawatts-percent');
 		abbr.title = formatNumText(pwrdraw_ret[0], 2) + ' / ' + formatNumText(pwrcap, 2) + ' MW (' + formatPctText(pwrdraw_ret[0] / pwrcap, 1) + ')';
 		abbr.innerHTML = formatPctHTML(pwrdraw_ret[0] / pwrcap, 1);
 		document.getElementById('outfitting_stats_power_ret').replaceChildren(abbr);
 		var abbr = createTranslatedElement('abbr', 'interp-number', {'number':(pwrdraw_dep[0]/pwrcap), 'number#':1, 'number%':true});
-		abbr.className = ((pwrdraw_dep[0] > (1 + pwrbst) * pwrcap) ? 'error' : '');
+		abbr.className = ((pwrdraw_dep[0] > pwrcap_pwrbst) ? 'error' : '');
 		abbr.setAttribute('edsy-vals-title', JSON.stringify({'pwrdraw':pwrdraw_dep[0], 'pwrdraw#':2, 'pwrcap':pwrcap, 'pwrcap#':2, 'percent':(pwrdraw_dep[0]/pwrcap), 'percent#':1, 'percent%':true}));
 		abbr.setAttribute('edsy-title', 'interp-pwrdraw-pwrcap-megawatts-percent');
 		abbr.title = formatNumText(pwrdraw_dep[0], 2) + ' / ' + formatNumText(pwrcap, 2) + ' MW (' + formatPctText(pwrdraw_dep[0] / pwrcap, 1) + ')';
@@ -9230,8 +9231,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	var updateUIStatsThm = function() {
 		// get primary stats
-		// TODO pwrbst
 		var pwrcap = current.fit.getStat('pwrcap');
+		var pwrcap_pwrbst = pwrcap * (1 + (current.fit.getStat('pwrbst') / 100.0));
 		var pwrdraw_ret = current.fit.getStat('pwrdraw_ret');
 		var pwrdraw_dep = current.fit.getStat('pwrdraw_dep');
 		var thmload_ct = current.fit.getStat('thmload_ct');
@@ -9250,13 +9251,15 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var heateff = slot.getEffectiveAttrValue('heateff');
 		
 		// compute derived stats
+		// pwrbst does not increase the displayed MW output of the plant, so %usage remains the same
+		// instead, %usage is allowed to go to (e.g.) 104% before overloading
 		var thmload_pwrdraw_ret = pwrdraw_ret[0];
-		for (var p = MAX_POWER_PRIORITY;  p >= 1 && thmload_pwrdraw_ret > pwrcap;  p--) {
+		for (var p = MAX_POWER_PRIORITY;  p >= 1 && thmload_pwrdraw_ret > pwrcap_pwrbst;  p--) {
 			thmload_pwrdraw_ret -= pwrdraw_ret[p];
 		}
 		thmload_pwrdraw_ret *= heateff;
 		var thmload_pwrdraw_dep = pwrdraw_dep[0];
-		for (var p = MAX_POWER_PRIORITY;  p >= 1 && thmload_pwrdraw_dep > pwrcap;  p--) {
+		for (var p = MAX_POWER_PRIORITY;  p >= 1 && thmload_pwrdraw_dep > pwrcap_pwrbst;  p--) {
 			thmload_pwrdraw_dep -= pwrdraw_dep[p];
 		}
 		thmload_pwrdraw_dep *= heateff;
