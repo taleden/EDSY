@@ -2444,29 +2444,20 @@ window.edsy = new (function() {
 		}, // setPowerDist()
 		
 		
-		changePowerDist: function(dist0, delta) {
-			if (!(dist0 in this.powerdist))
+		changePowerDist: function(sys0, delta) {
+			if (!(sys0 in this.powerdist))
 				return false;
-			var dist1 = ((dist0 === 'sys') ? 'eng' : ((dist0 === 'eng') ? 'wep' : 'sys'));
-			var dist2 = ((dist0 === 'sys') ? 'wep' : ((dist0 === 'eng') ? 'sys' : 'eng'));
-			if (delta < 0) {
-				var rem0 = min(-delta, this.powerdist[dist0]);
-				var add1 = min(rem0 >> 1, MAX_POWER_DIST - this.powerdist[dist1] - (this.crewdist[dist1] << 1));
-				var add2 = min(rem0 >> 1, MAX_POWER_DIST - this.powerdist[dist2] - (this.crewdist[dist2] << 1));
-				add1 += rem0 - add1 - add2;
-				this.powerdist[dist0] -= rem0;
-				this.powerdist[dist1] += add1;
-				this.powerdist[dist2] += add2;
-			} else if (delta > 0) {
-				var add0 = min(delta, MAX_POWER_DIST - this.powerdist[dist0] - (this.crewdist[dist0] << 1));
-				var rem1 = min(add0 >> 1, this.powerdist[dist1]);
-				var rem2 = min(add0 >> 1, this.powerdist[dist2]);
-				rem1 += add0 - rem1 - rem2;
-				this.powerdist[dist0] += add0;
-				this.powerdist[dist1] -= rem1;
-				this.powerdist[dist2] -= rem2;
-			}
-			return this.setPowerDist(this.powerdist.sys, this.powerdist.eng, this.powerdist.wep);
+			var sys1 = ((sys0 === 'sys') ? 'eng' : ((sys0 === 'eng') ? 'wep' : 'sys'));
+			var sys2 = ((sys0 === 'sys') ? 'wep' : ((sys0 === 'eng') ? 'sys' : 'eng'));
+			var dist0 = min(max(this.powerdist[sys0] + delta                 , 0), MAX_POWER_DIST, TOTAL_POWER_DIST);
+			delta = dist0 - this.powerdist[sys0];
+			var dist1 = min(max(this.powerdist[sys1] - (delta - (delta >> 1)), 0), MAX_POWER_DIST, TOTAL_POWER_DIST - dist0);
+			var dist2 = TOTAL_POWER_DIST - dist0 - dist1;
+			this.powerdist[sys0] = dist0;
+			this.powerdist[sys1] = dist1;
+			this.powerdist[sys2] = dist2;
+			this.clearStats();
+			return true;
 		}, // changePowerDist()
 		
 		
