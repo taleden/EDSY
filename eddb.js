@@ -1181,7 +1181,7 @@ var eddb = {
 			fdid:129030680, fdname:'Mandalay', eddbid:null,
 			id:46, stype:'ex', name:'Mandalay', class:2, cost:16527690, retail:17639220,
 			topspd:280, bstspd:350, mnv:5, shields:220, armour:230, mass:230, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
-			minthrust:71.5, boostcost:13, pitch:35, yaw:28, roll:96, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:24.5, minyaw:16, // verify: minpitch // TODO: *acc
+			minthrust:71.5, boostcost:14, pitch:35, yaw:28, roll:96, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:24.5, minyaw:16, // verify: minpitch // TODO: *acc
 			heatcap:250, heatdismin:NaN, heatdismax:51.00, fuelcost:50, fuelreserve:0.5, hardness:55, masslock:11, crew:2, // verify: heatcap,heatdismax // TODO: heatdismin
 			slots:{
 				hardpoint:[1,1,2,2,2,2],

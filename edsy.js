@@ -26,7 +26,7 @@ window.edsy = new (function() {
 	var CORE_SLOT_ABBR = ['BH','PP','TH','FD','LS','PD','SS','FT'];
 	var CORE_ABBR_SLOT = { BH:0,PP:1,TH:2,FD:3,LS:4,PD:5,SS:6,FT:7,
 	                            RB:1,TM:2,FH:3,EC:4,PC:5,     FS:7 };
-	var BOOST_MARGIN = 0.005;
+	var BOOST_MARGIN = 0;
 	var SHIP_HATCH_ID = 49180;
 	var MAX_SLOT_CLASS = 8;
 	var MAX_POWER_DIST = 8;
@@ -2868,6 +2868,7 @@ window.edsy = new (function() {
 			}
 			
 			// sort and compare slot-modules
+			// TODO: don't just assume we can convert slot-by-slot in order, things could be rearranged; instead, for each target slot, find the best-fit source slot
 			var slot1 = base.getSlot('ship', 'hull');
 			var slot2 = this.getSlot('ship', 'hull');
 			var modidNum = {};
