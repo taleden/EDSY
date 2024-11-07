@@ -201,7 +201,7 @@ window.edsy = new (function() {
 			insurance: 9500,
 			discounts: 0,
 			builtin: 'some',
-			onlybest: false,
+			onlybest: 'some',
 			experimental: false,
 			show1: true,
 			show2: true,
@@ -10392,7 +10392,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			var opt = 'builtin' + bmodid;
 			current.option[opt] = !!current.option[opt];
 		}
-		current.option.onlybest = !!current.option.onlybest;
+		if (!{none:1,some:1,all:1}[current.option.onlybest])
+			current.option.onlybest = 'some';
 		current.option.experimental = !!current.option.experimental;
 		current.option.show1 = !!current.option.show1;
 		current.option.show2 = !!current.option.show2;
@@ -10417,7 +10418,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			current.option.language = '';
 		
 		// apply options settings
-		document.body.classList.toggle('onlybest', current.option.onlybest);
+		document.body.classList.toggle('mostlybest', current.option.onlybest == 'some');
+		document.body.classList.toggle('onlybest', current.option.onlybest == 'all');
 		document.body.classList.toggle('experimental', current.option.experimental);
 		document.body.classList.toggle('show1', current.option.show1);
 		document.body.classList.toggle('show2', current.option.show2);
@@ -10458,7 +10460,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			elements[opt].checked = (BUILTIN_STORED_MODULES[bmodid].tag === 'T') || current.option[opt];
 		}
 		document.getElementById('options_builtin').style.display = ((current.option.builtin === 'some') ? '' : 'none');
-		elements.onlybest.checked = current.option.onlybest;
+		elements.onlybest.value = current.option.onlybest;
 		elements.experimental.checked = current.option.experimental;
 		elements.show1.checked = current.option.show1;
 		elements.show2.checked = current.option.show2;
@@ -11878,7 +11880,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			var opt = 'builtin' + bmodid;
 			current.option[opt] = elements[opt].checked;
 		}
-		current.option.onlybest = elements.onlybest.checked;
+		current.option.onlybest = elements.onlybest.value;
 		current.option.experimental = elements.experimental.checked;
 		current.option.show1 = elements.show1.checked;
 		current.option.show2 = elements.show2.checked;

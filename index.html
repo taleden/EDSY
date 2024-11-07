@@ -1106,9 +1106,16 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 								</table>
 							</div>
 							<div>
-								<label class="checkbox left"><input type="checkbox" name="onlybest"><div><div class="check"></div><span edsy-text="ui-options-hide-small">Hide Small Modules</span></div></label>
+								<b edsy-text="ui-options-hide-small">Hide Small Modules</b>
 								&mdash;
 								<span edsy-text="ui-options-hide-small-desc">Display only the largest size class of each available module type in the SLOT view of the module browser.</span>
+								<dl>
+									<dd><select name="onlybest">
+										<option value="none" edsy-text="ui-options-onlybest-none">None</option>
+										<option value="some" edsy-text="ui-options-onlybest-some">Most (except for Power Plants, Thrusters, and Power Distributors)</option>
+										<option value="all" edsy-text="ui-options-onlybest-all">All</option>
+									</select></dd>
+								</dl>
 							</div>
 							<div>
 								<label class="checkbox left"><input type="checkbox" name="experimental"><div><div class="check"></div><span edsy-text="ui-options-experimental-mode">Experimental Mode</span></div></label>
