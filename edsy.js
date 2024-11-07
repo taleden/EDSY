@@ -119,6 +119,7 @@ window.edsy = new (function() {
 		"MJ/s": "unit-megajoules-per-second",
 		"MW": "unit-megawatts-abbr",
 		"MW/s": "unit-megawatts-per-second-abbr",
+		"/MW": "unit-per-megawatt-abbr",
 		"T": "unit-tons-abbr",
 		"T/s": "unit-tons-per-second-abbr",
 		"h": "unit-hours-abbr",
@@ -8654,7 +8655,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			input.name = attr;
 			
 			var unit = document.getElementById('outfitting_details_unit_' + r);
-			unit.setAttribute('edsy-text', (attribute.unit ? UNIT_ABBR_TRANSLATIONS[attribute.unit] : ''));
+			unit.setAttribute('edsy-text', (UNIT_ABBR_TRANSLATIONS[attribute.unit || ''] || ''));
 			unit.innerHTML = (attribute.unit || '');
 			
 			tbody.rows[r].style.display = '';
@@ -12277,7 +12278,9 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			(doc || document).querySelectorAll("["+keyattr+"]").forEach(function (el) {
 				var key = el.getAttribute(keyattr);
 				var vals = ((keyattr === 'edsy-title') ? el.getAttribute('edsy-vals-title') : '') || el.getAttribute("edsy-vals");
-				if (vals === '') {
+				if (key === undefined || key === null || key === '') {
+					return;
+				} else if (vals === '') {
 					vals = {};
 				} else if (vals) {
 					try {
