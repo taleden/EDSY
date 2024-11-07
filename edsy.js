@@ -8996,10 +8996,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var cabincap = current.fit.getStat('cabincap');
 		
 		// compute derived stats
-		var curTtlFuel = min(max(parseNumText(document.forms.stats.elements.stats_cur_fuel.value) || 0, 0), fuelcap) + fuelres;
+		var curTtlFuel = min(max(parseNumText(document.forms.stats.elements.stats_cur_fuel.value) || 0, 0), fuelcap);
 		var curTtlCrgo = min(max(parseNumText(document.forms.stats.elements.stats_cur_cargo.value) || 0, 0), cargocap);
-		var curTtlMass = mass + curTtlFuel + curTtlCrgo;
-		var maxTtlMass = mass + fuelcap + cargocap;
+		var curTtlMass = mass + curTtlFuel + fuelres + curTtlCrgo;
+		var maxTtlMass = mass + fuelcap              + cargocap;
 		
 		// update displays
 		document.getElementById('outfitting_stats_cur_mass').innerHTML = formatAttrHTML('mass', curTtlMass, 1);
@@ -9118,7 +9118,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var unlNavJmp = current.fit.getStat('_jump_unladen');
 		var curNavJmp = getJumpDistance(         mass + curTtlFuel + fuelres + curTtlCrgo, min(curTtlFuel, maxfuel), optmass, fuelmul, fuelpower, jumpbst);
 		var maxNavJmp = current.fit.getStat('_jump_max');
-		var curNavRng = getJumpRange(curTtlFuel, mass + curTtlFuel           + curTtlCrgo, min(curTtlFuel, maxfuel), optmass, fuelmul, fuelpower, jumpbst);
+		var curNavRng = getJumpRange(curTtlFuel, mass + curTtlFuel + fuelres + curTtlCrgo, min(curTtlFuel, maxfuel), optmass, fuelmul, fuelpower, jumpbst);
 		var ldnNavRng = current.fit.getStat('_range_laden');
 		var unlNavRng = current.fit.getStat('_range_unladen');
 		var scpNavJmp = min(curTtlFuel, maxfuel) / scooprate;
@@ -9176,18 +9176,18 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var maxmulrot = slot.getEffectiveAttrValue('maxmulrot');
 		
 		// compute derived stats
-		var curTtlFuel = min(max(parseNumText(document.forms.stats.elements.stats_cur_fuel.value) || 0, 0), fuelcap) + fuelres;
+		var curTtlFuel = min(max(parseNumText(document.forms.stats.elements.stats_cur_fuel.value) || 0, 0), fuelcap);
 		var curTtlCrgo = min(max(parseNumText(document.forms.stats.elements.stats_cur_cargo.value) || 0, 0), cargocap);
 		var powerdistEngMul = powerdist_eng / MAX_POWER_DIST;
-		var curNavSpdMul = getMassCurveMultiplier(mass + curTtlFuel + curTtlCrgo, minmass, optmass, maxmass, minmulspd, optmulspd, maxmulspd) / 100;
-		var ldnNavSpdMul = getMassCurveMultiplier(mass + fuelcap    + cargocap  , minmass, optmass, maxmass, minmulspd, optmulspd, maxmulspd) / 100;
-		var unlNavSpdMul = getMassCurveMultiplier(mass + fuelcap                , minmass, optmass, maxmass, minmulspd, optmulspd, maxmulspd) / 100;
-		var maxNavSpdMul = getMassCurveMultiplier(mass                          , minmass, optmass, maxmass, minmulspd, optmulspd, maxmulspd) / 100;
+		var curNavSpdMul = getMassCurveMultiplier(mass + curTtlFuel + fuelres + curTtlCrgo, minmass, optmass, maxmass, minmulspd, optmulspd, maxmulspd) / 100;
+		var ldnNavSpdMul = getMassCurveMultiplier(mass + fuelcap              + cargocap  , minmass, optmass, maxmass, minmulspd, optmulspd, maxmulspd) / 100;
+		var unlNavSpdMul = getMassCurveMultiplier(mass + fuelcap                          , minmass, optmass, maxmass, minmulspd, optmulspd, maxmulspd) / 100;
+		var maxNavSpdMul = getMassCurveMultiplier(mass                                    , minmass, optmass, maxmass, minmulspd, optmulspd, maxmulspd) / 100;
 		var engcapEnough = (engcap > boostcost + BOOST_MARGIN);
 		var curNavFrq = (boostcost / (engchg * pow(powerdist_eng / MAX_POWER_DIST, 1.1)));
 		var maxNavFrq = (boostcost / engchg);
-		var curHndRotMul = getMassCurveMultiplier(mass + curTtlFuel + curTtlCrgo, minmass, optmass, maxmass, minmulrot, optmulrot, maxmulrot) / 100;
-		var maxHndRotMul = getMassCurveMultiplier(mass                          , minmass, optmass, maxmass, minmulrot, optmulrot, maxmulrot) / 100;
+		var curHndRotMul = getMassCurveMultiplier(mass + curTtlFuel + fuelres + curTtlCrgo, minmass, optmass, maxmass, minmulrot, optmulrot, maxmulrot) / 100;
+		var maxHndRotMul = getMassCurveMultiplier(mass                                    , minmass, optmass, maxmass, minmulrot, optmulrot, maxmulrot) / 100;
 		
 		// update nav displays
 		var htmlErrorTH = '<abbr class="error" edsy-title="ui-stats-nav-error-thruster" title="Thruster has insufficient maximum mass" edsy-text="ui-stats-nav-error-abbr">ERR</abbr>';
