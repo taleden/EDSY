@@ -2115,15 +2115,15 @@ window.edsy = new (function() {
 		var expid2 = slot2 ? slot2.getExpeffectID() : '';
 		
 		// increment module tallies
-		if (modid1 && sgrp1 !== 'ship')
+		if (modidNum && modid1 && sgrp1 !== 'ship')
 			modidNum[modid1] = (modidNum[modid1] || 0) + 1;
-		if (modid2 && sgrp2 !== 'ship' && modid1 != modid2)
+		if (modidNum && modid2 && sgrp2 !== 'ship' && modid1 != modid2)
 			modidNum[modid2] = (modidNum[modid2] || 0) + 1;
 		
 		// if we have an old module and it's different, or it's insufficiently discounted and not too engineered, or it's pre-engineered and we want different (pre-)engineering, sell it
 		if (modid1) {
 			if ((modid1 != modid2) || (discmod1 > max(cache.discountMod[limdisc], discmod2) && (!bpid2 || bpid1 != bpid2 || bpgrade1 <= limdisceng)) || (preeng1 && (preeng2 || bpid1 != bpid2 || bpgrade1 != bpgrade2 || bproll1 != bproll2))) {
-				steps.push({ sgrp:sgrp1, sid:shipid1, mid:((sgrp1 === 'ship') ? 0 : modid1), num:modidNum[modid1], act:'Sell', discmod:discmod1, cost:{'':-slot1.getCost()} });
+				steps.push({ sgrp:sgrp1, sid:shipid1, mid:((sgrp1 === 'ship') ? 0 : modid1), num:(modidNum || EMPTY_OBJ)[modid1], act:'Sell', discmod:discmod1, cost:{'':-slot1.getCost()} });
 				slot1 = null;
 				modid1 = preeng1 = bpgrade1 = bproll1 = 0;
 				bpid1 = expid1 = '';
@@ -2134,7 +2134,7 @@ window.edsy = new (function() {
 		if (modid2) {
 			// if we have no matching old module, buy one
 			if (modid1 != modid2) {
-				steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), preeng:(preeng2 ? (BUILTIN_STORED_MODULES[preeng2] || EMPTY_OBJ).name : null), num:modidNum[modid2], act:'Buy', discmod:discmod2, cost:{'':slot2.getCost()} });
+				steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), preeng:(preeng2 ? (BUILTIN_STORED_MODULES[preeng2] || EMPTY_OBJ).name : null), num:(modidNum || EMPTY_OBJ)[modid2], act:'Buy', discmod:discmod2, cost:{'':slot2.getCost()} });
 				modid1 = modid2;
 				bpgrade1 = bproll1 = 0;
 				bpid1 = expid1 = '';
@@ -2149,7 +2149,7 @@ window.edsy = new (function() {
 					bproll1 = 0;
 					expid1 = '';
 				} else if (bproll1 <= 0) {
-					steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Conv', bpid:bpid1, bpgrade:bpgrade1, cost:{} });
+					steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:(modidNum || EMPTY_OBJ)[modid2], act:'Conv', bpid:bpid1, bpgrade:bpgrade1, cost:{} });
 					bpgrade1--;
 					bproll1 = 1;
 				}
@@ -2162,7 +2162,7 @@ window.edsy = new (function() {
 						var cost = {};
 						for (var mat in mats)
 							cost[mat] = rolls * mats[mat];
-						steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Eng', bpid:bpid2, bpgrade:bpgrade1, bproll:limit, rolls:rolls, cost:cost });
+						steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:(modidNum || EMPTY_OBJ)[modid2], act:'Eng', bpid:bpid2, bpgrade:bpgrade1, bproll:limit, rolls:rolls, cost:cost });
 					}
 					bpgrade1++;
 					bproll1 = 0;
@@ -2174,7 +2174,7 @@ window.edsy = new (function() {
 			var mtype2 = (slot2.getSlotGroup() === 'hardpoint') ? 'wpn' : slot2.getModuleMtype();
 			if (expeffect && expid1 != expid2 && limexpeffect !== '' && (limexpeffect === 'all' || (','+limexpeffect+',').indexOf(mtype2) != -1)) {
 				var cost = clone({}, expeffect.mats);
-				steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:modidNum[modid2], act:'Exp', expid:expid2, cost:cost });
+				steps.push({ sgrp:sgrp2, sid:shipid2, mid:((sgrp2 === 'ship') ? 0 : modid2), num:(modidNum || EMPTY_OBJ)[modid2], act:'Exp', expid:expid2, cost:cost });
 			}
 		}
 		
@@ -2868,22 +2868,25 @@ window.edsy = new (function() {
 				}
 			}
 			
-			// sort and compare slot-modules
-			// TODO: don't just assume we can convert slot-by-slot in order, things could be rearranged; instead, for each target slot, find the best-fit source slot
+			// replace the hull, if needed
+			var modidNum = {};
 			var slot1 = base.getSlot('ship', 'hull');
 			var slot2 = this.getSlot('ship', 'hull');
-			var modidNum = {};
 			var steps = Slot.getRetrofitData(slot1, slot2, modidNum, limdisc, limdisceng, limbpgrade, limbproll, limexpeffect, limrolls);
+			
+			// process slot modules
 			for (var g = 0;  g < GROUPS.length;  g++) {
 				var slotgroup = GROUPS[g];
 				if (slotgroup === 'military')
 					continue;
+				
+				/* OLD AND BUSTED: slot-by-slot direct retrofitting
+				var groupsales = [];
+				var groupsteps = [];
 				groupSlots1[slotgroup].sort(sortSlotModules);
 				groupSlots2[slotgroup].sort(sortSlotModules);
 				var slotnum1 = 0;
 				var slotnum2 = 0;
-				var groupsteps = [];
-				var groupsales = [];
 				do {
 					var slot1 = groupSlots1[slotgroup][slotnum1];
 					var slot2 = groupSlots2[slotgroup][slotnum2];
@@ -2906,6 +2909,58 @@ window.edsy = new (function() {
 					}
 				} while (true);
 				Array.prototype.push.apply(steps, groupsales);
+				Array.prototype.push.apply(steps, groupsteps);
+				*/
+				
+				/* NEW HOTNESS: improved source-to-target retrofit matching */
+				
+				// retrofit or purchase each target module
+				var groupsteps = [];
+				for (var slotnum2 = 0;  slotnum2 < groupSlots2[slotgroup].length;  slotnum2++) {
+					var slot2 = groupSlots2[slotgroup][slotnum2];
+					if (!slot2 || !slot2.getModule())
+						continue;
+					
+					// find the best source module to retrofit from
+					var retronum = -1;
+					var retrolen = -1;
+					if (slotgroup === 'component') {
+						// for core components, it's always the matching slot regardless of modid
+						retronum = slotnum2;
+					} else {
+						// otherwise, find the easiest retrofit from a source module with the same modid, if any
+						for (var slotnum1 = 0;  slotnum1 < groupSlots1[slotgroup].length;  slotnum1++) {
+							var slot1 = groupSlots1[slotgroup][slotnum1];
+							if (slot1 && slot1.getModuleID() == slot2.getModuleID()) {
+								// don't increment modidNums yet, this is still hypothetical
+								var slotsteps = Slot.getRetrofitData(slot1, slot2, null, limdisc, limdisceng, limbpgrade, limbproll, limexpeffect, limrolls);
+								if (retronum < 0 || retrolen > slotsteps.length) {
+									retronum = slotnum1;
+									retrolen = slotsteps.length;
+								}
+							}
+						}
+					}
+					
+					// if a direct retrofit was found, log those steps and remove the source slot from later consideration
+					if (retronum >= 0) {
+						Array.prototype.push.apply(groupsteps, Slot.getRetrofitData(groupSlots1[slotgroup][retronum], slot2, modidNum, limdisc, limdisceng, limbpgrade, limbproll, limexpeffect, limrolls));
+						groupSlots1[slotgroup][retronum] = null;
+					} else {
+						// otherwise, just buy the target module
+						Array.prototype.push.apply(groupsteps, Slot.getRetrofitData(null, slot2, modidNum, limdisc, limdisceng, limbpgrade, limbproll, limexpeffect, limrolls));
+					}
+				}
+				
+				// if any source slots remain, sell them off first
+				for (var slotnum1 = 0;  slotnum1 < groupSlots1[slotgroup].length;  slotnum1++) {
+					var slot1 = groupSlots1[slotgroup][slotnum1];
+					if (slot && slot.getModule()) {
+						Array.prototype.push.apply(steps, Slot.getRetrofitData(slot1, null, modidNum, limdisc, limdisceng, limbpgrade, limbproll, limexpeffect, limrolls));
+					}
+				}
+				
+				// then append the retrofits
 				Array.prototype.push.apply(steps, groupsteps);
 			}
 			
