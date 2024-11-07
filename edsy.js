@@ -2739,6 +2739,7 @@ window.edsy = new (function() {
 			var maxfuel = slot.getEffectiveAttrValue('maxfuel');
 			var fuelmul = slot.getEffectiveAttrValue('fuelmul');
 			var fuelpower = slot.getEffectiveAttrValue('fuelpower');
+			// fuelres does NOT count toward jump fuel cost (but is wrongly included when displaying "current" jump distance in the stats panel)
 			stats._jump_laden    = getJumpDistance(            stats.mass + stats.fuelcap + stats.cargocap, min(stats.fuelcap, maxfuel), optmass, fuelmul, fuelpower, stats.jumpbst);
 			stats._jump_unladen  = getJumpDistance(            stats.mass + stats.fuelcap                 , min(stats.fuelcap, maxfuel), optmass, fuelmul, fuelpower, stats.jumpbst);
 			stats._jump_max      = getJumpDistance(            stats.mass + min(stats.fuelcap, maxfuel)   , min(stats.fuelcap, maxfuel), optmass, fuelmul, fuelpower, stats.jumpbst);
@@ -8996,6 +8997,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var cabincap = current.fit.getStat('cabincap');
 		
 		// compute derived stats
+		// in-game, fuelres is included when displaying current mass but not max mass
 		var curTtlFuel = min(max(parseNumText(document.forms.stats.elements.stats_cur_fuel.value) || 0, 0), fuelcap);
 		var curTtlCrgo = min(max(parseNumText(document.forms.stats.elements.stats_cur_cargo.value) || 0, 0), cargocap);
 		var curTtlMass = mass + curTtlFuel + fuelres + curTtlCrgo;
@@ -9112,6 +9114,11 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var fuelpower = slot.getEffectiveAttrValue('fuelpower');
 		
 		// get or compute derived stats
+		// fuelres does NOT count toward mass for purposes of jump fuel cost or routing:
+		// { "timestamp":"2024-11-07T18:38:16Z", "event":"Loadout", "Ship":"adder", "ShipID":99, "ShipName":"", "ShipIdent":"TA-07A", "HullValue":15986, "ModulesValue":1260121, "HullHealth":1.000000, "UnladenMass":59.500000, "CargoCapacity":0, "MaxJumpRange":21.072477, "FuelCapacity":{ "Main":8.000000, "Reserve":0.360000 }, "Rebuy":47852, "Modules":[ { "Slot":"TinyHardpoint1", "Item":"hpt_shieldbooster_size0_class5", "On":false, "Priority":0, "Health":1.000000 }, { "Slot":"Armour", "Item":"adder_armour_grade1", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"PowerPlant", "Item":"int_powerplant_size2_class2", "On":true, "Priority":1, "Health":1.000000, "Value":5204 }, { "Slot":"MainEngines", "Item":"int_engine_size2_class2", "On":true, "Priority":0, "Health":1.000000, "Value":5502 }, { "Slot":"FrameShiftDrive", "Item":"int_hyperdrive_size3_class4", "On":true, "Priority":0, "Health":1.000000, "Value":5502 }, { "Slot":"LifeSupport", "Item":"int_lifesupport_size1_class2", "On":true, "Priority":0, "Health":1.000000, "Value":453 }, { "Slot":"PowerDistributor", "Item":"int_powerdistributor_size1_class2", "On":false, "Priority":0, "Health":1.000000, "Value":1270 }, { "Slot":"Radar", "Item":"int_sensors_size3_class2", "On":true, "Priority":0, "Health":1.000000, "Value":3556 }, { "Slot":"FuelTank", "Item":"int_fueltank_size3_class3", "On":true, "Priority":1, "Health":1.000000, "Value":6197 }, { "Slot":"Slot01_Size3", "Item":"int_hullreinforcement_size3_class1", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"Slot06_Size1", "Item":"int_supercruiseassist", "On":false, "Priority":2, "Health":1.000000, "Value":8003 }, { "Slot":"Slot07_Size1", "Item":"int_dockingcomputer_advanced", "On":false, "Priority":2, "Health":1.000000, "Value":11852 }, { "Slot":"PlanetaryApproachSuite", "Item":"int_planetapproachsuite_advanced", "On":true, "Priority":1, "Health":1.000000, "Value":438 }, { "Slot":"VesselVoice", "Item":"voicepack_verity", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"ShipCockpit", "Item":"adder_cockpit", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"CargoHatch", "Item":"modularcargobaydoor", "On":false, "Priority":2, "Health":1.000000 } ] }
+		// { "timestamp":"2024-11-07T18:42:27Z", "event":"FSDJump", "Taxi":false, "Multicrew":false, "StarSystem":"LTT 4379", "SystemAddress":972566825323, "StarPos":[46.81250,28.87500,14.78125], "SystemAllegiance":"", "SystemEconomy":"$economy_None;", "SystemEconomy_Localised":"None", "SystemSecondEconomy":"$economy_None;", "SystemSecondEconomy_Localised":"None", "SystemGovernment":"$government_None;", "SystemGovernment_Localised":"None", "SystemSecurity":"$GAlAXY_MAP_INFO_state_anarchy;", "SystemSecurity_Localised":"Anarchy", "Population":0, "Body":"LTT 4379", "BodyID":0, "BodyType":"Star", "JumpDist":18.967, "FuelUsed":1.487030, "FuelLevel":6.512970 }
+		// this ship could only jump 18.94 LY including fuelres mass, but successfully jumped 18.967 LY from Shinrarta Dezhra to LTT 4379 using 1.487 T of fuel
+		// nonetheless, the in-game "current" jump distance is wrongly calculated including fuelres, so we unfortunately replicate that bug here so folks don't complain about the mismatch
 		var curTtlFuel = min(max(parseNumText(document.forms.stats.elements.stats_cur_fuel.value) || 0, 0), fuelcap);
 		var curTtlCrgo = min(max(parseNumText(document.forms.stats.elements.stats_cur_cargo.value) || 0, 0), cargocap);
 		var ldnNavJmp = current.fit.getStat('_jump_laden');
