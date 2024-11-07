@@ -202,6 +202,8 @@ window.edsy = new (function() {
 			discounts: 0,
 			builtin: 'some',
 			onlybest: 'some',
+			revsize: false,
+			revrating: false,
 			experimental: false,
 			show1: true,
 			show2: true,
@@ -4460,7 +4462,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		// by class (size)
 		var v1 = 0 + (m1.class || 0);
 		var v2 = 0 + (m2.class || 0);
-		if (v1 != v2) return v1 - v2;
+		if (v1 != v2) return (current.option.revsize ? (v2 - v1) : (v1 - v2));
 		// by uniqueness
 		var a1 = eddb.mtype[m1.mtype].modulenames[m1.name];
 		v1 = (a1 ? ((typeof a1 !== 'string') ? 0 : 1) : 2);
@@ -4502,7 +4504,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		// by rating (A-B-C-D-E-F-G-H-I)
 		v1 = 0 - (m1.rating || ' ').charCodeAt(0);
 		v2 = 0 - (m2.rating || ' ').charCodeAt(0);
-		if (v1 != v2) return v1 - v2;
+		if (v1 != v2) return (current.option.revrating ? (v2 - v1) : (v1 - v2));
 		// by name
 		v1 = getTranslation('module-'+(m1.namekey || modid1)) || m1.name;
 		v2 = getTranslation('module-'+(m2.namekey || modid2)) || m2.name;
@@ -4823,10 +4825,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // initCache()
 	
 	
-	var sortCache = function() {
+	var sortCache = function(onlymodules) {
 		cache.ships.sort(sortShipIDs);
-		for (var group in cache.groupMtypes) {
-			cache.groupMtypes[group].sort(sortMtypes);
+		if (!onlymodules) {
+			for (var group in cache.groupMtypes) {
+				cache.groupMtypes[group].sort(sortMtypes);
+			}
 		}
 		for (var mtype in cache.mtypeModules) {
 			cache.mtypeModules[mtype].sort(sortModuleIDs);
@@ -4834,11 +4838,13 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		for (var mtype in cache.mtypeBuiltins) {
 			cache.mtypeBuiltins[mtype].sort(sortBuiltinIDs);
 		}
-		for (var mtype in cache.mtypeBlueprints) {
-			cache.mtypeBlueprints[mtype].sort(sortBlueprints);
-		}
-		for (var mtype in cache.mtypeExpeffects[mtype]) {
-			cache.mtypeExpeffects[mtype].sort(sortExpeffects);
+		if (!onlymodules) {
+			for (var mtype in cache.mtypeBlueprints) {
+				cache.mtypeBlueprints[mtype].sort(sortBlueprints);
+			}
+			for (var mtype in cache.mtypeExpeffects[mtype]) {
+				cache.mtypeExpeffects[mtype].sort(sortExpeffects);
+			}
 		}
 	}; // sortCache()
 	
@@ -6526,7 +6532,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			} else {
 				updateUIFitStoredBuilds();
 			}
+			sortCache(true); // affected by options
+			initUIModulePicker();
 			updateUIModulePickerStoredModules();
+			updateUIModulePickerWarnings();
 			updateUIDetailsStoredModules();
 			updateUIDetailsStoredModuleControls();
 			updateUIAnalysisStoredBuilds();
@@ -6877,6 +6886,67 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		return true;
 	}; // updateUIModulePickerStoredModule()
+	
+	
+	var updateUIModulePickerWarnings = function() {
+		if (!current.fit)
+			return;
+		var shipid = current.fit.getShipID();
+		var ship = eddb.ship[shipid];
+		
+		// get attributes
+		var slot = current.fit.getSlot('ship', 'hull');
+		var crew = slot.getEffectiveAttrValue('crew');
+		var mass = slot.getEffectiveAttrValue('mass');
+		var boostcost = slot.getEffectiveAttrValue('boostcost');
+		var pwrdraw_ret = current.fit.getStat('pwrdraw_ret');
+		var pwrbst = current.fit.getStat('pwrbst') / 100.0;
+		
+		// mark undersized or disallowed modules
+		for (var mtype in { cpp:1, ct:1, cpd:1,  ifh:1, ipc:1, isg:1 }) {
+			for (var m = 0;  m < cache.mtypeModules[mtype].length;  m++) {
+				var modid = cache.mtypeModules[mtype][m];
+				var namehashes = Object.keys(current.stored.moduleNamehashStored[modid] || EMPTY_OBJ);
+				namehashes.push('');
+				for (var n = 0;  n < namehashes.length;  n++) {
+					var namehash = namehashes[n];
+					if (namehash) {
+						current.tempSlot.setStoredHash(current.stored.moduleNamehashStored[0][namehash].modulehash);
+					} else {
+						current.tempSlot.setModuleID(modid);
+					}
+					var notenough = false;
+					var notallowed = false;
+					switch (mtype) {
+					case 'cpp':
+						notenough = ((current.tempSlot.getEffectiveAttrValue('pwrcap') * (1 + pwrbst)) < pwrdraw_ret[0]);
+						break;
+						
+					case 'ct':
+						notenough = (current.tempSlot.getEffectiveAttrValue('engmaxmass') < mass);
+						break;
+						
+					case 'cpd':
+						notenough = (current.tempSlot.getEffectiveAttrValue('engcap') < (boostcost + BOOST_MARGIN));
+						break;
+						
+					case 'ifh':
+					case 'ipc':
+						var module = eddb.module[modid];
+						notallowed = (module.reserved && !module.reserved[shipid]);
+						break;
+						
+					case 'isg':
+						notenough = (current.tempSlot.getEffectiveAttrValue('genmaxmass') < mass);
+						break;
+					}
+					var el = document.getElementById('outfitting_module.' + modid + '.' + namehash);
+					el.classList.toggle('notenough', notenough);
+					el.classList.toggle('notallowed', notallowed);
+				}
+			}
+		}
+	}; // updateUIModulePickerWarnings()
 	
 	
 	var setUIModuleTab = function(tab) {
@@ -7567,45 +7637,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		document.getElementById('outfitting_fit_class_ship_hull').innerHTML = '?SML'[ship.class || 0];
 		
 		// mark undersized or reserved modules
-		for (var mtype in { ct:1, cpd:1, isg:1,  ifh:2, ipc:2 }) {
-			for (var m = 0;  m < cache.mtypeModules[mtype].length;  m++) {
-				var modid = cache.mtypeModules[mtype][m];
-				var namehashes = Object.keys(current.stored.moduleNamehashStored[modid] || EMPTY_OBJ);
-				namehashes.push('');
-				for (var n = 0;  n < namehashes.length;  n++) {
-					var namehash = namehashes[n];
-					if (namehash) {
-						current.tempSlot.setStoredHash(current.stored.moduleNamehashStored[0][namehash].modulehash);
-					} else {
-						current.tempSlot.setModuleID(modid);
-					}
-					var notenough = false;
-					var notallowed = false;
-					switch (mtype) {
-					case 'cpd':
-						notenough = (current.tempSlot.getEffectiveAttrValue('engcap') < (boostcost + BOOST_MARGIN));
-						break;
-						
-					case 'ct':
-						notenough = (current.tempSlot.getEffectiveAttrValue('engmaxmass') < mass);
-						break;
-						
-					case 'ifh':
-					case 'ipc':
-						var module = eddb.module[modid];
-						notallowed = (module.reserved && !module.reserved[shipid]);
-						break;
-						
-					case 'isg':
-						notenough = (current.tempSlot.getEffectiveAttrValue('genmaxmass') < mass);
-						break;
-					}
-					var el = document.getElementById('outfitting_module.' + modid + '.' + namehash);
-					el.classList.toggle('notenough', notenough);
-					el.classList.toggle('notallowed', notallowed);
-				}
-			}
-		}
+		updateUIModulePickerWarnings();
 		
 		// create or update slot rows
 		for (var sg = 0;  sg < GROUPS.length;  sg++) {
@@ -10394,6 +10426,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		if (!{none:1,some:1,all:1}[current.option.onlybest])
 			current.option.onlybest = 'some';
+		current.option.revsize = !!current.option.revsize;
+		current.option.revrating = !!current.option.revrating;
 		current.option.experimental = !!current.option.experimental;
 		current.option.show1 = !!current.option.show1;
 		current.option.show2 = !!current.option.show2;
@@ -10420,6 +10454,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		// apply options settings
 		document.body.classList.toggle('mostlybest', current.option.onlybest == 'some');
 		document.body.classList.toggle('onlybest', current.option.onlybest == 'all');
+		// revsize,revrating are handled by initUIModulePicker()
 		document.body.classList.toggle('experimental', current.option.experimental);
 		document.body.classList.toggle('show1', current.option.show1);
 		document.body.classList.toggle('show2', current.option.show2);
@@ -10461,6 +10496,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		}
 		document.getElementById('options_builtin').style.display = ((current.option.builtin === 'some') ? '' : 'none');
 		elements.onlybest.value = current.option.onlybest;
+		elements.revsize.checked = current.option.revsize;
+		elements.revrating.checked = current.option.revrating;
 		elements.experimental.checked = current.option.experimental;
 		elements.show1.checked = current.option.show1;
 		elements.show2.checked = current.option.show2;
@@ -11881,6 +11918,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			current.option[opt] = elements[opt].checked;
 		}
 		current.option.onlybest = elements.onlybest.value;
+		current.option.revsize = elements.revsize.checked;
+		current.option.revrating = elements.revrating.checked;
 		current.option.experimental = elements.experimental.checked;
 		current.option.show1 = elements.show1.checked;
 		current.option.show2 = elements.show2.checked;
@@ -11902,7 +11941,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		
 		updateUILayout();
 		readStoredModules();
+		sortCache(true);
+		initUIModulePicker();
 		updateUIModulePickerStoredModules();
+		updateUIModulePickerWarnings();
 		updateUIDetailsStoredModules();
 		updateUIDetailsStoredModuleControls();
 		updateUIDetailsModifications();
@@ -12259,6 +12301,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			sortUIShipyardTable(document.getElementById('shipyard_ships_table'), UI_SHIPYARD_SHIPS_COLS);
 			initUIModulePicker();
 			updateUIModulePickerStoredModules();
+			updateUIModulePickerWarnings();
 			sortUIOptionsBuiltins();
 			updateUIDetailsModule();
 		}
@@ -12399,7 +12442,6 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			// initialize UI
 			initUIShipyardShips,
 			initUIShipyardStoredBuilds,
-			initUIModulePicker,
 			initUIFitSlots,
 			initUIDetails,
 			initUIAnalysisRetrofit,
@@ -12408,6 +12450,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			// initialize storage
 			readStoredOptions,
 			updateUIOptions,
+			initUIModulePicker, // affected by sort options
 			readStoredImports,
 			readStoredBuilds,
 			updateUIShipyardStoredBuilds,
