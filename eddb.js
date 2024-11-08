@@ -18,7 +18,7 @@ var eddb = {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
 			id:1, stype:'mp', name:'Sidewinder', class:1, cost:5070, retail:32000,
 			topspd:220, bstspd:320, mnv:5, shields:40, armour:60, mass:25, fwdacc:44.39, revacc:29.96, latacc:29.96,
-			minthrust:45.454, boostcost:7, pitch:42, yaw:16, roll:110, pitchacc:220, yawacc:110, rollacc:240, minpitch:34,
+			minthrust:45.454, boostcost:7, boostint:4, pitch:42, yaw:16, roll:110, pitchacc:220, yawacc:110, rollacc:240, minpitch:34,
 			heatcap:140, heatdismin:1.18, heatdismax:18.15, fuelcost:50, fuelreserve:0.30, hardness:20, masslock:6, crew:1,
 			slots:{
 				hardpoint:[1,1],
@@ -46,7 +46,7 @@ var eddb = {
 			fdid:128049255, fdname:'Eagle', eddbid:7,
 			id:21, stype:'co', name:'Eagle', class:1, cost:7490, retail:44800,
 			topspd:240, bstspd:350, mnv:7, shields:60, armour:40, mass:50, fwdacc:43.97, revacc:29.97, latacc:29.86,
-			minthrust:75.0, boostcost:8, pitch:50, yaw:18, roll:120, pitchacc:220, yawacc:110, rollacc:240, minpitch:40,
+			minthrust:75.0, boostcost:8, boostint:4.5, pitch:50, yaw:18, roll:120, pitchacc:220, yawacc:110, rollacc:240, minpitch:40,
 			heatcap:165, heatdismin:1.38, heatdismax:21.48, fuelcost:50, fuelreserve:0.34, hardness:28, masslock:6, crew:1,
 			slots:{
 				hardpoint:[1,1,1],
@@ -74,7 +74,7 @@ var eddb = {
 			fdid:128049261, fdname:'Hauler', eddbid:12,
 			id:31, stype:'fr', name:'Hauler', class:1, cost:8160, retail:52720,
 			topspd:200, bstspd:300, mnv:4, shields:50, armour:100, mass:14, fwdacc:39.87, revacc:29.95, latacc:29.95,
-			minthrust:35.0, boostcost:7, pitch:36, yaw:14, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:30,
+			minthrust:35.0, boostcost:7, boostint:4, pitch:36, yaw:14, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:30,
 			heatcap:123, heatdismin:1.06, heatdismax:16.20, fuelcost:50, fuelreserve:0.25, hardness:20, masslock:6, crew:1,
 			slots:{
 				hardpoint:[1],
@@ -102,7 +102,7 @@ var eddb = {
 			fdid:128049267, fdname:'Adder', eddbid:1,
 			id:41, stype:'ex', name:'Adder', class:1, cost:18710, retail:87810,
 			topspd:220, bstspd:320, mnv:4, shields:60, armour:90, mass:35, fwdacc:39.41, revacc:27.73, latacc:27.86,
-			minthrust:45.454, boostcost:8, pitch:38, yaw:14, roll:100, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
+			minthrust:45.454, boostcost:8, boostint:4, pitch:38, yaw:14, roll:100, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
 			heatcap:170, heatdismin:1.45, heatdismax:22.60, fuelcost:50, fuelreserve:0.36, hardness:35, masslock:7, crew:2,
 			slots:{
 				hardpoint:[2,1,1],
@@ -130,7 +130,7 @@ var eddb = {
 			fdid:128672138, fdname:'Empire_Eagle', eddbid:15,
 			id:25, stype:'co', name:'Imperial Eagle', class:1, cost:50890, retail:110830,
 			topspd:300, bstspd:400, mnv:5, shields:80, armour:60, mass:50, fwdacc:34.54, revacc:27.84, latacc:27.84,
-			minthrust:70.0, boostcost:8, pitch:40, yaw:15, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:30,
+			minthrust:70.0, boostcost:8, boostint:4.5, pitch:40, yaw:15, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:30,
 			heatcap:163, heatdismin:1.50, heatdismax:21.20, fuelcost:50, fuelreserve:0.37, hardness:28, masslock:6, crew:1, // verify masslock
 			slots:{
 				hardpoint:[2,1,1],
@@ -158,7 +158,7 @@ var eddb = {
 			fdid:128049273, fdname:'Viper', eddbid:22,
 			id:22, stype:'co', name:'Viper Mk III', class:1, cost:74610, retail:142930,
 			topspd:320, bstspd:400, mnv:4, shields:105, armour:70, mass:50, fwdacc:53.98, revacc:29.70, latacc:24.95,
-			minthrust:62.5, boostcost:10, pitch:35, yaw:15, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
+			minthrust:62.5, boostcost:10, boostint:5, pitch:35, yaw:15, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
 			heatcap:195, heatdismin:1.69, heatdismax:26.20, fuelcost:50, fuelreserve:0.41, hardness:35, masslock:7, crew:1,
 			slots:{
 				hardpoint:[2,2,1,1],
@@ -186,7 +186,7 @@ var eddb = {
 			fdid:128049279, fdname:'CobraMkIII', eddbid:4,
 			id:2, stype:'mp', name:'Cobra Mk III', class:1, cost:186260, retail:349720,
 			topspd:280, bstspd:400, mnv:5, shields:80, armour:120, mass:180, fwdacc:35.03, revacc:25.16, latacc:20.02,
-			minthrust:50.0, boostcost:10, pitch:40, yaw:10, roll:100, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
+			minthrust:50.0, boostcost:10, boostint:5, pitch:40, yaw:10, roll:100, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
 			heatcap:225, heatdismin:1.92, heatdismax:30.63, fuelcost:50, fuelreserve:0.49, hardness:35, masslock:8, crew:2,
 			slots:{
 				hardpoint:[2,2,1,1],
@@ -214,7 +214,7 @@ var eddb = {
 			fdid:128672255, fdname:'Viper_MkIV', eddbid:28,
 			id:28, stype:'co', name:'Viper Mk IV', class:1, cost:290680, retail:437930,
 			topspd:270, bstspd:340, mnv:3, shields:150, armour:150, mass:190, fwdacc:53.84, revacc:30.14, latacc:24.97,
-			minthrust:64.815, boostcost:10, pitch:30, yaw:12, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:25,
+			minthrust:64.815, boostcost:10, boostint:5, pitch:30, yaw:12, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:25,
 			heatcap:209, heatdismin:1.82, heatdismax:28.98, fuelcost:50, fuelreserve:0.46, hardness:35, masslock:7, crew:1, // verify masslock
 			slots:{
 				hardpoint:[2,2,1,1],
@@ -242,7 +242,7 @@ var eddb = {
 			fdid:128671217, fdname:'DiamondBack', eddbid:6,
 			id:43, stype:'ex', name:'Diamondback Scout', class:1, cost:441800, retail:564330,
 			topspd:280, bstspd:380, mnv:5, shields:120, armour:120, mass:170, fwdacc:39.57, revacc:29.82, latacc:25.19,
-			minthrust:60.714, boostcost:10, pitch:42, yaw:15, roll:100, pitchacc:200, yawacc:100, rollacc:220, minpitch:35,
+			minthrust:60.714, boostcost:10, boostint:4, pitch:42, yaw:15, roll:100, pitchacc:200, yawacc:100, rollacc:220, minpitch:35,
 			heatcap:346, heatdismin:2.42, heatdismax:48.05, fuelcost:50, fuelreserve:0.49, hardness:40, masslock:8, crew:1,
 			slots:{
 				hardpoint:[2,2,1,1],
@@ -270,7 +270,7 @@ var eddb = {
 			fdid:128672262, fdname:'CobraMkIV', eddbid:29,
 			id:8, stype:'mp', name:'Cobra Mk IV', class:1, cost:584200, retail:764720,
 			topspd:200, bstspd:300, mnv:3, shields:120, armour:120, mass:210, fwdacc:27.84, revacc:19.91, latacc:15.03,
-			minthrust:50.0, boostcost:10, pitch:30, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:25,
+			minthrust:50.0, boostcost:10, boostint:5, pitch:30, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:25,
 			heatcap:228, heatdismin:1.99, heatdismax:31.68, fuelcost:50, fuelreserve:0.51, hardness:35, masslock:8, crew:2,
 			slots:{
 				hardpoint:[2,2,1,1,1],
@@ -298,7 +298,7 @@ var eddb = {
 			fdid:128049285, fdname:'Type6', eddbid:19,
 			id:32, stype:'fr', name:'Type-6 Transporter', class:2, cost:858010, retail:1045950,
 			topspd:220, bstspd:350, mnv:3, shields:90, armour:180, mass:155, fwdacc:20.10, revacc:14.96, latacc:15.07,
-			minthrust:40.909, boostcost:10, pitch:30, yaw:17, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:23,
+			minthrust:40.909, boostcost:10, boostint:4, pitch:30, yaw:17, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:23,
 			heatcap:179, heatdismin:1.70, heatdismax:24.55, fuelcost:50, fuelreserve:0.39, hardness:35, masslock:8, crew:1,
 			slots:{
 				hardpoint:[1,1],
@@ -326,7 +326,7 @@ var eddb = {
 			fdid:128049291, fdname:'Dolphin', eddbid:31,
 			id:53, stype:'pa', name:'Dolphin', class:1, cost:1095780, retail:1337320,
 			topspd:250, bstspd:350, mnv:3, shields:110, armour:110, mass:140, fwdacc:39.63, revacc:30.01, latacc:14.97,
-			minthrust:48.0, boostcost:10, pitch:30, yaw:20, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:23,
+			minthrust:48.0, boostcost:10, boostint:4, pitch:30, yaw:20, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:23,
 			heatcap:245, heatdismin:1.91, heatdismax:56.00, fuelcost:50, fuelreserve:0.50, hardness:35, masslock:9, crew:1, // verify masslock
 			slots:{
 				hardpoint:[1,1],
@@ -357,7 +357,7 @@ var eddb = {
 			fdid:128671831, fdname:'DiamondBackXL', eddbid:5,
 			id:44, stype:'ex', name:'Diamondback Explorer', class:1, cost:1616160, retail:1894760,
 			topspd:260, bstspd:340, mnv:4, shields:150, armour:150, mass:260, fwdacc:34.63, revacc:25.06, latacc:19.89,
-			minthrust:61.538, boostcost:13, pitch:35, yaw:13, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:28,
+			minthrust:61.538, boostcost:13, boostint:4, pitch:35, yaw:13, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:28,
 			heatcap:351, heatdismin:2.46, heatdismax:50.55, fuelcost:50, fuelreserve:0.52, hardness:42, masslock:10, crew:1,
 			slots:{
 				hardpoint:[3,2,2],
@@ -386,7 +386,7 @@ var eddb = {
 			id:7, stype:'mp', name:'Imperial Courier', class:1, cost:2462010, retail:2542930,
 			faction:'Empire', rank:3,
 			topspd:280, bstspd:380, mnv:4, shields:200, armour:80, mass:35, fwdacc:57.53, revacc:30.02, latacc:24.88,
-			minthrust:78.571, boostcost:10, pitch:38, yaw:16, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:32,
+			minthrust:78.571, boostcost:10, boostint:4, pitch:38, yaw:16, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:32,
 			heatcap:230, heatdismin:1.62, heatdismax:25.05, fuelcost:50, fuelreserve:0.41, hardness:30, masslock:7, crew:1,
 			slots:{
 				hardpoint:[2,2,2],
@@ -414,7 +414,7 @@ var eddb = {
 			fdid:128672269, fdname:'Independant_Trader', eddbid:27,
 			id:35, stype:'fr', name:'Keelback', class:2, cost:2937840, retail:3126150,
 			topspd:200, bstspd:300, mnv:2, shields:135, armour:270, mass:180, fwdacc:20.22, revacc:15.07, latacc:15.03,
-			minthrust:45.0, boostcost:10, pitch:27, yaw:15, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:20,
+			minthrust:45.0, boostcost:10, boostint:4, pitch:27, yaw:15, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:20,
 			heatcap:215, heatdismin:1.87, heatdismax:29.78, fuelcost:50, fuelreserve:0.39, hardness:45, masslock:8, crew:2, // verify masslock
 			slots:{
 				hardpoint:[2,2,1,1],
@@ -445,7 +445,7 @@ var eddb = {
 			fdid:128672276, fdname:'Asp_Scout', eddbid:24,
 			id:45, stype:'ex', name:'Asp Scout', class:2, cost:3811220, retail:3961160,
 			topspd:220, bstspd:300, mnv:5, shields:120, armour:180, mass:150, fwdacc:35.02, revacc:20.10, latacc:20.03,
-			minthrust:50.0, boostcost:13, pitch:40, yaw:15, roll:110, pitchacc:200, yawacc:100, rollacc:220, minpitch:35,
+			minthrust:50.0, boostcost:13, boostint:4.5, pitch:40, yaw:15, roll:110, pitchacc:200, yawacc:100, rollacc:220, minpitch:35,
 			heatcap:210, heatdismin:1.80, heatdismax:29.65, fuelcost:50, fuelreserve:0.47, hardness:52, masslock:8, crew:2, // verify masslock
 			slots:{
 				hardpoint:[2,2,1,1],
@@ -476,7 +476,7 @@ var eddb = {
 			fdid:128049309, fdname:'Vulture', eddbid:23,
 			id:23, stype:'co', name:'Vulture', class:1, cost:4670100, retail:4925620,
 			topspd:210, bstspd:340, mnv:5, shields:240, armour:160, mass:230, fwdacc:39.55, revacc:29.88, latacc:19.98,
-			minthrust:90.476, boostcost:16, pitch:42, yaw:17, roll:110, pitchacc:180, yawacc:90, rollacc:200, minpitch:35,
+			minthrust:90.476, boostcost:16, boostint:4.5, pitch:42, yaw:17, roll:110, pitchacc:180, yawacc:90, rollacc:200, minpitch:35,
 			heatcap:237, heatdismin:1.87, heatdismax:35.63, fuelcost:50, fuelreserve:0.57, hardness:55, masslock:10, crew:2,
 			slots:{
 				hardpoint:[3,3],
@@ -507,7 +507,7 @@ var eddb = {
 			fdid:128049303, fdname:'Asp', eddbid:3,
 			id:42, stype:'ex', name:'Asp Explorer', class:2, cost:6137180, retail:6661160,
 			topspd:250, bstspd:340, mnv:4, shields:140, armour:210, mass:280, fwdacc:23.64, revacc:15.04, latacc:14.97,
-			minthrust:48.0, boostcost:13, pitch:38, yaw:10, roll:100, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
+			minthrust:48.0, boostcost:13, boostint:4.5, pitch:38, yaw:10, roll:100, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
 			heatcap:272, heatdismin:2.34, heatdismax:39.90, fuelcost:50, fuelreserve:0.63, hardness:52, masslock:11, crew:2,
 			slots:{
 				hardpoint:[2,2,1,1,1,1],
@@ -536,7 +536,7 @@ var eddb = {
 			id:4, stype:'co', name:'Federal Dropship', class:2, cost:13501480, retail:14314210,
 			faction:'Federation', rank:3,
 			topspd:180, bstspd:300, mnv:3, shields:200, armour:300, mass:580, fwdacc:29.99, revacc:20.34, latacc:10.19,
-			minthrust:55.556, boostcost:19, pitch:30, yaw:14, roll:80, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
+			minthrust:55.556, boostcost:19, boostint:6, pitch:30, yaw:14, roll:80, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
 			heatcap:331, heatdismin:2.60, heatdismax:46.50, fuelcost:50, fuelreserve:0.83, hardness:60, masslock:14, crew:2,
 			slots:{
 				hardpoint:[3,2,2,2,2],
@@ -567,7 +567,7 @@ var eddb = {
 			fdid:128049297, fdname:'Type7', eddbid:20,
 			id:33, stype:'fr', name:'Type-7 Transporter', class:3, cost:16774470, retail:17472250,
 			topspd:180, bstspd:300, mnv:1, shields:156, armour:340, mass:350, fwdacc:20.11, revacc:15.02, latacc:15.13,
-			minthrust:33.333, boostcost:10, pitch:22, yaw:22, roll:60, pitchacc:200, yawacc:50, rollacc:200, minpitch:16, minyaw:16,
+			minthrust:33.333, boostcost:10, boostint:6, pitch:22, yaw:22, roll:60, pitchacc:200, yawacc:50, rollacc:200, minpitch:16, minyaw:16,
 			heatcap:226, heatdismin:2.17, heatdismax:32.45, fuelcost:50, fuelreserve:0.52, hardness:54, masslock:10, crew:1, // verify masslock
 			slots:{
 				hardpoint:[1,1,1,1],
@@ -598,7 +598,7 @@ var eddb = {
 			fdid:128816574, fdname:'TypeX', eddbid:33,
 			id:9, stype:'co', name:'Alliance Chieftain', class:2, cost:18603850, retail:19382250,
 			topspd:230, bstspd:330, mnv:4, shields:200, armour:280, mass:400, fwdacc:37.84, revacc:25.84, latacc:20.01,
-			minthrust:65.217, boostcost:19, pitch:38, yaw:16, roll:90, pitchacc:170, yawacc:60, rollacc:150, minpitch:32,
+			minthrust:65.217, boostcost:19, boostint:6, pitch:38, yaw:16, roll:90, pitchacc:170, yawacc:60, rollacc:150, minpitch:32,
 			heatcap:289, heatdismin:2.60, heatdismax:46.50, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:13, crew:2,
 			slots:{
 				hardpoint:[3,3,2,1,1,1],
@@ -627,7 +627,7 @@ var eddb = {
 			id:26, stype:'co', name:'Federal Assault Ship', class:2, cost:19102490, retail:19814210,
 			faction:'Federation', rank:5,
 			topspd:210, bstspd:350, mnv:4, shields:200, armour:300, mass:480, fwdacc:39.81, revacc:20.04, latacc:15.07,
-			minthrust:71.429, boostcost:19, pitch:38, yaw:19, roll:90, pitchacc:170, yawacc:80, rollacc:200, minpitch:30,
+			minthrust:71.429, boostcost:19, boostint:6, pitch:38, yaw:19, roll:90, pitchacc:170, yawacc:80, rollacc:200, minpitch:30,
 			heatcap:286, heatdismin:2.53, heatdismax:45.23, fuelcost:50, fuelreserve:0.72, hardness:60, masslock:14, crew:2, // verify masslock
 			slots:{
 				hardpoint:[3,3,2,2],
@@ -656,7 +656,7 @@ var eddb = {
 			id:3, stype:'mp', name:'Imperial Clipper', class:3, cost:21108270, retail:22295860,
 			faction:'Empire', rank:7,
 			topspd:300, bstspd:380, mnv:5, shields:180, armour:270, mass:400, fwdacc:24.74, revacc:20.05, latacc:10.10,
-			minthrust:60.0, boostcost:19, pitch:40, yaw:18, roll:80, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
+			minthrust:60.0, boostcost:19, boostint:4.5, pitch:40, yaw:18, roll:80, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
 			heatcap:304, heatdismin:2.63, heatdismax:46.80, fuelcost:50, fuelreserve:0.74, hardness:60, masslock:12, crew:2,
 			slots:{
 				hardpoint:[3,3,2,2],
@@ -684,7 +684,7 @@ var eddb = {
 			fdid:128816581, fdname:'TypeX_2', eddbid:36,
 			id:10, stype:'co', name:'Alliance Crusader', class:2, cost:22087940, retail:22866340,
 			topspd:180, bstspd:300, mnv:3, shields:200, armour:300, mass:500, fwdacc:29.78, revacc:24.78, latacc:18.96,
-			minthrust:61.11, boostcost:19, pitch:32, yaw:16, roll:80, pitchacc:150, yawacc:50, rollacc:150, minpitch:30, // verify minthrust
+			minthrust:61.11, boostcost:19, boostint:6, pitch:32, yaw:16, roll:80, pitchacc:150, yawacc:50, rollacc:150, minpitch:30, // verify minthrust
 			heatcap:316, heatdismin:2.53, heatdismax:45.23, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:13, crew:3, // verify hardness,masslock
 			slots:{ // verify
 				hardpoint:[3,2,2,1,1,1],
@@ -712,7 +712,7 @@ var eddb = {
 			fdid:128816588, fdname:'TypeX_3', eddbid:34,
 			id:13, stype:'co', name:'Alliance Challenger', class:2, cost:29561170, retail:30472250,
 			topspd:200, bstspd:310, mnv:4, shields:220, armour:300, mass:450, fwdacc:31.65, revacc:25.94, latacc:20.09,
-			minthrust:65.00, boostcost:19, pitch:35, yaw:16, roll:90, pitchacc:120, yawacc:50, rollacc:120, minpitch:32, // verify minthrust
+			minthrust:65.00, boostcost:19, boostint:6, pitch:35, yaw:16, roll:90, pitchacc:120, yawacc:50, rollacc:120, minpitch:32, // verify minthrust
 			heatcap:316, heatdismin:2.87, heatdismax:51.40, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:13, crew:2, // verify hardness,masslock
 			slots:{ // verify
 				hardpoint:[3,2,2,2,1,1,1],
@@ -741,7 +741,7 @@ var eddb = {
 			id:27, stype:'co', name:'Federal Gunship', class:2, cost:34806280, retail:35814210,
 			faction:'Federation', rank:7,
 			topspd:170, bstspd:280, mnv:1, shields:250, armour:350, mass:580, fwdacc:24.61, revacc:17.83, latacc:10.08,
-			minthrust:58.824, boostcost:23, pitch:25, yaw:18, roll:80, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
+			minthrust:58.824, boostcost:23, boostint:6, pitch:25, yaw:18, roll:80, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
 			heatcap:325, heatdismin:2.87, heatdismax:51.40, fuelcost:50, fuelreserve:0.82, hardness:60, masslock:14, crew:2, // verify masslock
 			slots:{
 				hardpoint:[3,2,2,2,2,1,1],
@@ -769,7 +769,7 @@ var eddb = {
 			fdid:128839281, fdname:'Krait_Light', eddbid:37,
 			id:11, stype:'mp', name:'Krait Phantom', class:2, cost:35732880, retail:37472250,
 			topspd:250, bstspd:350, mnv:3, shields:200, armour:180, mass:270, fwdacc:NaN, revacc:NaN, latacc:NaN,
-			minthrust:64.00, boostcost:13, pitch:31, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:200, minpitch:26, // verify minthrust
+			minthrust:64.00, boostcost:13, boostint:4.5, pitch:31, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:200, minpitch:26, // verify minthrust
 			heatcap:300, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.63, hardness:60, masslock:14, crew:2, // verify hardness
 			slots:{ // verify
 				hardpoint:[3,3,2,2],
@@ -797,7 +797,7 @@ var eddb = {
 			fdid:128816567, fdname:'Krait_MkII', eddbid:35,
 			id:14, stype:'mp', name:'Krait Mk II', class:2, cost:44152080, retail:45814210,
 			topspd:240, bstspd:330, mnv:3, shields:220, armour:220, mass:320, fwdacc:28.01, revacc:18.04, latacc:15.12,
-			minthrust:62.50, boostcost:13, pitch:31, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:200, minpitch:26, // verify minthrust
+			minthrust:62.50, boostcost:13, boostint:4.5, pitch:31, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:200, minpitch:26, // verify minthrust
 			heatcap:300, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.63, hardness:55, masslock:16, crew:3, // verify hardness
 			slots:{ // verify
 				hardpoint:[3,3,3,2,2],
@@ -825,7 +825,7 @@ var eddb = {
 			fdid:128049327, fdname:'Orca', eddbid:16,
 			id:51, stype:'pa', name:'Orca', class:3, cost:47792090, retail:48539890,
 			topspd:300, bstspd:380, mnv:1, shields:220, armour:220, mass:290, fwdacc:29.66, revacc:25.08, latacc:19.95,
-			minthrust:66.667, boostcost:16, pitch:25, yaw:18, roll:55, pitchacc:220, yawacc:110, rollacc:240, minpitch:20,
+			minthrust:66.667, boostcost:16, boostint:4, pitch:25, yaw:18, roll:55, pitchacc:220, yawacc:110, rollacc:240, minpitch:20,
 			heatcap:262, heatdismin:2.30, heatdismax:42.68, fuelcost:50, fuelreserve:0.79, hardness:55, masslock:15, crew:2,
 			slots:{
 				hardpoint:[3,2,2],
@@ -856,7 +856,7 @@ var eddb = {
 			fdid:128049351, fdname:'FerDeLance', eddbid:11,
 			id:24, stype:'co', name:'Fer-de-Lance', class:2, cost:51126980, retail:51567040,
 			topspd:260, bstspd:350, mnv:4, shields:300, armour:225, mass:250, fwdacc:29.31, revacc:24.34, latacc:20.04,
-			minthrust:84.615, boostcost:19, pitch:38, yaw:12, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
+			minthrust:84.615, boostcost:19, boostint:5, pitch:38, yaw:12, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
 			heatcap:224, heatdismin:2.05, heatdismax:41.63, fuelcost:50, fuelreserve:0.67, hardness:70, masslock:12, crew:2,
 			slots:{
 				hardpoint:[4,2,2,2,2],
@@ -884,7 +884,7 @@ var eddb = {
 			fdid:128915979, fdname:'Mamba', eddbid:38,
 			id:12, stype:'co', name:'Mamba', class:2, cost:55434290, retail:55867040,
 			topspd:310, bstspd:380, mnv:3, shields:270, armour:230, mass:250, fwdacc:NaN, revacc:NaN, latacc:NaN,
-			minthrust:77.42, boostcost:16, pitch:30, yaw:10, roll:75, pitchacc:180, yawacc:90, rollacc:200, minpitch:27, // verify minthrust
+			minthrust:77.42, boostcost:16, boostint:5, pitch:30, yaw:10, roll:75, pitchacc:180, yawacc:90, rollacc:200, minpitch:27, // verify minthrust
 			heatcap:165, heatdismin:2.05, heatdismax:41.63, fuelcost:50, fuelreserve:0.50, hardness:70, masslock:12, crew:2, // verify masslock
 			slots:{ // verify
 				hardpoint:[4,3,3,1,1],
@@ -912,7 +912,7 @@ var eddb = {
 			fdid:128049339, fdname:'Python', eddbid:17,
 			id:5, stype:'mp', name:'Python', class:2, cost:55316050, retail:56978180,
 			topspd:230, bstspd:300, mnv:2, shields:260, armour:260, mass:350, fwdacc:29.59, revacc:18.02, latacc:15.92,
-			minthrust:60.870, boostcost:23, pitch:29, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:24,
+			minthrust:60.870, boostcost:23, boostint:4.5, pitch:29, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:24,
 			heatcap:300, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.83, hardness:65, masslock:17, crew:2,
 			slots:{
 				hardpoint:[3,3,3,2,2],
@@ -940,7 +940,7 @@ var eddb = {
 			fdid:128049333, fdname:'Type9', eddbid:21,
 			id:34, stype:'fr', name:'Type-9 Heavy', class:3, cost:72108220, retail:76555840,
 			topspd:130, bstspd:200, mnv:0, shields:240, armour:480, mass:850, fwdacc:20.03, revacc:10.11, latacc:10.03,
-			minthrust:30.769, boostcost:19, pitch:20, yaw:8, roll:20, pitchacc:100, yawacc:50, rollacc:80, minpitch:15,
+			minthrust:30.769, boostcost:19, boostint:6, pitch:20, yaw:8, roll:20, pitchacc:100, yawacc:50, rollacc:80, minpitch:15,
 			heatcap:289, heatdismin:3.10, heatdismax:48.35, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:16, crew:3,
 			slots:{
 				hardpoint:[2,2,2,1,1],
@@ -971,7 +971,7 @@ var eddb = {
 			fdid:128049345, fdname:'BelugaLiner', eddbid:30,
 			id:52, stype:'pa', name:'Beluga Liner', class:3, cost:79686090, retail:84532760,
 			topspd:200, bstspd:280, mnv:2, shields:280, armour:280, mass:950, fwdacc:20.01, revacc:17.12, latacc:15.03,
-			minthrust:55.0, boostcost:19, pitch:25, yaw:17, roll:60, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
+			minthrust:55.0, boostcost:19, boostint:6, pitch:25, yaw:17, roll:60, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
 			heatcap:283, heatdismin:2.60, heatdismax:50.85, fuelcost:50, fuelreserve:0.81, hardness:60, masslock:18, crew:3, // verify masslock
 			slots:{
 				hardpoint:[2,2,2,2,2],
@@ -1002,7 +1002,7 @@ var eddb = {
 			fdid:128785619, fdname:'Type9_Military', eddbid:32,
 			id:36, stype:'fr', name:'Type-10 Defender', class:3, cost:121486140, retail:124755340,
 			topspd:180, bstspd:220, mnv:0, shields:320, armour:580, mass:1200, fwdacc:17.96, revacc:10.04, latacc:10.09,
-			minthrust:83.333, boostcost:19, pitch:22, yaw:8, roll:40, pitchacc:100, yawacc:35, rollacc:80, minpitch:18,
+			minthrust:83.333, boostcost:19, boostint:6, pitch:22, yaw:8, roll:40, pitchacc:100, yawacc:35, rollacc:80, minpitch:18,
 			heatcap:335, heatdismin:3.16, heatdismax:67.15, fuelcost:50, fuelreserve:0.77, hardness:75, masslock:26, crew:3,
 			slots:{
 				hardpoint:[3,3,3,3,2,2,2,1,1],
@@ -1033,7 +1033,7 @@ var eddb = {
 			fdid:128049363, fdname:'Anaconda', eddbid:2,
 			id:6, stype:'sh', name:'Anaconda', class:3, cost:142447820, retail:146969450,
 			topspd:180, bstspd:240, mnv:1, shields:350, armour:525, mass:400, fwdacc:19.85, revacc:10.03, latacc:10.05,
-			minthrust:44.444, boostcost:27, pitch:25, yaw:10, roll:60, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
+			minthrust:44.444, boostcost:27, boostint:6, pitch:25, yaw:10, roll:60, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
 			heatcap:334, heatdismin:3.16, heatdismax:67.15, fuelcost:50, fuelreserve:1.07, hardness:65, masslock:23, crew:3,
 			slots:{
 				hardpoint:[4,3,3,3,2,2,1,1],
@@ -1065,7 +1065,7 @@ var eddb = {
 			id:61, stype:'sh', name:'Federal Corvette', class:3, cost:183147460, retail:187969450,
 			faction:'Federation', rank:12,
 			topspd:200, bstspd:260, mnv:2, shields:555, armour:370, mass:900, fwdacc:19.87, revacc:10.08, latacc:9.98,
-			minthrust:50.0, boostcost:27, pitch:28, yaw:8, roll:75, pitchacc:100, yawacc:50, rollacc:80, minpitch:22,
+			minthrust:50.0, boostcost:27, boostint:6, pitch:28, yaw:8, roll:75, pitchacc:100, yawacc:50, rollacc:80, minpitch:22,
 			heatcap:333, heatdismin:3.28, heatdismax:70.33, fuelcost:50, fuelreserve:1.13, hardness:70, masslock:24, crew:3, // verify hardness, masslock
 			slots:{
 				hardpoint:[4,4,3,2,2,1,1],
@@ -1094,7 +1094,7 @@ var eddb = {
 			id:62, stype:'sh', name:'Imperial Cutter', class:3, cost:200484780, retail:208969450,
 			faction:'Empire', rank:12,
 			topspd:200, bstspd:320, mnv:0, shields:600, armour:400, mass:1100, fwdacc:29.37, revacc:10.04, latacc:6.06,
-			minthrust:80.0, boostcost:23, pitch:18, yaw:8, roll:45, pitchacc:100, yawacc:50, rollacc:80, minpitch:14,
+			minthrust:80.0, boostcost:23, boostint:6, pitch:18, yaw:8, roll:45, pitchacc:100, yawacc:50, rollacc:80, minpitch:14,
 			heatcap:327, heatdismin:3.27, heatdismax:72.58, fuelcost:50, fuelreserve:1.16, hardness:70, masslock:26, crew:3, // verify hardness
 			slots:{
 				hardpoint:[4,3,3,2,2,2,2],
@@ -1122,7 +1122,7 @@ var eddb = {
 			fdid:128666762, fdname:'Python_NX', eddbid:null,
 			id:15, stype:'mp', name:'Python Mk II', class:2, cost:66161981, retail:67527361,
 			topspd:256, bstspd:345, mnv:4, shields:335, armour:280, mass:450, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
-			minthrust:85.85, boostcost:20, pitch:37.01, yaw:12.51, roll:91.03, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:30, // verify: minthrust,pitch,roll,raw,minpitch // TODO: *acc
+			minthrust:85.85, boostcost:20, boostint:4.5, pitch:37.01, yaw:12.51, roll:91.03, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:30, // verify: minthrust,boostint,pitch,roll,raw,minpitch // TODO: *acc
 			heatcap:260, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.83, hardness:70, masslock:17, crew:2, // verify: heatcap,heatdismin,heatdismax
 			slots:{
 				hardpoint:[3,3,3,3,2,2],
@@ -1150,7 +1150,7 @@ var eddb = {
 			fdid:129030534, fdname:'Type8', eddbid:null,
 			id:37, stype:'fr', name:'Type-8 Transporter', class:2, cost:36238840, retail:38453970,
 			topspd:200, bstspd:340, mnv:1, shields:228, armour:440, mass:400, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
-			minthrust:45, boostcost:9, pitch:28, yaw:18, roll:60, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:18, minyaw:16, // verify: minthrust,pitch,roll,raw,minpitch // TODO: *acc
+			minthrust:45, boostcost:9, boostint:NaN, pitch:28, yaw:18, roll:60, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:18, minyaw:16, // verify: minthrust,pitch,roll,raw,minpitch // TODO: boostint,*acc
 			heatcap:236, heatdismin:NaN, heatdismax:36.25, fuelcost:50, fuelreserve:0.52, hardness:58, masslock:18, crew:1, // verify: heatcap,heatdismax // TODO: heatdismin
 			slots:{
 				hardpoint:[2,1,1,1,1,1],
@@ -1181,7 +1181,7 @@ var eddb = {
 			fdid:129030680, fdname:'Mandalay', eddbid:null,
 			id:46, stype:'ex', name:'Mandalay', class:2, cost:16527690, retail:17639220,
 			topspd:280, bstspd:350, mnv:5, shields:220, armour:230, mass:230, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
-			minthrust:71.5, boostcost:14, pitch:35, yaw:28, roll:96, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:24.5, minyaw:16, // verify: minpitch // TODO: *acc
+			minthrust:71.5, boostcost:14, boostint:5, pitch:35, yaw:28, roll:96, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:24.5, minyaw:16, // verify: minpitch // TODO: *acc
 			heatcap:250, heatdismin:NaN, heatdismax:51.00, fuelcost:50, fuelreserve:0.5, hardness:55, masslock:11, crew:2, // verify: heatcap,heatdismax // TODO: heatdismin
 			slots:{
 				hardpoint:[1,1,2,2,2,2],
@@ -1260,6 +1260,7 @@ var eddb = {
 		{ attr:'bstspd',                                      abbr:'Bst',  name:'Boost Speed',          unit:'M/s',         min:0,                  default:0, scale:0,             desc:'Maximum boost speed with outfitting mass equal to thruster optimal mass' }, // ship
 		{ attr:'minthrust',                                   abbr:'NThr', name:'Minimum Thrust',       unit:'%',           min:0, max:100,         default:0, scale:1,             desc:'Thruster speed modifier with 0 ENG pips' }, // ship
 		{ attr:'boostcost',                                   abbr:'BstC', name:'Boost Cost',           unit:'MW',   bad:1, min:0,                  default:0, scale:0,             desc:'Engines capacitor draw for engine boost (in megawatts per boost)' }, // ship
+		{ attr:'boostint',                                    abbr:'BstI', name:'Boost Interval',       unit:'s',    bad:1, min:0,                  default:0, scale:0,             desc:'Minimum time between engine boosts (in seconds)' }, // ship
 		{ attr:'mnv',                                         abbr:'Mnv',  name:'Manoeuvrability',                          min:0, max: 10, step:1, default:0, scale:0,             desc:'Manoeuvrability rating (out of 10)' }, // ship
 		{ attr:'pitch',                                       abbr:'Pch',  name:'Pitch Speed',          unit:'&deg;/s',     min:0,                  default:0, scale:2,             desc:'Base pitch speed (in degrees per second) with outfitting mass equal to thruster optimal mass' }, // ship
 		{ attr:'yaw',                                         abbr:'Yaw',  name:'Yaw Speed',            unit:'&deg;/s',     min:0,                  default:0, scale:2,             desc:'Base yaw speed (in degrees per second) with outfitting mass equal to thruster optimal mass' }, // ship

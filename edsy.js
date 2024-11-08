@@ -9246,6 +9246,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var slot = current.fit.getSlot('ship', 'hull');
 		var minthrust = slot.getEffectiveAttrValue('minthrust') / 100.0;
 		var boostcost = slot.getEffectiveAttrValue('boostcost');
+		var boostint = slot.getEffectiveAttrValue('boostint');
 		var topspd = slot.getEffectiveAttrValue('topspd');
 		var bstspd = slot.getEffectiveAttrValue('bstspd');
 		var pitch = slot.getEffectiveAttrValue('pitch');
@@ -9287,7 +9288,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		// update nav displays
 		var htmlErrorTH = '<abbr class="error" edsy-title="ui-stats-nav-error-thruster" title="Thruster has insufficient maximum mass" edsy-text="ui-stats-nav-error-abbr">ERR</abbr>';
 		var htmlErrorPD = '<abbr class="error" edsy-title="ui-stats-nav-error-distributor" title="Power distributor has insufficient ENG capacitor to boost" edsy-text="ui-stats-nav-error-abbr">ERR</abbr>';
-		var htmlBoost5 = '<abbr class="" edsy-title="ui-stats-nav-boost-often" title="Can boost as often as possible"><small class="semantic">&lt; </small>' + formatNumHTML(5) + '<small class="semantic" edsy-text="unit-seconds-abbr">s</small></abbr>';
+		var htmlCurNavFrq = formatTimeHTML(max(boostint, curNavFrq), true);
+		if (curNavFrq <= boostint)
+			htmlCurNavFrq = '<abbr class="" edsy-title="ui-stats-nav-boost-often" title="Can boost as often as possible">' + htmlCurNavFrq + '</abbr>';
+		var htmlMaxNavFrq = formatTimeHTML(max(boostint, maxNavFrq), true);
+		if (maxNavFrq <= boostint)
+			htmlMaxNavFrq = '<abbr class="" edsy-title="ui-stats-nav-boost-often" title="Can boost as often as possible">' + htmlMaxNavFrq + '</abbr>';
 		document.getElementById('outfitting_stats_cur_speed'    ).innerHTML = (isNaN(curNavSpdMul) ? htmlErrorTH : formatAttrHTML('topspd', curNavSpdMul * topspd * (powerdistEngMul + minthrust * (1 - powerdistEngMul))));
 		document.getElementById('outfitting_stats_laden_speed'  ).innerHTML = (isNaN(ldnNavSpdMul) ? htmlErrorTH : formatAttrHTML('topspd', ldnNavSpdMul * topspd));
 		document.getElementById('outfitting_stats_unladen_speed').innerHTML = (isNaN(unlNavSpdMul) ? htmlErrorTH : formatAttrHTML('topspd', unlNavSpdMul * topspd));
@@ -9296,8 +9302,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		document.getElementById('outfitting_stats_laden_boost'  ).innerHTML = (isNaN(ldnNavSpdMul) ? htmlErrorTH : (!engcapEnough ? htmlErrorPD : formatAttrHTML('bstspd', ldnNavSpdMul * bstspd)));
 		document.getElementById('outfitting_stats_unladen_boost').innerHTML = (isNaN(unlNavSpdMul) ? htmlErrorTH : (!engcapEnough ? htmlErrorPD : formatAttrHTML('bstspd', unlNavSpdMul * bstspd)));
 		document.getElementById('outfitting_stats_max_boost'    ).innerHTML = (isNaN(maxNavSpdMul) ? htmlErrorTH : (!engcapEnough ? htmlErrorPD : formatAttrHTML('bstspd', maxNavSpdMul * bstspd)));
-		document.getElementById('outfitting_stats_cur_boostfreq').innerHTML = (isNaN(curNavSpdMul) ? htmlErrorTH : (!engcapEnough ? htmlErrorPD : ((curNavFrq < 5.0) ? htmlBoost5 : formatTimeHTML(curNavFrq, true))));
-		document.getElementById('outfitting_stats_max_boostfreq').innerHTML = (isNaN(maxNavSpdMul) ? htmlErrorTH : (!engcapEnough ? htmlErrorPD : ((maxNavFrq < 5.0) ? htmlBoost5 : formatTimeHTML(maxNavFrq, true))));
+		document.getElementById('outfitting_stats_cur_boostfreq').innerHTML = (isNaN(curNavSpdMul) ? htmlErrorTH : (!engcapEnough ? htmlErrorPD : htmlCurNavFrq));
+		document.getElementById('outfitting_stats_max_boostfreq').innerHTML = (isNaN(maxNavSpdMul) ? htmlErrorTH : (!engcapEnough ? htmlErrorPD : htmlMaxNavFrq));
 		
 		// update hnd displays
 		document.getElementById('outfitting_stats_cur_pitch'    ).innerHTML = (isNaN(curHndRotMul) ? htmlErrorTH : formatAttrHTML('pitch', curHndRotMul * (pitch * powerdistEngMul + minpitch * (1 - powerdistEngMul))));
