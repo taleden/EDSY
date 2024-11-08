@@ -2013,11 +2013,11 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	visibility: visible;
 }
 
-#outfitting_fit_slots.priority1mfnret .priority1ret .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority2mfnret .priority2ret .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority3mfnret .priority3ret .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority4mfnret .priority4ret .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority5mfnret .priority5ret .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority1mfnret .priority1 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority2mfnret .priority2 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority3mfnret .priority3 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority4mfnret .priority4 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority5mfnret .priority5 .checkbox INPUT:checked + DIV .check,
 #outfitting_fit_slots.priority1mfndep .priority1dep .checkbox INPUT:checked + DIV .check,
 #outfitting_fit_slots.priority2mfndep .priority2dep .checkbox INPUT:checked + DIV .check,
 #outfitting_fit_slots.priority3mfndep .priority3dep .checkbox INPUT:checked + DIV .check,
@@ -2025,16 +2025,16 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots.priority5mfndep .priority5dep .checkbox INPUT:checked + DIV .check {
 	background-color: var(--colorblue5);
 }
-#outfitting_fit_slots.priority1mfnret .priority1ret .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority2mfnret .priority2ret .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority3mfnret .priority3ret .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority4mfnret .priority4ret .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority5mfnret .priority5ret .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority1mfnret .priority1ret .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority2mfnret .priority2ret .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority3mfnret .priority3ret .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority4mfnret .priority4ret .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority5mfnret .priority5ret .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority1mfnret .priority1 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority2mfnret .priority2 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority3mfnret .priority3 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority4mfnret .priority4 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority5mfnret .priority5 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority1mfnret .priority1 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority2mfnret .priority2 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority3mfnret .priority3 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority4mfnret .priority4 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority5mfnret .priority5 .checkbox INPUT + DIV .check::after,
 #outfitting_fit_slots.priority1mfndep .priority1dep .checkbox INPUT + DIV .check::before,
 #outfitting_fit_slots.priority2mfndep .priority2dep .checkbox INPUT + DIV .check::before,
 #outfitting_fit_slots.priority3mfndep .priority3dep .checkbox INPUT + DIV .check::before,
@@ -2047,16 +2047,16 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots.priority5mfndep .priority5dep .checkbox INPUT + DIV .check::after {
 	border-color: var(--colorblue3);
 }
-#outfitting_fit_slots.priority1mfnret .priority1ret .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority2mfnret .priority2ret .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority3mfnret .priority3ret .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority4mfnret .priority4ret .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority5mfnret .priority5ret .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority1mfnret .priority1ret .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority2mfnret .priority2ret .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority3mfnret .priority3ret .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority4mfnret .priority4ret .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority5mfnret .priority5ret .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority1mfnret .priority1 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority2mfnret .priority2 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority3mfnret .priority3 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority4mfnret .priority4 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority5mfnret .priority5 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority1mfnret .priority1 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority2mfnret .priority2 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority3mfnret .priority3 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority4mfnret .priority4 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority5mfnret .priority5 .checkbox INPUT:checked + DIV .check::after,
 #outfitting_fit_slots.priority1mfndep .priority1dep .checkbox INPUT:checked + DIV .check::before,
 #outfitting_fit_slots.priority2mfndep .priority2dep .checkbox INPUT:checked + DIV .check::before,
 #outfitting_fit_slots.priority3mfndep .priority3dep .checkbox INPUT:checked + DIV .check::before,
@@ -2070,11 +2070,11 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	border-color: var(--colorblue5);
 }
 
-#outfitting_fit_slots.priority1dmgret .priority1ret .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority2dmgret .priority2ret .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority3dmgret .priority3ret .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority4dmgret .priority4ret .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority5dmgret .priority5ret .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority1dmgret .priority1 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority2dmgret .priority2 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority3dmgret .priority3 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority4dmgret .priority4 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority5dmgret .priority5 .checkbox INPUT:checked + DIV .check,
 #outfitting_fit_slots.priority1dmgdep .priority1dep .checkbox INPUT:checked + DIV .check,
 #outfitting_fit_slots.priority2dmgdep .priority2dep .checkbox INPUT:checked + DIV .check,
 #outfitting_fit_slots.priority3dmgdep .priority3dep .checkbox INPUT:checked + DIV .check,
@@ -2082,16 +2082,16 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots.priority5dmgdep .priority5dep .checkbox INPUT:checked + DIV .check {
 	background-color: var(--colorgreen5);
 }
-#outfitting_fit_slots.priority1dmgret .priority1ret .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority2dmgret .priority2ret .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority3dmgret .priority3ret .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority4dmgret .priority4ret .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority5dmgret .priority5ret .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority1dmgret .priority1ret .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority2dmgret .priority2ret .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority3dmgret .priority3ret .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority4dmgret .priority4ret .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority5dmgret .priority5ret .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority1dmgret .priority1 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority2dmgret .priority2 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority3dmgret .priority3 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority4dmgret .priority4 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority5dmgret .priority5 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority1dmgret .priority1 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority2dmgret .priority2 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority3dmgret .priority3 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority4dmgret .priority4 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority5dmgret .priority5 .checkbox INPUT + DIV .check::after,
 #outfitting_fit_slots.priority1dmgdep .priority1dep .checkbox INPUT + DIV .check::before,
 #outfitting_fit_slots.priority2dmgdep .priority2dep .checkbox INPUT + DIV .check::before,
 #outfitting_fit_slots.priority3dmgdep .priority3dep .checkbox INPUT + DIV .check::before,
@@ -2104,16 +2104,16 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 #outfitting_fit_slots.priority5dmgdep .priority5dep .checkbox INPUT + DIV .check::after {
 	border-color: var(--colorgreen3);
 }
-#outfitting_fit_slots.priority1dmgret .priority1ret .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority2dmgret .priority2ret .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority3dmgret .priority3ret .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority4dmgret .priority4ret .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority5dmgret .priority5ret .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority1dmgret .priority1ret .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority2dmgret .priority2ret .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority3dmgret .priority3ret .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority4dmgret .priority4ret .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority5dmgret .priority5ret .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority1dmgret .priority1 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority2dmgret .priority2 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority3dmgret .priority3 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority4dmgret .priority4 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority5dmgret .priority5 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority1dmgret .priority1 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority2dmgret .priority2 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority3dmgret .priority3 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority4dmgret .priority4 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority5dmgret .priority5 .checkbox INPUT:checked + DIV .check::after,
 #outfitting_fit_slots.priority1dmgdep .priority1dep .checkbox INPUT:checked + DIV .check::before,
 #outfitting_fit_slots.priority2dmgdep .priority2dep .checkbox INPUT:checked + DIV .check::before,
 #outfitting_fit_slots.priority3dmgdep .priority3dep .checkbox INPUT:checked + DIV .check::before,
@@ -2127,35 +2127,60 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	border-color: var(--colorgreen5);
 }
 
-#outfitting_fit_slots.priority1err .priority1 .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority2err .priority2 .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority3err .priority3 .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority4err .priority4 .checkbox INPUT:checked + DIV .check,
-#outfitting_fit_slots.priority5err .priority5 .checkbox INPUT:checked + DIV .check {
+#outfitting_fit_slots.priority1errret .priority1 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority2errret .priority2 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority3errret .priority3 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority4errret .priority4 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority5errret .priority5 .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority1errdep .priority1dep .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority2errdep .priority2dep .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority3errdep .priority3dep .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority4errdep .priority4dep .checkbox INPUT:checked + DIV .check,
+#outfitting_fit_slots.priority5errdep .priority5dep .checkbox INPUT:checked + DIV .check {
 	background-color: var(--colorred5);
 }
-#outfitting_fit_slots.priority1err .priority1 .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority2err .priority2 .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority3err .priority3 .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority4err .priority4 .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority5err .priority5 .checkbox INPUT + DIV .check::before,
-#outfitting_fit_slots.priority1err .priority1 .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority2err .priority2 .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority3err .priority3 .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority4err .priority4 .checkbox INPUT + DIV .check::after,
-#outfitting_fit_slots.priority5err .priority5 .checkbox INPUT + DIV .check::after {
+#outfitting_fit_slots.priority1errret .priority1 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority2errret .priority2 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority3errret .priority3 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority4errret .priority4 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority5errret .priority5 .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority1errret .priority1 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority2errret .priority2 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority3errret .priority3 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority4errret .priority4 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority5errret .priority5 .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority1errdep .priority1dep .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority2errdep .priority2dep .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority3errdep .priority3dep .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority4errdep .priority4dep .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority5errdep .priority5dep .checkbox INPUT + DIV .check::before,
+#outfitting_fit_slots.priority1errdep .priority1dep .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority2errdep .priority2dep .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority3errdep .priority3dep .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority4errdep .priority4dep .checkbox INPUT + DIV .check::after,
+#outfitting_fit_slots.priority5errdep .priority5dep .checkbox INPUT + DIV .check::after {
 	border-color: var(--colorred3);
 }
-#outfitting_fit_slots.priority1err .priority1 .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority2err .priority2 .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority3err .priority3 .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority4err .priority4 .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority5err .priority5 .checkbox INPUT:checked + DIV .check::before,
-#outfitting_fit_slots.priority1err .priority1 .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority2err .priority2 .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority3err .priority3 .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority4err .priority4 .checkbox INPUT:checked + DIV .check::after,
-#outfitting_fit_slots.priority5err .priority5 .checkbox INPUT:checked + DIV .check::after {
+#outfitting_fit_slots.priority1errret .priority1 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority2errret .priority2 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority3errret .priority3 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority4errret .priority4 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority5errret .priority5 .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority1errret .priority1 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority2errret .priority2 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority3errret .priority3 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority4errret .priority4 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority5errret .priority5 .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority1errdep .priority1dep .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority2errdep .priority2dep .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority3errdep .priority3dep .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority4errdep .priority4dep .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority5errdep .priority5dep .checkbox INPUT:checked + DIV .check::before,
+#outfitting_fit_slots.priority1errdep .priority1dep .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority2errdep .priority2dep .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority3errdep .priority3dep .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority4errdep .priority4dep .checkbox INPUT:checked + DIV .check::after,
+#outfitting_fit_slots.priority5errdep .priority5dep .checkbox INPUT:checked + DIV .check::after {
 	border-color: var(--colorred5);
 }
 
@@ -2204,91 +2229,84 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	visibility: hidden;
 }
 
-#outfitting_fit_slots.priority1mfn .priority1 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority2mfn .priority2 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority3mfn .priority3 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority4mfn .priority4 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority5mfn .priority5 BUTTON.outfitting_fit_priority {
+#outfitting_fit_slots.priority1mfndep .priority1 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority2mfndep .priority2 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority3mfndep .priority3 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority4mfndep .priority4 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority5mfndep .priority5 BUTTON.outfitting_fit_priority {
 	color: var(--colorblue5);
 }
-#outfitting_fit_slots.priority1mfn .priority1 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority2mfn .priority2 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority3mfn .priority3 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority4mfn .priority4 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority5mfn .priority5 BUTTON.outfitting_fit_priority::before {
+#outfitting_fit_slots.priority1mfndep .priority1 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority2mfndep .priority2 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority3mfndep .priority3 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority4mfndep .priority4 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority5mfndep .priority5 BUTTON.outfitting_fit_priority::before {
 	border-right-color: var(--colorblue3);
 }
-#outfitting_fit_slots.priority1mfn .priority1 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority2mfn .priority2 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority3mfn .priority3 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority4mfn .priority4 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority5mfn .priority5 BUTTON.outfitting_fit_priority::after {
+#outfitting_fit_slots.priority1mfndep .priority1 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority2mfndep .priority2 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority3mfndep .priority3 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority4mfndep .priority4 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority5mfndep .priority5 BUTTON.outfitting_fit_priority::after {
 	border-left-color: var(--colorblue3);
 }
 
-#outfitting_fit_slots.priority1dmg .priority1 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority2dmg .priority2 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority3dmg .priority3 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority4dmg .priority4 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority5dmg .priority5 BUTTON.outfitting_fit_priority {
+#outfitting_fit_slots.priority1dmgdep .priority1 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority2dmgdep .priority2 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority3dmgdep .priority3 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority4dmgdep .priority4 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority5dmgdep .priority5 BUTTON.outfitting_fit_priority {
 	color: var(--colorgreen5);
 }
-#outfitting_fit_slots.priority1dmg .priority1 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority2dmg .priority2 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority3dmg .priority3 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority4dmg .priority4 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority5dmg .priority5 BUTTON.outfitting_fit_priority::before {
+#outfitting_fit_slots.priority1dmgdep .priority1 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority2dmgdep .priority2 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority3dmgdep .priority3 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority4dmgdep .priority4 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority5dmgdep .priority5 BUTTON.outfitting_fit_priority::before {
 	border-right-color: var(--colorgreen3);
 }
-#outfitting_fit_slots.priority1dmg .priority1 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority2dmg .priority2 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority3dmg .priority3 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority4dmg .priority4 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority5dmg .priority5 BUTTON.outfitting_fit_priority::after {
+#outfitting_fit_slots.priority1dmgdep .priority1 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority2dmgdep .priority2 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority3dmgdep .priority3 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority4dmgdep .priority4 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority5dmgdep .priority5 BUTTON.outfitting_fit_priority::after {
 	border-left-color: var(--colorgreen3);
 }
 
-#outfitting_fit_slots.priority1wrn .priority1 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority2wrn .priority2 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority3wrn .priority3 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority4wrn .priority4 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority5wrn .priority5 BUTTON.outfitting_fit_priority {
+#outfitting_fit_slots.priority1errret .priority1 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority2errret .priority2 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority3errret .priority3 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority4errret .priority4 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority5errret .priority5 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority1errdep .priority1 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority2errdep .priority2 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority3errdep .priority3 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority4errdep .priority4 BUTTON.outfitting_fit_priority,
+#outfitting_fit_slots.priority5errdep .priority5 BUTTON.outfitting_fit_priority {
 	color: var(--colorred5);
 }
-#outfitting_fit_slots.priority1wrn .priority1 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority2wrn .priority2 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority3wrn .priority3 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority4wrn .priority4 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority5wrn .priority5 BUTTON.outfitting_fit_priority::before {
+#outfitting_fit_slots.priority1errret .priority1 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority2errret .priority2 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority3errret .priority3 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority4errret .priority4 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority5errret .priority5 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority1errdep .priority1 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority2errdep .priority2 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority3errdep .priority3 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority4errdep .priority4 BUTTON.outfitting_fit_priority::before,
+#outfitting_fit_slots.priority5errdep .priority5 BUTTON.outfitting_fit_priority::before {
 	border-right-color: var(--colorred3);
 }
-#outfitting_fit_slots.priority1wrn .priority1 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority2wrn .priority2 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority3wrn .priority3 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority4wrn .priority4 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority5wrn .priority5 BUTTON.outfitting_fit_priority::after {
-	border-left-color: var(--colorred3);
-}
-
-#outfitting_fit_slots.priority1err .priority1 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority2err .priority2 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority3err .priority3 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority4err .priority4 BUTTON.outfitting_fit_priority,
-#outfitting_fit_slots.priority5err .priority5 BUTTON.outfitting_fit_priority {
-	color: var(--colorred5);
-}
-#outfitting_fit_slots.priority1err .priority1 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority2err .priority2 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority3err .priority3 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority4err .priority4 BUTTON.outfitting_fit_priority::before,
-#outfitting_fit_slots.priority5err .priority5 BUTTON.outfitting_fit_priority::before {
-	border-right-color: var(--colorred3);
-}
-#outfitting_fit_slots.priority1err .priority1 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority2err .priority2 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority3err .priority3 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority4err .priority4 BUTTON.outfitting_fit_priority::after,
-#outfitting_fit_slots.priority5err .priority5 BUTTON.outfitting_fit_priority::after {
+#outfitting_fit_slots.priority1errret .priority1 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority2errret .priority2 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority3errret .priority3 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority4errret .priority4 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority5errret .priority5 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority1errdep .priority1 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority2errdep .priority2 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority3errdep .priority3 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority4errdep .priority4 BUTTON.outfitting_fit_priority::after,
+#outfitting_fit_slots.priority5errdep .priority5 BUTTON.outfitting_fit_priority::after {
 	border-left-color: var(--colorred3);
 }
 

@@ -9147,20 +9147,20 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			abbr.style.width = width.toFixed(3) + '%';
 			abbr.className = ((pwrdraw_dep_ttl > pwrcap_pwrbst) ? 'err' : ((pwrdraw_dep_ttl <= MAX_MALFUNCTION_PWRCAP * pwrcap_pwrbst) ? 'mfn' : ((pwrdraw_dep_ttl <= MAX_DAMAGED_PWRCAP * pwrcap_pwrbst) ? 'dmg' : '')));
 			
-			if (pwrdraw_ret_ttl > pwrcap_pwrbst) {
-				classes += ' priority' + p + 'err';
-			} else if (pwrdraw_dep_ttl > pwrcap_pwrbst) {
-				classes += ' priority' + p + 'wrn';
-			}
 			if (pwrdraw_ret_ttl <= MAX_MALFUNCTION_PWRCAP * pwrcap_pwrbst) {
 				classes += ' priority' + p + 'mfnret';
 			} else if (pwrdraw_ret_ttl <= MAX_DAMAGED_PWRCAP * pwrcap_pwrbst) {
 				classes += ' priority' + p + 'dmgret';
+			} else if (pwrdraw_ret_ttl > pwrcap_pwrbst) {
+				classes += ' priority' + p + 'errret';
 			}
+			
 			if (pwrdraw_dep_ttl <= MAX_MALFUNCTION_PWRCAP * pwrcap_pwrbst) {
 				classes += ' priority' + p + 'mfndep';
 			} else if (pwrdraw_dep_ttl <= MAX_DAMAGED_PWRCAP * pwrcap_pwrbst) {
 				classes += ' priority' + p + 'dmgdep';
+			} else if (pwrdraw_dep_ttl > pwrcap_pwrbst) {
+				classes += ' priority' + p + 'errdep';
 			}
 		}
 		document.getElementById('outfitting_fit_slots').className = classes.substring(1);
