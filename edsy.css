@@ -1299,13 +1299,13 @@ BODY.onlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_pi
 BODY.onlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size6 .row:not(.size6),
 BODY.onlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size7 .row:not(.size7),
 BODY.onlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size8 .row:not(.size8),
-BODY.mostlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size2:not(.component_PP):not(.component_TH):not(.component_PD) .row:not(.size2),
-BODY.mostlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size3:not(.component_PP):not(.component_TH):not(.component_PD) .row:not(.size3),
-BODY.mostlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size4:not(.component_PP):not(.component_TH):not(.component_PD) .row:not(.size4),
-BODY.mostlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size5:not(.component_PP):not(.component_TH):not(.component_PD) .row:not(.size5),
-BODY.mostlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size6:not(.component_PP):not(.component_TH):not(.component_PD) .row:not(.size6),
-BODY.mostlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size7:not(.component_PP):not(.component_TH):not(.component_PD) .row:not(.size7),
-BODY.mostlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size8:not(.component_PP):not(.component_TH):not(.component_PD) .row:not(.size8) {
+BODY.mostlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size2:not(.component_PP):not(.component_TH):not(.component_PD):not(.component_FT) .row:not(.size2),
+BODY.mostlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size3:not(.component_PP):not(.component_TH):not(.component_PD):not(.component_FT) .row:not(.size3),
+BODY.mostlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size4:not(.component_PP):not(.component_TH):not(.component_PD):not(.component_FT) .row:not(.size4),
+BODY.mostlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size5:not(.component_PP):not(.component_TH):not(.component_PD):not(.component_FT) .row:not(.size5),
+BODY.mostlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size6:not(.component_PP):not(.component_TH):not(.component_PD):not(.component_FT) .row:not(.size6),
+BODY.mostlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size7:not(.component_PP):not(.component_TH):not(.component_PD):not(.component_FT) .row:not(.size7),
+BODY.mostlybest:not(.experimental) #outfitting_modules.SLOT #outfitting_modules_picker.size8:not(.component_PP):not(.component_TH):not(.component_PD):not(.component_FT) .row:not(.size8) {
 	display: none;
 }
 
