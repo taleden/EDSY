@@ -10905,7 +10905,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					info.style.top = '';
 					info.style.bottom = '80%';
 				}
-				info.innerHTML = '<b>' + els[e].innerText + '</b>: ' + els[e].title;
+				info.innerHTML = (els[e].id !== 'query_start' ? ('<b>' + els[e].innerText + '</b>: ') : '') + els[e].title;
 				info.style.display = 'block';
 				return;
 			}

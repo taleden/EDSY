@@ -1014,6 +1014,12 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 	box-shadow: 0 0 1rem 1rem var(--coloryellow5);
 }
 
+#query_start {
+	min-width: 1.5em;
+	min-height: 1.5em;
+	border-bottom: none;
+}
+
 #query_tool {
 	display: block;
 	position: static;
@@ -1026,7 +1032,6 @@ TABLE.striped .togglebutton INPUT:active + DIV .iconsvg {
 	color: var(--colorblack);
 	padding: 0.125rem;
 	text-decoration: none;
-	line-height: 13px;
 }
 
 #query_info {

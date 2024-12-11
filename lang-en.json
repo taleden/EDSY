@@ -21,6 +21,7 @@
 	"ui-stored": "Stored",
 	"ui-retrofit": "Retrofit",
 	"ui-compare": "Compare",
+	"ui-query-desc": "Drag this icon over abbreviated page elements to see more details",
 
 
 	"ui-shipyard-build-label": "Build",
