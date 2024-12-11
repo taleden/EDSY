@@ -1205,6 +1205,34 @@ var eddb = {
 				40115 : { cost:41575640, mass:38.00, fdid:129030685, fdname:'Mandalay_Armour_Reactive', eddbid:null }, // Reactive Surface Composite // verify
 			},
 		},
+		16 : {
+			fdid:null, fdname:'CobraMkV', eddbid:null,
+			id:16, stype:'mp', name:'Cobra Mk V', class:1, cost:473191, retail:989461,
+			topspd:290, bstspd:410, mnv:5, shields:160, armour:180, mass:150, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
+			minthrust:79, boostcost:10, boostint:NaN, pitch:45, yaw:120, roll:33, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:50, // TODO: boostint,*acc,minpitch
+			heatcap:NaN, heatdismin:NaN, heatdismax:NaN, fuelcost:50, fuelreserve:0.49, hardness:40, masslock:NaN, crew:3, // TODO: heat*,masslock
+			slots:{
+				hardpoint:[2,2,2,1,1],
+				utility  :[0,0,0,0],
+				component:[1,4,4,4,3,4,3,4],
+				military :[],
+				internal :[5,4,4,4,3,3,3,2,1],
+			},
+			stock:{
+				hardpoint:[62160,62160,0,0,0],
+				utility  :[0,0,0,0],
+				component:[40131,41450,42450,43451,44350,45450,46350,47430],
+				military :[],
+				internal :[30430,0,350,0,250,0,0,3151,3152],
+			},
+			module:{
+				40131 : { cost:      0, mass: 0.00, fdid:129031231, fdname:'CobraMkV_Armour_Grade1', eddbid:null }, // Lightweight Alloy
+				40122 : { cost: 395785, mass:14.00, fdid:129031232, fdname:'CobraMkV_Armour_Grade2', eddbid:null }, // Reinforced Alloy
+				40113 : { cost: 890515, mass:27.00, fdid:129031233, fdname:'CobraMkV_Armour_Grade3', eddbid:null }, // Military Grade Composite
+				40114 : { cost:2077867, mass:27.00, fdid:129031235, fdname:'CobraMkV_Armour_Mirrored', eddbid:null }, // Mirrored Surface Composite
+				40115 : { cost:2332158, mass:27.00, fdid:129031234, fdname:'CobraMkV_Armour_Reactive', eddbid:null }, // Reactive Surface Composite
+			},
+		},
 	}, // eddb.ship{}
 	rank : {
 		'Alliance' : [
