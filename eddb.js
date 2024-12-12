@@ -1150,7 +1150,7 @@ var eddb = {
 			fdid:129030534, fdname:'Type8', eddbid:null,
 			id:37, stype:'fr', name:'Type-8 Transporter', class:2, cost:36238840, retail:38453970,
 			topspd:200, bstspd:340, mnv:1, shields:228, armour:440, mass:400, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
-			minthrust:45, boostcost:9, boostint:NaN, pitch:28, yaw:18, roll:60, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:18, minyaw:16, // verify: minthrust,pitch,roll,raw,minpitch // TODO: boostint,*acc
+			minthrust:45, boostcost:9, boostint:6, pitch:28, yaw:18, roll:60, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:18, minyaw:16, // verify: minthrust,pitch,roll,raw,minpitch // TODO: *acc
 			heatcap:236, heatdismin:NaN, heatdismax:36.25, fuelcost:50, fuelreserve:0.52, hardness:58, masslock:18, crew:1, // verify: heatcap,heatdismax // TODO: heatdismin
 			slots:{
 				hardpoint:[2,1,1,1,1,1],
@@ -1206,11 +1206,11 @@ var eddb = {
 			},
 		},
 		16 : {
-			fdid:null, fdname:'CobraMkV', eddbid:null,
+			fdid:129031229, fdname:'CobraMkV', eddbid:null,
 			id:16, stype:'mp', name:'Cobra Mk V', class:1, cost:473191, retail:989461,
 			topspd:290, bstspd:410, mnv:5, shields:160, armour:180, mass:150, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
-			minthrust:79, boostcost:10, boostint:NaN, pitch:45, yaw:120, roll:33, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:50, // TODO: boostint,*acc,minpitch
-			heatcap:NaN, heatdismin:NaN, heatdismax:NaN, fuelcost:50, fuelreserve:0.49, hardness:40, masslock:NaN, crew:3, // TODO: heat*,masslock
+			minthrust:79, boostcost:10, boostint:5, pitch:45, yaw:120, roll:33, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:40, //verify: minpitch // TODO: *acc
+			heatcap:245, heatdismin:NaN, heatdismax:39.5, fuelcost:50, fuelreserve:0.49, hardness:40, masslock:NaN, crew:3, // verify: heatcap,heatdismax // TODO: heatdismin,masslock
 			slots:{
 				hardpoint:[2,2,2,1,1],
 				utility  :[0,0,0,0],
