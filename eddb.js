@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 419009901,
-	edsy_versions_db : [419039901,419039901,419039901,419039901], /* HTML,CSS,DB,JS */
+	version : 419049901,
+	edsy_versions_db : [419039901,419039901,419049901,419039901], /* HTML,CSS,DB,JS */
 	edsy_lastmodified_db : 20241212,
 	ship : {
 		 1 : {
@@ -1207,7 +1207,7 @@ var eddb = {
 		},
 		16 : {
 			fdid:129031229, fdname:'CobraMkV', eddbid:null,
-			id:16, stype:'mp', name:'Cobra Mk V', class:1, cost:473191, retail:989461,
+			id:16, stype:'mp', name:'Cobra Mk V', class:1, cost:1473191, retail:1989461,
 			topspd:290, bstspd:410, mnv:5, shields:160, armour:180, mass:150, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:79, boostcost:10, boostint:5, pitch:45, yaw:120, roll:33, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:40, //verify: minpitch // TODO: *acc
 			heatcap:245, heatdismin:NaN, heatdismax:39.5, fuelcost:50, fuelreserve:0.49, hardness:40, masslock:NaN, crew:3, // verify: heatcap,heatdismax // TODO: heatdismin,masslock
@@ -1227,10 +1227,10 @@ var eddb = {
 			},
 			module:{
 				40131 : { cost:      0, mass: 0.00, fdid:129031231, fdname:'CobraMkV_Armour_Grade1', eddbid:null }, // Lightweight Alloy
-				40122 : { cost: 395785, mass:14.00, fdid:129031232, fdname:'CobraMkV_Armour_Grade2', eddbid:null }, // Reinforced Alloy
-				40113 : { cost: 890515, mass:27.00, fdid:129031233, fdname:'CobraMkV_Armour_Grade3', eddbid:null }, // Military Grade Composite
-				40114 : { cost:2077867, mass:27.00, fdid:129031235, fdname:'CobraMkV_Armour_Mirrored', eddbid:null }, // Mirrored Surface Composite
-				40115 : { cost:2332158, mass:27.00, fdid:129031234, fdname:'CobraMkV_Armour_Reactive', eddbid:null }, // Reactive Surface Composite
+				40122 : { cost: 795785, mass:14.00, fdid:129031232, fdname:'CobraMkV_Armour_Grade2', eddbid:null }, // Reinforced Alloy
+				40113 : { cost:1790515, mass:27.00, fdid:129031233, fdname:'CobraMkV_Armour_Grade3', eddbid:null }, // Military Grade Composite
+				40114 : { cost:4177867, mass:27.00, fdid:129031235, fdname:'CobraMkV_Armour_Mirrored', eddbid:null }, // Mirrored Surface Composite
+				40115 : { cost:4689158, mass:27.00, fdid:129031234, fdname:'CobraMkV_Armour_Reactive', eddbid:null }, // Reactive Surface Composite
 			},
 		},
 	}, // eddb.ship{}
