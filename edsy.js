@@ -202,7 +202,7 @@ window.edsy = new (function() {
 			insurance: 9500,
 			discounts: 0,
 			builtin: 'some',
-			onlybest: 'some',
+			onlybest: 'none',
 			revsize: false,
 			revrating: false,
 			experimental: false,
@@ -10432,7 +10432,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			current.option[opt] = !!current.option[opt];
 		}
 		if (!{none:1,some:1,all:1}[current.option.onlybest])
-			current.option.onlybest = 'some';
+			current.option.onlybest = 'none';
 		current.option.revsize = !!current.option.revsize;
 		current.option.revrating = !!current.option.revrating;
 		current.option.experimental = !!current.option.experimental;
