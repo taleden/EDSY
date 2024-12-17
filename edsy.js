@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [419039901,419039901,419039901,419039901]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20241212;
+	var VERSIONS = [419039901,419039901,419039901,419049901]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20241217;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -81,6 +81,12 @@ window.edsy = new (function() {
 		434100 : { name:"4A FSD, IR+FB",                         modulehash:"HAcIG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             tag:'C' }, // CG reward // TODO: get sample to test import
 		435100 : { name:"5A FSD \"V1\", IR+FB",                  modulehash:"HAdsG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // human tech broker
 		436100 : { name:"6A FSD, IR+FB",                         modulehash:"HAfQG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             tag:'C' }, // CG reward // TODO: get sample to test import
+		432110 : { name:"2A SCO \"V1\", IR+FB",                  modulehash:"IAZBG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker // TODO: get sample to test import
+		433110 : { name:"3A SCO \"V1\", IR+FB",                  modulehash:"IAalG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker // TODO: get sample to test import
+		434110 : { name:"4A SCO \"V1\", IR+FB",                  modulehash:"IAcJG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker // TODO: get sample to test import
+		435110 : { name:"5A SCO \"V1\", IR+FB",                  modulehash:"IAdtG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker // TODO: get sample to test import
+		436110 : { name:"6A SCO \"V1\", IR+FB",                  modulehash:"IAfRG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker // TODO: get sample to test import
+		437110 : { name:"7A SCO \"V1\", IR+FB",                  modulehash:"IAg-G-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker // TODO: get sample to test import
 		
 		  5510 : { name:"5E Anti-Corrosion Cargo (32T)",         modulehash:"H08d00",                                          tag:'C' }, // CG reward
 		  6510 : { name:"6E Anti-Corrosion Cargo (64T)",         modulehash:"H0AB00",                                          tag:'C' }, // CG reward
