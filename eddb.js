@@ -1209,8 +1209,8 @@ var eddb = {
 			fdid:129031229, fdname:'CobraMkV', eddbid:null,
 			id:16, stype:'mp', name:'Cobra Mk V', class:1, cost:1473191, retail:1989461,
 			topspd:290, bstspd:410, mnv:5, shields:160, armour:180, mass:150, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
-			minthrust:79, boostcost:10, boostint:5, pitch:45, yaw:120, roll:33, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:40, //verify: minpitch // TODO: *acc
-			heatcap:245, heatdismin:NaN, heatdismax:39.5, fuelcost:50, fuelreserve:0.49, hardness:40, masslock:NaN, crew:3, // verify: heatcap,heatdismax // TODO: heatdismin,masslock
+			minthrust:79, boostcost:10, boostint:5, pitch:45, yaw:33, roll:120, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:40, //verify: minpitch // TODO: *acc
+			heatcap:245, heatdismin:NaN, heatdismax:39.5, fuelcost:50, fuelreserve:0.49, hardness:40, masslock:8, crew:3, // verify: heatcap,heatdismax // TODO: heatdismin
 			slots:{
 				hardpoint:[2,2,2,1,1],
 				utility  :[0,0,0,0],
