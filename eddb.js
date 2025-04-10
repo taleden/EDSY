@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 419049901,
-	edsy_versions_db : [419039901,419039901,419049901,419039901], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20241217,
+	version : 420019901,
+	edsy_versions_db : [419039901,419039901,420019901,419039901], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20250409,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1231,6 +1231,34 @@ var eddb = {
 				40113 : { cost:1790515, mass:27.00, fdid:129031233, fdname:'CobraMkV_Armour_Grade3', eddbid:null }, // Military Grade Composite
 				40114 : { cost:4177867, mass:27.00, fdid:129031235, fdname:'CobraMkV_Armour_Mirrored', eddbid:null }, // Mirrored Surface Composite
 				40115 : { cost:4689158, mass:27.00, fdid:129031234, fdname:'CobraMkV_Armour_Reactive', eddbid:null }, // Reactive Surface Composite
+			},
+		},
+		17 : {
+			fdid:null, fdname:'Corsair', eddbid:null, // TODO: fdid
+			id:17, stype:'mp', name:'Corsair', class:2, cost:76884160, retail:79304750,
+			topspd:280, bstspd:355, mnv:4, shields:235, armour:270, mass:265, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
+			minthrust:65, boostcost:19, boostint:5, pitch:26, yaw:10, roll:80, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:23, // TODO: *acc
+			heatcap:230, heatdismin:1.62, heatdismax:25.05, fuelcost:50, fuelreserve:0.41, hardness:65, masslock:7, crew:2, // verify: heatcap,heatdismin,heatdismax
+			slots:{
+				hardpoint:[3,3,3,2,2,2],
+				utility  :[0,0,0,0],
+				component:[1,7,7,5,4,7,6,5],
+				military :[],
+				internal :[6,6,6,5,5,5,4,3,2,1],
+			},
+			stock:{
+				hardpoint:[0,0,0,62160,62160,0],
+				utility  :[0,0,0,0],
+				component:[40131,41750,42750,43551,44450,45750,46650,47530],
+				military :[],
+				internal :[550,30550,0,450,0,0,0,0,3152,3151],
+			},
+			module:{
+				40131 : { cost:        0, mass: 0.00, fdid:null, fdname:'Corsair_Armour_Grade1', eddbid:129031322 }, // Lightweight Alloy
+				40122 : { cost: 31721900, mass:32.00, fdid:null, fdname:'Corsair_Armour_Grade2', eddbid:129031323 }, // Reinforced Alloy
+				40113 : { cost: 71374270, mass:63.00, fdid:null, fdname:'Corsair_Armour_Grade3', eddbid:129031324 }, // Military Grade Composite
+				40114 : { cost:166539970, mass:63.00, fdid:null, fdname:'Corsair_Armour_Mirrored', eddbid:129031325 }, // Mirrored Surface Composite
+				40115 : { cost:186921290, mass:63.00, fdid:null, fdname:'Corsair_Armour_Reactive', eddbid:129031326 }, // Reactive Surface Composite
 			},
 		},
 	}, // eddb.ship{}
