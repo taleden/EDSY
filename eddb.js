@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 420019901,
-	edsy_versions_db : [419039901,419039901,420019901,419039901], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20250409,
+	version : 420019902,
+	edsy_versions_db : [419039901,419039901,420019902,419039901], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20250411,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1119,7 +1119,7 @@ var eddb = {
 			},
 		},
 		15 : {
-			fdid:128666762, fdname:'Python_NX', eddbid:null,
+			fdid:128666762, fdname:'Python_NX',
 			id:15, stype:'mp', name:'Python Mk II', class:2, cost:66161981, retail:67527361,
 			topspd:256, bstspd:345, mnv:4, shields:335, armour:280, mass:450, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:85.85, boostcost:20, boostint:5, pitch:37.01, yaw:12.51, roll:91.03, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:30, // verify: minthrust,boostint,pitch,roll,raw,minpitch // TODO: *acc
@@ -1139,15 +1139,15 @@ var eddb = {
 				internal :[30650,350,0,0,150,3152],
 			},
 			module:{
-				40131 : { cost:        0, mass:    0, fdid:null, fdname:'Python_NX_Armour_Grade1', eddbid:null }, // Lightweight Alloy
-				40122 : { cost: 27010944, mass:   26, fdid:null, fdname:'Python_NX_Armour_Grade2', eddbid:null }, // Reinforced Alloy
-				40113 : { cost: 60774623, mass:   53, fdid:null, fdname:'Python_NX_Armour_Grade3', eddbid:null }, // Military Grade Composite
-				40114 : { cost:143630693, mass:   53, fdid:null, fdname:'Python_NX_Armour_Mirrored', eddbid:null }, // Mirrored Surface Composite
-				40115 : { cost:159161986, mass:   53, fdid:null, fdname:'Python_NX_Armour_Reactive', eddbid:null }, // Reactive Surface Composite
+				40131 : { cost:        0, mass:    0, fdid:null, fdname:'Python_NX_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 27010944, mass:   26, fdid:null, fdname:'Python_NX_Armour_Grade2' }, // Reinforced Alloy
+				40113 : { cost: 60774623, mass:   53, fdid:null, fdname:'Python_NX_Armour_Grade3' }, // Military Grade Composite
+				40114 : { cost:143630693, mass:   53, fdid:null, fdname:'Python_NX_Armour_Mirrored' }, // Mirrored Surface Composite
+				40115 : { cost:159161986, mass:   53, fdid:null, fdname:'Python_NX_Armour_Reactive' }, // Reactive Surface Composite
 			},
 		},
 		37 : {
-			fdid:129030534, fdname:'Type8', eddbid:null,
+			fdid:129030534, fdname:'Type8',
 			id:37, stype:'fr', name:'Type-8 Transporter', class:2, cost:36238840, retail:38453970,
 			topspd:200, bstspd:340, mnv:1, shields:228, armour:440, mass:400, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:45, boostcost:9, boostint:6, pitch:28, yaw:18, roll:60, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:18, minyaw:16, // verify: minthrust,pitch,roll,raw,minpitch // TODO: *acc
@@ -1170,15 +1170,15 @@ var eddb = {
 				internal :[750,550,0,0,450,30450,0,0,3152],
 			},
 			module:{
-				40131 : { cost:       0, mass: 0.00, fdid:129030535, fdname:'Type8_Armour_Grade1', eddbid:null }, // Lightweight Alloy
-				40122 : { cost:15381590, mass:32.00, fdid:129030536, fdname:'Type8_Armour_Grade2', eddbid:null }, // Reinforced Alloy // verify
-				40113 : { cost:34608570, mass:63.00, fdid:129030537, fdname:'Type8_Armour_Grade3', eddbid:null }, // Military Grade Composite // verify
-				40114 : { cost:81791590, mass:63.00, fdid:129030538, fdname:'Type8_Armour_Mirrored', eddbid:null }, // Mirrored Surface Composite // verify
-				40115 : { cost:90636000, mass:63.00, fdid:129030539, fdname:'Type8_Armour_Reactive', eddbid:null }, // Reactive Surface Composite // verify
+				40131 : { cost:       0, mass: 0.00, fdid:129030535, fdname:'Type8_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost:15381590, mass:32.00, fdid:129030536, fdname:'Type8_Armour_Grade2' }, // Reinforced Alloy // verify
+				40113 : { cost:34608570, mass:63.00, fdid:129030537, fdname:'Type8_Armour_Grade3' }, // Military Grade Composite // verify
+				40114 : { cost:81791590, mass:63.00, fdid:129030538, fdname:'Type8_Armour_Mirrored' }, // Mirrored Surface Composite // verify
+				40115 : { cost:90636000, mass:63.00, fdid:129030539, fdname:'Type8_Armour_Reactive' }, // Reactive Surface Composite // verify
 			},
 		},
 		46 : {
-			fdid:129030680, fdname:'Mandalay', eddbid:null,
+			fdid:129030680, fdname:'Mandalay',
 			id:46, stype:'ex', name:'Mandalay', class:2, cost:16527690, retail:17639220,
 			topspd:280, bstspd:350, mnv:5, shields:220, armour:230, mass:230, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:71.5, boostcost:14, boostint:5, pitch:35, yaw:28, roll:96, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:24.5, minyaw:16, // verify: minpitch // TODO: *acc
@@ -1198,15 +1198,15 @@ var eddb = {
 				internal :[550,30550,350,0,0,0,0,0,0,3152],
 			},
 			module:{
-				40131 : { cost:       0, mass: 0.00, fdid:129030681, fdname:'Mandalay_Armour_Grade1', eddbid:null }, // Lightweight Alloy
-				40122 : { cost: 7055690, mass:19.00, fdid:129030682, fdname:'Mandalay_Armour_Grade2', eddbid:null }, // Reinforced Alloy // verify
-				40113 : { cost:15875300, mass:38.00, fdid:129030683, fdname:'Mandalay_Armour_Grade3', eddbid:null }, // Military Grade Composite // verify
-				40114 : { cost:37518620, mass:38.00, fdid:129030684, fdname:'Mandalay_Armour_Mirrored', eddbid:null }, // Mirrored Surface Composite // verify
-				40115 : { cost:41575640, mass:38.00, fdid:129030685, fdname:'Mandalay_Armour_Reactive', eddbid:null }, // Reactive Surface Composite // verify
+				40131 : { cost:       0, mass: 0.00, fdid:129030681, fdname:'Mandalay_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 7055690, mass:19.00, fdid:129030682, fdname:'Mandalay_Armour_Grade2' }, // Reinforced Alloy // verify
+				40113 : { cost:15875300, mass:38.00, fdid:129030683, fdname:'Mandalay_Armour_Grade3' }, // Military Grade Composite // verify
+				40114 : { cost:37518620, mass:38.00, fdid:129030684, fdname:'Mandalay_Armour_Mirrored' }, // Mirrored Surface Composite // verify
+				40115 : { cost:41575640, mass:38.00, fdid:129030685, fdname:'Mandalay_Armour_Reactive' }, // Reactive Surface Composite // verify
 			},
 		},
 		16 : {
-			fdid:129031229, fdname:'CobraMkV', eddbid:null,
+			fdid:129031229, fdname:'CobraMkV',
 			id:16, stype:'mp', name:'Cobra Mk V', class:1, cost:1473191, retail:1989461,
 			topspd:290, bstspd:410, mnv:5, shields:160, armour:180, mass:150, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:79, boostcost:10, boostint:5, pitch:45, yaw:33, roll:120, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:40, //verify: minpitch // TODO: *acc
@@ -1226,19 +1226,19 @@ var eddb = {
 				internal :[30430,0,350,0,250,0,0,3151,3152],
 			},
 			module:{
-				40131 : { cost:      0, mass: 0.00, fdid:129031231, fdname:'CobraMkV_Armour_Grade1', eddbid:null }, // Lightweight Alloy
-				40122 : { cost: 795785, mass:14.00, fdid:129031232, fdname:'CobraMkV_Armour_Grade2', eddbid:null }, // Reinforced Alloy
-				40113 : { cost:1790515, mass:27.00, fdid:129031233, fdname:'CobraMkV_Armour_Grade3', eddbid:null }, // Military Grade Composite
-				40114 : { cost:4177867, mass:27.00, fdid:129031235, fdname:'CobraMkV_Armour_Mirrored', eddbid:null }, // Mirrored Surface Composite
-				40115 : { cost:4689158, mass:27.00, fdid:129031234, fdname:'CobraMkV_Armour_Reactive', eddbid:null }, // Reactive Surface Composite
+				40131 : { cost:      0, mass: 0.00, fdid:129031231, fdname:'CobraMkV_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 795785, mass:14.00, fdid:129031232, fdname:'CobraMkV_Armour_Grade2' }, // Reinforced Alloy
+				40113 : { cost:1790515, mass:27.00, fdid:129031233, fdname:'CobraMkV_Armour_Grade3' }, // Military Grade Composite
+				40114 : { cost:4177867, mass:27.00, fdid:129031235, fdname:'CobraMkV_Armour_Mirrored' }, // Mirrored Surface Composite
+				40115 : { cost:4689158, mass:27.00, fdid:129031234, fdname:'CobraMkV_Armour_Reactive' }, // Reactive Surface Composite
 			},
 		},
 		17 : {
-			fdid:null, fdname:'Corsair', eddbid:null, // TODO: fdid
+			fdid:129031320, fdname:'Corsair',
 			id:17, stype:'mp', name:'Corsair', class:2, cost:76884160, retail:79304750,
 			topspd:280, bstspd:355, mnv:4, shields:235, armour:270, mass:265, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:65, boostcost:19, boostint:5, pitch:26, yaw:10, roll:80, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:23, // TODO: *acc
-			heatcap:230, heatdismin:1.62, heatdismax:25.05, fuelcost:50, fuelreserve:0.41, hardness:65, masslock:7, crew:2, // verify: heatcap,heatdismin,heatdismax
+			heatcap:230, heatdismin:1.62, heatdismax:52.05, fuelcost:50, fuelreserve:0.41, hardness:65, masslock:7, crew:2, // verify: heatcap,heatdismin,heatdismax
 			slots:{
 				hardpoint:[3,3,3,2,2,2],
 				utility  :[0,0,0,0],
@@ -1254,11 +1254,11 @@ var eddb = {
 				internal :[550,30550,0,450,0,0,0,0,3152,3151],
 			},
 			module:{
-				40131 : { cost:        0, mass: 0.00, fdid:null, fdname:'Corsair_Armour_Grade1', eddbid:129031322 }, // Lightweight Alloy
-				40122 : { cost: 31721900, mass:32.00, fdid:null, fdname:'Corsair_Armour_Grade2', eddbid:129031323 }, // Reinforced Alloy
-				40113 : { cost: 71374270, mass:63.00, fdid:null, fdname:'Corsair_Armour_Grade3', eddbid:129031324 }, // Military Grade Composite
-				40114 : { cost:166539970, mass:63.00, fdid:null, fdname:'Corsair_Armour_Mirrored', eddbid:129031325 }, // Mirrored Surface Composite
-				40115 : { cost:186921290, mass:63.00, fdid:null, fdname:'Corsair_Armour_Reactive', eddbid:129031326 }, // Reactive Surface Composite
+				40131 : { cost:        0, mass: 0.00, fdid:129031322, fdname:'Corsair_Armour_Grade1' }, // Lightweight Alloy
+				40122 : { cost: 31721900, mass:32.00, fdid:129031323, fdname:'Corsair_Armour_Grade2' }, // Reinforced Alloy
+				40113 : { cost: 71374270, mass:63.00, fdid:129031324, fdname:'Corsair_Armour_Grade3' }, // Military Grade Composite
+				40114 : { cost:166539970, mass:63.00, fdid:129031325, fdname:'Corsair_Armour_Mirrored' }, // Mirrored Surface Composite
+				40115 : { cost:186921290, mass:63.00, fdid:129031326, fdname:'Corsair_Armour_Reactive' }, // Reactive Surface Composite
 			},
 		},
 	}, // eddb.ship{}
@@ -2738,7 +2738,7 @@ var eddb = {
 		58031 : { mtype:'uex',  cost: 850000,                name:'Pulse Wave Xeno Scanner',    class:0, rating:'C', mass:3.00,integ:100, pwrdraw:1.00,            boottime:2, scanrng:1000, maxangle:23.00, scantime:10, limit:'uex', fdid:129022952, fdname:'Hpt_XenoScanner_Advanced_Tiny' },
 		
 		52090 : { mtype:'uhsl', cost:   3500,                name:'Heat Sink Launcher',         class:0, rating:'I', mass:1.30, integ:45, pwrdraw:0.20, passive:1, boottime:0, distdraw:2.00, rof:0.2, bstint:5.00, ammoclip:1, ammomax:2, rldtime:10.0, hsdur:10, thmdrain:100.0, ammocost:25, fdid:128049519, fdname:'Hpt_HeatSinkLauncher_Turret_Tiny', eddbid:886 },
-		52091 : { mtype:'uhsl', cost:  50000,                name:'Caustic Sink Launcher',      class:0, rating:'I', mass:1.70, integ:45, pwrdraw:0.60, passive:1, boottime:0, distdraw:2.00, rof:0.2, bstint:5.00, ammoclip:1, ammomax:5, rldtime:10.0,                           ammocost:10, fdid:129019262, fdname:'Hpt_CausticSinkLauncher_Turret_Tiny', eddbid:null }, // Rescue Ship tech broker // verify: cost // TODO: eddbid
+		52091 : { mtype:'uhsl', cost:  50000,                name:'Caustic Sink Launcher',      class:0, rating:'I', mass:1.70, integ:45, pwrdraw:0.60, passive:1, boottime:0, distdraw:2.00, rof:0.2, bstint:5.00, ammoclip:1, ammomax:5, rldtime:10.0,                           ammocost:10, fdid:129019262, fdname:'Hpt_CausticSinkLauncher_Turret_Tiny', eddbid:null }, // Rescue Ship tech broker // verify: cost
 		
 		57050 : { mtype:'ukws', cost:  13540, namekey:57010, name:'Kill Warrant Scanner',       class:0, rating:'E', mass:1.30, integ:32, pwrdraw:0.20,            boottime:2, scanrng:2000, maxangle:15.00, scantime:10, limit:'ukws', fdid:128662530, fdname:'Hpt_CrimeScanner_Size0_Class1', eddbid:1237 },
 		57040 : { mtype:'ukws', cost:  40630, namekey:57010, name:'Kill Warrant Scanner',       class:0, rating:'D', mass:1.30, integ:24, pwrdraw:0.40,            boottime:2, scanrng:2500, maxangle:15.00, scantime:10, limit:'ukws', fdid:128662531, fdname:'Hpt_CrimeScanner_Size0_Class2', eddbid:1238 },
@@ -2962,11 +2962,11 @@ var eddb = {
 		43721 : { mtype:'cfsdo', cost: 20515650, namekey:43231, name:'Frame Shift Drive (SCO)', class:7, rating:'B', mass: 80.00, integ:150, pwrdraw:0.75, boottime:10, fsdoptmass:2700.0, fsdheat:43.0, maxfuel:12.80, fuelmul:0.012, fuelpower:2.75, sco:'Available', scospd: 46, scoacc:0.040, scoheat:130.000, scoconint:0.640, noundersize:1, fdid:129030599, fdname:'Int_Hyperdrive_Overcharge_Size7_Class4' }, // verify: fuelmul,fuelpower
 		43711 : { mtype:'cfsdo', cost: 61546940, namekey:43231, name:'Frame Shift Drive (SCO)', class:7, rating:'A', mass: 80.00, integ:164, pwrdraw:0.90, boottime:10, fsdoptmass:3000.0, fsdheat:43.0, maxfuel:13.10, fuelmul:0.013, fuelpower:2.75, sco:'Available', scospd: 58, scoacc:0.040, scoheat:123.500, scoconint:0.620, noundersize:1, fdid:129030600, fdname:'Int_Hyperdrive_Overcharge_Size7_Class5' }, // verify: fuelmul,fuelpower
 		
-	//	43851 : { mtype:'cfsdo', cost:         , namekey:43231, name:'Frame Shift Drive (SCO)', class:8, rating:'E', mass:      , integ:   , pwrdraw:    , boottime:10, fsdoptmass:      , fsdheat:    , maxfuel:     , fuelmul:0.008, fuelpower:2.90, sco:'Available', scospd:   , scoacc:     , scoheat:       , scoconint:     , noundersize:1, fdid:null, fdname:'Int_Hyperdrive_Overcharge_Size8_Class1', eddbid:null }, // verify: fuelmul,fuelpower
-	//	43841 : { mtype:'cfsdo', cost:         , namekey:43231, name:'Frame Shift Drive (SCO)', class:8, rating:'D', mass:      , integ:   , pwrdraw:    , boottime:10, fsdoptmass:      , fsdheat:    , maxfuel:     , fuelmul:0.012, fuelpower:2.90, sco:'Available', scospd:   , scoacc:     , scoheat:       , scoconint:     , noundersize:1, fdid:null, fdname:'Int_Hyperdrive_Overcharge_Size8_Class2', eddbid:null }, // verify: fuelmul,fuelpower
-	//	43831 : { mtype:'cfsdo', cost:         , namekey:43231, name:'Frame Shift Drive (SCO)', class:8, rating:'C', mass:      , integ:   , pwrdraw:    , boottime:10, fsdoptmass:      , fsdheat:    , maxfuel:     , fuelmul:0.012, fuelpower:2.90, sco:'Available', scospd:   , scoacc:     , scoheat:       , scoconint:     , noundersize:1, fdid:null, fdname:'Int_Hyperdrive_Overcharge_Size8_Class3', eddbid:null }, // verify: fuelmul,fuelpower
-	//	43821 : { mtype:'cfsdo', cost:         , namekey:43231, name:'Frame Shift Drive (SCO)', class:8, rating:'B', mass:      , integ:   , pwrdraw:    , boottime:10, fsdoptmass:      , fsdheat:    , maxfuel:     , fuelmul:0.012, fuelpower:2.90, sco:'Available', scospd:   , scoacc:     , scoheat:       , scoconint:     , noundersize:1, fdid:null, fdname:'Int_Hyperdrive_Overcharge_Size8_Class4', eddbid:null }, // verify: fuelmul,fuelpower
-	//	43811 : { mtype:'cfsdo', cost:         , namekey:43231, name:'Frame Shift Drive (SCO)', class:8, rating:'A', mass:      , integ:   , pwrdraw:    , boottime:10, fsdoptmass:      , fsdheat:    , maxfuel:     , fuelmul:0.013, fuelpower:2.90, sco:'Available', scospd:   , scoacc:     , scoheat:       , scoconint:     , noundersize:1, fdid:null, fdname:'Int_Hyperdrive_Overcharge_Size8_Class5', eddbid:null }, // verify: fuelmul,fuelpower
+	//	43851 : { mtype:'cfsdo', cost:         , namekey:43231, name:'Frame Shift Drive (SCO)', class:8, rating:'E', mass:      , integ:   , pwrdraw:    , boottime:10, fsdoptmass:      , fsdheat:    , maxfuel:     , fuelmul:0.008, fuelpower:2.90, sco:'Available', scospd:   , scoacc:     , scoheat:       , scoconint:     , noundersize:1, fdid:null, fdname:'Int_Hyperdrive_Overcharge_Size8_Class1' }, // verify: fuelmul,fuelpower
+	//	43841 : { mtype:'cfsdo', cost:         , namekey:43231, name:'Frame Shift Drive (SCO)', class:8, rating:'D', mass:      , integ:   , pwrdraw:    , boottime:10, fsdoptmass:      , fsdheat:    , maxfuel:     , fuelmul:0.012, fuelpower:2.90, sco:'Available', scospd:   , scoacc:     , scoheat:       , scoconint:     , noundersize:1, fdid:null, fdname:'Int_Hyperdrive_Overcharge_Size8_Class2' }, // verify: fuelmul,fuelpower
+	//	43831 : { mtype:'cfsdo', cost:         , namekey:43231, name:'Frame Shift Drive (SCO)', class:8, rating:'C', mass:      , integ:   , pwrdraw:    , boottime:10, fsdoptmass:      , fsdheat:    , maxfuel:     , fuelmul:0.012, fuelpower:2.90, sco:'Available', scospd:   , scoacc:     , scoheat:       , scoconint:     , noundersize:1, fdid:null, fdname:'Int_Hyperdrive_Overcharge_Size8_Class3' }, // verify: fuelmul,fuelpower
+	//	43821 : { mtype:'cfsdo', cost:         , namekey:43231, name:'Frame Shift Drive (SCO)', class:8, rating:'B', mass:      , integ:   , pwrdraw:    , boottime:10, fsdoptmass:      , fsdheat:    , maxfuel:     , fuelmul:0.012, fuelpower:2.90, sco:'Available', scospd:   , scoacc:     , scoheat:       , scoconint:     , noundersize:1, fdid:null, fdname:'Int_Hyperdrive_Overcharge_Size8_Class4' }, // verify: fuelmul,fuelpower
+	//	43811 : { mtype:'cfsdo', cost:         , namekey:43231, name:'Frame Shift Drive (SCO)', class:8, rating:'A', mass:      , integ:   , pwrdraw:    , boottime:10, fsdoptmass:      , fsdheat:    , maxfuel:     , fuelmul:0.013, fuelpower:2.90, sco:'Available', scospd:   , scoacc:     , scoheat:       , scoconint:     , noundersize:1, fdid:null, fdname:'Int_Hyperdrive_Overcharge_Size8_Class5' }, // verify: fuelmul,fuelpower
 		
 		
 		44150 : { mtype:'cls', cost:     520, namekey:44110, name:'Life Support', class:1, rating:'E', mass:  1.30, integ: 32, pwrdraw:0.32, boottime:1, emgcylife: 300, fdid:128064138, fdname:'Int_LifeSupport_Size1_Class1', eddbid:996 }, // verify price
