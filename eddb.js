@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 420019902,
-	edsy_versions_db : [419039901,419039901,420019902,419039901], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20250411,
+	version : 420019903,
+	edsy_versions_db : [419039901,419039901,420019903,419039901], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20250501,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1238,7 +1238,7 @@ var eddb = {
 			id:17, stype:'mp', name:'Corsair', class:2, cost:76884160, retail:79304750,
 			topspd:280, bstspd:355, mnv:4, shields:235, armour:270, mass:265, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:65, boostcost:19, boostint:5, pitch:26, yaw:10, roll:80, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:23, // TODO: *acc
-			heatcap:230, heatdismin:1.62, heatdismax:52.05, fuelcost:50, fuelreserve:0.41, hardness:65, masslock:7, crew:2, // verify: heatcap,heatdismin,heatdismax
+			heatcap:280, heatdismin:1.62, heatdismax:52.05, fuelcost:50, fuelreserve:0.41, hardness:65, masslock:17, crew:2, // verify: heatdismin,heatdismax
 			slots:{
 				hardpoint:[3,3,3,2,2,2],
 				utility  :[0,0,0,0],
