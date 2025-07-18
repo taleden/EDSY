@@ -977,7 +977,7 @@ window.edsy = new (function() {
 			if (!this.slotgroup || this.slotgroup === 'ship' || !this.modid) return true; // detached slots, ship pseudogroup slots, and empty slots are always enough if they're allowed
 			var ship = eddb.ship[this.build.getShipID()];
 			if (this.slotgroup === 'component' && this.slotnum == CORE_ABBR_SLOT.TH && ship.mass > this.getEffectiveAttrValue('engmaxmass')) return false; // ship mass exceeds thruster maximum
-			if (this.slotgroup === 'component' && this.slotnum == CORE_ABBR_SLOT.PD && ship.boostcost + BOOST_MARGIN > this.getEffectiveAttrValue('engcap')) return false; // ship boost cost exceeds distributor capacity
+			if (this.slotgroup === 'component' && this.slotnum == CORE_ABBR_SLOT.PD && (ship.boostcost + BOOST_MARGIN) > this.getEffectiveAttrValue('engcap')) return false; // ship boost cost exceeds distributor capacity
 			if (this.module.mtype === 'isg' && ship.mass > this.getEffectiveAttrValue('genmaxmass')) return false; // ship mass exceeds shieldgen maximum
 			return true;
 		}, // isEnough()
@@ -2770,7 +2770,7 @@ window.edsy = new (function() {
 			var maxmulspd = slot.getEffectiveAttrValue('maxmulspd');
 			var effmulspd = (getMassCurveMultiplier(stats.mass + stats.fuelcap, minmass, optmass, maxmass, minmulspd, optmulspd, maxmulspd) / 100);
 			stats._speed = (topspd * effmulspd);
-			stats._boost = ((engcap > boostcost + BOOST_MARGIN) ? (bstspd * effmulspd) : 0);
+			stats._boost = ((engcap >= (boostcost + BOOST_MARGIN)) ? (bstspd * effmulspd) : 0);
 			
 			// derived Shield stats
 			var mass_hull = slot_hull.getEffectiveAttrValue('mass');
@@ -9285,7 +9285,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var ldnNavSpdMul = getMassCurveMultiplier(mass + fuelcap              + cargocap  , minmass, optmass, maxmass, minmulspd, optmulspd, maxmulspd) / 100;
 		var unlNavSpdMul = getMassCurveMultiplier(mass + fuelcap                          , minmass, optmass, maxmass, minmulspd, optmulspd, maxmulspd) / 100;
 		var maxNavSpdMul = getMassCurveMultiplier(mass                                    , minmass, optmass, maxmass, minmulspd, optmulspd, maxmulspd) / 100;
-		var engcapEnough = (engcap > boostcost + BOOST_MARGIN);
+		var engcapEnough = (engcap >= boostcost + BOOST_MARGIN);
 		var curNavFrq = (boostcost / (engchg * pow(powerdist_eng / MAX_POWER_DIST, 1.1)));
 		var maxNavFrq = (boostcost / engchg);
 		var curHndRotMul = getMassCurveMultiplier(mass + curTtlFuel + fuelres + curTtlCrgo, minmass, optmass, maxmass, minmulrot, optmulrot, maxmulrot) / 100;
