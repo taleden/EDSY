@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 420019903,
-	edsy_versions_db : [419039901,419039901,420019903,419039901], /* HTML,CSS,DB,JS */
+	version : 420039901,
+	edsy_versions_db : [419039901,419039901,420039901,419039901], /* HTML,CSS,DB,JS */
 	edsy_lastmodified_db : 20250501,
 	ship : {
 		 1 : {
@@ -116,7 +116,7 @@ var eddb = {
 				utility  :[0,0],
 				component:[40131,41350,42350,43350,44150,45250,46350,47330],
 				military :[],
-				internal :[250,30350,150,0,0,3152,3151], // verify positions
+				internal :[250,30350,150,0,0,3152,3151],
 			},
 			module:{
 				40131 : { cost:     0, mass:0.00, fdid:128049268, fdname:'Adder_Armour_Grade1', eddbid:753 }, // Lightweight Alloy
@@ -144,7 +144,7 @@ var eddb = {
 				utility  :[0],
 				component:[40131,41350,42350,43350,44150,45250,46250,47230],
 				military :[0],
-				internal :[30350,150,0,0,3152,3151], // verify positions
+				internal :[30350,150,0,0,3152,3151],
 			},
 			module:{
 				40131 : { cost:     0, mass:0.00, fdid:128672140, fdname:'Empire_Eagle_Armour_Grade1', eddbid:1461 }, // Lightweight Alloy
@@ -172,7 +172,7 @@ var eddb = {
 				utility  :[0,0],
 				component:[40131,41350,42350,43350,44250,45350,46350,47230],
 				military :[0],
-				internal :[250,30350,0,0,3152,3151], // verify positions
+				internal :[250,30350,0,0,3152,3151],
 			},
 			module:{
 				40131 : { cost:     0, mass:0.00, fdid:128049274, fdname:'Viper_Armour_Grade1', eddbid:758 }, // Lightweight Alloy
@@ -200,7 +200,7 @@ var eddb = {
 				utility  :[0,0],
 				component:[40131,41450,42450,43450,44350,45350,46350,47430],
 				military :[],
-				internal :[350,350,30450,150,0,0,3152,3151], // verify positions
+				internal :[350,350,30450,150,0,0,3152,3151],
 			},
 			module:{
 				40131 : { cost:     0, mass: 0.00, fdid:128049280, fdname:'CobraMkIII_Armour_Grade1', eddbid:763 }, // Lightweight Alloy
@@ -228,14 +228,14 @@ var eddb = {
 				utility  :[0,0],
 				component:[40131,41450,42450,43450,44250,45350,46350,47430],
 				military :[0],
-				internal :[350,350,30350,150,0,0,3152,3151], // verify positions
+				internal :[350,350,30350,150,0,0,3152,3151],
 			},
 			module:{
 				40131 : { cost:      0, mass:0.00, fdid:128672257, fdname:'Viper_MkIV_Armour_Grade1', eddbid:1508 }, // Lightweight Alloy
-				40122 : { cost: 175180, mass:5.00, fdid:128672258, fdname:'Viper_MkIV_Armour_Grade2', eddbid:1509 }, // Reinforced Alloy // verify
-				40113 : { cost: 394140, mass:9.00, fdid:128672259, fdname:'Viper_MkIV_Armour_Grade3', eddbid:1510 }, // Military Grade Composite // verify
-				40114 : { cost: 931490, mass:9.00, fdid:128672260, fdname:'Viper_MkIV_Armour_Mirrored', eddbid:1511 }, // Mirrored Surface Composite // verify
-				40115 : { cost:1033210, mass:9.00, fdid:128672261, fdname:'Viper_MkIV_Armour_Reactive', eddbid:1512 }, // Reactive Surface Composite // verify
+				40122 : { cost: 175180, mass:5.00, fdid:128672258, fdname:'Viper_MkIV_Armour_Grade2', eddbid:1509 }, // Reinforced Alloy
+				40113 : { cost: 394140, mass:9.00, fdid:128672259, fdname:'Viper_MkIV_Armour_Grade3', eddbid:1510 }, // Military Grade Composite
+				40114 : { cost: 931480, mass:9.00, fdid:128672260, fdname:'Viper_MkIV_Armour_Mirrored', eddbid:1511 }, // Mirrored Surface Composite
+				40115 : { cost:1032200, mass:9.00, fdid:128672261, fdname:'Viper_MkIV_Armour_Reactive', eddbid:1512 }, // Reactive Surface Composite
 			},
 		},
 		43 : {
@@ -260,10 +260,10 @@ var eddb = {
 			},
 			module:{
 				40131 : { cost:      0, mass: 0.00, fdid:128671218, fdname:'DiamondBack_Armour_Grade1', eddbid:1384 }, // Lightweight Alloy
-				40122 : { cost: 225730, mass:13.00, fdid:128671219, fdname:'DiamondBack_Armour_Grade2', eddbid:1385 }, // Reinforced Alloy // verify
-				40113 : { cost: 507900, mass:26.00, fdid:128671220, fdname:'DiamondBack_Armour_Grade3', eddbid:1386 }, // Military Grade Composite // verify
-				40114 : { cost:1185100, mass:26.00, fdid:128671221, fdname:'DiamondBack_Armour_Mirrored', eddbid:1387 }, // Mirrored Surface Composite // verify
-				40115 : { cost:1330120, mass:26.00, fdid:128671222, fdname:'DiamondBack_Armour_Reactive', eddbid:1388 }, // Reactive Surface Composite // verify
+				40122 : { cost: 225730, mass:13.00, fdid:128671219, fdname:'DiamondBack_Armour_Grade2', eddbid:1385 }, // Reinforced Alloy
+				40113 : { cost: 507900, mass:26.00, fdid:128671220, fdname:'DiamondBack_Armour_Grade3', eddbid:1386 }, // Military Grade Composite
+				40114 : { cost:1185090, mass:26.00, fdid:128671221, fdname:'DiamondBack_Armour_Mirrored', eddbid:1387 }, // Mirrored Surface Composite
+				40115 : { cost:1330120, mass:26.00, fdid:128671222, fdname:'DiamondBack_Armour_Reactive', eddbid:1388 }, // Reactive Surface Composite
 			},
 		},
 		 8 : {
@@ -284,7 +284,7 @@ var eddb = {
 				utility  :[0,0],
 				component:[40131,41450,42450,43450,44350,45350,46350,47430],
 				military :[],
-				internal :[30450,350,350,350,250,250,150,0,3152,3151], // verify positions
+				internal :[30450,350,350,350,250,250,150,0,3152,3151],
 			},
 			module:{
 				40131 : { cost:      0, mass: 0.00, fdid:128672264, fdname:'CobraMkIV_Armour_Grade1', eddbid:1518 }, // Lightweight Alloy
@@ -312,7 +312,7 @@ var eddb = {
 				utility  :[0,0,0],
 				component:[40131,41350,42450,43450,44250,45350,46250,47430],
 				military :[],
-				internal :[450,450,350,350,30350,150,0,3152], // verify positions
+				internal :[450,450,350,350,30350,150,0,3152],
 			},
 			module:{
 				40131 : { cost:      0, mass: 0.00, fdid:128049286, fdname:'Type6_Armour_Grade1', eddbid:768 }, // Lightweight Alloy
@@ -343,7 +343,7 @@ var eddb = {
 				utility  :[0,0,0],
 				component:[40131,41450,42550,43450,44450,45350,46350,47430],
 				military :[],
-				internal :[6550,350,30450,250,150,0,0,3152,3151], // verify positions
+				internal :[6550,350,30450,250,150,0,0,3152,3151],
 			},
 			module:{
 				40131 : { cost:      0, mass: 0.00, fdid:128049292, fdname:'Dolphin_Armour_Grade1', eddbid:1589 }, // Lightweight Alloy
@@ -371,14 +371,14 @@ var eddb = {
 				utility  :[0,0,0,0],
 				component:[40131,41450,42450,43550,44350,45450,46350,47530],
 				military :[],
-				internal :[30450,350,250,0,0,0,3152,3151], // verify positions
+				internal :[30450,350,250,0,0,0,3152,3151],
 			},
 			module:{
 				40131 : { cost:      0, mass: 0.00, fdid:128671832, fdname:'DiamondBackXL_Armour_Grade1', eddbid:1456 }, // Lightweight Alloy
-				40122 : { cost: 757900, mass:23.00, fdid:128671833, fdname:'DiamondBackXL_Armour_Grade2', eddbid:1457 }, // Reinforced Alloy // verify
-				40113 : { cost:1705290, mass:47.00, fdid:128671834, fdname:'DiamondBackXL_Armour_Grade3', eddbid:1458 }, // Military Grade Composite // verify
-				40114 : { cost:3979000, mass:47.00, fdid:128671835, fdname:'DiamondBackXL_Armour_Mirrored', eddbid:1459 }, // Mirrored Surface Composite // verify
-				40115 : { cost:4465960, mass:47.00, fdid:128671836, fdname:'DiamondBackXL_Armour_Reactive', eddbid:1460 }, // Reactive Surface Composite // verify
+				40122 : { cost: 757910, mass:23.00, fdid:128671833, fdname:'DiamondBackXL_Armour_Grade2', eddbid:1457 }, // Reinforced Alloy
+				40113 : { cost:1705290, mass:47.00, fdid:128671834, fdname:'DiamondBackXL_Armour_Grade3', eddbid:1458 }, // Military Grade Composite
+				40114 : { cost:3979000, mass:47.00, fdid:128671835, fdname:'DiamondBackXL_Armour_Mirrored', eddbid:1459 }, // Mirrored Surface Composite
+				40115 : { cost:4465950, mass:47.00, fdid:128671836, fdname:'DiamondBackXL_Armour_Reactive', eddbid:1460 }, // Reactive Surface Composite
 			},
 		},
 		 7 : {
@@ -400,14 +400,14 @@ var eddb = {
 				utility  :[0,0,0,0],
 				component:[40131,41450,42350,43350,44150,45350,46250,47330],
 				military :[],
-				internal :[250,250,30250,150,150,0,3152,3151], // verify positions
+				internal :[250,250,30250,150,150,0,3152,3151],
 			},
 			module:{
 				40131 : { cost:      0, mass: 0.00, fdid:128671224, fdname:'Empire_Courier_Armour_Grade1', eddbid:1389 }, // Lightweight Alloy
-				40122 : { cost:1017200, mass: 4.00, fdid:128671225, fdname:'Empire_Courier_Armour_Grade2', eddbid:1390 }, // Reinforced Alloy // verify
-				40113 : { cost:2288600, mass: 8.00, fdid:128671226, fdname:'Empire_Courier_Armour_Grade3', eddbid:1391 }, // Military Grade Composite // verify
-				40114 : { cost:5408800, mass: 8.00, fdid:128671227, fdname:'Empire_Courier_Armour_Mirrored', eddbid:1392 }, // Mirrored Surface Composite // verify
-				40115 : { cost:5993700, mass: 8.00, fdid:128671228, fdname:'Empire_Courier_Armour_Reactive', eddbid:1393 }, // Reactive Surface Composite // verify
+				40122 : { cost:1017170, mass: 4.00, fdid:128671225, fdname:'Empire_Courier_Armour_Grade2', eddbid:1390 }, // Reinforced Alloy
+				40113 : { cost:2288640, mass: 8.00, fdid:128671226, fdname:'Empire_Courier_Armour_Grade3', eddbid:1391 }, // Military Grade Composite
+				40114 : { cost:5408810, mass: 8.00, fdid:128671227, fdname:'Empire_Courier_Armour_Mirrored', eddbid:1392 }, // Mirrored Surface Composite
+				40115 : { cost:5993690, mass: 8.00, fdid:128671228, fdname:'Empire_Courier_Armour_Reactive', eddbid:1393 }, // Reactive Surface Composite
 			},
 		},
 		35 : {
@@ -493,7 +493,7 @@ var eddb = {
 				utility  :[0,0,0,0],
 				component:[40131,41450,42550,43450,44350,45550,46450,47330],
 				military :[0],
-				internal :[30550,350,0,0,0,3152,3151], // verify positions
+				internal :[30550,350,0,0,0,3152,3151],
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128049310, fdname:'Vulture_Armour_Grade1', eddbid:783 }, // Lightweight Alloy
@@ -521,7 +521,7 @@ var eddb = {
 				utility  :[0,0,0,0],
 				component:[40131,41550,42550,43550,44450,45450,46550,47530],
 				military :[],
-				internal :[550,30550,250,0,0,150,0,3152], // verify positions
+				internal :[550,30550,250,0,0,150,0,3152],
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128049304, fdname:'Asp_Armour_Grade1', eddbid:778 }, // Lightweight Alloy
@@ -553,7 +553,7 @@ var eddb = {
 				utility  :[0,0,0,0],
 				component:[40131,41650,42650,43550,44550,45650,46450,47430],
 				military :[0,0],
-				internal :[550,450,30550,350,0,0,0,3152], // verify positions
+				internal :[550,450,30550,350,0,0,0,3152],
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128049322, fdname:'Federation_Dropship_Armour_Grade1', eddbid:793 }, // Lightweight Alloy
@@ -584,7 +584,7 @@ var eddb = {
 				utility  :[0,0,0,0],
 				component:[40131,41450,42550,43550,44450,45350,46350,47530],
 				military :[],
-				internal :[550,550,550,450,450,30450,0,0,0,3152], // verify positions
+				internal :[550,550,550,450,450,30450,0,0,0,3152],
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128049298, fdname:'Type7_Armour_Grade1', eddbid:773 }, // Lightweight Alloy
@@ -612,7 +612,7 @@ var eddb = {
 				utility  :[0,0,0,0],
 				component:[40131,41650,42650,43550,44550,45650,46450,47430],
 				military :[0,0,0],
-				internal :[550,30550,350,0,0,3152], // verify positions
+				internal :[550,30550,350,0,0,3152],
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128816576, fdname:'TypeX_Armour_Grade1', eddbid:1640 }, // Lightweight Alloy
@@ -641,14 +641,14 @@ var eddb = {
 				utility  :[0,0,0,0],
 				component:[40131,41650,42650,43550,44550,45650,46450,47430],
 				military :[0,0],
-				internal :[30550,450,350,350,0,0,3152], // verify positions
+				internal :[30550,450,350,350,0,0,3152],
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128672147, fdname:'Federation_Dropship_MkII_Armour_Grade1', eddbid:1466 }, // Lightweight Alloy
-				40122 : { cost: 7925680, mass:44.00, fdid:128672148, fdname:'Federation_Dropship_MkII_Armour_Grade2', eddbid:1467 }, // Reinforced Alloy // verify
-				40113 : { cost:17832780, mass:87.00, fdid:128672149, fdname:'Federation_Dropship_MkII_Armour_Grade3', eddbid:1468 }, // Military Grade Composite // verify
-				40114 : { cost:42144810, mass:87.00, fdid:128672150, fdname:'Federation_Dropship_MkII_Armour_Mirrored', eddbid:1469 }, // Mirrored Surface Composite // verify
-				40115 : { cost:46702080, mass:87.00, fdid:128672151, fdname:'Federation_Dropship_MkII_Armour_Reactive', eddbid:1470 }, // Reactive Surface Composite // verify
+				40122 : { cost: 7925680, mass:44.00, fdid:128672148, fdname:'Federation_Dropship_MkII_Armour_Grade2', eddbid:1467 }, // Reinforced Alloy
+				40113 : { cost:17832780, mass:87.00, fdid:128672149, fdname:'Federation_Dropship_MkII_Armour_Grade3', eddbid:1468 }, // Military Grade Composite
+				40114 : { cost:42144810, mass:87.00, fdid:128672150, fdname:'Federation_Dropship_MkII_Armour_Mirrored', eddbid:1469 }, // Mirrored Surface Composite
+				40115 : { cost:46702080, mass:87.00, fdid:128672151, fdname:'Federation_Dropship_MkII_Armour_Reactive', eddbid:1470 }, // Reactive Surface Composite
 			},
 		},
 		 3 : {
@@ -670,35 +670,35 @@ var eddb = {
 				utility  :[0,0,0,0],
 				component:[40131,41650,42650,43550,44550,45650,46550,47430],
 				military :[],
-				internal :[650,30650,350,0,0,0,150,0,3152], // verify positions
+				internal :[650,30650,350,0,0,0,150,0,3152],
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128049316, fdname:'Empire_Trader_Armour_Grade1', eddbid:788 }, // Lightweight Alloy
-				40122 : { cost: 8918340, mass:30.00, fdid:128049317, fdname:'Empire_Trader_Armour_Grade2', eddbid:789 }, // Reinforced Alloy // verify
-				40113 : { cost:20066270, mass:60.00, fdid:128049318, fdname:'Empire_Trader_Armour_Grade3', eddbid:790 }, // Military Grade Composite // verify
-				40114 : { cost:47423290, mass:60.00, fdid:128049319, fdname:'Empire_Trader_Armour_Mirrored', eddbid:791 }, // Mirrored Surface Composite // verify
-				40115 : { cost:52551340, mass:60.00, fdid:128049320, fdname:'Empire_Trader_Armour_Reactive', eddbid:792 }, // Reactive Surface Composite // verify
+				40122 : { cost: 8918340, mass:30.00, fdid:128049317, fdname:'Empire_Trader_Armour_Grade2', eddbid:789 }, // Reinforced Alloy
+				40113 : { cost:20066270, mass:60.00, fdid:128049318, fdname:'Empire_Trader_Armour_Grade3', eddbid:790 }, // Military Grade Composite
+				40114 : { cost:47423290, mass:60.00, fdid:128049319, fdname:'Empire_Trader_Armour_Mirrored', eddbid:791 }, // Mirrored Surface Composite
+				40115 : { cost:52551340, mass:60.00, fdid:128049320, fdname:'Empire_Trader_Armour_Reactive', eddbid:792 }, // Reactive Surface Composite
 			},
 		},
 		10 : {
 			fdid:128816581, fdname:'TypeX_2', eddbid:36,
-			id:10, stype:'co', name:'Alliance Crusader', class:2, cost:22087940, retail:22866340,
+			id:10, stype:'co', name:'Alliance Crusader', class:2, cost:22092000, retail:22866340,
 			topspd:180, bstspd:300, mnv:3, shields:200, armour:300, mass:500, fwdacc:29.78, revacc:24.78, latacc:18.96,
 			minthrust:61.11, boostcost:19, boostint:6, pitch:32, yaw:16, roll:80, pitchacc:150, yawacc:50, rollacc:150, minpitch:30, // verify minthrust
 			heatcap:316, heatdismin:2.53, heatdismax:45.23, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:13, crew:3, // verify hardness,masslock
-			slots:{ // verify
+			slots:{
 				hardpoint:[3,2,2,1,1,1],
 				utility  :[0,0,0,0],
 				component:[1,6,6,5,5,6,4,4],
 				military :[4,4,4],
 				internal :[6,5,3,3,2,2,1],
 			},
-			stock:{ // verify
-				hardpoint:[62160,0,62160,0,0,0],
+			stock:{
+				hardpoint:[0,62160,62160,0,0,0],
 				utility  :[0,0,0,0],
 				component:[40131,41650,42650,43550,44550,45650,46450,47430],
 				military :[0,0,0],
-				internal :[550,30550,350,0,0,0,3152], // verify positions
+				internal :[550,30550,250,250,0,0,3152],
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128816583, fdname:'TypeX_2_Armour_Grade1', eddbid:1659 }, // Lightweight Alloy
@@ -714,19 +714,19 @@ var eddb = {
 			topspd:200, bstspd:310, mnv:4, shields:220, armour:300, mass:450, fwdacc:31.65, revacc:25.94, latacc:20.09,
 			minthrust:65.00, boostcost:19, boostint:6, pitch:35, yaw:16, roll:90, pitchacc:120, yawacc:50, rollacc:120, minpitch:32, // verify minthrust
 			heatcap:316, heatdismin:2.87, heatdismax:51.40, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:13, crew:2, // verify hardness,masslock
-			slots:{ // verify
+			slots:{
 				hardpoint:[3,2,2,2,1,1,1],
 				utility  :[0,0,0,0],
 				component:[1,6,6,5,5,6,4,4],
 				military :[4,4,4],
 				internal :[6,6,3,3,2,2,1],
 			},
-			stock:{ // verify
-				hardpoint:[62160,0,62160,0,0,0,0],
+			stock:{
+				hardpoint:[0,62160,62160,0,0,0,0],
 				utility  :[0,0,0,0],
 				component:[40131,41650,42650,43550,44550,45650,46450,47430],
 				military :[0,0,0],
-				internal :[550,30650,250,250,0,0,3152], // verify positions
+				internal :[550,30650,250,250,0,0,3152],
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128816590, fdname:'TypeX_3_Armour_Grade1', eddbid:1650 }, // Lightweight Alloy
@@ -755,7 +755,7 @@ var eddb = {
 				utility  :[0,0,0,0],
 				component:[40131,41650,42650,43550,44550,45750,46550,47430],
 				military :[0,0,0],
-				internal :[0,30650,450,0,0,3152], // verify positions
+				internal :[0,30650,450,0,0,3152],
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128672154, fdname:'Federation_Gunship_Armour_Grade1', eddbid:1471 }, // Lightweight Alloy
@@ -767,51 +767,51 @@ var eddb = {
 		},
 		11 : {
 			fdid:128839281, fdname:'Krait_Light', eddbid:37,
-			id:11, stype:'mp', name:'Krait Phantom', class:2, cost:35732880, retail:37472250,
+			id:11, stype:'mp', name:'Krait Phantom', class:2, cost:35810120, retail:37472250,
 			topspd:250, bstspd:350, mnv:3, shields:200, armour:180, mass:270, fwdacc:NaN, revacc:NaN, latacc:NaN,
-			minthrust:64.00, boostcost:13, boostint:4.5, pitch:31, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:200, minpitch:26, // verify minthrust
-			heatcap:300, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.63, hardness:60, masslock:14, crew:2, // verify hardness
-			slots:{ // verify
+			minthrust:64.00, boostcost:13, boostint:4.5, pitch:31, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:200, minpitch:26,
+			heatcap:300, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.63, hardness:55, masslock:14, crew:2,
+			slots:{
 				hardpoint:[3,3,2,2],
 				utility  :[0,0,0,0],
 				component:[1,7,6,5,4,7,6,5],
 				military :[],
 				internal :[6,5,5,5,3,3,3,2,1],
 			},
-			stock:{ // verify
+			stock:{
 				hardpoint:[0,0,62160,62160],
 				utility  :[0,0,0,0],
 				component:[40131,41750,42650,43550,44450,45750,46650,47530],
 				military :[],
-				internal :[30650,550,550,550,0,0,0,150,3152], // verify positions
+				internal :[30650,550,550,450,0,0,0,150,3152],
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128839283, fdname:'Krait_Light_Armour_Grade1', eddbid:1768 }, // Lightweight Alloy
-				40122 : { cost:14988900, mass:26.00, fdid:128839284, fdname:'Krait_Light_Armour_Grade2', eddbid:1769 }, // Reinforced Alloy // verify
-				40113 : { cost:33725030, mass:53.00, fdid:128839285, fdname:'Krait_Light_Armour_Grade3', eddbid:1770 }, // Military Grade Composite // verify
-				40114 : { cost:79703480, mass:53.00, fdid:128839286, fdname:'Krait_Light_Armour_Mirrored', eddbid:1771 }, // Mirrored Surface Composite // verify
-				40115 : { cost:88322100, mass:53.00, fdid:128839287, fdname:'Krait_Light_Armour_Reactive', eddbid:1772 }, // Reactive Surface Composite // verify
+				40122 : { cost:14988900, mass:26.00, fdid:128839284, fdname:'Krait_Light_Armour_Grade2', eddbid:1769 }, // Reinforced Alloy
+				40113 : { cost:33725030, mass:53.00, fdid:128839285, fdname:'Krait_Light_Armour_Grade3', eddbid:1770 }, // Military Grade Composite
+				40114 : { cost:79703480, mass:53.00, fdid:128839286, fdname:'Krait_Light_Armour_Mirrored', eddbid:1771 }, // Mirrored Surface Composite
+				40115 : { cost:88322100, mass:53.00, fdid:128839287, fdname:'Krait_Light_Armour_Reactive', eddbid:1772 }, // Reactive Surface Composite
 			},
 		},
 		14 : {
 			fdid:128816567, fdname:'Krait_MkII', eddbid:35,
 			id:14, stype:'mp', name:'Krait Mk II', class:2, cost:44152080, retail:45814210,
 			topspd:240, bstspd:330, mnv:3, shields:220, armour:220, mass:320, fwdacc:28.01, revacc:18.04, latacc:15.12,
-			minthrust:62.50, boostcost:13, boostint:4.5, pitch:31, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:200, minpitch:26, // verify minthrust
-			heatcap:300, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.63, hardness:55, masslock:16, crew:3, // verify hardness
-			slots:{ // verify
+			minthrust:62.30, boostcost:13, boostint:4.5, pitch:31, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:200, minpitch:26,
+			heatcap:300, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.63, hardness:55, masslock:16, crew:3,
+			slots:{
 				hardpoint:[3,3,3,2,2],
 				utility  :[0,0,0,0],
 				component:[1,7,6,5,4,7,6,5],
 				military :[],
 				internal :[6,6,5,5,4,3,3,2,1],
 			},
-			stock:{ // verify
+			stock:{
 				hardpoint:[0,0,0,62160,62160],
 				utility  :[0,0,0,0],
 				component:[40131,41750,42650,43550,44450,45750,46650,47530],
 				military :[],
-				internal :[30650,550,550,450,0,0,0,150,3152], // verify positions
+				internal :[30650,550,550,450,0,0,0,150,3152],
 			},
 			module:{
 				40131 : { cost:        0, mass: 0.00, fdid:128816569, fdname:'Krait_MkII_Armour_Grade1', eddbid:1645 }, // Lightweight Alloy
@@ -842,14 +842,14 @@ var eddb = {
 				utility  :[0,0,0,0],
 				component:[40131,41550,42650,43550,44650,45550,46450,47530],
 				military :[],
-				internal :[6650,6450,450,30550,350,0,0,0,3152], // verify positions
+				internal :[6650,6450,450,30550,350,0,0,0,3152],
 			},
 			module:{
 				40131 : { cost:        0, mass: 0.00, fdid:128049328, fdname:'Orca_Armour_Grade1', eddbid:798 }, // Lightweight Alloy
-				40122 : { cost: 19415950, mass:21.00, fdid:128049329, fdname:'Orca_Armour_Grade2', eddbid:799 }, // Reinforced Alloy // verify
-				40113 : { cost: 43685900, mass:87.00, fdid:128049330, fdname:'Orca_Armour_Grade3', eddbid:800 }, // Military Grade Composite // verify
-				40114 : { cost:103244340, mass:87.00, fdid:128049331, fdname:'Orca_Armour_Mirrored', eddbid:801 }, // Mirrored Surface Composite // verify
-				40115 : { cost:114408510, mass:87.00, fdid:128049332, fdname:'Orca_Armour_Reactive', eddbid:802 }, // Reactive Surface Composite // verify
+				40122 : { cost: 19415960, mass:21.00, fdid:128049329, fdname:'Orca_Armour_Grade2', eddbid:799 }, // Reinforced Alloy
+				40113 : { cost: 43685900, mass:87.00, fdid:128049330, fdname:'Orca_Armour_Grade3', eddbid:800 }, // Military Grade Composite
+				40114 : { cost:103244340, mass:87.00, fdid:128049331, fdname:'Orca_Armour_Mirrored', eddbid:801 }, // Mirrored Surface Composite
+				40115 : { cost:114408510, mass:87.00, fdid:128049332, fdname:'Orca_Armour_Reactive', eddbid:802 }, // Reactive Surface Composite
 			},
 		},
 		24 : {
@@ -870,14 +870,14 @@ var eddb = {
 				utility  :[0,0,0,0,0,0],
 				component:[40131,41650,42550,43450,44450,45650,46450,47330],
 				military :[],
-				internal :[450,30450,350,0,0,3152], // verify positions
+				internal :[450,30450,350,0,0,3152],
 			},
 			module:{
 				40131 : { cost:        0, mass: 0.00, fdid:128049352, fdname:'FerDeLance_Armour_Grade1', eddbid:813 }, // Lightweight Alloy
-				40122 : { cost: 20626820, mass:19.00, fdid:128049353, fdname:'FerDeLance_Armour_Grade2', eddbid:814 }, // Reinforced Alloy // verify
-				40113 : { cost: 46410340, mass:38.00, fdid:128049354, fdname:'FerDeLance_Armour_Grade3', eddbid:815 }, // Military Grade Composite // verify
-				40114 : { cost:109683090, mass:38.00, fdid:128049355, fdname:'FerDeLance_Armour_Mirrored', eddbid:816 }, // Mirrored Surface Composite // verify
-				40115 : { cost:121543510, mass:38.00, fdid:128049356, fdname:'FerDeLance_Armour_Reactive', eddbid:817 }, // Reactive Surface Composite // verify
+				40122 : { cost: 20626820, mass:19.00, fdid:128049353, fdname:'FerDeLance_Armour_Grade2', eddbid:814 }, // Reinforced Alloy
+				40113 : { cost: 46410340, mass:38.00, fdid:128049354, fdname:'FerDeLance_Armour_Grade3', eddbid:815 }, // Military Grade Composite
+				40114 : { cost:109683100, mass:38.00, fdid:128049355, fdname:'FerDeLance_Armour_Mirrored', eddbid:816 }, // Mirrored Surface Composite
+				40115 : { cost:121543510, mass:38.00, fdid:128049356, fdname:'FerDeLance_Armour_Reactive', eddbid:817 }, // Reactive Surface Composite
 			},
 		},
 		12 : {
@@ -886,19 +886,19 @@ var eddb = {
 			topspd:310, bstspd:380, mnv:3, shields:270, armour:230, mass:250, fwdacc:NaN, revacc:NaN, latacc:NaN,
 			minthrust:77.42, boostcost:16, boostint:5, pitch:30, yaw:10, roll:75, pitchacc:180, yawacc:90, rollacc:200, minpitch:27, // verify minthrust
 			heatcap:165, heatdismin:2.05, heatdismax:41.63, fuelcost:50, fuelreserve:0.50, hardness:70, masslock:12, crew:2, // verify masslock
-			slots:{ // verify
+			slots:{
 				hardpoint:[4,3,3,1,1],
 				utility  :[0,0,0,0,0,0],
 				component:[1,6,5,4,4,6,4,3],
 				military :[],
 				internal :[5,4,3,2,2,1],
 			},
-			stock:{ // verify
+			stock:{
 				hardpoint:[0,0,0,62160,62160],
 				utility  :[0,0,0,0,0,0],
 				component:[40131,41650,42550,43450,44450,45650,46450,47330],
 				military :[],
-				internal :[450,30450,250,0,0,3152], // verify positions
+				internal :[450,30450,250,0,0,3152],
 			},
 			module:{
 				40131 : { cost:        0, mass: 0.00, fdid:128915981, fdname:'Mamba_Armour_Grade1', eddbid:1798 }, // Lightweight Alloy
@@ -926,7 +926,7 @@ var eddb = {
 				utility  :[0,0,0,0],
 				component:[40131,41750,42650,43550,44450,45750,46650,47530],
 				military :[],
-				internal :[550,550,30650,450,0,0,0,0,150,3152], // verify positions
+				internal :[550,550,30650,450,0,0,0,0,150,3152],
 			},
 			module:{
 				40131 : { cost:        0, mass: 0.00, fdid:128049340, fdname:'Python_Armour_Grade1', eddbid:808 }, // Lightweight Alloy
@@ -957,7 +957,7 @@ var eddb = {
 				utility  :[0,0,0,0],
 				component:[40131,41650,42750,43650,44550,45650,46450,47630],
 				military :[],
-				internal :[750,750,650,30650,450,350,0,250,0,0,3152], // verify positions
+				internal :[750,750,650,30650,450,350,0,250,0,0,3152],
 			},
 			module:{
 				40131 : { cost:        0, mass:  0.00, fdid:128049334, fdname:'Type9_Armour_Grade1', eddbid:803 }, // Lightweight Alloy
@@ -988,7 +988,7 @@ var eddb = {
 				utility  :[0,0,0,0,0,0],
 				component:[40131,41650,42750,43750,44850,45650,46550,47730],
 				military :[],
-				internal :[30650,550,6640,6640,6440,6440,350,250,0,0,0,3152], // verify positions
+				internal :[30650,550,6640,6640,6440,6440,350,250,0,0,0,3152],
 			},
 			module:{
 				40131 : { cost:        0, mass:  0.00, fdid:128049346, fdname:'BelugaLiner_Armour_Grade1', eddbid:1554 }, // Lightweight Alloy
@@ -1050,7 +1050,7 @@ var eddb = {
 				utility  :[0,0,0,0,0,0,0,0],
 				component:[40131,41850,42750,43650,44550,45850,46850,47530],
 				military :[0],
-				internal :[650,550,30650,0,450,0,0,0,0,0,150,3152], // verify positions
+				internal :[650,550,30650,0,450,0,0,0,0,0,150,3152],
 			},
 			module:{
 				40131 : { cost:        0, mass: 0.00, fdid:128049364, fdname:'Anaconda_Armour_Grade1', eddbid:818 }, // Lightweight Alloy
@@ -1066,7 +1066,7 @@ var eddb = {
 			faction:'Federation', rank:12,
 			topspd:200, bstspd:260, mnv:2, shields:555, armour:370, mass:900, fwdacc:19.87, revacc:10.08, latacc:9.98,
 			minthrust:50.0, boostcost:27, boostint:6, pitch:28, yaw:8, roll:75, pitchacc:100, yawacc:50, rollacc:80, minpitch:22,
-			heatcap:333, heatdismin:3.28, heatdismax:70.33, fuelcost:50, fuelreserve:1.13, hardness:70, masslock:24, crew:3, // verify hardness, masslock
+			heatcap:333, heatdismin:3.28, heatdismax:70.33, fuelcost:50, fuelreserve:1.13, hardness:70, masslock:24, crew:3, // verify masslock
 			slots:{
 				hardpoint:[4,4,3,2,2,1,1],
 				utility  :[0,0,0,0,0,0,0,0],
@@ -1079,14 +1079,14 @@ var eddb = {
 				utility  :[0,0,0,0,0,0,0,0],
 				component:[40131,41850,42750,43650,44550,45850,46850,47530],
 				military :[0,0],
-				internal :[30750,650,0,0,0,0,0,350,0,250,3152], // verify positions
+				internal :[30750,650,0,0,0,0,0,350,0,250,3152],
 			},
 			module:{
 				40131 : { cost:        0, mass: 0.00, fdid:128049370, fdname:'Federation_Corvette_Armour_Grade1', eddbid:1498 }, // Lightweight Alloy
-				40122 : { cost: 75187790, mass:30.00, fdid:128049371, fdname:'Federation_Corvette_Armour_Grade2', eddbid:1499 }, // Reinforced Alloy // verify
-				40113 : { cost:169172510, mass:60.00, fdid:128049372, fdname:'Federation_Corvette_Armour_Grade3', eddbid:1500 }, // Military Grade Composite // verify
-				40114 : { cost:399811020, mass:60.00, fdid:128049373, fdname:'Federation_Corvette_Armour_Mirrored', eddbid:1501 }, // Mirrored Surface Composite // verify
-				40115 : { cost:443044000, mass:60.00, fdid:128049374, fdname:'Federation_Corvette_Armour_Reactive', eddbid:1502 }, // Reactive Surface Composite // verify
+				40122 : { cost: 75187780, mass:30.00, fdid:128049371, fdname:'Federation_Corvette_Armour_Grade2', eddbid:1499 }, // Reinforced Alloy
+				40113 : { cost:169172510, mass:60.00, fdid:128049372, fdname:'Federation_Corvette_Armour_Grade3', eddbid:1500 }, // Military Grade Composite
+				40114 : { cost:399811020, mass:60.00, fdid:128049373, fdname:'Federation_Corvette_Armour_Mirrored', eddbid:1501 }, // Mirrored Surface Composite
+				40115 : { cost:443044000, mass:60.00, fdid:128049374, fdname:'Federation_Corvette_Armour_Reactive', eddbid:1502 }, // Reactive Surface Composite
 			},
 		},
 		62 : {
@@ -1095,7 +1095,7 @@ var eddb = {
 			faction:'Empire', rank:12,
 			topspd:200, bstspd:320, mnv:0, shields:600, armour:400, mass:1100, fwdacc:29.37, revacc:10.04, latacc:6.06,
 			minthrust:80.0, boostcost:23, boostint:6, pitch:18, yaw:8, roll:45, pitchacc:100, yawacc:50, rollacc:80, minpitch:14,
-			heatcap:327, heatdismin:3.27, heatdismax:72.58, fuelcost:50, fuelreserve:1.16, hardness:70, masslock:26, crew:3, // verify hardness
+			heatcap:327, heatdismin:3.27, heatdismax:72.58, fuelcost:50, fuelreserve:1.16, hardness:70, masslock:26, crew:3,
 			slots:{
 				hardpoint:[4,3,3,2,2,2,2],
 				utility  :[0,0,0,0,0,0,0,0],
@@ -1104,26 +1104,26 @@ var eddb = {
 				internal :[8,8,6,6,6,5,5,4,3,1],
 			},
 			stock:{
-				hardpoint:[0,0,0,62160,62160,0,0], // verify positions
+				hardpoint:[0,0,0,62160,62160,0,0],
 				utility  :[0,0,0,0,0,0,0,0],
 				component:[40131,41850,42850,43750,44750,45750,46750,47630],
 				military :[0,0],
-				internal :[30850,750,550,0,0,0,0,0,250,3152], // verify positions
+				internal :[30850,750,550,0,0,0,0,0,250,3152],
 			},
 			module:{
 				40131 : { cost:        0, mass: 0.00, fdid:128049376, fdname:'Cutter_Armour_Grade1', eddbid:1493 }, // Lightweight Alloy
-				40122 : { cost: 83587780, mass:30.00, fdid:128049377, fdname:'Cutter_Armour_Grade2', eddbid:1494 }, // Reinforced Alloy // verify
-				40113 : { cost:188072500, mass:60.00, fdid:128049378, fdname:'Cutter_Armour_Grade3', eddbid:1495 }, // Military Grade Composite // verify
-				40114 : { cost:444478020, mass:60.00, fdid:128049379, fdname:'Cutter_Armour_Mirrored', eddbid:1496 }, // Mirrored Surface Composite // verify
-				40115 : { cost:492541000, mass:60.00, fdid:128049380, fdname:'Cutter_Armour_Reactive', eddbid:1497 }, // Reactive Surface Composite // verify
+				40122 : { cost: 83587780, mass:30.00, fdid:128049377, fdname:'Cutter_Armour_Grade2', eddbid:1494 }, // Reinforced Alloy
+				40113 : { cost:188072510, mass:60.00, fdid:128049378, fdname:'Cutter_Armour_Grade3', eddbid:1495 }, // Military Grade Composite
+				40114 : { cost:444478020, mass:60.00, fdid:128049379, fdname:'Cutter_Armour_Mirrored', eddbid:1496 }, // Mirrored Surface Composite
+				40115 : { cost:492541000, mass:60.00, fdid:128049380, fdname:'Cutter_Armour_Reactive', eddbid:1497 }, // Reactive Surface Composite
 			},
 		},
 		15 : {
 			fdid:128666762, fdname:'Python_NX',
 			id:15, stype:'mp', name:'Python Mk II', class:2, cost:66161981, retail:67527361,
 			topspd:256, bstspd:345, mnv:4, shields:335, armour:280, mass:450, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
-			minthrust:85.85, boostcost:20, boostint:5, pitch:37.01, yaw:12.51, roll:91.03, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:30, // verify: minthrust,boostint,pitch,roll,raw,minpitch // TODO: *acc
-			heatcap:260, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.83, hardness:70, masslock:17, crew:2, // verify: heatcap,heatdismin,heatdismax
+			minthrust:85.75, boostcost:20, boostint:5, pitch:37, yaw:12.5, roll:91, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:30, // TODO: *acc
+			heatcap:273, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.83, hardness:70, masslock:17, crew:2, // verify: heatdismin
 			slots:{
 				hardpoint:[3,3,3,3,2,2],
 				utility  :[0,0,0,0,0,0],
@@ -1150,7 +1150,7 @@ var eddb = {
 			fdid:129030534, fdname:'Type8',
 			id:37, stype:'fr', name:'Type-8 Transporter', class:2, cost:36238840, retail:38453970,
 			topspd:200, bstspd:340, mnv:1, shields:228, armour:440, mass:400, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
-			minthrust:45, boostcost:9, boostint:6, pitch:28, yaw:18, roll:60, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:18, minyaw:16, // verify: minthrust,pitch,roll,raw,minpitch // TODO: *acc
+			minthrust:45, boostcost:10, boostint:6, pitch:28, yaw:18, roll:60, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:18, minyaw:16, // verify: minthrust,pitch,roll,raw,minpitch // TODO: *acc
 			heatcap:236, heatdismin:NaN, heatdismax:36.25, fuelcost:50, fuelreserve:0.52, hardness:58, masslock:18, crew:1, // verify: heatcap,heatdismax // TODO: heatdismin
 			slots:{
 				hardpoint:[2,1,1,1,1,1],
