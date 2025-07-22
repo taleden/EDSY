@@ -655,6 +655,7 @@
 	"ship-53": "Dolphin",
 	"ship-61": "Federal Corvette",
 	"ship-62": "Imperial Cutter",
+	"ship-63": "Panther Clipper Mk II",
 
 
 	"mtype-cbh": "Bulkheads",
@@ -734,7 +735,9 @@
 	"module-550": "Cargo Rack (Cap: 32)",
 	"module-650": "Cargo Rack (Cap: 64)",
 	"module-750": "Cargo Rack (Cap: 128)",
+	"module-740": "Mk II Cargo Rack (Cap: 192)",
 	"module-850": "Cargo Rack (Cap: 256)",
+	"module-840": "Mk II Cargo Rack (Cap: 384)",
 	"module-151": "Anti-Corrosion Cargo Rack (Cap: 1)",
 	"module-161": "Anti-Corrosion Cargo Rack (Cap: 2)",
 	"module-251": "Anti-Corrosion Cargo Rack (Cap: 4)",

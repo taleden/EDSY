@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [419039901,419039901,419039901,419049901]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20241217;
+	var VERSIONS = [419039901,419039901,421039900,421039900]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20250722;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -966,9 +966,11 @@ window.edsy = new (function() {
 			if (module.class > slotsize) return false; // module is too large for the slot
 			if (module.class < slotsize && this.slotgroup === 'component' && (this.slotnum == CORE_ABBR_SLOT.LS || this.slotnum == CORE_ABBR_SLOT.SS)) return false; // module is too small for the slot (i.e. life support, sensors)
 			if (module.class < slotsize && module.noundersize) return false; // mtype can normally be undersized, but this module cannot (i.e. SCO FSD)
-			if (module.reserved && !module.reserved[shipid]) return false; // module does not allow the ship (i.e. fighter hangars, luxury cabins)
+			if (module.reserved && !module.reserved[shipid]) return false; // module does not allow the ship (i.e. fighter hangars, luxury cabins, mk ii cargo racks)
 			var shipreserved = ((ship.reserved || EMPTY_OBJ)[this.slotgroup] || EMPTY_OBJ)[this.slotnum];
-			if (shipreserved && !shipreserved[module.mtype]) return false; // slot does not allow the module type (i.e. Beluga/Orca/Dolphin cabins-only slots)
+			if (shipreserved && !shipreserved[module.mtype]) return false; // slot does not allow the module type (i.e. Beluga/Orca/Dolphin cabins-only slots, Panther cargo-only slots)
+			// TODO: generalize this special case for mk ii cargo racks in non-'Cargo' slots
+			if (module.mtype == 'icr' && module.reserved && !(((ship.slotnames || EMPTY_OBJ)[this.slotgroup] || EMPTY_OBJ)[this.slotnum] || '').toUpperCase().startsWith('CARGO')) return false;
 			return true;
 		}, // isModuleIDAllowed()
 		
@@ -3626,6 +3628,16 @@ window.edsy = new (function() {
 				groupSlotnames[slotgroup].push(slotname);
 				slotModule[slotname] = modulejson;
 				slotNum[slotname] = fdevmap.slotNum[slotname] || parseInt(tokens[2] || 0);
+				if ((ship.slotnames || EMPTY_OBJ)[slotgroup]) {
+					// if the ship has irregular slotnames, try to look it up that way
+					for (var n = 0;  n < ship.slotnames[slotgroup].length;  n++) {
+						if ((ship.slotnames[slotgroup][n] || '').toUpperCase() == slotname) {
+if(false && current.dev) console.log("Build.fromJournal(): matched slot "+slotname+" to "+slotgroup+ " #"+n+" instead of "+slotNum[slotname]);
+							slotNum[slotname] = n;
+							break;
+						}
+					}
+				}
 				slotSize[slotname] = ((slotgroup === 'hardpoint') ? 'TSMLH'.indexOf(slotname[0]) : parseInt(tokens[3] || 0));
 				// since the slot size could be misreported by the slot name, take the greater of that or the size of the actual slotted module, if any
 				if (modulejson) {
@@ -6573,6 +6585,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					TINYHARDPOINT    : 'utility',
 					MILITARY         : 'military',
 					SLOT             : 'internal',
+					CARGO            : 'internal',
 				},
 				slotNum: {},
 				shipModule: {},
@@ -6910,7 +6923,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var pwrbst = current.fit.getStat('pwrbst') / 100.0;
 		
 		// mark undersized or disallowed modules
-		for (var mtype in { cpp:1, ct:1, cpd:1,  ifh:1, ipc:1, isg:1 }) {
+		for (var mtype in { cpp:1, ct:1, cpd:1,  cft:1, icr:1, ifh:1, ipc:1, isg:1 }) {
 			for (var m = 0;  m < cache.mtypeModules[mtype].length;  m++) {
 				var modid = cache.mtypeModules[mtype][m];
 				var namehashes = Object.keys(current.stored.moduleNamehashStored[modid] || EMPTY_OBJ);
@@ -6936,11 +6949,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					case 'cpd':
 						notenough = (current.tempSlot.getEffectiveAttrValue('engcap') < (boostcost + BOOST_MARGIN));
 						break;
-						
+					
+					case 'cft':
+					case 'icr':
 					case 'ifh':
 					case 'ipc':
 						var module = eddb.module[modid];
 						notallowed = (module.reserved && !module.reserved[shipid]);
+if(false && current.dev) console.log("updateUIModulePickerWarnings(): modid "+modid+" mtype "+mtype+(notallowed ? " notallowed" : " allowed")+" on ship "+shipid);
 						break;
 						
 					case 'isg':
@@ -6948,8 +6964,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 						break;
 					}
 					var el = document.getElementById('outfitting_module.' + modid + '.' + namehash);
-					el.classList.toggle('notenough', notenough);
-					el.classList.toggle('notallowed', notallowed);
+					el.classList.toggle('notenough', !!notenough);
+					el.classList.toggle('notallowed', !!notallowed);
 				}
 			}
 		}
@@ -7667,9 +7683,11 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					span.setAttribute('edsy-vals', (szcls ? JSON.stringify({'number':szcls}) : ''));
 				}
 				if (((ship.reserved || EMPTY_OBJ)[slotgroup] || EMPTY_OBJ)[slotnum]) {
+if(false && current.dev) console.log("updateUIFitShip(): slot "+slotgroup+ "#"+slotnum+" is reserved: "+Object.keys(ship.reserved[slotgroup][slotnum]).join(","));
 					var abbr = document.createElement('abbr');
 					abbr.setAttribute('edsy-title', 'ui-slots-restricted');
 					abbr.appendChild(span);
+					abbr.appendChild(document.createTextNode('*'));
 					span = abbr;
 				}
 				document.getElementById('outfitting_fit_class_' + slotgroup + '_' + slotnum).replaceChildren(span);
@@ -8028,12 +8046,28 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			((GROUPS.indexOf(slotgroup) >= 0) ? (' size' + ship.slots[slotgroup][slotnum]) : ('_' + slotnum)) +
 			(reserved ? ' reserved' : '')
 		);
-		if (reserved) {
-			for (var mtype in cache.mtypeModules) {
-				document.getElementById('outfitting_modules_mtype_' + mtype).classList.toggle('reserved', reserved[mtype]);
+if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+slotnum+" is "+(reserved ? ("reserved: "+Object.keys(reserved).join(",")) : "unreserved"));
+		for (var mtype in cache.mtypeModules) {
+			document.getElementById('outfitting_modules_mtype_' + mtype).classList.toggle('reserved', !!(reserved && reserved[mtype]));
+		}
+		
+		var slot = current.fit.getSlot(slotgroup, slotnum);
+		
+		// TODO: generalize this special case for mk ii cargo racks which can only go in 'Cargo' slots
+		for (var m = 0;  m < cache.mtypeModules['icr'].length;  m++) {
+			var modid = cache.mtypeModules['icr'][m];
+			var module = eddb.module[modid];
+			if (module.reserved) {
+				var namehashes = Object.keys(current.stored.moduleNamehashStored[modid] || EMPTY_OBJ);
+				namehashes.push('');
+				for (var n = 0;  n < namehashes.length;  n++) {
+					var namehash = namehashes[n];
+					var el = document.getElementById('outfitting_module.' + modid + '.' + namehash);
+					el.classList.toggle('notallowed', !slot.isModuleIDAllowed(modid));
+				}
 			}
 		}
-		var slot = current.fit.getSlot(slotgroup, slotnum);
+		
 		var modid = slot.getModuleID();
 		if (GROUPS.indexOf(slotgroup) >= 0) {
 			var modulehash = slot.getStoredHash();
@@ -9061,7 +9095,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 						notenough = ((current.tempSlot.getEffectiveAttrValue('pwrcap') * (1 + pwrbst)) < pwrdraw_ret[0]);
 						break;
 					}
-					document.getElementById('outfitting_module.' + modid + '.' + namehash).classList.toggle('notenough', notenough);
+					document.getElementById('outfitting_module.' + modid + '.' + namehash).classList.toggle('notenough', !!notenough);
 				}
 			}
 		}
@@ -10468,10 +10502,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		document.body.classList.toggle('mostlybest', current.option.onlybest == 'some');
 		document.body.classList.toggle('onlybest', current.option.onlybest == 'all');
 		// revsize,revrating are handled by initUIModulePicker()
-		document.body.classList.toggle('experimental', current.option.experimental);
-		document.body.classList.toggle('show1', current.option.show1);
-		document.body.classList.toggle('show2', current.option.show2);
-		document.body.classList.toggle('show3', current.option.show3);
+		document.body.classList.toggle('experimental', !!current.option.experimental);
+		document.body.classList.toggle('show1', !!current.option.show1);
+		document.body.classList.toggle('show2', !!current.option.show2);
+		document.body.classList.toggle('show3', !!current.option.show3);
 		var docstyle = document.documentElement.style;
 		for (var i = 0;  i < CSS_FONTS.length;  i++) {
 			var opt = 'font' + CSS_FONTS[i];

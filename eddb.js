@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 420039901,
-	edsy_versions_db : [419039901,419039901,420039901,419039901], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20250501,
+	version : 421039900,
+	edsy_versions_db : [419039901,419039901,421039900,421039900], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20250722,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1238,7 +1238,7 @@ var eddb = {
 			id:17, stype:'mp', name:'Corsair', class:2, cost:76884160, retail:79304750,
 			topspd:280, bstspd:355, mnv:4, shields:235, armour:270, mass:265, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:65, boostcost:19, boostint:5, pitch:26, yaw:10, roll:80, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:23, // TODO: *acc
-			heatcap:280, heatdismin:1.62, heatdismax:52.05, fuelcost:50, fuelreserve:0.41, hardness:65, masslock:17, crew:2, // verify: heatdismin,heatdismax
+			heatcap:280, heatdismin:1.62, heatdismax:52.05, fuelcost:50, fuelreserve:0.41, hardness:65, masslock:17, crew:2, // verify: heatcap,heatdismin,heatdismax
 			slots:{
 				hardpoint:[3,3,3,2,2,2],
 				utility  :[0,0,0,0],
@@ -1259,6 +1259,40 @@ var eddb = {
 				40113 : { cost: 71374270, mass:63.00, fdid:129031324, fdname:'Corsair_Armour_Grade3' }, // Military Grade Composite
 				40114 : { cost:166539970, mass:63.00, fdid:129031325, fdname:'Corsair_Armour_Mirrored' }, // Mirrored Surface Composite
 				40115 : { cost:186921290, mass:63.00, fdid:129031326, fdname:'Corsair_Armour_Reactive' }, // Reactive Surface Composite
+			},
+		},
+		63 : {
+			fdid:129034269, fdname:'PantherMkII', eddbid:null,
+			id:63, stype:'sh', name:'Panther Clipper Mk II', class:3, cost:286906165, retail:301348585, // verify: cost,retail
+			topspd:180, bstspd:250, mnv:0, shields:350, armour:620, mass:1200, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
+			minthrust:33.3, boostcost:19, boostint:6.5, pitch:18, yaw:10, roll:20, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:14, // TODO: *acc
+			heatcap:329, heatdismin:NaN, heatdismax:62.425, fuelcost:50, fuelreserve:1.11, hardness:70, masslock:NaN, crew:4, // verify: heatcap,heatdismax // TODO: heatdismin,masslock
+			slots:{
+				hardpoint:[3,3,2,2,2,2,1,1,1,1],
+				utility  :[0,0,0,0,0,0],
+				component:[1,8,8,7,5,7,5,7],
+				military :[],
+				internal :[8,8,7,7,6,6,6,5,5,4,2,1],
+			},
+			slotnames:{
+				internal :['Cargo01','Slot01_Size8','Cargo02','Slot02_Size7','Slot03_Size6','Slot04_Size6','Slot05_Size6','Slot06_Size5','Slot07_Size5','Slot08_Size4','Slot09_Size2','Slot10_Size1'],
+			},
+			reserved:{
+				internal :[{cft:1,icr:1},null,{cft:1,icr:1}],
+			},
+			stock:{
+				hardpoint:[0,0,62160,62160,0,0,0,0,0,0],
+				utility  :[0,0,0,0,0,0,0,0],
+				component:[40131,41850,42850,43751,44550,45750,46550,47730],
+				military :[],
+				internal :[750,30750,0,0,0,550,550,0,0,0,3151,3152],
+			},
+			module:{
+				40131 : { cost:        0, mass:  0.00, fdid:129034271, fdname:'PantherMkII_Armour_Grade1', eddbid:null }, // Lightweight Alloy // verify: cost
+				40122 : { cost:120539430, mass: 75.00, fdid:129034272, fdname:'PantherMkII_Armour_Grade2', eddbid:null }, // Reinforced Alloy // verify: cost
+				40113 : { cost:271213730, mass:150.00, fdid:129034273, fdname:'PantherMkII_Armour_Grade3', eddbid:null }, // Military Grade Composite // verify: cost
+				40114 : { cost:632832030, mass:150.00, fdid:129034274, fdname:'PantherMkII_Armour_Mirrored', eddbid:null }, // Mirrored Surface Composite // verify: cost
+				40115 : { cost:710278610, mass:150.00, fdid:129034275, fdname:'PantherMkII_Armour_Reactive', eddbid:null }, // Reactive Surface Composite // verify: cost
 			},
 		},
 	}, // eddb.ship{}
@@ -3194,7 +3228,9 @@ var eddb = {
 		  550 : { mtype:'icr', cost: 111570, name:'Cargo Rack (Cap: 32)',  class:5, rating:'E', cargocap: 32, fdid:128064342, fdname:'Int_CargoRack_Size5_Class1', eddbid:1195 },
 		  650 : { mtype:'icr', cost: 362590, name:'Cargo Rack (Cap: 64)',  class:6, rating:'E', cargocap: 64, fdid:128064343, fdname:'Int_CargoRack_Size6_Class1', eddbid:1196 },
 		  750 : { mtype:'icr', cost:1178420, name:'Cargo Rack (Cap: 128)', class:7, rating:'E', cargocap:128, fdid:128064344, fdname:'Int_CargoRack_Size7_Class1', eddbid:1197 },
+		  740 : { mtype:'icr', cost:1958680, name:'Mk II Cargo Rack (Cap: 192)', class:7, rating:'D', cargocap:192, reserved:{63:1}, fdid:129034963, fdname:'Int_LargeCargoRack_Size7_Class1', eddbid:null }, // TODO: Mk II Cargo Slot only
 		  850 : { mtype:'icr', cost:3829870, name:'Cargo Rack (Cap: 256)', class:8, rating:'E', cargocap:256, fdid:128064345, fdname:'Int_CargoRack_Size8_Class1', eddbid:1198 },
+		  840 : { mtype:'icr', cost:4929320, name:'Mk II Cargo Rack (Cap: 384)', class:8, rating:'D', cargocap:384, reserved:{63:1}, fdid:129034964, fdname:'Int_LargeCargoRack_Size8_Class1', eddbid:null }, // TODO: Mk II Cargo Slot only
 		  151 : { mtype:'icr', cost:   6250, name:'Anti-Corrosion Cargo Rack (Cap: 1)',  class:1, rating:'E', cargocap: 1, fdid:128681641, fdname:'Int_CorrosionProofCargoRack_Size1_Class1', eddbid:1553 }, // at Palin, Sedesi
 		  161 : { mtype:'icr', cost:  12560, name:'Anti-Corrosion Cargo Rack (Cap: 2)',  class:1, rating:'F', cargocap: 2, fdid:128681992, fdname:'Int_CorrosionProofCargoRack_Size1_Class2', eddbid:1552 }, // at Palin, Sedesi
 		  251 : { mtype:'icr', cost:    NaN, name:'Anti-Corrosion Cargo Rack (Cap: 4)',  class:2, rating:'E', cargocap: 4, fdid:     null, fdname:'Int_CorrosionProofCargoRack_Size2_Class1', eddbid:null, hidden:1 }, // never released
@@ -3238,9 +3274,9 @@ var eddb = {
 		13560 : { mtype:'iex', cost:4000000, namekey:13360, name:'Experimental Weapon Stabiliser', class:5, rating:'F', mass: 20.00, pwrdraw:   0, powerlock:1, limit:'iex', unlimit:'hex', unlimitcount:2, fdid:129019261, fdname:'Int_ExpModuleStabiliser_Size5_Class3', eddbid:1837 }, //TODO: pwrdraw:3.00 advertised, but not actual
 		
 		
-		 7540 : { mtype:'ifh', cost: 575660,               name:'Fighter Hangar', class:5, rating:'D', mass:20.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1}, ammocost: 1030, limit:'ifh', fdid:128727930, fdname:'Int_FighterBay_Size5_Class1', eddbid:1562 },
-		 7640 : { mtype:'ifh', cost:1869350, namekey:7540, name:'Fighter Hangar', class:6, rating:'D', mass:40.00, integ: 80, pwrdraw:0.35, boottime:5, vslots:2, vcount: 8, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1}, ammocost: 1030, limit:'ifh', fdid:128727931, fdname:'Int_FighterBay_Size6_Class1', eddbid:1561 },
-		 7740 : { mtype:'ifh', cost:2369330, namekey:7540, name:'Fighter Hangar', class:7, rating:'D', mass:60.00, integ:120, pwrdraw:0.35, boottime:5, vslots:2, vcount:15, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1}, ammocost: 1030, limit:'ifh', fdid:128727932, fdname:'Int_FighterBay_Size7_Class1', eddbid:1560 },
+		 7540 : { mtype:'ifh', cost: 575660,               name:'Fighter Hangar', class:5, rating:'D', mass:20.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1}, ammocost: 1030, limit:'ifh', fdid:128727930, fdname:'Int_FighterBay_Size5_Class1', eddbid:1562 },
+		 7640 : { mtype:'ifh', cost:1869350, namekey:7540, name:'Fighter Hangar', class:6, rating:'D', mass:40.00, integ: 80, pwrdraw:0.35, boottime:5, vslots:2, vcount: 8, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1}, ammocost: 1030, limit:'ifh', fdid:128727931, fdname:'Int_FighterBay_Size6_Class1', eddbid:1561 },
+		 7740 : { mtype:'ifh', cost:2369330, namekey:7540, name:'Fighter Hangar', class:7, rating:'D', mass:60.00, integ:120, pwrdraw:0.35, boottime:5, vslots:2, vcount:15, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1}, ammocost: 1030, limit:'ifh', fdid:128727932, fdname:'Int_FighterBay_Size7_Class1', eddbid:1560 },
 		
 		
 		 3150 : { mtype:'ifa', cost: 4500, name:'Standard Docking Computer', class:1, rating:'E', integ:10, pwrdraw:0.39, boottime:3, limit:'ifa_dc', fdid:128049549, fdname:'Int_DockingComputer_Standard', eddbid:890 },
