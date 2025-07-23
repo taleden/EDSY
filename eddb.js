@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 421039900,
-	edsy_versions_db : [419039901,419039901,421039900,421039900], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20250722,
+	version : 421039901,
+	edsy_versions_db : [419039901,419039901,421039901,421039901], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20250723,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1263,10 +1263,10 @@ var eddb = {
 		},
 		63 : {
 			fdid:129034269, fdname:'PantherMkII', eddbid:null,
-			id:63, stype:'sh', name:'Panther Clipper Mk II', class:3, cost:286906165, retail:301348585, // verify: cost,retail
+			id:63, stype:'sh', name:'Panther Clipper Mk II', class:3, cost:286906165, retail:301348585,
 			topspd:180, bstspd:250, mnv:0, shields:350, armour:620, mass:1200, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:33.3, boostcost:19, boostint:6.5, pitch:18, yaw:10, roll:20, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:14, // TODO: *acc
-			heatcap:329, heatdismin:NaN, heatdismax:62.425, fuelcost:50, fuelreserve:1.11, hardness:70, masslock:NaN, crew:4, // verify: heatcap,heatdismax // TODO: heatdismin,masslock
+			heatcap:329, heatdismin:NaN, heatdismax:62.45, fuelcost:50, fuelreserve:1.11, hardness:70, masslock:NaN, crew:4, // TODO: heatdismin,masslock
 			slots:{
 				hardpoint:[3,3,2,2,2,2,1,1,1,1],
 				utility  :[0,0,0,0,0,0],
@@ -1288,11 +1288,11 @@ var eddb = {
 				internal :[750,30750,0,0,0,550,550,0,0,0,3151,3152],
 			},
 			module:{
-				40131 : { cost:        0, mass:  0.00, fdid:129034271, fdname:'PantherMkII_Armour_Grade1', eddbid:null }, // Lightweight Alloy // verify: cost
-				40122 : { cost:120539430, mass: 75.00, fdid:129034272, fdname:'PantherMkII_Armour_Grade2', eddbid:null }, // Reinforced Alloy // verify: cost
-				40113 : { cost:271213730, mass:150.00, fdid:129034273, fdname:'PantherMkII_Armour_Grade3', eddbid:null }, // Military Grade Composite // verify: cost
-				40114 : { cost:632832030, mass:150.00, fdid:129034274, fdname:'PantherMkII_Armour_Mirrored', eddbid:null }, // Mirrored Surface Composite // verify: cost
-				40115 : { cost:710278610, mass:150.00, fdid:129034275, fdname:'PantherMkII_Armour_Reactive', eddbid:null }, // Reactive Surface Composite // verify: cost
+				40131 : { cost:        0, mass:  0.00, fdid:129034271, fdname:'PantherMkII_Armour_Grade1', eddbid:null }, // Lightweight Alloy
+				40122 : { cost:120539430, mass: 75.00, fdid:129034272, fdname:'PantherMkII_Armour_Grade2', eddbid:null }, // Reinforced Alloy
+				40113 : { cost:271213730, mass:150.00, fdid:129034273, fdname:'PantherMkII_Armour_Grade3', eddbid:null }, // Military Grade Composite
+				40114 : { cost:632832030, mass:150.00, fdid:129034274, fdname:'PantherMkII_Armour_Mirrored', eddbid:null }, // Mirrored Surface Composite
+				40115 : { cost:710278610, mass:150.00, fdid:129034275, fdname:'PantherMkII_Armour_Reactive', eddbid:null }, // Reactive Surface Composite
 			},
 		},
 	}, // eddb.ship{}
@@ -2709,10 +2709,10 @@ var eddb = {
 		82123 : { mtype:'hmr', cost:   72600,                name:'Seeker Missile Rack',                     mount:'F', missile:'S', class:1, rating:'B', mass: 2.00, integ:40, pwrdraw:0.60, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 625, rof:0.333, bstint:3.000,                      ammoclip: 6, ammomax:   6,           rldtime:12.0, brcdmg:16.0, minbrc: 0, maxbrc: 0,             expwgt:100, thmwgt:0, ammocost:500, noexpeffects:{'wpnx_fsin':1,'wpnx_pemu':1}, fdid:128049492, fdname:'Hpt_BasicMissileRack_Fixed_Small', eddbid:878 },
 		82126 : { mtype:'hmr', cost:   32180,                name:'Advanced Missile Rack',                   mount:'F', missile:'D', class:1, rating:'B', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0, dps:25.000, damage:50.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg:20.0,minbrc:100,maxbrc:100,             expwgt:100, thmwgt:0, ammocost:500, noexpeffects:{'wpnx_drmu':1},               fdid:128935982, fdname:'Hpt_DumbfireMissileRack_Fixed_Small_Advanced', eddbid:1813 },
 		82220 : { mtype:'hmr', cost:  240400, namekey:82120, name:'Missile Rack',                            mount:'F', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:25.000, damage:50.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip:12, ammomax:  48,            rldtime:5.0, brcdmg:20.0,minbrc:100,maxbrc:100,             expwgt:100, thmwgt:0, ammocost:500, noexpeffects:{'wpnx_drmu':1},               fdid:128666725, fdname:'Hpt_DumbfireMissileRack_Fixed_Medium', eddbid:1327 },
-		82223 : { mtype:'hmr', cost:  512400, namekey:82123, name:'Seeker Missile Rack',                     mount:'F', missile:'S', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 625, rof:0.333, bstint:3.000,                      ammoclip: 6, ammomax:  18,           rldtime:12.0, brcdmg:16.0, minbrc: 0, maxbrc: 0,             expwgt:100, thmwgt:0, ammocost:500, noexpeffects:{'wpnx_fsin':1,'wpnx_pemu':1}, fdid:128049493, fdname:'Hpt_BasicMissileRack_Fixed_Medium', eddbid:879 },
+		82223 : { mtype:'hmr', cost:  512400, namekey:82123, name:'Seeker Missile Rack',                     mount:'F', missile:'S', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 625, rof:0.333, bstint:3.000,                      ammoclip: 6, ammomax:  18,           rldtime:12.0, brcdmg:16.0, minbrc: 0, maxbrc: 0,             expwgt:100, thmwgt:0, ammocost:500, noexpeffects:{'wpnx_pemu':1},               fdid:128049493, fdname:'Hpt_BasicMissileRack_Fixed_Medium', eddbid:879 },
 		82226 : { mtype:'hmr', cost:  240400, namekey:82126, name:'Advanced Missile Rack',                   mount:'F', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:25.000, damage:50.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip:12, ammomax:  64,            rldtime:5.0, brcdmg:20.0,minbrc:100,maxbrc:100,             expwgt:100, thmwgt:0, ammocost:500, noexpeffects:{'wpnx_drmu':1},               fdid:128935983, fdname:'Hpt_DumbfireMissileRack_Fixed_Medium_Advanced', eddbid:1814 },
 		82310 : { mtype:'hmr', cost: 1021500, namekey:82120, name:'Missile Rack',                            mount:'F', missile:'D', class:3, rating:'A', mass: 8.00, integ:64, pwrdraw:1.62, boottime:0, dps:25.000, damage:50.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 750, rof:0.500, bstint:2.000,                      ammoclip:12, ammomax:  96,            rldtime:5.0, brcdmg:20.0,minbrc:100,maxbrc:100,             expwgt:100, thmwgt:0, ammocost:500, noexpeffects:{'wpnx_drmu':1},               fdid:128891602, fdname:'Hpt_DumbfireMissileRack_Fixed_Large', eddbid:1657 },
-		82313 : { mtype:'hmr', cost: 1471030, namekey:82123, name:'Seeker Missile Rack',                     mount:'F', missile:'S', class:3, rating:'A', mass: 8.00, integ:64, pwrdraw:1.62, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 625, rof:0.333, bstint:3.000,                      ammoclip: 6, ammomax:  36,           rldtime:12.0, brcdmg:16.0, minbrc: 0, maxbrc: 0,             expwgt:100, thmwgt:0, ammocost:500, noexpeffects:{'wpnx_fsin':1,'wpnx_pemu':1}, fdid:128049494, fdname:'Hpt_BasicMissileRack_Fixed_Large', eddbid:1656 },
+		82313 : { mtype:'hmr', cost: 1471030, namekey:82123, name:'Seeker Missile Rack',                     mount:'F', missile:'S', class:3, rating:'A', mass: 8.00, integ:64, pwrdraw:1.62, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 625, rof:0.333, bstint:3.000,                      ammoclip: 6, ammomax:  36,           rldtime:12.0, brcdmg:16.0, minbrc: 0, maxbrc: 0,             expwgt:100, thmwgt:0, ammocost:500, noexpeffects:{'wpnx_pemu':1},               fdid:128049494, fdname:'Hpt_BasicMissileRack_Fixed_Large', eddbid:1656 },
 		82224 : { mtype:'hmr', cost:  768600,                name:'Pack-Hound Missile Rack',        tag:'P', mount:'F', missile:'S', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:60.000, damage: 7.500, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 600, rof:2.000, bstint:0.500,                      ammoclip:12, ammomax: 120, rounds: 4, rldtime:5.0, brcdmg: 3.0, minbrc: 0, maxbrc: 0,             expwgt:100, thmwgt:0, ammocost:500, noexpeffects:{'wpnx_fsin':1,'wpnx_pemu':1}, fdid:128671344, fdname:'Hpt_DrunkMissileRack_Fixed_Medium', eddbid:1480 }, // powerplay
 		82225 : { mtype:'hmr', cost: 1951040,                name:'Rocket Propelled FSD Disrupter', tag:'P', mount:'F', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,              shotspd: 750, rof:0.333, bstint:3.000,                      ammoclip:12, ammomax:  48,            rldtime:5.0, brcdmg:16.0,minbrc:100,maxbrc:100,             expwgt:100, thmwgt:0, ammocost:500, noexpeffects:{'wpnx_drmu':1},               fdid:128732552, fdname:'Hpt_DumbfireMissileRack_Fixed_Medium_Lasso', eddbid:1807 }, // powerplay
 		
