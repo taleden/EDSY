@@ -685,7 +685,7 @@ var eddb = {
 			id:10, stype:'co', name:'Alliance Crusader', class:2, cost:22092000, retail:22866340,
 			topspd:180, bstspd:300, mnv:3, shields:200, armour:300, mass:500, fwdacc:29.78, revacc:24.78, latacc:18.96,
 			minthrust:61.11, boostcost:19, boostint:6, pitch:32, yaw:16, roll:80, pitchacc:150, yawacc:50, rollacc:150, minpitch:30, // verify minthrust
-			heatcap:316, heatdismin:2.53, heatdismax:45.23, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:13, crew:3, // verify hardness,masslock
+			heatcap:316, heatdismin:2.53, heatdismax:45.23, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:13, crew:4, // verify hardness,masslock
 			slots:{
 				hardpoint:[3,2,2,1,1,1],
 				utility  :[0,0,0,0],
@@ -941,7 +941,7 @@ var eddb = {
 			id:34, stype:'fr', name:'Type-9 Heavy', class:3, cost:72108220, retail:76555840,
 			topspd:130, bstspd:200, mnv:0, shields:240, armour:480, mass:850, fwdacc:20.03, revacc:10.11, latacc:10.03,
 			minthrust:30.769, boostcost:19, boostint:6, pitch:20, yaw:8, roll:20, pitchacc:100, yawacc:50, rollacc:80, minpitch:15,
-			heatcap:289, heatdismin:3.10, heatdismax:48.35, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:16, crew:3,
+			heatcap:289, heatdismin:3.10, heatdismax:48.35, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:16, crew:4,
 			slots:{
 				hardpoint:[2,2,2,1,1],
 				utility  :[0,0,0,0],
@@ -972,7 +972,7 @@ var eddb = {
 			id:52, stype:'pa', name:'Beluga Liner', class:3, cost:79686090, retail:84532760,
 			topspd:200, bstspd:280, mnv:2, shields:280, armour:280, mass:950, fwdacc:20.01, revacc:17.12, latacc:15.03,
 			minthrust:55.0, boostcost:19, boostint:6, pitch:25, yaw:17, roll:60, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
-			heatcap:283, heatdismin:2.60, heatdismax:50.85, fuelcost:50, fuelreserve:0.81, hardness:60, masslock:18, crew:3, // verify masslock
+			heatcap:283, heatdismin:2.60, heatdismax:50.85, fuelcost:50, fuelreserve:0.81, hardness:60, masslock:18, crew:4, // verify masslock
 			slots:{
 				hardpoint:[2,2,2,2,2],
 				utility  :[0,0,0,0,0,0],
@@ -1003,7 +1003,7 @@ var eddb = {
 			id:36, stype:'fr', name:'Type-10 Defender', class:3, cost:121486140, retail:124755340,
 			topspd:180, bstspd:220, mnv:0, shields:320, armour:580, mass:1200, fwdacc:17.96, revacc:10.04, latacc:10.09,
 			minthrust:83.333, boostcost:19, boostint:6, pitch:22, yaw:8, roll:40, pitchacc:100, yawacc:35, rollacc:80, minpitch:18,
-			heatcap:335, heatdismin:3.16, heatdismax:67.15, fuelcost:50, fuelreserve:0.77, hardness:75, masslock:26, crew:3,
+			heatcap:335, heatdismin:3.16, heatdismax:67.15, fuelcost:50, fuelreserve:0.77, hardness:75, masslock:26, crew:4,
 			slots:{
 				hardpoint:[3,3,3,3,2,2,2,1,1],
 				utility  :[0,0,0,0,0,0,0,0],
@@ -1034,7 +1034,7 @@ var eddb = {
 			id:6, stype:'sh', name:'Anaconda', class:3, cost:142447820, retail:146969450,
 			topspd:180, bstspd:240, mnv:1, shields:350, armour:525, mass:400, fwdacc:19.85, revacc:10.03, latacc:10.05,
 			minthrust:44.444, boostcost:27, boostint:6, pitch:25, yaw:10, roll:60, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
-			heatcap:334, heatdismin:3.16, heatdismax:67.15, fuelcost:50, fuelreserve:1.07, hardness:65, masslock:23, crew:3,
+			heatcap:334, heatdismin:3.16, heatdismax:67.15, fuelcost:50, fuelreserve:1.07, hardness:65, masslock:23, crew:4,
 			slots:{
 				hardpoint:[4,3,3,3,2,2,1,1],
 				utility  :[0,0,0,0,0,0,0,0],
@@ -1066,7 +1066,7 @@ var eddb = {
 			faction:'Federation', rank:12,
 			topspd:200, bstspd:260, mnv:2, shields:555, armour:370, mass:900, fwdacc:19.87, revacc:10.08, latacc:9.98,
 			minthrust:50.0, boostcost:27, boostint:6, pitch:28, yaw:8, roll:75, pitchacc:100, yawacc:50, rollacc:80, minpitch:22,
-			heatcap:333, heatdismin:3.28, heatdismax:70.33, fuelcost:50, fuelreserve:1.13, hardness:70, masslock:24, crew:3, // verify masslock
+			heatcap:333, heatdismin:3.28, heatdismax:70.33, fuelcost:50, fuelreserve:1.13, hardness:70, masslock:24, crew:4, // verify masslock
 			slots:{
 				hardpoint:[4,4,3,2,2,1,1],
 				utility  :[0,0,0,0,0,0,0,0],
@@ -1095,7 +1095,7 @@ var eddb = {
 			faction:'Empire', rank:12,
 			topspd:200, bstspd:320, mnv:0, shields:600, armour:400, mass:1100, fwdacc:29.37, revacc:10.04, latacc:6.06,
 			minthrust:80.0, boostcost:23, boostint:6, pitch:18, yaw:8, roll:45, pitchacc:100, yawacc:50, rollacc:80, minpitch:14,
-			heatcap:327, heatdismin:3.27, heatdismax:72.58, fuelcost:50, fuelreserve:1.16, hardness:70, masslock:26, crew:3,
+			heatcap:327, heatdismin:3.27, heatdismax:72.58, fuelcost:50, fuelreserve:1.16, hardness:70, masslock:26, crew:4,
 			slots:{
 				hardpoint:[4,3,3,2,2,2,2],
 				utility  :[0,0,0,0,0,0,0,0],
