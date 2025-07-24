@@ -65,11 +65,14 @@ window.edsy = new (function() {
 		811400 : { name:"1D/F Mining Laser, LR, Incen",          modulehash:"HJpqmF5j3H0072y006y00AkPcEy00I_ezL800PBLL",       tag:'T' }, // Torval Mining Ltd tech broker
 		822230 : { name:"2B Seeker \"V1\", HC+LW, ThermCas",     modulehash:"HK4lG-3Q_W42-Cp6ypDAsPcIwPc",                     tag:'T' }, // human tech broker
 		822231 : { name:"2B Seeker, HC+RF, Drag",                modulehash:"HK4lG-2R00612008u00GwghUsPcX400b400",             tag:'C' }, // CG reward // TODO: get sample to test import
+		822232 : { name:"2B Seeker, HC+STD, FDInter",            modulehash:"IK4lG-ZK00910pD50008upDCvcQMoPcOwPcUoPcX000b000", tag:'C' }, // CG reward // TODO: get sample to test import
+		823130 : { name:"3A Seeker, HC+STD, FDInter",            modulehash:"IK69G-ZK00910pD50008upDCvcQMoPcOwPcUoPcX000b000", tag:'C' }, // CG reward // TODO: get sample to test import
 		722500 : { name:"2E/F Multi-cannon, RF+HC, Phasing",     modulehash:"HHewm1WaCS007Uy00Yuaab600f466n600soPcv400",       tag:'C' }, // CG reward
 		842200 : { name:"2B/F Rail, LR+HC, FeedCas",             modulehash:"FKZyG03I0080-Cp8zCpT000Yyv4b000f000iu00r900",     tag:'C' }, // CG reward // TODO: get sample to test import
 		
 		510600 : { name:"0F ECM, LW+Shd",                        modulehash:"FCTqG03G0032_pD50009000",                         tag:'C' }, // CG reward // TODO: get sample to test import
 		520900 : { name:"0I Heat Sink \"Sirius\", ACx2",         modulehash:"HCjwG-2G002P000S_00",                             tag:'T' }, // Sirus tech broker
+		570300 : { name:"0C KWS, FS+LR",                         modulehash:"IDx6G-ZG0056y008y00GzCpMupDQ_Pc",                 tag:'C' }, // CG reward // TODO: get sample to test import
 		570100 : { name:"0A KWS, FS+LR",                         modulehash:"FDwoG03G0056y008y00GzCpMupDQ_Pc",                 tag:'C' }, // CG reward // TODO: get sample to test import
 		530900 : { name:"0I/T Point Defence, Foc+LW",            modulehash:"FCzYG05G0042_pD6y00GkPcL000",                     tag:'C' }, // CG reward // TODO: get sample to test import
 		
@@ -87,6 +90,11 @@ window.edsy = new (function() {
 		435110 : { name:"5A SCO \"V1\", IR+FB",                  modulehash:"IAdtG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker // TODO: get sample to test import
 		436110 : { name:"6A SCO \"V1\", IR+FB",                  modulehash:"IAfRG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker // TODO: get sample to test import
 		437110 : { name:"7A SCO \"V1\", IR+FB",                  modulehash:"IAg-G-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker // TODO: get sample to test import
+		453400 : { name:"3D Power Distributor, SF+EF",           modulehash:"IB4SG-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward // TODO: get sample to test import
+		453100 : { name:"3A Power Distributor, SF+EF",           modulehash:"IB3_G-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward // TODO: get sample to test import
+		454400 : { name:"4D Power Distributor, SF+EF",           modulehash:"IB60G-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward // TODO: get sample to test
+		454100 : { name:"4A Power Distributor, SF+EF",           modulehash:"IB5YG-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward // TODO: get sample to test
+		456100 : { name:"6A Power Distributor, SF+EF",           modulehash:"IB8gG-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward // TODO: get sample to test
 		
 		  5510 : { name:"5E Anti-Corrosion Cargo (32T)",         modulehash:"H08d00",                                          tag:'C' }, // CG reward
 		  6510 : { name:"6E Anti-Corrosion Cargo (64T)",         modulehash:"H0AB00",                                          tag:'C' }, // CG reward
