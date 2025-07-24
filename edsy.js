@@ -66,6 +66,7 @@ window.edsy = new (function() {
 		822230 : { name:"2B Seeker \"V1\", HC+LW, ThermCas",     modulehash:"HK4lG-3Q_W42-Cp6ypDAsPcIwPc",                     tag:'T' }, // human tech broker
 		822231 : { name:"2B Seeker, HC+RF, Drag",                modulehash:"HK4lG-2R00612008u00GwghUsPcX400b400",             tag:'C' }, // CG reward // TODO: get sample to test import
 		822232 : { name:"2B Seeker, HC+STD, FDInter",            modulehash:"IK4lG-ZK00910pD50008upDCvcQMoPcOwPcUoPcX000b000", tag:'C' }, // CG reward // TODO: get sample to test import
+		823130 : { name:"3A Seeker, HC+STD, FDInter",            modulehash:"IK69G-ZK00910pD50008upDCvcQMoPcOwPcUoPcX000b000", tag:'C' }, // CG reward // TODO: get sample to test import
 		722500 : { name:"2E/F Multi-cannon, RF+HC, Phasing",     modulehash:"HHewm1WaCS007Uy00Yuaab600f466n600soPcv400",       tag:'C' }, // CG reward
 		842200 : { name:"2B/F Rail, LR+HC, FeedCas",             modulehash:"FKZyG03I0080-Cp8zCpT000Yyv4b000f000iu00r900",     tag:'C' }, // CG reward // TODO: get sample to test import
 		
