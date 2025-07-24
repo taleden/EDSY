@@ -90,6 +90,11 @@ window.edsy = new (function() {
 		435110 : { name:"5A SCO \"V1\", IR+FB",                  modulehash:"IAdtG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker // TODO: get sample to test import
 		436110 : { name:"6A SCO \"V1\", IR+FB",                  modulehash:"IAfRG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker // TODO: get sample to test import
 		437110 : { name:"7A SCO \"V1\", IR+FB",                  modulehash:"IAg-G-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker // TODO: get sample to test import
+		453400 : { name:"3D Power Distributor, SF+EF",           modulehash:"IB4SG-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward // TODO: get sample to test import
+		453100 : { name:"3A Power Distributor, SF+EF",           modulehash:"IB3_G-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward // TODO: get sample to test import
+		454400 : { name:"4D Power Distributor, SF+EF",           modulehash:"IB60G-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward // TODO: get sample to test
+		454100 : { name:"4A Power Distributor, SF+EF",           modulehash:"IB5YG-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward // TODO: get sample to test
+		456100 : { name:"6A Power Distributor, SF+EF",           modulehash:"IB8gG-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward // TODO: get sample to test
 		
 		  5510 : { name:"5E Anti-Corrosion Cargo (32T)",         modulehash:"H08d00",                                          tag:'C' }, // CG reward
 		  6510 : { name:"6E Anti-Corrosion Cargo (64T)",         modulehash:"H0AB00",                                          tag:'C' }, // CG reward
