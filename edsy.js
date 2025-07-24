@@ -72,7 +72,7 @@ window.edsy = new (function() {
 		
 		510600 : { name:"0F ECM, LW+Shd",                        modulehash:"FCTqG03G0032_pD50009000",                         tag:'C' }, // CG reward // TODO: get sample to test import
 		520900 : { name:"0I Heat Sink \"Sirius\", ACx2",         modulehash:"HCjwG-2G002P000S_00",                             tag:'T' }, // Sirus tech broker
-		570300 : { name:"0C KWS, FS+LR",                         modulehash:"IDx6G-dG0056y008y00GzCpMupDQ_Pc",                 tag:'C' }, // CG reward // TODO: get sample to test import
+		570300 : { name:"0C KWS, FS+LR",                         modulehash:"IDx6G-ZG0056y008y00GzCpMupDQ_Pc",                 tag:'C' }, // CG reward // TODO: get sample to test import
 		570100 : { name:"0A KWS, FS+LR",                         modulehash:"FDwoG03G0056y008y00GzCpMupDQ_Pc",                 tag:'C' }, // CG reward // TODO: get sample to test import
 		530900 : { name:"0I/T Point Defence, Foc+LW",            modulehash:"FCzYG05G0042_pD6y00GkPcL000",                     tag:'C' }, // CG reward // TODO: get sample to test import
 		
