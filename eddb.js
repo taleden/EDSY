@@ -1184,14 +1184,14 @@ var eddb = {
 			minthrust:71.5, boostcost:14, boostint:5, pitch:35, yaw:28, roll:96, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:24.5, minyaw:16, // verify: minpitch // TODO: *acc
 			heatcap:245, heatdismin:NaN, heatdismax:51.00, fuelcost:50, fuelreserve:0.5, hardness:55, masslock:11, crew:2, // TODO: heatdismin
 			slots:{
-				hardpoint:[1,1,2,2,2,2],
+				hardpoint:[2,2,2,2,1,1],
 				utility  :[0,0,0,0],
 				component:[1,5,5,5,4,5,5,5],
 				military :[],
 				internal :[6,5,4,4,3,3,2,1,1,1],
 			},
 			stock:{
-				hardpoint:[62160,62160,0,0,0,0],
+				hardpoint:[0,0,0,0,62160,62160],
 				utility  :[0,0,0,0],
 				component:[40131,41550,42550,43531,44450,45550,46550,47530],
 				military :[],
