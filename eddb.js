@@ -577,7 +577,7 @@ var eddb = {
 				internal :[6,6,6,5,5,5,3,3,2,1],
 			},
 			slotnames:{
-				internal :['Slot01_Size6','Slot02_Size6','Slot03_Size5','Slot04_Size5','Slot05_Size4','Slot06_Size4','Slot07_Size2','Slot08_Size2','Slot09_Size2','Slot10_Size1'],
+				internal :['Slot01_Size6','Slot02_Size6','Slot03_Size5','Slot04_Size5','Slot05_Size4','Slot06_Size4','Slot07_Size2','Slot08_Size2','Slot09_Size2','Slot09_Size1'],
 			},
 			stock:{
 				hardpoint:[62160,62160,0,0],
@@ -1160,7 +1160,7 @@ var eddb = {
 				internal :[7,6,6,6,5,5,4,2,1],
 			},
 			slotnames:{
-				hardpoint:['SmallHardpoint1','SmallHardpoint2','MediumHardpoint1','SmallHardpoint4','SmallHardpoint5','SmallHardpoint6'],
+				hardpoint:['MediumHardpoint1','SmallHardpoint1','SmallHardpoint2','SmallHardpoint4','SmallHardpoint5','SmallHardpoint6'],
 			},
 			stock:{
 				hardpoint:[0,62160,62160,0,0,0],
