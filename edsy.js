@@ -11,7 +11,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 'use strict';
 window.edsy = new (function() {
 	var VERSIONS = [419039901,419039901,421039901,421039901]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20250723;
+	var LASTMODIFIED = 20250806;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -41,61 +41,70 @@ window.edsy = new (function() {
 	var BPROLL_UPGRADE = 0.8;
 //	var BPROLL_LIMIT = 0.95;
 	var DISCOUNTS = [30,20,15,10,5,2.5];
-	var HASH_VERSION = 18;
+	var HASH_VERSION = 19;
 	var ICON_MOUNT = { F:'fixed', G:'gimballed', T:'turreted' };
 	var ICON_MISSILE = { D:'dumbfire', S:'seeker' };
 	var ICON_TAG = { C:'community', G:'guardian', P:'powerplay', T:'techbroker' };
 	var CSS_FONTS = ['caps','text','fixed'];
 	var CSS_COLORS = ['orange','red','blue','green','yellow'];
 	var BUILTIN_STORED_MODULES = {
-		872200 : { name:"2B Enzyme Missile, HC+Caustic",         modulehash:"FLIqG02G0050ypD4sPc8y00C_00Gu00",                 tag:'C' }, // CG reward // TODO: get sample to test import
-		862500 : { name:"2E/FD AX Missile, HC+RF",               modulehash:"HL3gG-3G_W90zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", tag:'T' }, // Sirius tech broker
-		863300 : { name:"3C/FD AX Missile, HC+RF",               modulehash:"HL4wG-3G_W90zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", tag:'T' }, // Sirius tech broker // TODO: get sample to test import
-		862570 : { name:"2E/G EAXMC \"Azimuth\", OC, AL",        modulehash:"HL3nG-3H0038_00CoPcL600",                         tag:'T' }, // Azimuth / Rescue Ship tech broker
-		863370 : { name:"3C/G EAXMC \"Azimuth\", OC, AL",        modulehash:"HL51G-3H0038_00CoPcL600",                         tag:'T' }, // Azimuth / Rescue Ship tech broker
-		881400 : { name:"1D/F Grd Gauss, RF+HC",                 modulehash:"HLXCG-2G0092_166_00A_00Ew7ZHD00L800P600T800YsPc", tag:'T' }, // Salvation tech broker
-		882200 : { name:"2B/F Grd Gauss, RF+HC",                 modulehash:"HLYSG-2G0092_166_00A_00Ew7ZHD00L800P600T800YsPc", tag:'T' }, // Salvation tech broker
-		881430 : { name:"1D/F Grd Plasma, OC+Foc",               modulehash:"HLXFG-2Gxq60vBh4zHx8y00Cw00H800KvLL",             tag:'T' }, // Salvation tech broker
-		882230 : { name:"2B/F Grd Plasma, OC+Foc",               modulehash:"HLYVG-2Gxq60vBh4zHx8y00Cw00H800KvLL",             tag:'T' }, // Salvation tech broker // TODO: get sample to test import
-		881460 : { name:"1D/F Grd Shard, LR+Foc, Pen",           modulehash:"HLXIG-2G0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", tag:'T' }, // Salvation tech broker
-		882160 : { name:"2A/F Grd Shard, LR+Foc, Pen",           modulehash:"HLYOG-2G0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", tag:'T' }, // Salvation tech broker // TODO: get sample to test import
-		882161 : { name:"2A/F Grd Shard, LR5",                   modulehash:"GLYOmH7I03G0080y0051Cp993DDFm0H058L800Op77V700",  tag:'C' }, // CG reward // TODO: get sample to test import
-		
-		811410 : { name:"1D/F Abrasion Blaster, LR",             modulehash:"FJprG02G0062y006y00Ey00Iy00L800P800",             tag:'C' }, // CG reward // TODO: get sample to test import
-		811400 : { name:"1D/F Mining Laser, LR, Incen",          modulehash:"HJpqmF5j3H0072y006y00AkPcEy00I_ezL800PBLL",       tag:'T' }, // Torval Mining Ltd tech broker
-		822230 : { name:"2B Seeker \"V1\", HC+LW, ThermCas",     modulehash:"HK4lG-3Q_W42-Cp6ypDAsPcIwPc",                     tag:'T' }, // human tech broker
+		811410 : { name:"1D/F Abrasion Blaster, LR",             modulehash:"JJprG-ZG0062y006y00Ey00Iy00L800P800",             tag:'C' }, // CG reward
+		862500 : { name:"2E/FD AX Missile, HC+RF",               modulehash:"JL3gG-ZG0090zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", tag:'T' }, // Sirius tech broker
+		863300 : { name:"3C/FD AX Missile, HC+RF",               modulehash:"JL4wG-ZG0090zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", tag:'T' }, // Sirius tech broker
+		862570 : { name:"2E/G EAXMC \"Azimuth\", OC, AL",        modulehash:"JL3nG-ZH0038_00CoPcL600",                         tag:'T' }, // Azimuth / Rescue Ship tech broker
+		863370 : { name:"3C/G EAXMC \"Azimuth\", OC, AL",        modulehash:"JL51G-ZH0038_00CoPcL600",                         tag:'T' }, // Azimuth / Rescue Ship tech broker
+		872200 : { name:"2B Enzyme Missile, HC+Caustic",         modulehash:"JLIqG-ZG0050ypD4sPc8y00C_00Gu00",                 tag:'C' }, // CG reward
+		711510 : { name:"1E/G Frag Cannon, DS+HC, SS",           modulehash:"JHNlG-ZP0070ypD8sPcUoPcYlhXb400f2ghizR1",         tag:'C' }, // CG reward
+		713310 : { name:"3C/G Frag Cannon, DS+HC, SS",           modulehash:"JHQZG-ZP0070ypD8sPcUoPcYlhXb400f2ghizR1",         tag:'C' }, // CG reward
+		881400 : { name:"1D/F Grd Gauss, RF+HC",                 modulehash:"JLXCG-YG0092_166_00A_00Ew7ZHD00L800P600T800YsPc", tag:'T' }, // Salvation tech broker
+		882200 : { name:"2B/F Grd Gauss, RF+HC",                 modulehash:"JLYSG-YG0092_166_00A_00Ew7ZHD00L800P600T800YsPc", tag:'T' }, // Salvation tech broker
+		881430 : { name:"1D/F Grd Plasma, OC+Foc",               modulehash:"JLXFG-YG0060vBh4zHx8y00Cw00H800KvLL",             tag:'T' }, // Salvation tech broker
+		882230 : { name:"2B/F Grd Plasma, OC+Foc",               modulehash:"JLYVG-YG0060vBh4zHx8y00Cw00H800KvLL",             tag:'T' }, // Salvation tech broker
+		881460 : { name:"1D/F Grd Shard, LR+Foc, Pen",           modulehash:"JLXIG-YG0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", tag:'T' }, // Salvation tech broker
+		882160 : { name:"2A/F Grd Shard, LR+Foc, Pen",           modulehash:"JLYOG-YG0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", tag:'T' }, // Salvation tech broker
+		882161 : { name:"2A/F Grd Shard, LR5+Foc",               modulehash:"JLYOG-ZG0080y0051Cp993DDFm0H058L800Op77V700",     tag:'C' }, // CG reward
+		811400 : { name:"1D/F Mining Laser, LR, Incen",          modulehash:"JJpqG-ZH0072y006y00AkPcEy00I_ezL800PBLL",         tag:'T' }, // Torval Mining Ltd tech broker
+		722500 : { name:"2E/F Multi-cannon, RF+HC, Phasing",     modulehash:"JHewG-iS007Uy00Yuaab600f466n600soPcv400",         tag:'C' }, // CG reward
+		842200 : { name:"2B/F Rail, HC+LR, FeedCas",             modulehash:"JKZyG-ZI0080-Cp8zCpT000Yyv4b000f000iu00r900",     tag:'C' }, // CG reward
+		862280 : { name:"2B/T Flak, Green",                      modulehash:"JL3KG-bG_W1A-wu",                                 tag:'T' }, // tech broker?
+		862281 : { name:"2B/T Flak, Pink",                       modulehash:"JL3KG-dG_W1A-wu",                                 tag:'T' }, // tech broker?
+		862282 : { name:"2B/T Flak, Red",                        modulehash:"JL3KG-fG_W1A-wu",                                 tag:'T' }, // tech broker?
+		862283 : { name:"2B/T Flak, Yellow",                     modulehash:"JL3KG-hG_W1A-wu",                                 tag:'T' }, // tech broker?
+		822230 : { name:"2B Seeker \"V1\", HC+LW, ThmCas",       modulehash:"JK4lG-ZQ0072-Cp6ypDAsPcIwPcUoPcX000b000",         tag:'T' }, // human tech broker
 		822231 : { name:"2B Seeker, HC+RF, Drag",                modulehash:"HK4lG-2R00612008u00GwghUsPcX400b400",             tag:'C' }, // CG reward // TODO: get sample to test import
-		822232 : { name:"2B Seeker, HC+Std, FSDInt",             modulehash:"IK4lG-ZK00910pD50008upDCvcQMoPcOwPcUoPcX000b000", tag:'C' }, // CG reward
-		722500 : { name:"2E/F Multi-cannon, RF+HC, Phasing",     modulehash:"HHewm1WaCS007Uy00Yuaab600f466n600soPcv400",       tag:'C' }, // CG reward
-		842200 : { name:"2B/F Rail, LR+HC, FeedCas",             modulehash:"FKZyG03I0080-Cp8zCpT000Yyv4b000f000iu00r900",     tag:'C' }, // CG reward // TODO: get sample to test import
-		823132 : { name:"3A Seeker, HC+Std, FSDInt",             modulehash:"IK69G-ZK00910pD50008upDCvcQMoPcOwPcUoPcX000b000", tag:'C' }, // CG reward
+		822232 : { name:"2B Seeker, HC+Std, FSDInt",             modulehash:"JK4lG-ZK00910pD50008upDCvcQMoPcOwPcUoPcX000b000", tag:'C' }, // CG reward
+		823132 : { name:"3A Seeker, HC+Std, FSDInt",             modulehash:"JK69G-ZK00910pD50008upDCvcQMoPcOwPcUoPcX000b000", tag:'C' }, // CG reward
 		
 		510600 : { name:"0F ECM, LW+Shd",                        modulehash:"FCTqG03G0032_pD50009000",                         tag:'C' }, // CG reward // TODO: get sample to test import
-		520900 : { name:"0I Heat Sink \"Sirius\", ACx2",         modulehash:"HCjwG-2G002P000S_00",                             tag:'T' }, // Sirus tech broker
-		570300 : { name:"0C KWS, FS+LR",                         modulehash:"IDx6G-ZG0056y008y00GzCpMupDQ_Pc",                 tag:'C' }, // CG reward
-		570100 : { name:"0A KWS, FS+LR",                         modulehash:"FDwoG03G0056y008y00GzCpMupDQ_Pc",                 tag:'C' }, // CG reward // TODO: get sample to test import
-		530900 : { name:"0I/T Point Defence, Foc+LW",            modulehash:"FCzYG05G0042_pD6y00GkPcL000",                     tag:'C' }, // CG reward // TODO: get sample to test import
+		520900 : { name:"0I Heat Sink, ACx2",                    modulehash:"JCjwG-YG002P000S_00",                             tag:'T' }, // Sirus tech broker
+		570100 : { name:"0A KWS, FS+LR",                         modulehash:"JDwoG-ZG0056y008y00GzCpMupDQ_Pc",                 tag:'C' }, // CG reward
+		570300 : { name:"0C KWS, FS+LR",                         modulehash:"JDx6G-ZG0056y008y00GzCpMupDQ_Pc",                 tag:'C' }, // CG reward
+		530900 : { name:"0I/T Point Defence, LW+Foc",            modulehash:"JCzYG-bG0042_pD6y00GkPcL000",                     tag:'C' }, // CG reward
 		
-		413100 : { name:"3A Power Plant, AR+OC",                 modulehash:"FA5UG03G0040sPc4-cQ8yAFCqAF",                     tag:'C' }, // CG reward // TODO: get sample to test import
-		413101 : { name:"3A Power Plant, OC",                    modulehash:"HA5UG-7G0036upD8ypDCvcQ",                         tag:'C' }, // CG reward // TODO: get sample to test import
-		414101 : { name:"4A Power Plant, OC",                    modulehash:"HA72G-7G0036upD8ypDCvcQ",                         tag:'C' }, // CG reward // TODO: get sample to test import
-		415101 : { name:"5A Power Plant, OC",                    modulehash:"HA8cG-7G0036upD8ypDCvcQ",                         tag:'C' }, // CG reward // TODO: get sample to test import
-		433100 : { name:"3A FSD, IR+FB",                         modulehash:"HAakG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             tag:'C' }, // CG reward // TODO: get sample to test import
-		434100 : { name:"4A FSD, IR+FB",                         modulehash:"HAcIG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             tag:'C' }, // CG reward // TODO: get sample to test import
-		435100 : { name:"5A FSD \"V1\", IR+FB",                  modulehash:"HAdsG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // human tech broker
-		436100 : { name:"6A FSD, IR+FB",                         modulehash:"HAfQG-5G_W60upD6upD8qpDE_PcGzcQKsPc",             tag:'C' }, // CG reward // TODO: get sample to test import
-		432110 : { name:"2A SCO \"V1\", IR+FB",                  modulehash:"IAZBG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker // TODO: get sample to test import
-		433110 : { name:"3A SCO \"V1\", IR+FB",                  modulehash:"IAalG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker // TODO: get sample to test import
-		434110 : { name:"4A SCO \"V1\", IR+FB",                  modulehash:"IAcJG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker // TODO: get sample to test import
-		435110 : { name:"5A SCO \"V1\", IR+FB",                  modulehash:"IAdtG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker // TODO: get sample to test import
-		436110 : { name:"6A SCO \"V1\", IR+FB",                  modulehash:"IAfRG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker // TODO: get sample to test import
-		437110 : { name:"7A SCO \"V1\", IR+FB",                  modulehash:"IAg-G-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker // TODO: get sample to test import
+		453100 : { name:"3A Power Dist, SF+EF",                  modulehash:"JB3_G-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward
+		453400 : { name:"3D Power Dist, SF+EF",                  modulehash:"JB4SG-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward
+		454100 : { name:"4A Power Dist, SF+EF",                  modulehash:"JB5YG-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward
+		454400 : { name:"4D Power Dist, SF+EF",                  modulehash:"JB60G-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward
+		456100 : { name:"6A Power Dist, SF+EF",                  modulehash:"JB8gG-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward
+		413100 : { name:"3A Power Plant, AR+OC",                 modulehash:"JA5UG-ZG0040sPc4-cQ8yAFCqAF",                     tag:'C' }, // CG reward
+		413101 : { name:"3A Power Plant, OCx2",                  modulehash:"JA5UG-dG0036upD8ypDCvcQ",                         tag:'C' }, // CG reward
+		414101 : { name:"4A Power Plant, OCx2",                  modulehash:"JA72G-dG0036upD8ypDCvcQ",                         tag:'C' }, // CG reward
+		415101 : { name:"5A Power Plant, OCx2",                  modulehash:"JA8cG-dG0036ur88ypDCvcQ",                         tag:'C' }, // CG reward
+		433100 : { name:"3A FSD \"V1\", IR+FB",                  modulehash:"JAakG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'C' }, // CG reward
+		434100 : { name:"4A FSD \"V1\", IR+FB",                  modulehash:"JAcIG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'C' }, // CG reward
+		435100 : { name:"5A FSD \"V1\", IR+FB",                  modulehash:"JAdsG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // human tech broker
+		436100 : { name:"6A FSD \"V1\", IR+FB",                  modulehash:"JAfQG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'C' }, // CG reward
+		432110 : { name:"2A SCO \"V1\", IR+FB",                  modulehash:"JAZBG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker
+		433110 : { name:"3A SCO \"V1\", IR+FB",                  modulehash:"JAalG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker
+		434110 : { name:"4A SCO \"V1\", IR+FB",                  modulehash:"JAcJG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker
+		435110 : { name:"5A SCO \"V1\", IR+FB",                  modulehash:"JAdtG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker
+		436110 : { name:"6A SCO \"V1\", IR+FB",                  modulehash:"JAfRG-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker
+		437110 : { name:"7A SCO \"V1\", IR+FB",                  modulehash:"JAg-G-bG0060upD6upD8qpDE_PcGzcQKsPc",             tag:'T' }, // CG reward / human tech broker
 		
 		  5510 : { name:"5E Anti-Corrosion Cargo (32T)",         modulehash:"H08d00",                                          tag:'C' }, // CG reward
 		  6510 : { name:"6E Anti-Corrosion Cargo (64T)",         modulehash:"H0AB00",                                          tag:'C' }, // CG reward
-		
-		303100 : { name:"3A Shield Gen, KR+TR",                  modulehash:"F7PcG05G0044sPc8wPccupDgvcQ",                     tag:'C' }, // CG reward // TODO: get sample to test import
-		111300 : { name:"1I DSS \"V1\", ERx2",                   modulehash:"H2jwG-9G_W1P000",                                 tag:'T' }, // human tech broker
+		111300 : { name:"1I DSS \"V1\", ERx2",                   modulehash:"J2jwG-fG001P000",                                 tag:'T' }, // human tech broker
+		303100 : { name:"3A Shield Gen, KR+TR",                  modulehash:"J7PcG-bG0044sPc8wPccupDgvcQ",                     tag:'C' }, // CG reward
 	};
 	var LANG_NAMES = { // TODO cn? ko? nl? pl?
 		"cs": "Čeština",
@@ -1188,7 +1197,7 @@ window.edsy = new (function() {
 					}
 					this.clearStats();
 				} else {
-					this.bproll = bproll = 0;
+					this.bproll = 0;
 					if (this.attrModifier) {
 						this.attrOverride = {};
 						for (var attr in this.attrModifier)
@@ -1607,7 +1616,7 @@ window.edsy = new (function() {
 		
 		getHash: function(stored) {
 			/*
-			module hash format (HASH_VERSION=18):
+			module hash format (HASH_VERSION=19):
 				<3 chars / 18 bits>: module id (0..262143)
 				<1 char / 6 bits>: slot flags
 					0x20 <bit 1>: costed?
@@ -1657,31 +1666,42 @@ window.edsy = new (function() {
 				var bpidx = ((mtype.blueprints || EMPTY_ARR).indexOf(this.bpid) + 1);
 				var expidx = ((mtype.expeffects || EMPTY_ARR).indexOf(this.expid) + 1);
 				var bproll = (((this.bproll * 4000) + 0.5) | 0);
-				var nummods = 0;
-				var modulehash = '';
+				var nummods = 0, b_nummods = 0;
+				var modulehash = '', b_modulehash = '';
 				if (mtype.modifiable && this.attrModifier) {
 					for (var a = 0;  a < mtype.modifiable.length;  a++) {
 						var attr = mtype.modifiable[a];
-						if (cache.attribute[attr] && this.attrModifier[attr] && this.attrOverride[attr]) {
-							nummods++;
-							modulehash += hashEncode(((a & 0xF) << 20) | (float20Encode(this.attrModifier[attr]) & 0xFFFFF), 4);
+						if (cache.attribute[attr] && this.attrModifier[attr]) {
+							if (this.preeng || this.attrOverride[attr]) {
+								nummods++;
+								modulehash += hashEncode(((a & 0xF) << 20) | (float20Encode(this.attrModifier[attr]) & 0xFFFFF), 4);
+							}
+							b_nummods++;
+							b_modulehash += hashEncode(((a & 0xF) << 20) | (float20Encode(this.attrModifier[attr]) & 0xFFFFF), 4);
 						}
 					}
 				}
 				var engbits = (((preeng & 0x1) << 11) | ((bpidx & 0xF) << 7) | ((this.bpgrade & 0x7) << 4) | (expidx & 0xF));
 				var enghash = ((engbits || nummods) ? (hashEncode(engbits, 2) + hashEncode(bproll, 2) + hashEncode(nummods & 0x1F, 1) + modulehash) : '');
+				var b_enghash = ((engbits || b_nummods) ? (hashEncode(engbits, 2) + hashEncode(0, 2) + hashEncode(b_nummods & 0x1F, 1) + b_modulehash) : ''); // ignore bproll, include all modifiers
 				
 				var slotbits = ((costed ? 0x20 : 0) | (enghash ? 0x10 : 0) | (this.getPowered() ? 0 : 0x8) | ((this.getPriority() - 1) & 0x7));
 				this.hash = (modidhash + hashEncode(slotbits, 1) + costhash + enghash);
-				this.storedhash = (hashEncode(HASH_VERSION, 1) + modidhash + hashEncode(slotbits & 0x30, 1) + costhash + enghash);
+				this.storedhash = (hashEncode(HASH_VERSION, 1) + modidhash + hashEncode(slotbits & 0x30, 1) + costhash + enghash); // ignore slotbits 0x0F (powered, priority)
+				this.builtinhash = (hashEncode(HASH_VERSION, 1) + modidhash + hashEncode(slotbits & 0x10, 1) + hashEncode(0x3F, 1) + b_enghash); // further ignore slotbits 0x20 (costed), assume discounts 0x3F (free), and ignore bproll
 			}
-			return (stored ? this.storedhash : this.hash);
+			return (stored ? (stored > 1 ? this.builtinhash : this.storedhash) : this.hash);
 		}, // getHash()
 		
 		
 		getStoredHash: function() {
-			return this.getHash(true);
+			return this.getHash(1);
 		}, // getStoredHash()
+		
+		
+		getBuiltinHash: function() {
+			return this.getHash(2);
+		}, // getBuiltinHash()
 		
 		
 		setHash: function(hash, version, errors, experimental) {
@@ -2079,7 +2099,7 @@ window.edsy = new (function() {
 	
 	
 	Slot.getModuleIDStoredHash = function(modid) {
-		// HASH_VERSION=18
+		// HASH_VERSION=19
 		return (hashEncode(HASH_VERSION, 1) + hashEncode(modid & 0x1FFFF, 3) + hashEncode(0, 2)); // slotbits(!costed), discountbits
 	}; // getModuleIDStoredHash()
 	
@@ -2117,8 +2137,8 @@ window.edsy = new (function() {
 		var modid2 = slot2 ? slot2.getModuleID() : 0;
 		var discmod1 = slot1 ? cache.discountMod[slot1.getDiscounts()] : 1;
 		var discmod2 = slot2 ? cache.discountMod[slot2.getDiscounts()] : 1;
-		var preeng1 = (slot1 && slot1.getPreEngineered()) ? cache.modulehashBuiltin[slot1.getStoredHash()] : 0;
-		var preeng2 = (slot2 && slot2.getPreEngineered()) ? cache.modulehashBuiltin[slot2.getStoredHash()] : 0;
+		var preeng1 = (slot1 && slot1.getPreEngineered()) ? cache.modulehashBuiltin[slot1.getBuiltinHash()] : 0;
+		var preeng2 = (slot2 && slot2.getPreEngineered()) ? cache.modulehashBuiltin[slot2.getBuiltinHash()] : 0;
 		var bpid1 = slot1 ? slot1.getBlueprintID() : '';
 		var bpid2 = slot2 ? slot2.getBlueprintID() : '';
 		var bpgrade1 = slot1 ? slot1.getBlueprintGrade() : 0;
@@ -3577,7 +3597,9 @@ window.edsy = new (function() {
 				idmap.module[86310] = 86330; // AX Missile Rack
 				idmap.module[86312] = 86352; // AX Missile Rack
 			case 17:
-			case 18: // HASH_VERSION
+			case 18:
+				idmap.slotnum[46] = { hardpoint:[4,5,0,1,2,3] }; // Mandalay hardpoint SSMMMM -> MMMMSS
+			case 19: // HASH_VERSION
 			default:
 			}
 		}
@@ -3840,10 +3862,10 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 										}
 									}
 									
-									// if the resulting modulehash matches a builtin, set the preeng flag
-									var preeng = !!cache.modulehashBuiltin[slot.getStoredHash()];
-									if (!slot.setPreEngineered(preeng)) {
-										if (errors) errors.push(modulejson.Slot + ': Invalid pre-engineered: ' + preeng);
+									// if the resulting builtinhash matches an actual builtin, reset slot hash to that builtin (to apply its pre-eng, price, powered, priority, etc)
+									var builtin = cache.modulehashBuiltin[slot.getBuiltinHash()];
+									if (builtin && !slot.setStoredHash(BUILTIN_STORED_MODULES[builtin].modulehash)) {
+										if (errors) errors.push(modulejson.Slot + ': Failed to match builtin "'+BUILTIN_STORED_MODULES[builtin].name+'"');
 									}
 								}
 							} else if (errors) errors.push(modulejson.Slot + ': Invalid module: ' + modulejson.Item);
@@ -4767,21 +4789,21 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var slot = build.getDetachedSlot();
 		cache.modulehashBuiltin = {};
 		for (var bmodid in BUILTIN_STORED_MODULES) {
-			var storedhash = BUILTIN_STORED_MODULES[bmodid].modulehash;
-			var modid = Slot.getStoredHashModuleID(storedhash);
+			var builtinhash = BUILTIN_STORED_MODULES[bmodid].modulehash;
+			var modid = Slot.getStoredHashModuleID(builtinhash);
 			var mtype = eddb.module[modid].mtype;
 			if (cache.mtypeBuiltins[mtype]) {
 				cache.mtypeBuiltins[mtype].push(bmodid);
 			}
 			
-			// get current-version modulehashes of all builtin stored modules, with and without preeng flags, so that lookups will work
-			cache.modulehashBuiltin[storedhash] = bmodid;
-			slot.setStoredHash(storedhash, null, true);
+			// get current-version builtinhashes of all builtin stored modules, with and without preeng flags, so that lookups will work
+			cache.modulehashBuiltin[builtinhash] = bmodid;
+			slot.setStoredHash(builtinhash, null, true);
 			slot.setPreEngineered(0);
-			cache.modulehashBuiltin[slot.getStoredHash()] = bmodid;
-			slot.setPreEngineered(1);
-			cache.modulehashBuiltin[slot.getStoredHash()] = bmodid;
-			BUILTIN_STORED_MODULES[bmodid].modulehash = slot.getStoredHash();
+			cache.modulehashBuiltin[slot.getBuiltinHash()] = bmodid;
+			slot.setPreEngineered(slot.isModified());
+			cache.modulehashBuiltin[slot.getBuiltinHash()] = bmodid;
+			BUILTIN_STORED_MODULES[bmodid].modulehash = slot.getBuiltinHash();
 			
 			var opt = 'builtin' + bmodid;
 			current.option[opt] = ((BUILTIN_STORED_MODULES[bmodid].tag === 'T') ? true : false);
@@ -5350,8 +5372,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		for (var r = 0;  r < tbody.rows.length;  r++) {
 			var row = tbody.rows[r];
 			var key = (row.cells[col].getAttribute('edsy-sort') || row.cells[col].innerText);
-			if (sortnum)
+			if (sortnum) {
 				key = parseNumText(key);
+				// since NaN is neither > nor < than a number, it breaks the sort; leave such rows out of the sort entirely, they'll end up at the top of the table at the end
+				if (isNaN(key))
+					continue;
+			}
 			var key2 = sortalt ? key.length : 0;
 			list.push({ row:row, key:(alt ? key2 : key), key2:(alt ? key : key2) });
 		}
@@ -8895,6 +8921,8 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 			return false;
 		if (current.outfitting_focus === 'slot') {
 			updateUIFitStoredBuildControls();
+			updateUIFitSlot(current.group, current.slot);
+			updateUIStats();
 		}
 		updateUIDetailsStoredModuleControls();
 		updateUIDetailsModifications();
