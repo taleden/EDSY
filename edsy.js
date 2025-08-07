@@ -7290,7 +7290,22 @@ if(false && current.dev) console.log("updateUIModulePickerWarnings(): modid "+mo
 	}; // updateUIFitColumns()
 	
 	
+	var updateUIFitTitle = function() {
+		var fit = current.fit;
+		var hullname = (getTranslation('ship-'+fit.getShipID()) || eddb.ship[fit.getShipID()].name).trim();
+		var shipname = (fit.getName() || "").trim();
+		var shipnametag = (fit.getNameTag() || "").trim();
+		var storedname = hashDecodeS(document.forms.fit.elements.outfitting_fit_stored.value);
+		var title = hullname + (shipnametag ? (" " + shipnametag) : "") + (shipname ? (" \"" + shipname + "\"") : "");
+		if (storedname)
+			title = storedname + " (" + title + ")";
+		document.title = "EDSY" + (title ? (": " + title) : "");
+		return true;
+	}; // updateUIFitTitle()
+	
+	
 	var updateUIFitHash = function(buildhash) {
+		updateUIFitTitle();
 		if (current.hashlock)
 			return false;
 		buildhash = window.location.protocol + '//' + window.location.hostname + window.location.pathname + '#/L=' + (buildhash || current.fit.getHash());
@@ -7544,7 +7559,9 @@ if(false && current.dev) console.log("updateUIModulePickerWarnings(): modid "+mo
 	var updateUIFitStoredBuilds = function() {
 		var select = document.forms.fit.elements.outfitting_fit_stored;
 		var shipid = (current.fit ? current.fit.getShipID() : -1);
-		return populateDOMSelectStoreds(select, current.stored.shipStoreds[shipid], select.value, 1);
+		var ok = populateDOMSelectStoreds(select, current.stored.shipStoreds[shipid], select.value, 1);
+		updateUIFitTitle();
+		return ok;
 	}; // updateUIFitStoredBuilds()
 	
 	
@@ -7567,6 +7584,7 @@ if(false && current.dev) console.log("updateUIModulePickerWarnings(): modid "+mo
 		document.getElementById('outfitting_fit_stored_saveas').disabled = false;
 		document.getElementById('outfitting_fit_stored_rename').disabled = (!storedbuild);
 		document.getElementById('outfitting_fit_stored_delete').disabled = (!storedbuild);
+		updateUIFitTitle();
 		return true;
 	}; // updateUIFitStoredBuildControls()
 	
@@ -7639,13 +7657,10 @@ if(false && current.dev) console.log("updateUIModulePickerWarnings(): modid "+mo
 		writeStoredBuilds();
 		updateUIShipyardStoredBuild(oldnamehash);
 		updateUIShipyardStoredBuild(namehash);
+		updateUIFitStoredBuilds();
 		var select = document.forms.fit.elements.outfitting_fit_stored;
-		if (select.value === oldnamehash) {
-			updateUIFitStoredBuilds();
+		if (select.value === oldnamehash)
 			select.value = namehash;
-		} else {
-			updateUIFitStoredBuilds();
-		}
 		updateUIAnalysisStoredBuilds(oldnamehash, namehash);
 	}; // renameStoredBuild()
 	
@@ -7666,13 +7681,11 @@ if(false && current.dev) console.log("updateUIModulePickerWarnings(): modid "+mo
 		stored = null;
 		writeStoredBuilds();
 		updateUIShipyardStoredBuild(namehash);
+		updateUIFitStoredBuilds();
 		var select = document.forms.fit.elements.outfitting_fit_stored;
 		if (select.value === namehash) {
-			updateUIFitStoredBuilds();
 			updateUIFitStoredBuildControls(true);
 			select.selectedIndex = -1;
-		} else {
-			updateUIFitStoredBuilds();
 		}
 		updateUIAnalysisStoredBuilds();
 	}; // deleteStoredBuild()
