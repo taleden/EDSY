@@ -66,10 +66,10 @@ window.edsy = new (function() {
 		811400 : { name:"1D/F Mining Laser, LR, Incen",          modulehash:"JJpqG-ZH0072y006y00AkPcEy00I_ezL800PBLL",         tag:'T' }, // Torval Mining Ltd tech broker
 		722500 : { name:"2E/F Multi-cannon, RF+HC, Phasing",     modulehash:"JHewG-iS007Uy00Yuaab600f466n600soPcv400",         tag:'C' }, // CG reward
 		842200 : { name:"2B/F Rail, HC+LR, FeedCas",             modulehash:"JKZyG-ZI0080-Cp8zCpT000Yyv4b000f000iu00r900",     tag:'C' }, // CG reward
-		862280 : { name:"2B/T Flak, Green",                      modulehash:"JL3KG-bG_W1A-wu",                                 tag:'T' }, // tech broker?
-		862281 : { name:"2B/T Flak, Pink",                       modulehash:"JL3KG-dG_W1A-wu",                                 tag:'T' }, // tech broker?
-		862282 : { name:"2B/T Flak, Red",                        modulehash:"JL3KG-fG_W1A-wu",                                 tag:'T' }, // tech broker?
-		862283 : { name:"2B/T Flak, Yellow",                     modulehash:"JL3KG-hG_W1A-wu",                                 tag:'T' }, // tech broker?
+	//	862280 : { name:"2B/T Flak, Green",                      modulehash:"JL3KG-bG_W1A-wu",                                 tag:'T' }, // tech broker?
+	//	862281 : { name:"2B/T Flak, Pink",                       modulehash:"JL3KG-dG_W1A-wu",                                 tag:'T' }, // tech broker?
+	//	862282 : { name:"2B/T Flak, Red",                        modulehash:"JL3KG-fG_W1A-wu",                                 tag:'T' }, // tech broker?
+	//	862283 : { name:"2B/T Flak, Yellow",                     modulehash:"JL3KG-hG_W1A-wu",                                 tag:'T' }, // tech broker?
 		822230 : { name:"2B Seeker \"V1\", HC+LW, ThmCas",       modulehash:"JK4lG-ZQ0072-Cp6ypDAsPcIwPcUoPcX000b000",         tag:'T' }, // human tech broker
 		822231 : { name:"2B Seeker, HC+RF, Drag",                modulehash:"HK4lG-2R00612008u00GwghUsPcX400b400",             tag:'C' }, // CG reward // TODO: get sample to test import
 		822232 : { name:"2B Seeker, HC+Std, FSDInt",             modulehash:"JK4lG-ZK00910pD50008upDCvcQMoPcOwPcUoPcX000b000", tag:'C' }, // CG reward
