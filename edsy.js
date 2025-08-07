@@ -2262,7 +2262,10 @@ window.edsy = new (function() {
 		
 		clearStats: function() {
 			this.clearHash();
-			this.stats = null;
+			if (this.stats) {
+				this.prevstats = this.stats;
+				this.stats = null;
+			}
 		}, // clearStats()
 		
 		
@@ -2876,6 +2879,11 @@ window.edsy = new (function() {
 				this.updateStats();
 			return this.stats[stat];
 		}, // getStat()
+		
+		
+		getPrevStat: function(stat) {
+			return (this.prevstats || EMPTY_OBJ)[stat];
+		}, // getPrevStat()
 		
 		
 		getRetrofitData: function(base, limdisc, limdisceng, limbpgrade, limbproll, limexpeffect, limrolls) {
@@ -9152,13 +9160,23 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		var cost = current.fit.getStat('cost');
 		var mass = current.fit.getStat('mass');
 		var fuelcap = current.fit.getStat('fuelcap');
+		var fuelcapPrev = current.fit.getPrevStat('fuelcap');
 		var cargocap = current.fit.getStat('cargocap');
+		var cargocapPrev = current.fit.getPrevStat('cargocap');
 		var cabincap = current.fit.getStat('cabincap');
 		
-		// compute derived stats
-		// in-game, fuelres is included when displaying current mass but not max mass
+		// limit current fuel and cargo to maximums and calculate derived stats
 		var curTtlFuel = min(max(parseNumText(document.forms.stats.elements.stats_cur_fuel.value) || 0, 0), fuelcap);
+		if (fuelcapPrev && fuelcapPrev != fuelcap) {
+			curTtlFuel = (curTtlFuel == fuelcapPrev) ? fuelcap : min(fuelcap, curTtlFuel);
+			document.forms.stats.elements.stats_cur_fuel.value = formatNumText(curTtlFuel, (curTtlFuel % 1) ? 1 : 0);
+		}
 		var curTtlCrgo = min(max(parseNumText(document.forms.stats.elements.stats_cur_cargo.value) || 0, 0), cargocap);
+		if (cargocapPrev && cargocapPrev != cargocap) {
+			curTtlCrgo = (curTtlCrgo == cargocapPrev) ? cargocap : min(cargocap, curTtlCrgo);
+			document.forms.stats.elements.stats_cur_cargo.value = formatNumText(curTtlCrgo, 0);
+		}
+		// in-game, fuelres is included when displaying current mass but not max mass
 		var curTtlMass = mass + curTtlFuel + fuelres + curTtlCrgo;
 		var maxTtlMass = mass + fuelcap              + cargocap;
 		
@@ -11959,11 +11977,9 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		} else {
 			return;
 		}
-		
-		var scale = 0;
 		var value = parseNumText(e.target.value);
 		var step = (e.shiftKey ? 10 : 1);
-		value = formatNumText(((mod > 0) ? (floor(round(value / pow(10, -scale)) / step) + 1) : (ceil(round(value / pow(10, -scale)) / step) - 1)) * pow(10, -scale) * step, scale);
+		value = ((mod < 0) ? ceil : floor)((value + 0.1 * mod) / step + mod) * step;
 		switch (e.target.name) {
 		case 'stats_cur_fuel':   setStatsCurFuel(value);   break;
 		case 'stats_cur_cargo':  setStatsCurCargo(value);  break;
