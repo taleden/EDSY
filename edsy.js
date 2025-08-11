@@ -11,7 +11,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 'use strict';
 window.edsy = new (function() {
 	var VERSIONS = [419039901,419039901,421039901,421039901]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20250807;
+	var LASTMODIFIED = 20250811;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -782,26 +782,26 @@ window.edsy = new (function() {
 	*/
 	
 	
-	var getJumpFuelCost = function(mass, dist, fsdOpt, fsdMul, fsdExp, jmpBst) {
+	var getJumpFuelCost = function(dist, mass, curfuel, fsdfuel, fsdopt, fsdmul, fsdpower, jumpbst) {
 		// https://forums.frontier.co.uk/threads/mass-effect-on-hyperspace-range.32734/#post-643461
-		return fsdMul * pow(max(0, dist - jmpBst) * mass / fsdOpt, fsdExp);
+		var maxdist = getJumpDistance(mass, curfuel, fsdfuel, fsdopt, fsdmul, fsdpower, jumpbst);
+		return pow(dist / maxdist, fsdpower) * min(curfuel, fsdfuel);
 	}; // getJumpFuelCost()
 	
 	
-	var getJumpDistance = function(mass, fuel, fsdOpt, fsdMul, fsdExp, jmpBst) {
+	var getJumpDistance = function(mass, curfuel, fsdfuel, fsdopt, fsdmul, fsdpower, jumpbst) {
 		// https://forums.frontier.co.uk/threads/mass-effect-on-hyperspace-range.32734/#post-643461
-		return pow(fuel / fsdMul, 1 / fsdExp) * fsdOpt / mass + jmpBst;
+		return pow(min(curfuel, fsdfuel) / fsdmul, 1 / fsdpower) * fsdopt / (mass + curfuel) + jumpbst;
 	}; // getJumpDistance()
 	
 	
-	var getJumpRange = function(fuelcap, mass, fuel, fsdOpt, fsdMul, fsdExp, jmpBst) {
+	var getJumpRange = function(mass, curfuel, fsdfuel, fsdopt, fsdmul, fsdpower, jumpbst) {
 		var range = 0;
-		while (fuelcap > fuel) {
-			range += getJumpDistance(mass, fuel, fsdOpt, fsdMul, fsdExp, jmpBst);
-			fuelcap -= fuel;
-			mass -= fuel;
+		while (curfuel >= 0.000001) {
+			range += getJumpDistance(mass, curfuel, fsdfuel, fsdopt, fsdmul, fsdpower, jumpbst);
+			curfuel -= fsdfuel;
 		}
-		return range + getJumpDistance(mass, fuelcap, fsdOpt, fsdMul, fsdExp, jmpBst);
+		return range;
 	}; // getJumpRange()
 	
 	
@@ -2269,6 +2269,11 @@ window.edsy = new (function() {
 		}, // clearStats()
 		
 		
+		clearPrevStats: function() {
+			this.prevstats = null;
+		}, // clearPrevStats()
+		
+		
 		getShipID: function() {
 			return this.shipid;
 		}, // getShipID()
@@ -2772,16 +2777,19 @@ window.edsy = new (function() {
 			
 			// derived FSD stats
 			var slot = this.getSlot('component', CORE_ABBR_SLOT.FD);
-			var optmass = slot.getEffectiveAttrValue('fsdoptmass');
-			var maxfuel = slot.getEffectiveAttrValue('maxfuel');
-			var fuelmul = slot.getEffectiveAttrValue('fuelmul');
-			var fuelpower = slot.getEffectiveAttrValue('fuelpower');
-			// fuelres does NOT count toward jump fuel cost (but is wrongly included when displaying "current" jump distance in the stats panel)
-			stats._jump_laden    = getJumpDistance(            stats.mass + stats.fuelcap + stats.cargocap, min(stats.fuelcap, maxfuel), optmass, fuelmul, fuelpower, stats.jumpbst);
-			stats._jump_unladen  = getJumpDistance(            stats.mass + stats.fuelcap                 , min(stats.fuelcap, maxfuel), optmass, fuelmul, fuelpower, stats.jumpbst);
-			stats._jump_max      = getJumpDistance(            stats.mass + min(stats.fuelcap, maxfuel)   , min(stats.fuelcap, maxfuel), optmass, fuelmul, fuelpower, stats.jumpbst);
-			stats._range_laden   = getJumpRange(stats.fuelcap, stats.mass + stats.fuelcap + stats.cargocap, min(stats.fuelcap, maxfuel), optmass, fuelmul, fuelpower, stats.jumpbst);
-			stats._range_unladen = getJumpRange(stats.fuelcap, stats.mass + stats.fuelcap                 , min(stats.fuelcap, maxfuel), optmass, fuelmul, fuelpower, stats.jumpbst);
+			var fsdopt = slot.getEffectiveAttrValue('fsdoptmass');
+			var fsdfuel = slot.getEffectiveAttrValue('maxfuel');
+			var fsdmul = slot.getEffectiveAttrValue('fuelmul');
+			var fsdpower = slot.getEffectiveAttrValue('fuelpower');
+			// fuelres does NOT count toward available jump fuel NOR total jump mass,
+			// but is wrongly counted both ways by the "cur" range shown in-game in outfitting and the right-hand ship panel;
+			// the "min" and "max" ranges shown there treat fuelres correctly, but pretend you can use the fsd's max fuel even if your fuel tank is smaller than that;
+			// the only correct in-game current jump range display is in the advanced maintenance restock and refuel windows, but they also display current range in all three "min/cur/max" positions
+			stats._jump_laden    = getJumpDistance(stats.mass + stats.cargocap,     stats.fuelcap          , fsdfuel, fsdopt, fsdmul, fsdpower, stats.jumpbst);
+			stats._jump_unladen  = getJumpDistance(stats.mass                 ,     stats.fuelcap          , fsdfuel, fsdopt, fsdmul, fsdpower, stats.jumpbst);
+			stats._jump_max      = getJumpDistance(stats.mass                 , min(stats.fuelcap, fsdfuel), fsdfuel, fsdopt, fsdmul, fsdpower, stats.jumpbst);
+			stats._range_laden   = getJumpRange(stats.mass + stats.cargocap, stats.fuelcap, fsdfuel, fsdopt, fsdmul, fsdpower, stats.jumpbst);
+			stats._range_unladen = getJumpRange(stats.mass                 , stats.fuelcap, fsdfuel, fsdopt, fsdmul, fsdpower, stats.jumpbst);
 			
 			// derived Thruster stats
 			var boostcost = slot_hull.getEffectiveAttrValue('boostcost');
@@ -9160,6 +9168,7 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		updateUIStatsShd();
 		updateUIStatsArm();
 		updateUIStatsWpn();
+		current.fit.clearPrevStats();
 		
 		updateUIFitHash();
 		updateTranslations(document.getElementById('outfitting_stats_container'));
@@ -9298,27 +9307,22 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		var cargocap = current.fit.getStat('cargocap');
 		var scooprate = current.fit.getStat('scooprate');
 		var slot = current.fit.getSlot('component', CORE_ABBR_SLOT.FD);
-		var optmass = slot.getEffectiveAttrValue('fsdoptmass');
-		var maxfuel = slot.getEffectiveAttrValue('maxfuel');
-		var fuelmul = slot.getEffectiveAttrValue('fuelmul');
-		var fuelpower = slot.getEffectiveAttrValue('fuelpower');
+		var fsdopt = slot.getEffectiveAttrValue('fsdoptmass');
+		var fsdfuel = slot.getEffectiveAttrValue('maxfuel');
+		var fsdmul = slot.getEffectiveAttrValue('fuelmul');
+		var fsdpower = slot.getEffectiveAttrValue('fuelpower');
 		
 		// get or compute derived stats
-		// fuelres does NOT count toward mass for purposes of jump fuel cost or routing:
-		// { "timestamp":"2024-11-07T18:38:16Z", "event":"Loadout", "Ship":"adder", "ShipID":99, "ShipName":"", "ShipIdent":"TA-07A", "HullValue":15986, "ModulesValue":1260121, "HullHealth":1.000000, "UnladenMass":59.500000, "CargoCapacity":0, "MaxJumpRange":21.072477, "FuelCapacity":{ "Main":8.000000, "Reserve":0.360000 }, "Rebuy":47852, "Modules":[ { "Slot":"TinyHardpoint1", "Item":"hpt_shieldbooster_size0_class5", "On":false, "Priority":0, "Health":1.000000 }, { "Slot":"Armour", "Item":"adder_armour_grade1", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"PowerPlant", "Item":"int_powerplant_size2_class2", "On":true, "Priority":1, "Health":1.000000, "Value":5204 }, { "Slot":"MainEngines", "Item":"int_engine_size2_class2", "On":true, "Priority":0, "Health":1.000000, "Value":5502 }, { "Slot":"FrameShiftDrive", "Item":"int_hyperdrive_size3_class4", "On":true, "Priority":0, "Health":1.000000, "Value":5502 }, { "Slot":"LifeSupport", "Item":"int_lifesupport_size1_class2", "On":true, "Priority":0, "Health":1.000000, "Value":453 }, { "Slot":"PowerDistributor", "Item":"int_powerdistributor_size1_class2", "On":false, "Priority":0, "Health":1.000000, "Value":1270 }, { "Slot":"Radar", "Item":"int_sensors_size3_class2", "On":true, "Priority":0, "Health":1.000000, "Value":3556 }, { "Slot":"FuelTank", "Item":"int_fueltank_size3_class3", "On":true, "Priority":1, "Health":1.000000, "Value":6197 }, { "Slot":"Slot01_Size3", "Item":"int_hullreinforcement_size3_class1", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"Slot06_Size1", "Item":"int_supercruiseassist", "On":false, "Priority":2, "Health":1.000000, "Value":8003 }, { "Slot":"Slot07_Size1", "Item":"int_dockingcomputer_advanced", "On":false, "Priority":2, "Health":1.000000, "Value":11852 }, { "Slot":"PlanetaryApproachSuite", "Item":"int_planetapproachsuite_advanced", "On":true, "Priority":1, "Health":1.000000, "Value":438 }, { "Slot":"VesselVoice", "Item":"voicepack_verity", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"ShipCockpit", "Item":"adder_cockpit", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"CargoHatch", "Item":"modularcargobaydoor", "On":false, "Priority":2, "Health":1.000000 } ] }
-		// { "timestamp":"2024-11-07T18:42:27Z", "event":"FSDJump", "Taxi":false, "Multicrew":false, "StarSystem":"LTT 4379", "SystemAddress":972566825323, "StarPos":[46.81250,28.87500,14.78125], "SystemAllegiance":"", "SystemEconomy":"$economy_None;", "SystemEconomy_Localised":"None", "SystemSecondEconomy":"$economy_None;", "SystemSecondEconomy_Localised":"None", "SystemGovernment":"$government_None;", "SystemGovernment_Localised":"None", "SystemSecurity":"$GAlAXY_MAP_INFO_state_anarchy;", "SystemSecurity_Localised":"Anarchy", "Population":0, "Body":"LTT 4379", "BodyID":0, "BodyType":"Star", "JumpDist":18.967, "FuelUsed":1.487030, "FuelLevel":6.512970 }
-		// this ship could only jump 18.94 LY including fuelres mass, but successfully jumped 18.967 LY from Shinrarta Dezhra to LTT 4379 using 1.487 T of fuel
-		// nonetheless, the in-game "current" jump distance is wrongly calculated including fuelres, so we unfortunately replicate that bug here so folks don't complain about the mismatch
 		var curTtlFuel = min(max(parseNumText(document.forms.stats.elements.stats_cur_fuel.value) || 0, 0), fuelcap);
 		var curTtlCrgo = min(max(parseNumText(document.forms.stats.elements.stats_cur_cargo.value) || 0, 0), cargocap);
 		var ldnNavJmp = current.fit.getStat('_jump_laden');
 		var unlNavJmp = current.fit.getStat('_jump_unladen');
-		var curNavJmp = getJumpDistance(         mass + curTtlFuel + fuelres + curTtlCrgo, min(curTtlFuel, maxfuel), optmass, fuelmul, fuelpower, jumpbst);
+		var curNavJmp = getJumpDistance(mass + curTtlCrgo, curTtlFuel, fsdfuel, fsdopt, fsdmul, fsdpower, jumpbst);
 		var maxNavJmp = current.fit.getStat('_jump_max');
-		var curNavRng = getJumpRange(curTtlFuel, mass + curTtlFuel + fuelres + curTtlCrgo, min(curTtlFuel, maxfuel), optmass, fuelmul, fuelpower, jumpbst);
+		var curNavRng = getJumpRange(mass + curTtlCrgo, curTtlFuel, fsdfuel, fsdopt, fsdmul, fsdpower, jumpbst);
 		var ldnNavRng = current.fit.getStat('_range_laden');
 		var unlNavRng = current.fit.getStat('_range_unladen');
-		var scpNavJmp = min(curTtlFuel, maxfuel) / scooprate;
+		var scpNavJmp = min(fuelcap, fsdfuel) / scooprate;
 		var scpNavRng = fuelcap / scooprate;
 		
 		// update displays
@@ -12057,6 +12061,7 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		updateUIDetailsModifications();
 		updateUIStatsPanels();
 		updateUIStatsTotals();
+		current.fit.clearPrevStats();
 		
 		writeStoredOptions();
 		
