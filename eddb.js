@@ -2,7 +2,7 @@
 EDSY was created using assets and imagery from Elite Dangerous, with the permission of Frontier Developments plc, for non-commercial purposes.
 It is not endorsed by nor reflects the views or opinions of Frontier Developments and no employee of Frontier Developments was involved in the making of it.
 
-Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2024 taleden
+Except where noted otherwise, all design, markup and script code for EDSY is copyright (c) 2015-2025 taleden
 and is provided under a Creative Commons Attribution-NonCommercial 4.0 International License (http://creativecommons.org/licenses/by-nc/4.0/).
 
 The Elite Dangerous game logic and data in this file remains the property of Frontier Developments plc, and is used here as authorized by
@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 421039902,
-	edsy_versions_db : [419039901,419039901,421039901,421039901], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20250814,
+	version : 422019901,
+	edsy_versions_db : [419039901,419039901,422019901,422019901], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20250925,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1282,7 +1282,7 @@ var eddb = {
 			},
 			stock:{
 				hardpoint:[0,0,62160,62160,0,0,0,0,0,0],
-				utility  :[0,0,0,0,0,0,0,0],
+				utility  :[0,0,0,0,0,0],
 				component:[40131,41850,42850,43751,44550,45750,46550,47730],
 				military :[],
 				internal :[750,30750,0,0,0,550,550,0,0,0,3151,3152],
@@ -1293,6 +1293,42 @@ var eddb = {
 				40113 : { cost:271213730, mass:150.00, fdid:129034273, fdname:'PantherMkII_Armour_Grade3', eddbid:null }, // Military Grade Composite
 				40114 : { cost:632832030, mass:150.00, fdid:129034274, fdname:'PantherMkII_Armour_Mirrored', eddbid:null }, // Mirrored Surface Composite
 				40115 : { cost:710278610, mass:150.00, fdid:129034275, fdname:'PantherMkII_Armour_Reactive', eddbid:null }, // Reactive Surface Composite
+			},
+		},
+		38 : {
+			fdid:null, fdname:'LakonMiner', eddbid:null,
+			id:38, stype:'mi', name:'Type-11 Prospector', class:2, cost:66346710, retail:67861850,
+			topspd:270, bstspd:350, mnv:2, shields:275, armour:350, mass:320, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
+			minthrust:70.0, boostcost:27, boostint:5, pitch:22, yaw:22, roll:37.5, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:NaN, // TODO: boostcost, boostint, *acc, minpitch
+			heatcap:NaN, heatdismin:NaN, heatdismax:NaN, fuelcost:50, fuelreserve:0.60, hardness:58, masslock:NaN, crew:3, // TODO: heatdismin, masslock
+			slots:{
+				hardpoint:[3,2,2,2,1,1,1,1],
+				utility  :[0,0,0,0],
+				component:[1,6,5,5,3,7,3,5],
+				military :[],
+				internal :[6,6,6,5,5,5,5,4,3,2,1,1],
+			},
+			slotnames:{
+				hardpoint:['LargeMiningHardpoint1','MediumMiningHardpoint1','MediumMiningHardpoint2','MediumHardpoint3','SmallMiningHardpoint1','SmallHardpoint2','SmallHardpoint3','SmallHardpoint4'],
+				internal :['Slot01_Size6','Slot02_Size6','Slot03_Size6','Slot04_Size5','Slot05_Size5','LimpetController01','FighterBay01','Slot06_Size4','Slot07_Size3','Slot08_Size2','Slot09_Size1','Slot10_Size1'],
+			},
+			reserved:{
+				hardpoint :[{hmtl:1,hmtm:1},{hmtl:1,hmtm:1},{hmtl:1,hmtm:1},null,{hmtl:1,hmtm:1}],
+				internal  :[null,null,null,null,null,{iclc:1,idlc:1,iftlc:1,ihblc:1,imlc:1,iplc:1,inlc:1,irlc:1,islc:1},{ifh:1}],
+			},
+			stock:{
+				hardpoint:[0,0,0,0,0,0,62160,62160],
+				utility  :[0,0,0,0],
+				component:[40131,41650,42550,43551,44350,45750,46350,47530],
+				military :[],
+				internal :[550,550,30550,0,0,0,0,0,0,0,3151,3152],
+			},
+			module:{
+				40131 : { cost:        0, mass:  0.00, fdid:129036132, fdname:'LakonMiner_Armour_Grade1', eddbid:null }, // Lightweight Alloy
+				40122 : { cost: 27144740, mass: 32.00, fdid:129036133, fdname:'LakonMiner_Armour_Grade2', eddbid:null }, // Reinforced Alloy
+				40113 : { cost: 61075670, mass: 63.00, fdid:129036134, fdname:'LakonMiner_Armour_Grade3', eddbid:null }, // Military Grade Composite
+				40114 : { cost:144342150, mass: 63.00, fdid:129036135, fdname:'LakonMiner_Armour_Mirrored', eddbid:null }, // Mirrored Surface Composite
+				40115 : { cost:159950380, mass: 63.00, fdid:129036136, fdname:'LakonMiner_Armour_Reactive', eddbid:null }, // Reactive Surface Composite
 			},
 		},
 	}, // eddb.ship{}
@@ -2622,9 +2658,9 @@ var eddb = {
 		// TODO: renumber to 89xxx?
 		86226 : { mtype:'hex', cost:  261800,                name:'Remote Release Flak Launcher',          mount:'F', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:17.000, damage:34.000, distdraw:0.240, thmload:3.60, pierce: 60,                  shotspd: 550, rof:0.500, bstint:2.000,                       ammoclip: 1, ammomax:  32,            rldtime:2.0, brcdmg: 1.700, brcpct: 5,minbrc:100,maxbrc:100,             expwgt:100,                                               ammocost:125,              noblueprints:{'*':1},      fdid:128785626, fdname:'Hpt_FlakMortar_Fixed_Medium', eddbid:1620 },
 		86228 : { mtype:'hex', cost: 1259200, namekey:86226, name:'Remote Release Flak Launcher',          mount:'T', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:17.000, damage:34.000, distdraw:0.240, thmload:3.60, pierce: 60,                  shotspd: 550, rof:0.500, bstint:2.000,                       ammoclip: 1, ammomax:  32,            rldtime:2.0, brcdmg: 1.700, brcpct: 5,minbrc:100,maxbrc:100,             expwgt:100,                                               ammocost:125,              noblueprints:{'wpn_hc':1}, fdid:128793058, fdname:'Hpt_FlakMortar_Turret_Medium', eddbid:1621 },
-		87223 : { mtype:'hex', cost:  353760, namekey:87222, name:'Remote Release Flechette Launcher',     mount:'F', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps: 6.500, damage:13.000, distdraw:0.240, thmload:3.60, pierce: 80,                  shotspd: 550, rof:0.500, bstint:2.000,                       ammoclip: 1, ammomax:  72,            rldtime:2.0, brcdmg: 6.5  , brcpct:50,minbrc:100,maxbrc:100,             kinwgt:10.0  /.13000, expwgt: 3.0  /.13000,               ammocost: 56,              noblueprints:{'*':1},      fdid:128833996, fdname:'Hpt_FlechetteLauncher_Fixed_Medium', eddbid:1751 }, // human tech broker // TODO: get frag damage
-		87222 : { mtype:'hex', cost: 1279200,                name:'Remote Release Flechette Launcher',     mount:'T', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps: 6.500, damage:13.000, distdraw:0.240, thmload:3.60, pierce: 70,                  shotspd: 550, rof:0.500, bstint:2.000,                       ammoclip: 1, ammomax:  72,            rldtime:2.0, brcdmg: 6.5  , brcpct:50,minbrc:100,maxbrc:100,             kinwgt:10.0  /.13000, expwgt: 3.0  /.13000,               ammocost: 56,              noblueprints:{'*':1},      fdid:128833997, fdname:'Hpt_FlechetteLauncher_Turret_Medium', eddbid:1752 }, // human tech broker // verify cost // TODO: get frag damage
-		87220 : { mtype:'hex', cost:  480500,                name:'Enzyme Missile Rack',      mount:'F', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps: 2.5  , damage: 5.0  , distdraw:0.080, thmload:1.50, pierce: 60,                  shotspd: 750, rof:0.500, bstint:2.000,                       ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0    , brcpct: 0, minbrc:80,maxbrc:100,             expwgt: 4.0  /.05000, cauwgt: 1.0  /.05000,               ammocost:235, limit:'hex', noblueprints:{'dec_g':1,'dec_p':1,'dec_r':1,'dec_y':1}, fdid:128833995, fdname:'Hpt_CausticMissile_Fixed_Medium', eddbid:1750 }, // human tech broker // verify: cauwgt
+		87223 : { mtype:'hex', cost:  353760, namekey:87222, name:'Remote Release Flechette Launcher',     mount:'F', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps: 6.500, damage:13.000, distdraw:0.240, thmload:3.60, pierce: 80,                  shotspd: 550, rof:0.500, bstint:2.000,                       ammoclip: 1, ammomax:  72,            rldtime:2.0, brcdmg: 6.500, brcpct:50,minbrc:100,maxbrc:100,             kinwgt:10.000/.13000, expwgt: 3.000/.13000,               ammocost: 56,              noblueprints:{'*':1},      fdid:128833996, fdname:'Hpt_FlechetteLauncher_Fixed_Medium', eddbid:1751 }, // human tech broker // TODO: get frag damage
+		87222 : { mtype:'hex', cost: 1279200,                name:'Remote Release Flechette Launcher',     mount:'T', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps: 6.500, damage:13.000, distdraw:0.240, thmload:3.60, pierce: 70,                  shotspd: 550, rof:0.500, bstint:2.000,                       ammoclip: 1, ammomax:  72,            rldtime:2.0, brcdmg: 6.500, brcpct:50,minbrc:100,maxbrc:100,             kinwgt:10.000/.13000, expwgt: 3.000/.13000,               ammocost: 56,              noblueprints:{'*':1},      fdid:128833997, fdname:'Hpt_FlechetteLauncher_Turret_Medium', eddbid:1752 }, // human tech broker // verify cost // TODO: get frag damage
+		87220 : { mtype:'hex', cost:  480500,                name:'Enzyme Missile Rack',      mount:'F', missile:'D', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps: 2.5  , damage: 5.0  , distdraw:0.080, thmload:1.50, pierce: 60,                  shotspd: 750, rof:0.500, bstint:2.000,                       ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0    , brcpct: 0, minbrc:80,maxbrc:100,             expwgt: 4.0  /.05   , cauwgt: 1.0  /.05   ,               ammocost:235, limit:'hex', noblueprints:{'dec_g':1,'dec_p':1,'dec_r':1,'dec_y':1}, fdid:128833995, fdname:'Hpt_CausticMissile_Fixed_Medium', eddbid:1750 }, // human tech broker // verify: cauwgt
 		
 		86250 : {mtype:'hexxm',cost:  540900,                name:'AX Missile Rack',          mount:'F', missile:'D', class:2, rating:'E', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:35.000, damage:70.000, distdraw:0.140, thmload:2.40, pierce: 60,                  shotspd: 750, rof:0.500, bstint:2.000,                       ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0    , brcpct: 0, minbrc:80,maxbrc:100,             axewgt:43    /.70   , expwgt:27    /.70   ,               ammocost:235, limit:'hex',                            fdid:128788699, fdname:'Hpt_ATDumbfireMissile_Fixed_Medium', eddbid:1614 }, // TODO: exact damage
 		86262 : {mtype:'hexxm',cost: 2022700, namekey:86250, name:'AX Missile Rack',          mount:'T', missile:'D', class:2, rating:'F', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:28.5  , damage:57    , distdraw:0.080, thmload:1.50, pierce: 60, maximumrng:5000, shotspd: 750, rof:0.500, bstint:2.000,                       ammoclip: 8, ammomax:  64,            rldtime:5.0, brcdmg: 0    , brcpct: 0, minbrc:80,maxbrc:100,             axewgt:37    /.57   , expwgt:20    /.57   ,               ammocost:235, limit:'hex', noblueprints:{'*':1},      fdid:128788704, fdname:'Hpt_ATDumbfireMissile_Turret_Medium', eddbid:1615 }, // TODO: exact damage
@@ -2699,6 +2735,7 @@ var eddb = {
 		81242 : { mtype:'hmtl',cost:   32580, namekey:81140, name:'Mining Laser',                          mount:'T', class:2, rating:'D', mass: 2.00, integ:51, pwrdraw:0.75, boottime:0, dps: 4.000, damage: 4.000, distdraw:3.000, thmload:4.00, pierce: 18, maximumrng: 500,               rof:  1/0, bstint:0    ,                                                                          brcdmg: 0.600, brcpct:15, minbrc:10, maxbrc:20,             thmwgt:100,                                 dmgfall: 300, noblueprints:{'*':1}, noexpeffects:{'*':1}, fdid:128740820, fdname:'Hpt_MiningLaser_Turret_Medium', eddbid:1588 },
 		81144 : { mtype:'hmtl',cost:   33860,                name:'Mining Lance Beam Laser',      tag:'P', mount:'F', class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:0.70, boottime:0, dps: 8.000, damage: 8.000, distdraw:1.750, thmload:6.00, pierce: 18, maximumrng:2000,               rof:  1/0, bstint:0    ,                                                                          brcdmg: 1.200, brcpct:15, minbrc:10, maxbrc:20,             thmwgt:100,                                 dmgfall: 500, noblueprints:{'*':1}, noexpeffects:{'*':1}, fdid:128671340, fdname:'Hpt_MiningLaser_Fixed_Small_Advanced', eddbid:1479 }, // powerplay
 		
+		// TODO: renumber to 8?xxx?
 		81225 : { mtype:'hmtm',cost:  153110,                name:'Seismic Charge Launcher',               mount:'F', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:15.000, damage:15.000, duration:2.0, dmgmul:1.0, distdraw:0.240, thmload:3.60, pierce:35, maximumrng:1000, shotspd:350, rof:1.000, bstint:1.000, ammoclip: 1, ammomax:  72,          rldtime:1.0, brcdmg: 3.000, brcpct:20, minbrc: 0, maxbrc: 0,             expwgt:100,                                                             fdid:128915460, fdname:'Hpt_Mining_SeismChrgWarhd_Fixed_Medium', eddbid:1791 },
 		81226 : { mtype:'hmtm',cost:  445570, namekey:81225, name:'Seismic Charge Launcher',               mount:'T', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:15.000, damage:15.000, duration:2.0, dmgmul:1.0, distdraw:0.240, thmload:3.60, pierce:35, maximumrng:1000, shotspd:350, rof:1.000, bstint:1.000, ammoclip: 1, ammomax:  72,          rldtime:1.0, brcdmg: 3.000, brcpct:20, minbrc: 0, maxbrc: 0,             expwgt:100,                                                             fdid:128915461, fdname:'Hpt_Mining_SeismChrgWarhd_Turret_Medium', eddbid:1792 },
 		81127 : { mtype:'hmtm',cost:   12600,                name:'Sub-surface Displacement Missile',      mount:'F', class:1, rating:'B', mass: 2.00, integ:40, pwrdraw:0.42, boottime:0, dps: 2.500, damage: 5.000, distdraw:0.180, thmload:2.25, pierce: 25,                  shotspd: 550, rof:0.500, bstint:2.000,                       ammoclip: 1, ammomax:  32,            rldtime:2.0, brcdmg: 0.500, brcpct:10, minbrc:10, maxbrc:20,             expwgt:100,                                                             fdid:128915454, fdname:'Hpt_Mining_SubSurfDispMisle_Fixed_Small', eddbid:1785 },
@@ -2706,6 +2743,7 @@ var eddb = {
 		81227 : { mtype:'hmtm',cost:  122170, namekey:81127, name:'Sub-surface Displacement Missile',      mount:'F', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.01, boottime:0, dps: 2.500, damage: 5.000, distdraw:0.210, thmload:2.90, pierce: 25,                  shotspd: 550, rof:0.500, bstint:2.000,                       ammoclip: 1, ammomax:  96,            rldtime:2.0, brcdmg: 0.500, brcpct:10, minbrc:10, maxbrc:20,             expwgt:100,                                                             fdid:128915456, fdname:'Hpt_Mining_SubSurfDispMisle_Fixed_Medium', eddbid:1787 },
 		81228 : { mtype:'hmtm',cost:  381750, namekey:81127, name:'Sub-surface Displacement Missile',      mount:'T', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:0.93, boottime:0, dps: 2.500, damage: 5.000, distdraw:0.180, thmload:2.90, pierce: 25,                  shotspd: 550, rof:0.500, bstint:2.000,                       ammoclip: 1, ammomax:  96,            rldtime:2.0, brcdmg: 0.500, brcpct:10, minbrc:10, maxbrc:20,             expwgt:100,                                                             fdid:128915457, fdname:'Hpt_Mining_SubSurfDispMisle_Turret_Medium', eddbid:1788 },
 		81229 : { mtype:'hmtm',cost:  843170, namekey:81229, name:'Sub-surface Extraction Missile',        mount:'F', class:2, rating:'B', mass: 4.00, integ:50, pwrdraw:1.00, boottime:0, dps: 2.500, damage: 5.000, distdraw:0.210, thmload:2.90, pierce: 25,                  shotspd: 550, rof:0.500, bstint:2.000,                       ammoclip: 1, ammomax:  96,            rldtime:2.0, brcdmg: 0.500, brcpct:10, minbrc:10, maxbrc:20,             expwgt:100,                                                             fdid:129028577, fdname:'Hpt_Human_Extraction_Fixed_Medium' },
+		80339 : { mtype:'hmtm',cost:  149910, namekey:80339, name:'Mining Volley Repeater',                mount:'F', class:3, rating:'C', mass: 8.00, integ:61, pwrdraw:1.50, boottime:0, dps: 6.0  , damage: 0.3  , distdraw:0.30 , thmload:0.4 , pierce: 18, maximumrng: 500, shotspd: 167,rof:20.0  , bstint:0.05 ,                       ammoclip: 1, ammomax:   1,            rldtime:4.0, brcdmg: 0.03 , brcpct:10, minbrc:10, maxbrc:20,             thmwgt:100,                                 dmgfall: 500,               fdid:129036137, fdname:'Hpt_MiningToolV2_Fixed_Large' },
 		
 		82120 : { mtype:'hmr', cost:   32180,                name:'Missile Rack',                            mount:'F', missile:'D', class:1, rating:'B', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0, dps:25.000, damage:50.000, distdraw:0.240, thmload:3.60, pierce: 60,   shotspd: 750, rof:0.500, bstint:2.000,                       ammoclip: 8, ammomax:  16,            rldtime:5.0, brcdmg:20.000, brcpct:40,minbrc:100,maxbrc:100,             expwgt:100,                                               ammocost:500, noexpeffects:{'wpnx_drmu':1},               fdid:128666724, fdname:'Hpt_DumbfireMissileRack_Fixed_Small', eddbid:1326 },
 		82123 : { mtype:'hmr', cost:   72600,                name:'Seeker Missile Rack',                     mount:'F', missile:'S', class:1, rating:'B', mass: 2.00, integ:40, pwrdraw:0.60, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,   shotspd: 625, rof:0.333, bstint:3.000,                       ammoclip: 6, ammomax:   6,           rldtime:12.0, brcdmg:16.000, brcpct:40, minbrc: 0, maxbrc: 0,             expwgt:100,                                               ammocost:500, noexpeffects:{'wpnx_fsin':1,'wpnx_pemu':1}, fdid:128049492, fdname:'Hpt_BasicMissileRack_Fixed_Small', eddbid:878 },
@@ -2753,7 +2791,7 @@ var eddb = {
 		
 		84140 : { mtype:'hrg', cost:   51600,                name:'Rail Gun',                              mount:'F', class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:1.15, boottime:0, dps:37.048, damage:23.340, distdraw:2.690,thmload:12.00, pierce:100, maximumrng:3000, duration:1.0, rof:1.587, bstint:0.630,                       ammoclip: 1, ammomax:  80,            rldtime:1.0, brcdmg:22.173, brcpct:95, minbrc:40, maxbrc:80,             thmwgt:15.560/.23340, kinwgt: 7.780/.23340, dmgfall:1000, ammocost: 75, fdid:128049488, fdname:'Hpt_Railgun_Fixed_Small', eddbid:876 },
 		84220 : { mtype:'hrg', cost:  412800, namekey:84140, name:'Rail Gun',                              mount:'F', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.63, boottime:0, dps:50.036, damage:41.530, distdraw:5.110,thmload:20.00, pierce:100, maximumrng:3000, duration:1.2, rof:1.205, bstint:0.830,                       ammoclip: 1, ammomax:  80,            rldtime:1.0, brcdmg:39.454, brcpct:95, minbrc:40, maxbrc:80,             thmwgt:27.690/.41530, kinwgt:13.840/.41530, dmgfall:1000, ammocost: 75, fdid:128049489, fdname:'Hpt_Railgun_Fixed_Medium', eddbid:877 },
-		84224 : { mtype:'hrg', cost:  619200,                name:'Imperial Hammer Rail Gun',     tag:'P', mount:'F', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.63, boottime:0, dps:61.364, damage:15.000, distdraw:2.000,thmload:11.00, pierce:100, maximumrng:3000, duration:1.2, rof:4.091, bstint:0.400, bstrof: 6, bstsize:3, ammoclip: 3, ammomax: 240,            rldtime:1.2, brcdmg:14.250, brcpct:95, minbrc:40, maxbrc:80,             thmwgt:10    /.15   , kinwgt: 5    /.15   , dmgfall:1000, ammocost: 75, fdid:128671341, fdname:'Hpt_Railgun_Fixed_Medium_Burst', eddbid:1484 }, // powerplay // verify
+		84224 : { mtype:'hrg', cost:  619200,                name:'Imperial Hammer Rail Gun',     tag:'P', mount:'F', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.63, boottime:0, dps:61.364, damage:15.000, distdraw:2.000,thmload:11.00, pierce:100, maximumrng:3000, duration:1.2, rof:4.091, bstint:0.400, bstrof: 6, bstsize:3, ammoclip: 3, ammomax: 240,            rldtime:1.2, brcdmg:14.250, brcpct:95, minbrc:40, maxbrc:80,             thmwgt:10.000/.15000, kinwgt: 5.000/.15000, dmgfall:1000, ammocost: 75, fdid:128671341, fdname:'Hpt_Railgun_Fixed_Medium_Burst', eddbid:1484 }, // powerplay // verify
 		
 		85193 : { mtype:'htp', cost:   11200,                name:'Torpedo Pylon',            mount:'F', missile:'S', class:1, rating:'I', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0,dps:120.000,damage:120.000,                thmload:45.00, pierce:1e4,                  shotspd: 250, rof:1.000, bstint:1.000,                       ammoclip: 1,                          rldtime:5.0, brcdmg:60.000, brcpct:50,minbrc:100,maxbrc:100,             expwgt:100,                                             ammocost:15000, fdid:128049509, fdname:'Hpt_AdvancedTorpPylon_Fixed_Small', eddbid:882 },
 		85293 : { mtype:'htp', cost:   44800, namekey:85193, name:'Torpedo Pylon',            mount:'F', missile:'S', class:2, rating:'I', mass: 4.00, integ:51, pwrdraw:0.40, boottime:0,dps:120.000,damage:120.000,                thmload:50.00, pierce:1e4,                  shotspd: 250, rof:1.000, bstint:1.000,                       ammoclip: 2,                          rldtime:5.0, brcdmg:60.000, brcpct:50,minbrc:100,maxbrc:100,             expwgt:100,                                             ammocost:15000, fdid:128049510, fdname:'Hpt_AdvancedTorpPylon_Fixed_Medium', eddbid:883 },
@@ -3276,9 +3314,9 @@ var eddb = {
 		13560 : { mtype:'iex', cost:4000000, namekey:13360, name:'Experimental Weapon Stabiliser', class:5, rating:'F', mass: 20.00, pwrdraw:   0, powerlock:1, limit:'iex', unlimit:'hex', unlimitcount:2, fdid:129019261, fdname:'Int_ExpModuleStabiliser_Size5_Class3', eddbid:1837 }, //TODO: pwrdraw:3.00 advertised, but not actual
 		
 		
-		 7540 : { mtype:'ifh', cost: 575660,               name:'Fighter Hangar', class:5, rating:'D', mass:20.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1}, ammocost: 1030, limit:'ifh', fdid:128727930, fdname:'Int_FighterBay_Size5_Class1', eddbid:1562 },
-		 7640 : { mtype:'ifh', cost:1869350, namekey:7540, name:'Fighter Hangar', class:6, rating:'D', mass:40.00, integ: 80, pwrdraw:0.35, boottime:5, vslots:2, vcount: 8, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1}, ammocost: 1030, limit:'ifh', fdid:128727931, fdname:'Int_FighterBay_Size6_Class1', eddbid:1561 },
-		 7740 : { mtype:'ifh', cost:2369330, namekey:7540, name:'Fighter Hangar', class:7, rating:'D', mass:60.00, integ:120, pwrdraw:0.35, boottime:5, vslots:2, vcount:15, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1}, ammocost: 1030, limit:'ifh', fdid:128727932, fdname:'Int_FighterBay_Size7_Class1', eddbid:1560 },
+		 7540 : { mtype:'ifh', cost: 575660,               name:'Fighter Hangar', class:5, rating:'D', mass:20.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1}, ammocost: 1030, limit:'ifh', fdid:128727930, fdname:'Int_FighterBay_Size5_Class1', eddbid:1562 },
+		 7640 : { mtype:'ifh', cost:1869350, namekey:7540, name:'Fighter Hangar', class:6, rating:'D', mass:40.00, integ: 80, pwrdraw:0.35, boottime:5, vslots:2, vcount: 8, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1}, ammocost: 1030, limit:'ifh', fdid:128727931, fdname:'Int_FighterBay_Size6_Class1', eddbid:1561 },
+		 7740 : { mtype:'ifh', cost:2369330, namekey:7540, name:'Fighter Hangar', class:7, rating:'D', mass:60.00, integ:120, pwrdraw:0.35, boottime:5, vslots:2, vcount:15, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1}, ammocost: 1030, limit:'ifh', fdid:128727932, fdname:'Int_FighterBay_Size7_Class1', eddbid:1560 },
 		
 		
 		 3150 : { mtype:'ifa', cost: 4500, name:'Standard Docking Computer', class:1, rating:'E', integ:10, pwrdraw:0.39, boottime:3, limit:'ifa_dc', fdid:128049549, fdname:'Int_DockingComputer_Standard', eddbid:890 },

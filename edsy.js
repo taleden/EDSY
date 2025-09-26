@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [419039901,419039901,421039901,421039901]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20250811;
+	var VERSIONS = [419039901,419039901,422019901,422019901]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20250925;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -829,7 +829,9 @@ window.edsy = new (function() {
 		var expected = (1 - ((1 - baseres / 100) * (1 - extrares / 100))) * 100;
 		var penalized = lo + (expected - lo) / (100 - lo) * (hi - lo); // remap range [lo..100] to [lo..hi]
 		var actual = ((penalized >= 30) ? penalized : expected);
-		return (1 - ((1 - exemptres / 100) * (1 - actual / 100))) * 100;
+		var effective = (1 - ((1 - exemptres / 100) * (1 - actual / 100))) * 100;
+//TODO console.log("gEDR("+baseres+","+extrares+","+exemptres+","+bestres+") = "+effective);
+		return effective;
 	}; // getEffectiveDamageResistance()
 	
 	
@@ -980,7 +982,7 @@ window.edsy = new (function() {
 			if (module.class < slotsize && module.noundersize) return false; // mtype can normally be undersized, but this module cannot (i.e. SCO FSD)
 			if (module.reserved && !module.reserved[shipid]) return false; // module does not allow the ship (i.e. fighter hangars, luxury cabins, mk ii cargo racks)
 			var shipreserved = ((ship.reserved || EMPTY_OBJ)[this.slotgroup] || EMPTY_OBJ)[this.slotnum];
-			if (shipreserved && !shipreserved[module.mtype]) return false; // slot does not allow the module type (i.e. Beluga/Orca/Dolphin cabins-only slots, Panther cargo-only slots)
+			if (shipreserved && !shipreserved[module.mtype]) return false; // slot does not allow the module type (i.e. Beluga/Orca/Dolphin cabins-only slots, Panther cargo-only slots, Prospector mining/limpet/hangar slots)
 			// TODO: generalize this special case for mk ii cargo racks in non-'Cargo' slots
 			if (module.mtype == 'icr' && module.reserved && !(((ship.slotnames || EMPTY_OBJ)[this.slotgroup] || EMPTY_OBJ)[this.slotnum] || '').toUpperCase().startsWith('CARGO')) return false;
 			return true;
@@ -2822,10 +2824,12 @@ window.edsy = new (function() {
 				var thmres = slot_isg.getEffectiveAttrValue('thmres');
 				var expres = slot_isg.getEffectiveAttrValue('expres');
 				var caures = slot_isg.getEffectiveAttrValue('caures');
+				var effmulshd = (getMassCurveMultiplier(mass_hull, minmass, optmass, maxmass, minmul, optmul, maxmul) / 100);
+//TODO console.log(effmulshd);
 				stats._shields = (
 						shields
 						* getEffectiveShieldBoostMultiplier(stats.shieldbst)
-						* getMassCurveMultiplier(mass_hull, minmass, optmass, maxmass, minmul, optmul, maxmul) / 100
+						* effmulshd
 				) + stats.shieldrnf;
 				// shield resistance is stacking-penalized EXCLUDING the generator!
 				stats._skinres = getEffectiveDamageResistance(0, (1 - kinmod_usb) * 100, kinres);
@@ -2845,10 +2849,12 @@ window.edsy = new (function() {
 			var caures = slot.getEffectiveAttrValue('caures');
 			stats._armour = ((armour * (1 + stats.hullbst / 100)) + stats.hullrnf);
 			// armour resistance is stacking-penalized INCLUDING the bulkheads!
+console.log("armor kin/thm/exp/cau res");
 			stats._akinres = getEffectiveDamageResistance(kinres, (1 - kinmod_ihrp) * 100, 0, (1 - kinmin_ihrp) * 100);
 			stats._athmres = getEffectiveDamageResistance(thmres, (1 - thmmod_ihrp) * 100, 0, (1 - thmmin_ihrp) * 100);
 			stats._aexpres = getEffectiveDamageResistance(expres, (1 - expmod_ihrp) * 100, 0, (1 - expmin_ihrp) * 100);
 			stats._acaures = getEffectiveDamageResistance(caures, (1 - caumod_ihrp) * 100, 0, (1 - caumin_ihrp) * 100);
+console.log("---");
 			
 			// derived Weapon stats
 			var slot = this.getSlot('component', CORE_ABBR_SLOT.PD);
@@ -6627,10 +6633,16 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					LARGEHARDPOINT   : 'hardpoint',
 					MEDIUMHARDPOINT  : 'hardpoint',
 					SMALLHARDPOINT   : 'hardpoint',
+					HUGEMININGHARDPOINT   : 'hardpoint',
+					LARGEMININGHARDPOINT  : 'hardpoint',
+					MEDIUMMININGHARDPOINT : 'hardpoint',
+					SMALLMININGHARDPOINT  : 'hardpoint',
 					TINYHARDPOINT    : 'utility',
 					MILITARY         : 'military',
 					SLOT             : 'internal',
 					CARGO            : 'internal',
+					LIMPETCONTROLLER : 'internal',
+					FIGHTERBAY       : 'internal',
 				},
 				slotNum: {},
 				shipModule: {},
