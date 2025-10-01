@@ -12,7 +12,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 var eddb = {
 	version : 422019901,
 	edsy_versions_db : [419039901,419039901,422019901,422019901], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20250925,
+	edsy_lastmodified_db : 20250930,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1298,8 +1298,8 @@ var eddb = {
 		38 : {
 			fdid:null, fdname:'LakonMiner', eddbid:null,
 			id:38, stype:'mi', name:'Type-11 Prospector', class:2, cost:66346710, retail:67861850,
-			topspd:270, bstspd:350, mnv:2, shields:275, armour:350, mass:320, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
-			minthrust:70.0, boostcost:27, boostint:5, pitch:22, yaw:22, roll:37.5, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:NaN, // TODO: boostcost, boostint, *acc, minpitch
+			topspd:270, bstspd:365, mnv:2, shields:275, armour:350, mass:320, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
+			minthrust:70.5, boostcost:25, boostint:6, pitch:25, yaw:22, roll:37.5, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:22, // TODO: *acc, minpitch
 			heatcap:NaN, heatdismin:NaN, heatdismax:NaN, fuelcost:50, fuelreserve:0.60, hardness:58, masslock:NaN, crew:3, // TODO: heatdismin, masslock
 			slots:{
 				hardpoint:[3,2,2,2,1,1,1,1],
@@ -1902,6 +1902,8 @@ var eddb = {
 		cs_lr : { name:'Long Range', maxgrade:5, mass:[20,40,60,80,100], scanangle:[-10,-15,-20,-25,-30], typemis:[15,30,45,60,75], mats:[ {iro:1}, {iro:1, hyca:1}, {iro:1, hyca:1, unemda:1}, {ger:1, elar:1, deemda:1}, {nio:1, poca:1, abcoemda:1} ], fdname:'Sensor_LongRange' },
 		cs_wa : { name:'Wide Angle', maxgrade:5, pwrdraw:[10,20,30,40,50], scanangle:[40,80,120,160,200], typemis:[-4,-8,-12,-16,-20], mats:[ {mesc:1}, {mesc:1, ger:1}, {mesc:1, ger:1, clscda:1}, {meeq:1, nio:1, discda:1}, {meco:1, tin:1, clscfr:1} ], fdname:'Sensor_WideAngle' },
 		
+		icr_ecr : { name:'Expanded Cargo Rack', maxgrade:5, cargocap:[7,14,21,28,35], fdname:'CargoRack_IncreasedCapacity' },
+		
 		ifsdi_eca : { name:'Expanded Capture Arc', maxgrade:5, pwrdraw:[10,20,30,40,50], timerng:[-10,-15,-20,-25,-30], facinglim:[40,60,80,100,120], mats:[ {mesc:1}, {unenfi:1, meeq:1}, {grre:1, taenco:1, meco:1}, {meeq:1, stwaso:1, discda:1}, {meco:1, echytr:1, clscfr:1} ], fdname:'FSDinterdictor_Expanded' },
 		ifsdi_lr : { name:'Longer Range', maxgrade:5, mass:[10,15,20,25,30], pwrdraw:[10,20,30,40,50], timerng:[20,30,40,50,60], facinglim:[-10,-15,-20,-25,-30], mats:[ {unenfi:1}, {atdiwaec:1, taenco:1}, {anbuscda:1, anfste:1, opsyke:1}, {unscar:1, stwaso:1, atenar:1}, {clscda:1, echytr:1, adenca:1} ], fdname:'FSDinterdictor_LongRange' },
 		
@@ -2414,6 +2416,8 @@ var eddb = {
 			name:'Cargo Racks',
 			modulenames:{},
 			keyattrs:['cargocap'],
+			modifiable:['cargocap'],
+			blueprints:['icr_ecr'],
 		},
 		
 		iclc : {

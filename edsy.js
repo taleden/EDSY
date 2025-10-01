@@ -103,6 +103,10 @@ window.edsy = new (function() {
 		
 		  5510 : { name:"5E Anti-Corrosion Cargo (32T)",         modulehash:"H08d00",                                          tag:'C' }, // CG reward
 		  6510 : { name:"6E Anti-Corrosion Cargo (64T)",         modulehash:"H0AB00",                                          tag:'C' }, // CG reward
+		
+		  5500 : { name:"5E Cargo Rack, ECR",                    modulehash:"J08cG-ZG0010vW0",                                 tag:'C' }, // CG reward
+		  6500 : { name:"6E Cargo Rack, ECR",                    modulehash:"J0AAG-ZG0010vW0",                                 tag:'C' }, // CG reward
+		
 		111300 : { name:"1I DSS \"V1\", ERx2",                   modulehash:"J2jwG-fG001P000",                                 tag:'T' }, // human tech broker
 		303100 : { name:"3A Shield Gen, KR+TR",                  modulehash:"J7PcG-bG0044sPc8wPccupDgvcQ",                     tag:'C' }, // CG reward
 	};
@@ -2849,12 +2853,12 @@ window.edsy = new (function() {
 			var caures = slot.getEffectiveAttrValue('caures');
 			stats._armour = ((armour * (1 + stats.hullbst / 100)) + stats.hullrnf);
 			// armour resistance is stacking-penalized INCLUDING the bulkheads!
-console.log("armor kin/thm/exp/cau res");
+//TODO console.log("armor kin/thm/exp/cau res");
 			stats._akinres = getEffectiveDamageResistance(kinres, (1 - kinmod_ihrp) * 100, 0, (1 - kinmin_ihrp) * 100);
 			stats._athmres = getEffectiveDamageResistance(thmres, (1 - thmmod_ihrp) * 100, 0, (1 - thmmin_ihrp) * 100);
 			stats._aexpres = getEffectiveDamageResistance(expres, (1 - expmod_ihrp) * 100, 0, (1 - expmin_ihrp) * 100);
 			stats._acaures = getEffectiveDamageResistance(caures, (1 - caumod_ihrp) * 100, 0, (1 - caumin_ihrp) * 100);
-console.log("---");
+//TODO console.log("---");
 			
 			// derived Weapon stats
 			var slot = this.getSlot('component', CORE_ABBR_SLOT.PD);
