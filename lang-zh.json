@@ -557,7 +557,6 @@
   "attr-boottime-desc": "启用或重启所需时间(秒)",
   "attr-brcdmg": "破坏模组伤害",
   "attr-brcdmg-abbr": "模组伤",
-  "attr-brcdmg-desc": "当破坏船体时对目标模组的伤害",
   "attr-bstint": "开火间隔",
   "attr-bstint-abbr": "连发间隔",
   "attr-bstint-desc": "开火后到下次可开火时所需时间(秒)",
