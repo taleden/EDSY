@@ -11,7 +11,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 'use strict';
 window.edsy = new (function() {
 	var VERSIONS = [419039901,419039901,422019901,422019901]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20250925;
+	var LASTMODIFIED = 20250930;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -984,11 +984,12 @@ window.edsy = new (function() {
 			if (module.class > slotsize) return false; // module is too large for the slot
 			if (module.class < slotsize && this.slotgroup === 'component' && (this.slotnum == CORE_ABBR_SLOT.LS || this.slotnum == CORE_ABBR_SLOT.SS)) return false; // module is too small for the slot (i.e. life support, sensors)
 			if (module.class < slotsize && module.noundersize) return false; // mtype can normally be undersized, but this module cannot (i.e. SCO FSD)
-			if (module.reserved && !module.reserved[shipid]) return false; // module does not allow the ship (i.e. fighter hangars, luxury cabins, mk ii cargo racks)
+			if (module.reserved && !module.reserved[shipid]) return false; // module does not allow the ship (i.e. fighter hangars, luxury cabins, mk ii cargo racks, mk ii mining multi-limpet controllers)
 			var shipreserved = ((ship.reserved || EMPTY_OBJ)[this.slotgroup] || EMPTY_OBJ)[this.slotnum];
 			if (shipreserved && !shipreserved[module.mtype]) return false; // slot does not allow the module type (i.e. Beluga/Orca/Dolphin cabins-only slots, Panther cargo-only slots, Prospector mining/limpet/hangar slots)
-			// TODO: generalize this special case for mk ii cargo racks in non-'Cargo' slots
+			// TODO: generalize these special cases for mk ii cargo racks and mk ii mining multi-limpet controllers only in 'Cargo' or 'LimpetController' slots, respectively
 			if (module.mtype == 'icr' && module.reserved && !(((ship.slotnames || EMPTY_OBJ)[this.slotgroup] || EMPTY_OBJ)[this.slotnum] || '').toUpperCase().startsWith('CARGO')) return false;
+			if (module.mtype == 'imlc' && module.reserved && !(((ship.slotnames || EMPTY_OBJ)[this.slotgroup] || EMPTY_OBJ)[this.slotnum] || '').toUpperCase().startsWith('LIMPETCONTROLLER')) return false;
 			return true;
 		}, // isModuleIDAllowed()
 		
@@ -8127,9 +8128,10 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		
 		var slot = current.fit.getSlot(slotgroup, slotnum);
 		
-		// TODO: generalize this special case for mk ii cargo racks which can only go in 'Cargo' slots
-		for (var m = 0;  m < cache.mtypeModules['icr'].length;  m++) {
-			var modid = cache.mtypeModules['icr'][m];
+		// TODO: generalize this logic for mk ii cargo racks and mk ii mining multi-limpet controllers only in 'Cargo' and 'LimpetController' slots, respectively
+		var resmods = cache.mtypeModules['icr'].concat(cache.mtypeModules['imlc']);
+		for (var m = 0;  m < resmods.length;  m++) {
+			var modid = resmods[m];
 			var module = eddb.module[modid];
 			if (module.reserved) {
 				var namehashes = Object.keys(current.stored.moduleNamehashStored[modid] || EMPTY_OBJ);

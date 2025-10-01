@@ -1296,7 +1296,7 @@ var eddb = {
 			},
 		},
 		38 : {
-			fdid:null, fdname:'LakonMiner', eddbid:null,
+			fdid:129036130, fdname:'LakonMiner', eddbid:null,
 			id:38, stype:'mi', name:'Type-11 Prospector', class:2, cost:66346710, retail:67861850,
 			topspd:270, bstspd:365, mnv:2, shields:275, armour:350, mass:320, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:70.5, boostcost:25, boostint:6, pitch:25, yaw:22, roll:37.5, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:22, // TODO: *acc, minpitch
@@ -2518,7 +2518,7 @@ var eddb = {
 		imlc : {
 			name:'Multi Limpets',
 		//	modulenames:{},
-			modulenames:{'Operations Limpet Controller':'Operations', 'Xeno Limpet Controller':'Xeno', 'Mining Multi Limpet Controller':'Mining', 'Rescue Limpet Controller':'Rescue', 'Universal Multi Limpet Controller':'Universal'},
+			modulenames:{'Operations Limpet Controller':'Operations', 'Xeno Limpet Controller':'Xeno', 'Mining Multi-Limpet Controller':'Mining', 'Rescue Limpet Controller':'Rescue', 'Universal Multi-Limpet Controller':'Universal'},
 			keyattrs:['maxlimpet','lpactrng'],
 		},
 		
@@ -3507,16 +3507,17 @@ var eddb = {
 		 9541 : { mtype:'imahrp', cost:675000, namekey:9141, name:'Meta Alloy Hull Reinforcement Package', class:5, rating:'D', mass: 16, hullrnf:351, caures:3.0, fdid:128793126, fdname:'Int_MetaAlloyHullReinforcement_Size5_Class2', eddbid:1673 }, // human tech broker
 		
 		
-		19351 : { mtype:'imlc', cost:    15000, namekey:19331, name:'Mining Multi Limpet Controller',    class:3, rating:'E', mlctype:'M', mass: 12, integ: 45, pwrdraw:0.50, boottime:6, maxlimpet: 4, lpactrng: 3300, limpettime:1/0, maxspd:200, multispd:60,                                                                    limit:'imlc', fdid:129001921, fdname:'Int_MultiDroneControl_Mining_Size3_Class1', eddbid:1816 },
-		19331 : { mtype:'imlc', cost:    50000,                name:'Mining Multi Limpet Controller',    class:3, rating:'C', mlctype:'M', mass: 10, integ: 68, pwrdraw:0.35, boottime:6, maxlimpet: 4, lpactrng: 5000, limpettime:1/0, maxspd:200, multispd:60,                                                                    limit:'imlc', fdid:129001922, fdname:'Int_MultiDroneControl_Mining_Size3_Class3', eddbid:1817 },
+		19351 : { mtype:'imlc', cost:    15000, namekey:19331, name:'Mining Multi-Limpet Controller',    class:3, rating:'E', mlctype:'M', mass: 12, integ: 45, pwrdraw:0.50, boottime:6, maxlimpet: 4, lpactrng: 3300, limpettime:1/0, maxspd:200, multispd:60,                                                                    limit:'imlc', fdid:129001921, fdname:'Int_MultiDroneControl_Mining_Size3_Class1', eddbid:1816 },
+		19331 : { mtype:'imlc', cost:    50000,                name:'Mining Multi-Limpet Controller',    class:3, rating:'C', mlctype:'M', mass: 10, integ: 68, pwrdraw:0.35, boottime:6, maxlimpet: 4, lpactrng: 5000, limpettime:1/0, maxspd:200, multispd:60,                                                                    limit:'imlc', fdid:129001922, fdname:'Int_MultiDroneControl_Mining_Size3_Class3', eddbid:1817 },
+		19511 : { mtype:'imlc', cost:  2332800,                name:'Mk II Mining Multi-Limpet Controller',class:5,rating:'A',mlctype:'M', mass: 64, integ:105, pwrdraw:1.40, boottime:6, maxlimpet:14, lpactrng: 9100, limpettime:1/0, maxspd:200,multispd:176,                                                                    limit:'imlc', reserved:{38:1}, fdid:129036138, fdname:'Int_MultiDroneControl_MiningV2_Size5_Class5', eddbid:null }, // TODO: Mk II Limpet slot only
 		19332 : { mtype:'imlc', cost:    50000, namekey:19322, name:'Operations Limpet Controller',      class:3, rating:'C', mlctype:'O', mass: 10, integ: 68, pwrdraw:0.35, boottime:6, maxlimpet: 4, lpactrng: 2600, limpettime:510, maxspd:500, multispd:60,                              hacktime:16, mincargo:3, maxcargo: 8, limit:'imlc', fdid:129001923, fdname:'Int_MultiDroneControl_Operations_Size3_Class3', eddbid:1818 },
 		19322 : { mtype:'imlc', cost:    80000,                name:'Operations Limpet Controller',      class:3, rating:'B', mlctype:'O', mass: 15, integ: 80, pwrdraw:0.30, boottime:6, maxlimpet: 4, lpactrng: 3100, limpettime:420, maxspd:500, multispd:60,                              hacktime:22, mincargo:4, maxcargo: 9, limit:'imlc', fdid:129001924, fdname:'Int_MultiDroneControl_Operations_Size3_Class4', eddbid:1819 },
 		19343 : { mtype:'imlc', cost:    30000, namekey:19333, name:'Rescue Limpet Controller',          class:3, rating:'D', mlctype:'R', mass:  8, integ: 58, pwrdraw:0.40, boottime:6, maxlimpet: 4, lpactrng: 2100, limpettime:300, maxspd:500,              fuelxfer:1.0, lmprepcap: 60, hacktime:19, mincargo:2, maxcargo: 7, limit:'imlc', fdid:129001925, fdname:'Int_MultiDroneControl_Rescue_Size3_Class2', eddbid:1820 },
 		19333 : { mtype:'imlc', cost:    50000,                name:'Rescue Limpet Controller',          class:3, rating:'C', mlctype:'R', mass: 10, integ: 68, pwrdraw:0.35, boottime:6, maxlimpet: 4, lpactrng: 2600, limpettime:300, maxspd:500,              fuelxfer:1.0, lmprepcap: 60, hacktime:16, mincargo:3, maxcargo: 8, limit:'imlc', fdid:129001926, fdname:'Int_MultiDroneControl_Rescue_Size3_Class3', eddbid:1821 },
 		19334 : { mtype:'imlc', cost:    50000, namekey:19324, name:'Xeno Limpet Controller',            class:3, rating:'C', mlctype:'X', mass: 10, integ: 68, pwrdraw:0.35, boottime:6, maxlimpet: 4, lpactrng: 5000, limpettime:300, maxspd:200,                            lmprepcap: 70,                                       limit:'imlc', fdid:129001927, fdname:'Int_MultiDroneControl_Xeno_Size3_Class3', eddbid:1822 },
 		19324 : { mtype:'imlc', cost:    80000,                name:'Xeno Limpet Controller',            class:3, rating:'B', mlctype:'X', mass: 15, integ: 80, pwrdraw:0.30, boottime:6, maxlimpet: 4, lpactrng: 5000, limpettime:300, maxspd:200,                            lmprepcap: 70,                                       limit:'imlc', fdid:129001928, fdname:'Int_MultiDroneControl_Xeno_Size3_Class4', eddbid:1823 },
-		19730 : { mtype:'imlc', cost:  4000000, namekey:19710, name:'Universal Multi Limpet Controller', class:7, rating:'C', mlctype:'U', mass:125, integ:150, pwrdraw:0.80, boottime:6, maxlimpet: 8, lpactrng: 6500, limpettime:1/0, maxspd:500, multispd:60, fuelxfer:1.0, lmprepcap:310, hacktime: 8, mincargo:3, maxcargo: 8, limit:'imlc', fdid:129001929, fdname:'Int_MultiDroneControl_Universal_Size7_Class3', eddbid:1824 },
-		19710 : { mtype:'imlc', cost:  8000000,                name:'Universal Multi Limpet Controller', class:7, rating:'A', mlctype:'U', mass:140, integ:200, pwrdraw:1.10, boottime:6, maxlimpet: 8, lpactrng: 9100, limpettime:1/0, maxspd:500, multispd:60, fuelxfer:1.0, lmprepcap:310, hacktime: 5, mincargo:5, maxcargo:10, limit:'imlc', fdid:129001930, fdname:'Int_MultiDroneControl_Universal_Size7_Class5', eddbid:1825 },
+		19730 : { mtype:'imlc', cost:  4000000, namekey:19710, name:'Universal Multi-Limpet Controller', class:7, rating:'C', mlctype:'U', mass:125, integ:150, pwrdraw:0.80, boottime:6, maxlimpet: 8, lpactrng: 6500, limpettime:1/0, maxspd:500, multispd:60, fuelxfer:1.0, lmprepcap:310, hacktime: 8, mincargo:3, maxcargo: 8, limit:'imlc', fdid:129001929, fdname:'Int_MultiDroneControl_Universal_Size7_Class3', eddbid:1824 },
+		19710 : { mtype:'imlc', cost:  8000000,                name:'Universal Multi-Limpet Controller', class:7, rating:'A', mlctype:'U', mass:140, integ:200, pwrdraw:1.10, boottime:6, maxlimpet: 8, lpactrng: 9100, limpettime:1/0, maxspd:500, multispd:60, fuelxfer:1.0, lmprepcap:310, hacktime: 5, mincargo:5, maxcargo:10, limit:'imlc', fdid:129001930, fdname:'Int_MultiDroneControl_Universal_Size7_Class5', eddbid:1825 },
 		
 		
 		 8150 : { mtype:'imrp', cost:     5000, namekey:8140, name:'Module Reinforcement Package', class:1, rating:'E', mass: 2.00, integ: 77, dmgprot:30, noblueprints:{misc_agzr:1}, fdid:128737270, fdname:'Int_ModuleReinforcement_Size1_Class1', eddbid:1577 },
