@@ -2545,12 +2545,6 @@ var eddb = {
 			modulenames:{},
 		},
 		
-		ifh : {
-			name:'Fighter Hangars',
-			modulenames:{},
-			keyattrs:['vslots','vcount'],
-		},
-		
 		ifa : {
 			name:'Flight Assists',
 			modulenames:{},
@@ -2716,6 +2710,12 @@ var eddb = {
 			keyattrs:['_X_ scanrngmod','_X_ scanratemod','proberad'],
 			modifiable:['_X_ mass','_X_ boottime','_X_ pwrdraw','_X_ scanrngmod','_X_ scanangmod','_X_ scanratemod','proberad'],
 			blueprints:['_X_ iss_fs','_X_ iss_lr','_X_ iss_wa','iss_er'],
+		},
+		
+		ifh : {
+			name:'Vessel Hangars', // was Fighter Hangars
+			modulenames:{},
+			keyattrs:['vslots','vcount'],
 		},
 	}, // eddb.mtype{}
 	module : {
@@ -3435,9 +3435,18 @@ var eddb = {
 		13560 : { mtype:'iex', cost:4000000, namekey:13360, name:'Experimental Weapon Stabiliser', class:5, rating:'F', mass: 20.00, pwrdraw:   0, powerlock:1, limit:'iex', unlimit:'hex', unlimitcount:2, fdid:129019261, fdname:'Int_ExpModuleStabiliser_Size5_Class3', eddbid:1837 }, //TODO: pwrdraw:3.00 advertised, but not actual
 		
 		
-		 7540 : { mtype:'ifh', cost: 575660,               name:'Fighter Hangar', class:5, rating:'D', mass:20.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:128727930, fdname:'Int_FighterBay_Size5_Class1', eddbid:1562 },
-		 7640 : { mtype:'ifh', cost:1869350, namekey:7540, name:'Fighter Hangar', class:6, rating:'D', mass:40.00, integ: 80, pwrdraw:0.35, boottime:5, vslots:2, vcount: 8, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:128727931, fdname:'Int_FighterBay_Size6_Class1', eddbid:1561 },
-		 7740 : { mtype:'ifh', cost:2369330, namekey:7540, name:'Fighter Hangar', class:7, rating:'D', mass:60.00, integ:120, pwrdraw:0.35, boottime:5, vslots:2, vcount:15, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:128727932, fdname:'Int_FighterBay_Size7_Class1', eddbid:1560 },
+		 7540 : { mtype:'ifh', cost: 575650,               name:'Vessel Hangar',       class:5, rating:'D', mass:20.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:128727930, fdname:'Int_FighterBay_Size5_Class1',         eddbid:1562 },
+		 7541 : { mtype:'ifh', cost:      0, namekey:7540, name:'Vessel Hangar',       class:5, rating:'D', mass:20.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:129045963, fdname:'Int_FighterBay_Size5_Class1_Free'     },
+		 7542 : { mtype:'ifh', cost: 794390,               name:'Mk II Vessel Hangar', class:5, rating:'D', mass:10.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{                                                 63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:129045540, fdname:'Int_FighterBayMk2_Size5_Class1'       },
+		 7543 : { mtype:'ifh', cost:      0, namekey:7542, name:'Mk II Vessel Hangar', class:5, rating:'D', mass:10.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{                                                 63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:129045677, fdname:'Int_FighterBayMk2_Size5_Class1_Free'  },
+		 7640 : { mtype:'ifh', cost:1869340, namekey:7540, name:'Vessel Hangar',       class:6, rating:'D', mass:40.00, integ: 80, pwrdraw:0.35, boottime:5, vslots:2, vcount: 8, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:128727931, fdname:'Int_FighterBay_Size6_Class1',         eddbid:1561 },
+		 7641 : { mtype:'ifh', cost:      0, namekey:7540, name:'Vessel Hangar',       class:6, rating:'D', mass:40.00, integ: 80, pwrdraw:0.35, boottime:5, vslots:2, vcount: 8, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:129045964, fdname:'Int_FighterBay_Size6_Class1_Free'     },
+		 7642 : { mtype:'ifh', cost:2579690, namekey:7542, name:'Mk II Vessel Hangar', class:6, rating:'D', mass:20.00, integ: 80, pwrdraw:0.35, boottime:5, vslots:2, vcount: 8, reserved:{                                                 63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:129045539, fdname:'Int_FighterBayMk2_Size6_Class1'       },
+		 7643 : { mtype:'ifh', cost:      0, namekey:7542, name:'Mk II Vessel Hangar', class:6, rating:'D', mass:20.00, integ: 80, pwrdraw:0.35, boottime:5, vslots:2, vcount: 8, reserved:{                                                 63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:129045678, fdname:'Int_FighterBayMk2_Size6_Class1_Free'  },
+		 7740 : { mtype:'ifh', cost:2369320, namekey:7540, name:'Vessel Hangar',       class:7, rating:'D', mass:60.00, integ:120, pwrdraw:0.35, boottime:5, vslots:2, vcount:30, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:128727932, fdname:'Int_FighterBay_Size7_Class1',         eddbid:1560 },
+		 7741 : { mtype:'ifh', cost:      0, namekey:7540, name:'Vessel Hangar',       class:7, rating:'D', mass:60.00, integ:120, pwrdraw:0.35, boottime:5, vslots:2, vcount:30, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:129045965, fdname:'Int_FighterBay_Size7_Class1_Free'     },
+		 7742 : { mtype:'ifh', cost:3269660, namekey:7542, name:'Mk II Vessel Hangar', class:7, rating:'D', mass:30.00, integ:120, pwrdraw:0.35, boottime:5, vslots:2, vcount:30, reserved:{                                                 63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:129045541, fdname:'Int_FighterBayMk2_Size7_Class1'       },
+		 7743 : { mtype:'ifh', cost:      0, namekey:7542, name:'Mk II Vessel Hangar', class:7, rating:'D', mass:30.00, integ:120, pwrdraw:0.35, boottime:5, vslots:2, vcount:30, reserved:{                                                 63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:129045679, fdname:'Int_FighterBayMk2_Size7_Class1_Free'  },
 		
 		
 		 3150 : { mtype:'ifa', cost: 4500, name:'Standard Docking Computer', class:1, rating:'E', integ:10, pwrdraw:0.39, boottime:3, limit:'ifa_dc', fdid:128049549, fdname:'Int_DockingComputer_Standard', eddbid:890 },
