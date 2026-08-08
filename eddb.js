@@ -1120,7 +1120,7 @@ var eddb = {
 		},
 		15 : {
 			fdid:128666762, fdname:'Python_NX',
-			id:15, stype:'mp', name:'Python Mk II', class:2, cost:66161981, retail:67527361,
+			id:15, stype:'mp', name:'Python Mk II', class:2, cost:64731711, retail:67527361,
 			topspd:256, bstspd:345, mnv:4, shields:335, armour:280, mass:450, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:85.75, boostcost:20, boostint:5, pitch:37, yaw:12.5, roll:91, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:30, // TODO: *acc
 			heatcap:260, heatdismin:NaN, heatdismax:52.00, fuelcost:50, fuelreserve:0.83, hardness:70, masslock:17, crew:2, // TODO: heatdismin
@@ -1136,7 +1136,7 @@ var eddb = {
 				utility  :[0,0,0,0,0,0],
 				component:[40131,41650,42650,43531,44450,45650,46550,47430],
 				military :[],
-				internal :[30650,350,0,0,150,3152],
+				internal :[30650,350,0,0,3152,3151],
 			},
 			module:{
 				40131 : { cost:        0, mass:    0, fdid:129030466, fdname:'Python_NX_Armour_Grade1' }, // Lightweight Alloy
