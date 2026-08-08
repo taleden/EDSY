@@ -1300,7 +1300,7 @@ var eddb = {
 			id:38, stype:'mi', name:'Type-11 Prospector', class:2, cost:66346710, retail:67861850,
 			topspd:270, bstspd:365, mnv:2, shields:275, armour:350, mass:320, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:70.5, boostcost:25, boostint:6, pitch:25, yaw:22, roll:37.5, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:22, // TODO: *acc
-			heatcap:300, heatdismin:NaN, heatdismax:52.15, fuelcost:50, fuelreserve:0.60, hardness:58, masslock:NaN, crew:3, // TODO: heatdismin,masslock
+			heatcap:300, heatdismin:NaN, heatdismax:52.15, fuelcost:50, fuelreserve:0.60, hardness:58, masslock:15, crew:3, // TODO: heatdismin
 			slots:{
 				hardpoint:[3,2,2,2,1,1,1,1],
 				utility  :[0,0,0,0],
@@ -1403,7 +1403,7 @@ var eddb = {
 			id:54, stype:'pa', name:'Lynx Highliner', class:2, cost:67992080, retail:69289470,
 			topspd:285, bstspd:350, mnv:3, shields:200, armour:350, mass:260, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:73.75, boostcost:14, boostint:5, pitch:26, yaw:19, roll:60, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:23, // TODO: *acc
-			heatcap:NaN, heatdismin:NaN, heatdismax:NaN, fuelcost:50, fuelreserve:0.75, hardness:55, masslock:NaN, crew:2, // TODO: heatcap,heatdismin,heatdismax,masslock
+			heatcap:NaN, heatdismin:NaN, heatdismax:NaN, fuelcost:50, fuelreserve:0.75, hardness:55, masslock:16, crew:2, // TODO: heatcap,heatdismin,heatdismax,masslock
 			slots:{
 				hardpoint:[3,2,2,2,2],
 				utility  :[0,0,0,0],
