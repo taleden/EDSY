@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 423039901,
-	edsy_versions_db : [419039901,423009901,423039901,423039901], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20260428,
+	version : 424009901,
+	edsy_versions_db : [419039901,423009901,424009901,424009901], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20260810,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
