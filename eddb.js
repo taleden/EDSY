@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 423039901,
-	edsy_versions_db : [419039901,423009901,423039901,423039901], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20260428,
+	version : 424009901,
+	edsy_versions_db : [419039901,423009901,424009901,424009901], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20260810,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -685,7 +685,7 @@ var eddb = {
 			id:10, stype:'co', name:'Alliance Crusader', class:2, cost:22092000, retail:22866340,
 			topspd:180, bstspd:300, mnv:3, shields:200, armour:300, mass:500, fwdacc:29.78, revacc:24.78, latacc:18.96,
 			minthrust:61.11, boostcost:19, boostint:6, pitch:32, yaw:16, roll:80, pitchacc:150, yawacc:50, rollacc:150, minpitch:30, // verify minthrust
-			heatcap:316, heatdismin:2.53, heatdismax:45.23, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:13, crew:3, // verify hardness,masslock
+			heatcap:316, heatdismin:2.53, heatdismax:45.23, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:13, crew:4, // verify hardness,masslock
 			slots:{
 				hardpoint:[3,2,2,1,1,1],
 				utility  :[0,0,0,0],
@@ -941,7 +941,7 @@ var eddb = {
 			id:34, stype:'fr', name:'Type-9 Heavy', class:3, cost:72108220, retail:76555840,
 			topspd:130, bstspd:200, mnv:0, shields:240, armour:480, mass:850, fwdacc:20.03, revacc:10.11, latacc:10.03,
 			minthrust:30.769, boostcost:19, boostint:6, pitch:20, yaw:8, roll:20, pitchacc:100, yawacc:50, rollacc:80, minpitch:15,
-			heatcap:289, heatdismin:3.10, heatdismax:48.35, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:16, crew:3,
+			heatcap:289, heatdismin:3.10, heatdismax:48.35, fuelcost:50, fuelreserve:0.77, hardness:65, masslock:16, crew:4,
 			slots:{
 				hardpoint:[2,2,2,1,1],
 				utility  :[0,0,0,0],
@@ -972,7 +972,7 @@ var eddb = {
 			id:52, stype:'pa', name:'Beluga Liner', class:3, cost:79686090, retail:84532760,
 			topspd:200, bstspd:280, mnv:2, shields:280, armour:280, mass:950, fwdacc:20.01, revacc:17.12, latacc:15.03,
 			minthrust:55.0, boostcost:19, boostint:6, pitch:25, yaw:17, roll:60, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
-			heatcap:283, heatdismin:2.60, heatdismax:50.85, fuelcost:50, fuelreserve:0.81, hardness:60, masslock:18, crew:3, // verify masslock
+			heatcap:283, heatdismin:2.60, heatdismax:50.85, fuelcost:50, fuelreserve:0.81, hardness:60, masslock:18, crew:4, // verify masslock
 			slots:{
 				hardpoint:[2,2,2,2,2],
 				utility  :[0,0,0,0,0,0],
@@ -1003,7 +1003,7 @@ var eddb = {
 			id:36, stype:'fr', name:'Type-10 Defender', class:3, cost:121486140, retail:124755340,
 			topspd:180, bstspd:220, mnv:0, shields:320, armour:580, mass:1200, fwdacc:17.96, revacc:10.04, latacc:10.09,
 			minthrust:83.333, boostcost:19, boostint:6, pitch:22, yaw:8, roll:40, pitchacc:100, yawacc:35, rollacc:80, minpitch:18,
-			heatcap:335, heatdismin:3.16, heatdismax:67.15, fuelcost:50, fuelreserve:0.77, hardness:75, masslock:26, crew:3,
+			heatcap:335, heatdismin:3.16, heatdismax:67.15, fuelcost:50, fuelreserve:0.77, hardness:75, masslock:26, crew:4,
 			slots:{
 				hardpoint:[3,3,3,3,2,2,2,1,1],
 				utility  :[0,0,0,0,0,0,0,0],
@@ -1034,7 +1034,7 @@ var eddb = {
 			id:6, stype:'sh', name:'Anaconda', class:3, cost:142447820, retail:146969450,
 			topspd:180, bstspd:240, mnv:1, shields:350, armour:525, mass:400, fwdacc:19.85, revacc:10.03, latacc:10.05,
 			minthrust:44.444, boostcost:27, boostint:6, pitch:25, yaw:10, roll:60, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
-			heatcap:334, heatdismin:3.16, heatdismax:67.15, fuelcost:50, fuelreserve:1.07, hardness:65, masslock:23, crew:3,
+			heatcap:334, heatdismin:3.16, heatdismax:67.15, fuelcost:50, fuelreserve:1.07, hardness:65, masslock:23, crew:4,
 			slots:{
 				hardpoint:[4,3,3,3,2,2,1,1],
 				utility  :[0,0,0,0,0,0,0,0],
@@ -1066,7 +1066,7 @@ var eddb = {
 			faction:'Federation', rank:12,
 			topspd:200, bstspd:260, mnv:2, shields:555, armour:370, mass:900, fwdacc:19.87, revacc:10.08, latacc:9.98,
 			minthrust:50.0, boostcost:27, boostint:6, pitch:28, yaw:8, roll:75, pitchacc:100, yawacc:50, rollacc:80, minpitch:22,
-			heatcap:333, heatdismin:3.28, heatdismax:70.33, fuelcost:50, fuelreserve:1.13, hardness:70, masslock:24, crew:3, // verify masslock
+			heatcap:333, heatdismin:3.28, heatdismax:70.33, fuelcost:50, fuelreserve:1.13, hardness:70, masslock:24, crew:4, // verify masslock
 			slots:{
 				hardpoint:[4,4,3,2,2,1,1],
 				utility  :[0,0,0,0,0,0,0,0],
@@ -1095,7 +1095,7 @@ var eddb = {
 			faction:'Empire', rank:12,
 			topspd:200, bstspd:320, mnv:0, shields:600, armour:400, mass:1100, fwdacc:29.37, revacc:10.04, latacc:6.06,
 			minthrust:80.0, boostcost:23, boostint:6, pitch:18, yaw:8, roll:45, pitchacc:100, yawacc:50, rollacc:80, minpitch:14,
-			heatcap:327, heatdismin:3.27, heatdismax:72.58, fuelcost:50, fuelreserve:1.16, hardness:70, masslock:26, crew:3,
+			heatcap:327, heatdismin:3.27, heatdismax:72.58, fuelcost:50, fuelreserve:1.16, hardness:70, masslock:26, crew:4,
 			slots:{
 				hardpoint:[4,3,3,2,2,2,2],
 				utility  :[0,0,0,0,0,0,0,0],
@@ -1120,7 +1120,7 @@ var eddb = {
 		},
 		15 : {
 			fdid:128666762, fdname:'Python_NX',
-			id:15, stype:'mp', name:'Python Mk II', class:2, cost:66161981, retail:67527361,
+			id:15, stype:'mp', name:'Python Mk II', class:2, cost:64731711, retail:67527361,
 			topspd:256, bstspd:345, mnv:4, shields:335, armour:280, mass:450, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:85.75, boostcost:20, boostint:5, pitch:37, yaw:12.5, roll:91, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:30, // TODO: *acc
 			heatcap:260, heatdismin:2.68, heatdismax:52.00, fuelcost:50, fuelreserve:0.83, hardness:70, masslock:17, crew:2,
@@ -1136,7 +1136,7 @@ var eddb = {
 				utility  :[0,0,0,0,0,0],
 				component:[40131,41650,42650,43531,44450,45650,46550,47430],
 				military :[],
-				internal :[30650,350,0,0,150,3152],
+				internal :[30650,350,0,0,3152,3151],
 			},
 			module:{
 				40131 : { cost:        0, mass:    0, fdid:129030466, fdname:'Python_NX_Armour_Grade1' }, // Lightweight Alloy
@@ -2545,12 +2545,6 @@ var eddb = {
 			modulenames:{},
 		},
 		
-		ifh : {
-			name:'Fighter Hangars',
-			modulenames:{},
-			keyattrs:['vslots','vcount'],
-		},
-		
 		ifa : {
 			name:'Flight Assists',
 			modulenames:{},
@@ -2717,6 +2711,12 @@ var eddb = {
 			modifiable:['_X_ mass','_X_ boottime','_X_ pwrdraw','_X_ scanrngmod','_X_ scanangmod','_X_ scanratemod','proberad'],
 			blueprints:['_X_ iss_fs','_X_ iss_lr','_X_ iss_wa','iss_er'],
 		},
+		
+		ifh : {
+			name:'Vessel Hangars', // was Fighter Hangars
+			modulenames:{},
+			keyattrs:['vslots','vcount'],
+		},
 	}, // eddb.mtype{}
 	module : {
 		
@@ -2735,7 +2735,7 @@ var eddb = {
 		60332 : { mtype:'hel', cost:19399600, namekey:60150, name:'Beam Laser',                            mount:'T', class:3, rating:'D', mass: 8.00, integ:64, pwrdraw:1.51, boottime:0, dps:14.360, damage:14.360, distdraw:3.510, thmload:5.11, pierce: 50, maximumrng:3000,               rof:  1/0, bstint:0    ,                                                                          brcdmg:11.488, brcpct:80, minbrc:40, maxbrc:80,             thmwgt:100,                                 dmgfall: 600,               fdid:128049437, fdname:'Hpt_BeamLaser_Turret_Large', eddbid:849 },
 		60410 : { mtype:'hel', cost: 2396160, namekey:60150, name:'Beam Laser',                            mount:'F', class:4, rating:'A', mass:16.00, integ:80, pwrdraw:2.61, boottime:0, dps:41.380, damage:41.380, distdraw:8.190, thmload:9.93, pierce: 60, maximumrng:3000,               rof:  1/0, bstint:0    ,                                                                          brcdmg:33.104, brcpct:80, minbrc:40, maxbrc:80,             thmwgt:100,                                 dmgfall: 600,               fdid:128049431, fdname:'Hpt_BeamLaser_Fixed_Huge', eddbid:1540 },
 		60411 : { mtype:'hel', cost: 8746160, namekey:60150, name:'Beam Laser',                            mount:'G', class:4, rating:'A', mass:16.00, integ:80, pwrdraw:2.57, boottime:0, dps:32.680, damage:32.680, distdraw:8.990,thmload:10.62, pierce: 60, maximumrng:3000,               rof:  1/0, bstint:0    ,                                                                          brcdmg:26.144, brcpct:80, minbrc:40, maxbrc:80,             thmwgt:100,                                 dmgfall: 600,               fdid:128681994, fdname:'Hpt_BeamLaser_Gimbal_Huge', eddbid:1544 },
-		60154 : { mtype:'hel', cost:   56150,                name:'Retributor Beam Laser',        tag:'P', mount:'F', class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.62, boottime:0, dps: 4.910, damage: 4.910, distdraw:2.520, thmload:2.70, pierce: 18, maximumrng:3000,               rof:  1/0, bstint:0    ,                                                                          brcdmg: 3.928, brcpct:80, minbrc:40, maxbrc:80,             thmwgt:100,                                 dmgfall: 600,               fdid:128671346, fdname:'Hpt_BeamLaser_Fixed_Small_Heat', eddbid:1476 }, // powerplay // verify
+		60154 : { mtype:'hel', cost:   56150,                name:'Retributor Beam Laser',        tag:'P', mount:'F', class:1, rating:'E', mass: 2.00, integ:40, pwrdraw:0.62, boottime:0, dps: 4.910, damage: 4.910, distdraw:2.520, thmload:2.70, pierce: 18, maximumrng:3000,               rof:  1/0, bstint:0    ,                                                                          brcdmg: 3.928, brcpct:80, minbrc:40, maxbrc:80,             thmwgt:100,                                 dmgfall: 800,               fdid:128671346, fdname:'Hpt_BeamLaser_Fixed_Small_Heat', eddbid:1476 }, // powerplay
 		
 		61160 : { mtype:'hul', cost:    4400,                name:'Burst Laser',                           mount:'F', class:1, rating:'F', mass: 2.00, integ:40, pwrdraw:0.65, boottime:0, dps: 8.147, damage: 1.720, distdraw:0.250, thmload:0.38, pierce: 20, maximumrng:3000,               rof:4.737, bstint:0.500, bstrof:15, bstsize:3,                                                    brcdmg: 1.462, brcpct:85, minbrc:40, maxbrc:80,             thmwgt:100,                                 dmgfall: 500,               fdid:128049400, fdname:'Hpt_PulseLaserBurst_Fixed_Small', eddbid:832 },
 		61171 : { mtype:'hul', cost:    8600, namekey:61160, name:'Burst Laser',                           mount:'G', class:1, rating:'G', mass: 2.00, integ:40, pwrdraw:0.64, boottime:0, dps: 6.448, damage: 1.220, distdraw:0.240, thmload:0.34, pierce: 20, maximumrng:3000,               rof:5.285, bstint:0.450, bstrof:17, bstsize:3,                                                    brcdmg: 1.037, brcpct:85, minbrc:40, maxbrc:80,             thmwgt:100,                                 dmgfall: 500,               fdid:128049404, fdname:'Hpt_PulseLaserBurst_Gimbal_Small', eddbid:835 },
@@ -2843,6 +2843,7 @@ var eddb = {
 		81240 : { mtype:'hmtl',cost:   22580, namekey:81140, name:'Mining Laser',                          mount:'F', class:2, rating:'D', mass: 2.00, integ:51, pwrdraw:0.75, boottime:0, dps: 4.000, damage: 4.000, distdraw:3.000, thmload:4.00, pierce: 18, maximumrng: 500,               rof:  1/0, bstint:0    ,                                                                          brcdmg: 0.600, brcpct:15, minbrc:10, maxbrc:20,             thmwgt:100,                                 dmgfall: 300, noblueprints:{'*':1}, noexpeffects:{'*':1}, fdid:128049526, fdname:'Hpt_MiningLaser_Fixed_Medium', eddbid:889 },
 		81242 : { mtype:'hmtl',cost:   32580, namekey:81140, name:'Mining Laser',                          mount:'T', class:2, rating:'D', mass: 2.00, integ:51, pwrdraw:0.75, boottime:0, dps: 4.000, damage: 4.000, distdraw:3.000, thmload:4.00, pierce: 18, maximumrng: 500,               rof:  1/0, bstint:0    ,                                                                          brcdmg: 0.600, brcpct:15, minbrc:10, maxbrc:20,             thmwgt:100,                                 dmgfall: 300, noblueprints:{'*':1}, noexpeffects:{'*':1}, fdid:128740820, fdname:'Hpt_MiningLaser_Turret_Medium', eddbid:1588 },
 		81144 : { mtype:'hmtl',cost:   33860,                name:'Mining Lance Beam Laser',      tag:'P', mount:'F', class:1, rating:'D', mass: 2.00, integ:40, pwrdraw:0.70, boottime:0, dps: 8.000, damage: 8.000, distdraw:1.750, thmload:6.00, pierce: 18, maximumrng:2000,               rof:  1/0, bstint:0    ,                                                                          brcdmg: 1.200, brcpct:15, minbrc:10, maxbrc:20,             thmwgt:100,                                 dmgfall: 500, noblueprints:{'*':1}, noexpeffects:{'*':1}, fdid:128671340, fdname:'Hpt_MiningLaser_Fixed_Small_Advanced', eddbid:1479 }, // powerplay
+		80339 : { mtype:'hmtl',cost:  149910, namekey:80339, name:'Mining Volley Repeater',                mount:'F', class:3, rating:'C', mass: 8.00, integ:61, pwrdraw:1.50, boottime:0, dps: 6.0  , damage: 0.3  , distdraw:0.30 , thmload:0.4 , pierce: 18, maximumrng: 500, shotspd: 167,rof:20.0  , bstint:0.05 ,                                                             rldtime:0.0, brcdmg: 0.03 , brcpct:10, minbrc:10, maxbrc:20, jitter:2.19,thmwgt:100,                                 dmgfall: 500, noblueprints:{'*':1}, noexpeffects:{'*':1}, reserved:{38:1}, fdid:129036137, fdname:'Hpt_MiningToolV2_Fixed_Large' }, // rldtime:4.0 advertised, but not actual // TODO: locked to ship or any Mk II Mining slot?
 		
 		// TODO: renumber to 8?xxx?
 		81225 : { mtype:'hmtm',cost:  153110,                name:'Seismic Charge Launcher',               mount:'F', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.20, boottime:0, dps:15.000, damage:15.000, duration:2.0, dmgmul:1.0, distdraw:0.240, thmload:3.60, pierce:35, maximumrng:1000, shotspd:350, rof:1.000, bstint:1.000, ammoclip: 1, ammomax:  72,          rldtime:1.0, brcdmg: 3.000, brcpct:20, minbrc: 0, maxbrc: 0,             expwgt:100,                                                             fdid:128915460, fdname:'Hpt_Mining_SeismChrgWarhd_Fixed_Medium', eddbid:1791 },
@@ -2852,7 +2853,6 @@ var eddb = {
 		81227 : { mtype:'hmtm',cost:  122170, namekey:81127, name:'Sub-surface Displacement Missile',      mount:'F', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:1.01, boottime:0, dps: 2.500, damage: 5.000, distdraw:0.210, thmload:2.90, pierce: 25,                  shotspd: 550, rof:0.500, bstint:2.000,                       ammoclip: 1, ammomax:  96,            rldtime:2.0, brcdmg: 0.500, brcpct:10, minbrc:10, maxbrc:20,             expwgt:100,                                                             fdid:128915456, fdname:'Hpt_Mining_SubSurfDispMisle_Fixed_Medium', eddbid:1787 },
 		81228 : { mtype:'hmtm',cost:  381750, namekey:81127, name:'Sub-surface Displacement Missile',      mount:'T', class:2, rating:'B', mass: 4.00, integ:51, pwrdraw:0.93, boottime:0, dps: 2.500, damage: 5.000, distdraw:0.180, thmload:2.90, pierce: 25,                  shotspd: 550, rof:0.500, bstint:2.000,                       ammoclip: 1, ammomax:  96,            rldtime:2.0, brcdmg: 0.500, brcpct:10, minbrc:10, maxbrc:20,             expwgt:100,                                                             fdid:128915457, fdname:'Hpt_Mining_SubSurfDispMisle_Turret_Medium', eddbid:1788 },
 		81229 : { mtype:'hmtm',cost:  843170, namekey:81229, name:'Sub-surface Extraction Missile',        mount:'F', class:2, rating:'B', mass: 4.00, integ:50, pwrdraw:1.00, boottime:0, dps: 2.500, damage: 5.000, distdraw:0.210, thmload:2.90, pierce: 25,                  shotspd: 550, rof:0.500, bstint:2.000,                       ammoclip: 1, ammomax:  96,            rldtime:2.0, brcdmg: 0.500, brcpct:10, minbrc:10, maxbrc:20,             expwgt:100,                                                             fdid:129028577, fdname:'Hpt_Human_Extraction_Fixed_Medium' },
-		80339 : { mtype:'hmtm',cost:  149910, namekey:80339, name:'Mining Volley Repeater',                mount:'F', class:3, rating:'C', mass: 8.00, integ:61, pwrdraw:1.50, boottime:0, dps: 6.0  , damage: 0.3  , distdraw:0.30 , thmload:0.4 , pierce: 18, maximumrng: 500, shotspd: 167,rof:20.0  , bstint:0.05 ,                       ammoclip: 1, ammomax:   1,            rldtime:4.0, brcdmg: 0.03 , brcpct:10, minbrc:10, maxbrc:20,             thmwgt:100,                                 dmgfall: 500,               fdid:129036137, fdname:'Hpt_MiningToolV2_Fixed_Large' },
 		
 		82120 : { mtype:'hmr', cost:   32180,                name:'Missile Rack',                            mount:'F', missile:'D', class:1, rating:'B', mass: 2.00, integ:40, pwrdraw:0.40, boottime:0, dps:25.000, damage:50.000, distdraw:0.240, thmload:3.60, pierce: 60,   shotspd: 750, rof:0.500, bstint:2.000,                       ammoclip: 8, ammomax:  16,            rldtime:5.0, brcdmg:20.000, brcpct:40,minbrc:100,maxbrc:100,             expwgt:100,                                               ammocost:500, noexpeffects:{'wpnx_drmu':1},               fdid:128666724, fdname:'Hpt_DumbfireMissileRack_Fixed_Small', eddbid:1326 },
 		82123 : { mtype:'hmr', cost:   72600,                name:'Seeker Missile Rack',                     mount:'F', missile:'S', class:1, rating:'B', mass: 2.00, integ:40, pwrdraw:0.60, boottime:0, dps:13.333, damage:40.000, distdraw:0.240, thmload:3.60, pierce: 60,   shotspd: 625, rof:0.333, bstint:3.000,                       ammoclip: 6, ammomax:   6,           rldtime:12.0, brcdmg:16.000, brcpct:40, minbrc: 0, maxbrc: 0,             expwgt:100,                                               ammocost:500, noexpeffects:{'wpnx_fsin':1,'wpnx_pemu':1}, fdid:128049492, fdname:'Hpt_BasicMissileRack_Fixed_Small', eddbid:878 },
@@ -3431,13 +3431,22 @@ var eddb = {
 		29750 : { mtype:'idlc', cost:1312200, namekey:29150, name:'Decontamination Limpet Controller', class:7, rating:'E', mass:128.00, integ:157, pwrdraw:0.97, boottime:10, maxlimpet: 4, lpactrng:2040, limpettime:300, maxspd:200, lmprepcap:180, fdid:128793944, fdname:'Int_DroneControl_Decontamination_Size7_Class1', eddbid:1635 },
 		
 		
-		13360 : { mtype:'iex', cost:2000000,                name:'Experimental Weapon Stabiliser', class:3, rating:'F', mass:  8.00, pwrdraw:   0, powerlock:1, limit:'iex', unlimit:'hex', unlimitcount:1, fdid:129019260, fdname:'Int_ExpModuleStabiliser_Size3_Class3', eddbid:1836 }, //TODO: pwrdraw:1.50 advertised, but not actual
-		13560 : { mtype:'iex', cost:4000000, namekey:13360, name:'Experimental Weapon Stabiliser', class:5, rating:'F', mass: 20.00, pwrdraw:   0, powerlock:1, limit:'iex', unlimit:'hex', unlimitcount:2, fdid:129019261, fdname:'Int_ExpModuleStabiliser_Size5_Class3', eddbid:1837 }, //TODO: pwrdraw:3.00 advertised, but not actual
+		13360 : { mtype:'iex', cost:2000000,                name:'Experimental Weapon Stabiliser', class:3, rating:'F', mass:  8.00, pwrdraw:   0, powerlock:1, limit:'iex', unlimit:'hex', unlimitcount:1, fdid:129019260, fdname:'Int_ExpModuleStabiliser_Size3_Class3', eddbid:1836 }, // pwrdraw:1.50 advertised, but not actual
+		13560 : { mtype:'iex', cost:4000000, namekey:13360, name:'Experimental Weapon Stabiliser', class:5, rating:'F', mass: 20.00, pwrdraw:   0, powerlock:1, limit:'iex', unlimit:'hex', unlimitcount:2, fdid:129019261, fdname:'Int_ExpModuleStabiliser_Size5_Class3', eddbid:1837 }, // pwrdraw:3.00 advertised, but not actual
 		
 		
-		 7540 : { mtype:'ifh', cost: 575660,               name:'Fighter Hangar', class:5, rating:'D', mass:20.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:128727930, fdname:'Int_FighterBay_Size5_Class1', eddbid:1562 },
-		 7640 : { mtype:'ifh', cost:1869350, namekey:7540, name:'Fighter Hangar', class:6, rating:'D', mass:40.00, integ: 80, pwrdraw:0.35, boottime:5, vslots:2, vcount: 8, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:128727931, fdname:'Int_FighterBay_Size6_Class1', eddbid:1561 },
-		 7740 : { mtype:'ifh', cost:2369330, namekey:7540, name:'Fighter Hangar', class:7, rating:'D', mass:60.00, integ:120, pwrdraw:0.35, boottime:5, vslots:2, vcount:15, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:128727932, fdname:'Int_FighterBay_Size7_Class1', eddbid:1560 },
+		 7540 : { mtype:'ifh', cost: 575650,               name:'Vessel Hangar',       class:5, rating:'D', mass:20.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:128727930, fdname:'Int_FighterBay_Size5_Class1',         eddbid:1562 },
+		 7541 : { mtype:'ifh', cost:      0, namekey:7540, name:'Vessel Hangar',       class:5, rating:'D', mass:20.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:129045963, fdname:'Int_FighterBay_Size5_Class1_Free'     },
+		 7542 : { mtype:'ifh', cost: 794390,               name:'Mk II Vessel Hangar', class:5, rating:'D', mass:10.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{                                                 63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:129045540, fdname:'Int_FighterBayMk2_Size5_Class1'       },
+		 7543 : { mtype:'ifh', cost:      0, namekey:7542, name:'Mk II Vessel Hangar', class:5, rating:'D', mass:10.00, integ: 60, pwrdraw:0.25, boottime:5, vslots:1, vcount: 6, reserved:{                                                 63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:129045677, fdname:'Int_FighterBayMk2_Size5_Class1_Free'  },
+		 7640 : { mtype:'ifh', cost:1869340, namekey:7540, name:'Vessel Hangar',       class:6, rating:'D', mass:40.00, integ: 80, pwrdraw:0.35, boottime:5, vslots:2, vcount: 8, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:128727931, fdname:'Int_FighterBay_Size6_Class1',         eddbid:1561 },
+		 7641 : { mtype:'ifh', cost:      0, namekey:7540, name:'Vessel Hangar',       class:6, rating:'D', mass:40.00, integ: 80, pwrdraw:0.35, boottime:5, vslots:2, vcount: 8, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:129045964, fdname:'Int_FighterBay_Size6_Class1_Free'     },
+		 7642 : { mtype:'ifh', cost:2579690, namekey:7542, name:'Mk II Vessel Hangar', class:6, rating:'D', mass:20.00, integ: 80, pwrdraw:0.35, boottime:5, vslots:2, vcount: 8, reserved:{                                                 63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:129045539, fdname:'Int_FighterBayMk2_Size6_Class1'       },
+		 7643 : { mtype:'ifh', cost:      0, namekey:7542, name:'Mk II Vessel Hangar', class:6, rating:'D', mass:20.00, integ: 80, pwrdraw:0.35, boottime:5, vslots:2, vcount: 8, reserved:{                                                 63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:129045678, fdname:'Int_FighterBayMk2_Size6_Class1_Free'  },
+		 7740 : { mtype:'ifh', cost:2369320, namekey:7540, name:'Vessel Hangar',       class:7, rating:'D', mass:60.00, integ:120, pwrdraw:0.35, boottime:5, vslots:2, vcount:30, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:128727932, fdname:'Int_FighterBay_Size7_Class1',         eddbid:1560 },
+		 7741 : { mtype:'ifh', cost:      0, namekey:7540, name:'Vessel Hangar',       class:7, rating:'D', mass:60.00, integ:120, pwrdraw:0.35, boottime:5, vslots:2, vcount:30, reserved:{35:1,27:1,34:1,6:1,61:1,62:1,52:1,36:1,10:1,14:1,63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:129045965, fdname:'Int_FighterBay_Size7_Class1_Free'     },
+		 7742 : { mtype:'ifh', cost:3269660, namekey:7542, name:'Mk II Vessel Hangar', class:7, rating:'D', mass:30.00, integ:120, pwrdraw:0.35, boottime:5, vslots:2, vcount:30, reserved:{                                                 63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:129045541, fdname:'Int_FighterBayMk2_Size7_Class1'       },
+		 7743 : { mtype:'ifh', cost:      0, namekey:7542, name:'Mk II Vessel Hangar', class:7, rating:'D', mass:30.00, integ:120, pwrdraw:0.35, boottime:5, vslots:2, vcount:30, reserved:{                                                 63:1,38:1,47:1}, ammocost: 1030, limit:'ifh', fdid:129045679, fdname:'Int_FighterBayMk2_Size7_Class1_Free'  },
 		
 		
 		 3150 : { mtype:'ifa', cost: 4500, name:'Standard Docking Computer', class:1, rating:'E', integ:10, pwrdraw:0.39, boottime:3, limit:'ifa_dc', fdid:128049549, fdname:'Int_DockingComputer_Standard', eddbid:890 },

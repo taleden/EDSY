@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [419039901,423009901,423039901,423039902]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20260429;
+	var VERSIONS = [419039901,423009901,424009901,424009901]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20260810;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -4883,36 +4883,38 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		cache.discounts.sort(sortDiscounts);
 		
 		// store default CSS options
-		var compStyle = getComputedStyle(document.documentElement);
-		for (var i = 0;  i < CSS_FONTS.length;  i++) {
-			var opt = 'font' + CSS_FONTS[i];
-			cache.option[opt] = compStyle.getPropertyValue('--' + opt).trim();
-			current.option[opt] = '';
-		}
-		current.option.colorinvert = cache.option.colorinvert = false;
-		for (var n = 1;  n <= 5;  n++) {
-			var opt = 'colorgrey' + n;
-			cache.option[opt] = compStyle.getPropertyValue('--' + opt).trim();
-		}
-		for (var i = 0;  i < CSS_COLORS.length;  i++) {
-			for (var n = 1;  n <= 5;  n++) {
-				var opt = 'color' + CSS_COLORS[i] + n;
+		if (document.title === 'EDSY') { 
+			var compStyle = getComputedStyle(document.documentElement);
+			for (var i = 0;  i < CSS_FONTS.length;  i++) {
+				var opt = 'font' + CSS_FONTS[i];
 				cache.option[opt] = compStyle.getPropertyValue('--' + opt).trim();
 				current.option[opt] = '';
 			}
-		}
-		
-		// create DOM templates for each defined SVG icon
-		var div = document.createElement('div');
-		document.getElementById('svg_defs').querySelectorAll('symbol').forEach(function (sym) {
-			var id = sym.id;
-			if (id.startsWith('icon_')) {
-				var name = id.substring(5);
-				// have to use a div shim because creating the svg element directly seems to break the <use xlink:href> somehow, so it renders no icon
-				div.innerHTML = '<svg class="iconsvg ' + name + '"><use xlink:href="#' + id + '"/></svg>';
-				cache.icon[name] = div.removeChild(div.firstChild);
+			current.option.colorinvert = cache.option.colorinvert = false;
+			for (var n = 1;  n <= 5;  n++) {
+				var opt = 'colorgrey' + n;
+				cache.option[opt] = compStyle.getPropertyValue('--' + opt).trim();
 			}
-		});
+			for (var i = 0;  i < CSS_COLORS.length;  i++) {
+				for (var n = 1;  n <= 5;  n++) {
+					var opt = 'color' + CSS_COLORS[i] + n;
+					cache.option[opt] = compStyle.getPropertyValue('--' + opt).trim();
+					current.option[opt] = '';
+				}
+			}
+			
+			// create DOM templates for each defined SVG icon
+			var div = document.createElement('div');
+			document.getElementById('svg_defs').querySelectorAll('symbol').forEach(function (sym) {
+				var id = sym.id;
+				if (id.startsWith('icon_')) {
+					var name = id.substring(5);
+					// have to use a div shim because creating the svg element directly seems to break the <use xlink:href> somehow, so it renders no icon
+					div.innerHTML = '<svg class="iconsvg ' + name + '"><use xlink:href="#' + id + '"/></svg>';
+					cache.icon[name] = div.removeChild(div.firstChild);
+				}
+			});
+		}	
 	}; // initCache()
 	
 	
@@ -12654,7 +12656,10 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 	if (document.title === 'EDSY') {
 		window.addEventListener('DOMContentLoaded', function() { loadTranslations(false).then(onDOMContentLoaded); });
 	} else {
+		// else expose the Build and Slot for headless tooling
+		this.Versions = () => [...VERSIONS]
 		this.Build = Build;
 		this.Slot = Slot;
+		initCache()
 	}
 })();
