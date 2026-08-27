@@ -5733,16 +5733,19 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		td.className = 'export';
 		var div = document.createElement('div');
 		div.className = 'export';
+		/* v.gd disabled
 		var button = document.createElement('button');
 		button.append(
 			createTranslatedElement('span', 'ui-button-generate'),
 			' ',
-			'(zip1.io)'
+			'(v.gd)'
 		);
-		button.name = 'export_short_gen_button_zip1.io';
+		button.name = 'export_short_gen_button_v.gd';
 		button.className = 'text';
 		button.addEventListener('click', onUIPopupExportShortButtonClick);
 		div.appendChild(button);
+		*/
+		/* ulvis.net disabled
 		var button = document.createElement('button');
 		button.append(
 			createTranslatedElement('span', 'ui-button-generate'),
@@ -5753,13 +5756,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		button.className = 'text';
 		button.addEventListener('click', onUIPopupExportShortButtonClick);
 		div.append(' ', button);
+		*/
 		var button = document.createElement('button');
 		button.append(
 			createTranslatedElement('span', 'ui-button-generate'),
 			' ',
-			'(v.gd)'
+			'(zip1.io)'
 		);
-		button.name = 'export_short_gen_button_v.gd';
+		button.name = 'export_short_gen_button_zip1.io';
 		button.className = 'text';
 		button.addEventListener('click', onUIPopupExportShortButtonClick);
 		div.append(' ', button);
