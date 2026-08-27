@@ -768,7 +768,7 @@ var eddb = {
 		11 : {
 			fdid:128839281, fdname:'Krait_Light', eddbid:37,
 			id:11, stype:'mp', name:'Krait Phantom', class:2, cost:35810120, retail:37472250,
-			topspd:250, bstspd:350, mnv:3, shields:200, armour:180, mass:270, fwdacc:NaN, revacc:NaN, latacc:NaN,
+			topspd:250, bstspd:350, mnv:3, shields:200, armour:180, mass:270, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:64.00, boostcost:13, boostint:4.5, pitch:31, yaw:10, roll:90, pitchacc:200, yawacc:100, rollacc:200, minpitch:26,
 			heatcap:300, heatdismin:2.68, heatdismax:52.05, fuelcost:50, fuelreserve:0.63, hardness:55, masslock:14, crew:2,
 			slots:{
@@ -883,7 +883,7 @@ var eddb = {
 		12 : {
 			fdid:128915979, fdname:'Mamba', eddbid:38,
 			id:12, stype:'co', name:'Mamba', class:2, cost:55434290, retail:55867040,
-			topspd:310, bstspd:380, mnv:3, shields:270, armour:230, mass:250, fwdacc:NaN, revacc:NaN, latacc:NaN,
+			topspd:310, bstspd:380, mnv:3, shields:270, armour:230, mass:250, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:77.42, boostcost:16, boostint:5, pitch:30, yaw:10, roll:75, pitchacc:180, yawacc:90, rollacc:200, minpitch:27, // verify minthrust
 			heatcap:165, heatdismin:2.05, heatdismax:41.63, fuelcost:50, fuelreserve:0.50, hardness:70, masslock:12, crew:2, // verify masslock
 			slots:{
@@ -1123,7 +1123,7 @@ var eddb = {
 			id:15, stype:'mp', name:'Python Mk II', class:2, cost:64731711, retail:67527361,
 			topspd:256, bstspd:345, mnv:4, shields:335, armour:280, mass:450, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:85.75, boostcost:20, boostint:5, pitch:37, yaw:12.5, roll:91, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:30, // TODO: *acc
-			heatcap:260, heatdismin:NaN, heatdismax:52.00, fuelcost:50, fuelreserve:0.83, hardness:70, masslock:17, crew:2, // TODO: heatdismin
+			heatcap:260, heatdismin:2.68, heatdismax:52.00, fuelcost:50, fuelreserve:0.83, hardness:70, masslock:17, crew:2,
 			slots:{
 				hardpoint:[3,3,3,3,2,2],
 				utility  :[0,0,0,0,0,0],
@@ -1151,7 +1151,7 @@ var eddb = {
 			id:37, stype:'fr', name:'Type-8 Transporter', class:2, cost:36238840, retail:38453970,
 			topspd:200, bstspd:340, mnv:1, shields:228, armour:440, mass:400, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:45, boostcost:10, boostint:6, pitch:28, yaw:18, roll:60, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:17, minyaw:16, // TODO: *acc
-			heatcap:236, heatdismin:NaN, heatdismax:36.50, fuelcost:50, fuelreserve:0.52, hardness:58, masslock:18, crew:1, // TODO: heatdismin
+			heatcap:236, heatdismin:2.27, heatdismax:36.50, fuelcost:50, fuelreserve:0.52, hardness:58, masslock:18, crew:1,
 			slots:{
 				hardpoint:[2,1,1,1,1,1],
 				utility  :[0,0,0,0],
@@ -1182,7 +1182,7 @@ var eddb = {
 			id:46, stype:'ex', name:'Mandalay', class:2, cost:16527690, retail:17639220,
 			topspd:280, bstspd:350, mnv:5, shields:220, armour:230, mass:230, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:71.5, boostcost:14, boostint:5, pitch:35, yaw:28, roll:96, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:24.5, minyaw:16, // verify: minpitch // TODO: *acc
-			heatcap:245, heatdismin:NaN, heatdismax:51.00, fuelcost:50, fuelreserve:0.5, hardness:55, masslock:11, crew:2, // TODO: heatdismin
+			heatcap:245, heatdismin:2.23, heatdismax:51.00, fuelcost:50, fuelreserve:0.5, hardness:55, masslock:11, crew:2,
 			slots:{
 				hardpoint:[2,2,2,2,1,1],
 				utility  :[0,0,0,0],
@@ -1210,7 +1210,7 @@ var eddb = {
 			id:16, stype:'mp', name:'Cobra Mk V', class:1, cost:1473191, retail:1989461,
 			topspd:290, bstspd:410, mnv:5, shields:160, armour:180, mass:150, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:79, boostcost:10, boostint:5, pitch:45, yaw:33, roll:120, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:40, //verify: minpitch // TODO: *acc
-			heatcap:245, heatdismin:NaN, heatdismax:40.50, fuelcost:50, fuelreserve:0.49, hardness:40, masslock:8, crew:3, // TODO: heatdismin
+			heatcap:245, heatdismin:2.06, heatdismax:40.50, fuelcost:50, fuelreserve:0.49, hardness:40, masslock:8, crew:3,
 			slots:{
 				hardpoint:[2,2,2,1,1],
 				utility  :[0,0,0,0],
@@ -1266,7 +1266,7 @@ var eddb = {
 			id:63, stype:'sh', name:'Panther Clipper Mk II', class:3, cost:286906165, retail:301348585,
 			topspd:180, bstspd:250, mnv:0, shields:350, armour:620, mass:1200, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:33.3, boostcost:19, boostint:6.5, pitch:18, yaw:10, roll:20, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:14, // TODO: *acc
-			heatcap:329, heatdismin:NaN, heatdismax:62.50, fuelcost:50, fuelreserve:1.11, hardness:70, masslock:25, crew:4, // verify: masslock // TODO: heatdismin
+			heatcap:329, heatdismin:3.21, heatdismax:62.50, fuelcost:50, fuelreserve:1.11, hardness:70, masslock:25, crew:4, // verify: masslock
 			slots:{
 				hardpoint:[3,3,2,2,2,2,1,1,1,1],
 				utility  :[0,0,0,0,0,0],
@@ -1300,7 +1300,7 @@ var eddb = {
 			id:38, stype:'mi', name:'Type-11 Prospector', class:2, cost:66346710, retail:67861850,
 			topspd:270, bstspd:365, mnv:2, shields:275, armour:350, mass:320, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:70.5, boostcost:25, boostint:6, pitch:25, yaw:22, roll:37.5, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:22, // TODO: *acc
-			heatcap:300, heatdismin:NaN, heatdismax:52.15, fuelcost:50, fuelreserve:0.60, hardness:58, masslock:15, crew:3, // TODO: heatdismin
+			heatcap:300, heatdismin:2.68, heatdismax:52.15, fuelcost:50, fuelreserve:0.60, hardness:58, masslock:15, crew:3,
 			slots:{
 				hardpoint:[3,2,2,2,1,1,1,1],
 				utility  :[0,0,0,0],
@@ -1336,7 +1336,7 @@ var eddb = {
 			id:47, stype:'ex', name:'Caspian Explorer', class:3, cost:189326510, retail:194861290,
 			topspd:210, bstspd:290, mnv:2, shields:500, armour:345, mass:950, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:76.0, boostcost:25, boostint:5.5, pitch:30, yaw:14, roll:75, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:23, // TODO: *acc
-			heatcap:341, heatdismin:NaN, heatdismax:72.10, fuelcost:50, fuelreserve:1.14, hardness:60, masslock:21, crew:4, // TODO: heatdismin
+			heatcap:341, heatdismin:3.21, heatdismax:72.10, fuelcost:50, fuelreserve:1.14, hardness:60, masslock:21, crew:4,
 			slots:{
 				hardpoint:[3,2,2,2,2,2,2],
 				utility  :[0,0,0,0,0,0],
@@ -1403,7 +1403,7 @@ var eddb = {
 			id:54, stype:'pa', name:'Lynx Highliner', class:2, cost:67992080, retail:69289470,
 			topspd:285, bstspd:350, mnv:3, shields:200, armour:350, mass:260, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:73.75, boostcost:14, boostint:5, pitch:26, yaw:19, roll:60, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:23, // TODO: *acc
-			heatcap:NaN, heatdismin:NaN, heatdismax:NaN, fuelcost:50, fuelreserve:0.75, hardness:55, masslock:16, crew:2, // TODO: heatcap,heatdismin,heatdismax,masslock
+			heatcap:NaN, heatdismin:1.67, heatdismax:NaN, fuelcost:50, fuelreserve:0.75, hardness:55, masslock:16, crew:2, // TODO: heatcap,heatdismax,masslock
 			slots:{
 				hardpoint:[3,2,2,2,2],
 				utility  :[0,0,0,0],
