@@ -12,7 +12,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 var eddb = {
 	version : 424009902,
 	edsy_versions_db : [419039901,423009901,424009902,424009902], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20260811,
+	edsy_lastmodified_db : 20260827,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
