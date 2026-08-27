@@ -1375,7 +1375,7 @@ var eddb = {
 			id:29, stype:'co', name:'Kestrel Mk II', class:1, cost:13776380, retail:14273820,
 			topspd:270, bstspd:360, mnv:8, shields:225, armour:70, mass:190, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:89, boostcost:14, boostint:4.5, pitch:50, yaw:24, roll:120, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:40, // TODO: *acc
-			heatcap:276, heatdismin:NaN, heatdismax:39.85, fuelcost:50, fuelreserve:0.61, hardness:55, masslock:NaN, crew:1, // TODO: heatdismin,masslock
+			heatcap:276, heatdismin:NaN, heatdismax:39.85, fuelcost:50, fuelreserve:0.61, hardness:55, masslock:11, crew:1, // TODO: heatdismin
 			slots:{
 				hardpoint:[3,3,3,1,1],
 				utility  :[0,0,0,0],
