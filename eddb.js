@@ -2021,6 +2021,8 @@ var eddb = {
 		ihrp_lw : { name:'Light Weight', maxgrade:5, mass:[-8,-12,-16,-20,-24], hullbst:[8,12,16,20,24], hullrnf:[-4,-8,-12,-16,-20], mats:[ {iro:1}, {iro:1, condco:1}, {iro:1, condco:1, hideco:1}, {ger:1, coce:1, prco:1}, {coce:1, tin:1, migral:1} ], fdname:'HullReinforcement_Advanced' },
 		ihrp_tr : { name:'Thermal Resistant', maxgrade:5, hullrnf:[3,6,9,12,15], kinres:[-2,-4,-6,-8,-10], thmres:[12,19,26,33,40], expres:[-2,-4,-6,-8,-10], mats:[ {hecowi:1}, {nic:1, hedipl:1}, {saal:1, van:1, heex:1}, {gaal:1, tun:1, heva:1}, {phal:1, mol:1, prhera:1} ], fdname:'HullReinforcement_Thermic' },
 		
+		imrp_hd : { name:'Heavy Duty', maxgrade:5, mass:[25,33.3,50,75.2,100], integ:[2.5,8.3,12.5,18.8,25], dmgprot:[2.5,8.3,12.5,18.8,25], mats:[ {}, {car:1, iro:1, shem:1}, {iro:1, shem:1, hideco:1}, {shem:1, hideco:1, prco:1, tun:1}, {cosh:1, rut:1, prhera:1, codyco:1} ], fdname:'MRP_HeavyDuty' }, // verify: mats // TODO: merccoin 0,5,5,10,25?
+		
 		iscb_rc : { name:'Rapid Charge', maxgrade:4, boottime:[10,15,20,25], spinup:[-10,-20,-30,-40], shieldrnfps:[5,10,15,20], scbdur:[-6,-12,-18,-24], mats:[ {sul:1}, {grre:1, chr:1}, {sul:1, hyca:1, pral:1}, {chr:1, elar:1, thal:1} ], fdname:'ShieldCellBank_Rapid' },
 		iscb_sp : { name:'Specialised', maxgrade:4, integ:[-5,-10,-15,-20], pwrdraw:[10,15,20,25], boottime:[-8,-16,-24,-32], shieldrnfps:[4,6,8,10], scbheat:[-6,-12,-18,-24], mats:[ {splefi:1}, {splefi:1, condco:1}, {exscemda:1, condco:1, crinfi:1}, {condco:1, crinfi:1, ytt:1} ], fdname:'ShieldCellBank_Specialised' },
 		
@@ -2628,8 +2630,8 @@ var eddb = {
 			name:'Module Reinforcements',
 			modulenames:{'Module Reinforcement Package':1, 'Guardian Module Reinforcement Package':1},
 			keyattrs:['integ','dmgprot'],
-			modifiable:[],
-			blueprints:['misc_agzr'],
+			modifiable:['mass','integ','dmgprot'],
+			blueprints:['misc_agzr','imrp_hd'],
 		},
 		
 		ipc : {
