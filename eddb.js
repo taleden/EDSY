@@ -1997,10 +1997,12 @@ var eddb = {
 		cfsd_ir : { name:'Increased Range', maxgrade:5, mass:[10,15,20,25,30], integ:[-3,-6,-9,-12,-15], pwrdraw:[3,6,9,12,15], fsdoptmass:[15,25,35,45,55], mats:[ {atdiwaec:1}, {atdiwaec:1, chpr:1}, {pho:1, chpr:1, stwaso:1}, {man:1, chdi:1, echytr:1}, {ars:1, chma:1, dawaex:1} ], fdname:'FSD_LongRange' },
 		cfsd_sh : { name:'Shielded', maxgrade:5, mass:[4,8,12,16,20], integ:[25,50,75,100,125], fsdoptmass:[3,6,9,12,15], fsdheat:[-10,-15,-20,-25,-30], mats:[ {nic:1}, {car:1, shem:1}, {car:1, zin:1, shse:1}, {van:1, hideco:1, cosh:1}, {tun:1, prco:1, imsh:1} ], fdname:'FSD_Shielded' },
 		
+		cpd_b : { name:'Balanced', maxgrade:5, mass:[2.5,3.3,5,7.52,10], integ:[-1.2,-1.7,-2.5,-3.8,-5], pwrdraw:[-1,-3.3,-5,-7.5,-10], wepcap:[2.1,7,10.5,15.8,21], wepchg:[2.3,7.7,11.5,17.3,23], engcap:[2.1,7,10.5,15.8,21], engchg:[2.3,7.7,11.5,17.3,23], syscap:[2.1,7,10.5,15.8,21], syschg:[2.3,7.7,11.5,17.3,23], mats:[ {}, {sul:1, splefi:1, chpr:1}, {splefi:1, chpr:1, hideco:1}, {chpr:1, hideco:1, sel:1, chma:1}, {prco:1, chma:1, misu:1, exfocr:1} ], fdname:'PowerDistributor_Balanced' }, // TODO: merccoin 0,5,10,15,25
 		cpd_ce : { name:'Charge Enhanced', maxgrade:5, wepcap:[-1,-2,-3,-4,-5], wepchg:[9,18,27,36,45], engcap:[-1,-2,-3,-4,-5], engchg:[9,18,27,36,45], syscap:[-1,-2,-3,-4,-5], syschg:[9,18,27,36,45], mats:[ {splefi:1}, {splefi:1, chpr:1}, {grre:1, mocofi:1, chdi:1}, {hyca:1, crinfi:1, chma:1}, {crinfi:1, chma:1, exfocr:1} ], fdname:'PowerDistributor_HighFrequency' },
 		cpd_ef : { name:'Engine Focused', maxgrade:5, wepcap:[-3,-6,-9,-12,-15], wepchg:[-1,-2,-3,-4,-5], engcap:[20,30,40,50,60], engchg:[16,23,30,37,44], syscap:[-3,-6,-9,-12,-15], syschg:[-3,-6,-9,-12,-15], mats:[ {sul:1}, {sul:1, condco:1}, {anbuscda:1, chr:1, elar:1}, {unscar:1, sel:1, poca:1}, {clscda:1, cad:1, misu:1} ], fdname:'PowerDistributor_PriorityEngines' },
 		cpd_hc : { name:'High Charge Capacity', maxgrade:5, integ:[10,15,20,25,30], wepcap:[10,18,26,34,42], wepchg:[-2,-6,-10,-14,-18], engcap:[10,18,26,34,42], engchg:[-2,-6,-10,-14,-18], syscap:[10,18,26,34,42], syschg:[-2,-6,-10,-14,-18],  mats:[ {sul:1}, {splefi:1, chr:1}, {splefi:1, chr:1, hideco:1}, {mocofi:1, sel:1, prco:1}, {crinfi:1, prco:1, misu:1} ], fdname:'PowerDistributor_HighCapacity' },
 		cpd_sh : { name:'Shielded', maxgrade:5, integ:[40,80,120,160,200], mass:[3,6,9,12,15], pwrdraw:[-10,-15,-20,-25,-30], mats:[ {woshem:1}, {car:1, shem:1}, {car:1, shem:1, hideco:1}, {van:1, shse:1, prco:1}, {tun:1, cosh:1, codyco:1} ], fdname:'PowerDistributor_Shielded' },
+		cpd_uf : { name:'Support Focused', maxgrade:5, wepcap:[-6.24,-8.3,-12.5,-18.8,-25], wepchg:[-5,-5.6,-10,-15,-20], engcap:[4.5,15,22.5,33.8,45], engchg:[4,13.3,20,30,45], syscap:[4.5,15,22.5,33.8,45], syschg:[4,13.3,20,30,40], mats:[ {}, {sul:1, splefi:1, condco:1}, {anbuscda:1, chr:1, elar:1}, {unscar:1, mocofi:1, sel:1, poca:1}, {clscda:1, cad:1, prco:1, misu:1} ], fdname:'PowerDistributor_SupportFocused' }, // TODO: merccoin 0,5,5,10,15
 		cpd_sf : { name:'System Focused', maxgrade:5, wepcap:[-3,-6,-9,-12,-15], wepchg:[-3,-6,-9,-12,-15], engcap:[-3,-6,-9,-12,-15], engchg:[-1,-2,-3,-4,-5], syscap:[20,30,40,50,60], syschg:[16,23,30,37,44], mats:[ {sul:1}, {sul:1, condco:1}, {anbuscda:1, chr:1, elar:1}, {unscar:1, sel:1, poca:1}, {clscda:1, cad:1, misu:1} ], fdname:'PowerDistributor_PrioritySystems' },
 		cpd_wf : { name:'Weapon Focused', maxgrade:5, wepcap:[20,30,40,50,60], wepchg:[16,23,30,37,44], engcap:[-3,-6,-9,-12,-15], engchg:[-3,-6,-9,-12,-15], syscap:[-3,-6,-9,-12,-15], syschg:[-1,-2,-3,-4,-5], mats:[ {sul:1}, {sul:1, condco:1}, {anbuscda:1, hyca:1, sel:1}, {unscar:1, elar:1, cad:1}, {clscda:1, poca:1, tel:1} ], fdname:'PowerDistributor_PriorityWeapons' },
 		
@@ -2496,7 +2498,7 @@ var eddb = {
 			modulenames:{'Power Distributor':1, 'Guardian Hybrid Power Distributor':1},
 			keyattrs:['engcap','engchg'],
 			modifiable:['mass','integ','pwrdraw','_X_ boottime','wepcap','wepchg','engcap','engchg','syscap','syschg'],
-			blueprints:['cpd_ce','cpd_ef','cpd_hc','cpd_sh','cpd_sf','cpd_wf','misc_agzr'],
+			blueprints:['cpd_ce','cpd_ef','cpd_hc','cpd_sh','cpd_sf','cpd_wf','misc_agzr','cpd_b','cpd_uf'],
 			expeffects:['cpdx_cc','cpdx_db','cpdx_fc','cpdx_sd','cpdx_sc'],
 		},
 		

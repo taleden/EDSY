@@ -84,10 +84,16 @@ window.edsy = new (function() {
 		530900 : { name:"0I/T Point Defence, LW+Foc",            modulehash:"JCzYG-bG0042_pD6y00GkPcL000",                     tag:'C' }, // CG reward
 		
 		453100 : { name:"3A Power Dist, SF+EF",                  modulehash:"JB3_G-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward
+		453101 : { name:"3A Power Dist, Sup",                    modulehash:"JB3_G-oG_W6Il-CMkPcOjmfSj7iWjmfaj7i",             tag:'M' }, // merccoin
 		453400 : { name:"3D Power Dist, SF+EF",                  modulehash:"JB4SG-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward
+		453401 : { name:"3D Power Dist, Sup",                    modulehash:"JB4SG-oG_W6Il-CMkPcOjmfSj7iWjmfaj7i",             tag:'M' }, // merccoin
 		454100 : { name:"4A Power Dist, SF+EF",                  modulehash:"JB5YG-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward
+		454101 : { name:"4A Power Dist, Sup",                    modulehash:"JB5YG-oG_W6Il-CMkPcOjmfSj7iWjmfaj7i",             tag:'M' }, // merccoin
 		454400 : { name:"4D Power Dist, SF+EF",                  modulehash:"JB60G-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward
+		454401 : { name:"4D Power Dist, Sup",                    modulehash:"JB60G-oG_W6Il-CMkPcOjmfSj7iWjmfaj7i",             tag:'M' }, // merccoin
+		455101 : { name:"5A Power Dist, Bal",                    modulehash:"JB76G-mG_W90gPc6c9EAb7iGfO4KfurOfO4SfurWfO4afur", tag:'M' }, // merccoin
 		456100 : { name:"6A Power Dist, SF+EF",                  modulehash:"JB8gG-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward
+		456101 : { name:"6A Power Dist, Sup",                    modulehash:"JB8gG-oG_W6Il-CMkPcOjmfSj7iWjmfaj7i",             tag:'M' }, // merccoin
 		413100 : { name:"3A Power Plant, AR+OC",                 modulehash:"JA5UG-ZG0040sPc4-cQ8yAFCqAF",                     tag:'C' }, // CG reward
 		413101 : { name:"3A Power Plant, OCx2",                  modulehash:"JA5UG-dG0036upD8ypDCvcQ",                         tag:'C' }, // CG reward
 		414101 : { name:"4A Power Plant, OCx2",                  modulehash:"JA72G-dG0036upD8ypDCvcQ",                         tag:'C' }, // CG reward
