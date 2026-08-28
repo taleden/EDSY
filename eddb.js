@@ -2035,6 +2035,7 @@ var eddb = {
 	//	iss_lr : { name:'Long Range', maxgrade:5, mass:[20,40,60,80,100], pwrdraw:[10,20,30,40,50], scanrngmod:[40,80,120,160,200], mats:[ {iro:1}, {iro:1, hyca:1}, {iro:1, hyca:1, unemda:1}, {ger:1, elar:1, deemda:1}, {nio:1, poca:1, abcoemda:1} ], fdname:'Sensor_LongRange' },
 	//	iss_wa : { name:'Wide Angle', maxgrade:5, mass:[20,40,60,80,100], pwrdraw:[10,20,30,40,50], scanangmod:[40,80,120,160,200], mats:[ {mesc:1}, {mesc:1, ger:1}, {mesc:1, ger:1, clscda:1}, {meeq:1, nio:1, discda:1}, {meco:1, tin:1, clscfr:1} ], fdname:'Sensor_WideAngle' },
 		iss_er : { name:'Expanded Radius', maxgrade:5, pwrdraw:[10,20,30,40,50], mass:[20,40,60,80,100], proberad:[10,20,30,40,50], mats:[ {mesc:1}, {mesc:1, ger:1}, {mesc:1, ger:1, phal:1}, {meeq:1, nio:1, prlial:1}, {meco:1, tin:1, prraal:1} ], fdname:'Sensor_Expanded' },
+		iss_lrd : { name:'Long Range', maxgrade:5, proberad:[10,33,50,75.2,1], mats:[ {}, {mesc:1, ger:1, mocofi:1}, {mesc:1, ger:1, phal:1}, {meeq:1, nio:1, phal:1, prlial:1}, {meeq:1, meco:1, tin:1, prraal:1} ], fdname:'Sensor_LongRangeDSS' }, // TODO: merccoin 0,5,5,10,20
 	}, // eddb.blueprint{}
 	expeffect : {
 		wpnx_aulo : { name:'Auto Loader', special:'Auto reload while firing', mats:{ meeq:4, meco:3, hideco:3 }, fdname:'special_auto_loader' },
@@ -2714,7 +2715,7 @@ var eddb = {
 			modulenames:{},
 			keyattrs:['_X_ scanrngmod','_X_ scanratemod','proberad'],
 			modifiable:['_X_ mass','_X_ boottime','_X_ pwrdraw','_X_ scanrngmod','_X_ scanangmod','_X_ scanratemod','proberad'],
-			blueprints:['_X_ iss_fs','_X_ iss_lr','_X_ iss_wa','iss_er'],
+			blueprints:['_X_ iss_fs','_X_ iss_lr','_X_ iss_wa','iss_er','iss_lrd'],
 		},
 		
 		ifh : {

@@ -110,6 +110,8 @@ window.edsy = new (function() {
 		  6500 : { name:"6E Cargo Rack, ECR (Cap: 86)",          modulehash:"J0AAG-ZG0010vW0",                                 tag:'C' }, // CG reward
 		
 		111300 : { name:"1I DSS \"V1\", ERx2",                   modulehash:"J2jwG-fG001P000",                                 tag:'T' }, // human tech broker
+		111301 : { name:"1I DSS, LR",                            modulehash:"J2jwG-gG_W1OoPc",                                         }, // TODO: tag:'M' merc coin
+		
 		303100 : { name:"3A Shield Gen, KR+TR",                  modulehash:"J7PcG-bG0044sPc8wPccupDgvcQ",                     tag:'C' }, // CG reward
 	};
 	var LANG_NAMES = { // TODO cn? ko? nl? pl?
