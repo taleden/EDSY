@@ -1332,7 +1332,7 @@ var eddb = {
 			},
 		},
 		47 : {
-			fdid:null , fdname:'Explorer_NX' , eddbid:null,
+			fdid:129036569 , fdname:'Explorer_NX', eddbid:null,
 			id:47, stype:'ex', name:'Caspian Explorer', class:3, cost:189326510, retail:194861290,
 			topspd:210, bstspd:290, mnv:2, shields:500, armour:345, mass:950, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:76.0, boostcost:25, boostint:5.5, pitch:30, yaw:14, roll:75, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:23, // TODO: *acc
@@ -1371,7 +1371,7 @@ var eddb = {
 			},
 		},
 		29 : {
-			fdid:null, fdname:'SmallCombat01_NX', eddbid:null,
+			fdid:129039241, fdname:'SmallCombat01_NX', eddbid:null,
 			id:29, stype:'co', name:'Kestrel Mk II', class:1, cost:13776380, retail:14273820,
 			topspd:270, bstspd:360, mnv:8, shields:225, armour:70, mass:190, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:89, boostcost:14, boostint:4.5, pitch:50, yaw:24, roll:120, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:40, // TODO: *acc
@@ -1399,11 +1399,11 @@ var eddb = {
 			},
 		},
 		54 : {
-			fdid:null, fdname:'MediumTransport01', eddbid:null, // TODO: fdid
+			fdid:129041442, fdname:'MediumTransport01', eddbid:null,
 			id:54, stype:'pa', name:'Lynx Highliner', class:2, cost:67992080, retail:69289470,
 			topspd:285, bstspd:350, mnv:3, shields:200, armour:350, mass:260, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:73.75, boostcost:14, boostint:5, pitch:26, yaw:19, roll:60, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:23, // TODO: *acc
-			heatcap:NaN, heatdismin:1.67, heatdismax:NaN, fuelcost:50, fuelreserve:0.75, hardness:55, masslock:16, crew:2, // TODO: heatcap,heatdismax,masslock
+			heatcap:279, heatdismin:1.67, heatdismax:49.35, fuelcost:50, fuelreserve:0.75, hardness:55, masslock:16, crew:2,
 			slots:{
 				hardpoint:[3,2,2,2,2],
 				utility  :[0,0,0,0],
