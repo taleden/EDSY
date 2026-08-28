@@ -113,10 +113,14 @@ window.edsy = new (function() {
 		  6510 : { name:"6E Anti-Corrosion Cargo (Cap: 64)",     modulehash:"H0AB00",                                          tag:'C' }, // CG reward
 		
 		  5500 : { name:"5E Cargo Rack, ECR (Cap: 43)",          modulehash:"J08cG-ZG0010vW0",                                 tag:'C' }, // CG reward
+		  5501 : { name:"5E Cargo Rack, Extended (Cap: 33)",     modulehash:"J08cG-aG_W10hxw",                                 tag:'M' }, // merccoin
 		  6500 : { name:"6E Cargo Rack, ECR (Cap: 86)",          modulehash:"J0AAG-ZG0010vW0",                                 tag:'C' }, // CG reward
+		  6501 : { name:"6E Cargo Rack, Extended (Cap: 66)",     modulehash:"J0AAG-aG_W10hxw",                                 tag:'M' }, // merccoin
+		
+		 85400 : { name:"5D Module Reinforcement, HD",           modulehash:"J25SG-aG_W30u004gPc8gPc",                         tag:'M' }, // merccoin
 		
 		111300 : { name:"1I DSS \"V1\", ERx2",                   modulehash:"J2jwG-fG001P000",                                 tag:'T' }, // human tech broker
-		111301 : { name:"1I DSS, LR",                            modulehash:"J2jwG-gG_W1OoPc",                                         }, // TODO: tag:'M' merc coin
+		111301 : { name:"1I DSS, LR",                            modulehash:"J2jwG-gG_W1OoPc",                                 tag:'M' }, // merccoin
 		
 		303100 : { name:"3A Shield Gen, KR+TR",                  modulehash:"J7PcG-bG0044sPc8wPccupDgvcQ",                     tag:'C' }, // CG reward
 	};

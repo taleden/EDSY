@@ -2011,6 +2011,7 @@ var eddb = {
 		cs_wa : { name:'Wide Angle', maxgrade:5, pwrdraw:[10,20,30,40,50], scanangle:[40,80,120,160,200], typemis:[-4,-8,-12,-16,-20], mats:[ {mesc:1}, {mesc:1, ger:1}, {mesc:1, ger:1, clscda:1}, {meeq:1, nio:1, discda:1}, {meco:1, tin:1, clscfr:1} ], fdname:'Sensor_WideAngle' },
 		
 		icr_ecr : { name:'Expanded Cargo Rack', maxgrade:5, cargocap:[7,14,21,28,35], fdname:'CargoRack_IncreasedCapacity' },
+		icr_xcr : { name:'Extended Cargo Rack', maxgrade:5, cargocap:[3.1,12.5,18.8,25,34.4], mats:[ {}, {mesc:1, van:1, man:1}, {mesc:1, van:1, nio:1}, {meeq:1, hideco:1, tin:1, nio:1}, {meeq:1, meco:1, prco:1, misu:1} ], fdname:'CargoRack_Extended' }, // TODO: merccoin 0,5,10,15,30
 		
 		ifs_sre : { name:'Scoop Rate Enhanced', maxgrade:5, scooprate:[10,20,30,40,50], pwrdraw:[3,6,9,12,15], mats:[ {pho:1, grre:1}, {chr:1, grre:1, chpr:1}, {chr:1, chpr:1, coce:1}, {chpr:2, chdi:1, prlial:1}, {tel:1, chma:1, prhera:1, prraal:1} ], fdname:'FuelScoop_ScoopRateEnhanced' }, // TODO: merccoin 10,15,20,25,35
 		
@@ -2530,7 +2531,7 @@ var eddb = {
 			modulenames:{},
 			keyattrs:['cargocap'],
 			modifiable:['cargocap'],
-			blueprints:['icr_ecr'],
+			blueprints:['icr_ecr','icr_xcr'],
 		},
 		
 		iclc : {
