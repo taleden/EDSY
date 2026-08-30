@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 424009902,
-	edsy_versions_db : [419039901,423009901,424009902,424009902], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20260827,
+	version : 424019901,
+	edsy_versions_db : [424019901,424019901,424019901,424019901], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20260829,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1951,6 +1951,7 @@ var eddb = {
 		misc_agzr : { name:'Anti-Guardian Zone Resistance', maxgrade:1, mats:[ {hasufr:2},{cacr:1},{tacoch:1} ], fdname:'GuardianModule_Sturdy' }, // TODO: fdname
 		
 		wpn_ds : { name:'Double Shot', maxgrade:5, maximumrng:[-2,-4,-6,-8,-10], bstrof:[6,8,10,12,14], bstsize:[2,2,2,2,2], ammoclip:[15,20,25,30,35], mats:[ {car:1}, {car:1, meeq:1}, {car:1, meeq:1, crinfi:1}, {van:1, meco:1, sefipa:1}, {hideco:1, confco:1, moemfi:1} ], fdname:'Weapon_DoubleShot' },
+		wpn_ef : { name:'Enduring Feedback', maxgrade:5, mass:[22.5,30,45,67.7,90], pwrdraw:[8.7,11.7,17.5,26.3,35], damage:[17.4,12,5.8,-17.1,-12], bstint:[-9.9,-32.6,-48.9,-73.5,-97.9], thmload:[60,44.5,33.3,16.5,0], maximumrng:[10,33.3,50,75.2,100], dmgfall:[32,300,350,425.6,500], ammomax:[10,32.5,50,75,100], rldtime:[6.2,8.3,12.5,18.8,25], mats:[ {}, {mesc:1, sul:1, mocofi:1}, {sul:1, mocofi:1, nio:1}, {mocofi:1, nio:1, copo:1, tin:1}, {meco:1, thal:1, misu:1, bico:1} ], fdname:'Weapon_EnduringFeedback' }, // TODO: merccoin 0,10,15,25,50
 		wpn_eff : { name:'Efficient', maxgrade:5, pwrdraw:[0,-12,-24,-36,-48], damage:[8,12,16,20,24], distdraw:[0,-15,-25,-35,-45], thmload:[-37.5,-42.5,-47.5,-52.5,-60], mats:[ {sul:1}, {sul:1, hedipl:1}, {exscemda:1, chr:1, heex:1}, {iremda:1, sel:1, heva:1}, {unemda:1, cad:1, prhera:1} ], fdname:'Weapon_Efficient' },
 		wpn_foc : { name:'Focused', maxgrade:5, thmload:[1,2,3,4,5], pierce:[40,60,80,100,120], maximumrng:[36,52,68,84,100], dmgfall:[36,52,68,84,100], mats:[ {iro:1}, {iro:1, condco:1}, {iro:1, chr:1, coce:1}, {ger:1, focr:1, poca:1}, {nio:1, refocr:1, misu:1} ], fdname:'Weapon_Focused' },
 		wpn_hc : { name:'High Capacity', maxgrade:5, mass:[20,30,40,50,60], pwrdraw:[4,8,12,16,20], ammoclip:[36,52,68,84,100], ammomax:[36,52,68,84,100], bstint:[-2,-4,-6,-8,-10], mats:[ {mesc:1}, {mesc:1, van:1}, {mesc:1, van:1, nio:1}, {meeq:1, hideco:1, tin:1}, {meco:1, prco:1, misu:1} ], fdname:'Weapon_HighCapacity' },
@@ -2344,7 +2345,7 @@ var eddb = {
 			modulenames:{},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maximumrng','bstint','ammoclip','ammomax','rldtime','_X_ jitter','dmgfall'],
-			blueprints:['wpn_hc','wpn_lw','wpn_lr','wpn_sr','wpn_stu'],
+			blueprints:['wpn_hc','wpn_lw','wpn_lr','wpn_sr','wpn_stu','wpn_ef'],
 			expeffects:['wpnx_db','hrgx_feca','wpnx_fc','wpnx_muse','wpnx_os','hrgx_plsl','wpnx_sd','hrgx_supe','wpnx_supe'],
 		},
 		
