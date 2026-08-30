@@ -65,6 +65,7 @@ window.edsy = new (function() {
 		882160 : { name:"2A/F Grd Shard, LR+Foc, Pen",           modulehash:"JLYOG-YG0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", tag:'T' }, // Salvation tech broker
 		882161 : { name:"2A/F Grd Shard, LR5+Foc",               modulehash:"JLYOG-ZG0080y0051Cp993DDFm0H058L800Op77V700",     tag:'C' }, // CG reward
 		811400 : { name:"1D/F Mining Laser, LR, Incen",          modulehash:"JJpqG-ZH0072y006y00AkPcEy00I_ezL800PBLL",         tag:'T' }, // Torval Mining Ltd tech broker
+		811401 : { name:"1D/F Mining Laser, Long Range",         modulehash:"JJpqG-cH_W72q006kPcAkPcEkPcInJ_KwPcQupD",         tag:'M' },
 		722500 : { name:"2E/F Multi-cannon, RF+HC, Phasing",     modulehash:"JHewG-iS007Uy00Yuaab600f466n600soPcv400",         tag:'C' }, // CG reward
 		842200 : { name:"2B/F Rail, HC+LR, FeedCas",             modulehash:"JKZyG-ZI0080-Cp8zCpT000Yyv4b000f000iu00r900",     tag:'C' }, // CG reward
 		842201 : { name:"2B/F Rail, Enduring Feedback",          modulehash:"JKZyG-iI_W90tCp8naNCraNKypDSoPcYoPceoPcilxwqv7i", tag:'M' },
