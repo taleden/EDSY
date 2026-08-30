@@ -1954,6 +1954,7 @@ var eddb = {
 		wpn_ef : { name:'Enduring Feedback', maxgrade:5, mass:[22.5,30,45,67.7,90], pwrdraw:[8.7,11.7,17.5,26.3,35], damage:[17.4,12,5.8,-17.1,-12], bstint:[-9.9,-32.6,-48.9,-73.5,-97.9], thmload:[60,44.5,33.3,16.5,0], maximumrng:[10,33.3,50,75.2,100], dmgfall:[32,300,350,425.6,500], ammomax:[10,32.5,50,75,100], rldtime:[6.2,8.3,12.5,18.8,25], mats:[ {}, {mesc:1, sul:1, mocofi:1}, {sul:1, mocofi:1, nio:1}, {mocofi:1, nio:1, copo:1, tin:1}, {meco:1, thal:1, misu:1, bico:1} ], fdname:'Weapon_EnduringFeedback' }, // TODO: merccoin 0,10,15,25,50
 		wpn_eff : { name:'Efficient', maxgrade:5, pwrdraw:[0,-12,-24,-36,-48], damage:[8,12,16,20,24], distdraw:[0,-15,-25,-35,-45], thmload:[-37.5,-42.5,-47.5,-52.5,-60], mats:[ {sul:1}, {sul:1, hedipl:1}, {exscemda:1, chr:1, heex:1}, {iremda:1, sel:1, heva:1}, {unemda:1, cad:1, prhera:1} ], fdname:'Weapon_Efficient' },
 		wpn_foc : { name:'Focused', maxgrade:5, thmload:[1,2,3,4,5], pierce:[40,60,80,100,120], maximumrng:[36,52,68,84,100], dmgfall:[36,52,68,84,100], mats:[ {iro:1}, {iro:1, condco:1}, {iro:1, chr:1, coce:1}, {ger:1, focr:1, poca:1}, {nio:1, refocr:1, misu:1} ], fdname:'Weapon_Focused' },
+		wpn_fr : { name:'Far-Reaching', maxgrade:5, integ:[0,-16.7,-25,-37.6,-50], pwrdraw:[-12.5,-16.7,-25,-37.6,-50], distdraw:[-12.5,-16.7,-25,-37.6,-50], thmload:[-5,-16.7,-25,-37.6,-50], maximumrng:[40,133.3,200,300,400], dmgfall:[-58,133.3,200,300,400], mats:[ {}, {sul:1, hedipl:1, mocofi:1}, {chr:1, mocofi:1, heex:1}, {mocofi:1, copo:1, sel:1, heva:1}, {crinfi:1, thal:1, bico:1, prhera:1} ], fdname:'Weapon_FarReaching' }, // TODO: merccoin 0,5,5,10,20
 		wpn_hc : { name:'High Capacity', maxgrade:5, mass:[20,30,40,50,60], pwrdraw:[4,8,12,16,20], ammoclip:[36,52,68,84,100], ammomax:[36,52,68,84,100], bstint:[-2,-4,-6,-8,-10], mats:[ {mesc:1}, {mesc:1, van:1}, {mesc:1, van:1, nio:1}, {meeq:1, hideco:1, tin:1}, {meco:1, prco:1, misu:1} ], fdname:'Weapon_HighCapacity' },
 		wpn_lw : { name:'Light Weight', maxgrade:5, mass:[-30,-45,-60,-75,-90], integ:[-20,-30,-40,-50,-60], pwrdraw:[0,-10,-20,-30,-40], distdraw:[0,-20,-25,-30,-35], mats:[ {pho:1}, {saal:1, man:1}, {saal:1, man:1, coce:1}, {condco:1, phal:1, prlial:1}, {coce:1, prlial:1, prraal:1} ], fdname:'Weapon_LightWeight' },
 		wpn_lr : { name:'Long Range', maxgrade:5, mass:[10,15,20,25,30], pwrdraw:[3,6,9,12,15], maximumrng:[20,40,60,80,100], dmgfall:[9999,9999,9999,9999,9999], mats:[ {sul:1}, {sul:1, mocofi:1}, {sul:1, mocofi:1, focr:1}, {mocofi:1, focr:1, copo:1}, {crinfi:1, thal:1, bico:1} ], fdname:'Weapon_LongRange' },
@@ -2025,7 +2026,7 @@ var eddb = {
 		ihrp_lw : { name:'Light Weight', maxgrade:5, mass:[-8,-12,-16,-20,-24], hullbst:[8,12,16,20,24], hullrnf:[-4,-8,-12,-16,-20], mats:[ {iro:1}, {iro:1, condco:1}, {iro:1, condco:1, hideco:1}, {ger:1, coce:1, prco:1}, {coce:1, tin:1, migral:1} ], fdname:'HullReinforcement_Advanced' },
 		ihrp_tr : { name:'Thermal Resistant', maxgrade:5, hullrnf:[3,6,9,12,15], kinres:[-2,-4,-6,-8,-10], thmres:[12,19,26,33,40], expres:[-2,-4,-6,-8,-10], mats:[ {hecowi:1}, {nic:1, hedipl:1}, {saal:1, van:1, heex:1}, {gaal:1, tun:1, heva:1}, {phal:1, mol:1, prhera:1} ], fdname:'HullReinforcement_Thermic' },
 		
-		imrp_hd : { name:'Heavy Duty', maxgrade:5, mass:[25,33.3,50,75.2,100], integ:[2.5,8.3,12.5,18.8,25], dmgprot:[2.5,8.3,12.5,18.8,25], mats:[ {}, {car:1, iro:1, shem:1}, {iro:1, shem:1, hideco:1}, {shem:1, hideco:1, prco:1, tun:1}, {cosh:1, rut:1, prhera:1, codyco:1} ], fdname:'MRP_HeavyDuty' }, // verify: mats // TODO: merccoin 0,5,5,10,25?
+		imrp_hd : { name:'Heavy Duty', maxgrade:5, mass:[25,33.3,50,75.2,100], integ:[2.5,8.3,12.5,18.8,25], dmgprot:[2.5,8.3,12.5,18.8,25], mats:[ {}, {car:1, iro:1, shem:1}, {iro:1, shem:1, hideco:1}, {shem:1, hideco:1, prco:1, tun:1}, {cosh:1, rut:1, prhera:1, codyco:1} ], fdname:'MRP_HeavyDuty' }, // TODO: merccoin 0,5,5,10,25?
 		
 		iscb_rc : { name:'Rapid Charge', maxgrade:4, boottime:[10,15,20,25], spinup:[-10,-20,-30,-40], shieldrnfps:[5,10,15,20], scbdur:[-6,-12,-18,-24], mats:[ {sul:1}, {grre:1, chr:1}, {sul:1, hyca:1, pral:1}, {chr:1, elar:1, thal:1} ], fdname:'ShieldCellBank_Rapid' },
 		iscb_sp : { name:'Specialised', maxgrade:4, integ:[-5,-10,-15,-20], pwrdraw:[10,15,20,25], boottime:[-8,-16,-24,-32], shieldrnfps:[4,6,8,10], scbheat:[-6,-12,-18,-24], mats:[ {splefi:1}, {splefi:1, condco:1}, {exscemda:1, condco:1, crinfi:1}, {condco:1, crinfi:1, ytt:1} ], fdname:'ShieldCellBank_Specialised' },
@@ -2294,7 +2295,7 @@ var eddb = {
 			modulenames:{'Mining Laser':1, 'Abrasion Blaster':'Abrasion'},
 			keyattrs:['distdraw','thmload','maximumrng'],
 			modifiable:['integ','pwrdraw','damage','distdraw','thmload','maximumrng','dmgfall'],
-			blueprints:['wpn_lr'],
+			blueprints:['wpn_lr','wpn_fr'],
 			expeffects:['wpnx_inro'],
 		},
 		
