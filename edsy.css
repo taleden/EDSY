@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 
 :root {
-	--edsy-versions-css: v-419039901-423009901-423009901-423009901; /* HTML,CSS,DB,JS */
-	--edsy-lastmodified-css: d-20251202;
+	--edsy-versions-css: v-424019901-424019901-424019901-424019901; /* HTML,CSS,DB,JS */
+	--edsy-lastmodified-css: d-20260829;
 	
 	--colorblack: black;
 	--colorwhite: white;
@@ -357,6 +357,9 @@ TEXTAREA::-webkit-scrollbar-thumb {
 }
 .iconsvg.guardian {
 	color: var(--colorblue5);
+}
+.iconsvg.merc {
+	color: var(--colorred5);
 }
 .iconsvg.powerplay {
 	color: var(--coloryellow4);
