@@ -398,7 +398,6 @@
   "ui-options-builtins": "Módulos embutidos armazenados",
   "ui-options-builtins-desc": "Selecione quais módulos com pré-engenharia (ou outras formas de disponibilidade limitada) para exibir como módulos embutidos armazenados.",
   "ui-options-builtins-none": "Nenhum",
-  "ui-options-builtins-some": "Alguns (todos disponíveis no Mediador de Tecnologia, recompensas CG selecionadas)",
   "ui-options-builtins-all": "Todos",
   "ui-options-hide-small": "Ocultar módulos menores",
   "ui-options-hide-small-desc": "Exibe apenas a maior classe de tamanho de cada tipo de módulo disponível na exibição COMPatível do navegador de módulos.",
