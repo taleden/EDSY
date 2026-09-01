@@ -396,7 +396,6 @@
   "ui-options-builtins": "自带的预设模组",
   "ui-options-builtins-desc": "选择要在预设模组中显示的工程师超改模组(或者其他限时获取的模组)",
   "ui-options-builtins-none": "不显示",
-  "ui-options-builtins-some": "显示部分(所有从科技经纪人兑换的模组以及你选定的CG奖励)",
   "ui-options-builtins-all": "显示所有",
   "ui-options-hide-small": "隐藏更小的模组",
   "ui-options-hide-small-desc": "在当前槽只显示每种模组最大的尺寸",
