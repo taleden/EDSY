@@ -49,7 +49,7 @@ window.edsy = new (function() {
 	var CSS_COLORS = ['orange','red','blue','green','yellow'];
 	var BUILTIN_STORED_MODULES = {
 		811410 : { name:"1D/F Abrasion Blaster, LR",             modulehash:"JJprG-ZG0062y006y00Ey00Iy00L800P800",             tag:'C' }, // CG reward
-	//	811411 : { name:"1D/F Abrasion Blaster, Far Reaching",   modulehash:"JJprG-aG_W56q00Eq00IkPcKwPcQyez",                 tag:'M' }, //TODO verify blueprint/expeffect modifiers
+	//	811411 : { name:"1D/F Abrasion Blaster, \"Far Reaching\"",modulehash:"JJprG-aG_W56q00Eq00IkPcKwPcQyez",                tag:'M' }, //TODO verify blueprint/expeffect modifiers
 		862500 : { name:"2E/FD AX Missile, HC+RF",               modulehash:"JL3gG-ZG0090zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", tag:'T' }, // Sirius tech broker
 		863300 : { name:"3C/FD AX Missile, HC+RF",               modulehash:"JL4wG-ZG0090zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", tag:'T' }, // Sirius tech broker
 		862570 : { name:"2E/G EAXMC \"Azimuth\", OC, AL",        modulehash:"JL3nG-ZH0038_00CoPcL600",                         tag:'T' }, // Azimuth / Rescue Ship tech broker
@@ -65,10 +65,10 @@ window.edsy = new (function() {
 		882160 : { name:"2A/F Grd Shard, LR+Foc, Pen",           modulehash:"JLYOG-YG0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", tag:'T' }, // Salvation tech broker
 		882161 : { name:"2A/F Grd Shard, LR5+Foc",               modulehash:"JLYOG-ZG0080y0051Cp993DDFm0H058L800Op77V700",     tag:'C' }, // CG reward
 		811400 : { name:"1D/F Mining Laser, LR, Incen",          modulehash:"JJpqG-ZH0072y006y00AkPcEy00I_ezL800PBLL",         tag:'T' }, // Torval Mining Ltd tech broker
-	//	811401 : { name:"1D/F Mining Laser, Long Range",         modulehash:"JJpqG-cH_W72q006kPcAkPcEkPcInJ_KwPcQupD",         tag:'M' }, //TODO verify blueprint/expeffect modifiers
+	//	811401 : { name:"1D/F Mining Laser, \"Long Range\"",     modulehash:"JJpqG-cH_W72q006kPcAkPcEkPcInJ_KwPcQupD",         tag:'M' }, //TODO verify blueprint/expeffect modifiers
 		722500 : { name:"2E/F Multi-cannon, RF+HC, Phasing",     modulehash:"JHewG-iS007Uy00Yuaab600f466n600soPcv400",         tag:'C' }, // CG reward
 		842200 : { name:"2B/F Rail, HC+LR, FeedCas",             modulehash:"JKZyG-ZI0080-Cp8zCpT000Yyv4b000f000iu00r900",     tag:'C' }, // CG reward
-	//	842201 : { name:"2B/F Rail, Enduring Feedback",          modulehash:"JKZyG-iI_W90tCp8naNCraNKypDSoPcYoPceoPcilxwqv7i", tag:'M' }, //TODO verify blueprint/expeffect modifiers
+	//	842201 : { name:"2B/F Rail, \"Enduring Feedback\"",      modulehash:"JKZyG-iI_W90tCp8naNCraNKypDSoPcYoPceoPcilxwqv7i", tag:'M' }, //TODO verify blueprint/expeffect modifiers
 		842240 : { name:"2B/F Imperial Hammer, HC, SupPen",      modulehash:"JKa0G-ZP0060zcQ8u00EsPcYuDrb000f000",             tag:'C' }, // CG reward
 		
 	//	862280 : { name:"2B/T Flak, Green",                      modulehash:"JL3KG-bG_W1A-wu",                                 tag:'T' }, // tech broker?
@@ -76,9 +76,10 @@ window.edsy = new (function() {
 	//	862282 : { name:"2B/T Flak, Red",                        modulehash:"JL3KG-fG_W1A-wu",                                 tag:'T' }, // tech broker?
 	//	862283 : { name:"2B/T Flak, Yellow",                     modulehash:"JL3KG-hG_W1A-wu",                                 tag:'T' }, // tech broker?
 		822230 : { name:"2B Seeker \"V1\", HC+LW, ThmCas",       modulehash:"JK4lG-ZQ0072-Cp6ypDAsPcIwPcUoPcX000b000",         tag:'T' }, // human tech broker
+		822234 : { name:"2B Seeker, \"Lightweight Thermal\"",    modulehash:"JK4lG-iQ0072nmf6qpDAf7iIj7iUb4SWrLLal77",         tag:'M' }, // merccoin
 		822231 : { name:"2B Seeker, HC+RF, Drag",                modulehash:"HK4lG-2R00612008u00GwghUsPcX400b400",             tag:'C' }, // CG reward // TODO: get sample to test import
 		822232 : { name:"2B Seeker, HC+Std, FSDInt",             modulehash:"JK4lG-ZK00910pD50008upDCvcQMoPcOwPcUoPcX000b000", tag:'C' }, // CG reward
-		822233 : { name:"2B Seeker, Drag Seeker, Drag",          modulehash:"JK4lG-gR0060w008m00Gof-Uf1GWvLLarLQ",             tag:'M' }, // merccoin
+		822233 : { name:"2B Seeker, \"Drag Seeker\"",            modulehash:"JK4lG-gR0060w008m00Gof-Uf1GWvLLarLQ",             tag:'M' }, // merccoin
 		823132 : { name:"3A Seeker, HC+Std, FSDInt",             modulehash:"JK69G-ZK00910pD50008upDCvcQMoPcOwPcUoPcX000b000", tag:'C' }, // CG reward
 		
 		510600 : { name:"0F ECM, LW+Shd",                        modulehash:"FCTqG03G0032_pD50009000",                         tag:'C' }, // CG reward // TODO: get sample to test import
@@ -88,16 +89,16 @@ window.edsy = new (function() {
 		530900 : { name:"0I/T Point Defence, LW+Foc",            modulehash:"JCzYG-bG0042_pD6y00GkPcL000",                     tag:'C' }, // CG reward
 		
 		453100 : { name:"3A Power Dist, SF+EF",                  modulehash:"JB3_G-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward
-		453101 : { name:"3A Power Dist, Sup",                    modulehash:"JB3_G-oG_W6Il-CMkPcOjmfSj7iWjmfaj7i",             tag:'M' }, // merccoin
+		453101 : { name:"3A Power Dist, \"Support\"",            modulehash:"JB3_G-oG_W6Il-CMkPcOjmfSj7iWjmfaj7i",             tag:'M' }, // merccoin
 		453400 : { name:"3D Power Dist, SF+EF",                  modulehash:"JB4SG-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward
-		453401 : { name:"3D Power Dist, Sup",                    modulehash:"JB4SG-oG_W6Il-CMkPcOjmfSj7iWjmfaj7i",             tag:'M' }, // merccoin
+		453401 : { name:"3D Power Dist, \"Support\"",            modulehash:"JB4SG-oG_W6Il-CMkPcOjmfSj7iWjmfaj7i",             tag:'M' }, // merccoin
 		454100 : { name:"4A Power Dist, SF+EF",                  modulehash:"JB5YG-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward
-		454101 : { name:"4A Power Dist, Sup",                    modulehash:"JB5YG-oG_W6Il-CMkPcOjmfSj7iWjmfaj7i",             tag:'M' }, // merccoin
+		454101 : { name:"4A Power Dist, \"Support\"",            modulehash:"JB5YG-oG_W6Il-CMkPcOjmfSj7iWjmfaj7i",             tag:'M' }, // merccoin
 		454400 : { name:"4D Power Dist, SF+EF",                  modulehash:"JB60G-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward
-		454401 : { name:"4D Power Dist, Sup",                    modulehash:"JB60G-oG_W6Il-CMkPcOjmfSj7iWjmfaj7i",             tag:'M' }, // merccoin
-		455101 : { name:"5A Power Dist, Bal",                    modulehash:"JB76G-mG_W90gPc6c9EAb7iGfO4KfurOfO4SfurWfO4afur", tag:'M' }, // merccoin
+		454401 : { name:"4D Power Dist, \"Support\"",            modulehash:"JB60G-oG_W6Il-CMkPcOjmfSj7iWjmfaj7i",             tag:'M' }, // merccoin
+		455101 : { name:"5A Power Dist, \"Balanced\"",           modulehash:"JB76G-mG_W90gPc6c9EAb7iGfO4KfurOfO4SfurWfO4afur", tag:'M' }, // merccoin
 		456100 : { name:"6A Power Dist, SF+EF",                  modulehash:"JB8gG-hG006Iu00MsPcOxCpSwPcWxCpawPc",             tag:'C' }, // CG reward
-		456101 : { name:"6A Power Dist, Sup",                    modulehash:"JB8gG-oG_W6Il-CMkPcOjmfSj7iWjmfaj7i",             tag:'M' }, // merccoin
+		456101 : { name:"6A Power Dist, \"Support\"",            modulehash:"JB8gG-oG_W6Il-CMkPcOjmfSj7iWjmfaj7i",             tag:'M' }, // merccoin
 		413100 : { name:"3A Power Plant, AR+OC",                 modulehash:"JA5UG-ZG0040sPc4-cQ8yAFCqAF",                     tag:'C' }, // CG reward
 		413101 : { name:"3A Power Plant, OCx2",                  modulehash:"JA5UG-dG0036upD8ypDCvcQ",                         tag:'C' }, // CG reward
 		414101 : { name:"4A Power Plant, OCx2",                  modulehash:"JA72G-dG0036upD8ypDCvcQ",                         tag:'C' }, // CG reward
@@ -117,14 +118,14 @@ window.edsy = new (function() {
 		  6510 : { name:"6E Anti-Corrosion Cargo (Cap: 64)",     modulehash:"H0AB00",                                          tag:'C' }, // CG reward
 		
 		  5500 : { name:"5E Cargo Rack, ECR (Cap: 43)",          modulehash:"J08cG-ZG0010vW0",                                 tag:'C' }, // CG reward
-		  5501 : { name:"5E Cargo Rack, Extended (Cap: 33)",     modulehash:"J08cG-aG_W10hxw",                                 tag:'M' }, // merccoin
+		  5501 : { name:"5E Cargo Rack, \"Extended\" (Cap: 33)", modulehash:"J08cG-aG_W10hxw",                                 tag:'M' }, // merccoin
 		  6500 : { name:"6E Cargo Rack, ECR (Cap: 86)",          modulehash:"J0AAG-ZG0010vW0",                                 tag:'C' }, // CG reward
-		  6501 : { name:"6E Cargo Rack, Extended (Cap: 66)",     modulehash:"J0AAG-aG_W10hxw",                                 tag:'M' }, // merccoin
+		  6501 : { name:"6E Cargo Rack, \"Extended\" (Cap: 66)", modulehash:"J0AAG-aG_W10hxw",                                 tag:'M' }, // merccoin
 		
-		 85400 : { name:"5D Module Reinforcement, HD",           modulehash:"J25SG-aG_W30u004gPc8gPc",                         tag:'M' }, // merccoin
+		 85400 : { name:"5D Module Reinforcement, \"Heavy Duty\"",modulehash:"J25SG-aG_W30u004gPc8gPc",                        tag:'M' }, // merccoin
 		
 		111300 : { name:"1I DSS \"V1\", ERx2",                   modulehash:"J2jwG-fG001P000",                                 tag:'T' }, // human tech broker
-		111301 : { name:"1I DSS, LR",                            modulehash:"J2jwG-gG_W1OoPc",                                 tag:'M' }, // merccoin
+		111301 : { name:"1I DSS, \"Long Range\"",                modulehash:"J2jwG-gG_W1OoPc",                                 tag:'M' }, // merccoin
 		
 		303100 : { name:"3A Shield Gen, KR+TR",                  modulehash:"J7PcG-bG0044sPc8wPccupDgvcQ",                     tag:'C' }, // CG reward
 	};
