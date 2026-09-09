@@ -1951,6 +1951,7 @@ var eddb = {
 		misc_agzr : { name:'Anti-Guardian Zone Resistance', maxgrade:1, mats:[ {hasufr:2},{cacr:1},{tacoch:1} ], fdname:'GuardianModule_Sturdy' }, // TODO: fdname
 		
 		wpn_ds : { name:'Double Shot', maxgrade:5, maximumrng:[-2,-4,-6,-8,-10], bstrof:[6,8,10,12,14], bstsize:[2,2,2,2,2], ammoclip:[15,20,25,30,35], mats:[ {car:1}, {car:1, meeq:1}, {car:1, meeq:1, crinfi:1}, {van:1, meco:1, sefipa:1}, {hideco:1, confco:1, moemfi:1} ], fdname:'Weapon_DoubleShot' },
+		wpn_drsk : { name:'Drag Seeker', maxgrade:5, mass:[37.5,50,75,112.75,150], pwrdraw:[5.75,8.25,12.5,18.75,25], distdraw:[12.5,13.9,20.9,31.4,41.7], bstint:[-4,-6.5,-10,-15,-20], ammoclip:[33.3,66.67,100,150,200], ammomax:[16.67,66.67,100,150,200], mats:[ {}, {mesc:1, van:1, hedipl:1}, {mesc:1, meeq:1, pral:1}, {mocofi:1, meco:1, hideco:1, thal:1}, {meco:1, prco:1, tec:1, misu:1} ], fdname:'Weapon_DragSeeker' }, // TODO: merccoin 0,10,10,20,40
 		wpn_ef : { name:'Enduring Feedback', maxgrade:5, mass:[22.5,30,45,67.7,90], pwrdraw:[8.7,11.7,17.5,26.3,35], damage:[17.4,12,5.8,-17.1,-12], bstint:[-9.9,-32.6,-48.9,-73.5,-97.9], thmload:[60,44.5,33.3,16.5,0], maximumrng:[10,33.3,50,75.2,100], dmgfall:[32,300,350,425.6,500], ammomax:[10,32.5,50,75,100], rldtime:[6.2,8.3,12.5,18.8,25], mats:[ {}, {mesc:1, sul:1, mocofi:1}, {sul:1, mocofi:1, nio:1}, {mocofi:1, nio:1, copo:1, tin:1}, {meco:1, thal:1, misu:1, bico:1} ], fdname:'Weapon_EnduringFeedback' }, // TODO: merccoin 0,10,15,25,50
 		wpn_eff : { name:'Efficient', maxgrade:5, pwrdraw:[0,-12,-24,-36,-48], damage:[8,12,16,20,24], distdraw:[0,-15,-25,-35,-45], thmload:[-37.5,-42.5,-47.5,-52.5,-60], mats:[ {sul:1}, {sul:1, hedipl:1}, {exscemda:1, chr:1, heex:1}, {iremda:1, sel:1, heva:1}, {unemda:1, cad:1, prhera:1} ], fdname:'Weapon_Efficient' },
 		wpn_foc : { name:'Focused', maxgrade:5, thmload:[1,2,3,4,5], pierce:[40,60,80,100,120], maximumrng:[36,52,68,84,100], dmgfall:[36,52,68,84,100], mats:[ {iro:1}, {iro:1, condco:1}, {iro:1, chr:1, coce:1}, {ger:1, focr:1, poca:1}, {nio:1, refocr:1, misu:1} ], fdname:'Weapon_Focused' },
@@ -2014,7 +2015,7 @@ var eddb = {
 		cs_wa : { name:'Wide Angle', maxgrade:5, pwrdraw:[10,20,30,40,50], scanangle:[40,80,120,160,200], typemis:[-4,-8,-12,-16,-20], mats:[ {mesc:1}, {mesc:1, ger:1}, {mesc:1, ger:1, clscda:1}, {meeq:1, nio:1, discda:1}, {meco:1, tin:1, clscfr:1} ], fdname:'Sensor_WideAngle' },
 		
 		icr_ecr : { name:'Expanded Cargo Rack', maxgrade:5, cargocap:[7,14,21,28,35], fdname:'CargoRack_IncreasedCapacity' },
-		icr_xcr : { name:'Extended Cargo Rack', maxgrade:5, cargocap:[3.1,12.5,18.8,25,34.4], mats:[ {}, {mesc:1, van:1, man:1}, {mesc:1, van:1, nio:1}, {meeq:1, hideco:1, tin:1, nio:1}, {meeq:1, meco:1, prco:1, misu:1} ], fdname:'CargoRack_Extended' }, // TODO: merccoin 0,5,10,15,30
+		icr_xcr : { name:'Extended Cargo Rack', maxgrade:5, cargocap:[3.125,12.5,18.75,25,34.375], mats:[ {}, {mesc:1, van:1, man:1}, {mesc:1, van:1, nio:1}, {meeq:1, hideco:1, tin:1, nio:1}, {meeq:1, meco:1, prco:1, misu:1} ], fdname:'CargoRack_Extended' }, // TODO: merccoin 0,5,10,15,30
 		
 		ifs_sre : { name:'Scoop Rate Enhanced', maxgrade:5, scooprate:[10,20,30,40,50], pwrdraw:[3,6,9,12,15], mats:[ {pho:1, grre:1}, {chr:1, grre:1, chpr:1}, {chr:1, chpr:1, coce:1}, {chpr:2, chdi:1, prlial:1}, {tel:1, chma:1, prhera:1, prraal:1} ], fdname:'FuelScoop_ScoopRateEnhanced' }, // TODO: merccoin 10,15,20,25,35
 		
@@ -2311,7 +2312,7 @@ var eddb = {
 			modulenames:{'Missile Rack':1, 'Seeker Missile Rack':1},
 			keyattrs:['damage','distdraw','thmload','ammoclip'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','bstint','ammoclip','ammomax','rldtime','jitter'],
-			blueprints:['wpn_hc','wpn_lw','wpn_rf','wpn_stu'],
+			blueprints:['wpn_hc','wpn_lw','wpn_rf','wpn_stu','wpn_drsk'],
 			expeffects:['wpnx_db','wpnx_emmu','wpnx_fc','wpnx_fsin','wpnx_muse','wpnx_ovmu','wpnx_os','wpnx_pemu','wpnx_sd','wpnx_thca','wpnx_drmu'],
 		},
 		
