@@ -56,6 +56,7 @@ window.edsy = new (function() {
 		862570 : { name:"2E/G EAXMC \"Azimuth\", OC, AL",        modulehash:"JL3nG-ZH0038_00CoPcL600",                         tag:'T' }, // Azimuth / Rescue Ship tech broker
 		863370 : { name:"3C/G EAXMC \"Azimuth\", OC, AL",        modulehash:"JL51G-ZH0038_00CoPcL600",                         tag:'T' }, // Azimuth / Rescue Ship tech broker
 		872200 : { name:"2B Enzyme Missile, HC+Caustic",         modulehash:"JLIqG-ZG0050ypD4sPc8y00C_00Gu00",                 tag:'C' }, // CG reward
+		872201 : { name:"2B Enzyme Missile, \"High-Yield\"",     modulehash:"JLIqG-iG_W50qpD4kPc8kPcCq00Ge69",                 tag:'M' }, // merccoin
 		711510 : { name:"1E/G Frag Cannon, DS+HC, SS",           modulehash:"JHNlG-ZP0080ypD8sPcUoPcYlhXb400f2ghizR1vF00",     tag:'C' }, // CG reward
 		713310 : { name:"3C/G Frag Cannon, DS+HC, SS",           modulehash:"JHQZG-ZP0080ypD8sPcUoPcYlhXb400f2ghizR1vF00",     tag:'C' }, // CG reward
 		881400 : { name:"1D/F Grd Gauss, RF+HC",                 modulehash:"JLXCG-YG0092_166_00A_00Ew7ZHD00L800P600T800YsPc", tag:'T' }, // Salvation tech broker

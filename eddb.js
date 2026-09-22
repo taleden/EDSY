@@ -1957,6 +1957,7 @@ var eddb = {
 		wpn_foc : { name:'Focused', maxgrade:5, thmload:[1,2,3,4,5], pierce:[40,60,80,100,120], maximumrng:[36,52,68,84,100], dmgfall:[36,52,68,84,100], mats:[ {iro:1}, {iro:1, condco:1}, {iro:1, chr:1, coce:1}, {ger:1, focr:1, poca:1}, {nio:1, refocr:1, misu:1} ], fdname:'Weapon_Focused' },
 		wpn_fr : { name:'Far-Reaching', maxgrade:5, integ:[0,-16.7,-25,-37.6,-50], pwrdraw:[-12.5,-16.7,-25,-37.6,-50], distdraw:[-12.5,-16.7,-25,-37.6,-50], thmload:[-5,-16.7,-25,-37.6,-50], maximumrng:[40,133.3,200,300,400], dmgfall:[-58,133.3,200,300,400], mats:[ {}, {sul:1, hedipl:1, mocofi:1}, {chr:1, mocofi:1, heex:1}, {mocofi:1, copo:1, sel:1, heva:1}, {crinfi:1, thal:1, bico:1, prhera:1} ], fdname:'Weapon_FarReaching' }, // TODO: merccoin 0,5,5,10,20
 		wpn_hc : { name:'High Capacity', maxgrade:5, mass:[20,30,40,50,60], pwrdraw:[4,8,12,16,20], ammoclip:[36,52,68,84,100], ammomax:[36,52,68,84,100], bstint:[-2,-4,-6,-8,-10], mats:[ {mesc:1}, {mesc:1, van:1}, {mesc:1, van:1, nio:1}, {meeq:1, hideco:1, tin:1}, {meco:1, prco:1, misu:1} ], fdname:'Weapon_HighCapacity' },
+		wpn_hy : { name:'High-Yield', maxgrade:5, mass:[15,20,30,45.1,60], pwrdraw:[5,6.7,10,15,20], damage:[5,0,0,0,0], ammoclip:[12.5,100,100,100,100], ammomax:[1.6,0,0,0,20], mats:[ {}, {mesc:1, van:1, condco:1}, {mesc:1, van:1, elar:1}, {meeq:1, hideco:1, tin:1, poca:1}, {meco:1, prco:1, moemfi:1, misu:1} ], fdname:'Weapon_HighYieldEnzyme' }, // TODO: merccoin 0,10,15,20,45
 		wpn_lw : { name:'Light Weight', maxgrade:5, mass:[-30,-45,-60,-75,-90], integ:[-20,-30,-40,-50,-60], pwrdraw:[0,-10,-20,-30,-40], distdraw:[0,-20,-25,-30,-35], mats:[ {pho:1}, {saal:1, man:1}, {saal:1, man:1, coce:1}, {condco:1, phal:1, prlial:1}, {coce:1, prlial:1, prraal:1} ], fdname:'Weapon_LightWeight' },
 		wpn_lwts : { name:'Lightweight Thermal Seeker', maxgrade:5, mass:[-9,-30,-45,-67.7,-90], integ:[-15,-20,-30,-45,-60], pwrdraw:[-2,-6.7,-10,-15,-20], distdraw:[-4,-13.3,-20,-30,-40], bstint:[-2,-3.5,-5,-7.5,-10], ammoclip:[16.67,33.3,50,83.3,100], ammomax:[5.56,33.3,50,72.2,100], mats:[ {}, {mesc:1, van:1, man:1}, {mesc:1, meeq:1, coce:1}, {mocofi:1, phal:1, prlial:1, thal:1}, {meco:1, prlial:1, prraal:1, misu:1} ], fdname:'Weapon_LightweightThermalSeeker' }, // TODO: merccoin 0,10,10,20,40
 		wpn_lr : { name:'Long Range', maxgrade:5, mass:[10,15,20,25,30], pwrdraw:[3,6,9,12,15], maximumrng:[20,40,60,80,100], dmgfall:[9999,9999,9999,9999,9999], mats:[ {sul:1}, {sul:1, mocofi:1}, {sul:1, mocofi:1, focr:1}, {mocofi:1, focr:1, copo:1}, {crinfi:1, thal:1, bico:1} ], fdname:'Weapon_LongRange' },
@@ -2213,7 +2214,7 @@ var eddb = {
 			modulenames:{'Remote Release Flak Launcher':'Flak', 'Remote Release Flechette Launcher':'Flechette'},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 			modifiable:['mass','pwrdraw','damage','ammoclip','ammomax'],
-			blueprints:['wpn_hc','dec_g','dec_p','dec_r','dec_y'],
+			blueprints:['wpn_hc','dec_g','dec_p','dec_r','dec_y','wpn_hy'],
 		},
 		
 		hexxm : {
