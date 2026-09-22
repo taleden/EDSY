@@ -82,7 +82,9 @@ window.edsy = new (function() {
 		822231 : { name:"2B Seeker, HC+RF, Drag",                modulehash:"HK4lG-2R00612008u00GwghUsPcX400b400",             tag:'C' }, // CG reward // TODO: get sample to test import
 		822232 : { name:"2B Seeker, HC+Std, FSDInt",             modulehash:"JK4lG-ZK00910pD50008upDCvcQMoPcOwPcUoPcX000b000", tag:'C' }, // CG reward
 		822233 : { name:"2B Seeker, \"Drag Seeker\"",            modulehash:"JK4lG-gR0060w008m00Gof-Uf1GWvLLarLQ",             tag:'M' }, // merccoin
+		822235 : { name:"2B Seeker, \"Lockdown\"",               modulehash:"JK4lG-kK_W90upD4oPc8mpDCiUkMb7iOj7iUb7iWrLLanJ_", tag:'M' }, // merccoin
 		823132 : { name:"3A Seeker, HC+Std, FSDInt",             modulehash:"JK69G-ZK00910pD50008upDCvcQMoPcOwPcUoPcX000b000", tag:'C' }, // CG reward
+		823135 : { name:"3A Seeker, \"Lockdown\"",               modulehash:"JK69G-kK_W90upD4oPc8mpDCiUkMb7iOj7iUb7iWrLLanJ_", tag:'M' }, // merccoin
 		
 		510600 : { name:"0F ECM, LW+Shd",                        modulehash:"FCTqG03G0032_pD50009000",                         tag:'C' }, // CG reward // TODO: get sample to test import
 		520900 : { name:"0I Heat Sink, ACx2",                    modulehash:"JCjwG-YG002P000S_00",                             tag:'T' }, // Sirus tech broker

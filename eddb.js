@@ -1960,6 +1960,7 @@ var eddb = {
 		wpn_hy : { name:'High-Yield', maxgrade:5, mass:[15,20,30,45.1,60], pwrdraw:[5,6.7,10,15,20], damage:[5,0,0,0,0], ammoclip:[12.5,100,100,100,100], ammomax:[1.6,0,0,0,20], mats:[ {}, {mesc:1, van:1, condco:1}, {mesc:1, van:1, elar:1}, {meeq:1, hideco:1, tin:1, poca:1}, {meco:1, prco:1, moemfi:1, misu:1} ], fdname:'Weapon_HighYieldEnzyme' }, // TODO: merccoin 0,10,15,20,45
 		wpn_lw : { name:'Light Weight', maxgrade:5, mass:[-30,-45,-60,-75,-90], integ:[-20,-30,-40,-50,-60], pwrdraw:[0,-10,-20,-30,-40], distdraw:[0,-20,-25,-30,-35], mats:[ {pho:1}, {saal:1, man:1}, {saal:1, man:1, coce:1}, {condco:1, phal:1, prlial:1}, {coce:1, prlial:1, prraal:1} ], fdname:'Weapon_LightWeight' },
 		wpn_lwts : { name:'Lightweight Thermal Seeker', maxgrade:5, mass:[-9,-30,-45,-67.7,-90], integ:[-15,-20,-30,-45,-60], pwrdraw:[-2,-6.7,-10,-15,-20], distdraw:[-4,-13.3,-20,-30,-40], bstint:[-2,-3.5,-5,-7.5,-10], ammoclip:[16.67,33.3,50,83.3,100], ammomax:[5.56,33.3,50,72.2,100], mats:[ {}, {mesc:1, van:1, man:1}, {mesc:1, meeq:1, coce:1}, {mocofi:1, phal:1, prlial:1, thal:1}, {meco:1, prlial:1, prraal:1, misu:1} ], fdname:'Weapon_LightweightThermalSeeker' }, // TODO: merccoin 0,10,10,20,40
+		wpn_ld : { name:'Lockdown', maxgrade:5, mass:[30,40,60,90.2,120], integ:[10,33.3,50,75.2,100], pwrdraw:[7.5,10,15,22.6,30], damage:[3.5,11.7,17.4,26.3,35], thmload:[-1,-3.3,-5,-7.5,-10], pierce:[4,13.3,20,30,40], bstint:[-1,-3.4,-5,-7.5,-10], ammoclip:[16.6,33.3,50,83.3,100], ammomax:[8.3,33.3,50,72.2,100], fdname:'Weapon_LockdownSeeker' }, // TODO: merccoin 0,10,15,25,45
 		wpn_lr : { name:'Long Range', maxgrade:5, mass:[10,15,20,25,30], pwrdraw:[3,6,9,12,15], maximumrng:[20,40,60,80,100], dmgfall:[9999,9999,9999,9999,9999], mats:[ {sul:1}, {sul:1, mocofi:1}, {sul:1, mocofi:1, focr:1}, {mocofi:1, focr:1, copo:1}, {crinfi:1, thal:1, bico:1} ], fdname:'Weapon_LongRange' },
 		wpn_lrml : { name:'Long Range Mining Laser', maxgrade:5, integ:[-12.5,-1.7,-25,-37.6,-50], pwrdraw:[-5,-1.7,-25,-37.6,-50], damage:[-5,-5,-5,-5,-5], distdraw:[-5,-1.7,-25,-37.6,-50], thmload:[-8.3,-27.66,-41.5,-62.4,-83], maximumrng:[40,133.3,200,300,400], dmgfall:[-30,288.9,400,567.9,733.3], mats:[ {}, {sul:1, hedipl:1, mocofi:1}, {chr:1, mocofi:1, heex:1}, {mocofi:1, copo:1, sel:1, heva:1}, {crinfi:1, thal:1, bico:1, prhera:1} ], fdname:'Weapon_LongRangeMiningLaser' }, // TODO: merccoin 0,5,5,10,25
 		wpn_oc : { name:'Overcharged', maxgrade:5, damage:[30,40,50,60,70], distdraw:[15,20,25,30,35], thmload:[3,6,9,12,15], ammoclip:[-3,-6,-9,-12,-15], mats:[ {nic:1}, {nic:1, condco:1}, {nic:1, condco:1, elar:1}, {zin:1, coce:1, poca:1}, {zir:1, copo:1, moemfi:1} ], fdname:'Weapon_Overcharged' },
@@ -2315,7 +2316,7 @@ var eddb = {
 			modulenames:{'Missile Rack':1, 'Seeker Missile Rack':1},
 			keyattrs:['damage','distdraw','thmload','ammoclip'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','bstint','ammoclip','ammomax','rldtime','jitter'],
-			blueprints:['wpn_hc','wpn_lw','wpn_rf','wpn_stu','wpn_drsk','wpn_lwts'],
+			blueprints:['wpn_hc','wpn_lw','wpn_rf','wpn_stu','wpn_drsk','wpn_lwts','wpn_ld'],
 			expeffects:['wpnx_db','wpnx_emmu','wpnx_fc','wpnx_fsin','wpnx_muse','wpnx_ovmu','wpnx_os','wpnx_pemu','wpnx_sd','wpnx_thca','wpnx_drmu'],
 		},
 		
