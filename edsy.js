@@ -49,7 +49,7 @@ window.edsy = new (function() {
 	var CSS_COLORS = ['orange','red','blue','green','yellow'];
 	var BUILTIN_STORED_MODULES = {
 		811410 : { name:"1D/F Abrasion Blaster, LR",             modulehash:"JJprG-ZG0062y006y00Ey00Iy00L800P800",             tag:'C' }, // CG reward
-	//	811411 : { name:"1D/F Abrasion Blaster, \"Far Reaching\"",modulehash:"JJprG-aG_W56q00Eq00IkPcKwPcQyez",                tag:'M' }, //TODO verify blueprint/expeffect modifiers
+		811411 : { name:"1D/F Abrasion Blaster, \"Far Reaching\"",modulehash:"JJprG-aG_W56q00Eq00IkPcKwPcQyez",                tag:'M' }, // merccoin
 		862500 : { name:"2E/FD AX Missile, HC+RF",               modulehash:"JL3gG-ZG0090zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", tag:'T' }, // Sirius tech broker
 		863300 : { name:"3C/FD AX Missile, HC+RF",               modulehash:"JL4wG-ZG0090zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", tag:'T' }, // Sirius tech broker
 		604100 : { name:"4A/F Beam Laser, \"Overloaded\"",       modulehash:"JElwG-mG_W50y008q00CoPcGu00Ko58",                 tag:'M' }, // merccoin
@@ -69,11 +69,11 @@ window.edsy = new (function() {
 		882160 : { name:"2A/F Grd Shard, LR+Foc, Pen",           modulehash:"JLYOG-YG0090y0051Cp98HkDFm0H058K_7YP4JAV700YpXv", tag:'T' }, // Salvation tech broker
 		882161 : { name:"2A/F Grd Shard, LR5+Foc",               modulehash:"JLYOG-ZG0080y0051Cp993DDFm0H058L800Op77V700",     tag:'C' }, // CG reward
 		811400 : { name:"1D/F Mining Laser, LR, Incen",          modulehash:"JJpqG-ZH0072y006y00AkPcEy00I_ezL800PBLL",         tag:'T' }, // Torval Mining Ltd tech broker
-	//	811401 : { name:"1D/F Mining Laser, \"Long Range\"",     modulehash:"JJpqG-cH_W72q006kPcAkPcEkPcInJ_KwPcQupD",         tag:'M' }, //TODO verify blueprint/expeffect modifiers
+		811401 : { name:"1D/F Mining Laser, \"Long Range\"",     modulehash:"JJpqG-cH_W72q006kPcAkPcEkPcInJ_KwPcQupD",         tag:'M' }, // merccoin
 		722500 : { name:"2E/F Multi-cannon, RF+HC, Phasing",     modulehash:"JHewG-iS007Uy00Yuaab600f466n600soPcv400",         tag:'C' }, // CG reward
 		722501 : { name:"2E/F Multi-cannon, \"Rapid Phase\"",    modulehash:"JHewG-oS_W6Uq00YmYqaupDesZ1m_00s_lN",             tag:'M' }, // merccoin
 		842200 : { name:"2B/F Rail, HC+LR, FeedCas",             modulehash:"JKZyG-ZI0080-Cp8zCpT000Yyv4b000f000iu00r900",     tag:'C' }, // CG reward
-	//	842201 : { name:"2B/F Rail, \"Enduring Feedback\"",      modulehash:"JKZyG-iI_W90tCp8naNCraNKypDSoPcYoPceoPcilxwqv7i", tag:'M' }, //TODO verify blueprint/expeffect modifiers
+		842201 : { name:"2B/F Rail, \"Enduring Feedback\"",      modulehash:"JKZyG-iI_W90tCp8naNCraNKypDSoPcYoPceoPcilxwqv7i", tag:'M' }, // merccoin
 		842240 : { name:"2B/F Imperial Hammer, HC, SupPen",      modulehash:"JKa0G-ZP0060zcQ8u00EsPcYuDrb000f000",             tag:'C' }, // CG reward
 		
 	//	862280 : { name:"2B/T Flak, Green",                      modulehash:"JL3KG-bG_W1A-wu",                                 tag:'T' }, // tech broker?
