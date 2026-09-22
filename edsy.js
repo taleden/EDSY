@@ -52,6 +52,7 @@ window.edsy = new (function() {
 	//	811411 : { name:"1D/F Abrasion Blaster, \"Far Reaching\"",modulehash:"JJprG-aG_W56q00Eq00IkPcKwPcQyez",                tag:'M' }, //TODO verify blueprint/expeffect modifiers
 		862500 : { name:"2E/FD AX Missile, HC+RF",               modulehash:"JL3gG-ZG0090zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", tag:'T' }, // Sirius tech broker
 		863300 : { name:"3C/FD AX Missile, HC+RF",               modulehash:"JL4wG-ZG0090zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", tag:'T' }, // Sirius tech broker
+		604100 : { name:"4A/F Beam Laser, \"Overloaded\"",       modulehash:"JElwG-mG_W50y008q00CoPcGu00Ko58",                 tag:'M' }, // merccoin
 		862570 : { name:"2E/G EAXMC \"Azimuth\", OC, AL",        modulehash:"JL3nG-ZH0038_00CoPcL600",                         tag:'T' }, // Azimuth / Rescue Ship tech broker
 		863370 : { name:"3C/G EAXMC \"Azimuth\", OC, AL",        modulehash:"JL51G-ZH0038_00CoPcL600",                         tag:'T' }, // Azimuth / Rescue Ship tech broker
 		872200 : { name:"2B Enzyme Missile, HC+Caustic",         modulehash:"JLIqG-ZG0050ypD4sPc8y00C_00Gu00",                 tag:'C' }, // CG reward

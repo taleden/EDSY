@@ -1962,6 +1962,7 @@ var eddb = {
 		wpn_lr : { name:'Long Range', maxgrade:5, mass:[10,15,20,25,30], pwrdraw:[3,6,9,12,15], maximumrng:[20,40,60,80,100], dmgfall:[9999,9999,9999,9999,9999], mats:[ {sul:1}, {sul:1, mocofi:1}, {sul:1, mocofi:1, focr:1}, {mocofi:1, focr:1, copo:1}, {crinfi:1, thal:1, bico:1} ], fdname:'Weapon_LongRange' },
 		wpn_lrml : { name:'Long Range Mining Laser', maxgrade:5, integ:[-12.5,-1.7,-25,-37.6,-50], pwrdraw:[-5,-1.7,-25,-37.6,-50], damage:[-5,-5,-5,-5,-5], distdraw:[-5,-1.7,-25,-37.6,-50], thmload:[-8.3,-27.66,-41.5,-62.4,-83], maximumrng:[40,133.3,200,300,400], dmgfall:[-30,288.9,400,567.9,733.3], mats:[ {}, {sul:1, hedipl:1, mocofi:1}, {chr:1, mocofi:1, heex:1}, {mocofi:1, copo:1, sel:1, heva:1}, {crinfi:1, thal:1, bico:1, prhera:1} ], fdname:'Weapon_LongRangeMiningLaser' }, // TODO: merccoin 0,5,5,10,25
 		wpn_oc : { name:'Overcharged', maxgrade:5, damage:[30,40,50,60,70], distdraw:[15,20,25,30,35], thmload:[3,6,9,12,15], ammoclip:[-3,-6,-9,-12,-15], mats:[ {nic:1}, {nic:1, condco:1}, {nic:1, condco:1, elar:1}, {zin:1, coce:1, poca:1}, {zir:1, copo:1, moemfi:1} ], fdname:'Weapon_Overcharged' },
+		wpn_ol : { name:'Overloaded', maxgrade:5, mass:[50,66.6,100,150.4,200], pwrdraw:[12.5,16.7,25,37.6,50], damage:[10,33.3,50,75.2,100], distdraw:[25,33.3,50,75.2,100], thmload:[9.5,23.8,31.7,47.5,71.4], mats:[ {}, {chr:1, condco:1, nic:1}, {chr:1, condco:1, elar:1}, {elar:1, hideco:1, poca:1, focr:1}, {zir:1, misu:1, moemfi:1, focr:1} ], fdname:'Weapon_Overloaded' }, // TODO: verify fdname, merccoin 0,10,15,25,50
 		wpn_pc : { name:'Plasma Conversion', maxgrade:5, pwrdraw:[5,10,20,30,40], damage:[-3,-5,-7,-9,-11], thmwgt:[96.1,93.4,90.6,87.6,84.5], abswgt:[3.9,6.6,9.4,12.4,15.5], mats:[ {pho:1, hecowi:1}, {hecowi:1, hedipl:1}, {hedipl:1, phal:1}, {hedipl:1, phal:1, refocr:1, confco:1}, {tec:1, thal:1, misu:1, moemfi:1 } ], fdname:'Weapon_PlasmaConversion' }, // TODO: merccoin 10,15,20,25,30
 		wpn_rf : { name:'Rapid Fire', maxgrade:5, damage:[-1,-2,-3,-4,-5], distdraw:[0,-5,-15,-25,-35], bstint:[-8,-17,-26,-35,-44], rldtime:[-25,-35,-45,-55,-65], jitter:[0.5,0.5,0.5,0.5,0.5], mats:[ {mesc:1}, {mesc:1, hedipl:1}, {splefi:1, meeq:1, pral:1}, {mocofi:1, meco:1, thal:1}, {pral:1, confco:1, tec:1} ], fdname:'Weapon_RapidFire' },
 		wpn_sr : { name:'Short Range', maxgrade:5, damage:[27,39,51,63,75], thmload:[0,10,20,30,40], maximumrng:[-10,-20,-30,-40,-50], mats:[ {nic:1}, {nic:1, mocofi:1}, {nic:1, mocofi:1, elar:1}, {mocofi:1, elar:1, copo:1}, {crinfi:1, confco:1, bico:1} ], fdname:'Weapon_ShortRange' },
@@ -2185,7 +2186,7 @@ var eddb = {
 			modulenames:{'Beam Laser':1},
 			keyattrs:['damage','distdraw','thmload','maximumrng'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maximumrng','dmgfall','_X_ jitter','thmwgt','abswgt'],
-			blueprints:['wpn_eff','wpn_lw','wpn_lr','wpn_oc','wpn_sr','wpn_stu','wpn_pc'],
+			blueprints:['wpn_eff','wpn_lw','wpn_lr','wpn_oc','wpn_sr','wpn_stu','wpn_pc','wpn_ol'],
 			expeffects:['wpnx_cose','wpnx_db','wpnx_fc','wpnx_os','wpnx_rese','wpnx_sd','wpnx_thco','wpnx_thsh','wpnx_thve'],
 		},
 		
