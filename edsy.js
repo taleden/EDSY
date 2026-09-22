@@ -58,7 +58,9 @@ window.edsy = new (function() {
 		872200 : { name:"2B Enzyme Missile, HC+Caustic",         modulehash:"JLIqG-ZG0050ypD4sPc8y00C_00Gu00",                 tag:'C' }, // CG reward
 		872201 : { name:"2B Enzyme Missile, \"High-Yield\"",     modulehash:"JLIqG-iG_W50qpD4kPc8kPcCq00Ge69",                 tag:'M' }, // merccoin
 		711510 : { name:"1E/G Frag Cannon, DS+HC, SS",           modulehash:"JHNlG-ZP0080ypD8sPcUoPcYlhXb400f2ghizR1vF00",     tag:'C' }, // CG reward
+		711511 : { name:"1E/G Frag Cannon, \"Double Screaming\"",modulehash:"JHNlG-mP_W70qpD8kPcUgPcb400evLLimGpv1cQ",         tag:'M' }, // merccoin
 		713310 : { name:"3C/G Frag Cannon, DS+HC, SS",           modulehash:"JHQZG-ZP0080ypD8sPcUoPcYlhXb400f2ghizR1vF00",     tag:'C' }, // CG reward
+		713311 : { name:"3C/G Frag Cannon, \"Double Screaming\"",modulehash:"JHQZG-mP_W70qpD8kPcUgPcb400evLLimGpv1cQ",         tag:'M' }, // merccoin
 		881400 : { name:"1D/F Grd Gauss, RF+HC",                 modulehash:"JLXCG-YG0092_166_00A_00Ew7ZHD00L800P600T800YsPc", tag:'T' }, // Salvation tech broker
 		882200 : { name:"2B/F Grd Gauss, RF+HC",                 modulehash:"JLYSG-YG0092_166_00A_00Ew7ZHD00L800P600T800YsPc", tag:'T' }, // Salvation tech broker
 		881430 : { name:"1D/F Grd Plasma, OC+Foc",               modulehash:"JLXFG-YG0060vBh4zHx8y00Cw00H800KvLL",             tag:'T' }, // Salvation tech broker

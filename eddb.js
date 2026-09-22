@@ -1950,6 +1950,7 @@ var eddb = {
 	//	misc_sh4 : { name:'Shielded', maxgrade:4, integ:[60,120,180,240], pwrdraw:[20,40,60,80], mats:[ {woshem:1}, {car:1, shem:1}, {car:1, shem:1, hideco:1}, {van:1, shse:1, prco:1} ], fdname:'Misc_Shielded' },
 		misc_agzr : { name:'Anti-Guardian Zone Resistance', maxgrade:1, mats:[ {hasufr:2},{cacr:1},{tacoch:1} ], fdname:'GuardianModule_Sturdy' }, // TODO: fdname
 		
+		wpn_dscr : { name:'Double Screaming', maxgrade:5, mass:[15,20,30,45.1,60], pwrdraw:[5,6.7,10,15,20], maximumrng:[-2.5,-2.5,-3.3,-5,-7.5], bstrof:[1.4,5,7.7,12.3,18], bstsize:[2,2,2,2,2], ammoclip:[33.3,33.3,33.3,100,166.7], ammomax:[6.66,22.2,33.9,51.1,67.8], mats:[ {}, {car:1, mesc:1, meeq:1}, {car:1, meeq:1, tin:1}, {van:1, crinfi:1, meco:1, sefipa:1}, {hideco:1, meco:1, confco:1, moemfi:1} ], fdname:'Weapon_DoubleScreaming' }, // TODO: verify bstrof, merccoin 0,10,15,25,50
 		wpn_ds : { name:'Double Shot', maxgrade:5, maximumrng:[-2,-4,-6,-8,-10], bstrof:[6,8,10,12,14], bstsize:[2,2,2,2,2], ammoclip:[15,20,25,30,35], mats:[ {car:1}, {car:1, meeq:1}, {car:1, meeq:1, crinfi:1}, {van:1, meco:1, sefipa:1}, {hideco:1, confco:1, moemfi:1} ], fdname:'Weapon_DoubleShot' },
 		wpn_drsk : { name:'Drag Seeker', maxgrade:5, mass:[37.5,50,75,112.75,150], pwrdraw:[5.75,8.25,12.5,18.75,25], distdraw:[12.5,13.9,20.9,31.4,41.7], bstint:[-4,-6.5,-10,-15,-20], ammoclip:[33.3,66.67,100,150,200], ammomax:[16.67,66.67,100,150,200], mats:[ {}, {mesc:1, van:1, hedipl:1}, {mesc:1, meeq:1, pral:1}, {mocofi:1, meco:1, hideco:1, thal:1}, {meco:1, prco:1, tec:1, misu:1} ], fdname:'Weapon_DragSeeker' }, // TODO: merccoin 0,10,10,20,40
 		wpn_ef : { name:'Enduring Feedback', maxgrade:5, mass:[22.5,30,45,67.7,90], pwrdraw:[8.7,11.7,17.5,26.3,35], damage:[17.4,12,5.8,-17.1,-12], bstint:[-9.9,-32.6,-48.9,-73.5,-97.9], thmload:[60,44.5,33.3,16.5,0], maximumrng:[10,33.3,50,75.2,100], dmgfall:[32,300,350,425.6,500], ammomax:[10,32.5,50,75,100], rldtime:[6.2,8.3,12.5,18.8,25], mats:[ {}, {mesc:1, sul:1, mocofi:1}, {sul:1, mocofi:1, nio:1}, {mocofi:1, nio:1, copo:1, tin:1}, {meco:1, thal:1, misu:1, bico:1} ], fdname:'Weapon_EnduringFeedback' }, // TODO: merccoin 0,10,15,25,50
@@ -2284,7 +2285,7 @@ var eddb = {
 			modulenames:{'Fragment Cannon':1},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maximumrng','bstint','bstsize','ammoclip','ammomax','rldtime','jitter','bstrof'],
-			blueprints:['wpn_ds','wpn_eff','wpn_hc','wpn_lw','wpn_oc','wpn_rf','wpn_stu'],
+			blueprints:['wpn_ds','wpn_eff','wpn_hc','wpn_lw','wpn_oc','wpn_rf','wpn_stu','wpn_dscr'],
 			expeffects:['wpnx_cosh','wpnx_dash','wpnx_db','wpnx_drmu','wpnx_fc','wpnx_inro','wpnx_muse','wpnx_os','wpnx_scsh','wpnx_sd'],
 		},
 		
