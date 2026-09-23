@@ -1014,10 +1014,13 @@ window.edsy = new (function() {
 			var shipreserved = ((ship.reserved || EMPTY_OBJ)[this.slotgroup] || EMPTY_OBJ)[this.slotnum];
 			if (shipreserved && !shipreserved[module.mtype]) return false; // slot does not allow the module type (i.e. Beluga/Orca/Dolphin cabins-only slots, Panther cargo-only slots, Prospector mining/limpet/hangar slots)
 			// TODO: generalize these special cases for mk ii cargo racks, mining multi-limpet controllers, passenger cabins only in 'Cargo', 'LimpetController', 'Passenger' slots, respectively
-			if (module.mtype == 'icr' && module.reserved && !(((ship.slotnames || EMPTY_OBJ)[this.slotgroup] || EMPTY_OBJ)[this.slotnum] || '').toUpperCase().startsWith('CARGO')) return false;
-			if (module.mtype == 'imlc' && module.reserved && !(((ship.slotnames || EMPTY_OBJ)[this.slotgroup] || EMPTY_OBJ)[this.slotnum] || '').toUpperCase().startsWith('LIMPETCONTROLLER')) return false;
+			var slotname = (((ship.slotnames || EMPTY_OBJ)[this.slotgroup] || EMPTY_OBJ)[this.slotnum] || '').toUpperCase();
+			if (module.mtype == 'icr' && module.reserved && !slotname.startsWith('CARGO')) return false;
+			if (module.mtype == 'imlc' && module.reserved && !slotname.startsWith('LIMPETCONTROLLER')) return false;
 			// apparently Mk II Passenger Cabins are *not* restricted to Passenger slots, only to the ship overall
-			// if (module.mtype == 'ipc' && module.reserved && !(((ship.slotnames || EMPTY_OBJ)[this.slotgroup] || EMPTY_OBJ)[this.slotnum] || '').toUpperCase().startsWith('PASSENGER')) return false;
+			// if (module.mtype == 'ipc' && module.reserved && !slotname.startsWith('PASSENGER')) return false;
+			// the Type11 hangar slot forbids regular vehicle hangars but allows both the mk ii large (which is reserved to fighter-capable ships) and the regular large (which isn't reserved). oy what a mess
+			if (module.mtype == 'ipvh' && !module.fdname.toUpperCase().includes('LARGEBUGGYBAY') && slotname.startsWith('FIGHTERBAY')) return false;
 			return true;
 		}, // isModuleIDAllowed()
 		
@@ -4834,7 +4837,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			if (module.hidden) {
 				cache.hiddenmods.push(modid);
 			}
-			if (module.reserved) {
+			if (module.reserved || module.mtype == 'ipvh') { // hack: by putting all PVHs in reservedmods even though only LPVHs are reserved, they'll be flagged by per-slot scanning in the case of the FighterBay slot
 				cache.reservedmods.push(modid);
 			}
 		}
@@ -7060,12 +7063,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		// mark disallowed modules
 		for (var m = 0;  m < cache.reservedmods.length;  m++) {
 			var modid = cache.reservedmods[m];
+			var module = current.fit.getModule(modid);
+			var notallowed = (module.reserved && !module.reserved[shipid]);
 			var namehashes = Object.keys(current.stored.moduleNamehashStored[modid] || EMPTY_OBJ);
 			namehashes.push('');
 			for (var n = 0;  n < namehashes.length;  n++) {
 				var namehash = namehashes[n];
-				var module = current.fit.getModule(modid);
-				var notallowed = (module.reserved && !module.reserved[shipid]);
 				var el = document.getElementById('outfitting_module.' + modid + '.' + namehash);
 				el.classList.toggle('notallowed', !!notallowed);
 			}
@@ -8206,13 +8209,13 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		
 		for (var m = 0;  m < cache.reservedmods.length;  m++) {
 			var modid = cache.reservedmods[m];
-			var module = eddb.module[modid];
+			var notallowed = !slot.isModuleIDAllowed(modid);
 			var namehashes = Object.keys(current.stored.moduleNamehashStored[modid] || EMPTY_OBJ);
 			namehashes.push('');
 			for (var n = 0;  n < namehashes.length;  n++) {
 				var namehash = namehashes[n];
 				var el = document.getElementById('outfitting_module.' + modid + '.' + namehash);
-				el.classList.toggle('notallowed', !slot.isModuleIDAllowed(modid));
+				el.classList.toggle('notallowed', !!notallowed);
 			}
 		}
 		

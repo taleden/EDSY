@@ -1314,7 +1314,7 @@ var eddb = {
 			},
 			reserved:{
 				hardpoint :[{hmtl:1,hmtm:1},{hmtl:1,hmtm:1},{hmtl:1,hmtm:1},null,{hmtl:1,hmtm:1}],
-				internal  :[null,null,null,null,null,{iclc:1,idlc:1,iftlc:1,ihblc:1,imlc:1,iplc:1,inlc:1,irlc:1,islc:1},{ifh:1}],
+				internal  :[null,null,null,null,null,{iclc:1,idlc:1,iftlc:1,ihblc:1,imlc:1,iplc:1,inlc:1,irlc:1,islc:1},{ifh:1,ipvh:1}],
 			},
 			stock:{
 				hardpoint:[0,0,0,0,0,0,62160,62160],
@@ -3720,16 +3720,16 @@ var eddb = {
 		
 		 5280 : { mtype:'ipvh', cost:  18000, namekey:5270, name:'Planetary Vehicle Hangar',             class:2, rating:'H', mass:12.00, integ:30, pwrdraw:0.25, boottime:5, vslots:1, vcount:1, ammocost: 1030, fdid:128672288, fdname:'Int_BuggyBay_Size2_Class1', eddbid:1528 },
 		 5270 : { mtype:'ipvh', cost:  21600,               name:'Planetary Vehicle Hangar',             class:2, rating:'G', mass: 6.00, integ:30, pwrdraw:0.75, boottime:5, vslots:1, vcount:1, ammocost: 1030, fdid:128672289, fdname:'Int_BuggyBay_Size2_Class2', eddbid:1529 },
-		 5260 : { mtype:'ipvh', cost:  32400,               name:'Large Planetary Vehicle Hangar',       class:2, rating:'F', mass:12.00, integ:30, pwrdraw:0.75, boottime:5, vslots:1, vcount:1, ammocost: 1030, fdid:129046055, fdname:'Int_LargeBuggyBay_Size2_Class3' },
-		 5261 : { mtype:'ipvh', cost:  32400,               name:'Mk II Large Planetary Vehicle Hangar', class:2, rating:'F', mass: 9.00, integ:30, pwrdraw:0.50, boottime:5, vslots:1, vcount:1, ammocost: 1030, reserved:{35:1,10:1,27:1,14:1,34:1,52:1,36:1,6:1,61:1,62:1,63:1,38:1,47:1}, fdid:129046058, fdname:'Int_MkIILargeBuggyBay_Size2_Class3' },
+		 5260 : { mtype:'ipvh', cost:  32400,               name:'Large Planetary Vehicle Hangar',       class:2, rating:'F', mass:12.00, integ:30, pwrdraw:0.75, boottime:5, vslots:1, vcount:1, ammocost: 1030, reserved:{35:1,10:1,27:1,14:1,34:1,52:1,36:1,6:1,61:1,62:1,63:1,38:1,47:1}, fdid:129046055, fdname:'Int_LargeBuggyBay_Size2_Class3' },
+		 5261 : { mtype:'ipvh', cost:  32400,               name:'Mk II Large Planetary Vehicle Hangar', class:2, rating:'F', mass: 9.00, integ:30, pwrdraw:0.50, boottime:5, vslots:1, vcount:1, ammocost: 1030, reserved:{                                                 63:1,38:1,47:1}, fdid:129046058, fdname:'Int_MkIILargeBuggyBay_Size2_Class3' },
 		 5480 : { mtype:'ipvh', cost:  72000, namekey:5270, name:'Planetary Vehicle Hangar',             class:4, rating:'H', mass:20.00, integ:30, pwrdraw:0.40, boottime:5, vslots:2, vcount:1, ammocost: 1030, fdid:128672290, fdname:'Int_BuggyBay_Size4_Class1', eddbid:1526 },
 		 5470 : { mtype:'ipvh', cost:  86400, namekey:5270, name:'Planetary Vehicle Hangar',             class:4, rating:'G', mass:10.00, integ:30, pwrdraw:1.20, boottime:5, vslots:2, vcount:1, ammocost: 1030, fdid:128672291, fdname:'Int_BuggyBay_Size4_Class2', eddbid:1527 },
-		 5460 : { mtype:'ipvh', cost: 129600, namekey:5260, name:'Large Planetary Vehicle Hangar',       class:4, rating:'F', mass:20.00, integ:30, pwrdraw:1.20, boottime:5, vslots:2, vcount:1, ammocost: 1030, fdid:129046056, fdname:'Int_LargeBuggyBay_Size4_Class3' },
-		 5461 : { mtype:'ipvh', cost: 129600, namekey:5261, name:'Mk II Large Planetary Vehicle Hangar', class:4, rating:'F', mass:15.00, integ:30, pwrdraw:0.80, boottime:5, vslots:2, vcount:1, ammocost: 1030, reserved:{35:1,10:1,27:1,14:1,34:1,52:1,36:1,6:1,61:1,62:1,63:1,38:1,47:1}, fdid:129046059, fdname:'Int_MkIILargeBuggyBay_Size4_Class3' },
+		 5460 : { mtype:'ipvh', cost: 129600, namekey:5260, name:'Large Planetary Vehicle Hangar',       class:4, rating:'F', mass:20.00, integ:30, pwrdraw:1.20, boottime:5, vslots:2, vcount:1, ammocost: 1030, reserved:{35:1,10:1,27:1,14:1,34:1,52:1,36:1,6:1,61:1,62:1,63:1,38:1,47:1}, fdid:129046056, fdname:'Int_LargeBuggyBay_Size4_Class3' },
+		 5461 : { mtype:'ipvh', cost: 129600, namekey:5261, name:'Mk II Large Planetary Vehicle Hangar', class:4, rating:'F', mass:15.00, integ:30, pwrdraw:0.80, boottime:5, vslots:2, vcount:1, ammocost: 1030, reserved:{                                                 63:1,38:1,47:1}, fdid:129046059, fdname:'Int_MkIILargeBuggyBay_Size4_Class3' },
 		 5680 : { mtype:'ipvh', cost: 576000, namekey:5270, name:'Planetary Vehicle Hangar',             class:6, rating:'H', mass:34.00, integ:30, pwrdraw:0.60, boottime:5, vslots:4, vcount:1, ammocost: 1030, fdid:128672292, fdname:'Int_BuggyBay_Size6_Class1', eddbid:1524 },
 		 5670 : { mtype:'ipvh', cost: 691200, namekey:5270, name:'Planetary Vehicle Hangar',             class:6, rating:'G', mass:17.00, integ:30, pwrdraw:1.80, boottime:5, vslots:4, vcount:1, ammocost: 1030, fdid:128672293, fdname:'Int_BuggyBay_Size6_Class2', eddbid:1525 },
-		 5660 : { mtype:'ipvh', cost:1036800, namekey:5260, name:'Large Planetary Vehicle Hangar',       class:6, rating:'F', mass:34.00, integ:30, pwrdraw:1.80, boottime:5, vslots:4, vcount:1, ammocost: 1030, fdid:129046057, fdname:'Int_LargeBuggyBay_Size6_Class3' },
-		 5661 : { mtype:'ipvh', cost:1036800, namekey:5261, name:'Mk II Large Planetary Vehicle Hangar', class:6, rating:'F', mass:25.50, integ:30, pwrdraw:1.20, boottime:5, vslots:4, vcount:1, ammocost: 1030, reserved:{35:1,10:1,27:1,14:1,34:1,52:1,36:1,6:1,61:1,62:1,63:1,38:1,47:1}, fdid:129046060, fdname:'Int_MkIILargeBuggyBay_Size6_Class3' },
+		 5660 : { mtype:'ipvh', cost:1036800, namekey:5260, name:'Large Planetary Vehicle Hangar',       class:6, rating:'F', mass:34.00, integ:30, pwrdraw:1.80, boottime:5, vslots:4, vcount:1, ammocost: 1030, reserved:{35:1,10:1,27:1,14:1,34:1,52:1,36:1,6:1,61:1,62:1,63:1,38:1,47:1}, fdid:129046057, fdname:'Int_LargeBuggyBay_Size6_Class3' },
+		 5661 : { mtype:'ipvh', cost:1036800, namekey:5261, name:'Mk II Large Planetary Vehicle Hangar', class:6, rating:'F', mass:25.50, integ:30, pwrdraw:1.20, boottime:5, vslots:4, vcount:1, ammocost: 1030, reserved:{                                                 63:1,38:1,47:1}, fdid:129046060, fdname:'Int_MkIILargeBuggyBay_Size6_Class3' },
 		
 		
 		24150 : { mtype:'iplc', cost:    600, namekey:24110, name:'Prospector Limpet Controller', class:1, rating:'E', mass:  1.30, integ: 24, pwrdraw:0.18, boottime:4, maxlimpet: 1, lpactrng: 3000, limpettime:1/0, maxspd:200, minebonus:1.0, fdid:128671269, fdname:'Int_DroneControl_Prospector_Size1_Class1', eddbid:1434 },
