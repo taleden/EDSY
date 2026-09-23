@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [424019901,424019901,424019901,424019901]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20260829;
+	var VERSIONS = [424019901,424019901,424019902,424019902]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20260923;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -86,7 +86,7 @@ window.edsy = new (function() {
 		822234 : { name:"2B Seeker, \"Lightweight Thermal\"",    modulehash:"JK4lG-iQ0072nmf6qpDAf7iIj7iUb4SWrLLal77",         tag:'M' }, // merccoin
 		822231 : { name:"2B Seeker, HC+RF, Drag",                modulehash:"HK4lG-2R00612008u00GwghUsPcX400b400",             tag:'C' }, // CG reward // TODO: get sample to test import
 		822232 : { name:"2B Seeker, HC+Std, FSDInt",             modulehash:"JK4lG-ZK00910pD50008upDCvcQMoPcOwPcUoPcX000b000", tag:'C' }, // CG reward
-		822233 : { name:"2B Seeker, \"Drag Seeker\"",            modulehash:"JK4lG-gR0060w008m00Gof-Uf1GWvLLarLQ",             tag:'M' }, // merccoin
+		822233 : { name:"2B Seeker, \"Drag\"",                   modulehash:"JK4lG-gR0060w008m00Gof-Uf1GWvLLarLQ",             tag:'M' }, // merccoin
 		822235 : { name:"2B Seeker, \"Lockdown\"",               modulehash:"JK4lG-kK_W90upD4oPc8mpDCiUkMb7iOj7iUb7iWrLLanJ_", tag:'M' }, // merccoin
 		823132 : { name:"3A Seeker, HC+Std, FSDInt",             modulehash:"JK69G-ZK00910pD50008upDCvcQMoPcOwPcUoPcX000b000", tag:'C' }, // CG reward
 		823136 : { name:"3A Seeker, \"Exposing\"",               modulehash:"JK69G-mR_W80vcQ8q00Ej7iL0AFUiUkWrLLalAmgkPc",     tag:'M' }, // merccoin
