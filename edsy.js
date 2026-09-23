@@ -53,6 +53,8 @@ window.edsy = new (function() {
 		862500 : { name:"2E/FD AX Missile, HC+RF",               modulehash:"JL3gG-ZG0090zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", tag:'T' }, // Sirius tech broker
 		863300 : { name:"3C/FD AX Missile, HC+RF",               modulehash:"JL4wG-ZG0090zcQ4sPcAhhXEsPcIupDL000P000UxCpWy00", tag:'T' }, // Sirius tech broker
 		604100 : { name:"4A/F Beam Laser, \"Overloaded\"",       modulehash:"JElwG-mG_W50y008q00CoPcGu00Ko58",                 tag:'M' }, // merccoin
+		612610 : { name:"2F/G Burst Laser, \"Regenerative\"",    modulehash:"JEzDG-qR_W68kPcCj7iGqQeSoPcYgPckxZL",             tag:'M' }, // merccoin
+		704200 : { name:"4B/F Cannon, \"Force Impact\"",         modulehash:"JHCKG-oL_W90u008qpDEvcQGoPcWrLDarLLelR9vMG0zMG0", tag:'M' }, // merccoin
 		862570 : { name:"2E/G EAXMC \"Azimuth\", OC, AL",        modulehash:"JL3nG-ZH0038_00CoPcL600",                         tag:'T' }, // Azimuth / Rescue Ship tech broker
 		863370 : { name:"3C/G EAXMC \"Azimuth\", OC, AL",        modulehash:"JL51G-ZH0038_00CoPcL600",                         tag:'T' }, // Azimuth / Rescue Ship tech broker
 		872200 : { name:"2B Enzyme Missile, HC+Caustic",         modulehash:"JLIqG-ZG0050ypD4sPc8y00C_00Gu00",                 tag:'C' }, // CG reward
@@ -87,6 +89,7 @@ window.edsy = new (function() {
 		822233 : { name:"2B Seeker, \"Drag Seeker\"",            modulehash:"JK4lG-gR0060w008m00Gof-Uf1GWvLLarLQ",             tag:'M' }, // merccoin
 		822235 : { name:"2B Seeker, \"Lockdown\"",               modulehash:"JK4lG-kK_W90upD4oPc8mpDCiUkMb7iOj7iUb7iWrLLanJ_", tag:'M' }, // merccoin
 		823132 : { name:"3A Seeker, HC+Std, FSDInt",             modulehash:"JK69G-ZK00910pD50008upDCvcQMoPcOwPcUoPcX000b000", tag:'C' }, // CG reward
+		823136 : { name:"3A Seeker, \"Exposing\"",               modulehash:"JK69G-mR_W80vcQ8q00Ej7iL0AFUiUkWrLLalAmgkPc",     tag:'M' }, // merccoin
 		823135 : { name:"3A Seeker, \"Lockdown\"",               modulehash:"JK69G-kK_W90upD4oPc8mpDCiUkMb7iOj7iUb7iWrLLanJ_", tag:'M' }, // merccoin
 		
 		510600 : { name:"0F ECM, LW+Shd",                        modulehash:"FCTqG03G0032_pD50009000",                         tag:'C' }, // CG reward // TODO: get sample to test import

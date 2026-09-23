@@ -1955,7 +1955,9 @@ var eddb = {
 		wpn_drsk : { name:'Drag Seeker', maxgrade:5, mass:[37.5,50,75,112.75,150], pwrdraw:[5.75,8.25,12.5,18.75,25], distdraw:[12.5,13.9,20.9,31.4,41.7], bstint:[-4,-6.5,-10,-15,-20], ammoclip:[33.3,66.67,100,150,200], ammomax:[16.67,66.67,100,150,200], mats:[ {}, {mesc:1, van:1, hedipl:1}, {mesc:1, meeq:1, pral:1}, {mocofi:1, meco:1, hideco:1, thal:1}, {meco:1, prco:1, tec:1, misu:1} ], fdname:'Weapon_DragSeeker' }, // TODO: merccoin 0,10,10,20,40
 		wpn_ef : { name:'Enduring Feedback', maxgrade:5, mass:[22.5,30,45,67.7,90], pwrdraw:[8.7,11.7,17.5,26.3,35], damage:[17.4,12,5.8,-17.1,-12], bstint:[-9.9,-32.6,-48.9,-73.5,-97.9], thmload:[60,44.5,33.3,16.5,0], maximumrng:[10,33.3,50,75.2,100], dmgfall:[32,300,350,425.6,500], ammomax:[10,32.5,50,75,100], rldtime:[6.2,8.3,12.5,18.8,25], mats:[ {}, {mesc:1, sul:1, mocofi:1}, {sul:1, mocofi:1, nio:1}, {mocofi:1, nio:1, copo:1, tin:1}, {meco:1, thal:1, misu:1, bico:1} ], fdname:'Weapon_EnduringFeedback' }, // TODO: merccoin 0,10,15,25,50
 		wpn_eff : { name:'Efficient', maxgrade:5, pwrdraw:[0,-12,-24,-36,-48], damage:[8,12,16,20,24], distdraw:[0,-15,-25,-35,-45], thmload:[-37.5,-42.5,-47.5,-52.5,-60], mats:[ {sul:1}, {sul:1, hedipl:1}, {exscemda:1, chr:1, heex:1}, {iremda:1, sel:1, heva:1}, {unemda:1, cad:1, prhera:1} ], fdname:'Weapon_Efficient' },
+		wpn_exp : { name:'Exposing Seeker', maxgrade:5, mass:[35], pwrdraw:[12.5], damage:[-4], thmload:[104], bstint:[-3.5], ammoclip:[16.66], ammomax:[5.6], rldtime:[-5], mats:[ {} ], fdname:null }, // TODO: G2-5, fdname, merccoin 0,?
 		wpn_foc : { name:'Focused', maxgrade:5, thmload:[1,2,3,4,5], pierce:[40,60,80,100,120], maximumrng:[36,52,68,84,100], dmgfall:[36,52,68,84,100], mats:[ {iro:1}, {iro:1, condco:1}, {iro:1, chr:1, coce:1}, {ger:1, focr:1, poca:1}, {nio:1, refocr:1, misu:1} ], fdname:'Weapon_Focused' },
+		wpn_fi : { name:'Force Impact', maxgrade:5, mass:[25], pwrdraw:[15], damage:[-35], distdraw:[10], bstint:[16.66], ammoclip:[16.66], ammomax:[5.8], kinwgt:[50], expwgt:[50], mats:[ {} ], fdname:null }, // TODO: G2-5, fdname, merccoin 0,?
 		wpn_fr : { name:'Far-Reaching', maxgrade:5, integ:[0,-16.7,-25,-37.6,-50], pwrdraw:[-12.5,-16.7,-25,-37.6,-50], distdraw:[-12.5,-16.7,-25,-37.6,-50], thmload:[-5,-16.7,-25,-37.6,-50], maximumrng:[40,133.3,200,300,400], dmgfall:[-58,133.3,200,300,400], mats:[ {}, {sul:1, hedipl:1, mocofi:1}, {chr:1, mocofi:1, heex:1}, {mocofi:1, copo:1, sel:1, heva:1}, {crinfi:1, thal:1, bico:1, prhera:1} ], fdname:'Weapon_FarReaching' }, // TODO: merccoin 0,5,5,10,20
 		wpn_hc : { name:'High Capacity', maxgrade:5, mass:[20,30,40,50,60], pwrdraw:[4,8,12,16,20], ammoclip:[36,52,68,84,100], ammomax:[36,52,68,84,100], bstint:[-2,-4,-6,-8,-10], mats:[ {mesc:1}, {mesc:1, van:1}, {mesc:1, van:1, nio:1}, {meeq:1, hideco:1, tin:1}, {meco:1, prco:1, misu:1} ], fdname:'Weapon_HighCapacity' },
 		wpn_hy : { name:'High-Yield', maxgrade:5, mass:[15,20,30,45.1,60], pwrdraw:[5,6.7,10,15,20], damage:[5,0,0,0,0], ammoclip:[12.5,100,100,100,100], ammomax:[1.6,0,0,0,20], mats:[ {}, {mesc:1, van:1, condco:1}, {mesc:1, van:1, elar:1}, {meeq:1, hideco:1, tin:1, poca:1}, {meco:1, prco:1, moemfi:1, misu:1} ], fdname:'Weapon_HighYieldEnzyme' }, // TODO: merccoin 0,10,15,20,45
@@ -1969,6 +1971,7 @@ var eddb = {
 		wpn_pc : { name:'Plasma Conversion', maxgrade:5, pwrdraw:[5,10,20,30,40], damage:[-3,-5,-7,-9,-11], thmwgt:[96.1,93.4,90.6,87.6,84.5], abswgt:[3.9,6.6,9.4,12.4,15.5], mats:[ {pho:1, hecowi:1}, {hecowi:1, hedipl:1}, {hedipl:1, phal:1}, {hedipl:1, phal:1, refocr:1, confco:1}, {tec:1, thal:1, misu:1, moemfi:1 } ], fdname:'Weapon_PlasmaConversion' }, // TODO: merccoin 10,15,20,25,30
 		wpn_rf : { name:'Rapid Fire', maxgrade:5, damage:[-1,-2,-3,-4,-5], distdraw:[0,-5,-15,-25,-35], bstint:[-8,-17,-26,-35,-44], rldtime:[-25,-35,-45,-55,-65], jitter:[0.5,0.5,0.5,0.5,0.5], mats:[ {mesc:1}, {mesc:1, hedipl:1}, {splefi:1, meeq:1, pral:1}, {mocofi:1, meco:1, thal:1}, {pral:1, confco:1, tec:1} ], fdname:'Weapon_RapidFire' },
 		wpn_rp : { name:'Rapid Phase', maxgrade:5, maximumrng:[-12.5,-16.6,-25,-37.6,-50], bstint:[-7.1,-9.5,-14.3,-21.5,-28.6], ammoclip:[30,100,150,226,300], ammomax:[20.46,68.2,102.4,154,204.8], rounds:[0,0,1,1,2], jitter:[0.75,1.25,1.5,2.26,3], dmgfall:[-84.25,-50,-32.5,-15.5,-10], mats:[ {}, {mesc:1, hedipl:1, condco:1}, {splefi:1, meeq:1, pral:1}, {mocofi:1, meco:1, coce:1, thal:1}, {pral:1, confco:1, coce:1, tec:1} ], fdname:'Weapon_RapidPhase' }, // TODO: merccoin 0,10,15,20,45
+		wpn_reg : { name:'Regenerative', maxgrade:5, pwrdraw:[5,6.66,10,15.04,20], damage:[4,2,8,17.07,26], distdraw:[13.8,18.33,27.5,41.35,55], maximumrng:[10,33.33,50,75.19,100], bstint:[-2.5,-8.25,-12.5,-18.8,-25], dmgfall:[-47.2,113.3,260,532.3,860], mats:[ {}, {nic:1, mocofi:1, condco:1}, {nic:1, condco:1, elar:1}, {elar:1, coce:1, poca:1, refocr:1}, {poca:1, copo:1, moemfi:1, shse:1} ], fdname:null }, // TODO: fdname, merccoin 0,10,10,20,40
 		wpn_sr : { name:'Short Range', maxgrade:5, damage:[27,39,51,63,75], thmload:[0,10,20,30,40], maximumrng:[-10,-20,-30,-40,-50], mats:[ {nic:1}, {nic:1, mocofi:1}, {nic:1, mocofi:1, elar:1}, {mocofi:1, elar:1, copo:1}, {crinfi:1, confco:1, bico:1} ], fdname:'Weapon_ShortRange' },
 		wpn_stu : { name:'Sturdy', maxgrade:5, mass:[20,40,60,80,100], integ:[100,150,200,250,300], thmload:[-10,-15,-20,-25,-30], pierce:[20,30,40,50,60], mats:[ {nic:1}, {nic:1, shem:1}, {nic:1, shem:1, tun:1}, {zin:1, tun:1, mol:1}, {hideco:1, mol:1, tec:1} ], fdname:'Weapon_Sturdy' },
 	//	wpn_aagf : { name:'Anti-Guardian Zone Resistance', maxgrade:1, mats:[ {hasufr:2},{cacr:1},{tacoch:1} ], fdname:'GuardianWeapon_Sturdy' }, // TODO: does this still exist? or only GuardianModule_Sturdy now?
@@ -2199,16 +2202,16 @@ var eddb = {
 			modulenames:{'Burst Laser':1},
 			keyattrs:['damage','distdraw','thmload','maximumrng'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maximumrng','bstint','_X_ bstsize','jitter','dmgfall','thmwgt','abswgt'],
-			blueprints:['wpn_eff','wpn_foc','wpn_lw','wpn_lr','wpn_oc','wpn_rf','wpn_sr','wpn_stu','wpn_pc'],
-			expeffects:['wpnx_cose','wpnx_db','wpnx_fc','wpnx_inim','wpnx_muse','wpnx_os','wpnx_phse','wpnx_scsp','wpnx_sd','wpnx_thsh'],
+			blueprints:['wpn_eff','wpn_foc','wpn_lw','wpn_lr','wpn_oc','wpn_rf','wpn_sr','wpn_stu','wpn_pc','wpn_reg'],
+			expeffects:['wpnx_cose','wpnx_db','wpnx_fc','wpnx_inim','wpnx_muse','wpnx_os','wpnx_phse','wpnx_scsp','wpnx_sd','wpnx_thsh','wpnx_rese'],
 		},
 		
 		hc : {
 			name:'Cannons',
 			modulenames:{'Cannon':1},
 			keyattrs:['damage','distdraw','thmload','maximumrng','ammoclip'],
-			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maximumrng','bstint','ammoclip','ammomax','rldtime','jitter','dmgfall'],
-			blueprints:['wpn_eff','wpn_hc','wpn_lw','wpn_lr','wpn_oc','wpn_rf','wpn_sr','wpn_stu'],
+			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','maximumrng','bstint','ammoclip','ammomax','rldtime','jitter','dmgfall','kinwgt','expwgt'],
+			blueprints:['wpn_eff','wpn_hc','wpn_lw','wpn_lr','wpn_oc','wpn_rf','wpn_sr','wpn_stu','wpn_fi'],
 			expeffects:['wpnx_aulo','wpnx_difi','wpnx_db','wpnx_fc','wpnx_fosh','wpnx_hys','wpnx_muse','wpnx_os','wpnx_smro','wpnx_sd','wpnx_thca'],
 		},
 		
@@ -2318,7 +2321,7 @@ var eddb = {
 			modulenames:{'Missile Rack':1, 'Seeker Missile Rack':1},
 			keyattrs:['damage','distdraw','thmload','ammoclip'],
 			modifiable:['mass','integ','pwrdraw','damage','distdraw','thmload','pierce','bstint','ammoclip','ammomax','rldtime','jitter'],
-			blueprints:['wpn_hc','wpn_lw','wpn_rf','wpn_stu','wpn_drsk','wpn_lwts','wpn_ld'],
+			blueprints:['wpn_hc','wpn_lw','wpn_rf','wpn_stu','wpn_drsk','wpn_lwts','wpn_ld','wpn_exp'],
 			expeffects:['wpnx_db','wpnx_emmu','wpnx_fc','wpnx_fsin','wpnx_muse','wpnx_ovmu','wpnx_os','wpnx_pemu','wpnx_sd','wpnx_thca','wpnx_drmu'],
 		},
 		
