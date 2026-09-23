@@ -18,6 +18,7 @@
   "ui-stored": "Gespeichert",
   "ui-retrofit": "Umrüstung",
   "ui-compare": "Vergleichen",
+  "ui-query-desc": "Ziehen Sie dieses Symbol über abgekürzte Seitenelemente um mehr Details zu sehen",
   "ui-shipyard-build-label": "Bauart",
   "ui-shipyard-build-desc": "Gespeicherte Build-Bezeichnung",
   "ui-shipyard-ship-label": "Schiff",
