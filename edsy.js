@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [424019901,424019901,424019902,424019902]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20260923;
+	var VERSIONS = [424019901,424019901,424029900,424029900]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20261020;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -41,7 +41,7 @@ window.edsy = new (function() {
 	var BPROLL_UPGRADE = 0.8;
 //	var BPROLL_LIMIT = 0.95;
 	var DISCOUNTS = [30,20,15,10,5,2.5];
-	var HASH_VERSION = 19;
+	var HASH_VERSION = 20;
 	var ICON_MOUNT = { F:'fixed', G:'gimballed', T:'turreted' };
 	var ICON_MISSILE = { D:'dumbfire', S:'seeker' };
 	var ICON_TAG = { C:'community', G:'guardian', M:'merc', P:'powerplay', T:'techbroker' };
@@ -1660,7 +1660,7 @@ window.edsy = new (function() {
 		
 		getHash: function(stored) {
 			/*
-			module hash format (HASH_VERSION=19):
+			module hash format (HASH_VERSION=20):
 				<3 chars / 18 bits>: module id (0..262143)
 				<1 char / 6 bits>: slot flags
 					0x20 <bit 1>: costed?
@@ -2143,7 +2143,7 @@ window.edsy = new (function() {
 	
 	
 	Slot.getModuleIDStoredHash = function(modid) {
-		// HASH_VERSION=19
+		// HASH_VERSION=20
 		return (hashEncode(HASH_VERSION, 1) + hashEncode(modid & 0x1FFFF, 3) + hashEncode(0, 2)); // slotbits(!costed), discountbits
 	}; // getModuleIDStoredHash()
 	
@@ -3663,7 +3663,16 @@ window.edsy = new (function() {
 			case 17:
 			case 18:
 				idmap.slotnum[46] = { hardpoint:[4,5,0,1,2,3] }; // Mandalay hardpoint SSMMMM -> MMMMSS
-			case 19: // HASH_VERSION
+			case 19:
+				idmap.slotnum[32] = idmap.slotnum[32] || {};
+				idmap.slotnum[32].internal = [1,2,3,4,5,6,7,8,9]; // Type-6 gains size 6 internal
+				idmap.slotnum[33] = idmap.slotnum[33] || {};
+				idmap.slotnum[33].internal = [2,3,4,5,6,7,8,9,10,11]; // Type-7 gains size 7 and 6 internals
+				idmap.slotnum[3] = idmap.slotnum[3] || {};
+				idmap.slotnum[3].internal = [1,2,3,4,5,6,7,8,9]; // Imperial Clipper gains size 7 internal
+				idmap.slotnum[4] = idmap.slotnum[4] || {};
+				idmap.slotnum[4].internal = [1,2,3,4,5,6,7,8,9]; // Federal Dropship gains size 6 internal
+			case 20: // HASH_VERSION
 			default:
 			}
 		}

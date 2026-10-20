@@ -17,8 +17,8 @@ var eddb = {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
 			id:1, stype:'mp', name:'Sidewinder', class:1, cost:5070, retail:32000,
-			topspd:220, bstspd:320, mnv:5, shields:40, armour:60, mass:25, fwdacc:44.39, revacc:29.96, latacc:29.96,
-			minthrust:45.454, boostcost:7, boostint:4, pitch:42, yaw:16, roll:110, pitchacc:220, yawacc:110, rollacc:240, minpitch:34,
+			topspd:220, bstspd:320, mnv:6, shields:55, armour:60, mass:25, fwdacc:44.39, revacc:29.96, latacc:29.96,
+			minthrust:45.454, boostcost:7, boostint:4, pitch:43, yaw:17, roll:110, pitchacc:220, yawacc:110, rollacc:240, minpitch:34,
 			heatcap:140, heatdismin:1.18, heatdismax:18.15, fuelcost:50, fuelreserve:0.30, hardness:20, masslock:6, crew:1,
 			slots:{
 				hardpoint:[1,1],
@@ -45,7 +45,7 @@ var eddb = {
 		21 : {
 			fdid:128049255, fdname:'Eagle', eddbid:7,
 			id:21, stype:'co', name:'Eagle', class:1, cost:7490, retail:44800,
-			topspd:240, bstspd:350, mnv:7, shields:60, armour:40, mass:50, fwdacc:43.97, revacc:29.97, latacc:29.86,
+			topspd:240, bstspd:350, mnv:7, shields:80, armour:40, mass:50, fwdacc:43.97, revacc:29.97, latacc:29.86,
 			minthrust:75.0, boostcost:8, boostint:4.5, pitch:50, yaw:18, roll:120, pitchacc:220, yawacc:110, rollacc:240, minpitch:40,
 			heatcap:165, heatdismin:1.38, heatdismax:21.48, fuelcost:50, fuelreserve:0.34, hardness:28, masslock:6, crew:1,
 			slots:{
@@ -213,8 +213,8 @@ var eddb = {
 		28 : {
 			fdid:128672255, fdname:'Viper_MkIV', eddbid:28,
 			id:28, stype:'co', name:'Viper Mk IV', class:1, cost:290680, retail:437930,
-			topspd:270, bstspd:340, mnv:3, shields:150, armour:150, mass:190, fwdacc:53.84, revacc:30.14, latacc:24.97,
-			minthrust:64.815, boostcost:10, boostint:5, pitch:30, yaw:12, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:25,
+			topspd:280, bstspd:360, mnv:3, shields:160, armour:150, mass:190, fwdacc:53.84, revacc:30.14, latacc:24.97,
+			minthrust:64.815, boostcost:10, boostint:5, pitch:33, yaw:13, roll:90, pitchacc:200, yawacc:100, rollacc:220, minpitch:25,
 			heatcap:209, heatdismin:1.82, heatdismax:28.98, fuelcost:50, fuelreserve:0.46, hardness:35, masslock:7, crew:1, // verify masslock
 			slots:{
 				hardpoint:[2,2,1,1],
@@ -297,7 +297,7 @@ var eddb = {
 		32 : {
 			fdid:128049285, fdname:'Type6', eddbid:19,
 			id:32, stype:'fr', name:'Type-6 Transporter', class:2, cost:858010, retail:1045950,
-			topspd:220, bstspd:350, mnv:3, shields:90, armour:180, mass:155, fwdacc:20.10, revacc:14.96, latacc:15.07,
+			topspd:220, bstspd:350, mnv:3, shields:125, armour:180, mass:155, fwdacc:20.10, revacc:14.96, latacc:15.07,
 			minthrust:40.909, boostcost:10, boostint:4, pitch:30, yaw:17, roll:100, pitchacc:220, yawacc:110, rollacc:240, minpitch:23,
 			heatcap:179, heatdismin:1.70, heatdismax:24.55, fuelcost:50, fuelreserve:0.39, hardness:35, masslock:8, crew:1,
 			slots:{
@@ -305,14 +305,17 @@ var eddb = {
 				utility  :[0,0,0],
 				component:[1,3,4,4,2,3,2,4],
 				military :[],
-				internal :[5,5,4,4,3,2,2,1],
+				internal :[6,5,5,4,4,3,2,2,1],
+			},
+			slotnames:{
+				internal :['Slot00_Size6','Slot01_Size5','Slot02_Size5','Slot03_Size4','Slot04_Size4','Slot05_Size3','Slot06_Size2','Slot07_Size2','Slot08_Size1'],
 			},
 			stock:{
 				hardpoint:[62160,62160],
 				utility  :[0,0,0],
 				component:[40131,41350,42450,43450,44250,45350,46250,47430],
 				military :[],
-				internal :[450,450,350,350,30350,150,0,3152],
+				internal :[0,450,450,350,350,30350,150,0,3152],
 			},
 			module:{
 				40131 : { cost:      0, mass: 0.00, fdid:128049286, fdname:'Type6_Armour_Grade1', eddbid:768 }, // Lightweight Alloy
@@ -444,12 +447,12 @@ var eddb = {
 		45 : {
 			fdid:128672276, fdname:'Asp_Scout', eddbid:24,
 			id:45, stype:'ex', name:'Asp Scout', class:2, cost:3811220, retail:3961160,
-			topspd:220, bstspd:300, mnv:5, shields:120, armour:180, mass:150, fwdacc:35.02, revacc:20.10, latacc:20.03,
-			minthrust:50.0, boostcost:13, boostint:4.5, pitch:40, yaw:15, roll:110, pitchacc:200, yawacc:100, rollacc:220, minpitch:35,
+			topspd:270, bstspd:360, mnv:5, shields:120, armour:180, mass:140, fwdacc:40, revacc:30, latacc:20,
+			minthrust:50.0, boostcost:13, boostint:4.5, pitch:40, yaw:18, roll:110, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:35, // TODO: *acc
 			heatcap:210, heatdismin:1.80, heatdismax:29.65, fuelcost:50, fuelreserve:0.47, hardness:52, masslock:8, crew:2, // verify masslock
 			slots:{
 				hardpoint:[2,2,1,1],
-				utility  :[0,0],
+				utility  :[0,0,0],
 				component:[1,4,4,4,3,4,4,4],
 				military :[],
 				internal :[5,4,3,3,2,2,1],
@@ -459,7 +462,7 @@ var eddb = {
 			},
 			stock:{
 				hardpoint:[0,0,62160,62160],
-				utility  :[0,0],
+				utility  :[0,0,0],
 				component:[40131,41450,42450,43450,44350,45450,46450,47430],
 				military :[],
 				internal :[350,350,30350,0,0,0,3152],
@@ -535,7 +538,7 @@ var eddb = {
 			fdid:128049321, fdname:'Federation_Dropship', eddbid:9,
 			id:4, stype:'co', name:'Federal Dropship', class:2, cost:13501480, retail:14314210,
 			faction:'Federation', rank:3,
-			topspd:180, bstspd:300, mnv:3, shields:200, armour:300, mass:580, fwdacc:29.99, revacc:20.34, latacc:10.19,
+			topspd:200, bstspd:300, mnv:3, shields:200, armour:300, mass:500, fwdacc:29.99, revacc:20.34, latacc:10.19,
 			minthrust:55.556, boostcost:19, boostint:6, pitch:30, yaw:14, roll:80, pitchacc:100, yawacc:50, rollacc:80, minpitch:20,
 			heatcap:331, heatdismin:2.60, heatdismax:46.50, fuelcost:50, fuelreserve:0.83, hardness:60, masslock:14, crew:2,
 			slots:{
@@ -543,17 +546,17 @@ var eddb = {
 				utility  :[0,0,0,0],
 				component:[1,6,6,5,5,6,4,4],
 				military :[4,4],
-				internal :[6,5,5,4,3,3,2,1],
+				internal :[6,6,5,5,4,3,3,2,1],
 			},
 			slotnames:{
-				internal :['Slot01_Size6','Slot02_Size5','Slot03_Size5','Slot04_Size4','Slot05_Size3','Slot06_Size3','Slot09_Size2','Slot10_Size1'],
+				internal :['Slot00_Size6','Slot01_Size6','Slot02_Size5','Slot03_Size5','Slot04_Size4','Slot05_Size3','Slot06_Size3','Slot09_Size2','Slot10_Size1'],
 			},
 			stock:{
 				hardpoint:[0,0,0,62160,62160],
 				utility  :[0,0,0,0],
 				component:[40131,41650,42650,43550,44550,45650,46450,47430],
 				military :[0,0],
-				internal :[550,450,30550,350,0,0,0,3152],
+				internal :[0,550,450,30550,350,0,0,0,3152],
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128049322, fdname:'Federation_Dropship_Armour_Grade1', eddbid:793 }, // Lightweight Alloy
@@ -566,25 +569,25 @@ var eddb = {
 		33 : {
 			fdid:128049297, fdname:'Type7', eddbid:20,
 			id:33, stype:'fr', name:'Type-7 Transporter', class:3, cost:16774470, retail:17472250,
-			topspd:180, bstspd:300, mnv:1, shields:156, armour:340, mass:350, fwdacc:20.11, revacc:15.02, latacc:15.13,
+			topspd:180, bstspd:300, mnv:1, shields:156, armour:340, mass:300, fwdacc:20.11, revacc:15.02, latacc:15.13,
 			minthrust:33.333, boostcost:10, boostint:6, pitch:22, yaw:22, roll:60, pitchacc:200, yawacc:50, rollacc:200, minpitch:16, minyaw:16,
-			heatcap:226, heatdismin:2.17, heatdismax:32.45, fuelcost:50, fuelreserve:0.52, hardness:54, masslock:10, crew:1, // verify masslock
+			heatcap:232, heatdismin:NaN, heatdismax:NaN, fuelcost:50, fuelreserve:0.52, hardness:54, masslock:10, crew:1, // verify masslock // TODO: heatdismin,heatdismax
 			slots:{
 				hardpoint:[1,1,1,1],
 				utility  :[0,0,0,0],
 				component:[1,5,5,5,4,4,3,5],
 				military :[],
-				internal :[6,6,6,5,5,5,3,3,2,1],
+				internal :[7,6,6,6,6,5,5,5,3,3,2,1],
 			},
 			slotnames:{
-				internal :['Slot01_Size6','Slot02_Size6','Slot03_Size5','Slot04_Size5','Slot05_Size4','Slot06_Size4','Slot07_Size2','Slot08_Size2','Slot09_Size2','Slot09_Size1'],
+				internal :['Slot00_Size7','Slot00_Size6','Slot01_Size6','Slot02_Size6','Slot03_Size5','Slot04_Size5','Slot05_Size4','Slot06_Size4','Slot07_Size2','Slot08_Size2','Slot09_Size2','Slot09_Size1'],
 			},
 			stock:{
 				hardpoint:[62160,62160,0,0],
 				utility  :[0,0,0,0],
 				component:[40131,41450,42550,43550,44450,45350,46350,47530],
 				military :[],
-				internal :[550,550,550,450,450,30450,0,0,0,3152],
+				internal :[0,0,550,550,550,450,450,30450,0,0,0,3152],
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128049298, fdname:'Type7_Armour_Grade1', eddbid:773 }, // Lightweight Alloy
@@ -653,24 +656,27 @@ var eddb = {
 		},
 		 3 : {
 			fdid:128049315, fdname:'Empire_Trader', eddbid:13,
-			id:3, stype:'mp', name:'Imperial Clipper', class:3, cost:21108270, retail:22295860,
+			id:3, stype:'mp', name:'Imperial Clipper', class:3, cost:21035250, retail:22295860,
 			faction:'Empire', rank:7,
-			topspd:300, bstspd:380, mnv:5, shields:180, armour:270, mass:400, fwdacc:24.74, revacc:20.05, latacc:10.10,
+			topspd:300, bstspd:380, mnv:5, shields:200, armour:270, mass:350, fwdacc:24.74, revacc:20.05, latacc:10.10,
 			minthrust:60.0, boostcost:19, boostint:4.5, pitch:40, yaw:18, roll:80, pitchacc:200, yawacc:100, rollacc:220, minpitch:30,
 			heatcap:304, heatdismin:2.63, heatdismax:46.80, fuelcost:50, fuelreserve:0.74, hardness:60, masslock:12, crew:2,
 			slots:{
 				hardpoint:[3,3,2,2],
 				utility  :[0,0,0,0],
-				component:[1,6,6,5,5,6,5,4],
+				component:[1,6,6,5,5,6,5,5],
 				military :[],
-				internal :[7,6,4,4,3,3,2,2,1],
+				internal :[7,7,6,4,4,3,3,2,2,1],
+			},
+			slotnames:{
+				internal :['Slot00_Size7','Slot01_Size7','Slot02_Size6','Slot03_Size4','Slot04_Size4','Slot05_Size3','Slot06_Size3','Slot07_Size2','Slot08_Size2','Slot09_Size1'],
 			},
 			stock:{
 				hardpoint:[0,0,62160,62160],
 				utility  :[0,0,0,0],
-				component:[40131,41650,42650,43550,44550,45650,46550,47430],
+				component:[40131,41650,42650,43550,44550,45650,46550,47530],
 				military :[],
-				internal :[650,30650,350,0,0,0,150,0,3152],
+				internal :[0,650,30650,350,0,0,0,150,0,3152],
 			},
 			module:{
 				40131 : { cost:       0, mass: 0.00, fdid:128049316, fdname:'Empire_Trader_Armour_Grade1', eddbid:788 }, // Lightweight Alloy
@@ -1180,7 +1186,7 @@ var eddb = {
 		46 : {
 			fdid:129030680, fdname:'Mandalay',
 			id:46, stype:'ex', name:'Mandalay', class:2, cost:16527690, retail:17639220,
-			topspd:280, bstspd:350, mnv:5, shields:220, armour:230, mass:230, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
+			topspd:280, bstspd:350, mnv:5, shields:220, armour:230, mass:190, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:71.5, boostcost:14, boostint:5, pitch:35, yaw:28, roll:96, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:24.5, minyaw:16, // verify: minpitch // TODO: *acc
 			heatcap:245, heatdismin:2.23, heatdismax:51.00, fuelcost:50, fuelreserve:0.5, hardness:55, masslock:11, crew:2,
 			slots:{
@@ -1334,7 +1340,7 @@ var eddb = {
 		47 : {
 			fdid:129036569 , fdname:'Explorer_NX', eddbid:null,
 			id:47, stype:'ex', name:'Caspian Explorer', class:3, cost:189326510, retail:194861290,
-			topspd:210, bstspd:290, mnv:2, shields:500, armour:345, mass:950, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
+			topspd:210, bstspd:290, mnv:2, shields:500, armour:345, mass:825, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:76.0, boostcost:25, boostint:5.5, pitch:30, yaw:14, roll:75, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:23, // TODO: *acc
 			heatcap:341, heatdismin:3.21, heatdismax:72.10, fuelcost:50, fuelreserve:1.14, hardness:60, masslock:21, crew:4,
 			slots:{
@@ -3763,15 +3769,21 @@ var eddb = {
 		 5280 : { mtype:'ipvh', cost:  18000, namekey:5270, name:'Planetary Vehicle Hangar',             class:2, rating:'H', mass:12.00, integ:30, pwrdraw:0.25, boottime:5, vslots:1, vcount:1, ammocost: 1030, fdid:128672288, fdname:'Int_BuggyBay_Size2_Class1', eddbid:1528 },
 		 5270 : { mtype:'ipvh', cost:  21600,               name:'Planetary Vehicle Hangar',             class:2, rating:'G', mass: 6.00, integ:30, pwrdraw:0.75, boottime:5, vslots:1, vcount:1, ammocost: 1030, fdid:128672289, fdname:'Int_BuggyBay_Size2_Class2', eddbid:1529 },
 		 5260 : { mtype:'ipvh', cost:  32400,               name:'Large Planetary Vehicle Hangar',       class:2, rating:'F', mass:12.00, integ:30, pwrdraw:0.75, boottime:5, vslots:1, vcount:1, ammocost: 1030, reserved:{35:1,10:1,27:1,14:1,34:1,52:1,36:1,6:1,61:1,62:1,63:1,38:1,47:1}, fdid:129046055, fdname:'Int_LargeBuggyBay_Size2_Class3' },
+		 5262 : { mtype:'ipvh', cost:      0, namekey:5260, name:'Large Planetary Vehicle Hangar',       class:2, rating:'F', mass:12.00, integ:30, pwrdraw:0.75, boottime:5, vslots:1, vcount:1, ammocost: 1030, reserved:{35:1,10:1,27:1,14:1,34:1,52:1,36:1,6:1,61:1,62:1,63:1,38:1,47:1}, fdid:129046181, fdname:'Int_LargeBuggyBay_Size2_Class3_Free', hidden:1 },
 		 5261 : { mtype:'ipvh', cost:  32400,               name:'Mk II Large Planetary Vehicle Hangar', class:2, rating:'F', mass: 9.00, integ:30, pwrdraw:0.50, boottime:5, vslots:1, vcount:1, ammocost: 1030, reserved:{                                                 63:1,38:1,47:1}, fdid:129046058, fdname:'Int_MkIILargeBuggyBay_Size2_Class3' },
+		 5263 : { mtype:'ipvh', cost:      0, namekey:5261, name:'Mk II Large Planetary Vehicle Hangar', class:2, rating:'F', mass: 9.00, integ:30, pwrdraw:0.50, boottime:5, vslots:1, vcount:1, ammocost: 1030, reserved:{                                                 63:1,38:1,47:1}, fdid:129046184, fdname:'Int_MkIILargeBuggyBay_Size2_Class3_Free', hidden:1 },
 		 5480 : { mtype:'ipvh', cost:  72000, namekey:5270, name:'Planetary Vehicle Hangar',             class:4, rating:'H', mass:20.00, integ:30, pwrdraw:0.40, boottime:5, vslots:2, vcount:1, ammocost: 1030, fdid:128672290, fdname:'Int_BuggyBay_Size4_Class1', eddbid:1526 },
 		 5470 : { mtype:'ipvh', cost:  86400, namekey:5270, name:'Planetary Vehicle Hangar',             class:4, rating:'G', mass:10.00, integ:30, pwrdraw:1.20, boottime:5, vslots:2, vcount:1, ammocost: 1030, fdid:128672291, fdname:'Int_BuggyBay_Size4_Class2', eddbid:1527 },
 		 5460 : { mtype:'ipvh', cost: 129600, namekey:5260, name:'Large Planetary Vehicle Hangar',       class:4, rating:'F', mass:20.00, integ:30, pwrdraw:1.20, boottime:5, vslots:2, vcount:1, ammocost: 1030, reserved:{35:1,10:1,27:1,14:1,34:1,52:1,36:1,6:1,61:1,62:1,63:1,38:1,47:1}, fdid:129046056, fdname:'Int_LargeBuggyBay_Size4_Class3' },
+		 5462 : { mtype:'ipvh', cost:      0, namekey:5260, name:'Large Planetary Vehicle Hangar',       class:4, rating:'F', mass:20.00, integ:30, pwrdraw:1.20, boottime:5, vslots:2, vcount:1, ammocost: 1030, reserved:{35:1,10:1,27:1,14:1,34:1,52:1,36:1,6:1,61:1,62:1,63:1,38:1,47:1}, fdid:129046182, fdname:'Int_LargeBuggyBay_Size4_Class3_Free', hidden:1 },
 		 5461 : { mtype:'ipvh', cost: 129600, namekey:5261, name:'Mk II Large Planetary Vehicle Hangar', class:4, rating:'F', mass:15.00, integ:30, pwrdraw:0.80, boottime:5, vslots:2, vcount:1, ammocost: 1030, reserved:{                                                 63:1,38:1,47:1}, fdid:129046059, fdname:'Int_MkIILargeBuggyBay_Size4_Class3' },
+		 5463 : { mtype:'ipvh', cost:      0, namekey:5261, name:'Mk II Large Planetary Vehicle Hangar', class:4, rating:'F', mass:15.00, integ:30, pwrdraw:0.80, boottime:5, vslots:2, vcount:1, ammocost: 1030, reserved:{                                                 63:1,38:1,47:1}, fdid:129046185, fdname:'Int_MkIILargeBuggyBay_Size4_Class3_Free', hidden:1 },
 		 5680 : { mtype:'ipvh', cost: 576000, namekey:5270, name:'Planetary Vehicle Hangar',             class:6, rating:'H', mass:34.00, integ:30, pwrdraw:0.60, boottime:5, vslots:4, vcount:1, ammocost: 1030, fdid:128672292, fdname:'Int_BuggyBay_Size6_Class1', eddbid:1524 },
 		 5670 : { mtype:'ipvh', cost: 691200, namekey:5270, name:'Planetary Vehicle Hangar',             class:6, rating:'G', mass:17.00, integ:30, pwrdraw:1.80, boottime:5, vslots:4, vcount:1, ammocost: 1030, fdid:128672293, fdname:'Int_BuggyBay_Size6_Class2', eddbid:1525 },
 		 5660 : { mtype:'ipvh', cost:1036800, namekey:5260, name:'Large Planetary Vehicle Hangar',       class:6, rating:'F', mass:34.00, integ:30, pwrdraw:1.80, boottime:5, vslots:4, vcount:1, ammocost: 1030, reserved:{35:1,10:1,27:1,14:1,34:1,52:1,36:1,6:1,61:1,62:1,63:1,38:1,47:1}, fdid:129046057, fdname:'Int_LargeBuggyBay_Size6_Class3' },
+		 5662 : { mtype:'ipvh', cost:      0, namekey:5260, name:'Large Planetary Vehicle Hangar',       class:6, rating:'F', mass:34.00, integ:30, pwrdraw:1.80, boottime:5, vslots:4, vcount:1, ammocost: 1030, reserved:{35:1,10:1,27:1,14:1,34:1,52:1,36:1,6:1,61:1,62:1,63:1,38:1,47:1}, fdid:129046183, fdname:'Int_LargeBuggyBay_Size6_Class3_Free', hidden:1 },
 		 5661 : { mtype:'ipvh', cost:1036800, namekey:5261, name:'Mk II Large Planetary Vehicle Hangar', class:6, rating:'F', mass:25.50, integ:30, pwrdraw:1.20, boottime:5, vslots:4, vcount:1, ammocost: 1030, reserved:{                                                 63:1,38:1,47:1}, fdid:129046060, fdname:'Int_MkIILargeBuggyBay_Size6_Class3' },
+		 5663 : { mtype:'ipvh', cost:      0, namekey:5261, name:'Mk II Large Planetary Vehicle Hangar', class:6, rating:'F', mass:25.50, integ:30, pwrdraw:1.20, boottime:5, vslots:4, vcount:1, ammocost: 1030, reserved:{                                                 63:1,38:1,47:1}, fdid:129046186, fdname:'Int_MkIILargeBuggyBay_Size6_Class3_Free', hidden:1 },
 		
 		
 		24150 : { mtype:'iplc', cost:    600, namekey:24110, name:'Prospector Limpet Controller', class:1, rating:'E', mass:  1.30, integ: 24, pwrdraw:0.18, boottime:4, maxlimpet: 1, lpactrng: 3000, limpettime:1/0, maxspd:200, minebonus:1.0, fdid:128671269, fdname:'Int_DroneControl_Prospector_Size1_Class1', eddbid:1434 },
