@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 424019902,
-	edsy_versions_db : [424019901,424019901,424019902,424019902], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20260923,
+	version : 424029900,
+	edsy_versions_db : [424019901,424019901,424029900,424019902], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20261020,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -1347,8 +1347,6 @@ var eddb = {
 			slotnames:{
 				hardpoint:['LargeHardpoint1','MediumHardpoint6','MediumHardpoint5','MediumHardpoint1','MediumHardpoint2','MediumHardpoint3','MediumHardpoint4'],
 			},
-			reserved:{
-			},
 			stock:{
 				hardpoint:[0,0,0,62160,62160,0,0],
 				utility  :[0,0,0,0,0,0],
@@ -1432,7 +1430,47 @@ var eddb = {
 				40115 : { cost:163315270, mass:53.00, fdid:129041448, fdname:'MediumTransport01_Armour_Reactive', eddbid:null }, // Reactive Surface Composite
 			},
 		},
-		/* 18,19: multipurpose;  20: combat;  39,30: industrial;  48,49,40: exploration;  55-59,50: passenger;  60: superheavy */
+		18 : {
+			fdid:129046025, fdname:'AnacondaMkII', eddbid:null,
+			id:18, stype:'sh', name:'Anaconda Mk II', class:3, cost:372041780, retail:384958850,
+			topspd:190, bstspd:250, mnv:2, shields:450, armour:745, mass:940, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
+			minthrust:47, boostcost:27, boostint:6, pitch:27, yaw:14, roll:65, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:22, // TODO: *acc
+			heatcap:NaN, heatdismin:NaN, heatdismax:NaN, fuelcost:50, fuelreserve:1.08, hardness:65, masslock:NaN, crew:4, // TODO: heatcap,heatdismin,heatdismax,masslock
+			slots:{
+				hardpoint:[4,3,3,3,3,1,1],
+				utility  :[0,0,0,0,0,0,0,0],
+				component:[1,8,7,8,5,8,8,6],
+				military :[5,5],
+				internal :[8,7,7,6,5,5,5,4,4,3,2,1],
+			},
+			slotnames:{
+				internal :['Slot01_Size8','Slot02_Size7','Slot03_Size7','Cargo01','Slot04_Size5','Slot05_Size5','Slot06_Size5','Slot07_Size4','Slot08_Size4','Slot09_Size3','Slot10_Size2','Slot11_Size1'],
+			},
+			reserved:{
+				internal :[null,null,null,{cft:1,icr:1}],
+			},
+			stock:{
+				hardpoint:[0,0,0,0,0,62160,62160],
+				utility  :[0,0,0,0,0,0,0,0],
+				component:[40131,41850,42750,43851,44550,45850,46850,47630],
+				military :[0,0],
+				internal :[750,650,30750,0,450,0,0,0,0,0,3152,3151],
+			},
+			module:{
+				40131 : { cost:        0, mass: 0.00, fdid:129046028, fdname:'AnacondaMkII_Armour_Grade1_Default', eddbid:null }, // Lightweight Alloy
+				40122 : { cost:NaN      , mass:NaN  , fdid:null     , fdname:null, eddbid:null, hidden:1 }, // Reinforced Alloy
+				40113 : { cost:NaN      , mass:NaN  , fdid:null     , fdname:null, eddbid:null, hidden:1 }, // Military Grade Composite
+				40114 : { cost:NaN      , mass:NaN  , fdid:null     , fdname:null, eddbid:null, hidden:1 }, // Mirrored Surface Composite
+				40115 : { cost:NaN      , mass:NaN  , fdid:null     , fdname:null, eddbid:null, hidden:1 }, // Reactive Surface Composite
+				
+				40136 : { cost: 19247940, mass:15.00, fdid:129046027, fdname:'AnacondaMkII_Armour_Grade1', eddbid:null, hidden:0 }, // Mk II Ablative Lightweight Alloy
+				40127 : { cost:153983540, mass:30.00, fdid:129046029, fdname:'AnacondaMkII_Armour_Grade2', eddbid:null, hidden:0 }, // Mk II Ablative Reinforced Alloy
+				40118 : { cost:346462970, mass:60.00, fdid:129046030, fdname:'AnacondaMkII_Armour_Grade3', eddbid:null, hidden:0 }, // Mk II Ablative Military Grade Composite
+				40119 : { cost:818807470, mass:60.00, fdid:129046031, fdname:'AnacondaMkII_Armour_Mirrored', eddbid:null, hidden:0 }, // Mk II Ablative Mirrored Surface Composite
+				40110 : { cost:907348010, mass:60.00, fdid:129046032, fdname:'AnacondaMkII_Armour_Reactive', eddbid:null, hidden:0 }, // Mk II Ablative Reactive Surface Composite
+			},
+		},
+		/* 19: multipurpose;  20: combat;  39,30: industrial;  48,49,40: exploration;  55-59,50: passenger;  60: superheavy */
 	}, // eddb.ship{}
 	rank : {
 		'Alliance' : [
@@ -2991,11 +3029,11 @@ var eddb = {
 		40114 : { mtype:'cbh', cost:NaN, name:'Mirrored Surface Composite', class:1, rating:'A', mass:NaN, hullbst:250.0, kinres:-75.0, thmres: 50.0, expres:-50.0, axeres:90.0, fdid:null, fdname:null, eddbid:null }, // placeholder
 		40115 : { mtype:'cbh', cost:NaN, name:'Reactive Surface Composite', class:1, rating:'A', mass:NaN, hullbst:250.0, kinres: 25.0, thmres:-40.0, expres: 20.0, axeres:90.0, fdid:null, fdname:null, eddbid:null }, // placeholder
 		
-		40136 : { mtype:'cbh', cost:NaN, name:'Mk II Ablative Lightweight Alloy',          class:1, rating:'C', mass:NaN, hullbst: 80.0, kinres:-20.0, thmres:  0.0, expres:-40.0, axeres:90.0, reserved:{47:1}, fdid:null, fdname:null, eddbid:null, hidden:1 }, // placeholder
-		40127 : { mtype:'cbh', cost:NaN, name:'Mk II Ablative Reinforced Alloy',           class:1, rating:'B', mass:NaN, hullbst:152.0, kinres:-20.0, thmres:  0.0, expres:-40.0, axeres:90.0, reserved:{47:1}, fdid:null, fdname:null, eddbid:null, hidden:1 }, // placeholder
-		40118 : { mtype:'cbh', cost:NaN, name:'Mk II Ablative Military Grade Composite',   class:1, rating:'A', mass:NaN, hullbst:250.0, kinres:-20.0, thmres:  0.0, expres:-40.0, axeres:90.0, reserved:{47:1}, fdid:null, fdname:null, eddbid:null, hidden:1 }, // placeholder
-		40119 : { mtype:'cbh', cost:NaN, name:'Mk II Ablative Mirrored Surface Composite', class:1, rating:'A', mass:NaN, hullbst:250.0, kinres:-75.0, thmres: 50.0, expres:-50.0, axeres:90.0, reserved:{47:1}, fdid:null, fdname:null, eddbid:null, hidden:1 }, // placeholder
-		40110 : { mtype:'cbh', cost:NaN, name:'Mk II Ablative Reactive Surface Composite', class:1, rating:'A', mass:NaN, hullbst:250.0, kinres: 25.0, thmres:-40.0, expres: 20.0, axeres:90.0, reserved:{47:1}, fdid:null, fdname:null, eddbid:null, hidden:1 }, // placeholder
+		40136 : { mtype:'cbh', cost:NaN, name:'Mk II Ablative Lightweight Alloy',          class:1, rating:'C', mass:NaN, hullbst: 80.0, kinres:-20.0, thmres:  0.0, expres:-40.0, axeres:90.0, reserved:{47:1,18:1}, fdid:null, fdname:null, eddbid:null, hidden:1 }, // placeholder
+		40127 : { mtype:'cbh', cost:NaN, name:'Mk II Ablative Reinforced Alloy',           class:1, rating:'B', mass:NaN, hullbst:152.0, kinres:-20.0, thmres:  0.0, expres:-40.0, axeres:90.0, reserved:{47:1,18:1}, fdid:null, fdname:null, eddbid:null, hidden:1 }, // placeholder
+		40118 : { mtype:'cbh', cost:NaN, name:'Mk II Ablative Military Grade Composite',   class:1, rating:'A', mass:NaN, hullbst:250.0, kinres:-20.0, thmres:  0.0, expres:-40.0, axeres:90.0, reserved:{47:1,18:1}, fdid:null, fdname:null, eddbid:null, hidden:1 }, // placeholder
+		40119 : { mtype:'cbh', cost:NaN, name:'Mk II Ablative Mirrored Surface Composite', class:1, rating:'A', mass:NaN, hullbst:250.0, kinres:-75.0, thmres: 50.0, expres:-50.0, axeres:90.0, reserved:{47:1,18:1}, fdid:null, fdname:null, eddbid:null, hidden:1 }, // placeholder
+		40110 : { mtype:'cbh', cost:NaN, name:'Mk II Ablative Reactive Surface Composite', class:1, rating:'A', mass:NaN, hullbst:250.0, kinres: 25.0, thmres:-40.0, expres: 20.0, axeres:90.0, reserved:{47:1,18:1}, fdid:null, fdname:null, eddbid:null, hidden:1 }, // placeholder
 		
 		
 		41250 : { mtype:'cpp', cost:     1980, namekey:41210, name:'Power Plant', class:2, rating:'E', mass:  2.50, integ: 46, pwrcap: 6.40, heateff:1.00, noblueprints:{misc_agzr:1}, fdid:128064033, fdname:'Int_Powerplant_Size2_Class1', eddbid:891 },
@@ -3410,10 +3448,11 @@ var eddb = {
 		  450 : { mtype:'icr', cost:  34330, name:'Cargo Rack (Cap: 16)',  class:4, rating:'E', cargocap: 16, fdid:128064341, fdname:'Int_CargoRack_Size4_Class1', eddbid:1194 },
 		  550 : { mtype:'icr', cost: 111570, name:'Cargo Rack (Cap: 32)',  class:5, rating:'E', cargocap: 32, fdid:128064342, fdname:'Int_CargoRack_Size5_Class1', eddbid:1195 },
 		  650 : { mtype:'icr', cost: 362590, name:'Cargo Rack (Cap: 64)',  class:6, rating:'E', cargocap: 64, fdid:128064343, fdname:'Int_CargoRack_Size6_Class1', eddbid:1196 },
+		  640 : { mtype:'icr', cost: 587400, name:'Mk II Cargo Rack (Cap: 96)',  class:6, rating:'D', cargocap: 96, reserved:{63:1,18:1}, fdid:129051593, fdname:'Int_LargeCargoRack_Size6_Class1', eddbid:null },
 		  750 : { mtype:'icr', cost:1178420, name:'Cargo Rack (Cap: 128)', class:7, rating:'E', cargocap:128, fdid:128064344, fdname:'Int_CargoRack_Size7_Class1', eddbid:1197 },
-		  740 : { mtype:'icr', cost:1958680, name:'Mk II Cargo Rack (Cap: 192)', class:7, rating:'D', cargocap:192, reserved:{63:1}, fdid:129034963, fdname:'Int_LargeCargoRack_Size7_Class1', eddbid:null },
+		  740 : { mtype:'icr', cost:1958680, name:'Mk II Cargo Rack (Cap: 192)', class:7, rating:'D', cargocap:192, reserved:{63:1,18:1}, fdid:129034963, fdname:'Int_LargeCargoRack_Size7_Class1', eddbid:null },
 		  850 : { mtype:'icr', cost:3829870, name:'Cargo Rack (Cap: 256)', class:8, rating:'E', cargocap:256, fdid:128064345, fdname:'Int_CargoRack_Size8_Class1', eddbid:1198 },
-		  840 : { mtype:'icr', cost:4929320, name:'Mk II Cargo Rack (Cap: 384)', class:8, rating:'D', cargocap:384, reserved:{63:1}, fdid:129034964, fdname:'Int_LargeCargoRack_Size8_Class1', eddbid:null },
+		  840 : { mtype:'icr', cost:4929320, name:'Mk II Cargo Rack (Cap: 384)', class:8, rating:'D', cargocap:384, reserved:{63:1,18:1}, fdid:129034964, fdname:'Int_LargeCargoRack_Size8_Class1', eddbid:null },
 		  151 : { mtype:'icr', cost:   6250, name:'Anti-Corrosion Cargo Rack (Cap: 1)',  class:1, rating:'E', cargocap: 1, fdid:128681641, fdname:'Int_CorrosionProofCargoRack_Size1_Class1', eddbid:1553 }, // at Palin, Sedesi
 		  161 : { mtype:'icr', cost:  12560, name:'Anti-Corrosion Cargo Rack (Cap: 2)',  class:1, rating:'F', cargocap: 2, fdid:128681992, fdname:'Int_CorrosionProofCargoRack_Size1_Class2', eddbid:1552 }, // at Palin, Sedesi
 		  251 : { mtype:'icr', cost:    NaN, name:'Anti-Corrosion Cargo Rack (Cap: 4)',  class:2, rating:'E', cargocap: 4, fdid:     null, fdname:'Int_CorrosionProofCargoRack_Size2_Class1', eddbid:null, hidden:1 }, // never released
