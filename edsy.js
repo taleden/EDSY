@@ -10,7 +10,7 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [424019901,424019901,424029900,424029900]; /* HTML,CSS,DB,JS */
+	var VERSIONS = [424019901,424019901,424029901,424029901]; /* HTML,CSS,DB,JS */
 	var LASTMODIFIED = 20261020;
 	
 	var EMPTY_OBJ = {};
@@ -1024,6 +1024,8 @@ window.edsy = new (function() {
 			// if (module.mtype == 'ipc' && module.reserved && !slotname.startsWith('PASSENGER')) return false;
 			// the Type11 hangar slot forbids regular vehicle hangars but allows both the mk ii large (which is reserved to fighter-capable ships) and the regular large (which isn't reserved). oy what a mess
 			if (module.mtype == 'ipvh' && !module.fdname.toUpperCase().includes('LARGEBUGGYBAY') && slotname.startsWith('FIGHTERBAY')) return false;
+			// the Mining Volley Repeater is allowed on the Anaconda Mk II's lower large hardpoints (slotnum 3,4) but not the others, because why not
+			if (modid == 80339 && shipid == 18 && (this.slotnum < 3 || this.slotnum > 4)) return false;
 			return true;
 		}, // isModuleIDAllowed()
 		
