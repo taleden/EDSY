@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 window.edsy = new (function() {
-	var VERSIONS = [424019901,424019901,424029901,424029901]; /* HTML,CSS,DB,JS */
-	var LASTMODIFIED = 20261020;
+	var VERSIONS = [424029903,424029903,424029903,424029903]; /* HTML,CSS,DB,JS */
+	var LASTMODIFIED = 20261026;
 	
 	var EMPTY_OBJ = {};
 	var EMPTY_ARR = [];
@@ -816,9 +816,13 @@ window.edsy = new (function() {
 	
 	
 	var getJumpFuelCost = function(dist, mass, curfuel, fsdfuel, fsdopt, fsdmul, fsdpower, jumpbst) {
-		// https://forums.frontier.co.uk/threads/mass-effect-on-hyperspace-range.32734/#post-643461
-		var maxdist = getJumpDistance(mass, curfuel, fsdfuel, fsdopt, fsdmul, fsdpower, jumpbst);
-		return pow(dist / maxdist, fsdpower) * min(curfuel, fsdfuel);
+		// Fuel cost scales with fuel use, ship mass and the drive coefficients.
+		var massratio = (mass + curfuel) / fsdopt;
+		var baserange = pow(min(curfuel, fsdfuel) / fsdmul, 1 / fsdpower) / massratio;
+		var maxdist = baserange + jumpbst;
+		if (baserange > 0 && maxdist > 0 && baserange !== maxdist)
+			dist = (dist / maxdist) * baserange;
+		return pow(massratio * dist, fsdpower) * fsdmul;
 	}; // getJumpFuelCost()
 	
 	
@@ -844,34 +848,236 @@ window.edsy = new (function() {
 	}; // getMassCurveMultiplier()
 	
 	
-	var getEffectiveDamageResistance = function(baseres, extrares, exemptres, bestres) {
-		// https://forums.frontier.co.uk/threads/kinetic-resistance-calculation.266235/post-4230114
-		// https://forums.frontier.co.uk/threads/shield-booster-mod-calculator.286097/post-4998592
-		/* old
-		var threshold = 30;
-		var rawres = 1 - ((1 - baseres / 100) * (1 - extrares / 100));
-		var maxres = 1 - ((1 - baseres / 100) * (1 - threshold / 100));
-		return 100 * (rawres - max(0, pow((rawres - maxres) / 2, curve || 1)));
-		*/
-		baseres = baseres || 0;
-		extrares = extrares || 0;
-		exemptres = exemptres || 0;
-		bestres = bestres || 0;
-		var lo = max(max(30, baseres), bestres || 0);
-		var hi = 65; // half credit past 30% means 100% -> 30 + (100 - 30) / 2 = 65%
-		var expected = (1 - ((1 - baseres / 100) * (1 - extrares / 100))) * 100;
-		var penalized = lo + (expected - lo) / (100 - lo) * (hi - lo); // remap range [lo..100] to [lo..hi]
-		var actual = ((penalized >= 30) ? penalized : expected);
-		var effective = (1 - ((1 - exemptres / 100) * (1 - actual / 100))) * 100;
-//TODO console.log("gEDR("+baseres+","+extrares+","+exemptres+","+bestres+") = "+effective);
-		return effective;
+	var getPowerAllocation = function(pwrdraw, pwrcap) {
+		var draw = 0;
+		var lastPriority = 0;
+		// Power allocation admits complete priority groups, then sheds every lower group.
+		var epsilon = Math.fround(0.0001);
+		for (var p = 1; p <= MAX_POWER_PRIORITY; p++) {
+			var demand = pwrdraw[p] || 0;
+			if (demand - (pwrcap - draw) >= epsilon)
+				break;
+			draw += demand;
+			lastPriority = p;
+		}
+		return { draw:draw, lastPriority:lastPriority };
+	}; // getPowerAllocation()
+
+
+	var getPowerPlantHeatRate = function(draw, capacity, powerMultiplier, heatCoefficient) {
+		// Power plant heat uses unboosted output times clamped utilisation.
+		var available = capacity * powerMultiplier;
+		var utilisation = available > pow(2, -23) ? min(max(draw / available, 0), 1) : 1;
+		return capacity * utilisation * heatCoefficient;
+	}; // getPowerPlantHeatRate()
+
+
+	var getShieldRecoveryTime = function(amount, rate, energyPerMJ, recharge, initialCharge) {
+		// Continuous estimate with constant rates and no other SYS demand.
+		if (isNaN(amount) || isNaN(rate) || isNaN(energyPerMJ) || isNaN(recharge) || isNaN(initialCharge))
+			return NaN;
+		if (amount <= 0) return 0;
+		if (rate <= 0) return Infinity;
+		var deficit = amount * energyPerMJ - initialCharge;
+		var energyTime = (deficit <= 0) ? 0 : ((recharge > 0) ? deficit / recharge : Infinity);
+		return max(amount / rate, energyTime);
+	}; // getShieldRecoveryTime()
+
+
+	var getGeneratedDamageSplitModifier = function(slot, attr) {
+		// Force Impact includes both High Yield and Force Shell.
+		var forceImpactShells = slot.bpid === 'wpn_fi' && slot.expid === 'wpnx_fosh';
+		if (slot.isAttrOverridden(attr) || (!forceImpactShells && slot.expid !== 'wpnx_inim' && slot.expid !== 'wpnx_inro' && slot.expid !== 'wpnx_hys' && slot.expid !== 'wpnx_ovmu'))
+			return undefined;
+		switch (attr) {
+		case 'kinwgt':
+		case 'thmwgt':
+		case 'abswgt':
+		case 'expwgt':
+		case 'axewgt':
+		case 'thgwgt':
+			return forceImpactShells ? eddb.expeffect.wpnx_hys[attr] : slot.getExperimentalAttrModifier(attr);
+		}
+		return undefined;
+	}; // getGeneratedDamageSplitModifier()
+
+
+	var getGeneratedIntegrity = function(slot) {
+		var module = slot.getModule();
+		if (!module || slot.isAttrOverridden('integ') || !(slot.bproll || slot.expid))
+			return undefined;
+		var value = Math.fround(getModuleAttrValue(module, 'integ'));
+		var blueprint = eddb.blueprint[slot.bpid];
+		var bpmod = (slot.bproll && blueprint && blueprint.integ) ? getBlueprintGradeRollAttrModifier(slot.bpid, slot.bpgrade, slot.bproll, 'integ') : 0;
+		var expmod = slot.getExperimentalAttrModifier('integ') || 0;
+		for (var modifier of [bpmod, expmod]) {
+			if (modifier)
+				value = max(0, Math.fround(value * Math.fround(1 + Math.fround(modifier))));
+		}
+		return value;
+	}; // getGeneratedIntegrity()
+
+
+	var getNominalIncrementalCycle = function(capacity, burst, interval, burstRate, reload, incremental) {
+		// Fully supplied incremental clip, with a running refill countdown and no timing overshoot.
+		var gap = (burst > 1) ? 1 / burstRate : interval;
+		if (!Number.isInteger(capacity) || capacity < 1 || !Number.isInteger(burst) || burst < 1 ||
+			!(interval > 0) || !(gap > 0) || !(incremental > max(interval, gap)) || !(reload >= interval))
+			return undefined;
+		var mean = (interval + (burst - 1) * gap) / burst;
+		var upper = ceil((capacity + 2 + max(interval, gap) / incremental) / (1 - mean / incremental)) + burst;
+		if (!Number.isSafeInteger(upper) || upper > 100000) return undefined;
+		for (var count = 1; count <= upper; count++) {
+			var cycles = floor((count - 1) / burst);
+			var last = cycles * interval + (count - 1 - cycles) * gap;
+			var x = last / incremental;
+			// Coincident refill and shot events require an event-order input.
+			if (count > 1 && abs(x - round(x)) < 1e-10) return undefined;
+			var added = max(0, ceil(x) - 1);
+			if (count === capacity + added)
+				return {shots:count, period:last + reload};
+		}
+		return undefined;
+	}; // getNominalIncrementalCycle()
+
+
+	var isNominalIncrementalWeapon = function(module) {
+		return !!(module && (module.fdname === 'Hpt_MkIIPlasmaShockAutocannon_Fixed_Large' || module.mtype === 'hexsc'));
+	}; // isNominalIncrementalWeapon()
+
+
+	var getWeaponCycleCharge = function(module, duration, damageMultiplier) {
+		// Weapon spin-up is independent of the hold-to-charge duration.
+		// Rail and Gauss release-wait timing cannot start this ramp during the interval.
+		var prefire = {
+			Hpt_Railgun_Fixed_Small:1.0, Hpt_Railgun_Fixed_Medium:1.2,
+			Hpt_Railgun_Fixed_Medium_Burst:1.2,
+			Hpt_Guardian_GaussCannon_Fixed_Small:1.2, Hpt_Guardian_GaussCannon_Fixed_Medium:1.2
+		}[module && module.fdname] || 0;
+		return prefire + duration * (damageMultiplier ? WEAPON_CHARGE : 1.0);
+	}; // getWeaponCycleCharge()
+
+
+	var getWeaponAmmoPerShot = function(module, rounds) {
+		// Pack-Hound spends one ammunition unit per projectile; ordinary pellets do not.
+		return module.fdname === 'Hpt_DrunkMissileRack_Fixed_Medium' ? rounds : 1;
+	}; // getWeaponAmmoPerShot()
+
+
+	var getNominalWeaponCapacitorTime = function(weapons, capacity, recharge) {
+		// Preserve the existing average-rate/first-clip transition approximation,
+		// integrating energy already spent instead of replacing the whole history.
+		var draw = 0;
+		for (var weapon of weapons) draw += weapon.eps;
+		var charge = capacity, elapsed = 0;
+		for (var weapon of weapons) {
+			var duration = weapon.spc - elapsed;
+			var drain = draw - recharge;
+			if (drain > 0 && charge <= drain * duration)
+				return elapsed + charge / drain;
+			charge = min(capacity, charge - drain * duration);
+			elapsed = weapon.spc;
+			draw += weapon.seps - weapon.eps;
+		}
+		return draw > recharge ? elapsed + charge / (draw - recharge) : Infinity;
+	}; // getNominalWeaponCapacitorTime()
+
+
+	var getNominalTerminalAmmoTime = function(capacity, reserve, burst, interval, burstRate, reload) {
+		// Ordinary countdown configurations without charge or incremental refill.
+		if (![capacity, reserve, burst, capacity + reserve].every(Number.isSafeInteger) || capacity < 1 || reserve < 0 || burst < 1 ||
+			capacity % burst || !isFinite(interval) || !isFinite(reload) || !(interval > 0) || !(reload >= interval)) return undefined;
+		var gap = (burst > 1) ? 1 / burstRate : interval;
+		if (!(gap > 0) || !isFinite(gap)) return undefined;
+		var total = capacity + reserve;
+		var preceding = floor((total - 1) / capacity);
+		var terminal = total - preceding * capacity;
+		var fullCycles = floor((capacity - 1) / burst);
+		var lastCycles = floor((terminal - 1) / burst);
+		return preceding * (fullCycles * interval + (capacity - 1 - fullCycles) * gap + reload) +
+			lastCycles * interval + (terminal - 1 - lastCycles) * gap;
+	}; // getNominalTerminalAmmoTime()
+
+
+	var getConfiguredTerminalAmmoTime = function(slot) {
+		// These configurations share the one-unit ammunition countdown rule.
+		if ([70140, 70244, 72410, 83320].indexOf(slot.getModuleID()) < 0 || slot.getExpeffectID() ||
+			slot.getEffectiveAttrValue('duration') !== 0 || !(slot.getEffectiveAttrValue('rldint') < 0) ||
+			!(slot.getEffectiveAttrValue('rldcost') < 0)) return undefined;
+		return getNominalTerminalAmmoTime(slot.getEffectiveAttrValue('ammoclip'), slot.getEffectiveAttrValue('ammomax'),
+			slot.getEffectiveAttrValue('bstsize'), slot.getEffectiveAttrValue('bstint'),
+			slot.getEffectiveAttrValue('bstrof'), slot.getEffectiveAttrValue('rldtime'));
+	}; // getConfiguredTerminalAmmoTime()
+
+
+	var getBuildPowerState = function(build) {
+		var state = { capacity:0, boost:0, deployed:[0,0,0,0,0,0], retracted:[0,0,0,0,0,0] };
+		for (var group in build.slots) {
+			for (var num in build.slots[group]) {
+				var slot = build.slots[group][num];
+				var module = slot.getModule();
+				if (!module)
+					continue;
+				// Installed Guardian distributor output is independent of its online state.
+				state.capacity += slot.getEffectiveAttrValue('pwrcap');
+				state.boost += slot.getEffectiveAttrValue('pwrbst');
+				if (slot.getPowered()) {
+					var draw = slot.getEffectiveAttrValue('pwrdraw');
+					var priority = slot.getPriority();
+					state.deployed[0] += draw;
+					state.deployed[priority] += draw;
+					if (group !== 'hardpoint' && (group !== 'utility' || module.passive)) {
+						state.retracted[0] += draw;
+						state.retracted[priority] += draw;
+					}
+				}
+			}
+		}
+		var available = state.capacity * (1 + state.boost / 100);
+		state.allocation_dep = getPowerAllocation(state.deployed, available);
+		state.allocation_ret = getPowerAllocation(state.retracted, available);
+		return state;
+	}; // getBuildPowerState()
+
+
+	var isSlotOnline = function(slot, state, deployed) {
+		var module = slot.getModule();
+		if (!module)
+			return false;
+		if (!slot.getEffectiveAttrValue('pwrdraw'))
+			return true;
+		if (!slot.getPowered() || (!deployed && (slot.slotgroup === 'hardpoint' || (slot.slotgroup === 'utility' && !module.passive))))
+			return false;
+		return slot.getPriority() <= (deployed ? state.allocation_dep : state.allocation_ret).lastPriority;
+	}; // isSlotOnline()
+
+
+
+	var getResistanceContribution = function(resistance) {
+		// Invert the game's per-provider resistance curve before multiplying providers.
+		var multiplier = 1 - ((resistance || 0) / 100);
+		return ((multiplier > 0.7) ? multiplier : 0.7 - (0.7 - multiplier) / 0.5);
+	}; // getResistanceContribution()
+
+
+	var getEffectiveDamageResistance = function(multiplier, maxres, exemptres) {
+		if (multiplier <= 0.7) {
+			multiplier = 0.7 - (0.7 - multiplier) * 0.5;
+		}
+		if (maxres !== null) {
+			multiplier = max(multiplier, 1 - maxres / 100);
+		}
+		if (exemptres !== undefined) {
+			// The generator multiplies the capped booster aggregate afterward.
+			multiplier = max(0, (1 - (exemptres || 0) / 100) * multiplier);
+		}
+		return (1 - multiplier) * 100;
 	}; // getEffectiveDamageResistance()
 	
 	
 	var getEffectiveShieldBoostMultiplier = function(shieldbst) {
-		// https://forums.frontier.co.uk/threads/very-experimental-shield-change.314820/post-4895068
+		// Booster factors add their excess over 1; each factor is 1 + shieldbst/100.
 		var i = (1 + (shieldbst / 100));
-	//	i = min(i, (1 - exp(-0.7 * i)) * 2.5); // proposed during 2.3 beta, but not implemented
 		return i;
 	}; // getEffectiveShieldBoostMultiplier()
 	
@@ -918,9 +1124,127 @@ window.edsy = new (function() {
 	}; // getHeatLevelAtTime()
 	
 	
-	var getEffectiveWeaponThermalLoad = function(thmload, distdraw, wepcap, weplvl) {
-		// https://forums.frontier.co.uk/threads/research-detailed-heat-mechanics.286628/post-6408594
-		return (thmload * (1 + 4 * min(max(1 - (wepcap * weplvl - distdraw) / wepcap, 0), 1)));
+	var getNominalHeatAfterTime = function(heatcap, heatdismax, thmload, heatlevel, seconds) {
+		// dH/dt = (load - Dmax*min(H,1)^2)/capacity, with constant inputs.
+		if (heatlevel >= 1) {
+			var rate = (thmload - heatdismax) / heatcap;
+			var timeToOne = rate < 0 ? (1 - heatlevel) / rate : Infinity;
+			if (seconds <= timeToOne) return heatlevel + rate * seconds;
+			seconds -= timeToOne;
+			heatlevel = 1;
+		}
+		if (thmload > heatdismax) {
+			var timeToOne = getTimeUntilHeatLevel(heatcap, heatdismax, thmload, heatlevel, 1);
+			if (seconds >= timeToOne) return 1 + (seconds - timeToOne) * (thmload - heatdismax) / heatcap;
+		}
+		if (!thmload) return heatlevel / (1 + heatdismax * heatlevel * seconds / heatcap);
+		var equilibrium = sqrt(thmload / heatdismax);
+		var advance = tanh(sqrt(heatdismax * thmload) * seconds / heatcap);
+		return equilibrium * (heatlevel + equilibrium * advance) / (equilibrium + heatlevel * advance);
+	}; // getNominalHeatAfterTime()
+
+
+	var getNominalHeatPulseSummary = function(heatcap, heatdismax, thmloadBase, pulses) {
+		if (!(isFinite(heatcap) && heatcap > 0 && isFinite(heatdismax) && heatdismax > 0 &&
+			isFinite(thmloadBase) && thmloadBase >= 0 && thmloadBase <= heatdismax) || !pulses || !pulses.length)
+			return undefined;
+		var ends = [];
+		for (var pulse of pulses) {
+			if (!(isFinite(pulse.heat) && pulse.heat >= 0 && isFinite(pulse.duration) && pulse.duration > 0)) return undefined;
+			ends.push(pulse.duration);
+		}
+		ends.sort(function(a, b) { return a - b; });
+		var heatlevel = getEquilibriumHeatLevel(heatdismax, thmloadBase);
+		var result = {peak:heatlevel, timeToOverheat:Infinity, overheatTime:0};
+		var elapsed = 0;
+		for (var end of ends) {
+			if (end === elapsed) continue;
+			var load = thmloadBase;
+			for (var pulse of pulses) if (pulse.duration > elapsed) load += pulse.heat / pulse.duration;
+			if (!isFinite(load)) return undefined;
+			var duration = end - elapsed;
+			var next = getNominalHeatAfterTime(heatcap, heatdismax, load, heatlevel, duration);
+			result.peak = max(result.peak, next);
+			if (heatlevel < 1.5 && next >= 1.5) {
+				var timeToOne = heatlevel < 1 ? getTimeUntilHeatLevel(heatcap, heatdismax, load, heatlevel, 1) : 0;
+				var crossing = timeToOne + (1.5 - max(1, heatlevel)) * heatcap / (load - heatdismax);
+				result.timeToOverheat = min(result.timeToOverheat, elapsed + crossing);
+				result.overheatTime += duration - crossing;
+			} else if (heatlevel >= 1.5 && (heatlevel > 1.5 || next > 1.5)) {
+				result.overheatTime += next >= 1.5 ? duration : (1.5 - heatlevel) * heatcap / (load - heatdismax);
+			}
+			heatlevel = next;
+			elapsed = end;
+		}
+		if (heatlevel > 1.5) result.overheatTime += thmloadBase < heatdismax ?
+			(heatlevel - 1.5) * heatcap / (heatdismax - thmloadBase) : Infinity;
+		return result;
+	}; // getNominalHeatPulseSummary()
+
+
+	var HPA_ADMISSION_MODULES = [83230, 83320, 83324, 83410];
+	var HPA_ADMISSION_BLUEPRINTS = { wpn_eff:1, wpn_foc:1, wpn_lw:1, wpn_lr:1, wpn_oc:1, wpn_rf:1, wpn_sr:1, wpn_stu:1 };
+	var HPA_ADMISSION_EFFECTS = { wpnx_dash:1, wpnx_difi:1, wpnx_db:1, wpnx_fc:1, wpnx_muse:1, wpnx_os:1, wpnx_phse:1, wpnx_sd:1, wpnx_tlb:1, wpnx_thco:1 };
+
+
+	var hasExplicitAttrOverride = function(slot) {
+		var modifiers = slot.getAllBaseAttrModifiers();
+		if (!modifiers) return false;
+		for (var attr in modifiers) if (slot.isAttrOverridden(attr)) return true;
+		return false;
+	}; // hasExplicitAttrOverride()
+
+
+	var generatedPlasmaDistributorDraw = function(slot) {
+		// Round each step of field * (1 + coefficient * strength) to single precision.
+		// One combined modifier represents the coefficient-strength product; only integrity uses a zero clamp.
+		var f32 = Math.fround;
+		var value = f32(slot.getBaseAttrValue('distdraw'));
+		if (!(value > 0)) return undefined;
+		var blueprint = eddb.blueprint[slot.bpid];
+		if (slot.bproll && blueprint && blueprint.distdraw && !slot.isAttrOverridden('distdraw')) {
+			var modifier = getBlueprintGradeRollAttrModifier(slot.bpid, slot.bpgrade, slot.bproll, 'distdraw');
+			if (modifier) value = f32(value * f32(1 + f32(modifier)));
+		}
+		return value;
+	}; // generatedPlasmaDistributorDraw()
+
+
+	var isGeneratedHpaConfiguration = function(slot) {
+		var blueprint = slot.getBlueprintID();
+		var effect = slot.getExpeffectID();
+		if (slot.getPreEngineered() || (!blueprint && !effect)) return false;
+		if (blueprint && (!HPA_ADMISSION_BLUEPRINTS[blueprint] || !(slot.bproll > 0))) return false;
+		if (effect && !HPA_ADMISSION_EFFECTS[effect]) return false;
+		if (hasExplicitAttrOverride(slot)) return false;
+		if ((slot.getEffectiveAttrValue('bstsize') || 1) !== 1) return false;
+		if (slot.getEffectiveAttrValue('dmgmul')) return false;
+		return true;
+	}; // isGeneratedHpaConfiguration()
+
+
+	var isWeaponCapacitorBlocked = function(slot, capacity) {
+		// Stock plasma draws use the stored value; supported generated configurations use one
+		// single-precision power adjustment. Slug, Mk II, pre-engineered, explicit overrides,
+		// unknown names and charged or burst changes stay unclassified.
+		if (HPA_ADMISSION_MODULES.indexOf(slot.getModuleID()) < 0) return false;
+		var draw;
+		if (!slot.getBlueprintID() && !slot.getExpeffectID() && !slot.isModified() && !slot.getPreEngineered()) {
+			draw = slot.getEffectiveAttrValue('distdraw');
+		} else if (isGeneratedHpaConfiguration(slot)) {
+			draw = generatedPlasmaDistributorDraw(slot);
+			if (draw === undefined) return false;
+		} else {
+			return false;
+		}
+		return isFinite(capacity) && capacity >= 0 && Math.fround(capacity) < Math.fround(draw);
+	}; // isWeaponCapacitorBlocked()
+
+
+	var getEffectiveWeaponThermalLoad = function(thmload, weplvl, wepheatmul) {
+		// Heat scales by 1 + (coefficient - 1) * (1 - charge/maximum), independently of distributor draw.
+		var missing = min(max(1 - weplvl, 0), 1);
+		return (thmload * (1 + (wepheatmul - 1) * missing));
 	}; // getEffectiveWeaponThermalLoad()
 	
 	
@@ -1026,6 +1350,10 @@ window.edsy = new (function() {
 			if (module.mtype == 'ipvh' && !module.fdname.toUpperCase().includes('LARGEBUGGYBAY') && slotname.startsWith('FIGHTERBAY')) return false;
 			// the Mining Volley Repeater is allowed on the Anaconda Mk II's lower large hardpoints (slotnum 3,4) but not the others, because why not
 			if (modid == 80339 && shipid == 18 && (this.slotnum < 3 || this.slotnum > 4)) return false;
+			// The Type-11 mining slots exclude the abrasion blaster; ordinary hardpoints allow it.
+			if (modid == 81229 && shipid == 38 && slotname.includes('MININGHARDPOINT')) return false;
+			// The hidden limpet module is incompatible with the dedicated controller slot.
+			if (modid == 26191 && shipid == 38 && slotname.startsWith('LIMPETCONTROLLER')) return false;
 			return true;
 		}, // isModuleIDAllowed()
 		
@@ -1181,6 +1509,8 @@ window.edsy = new (function() {
 		
 		
 		setPreEngineered: function(preeng) {
+			if (preeng && !this.preeng && this.bproll)
+				this.setBlueprintRoll(0);
 			this.preeng = preeng ? 1 : 0;
 			this.clearHash();
 			return true;
@@ -1195,6 +1525,18 @@ window.edsy = new (function() {
 		setBlueprint: function(bpid, bpgrade, bproll) {
 			if (!this.modid || (this.slotgroup === 'ship'))
 				return false;
+			// Freeze computed integer finals before changing a generated roll into custom data.
+			var capacities = {};
+			if (this.bproll && !bproll) {
+				for (var attr of ['ammoclip', 'ammomax', 'cargocap']) {
+					var value = attr === 'cargocap' ? getGeneratedCargoCapacity(this) : getGeneratedAmmoCapacity(this, attr);
+					if (value !== undefined) {
+						// A zero experimental factor cannot be inverted; retain the underlying count.
+						var baseOnly = attr !== 'cargocap' && this.getExperimentalAttrModifier(attr) === -1;
+						capacities[attr] = { value:baseOnly ? getGeneratedAmmoCapacity(this, attr, true) : value, baseOnly:baseOnly };
+					}
+				}
+			}
 			if (bpid === null) {
 				bpid = this.bpid;
 			}
@@ -1212,8 +1554,13 @@ window.edsy = new (function() {
 				} else {
 					bpgrade = min(max(bpgrade, 1), blueprint.maxgrade);
 				}
+				if (bproll && !isBlueprintGradeAvailable(bpid, bpgrade)) return false;
+				var previousBlueprint = this.bpid;
 				this.bpid = bpid;
 				this.bpgrade = bpgrade;
+				// Merc presets include their named experimental; later explicit selections remain editable.
+				if (bproll && bpid !== previousBlueprint && blueprint.expeffect)
+					this.setExpeffectID(blueprint.expeffect);
 				if (bproll) {
 					this.bproll = bproll = min(max(bproll, MIN_BPROLL), 1);
 					this.attrModifier = {};
@@ -1221,7 +1568,7 @@ window.edsy = new (function() {
 					for (var a = 0;  a < mtype.modifiable.length;  a++) {
 						var attr = mtype.modifiable[a];
 						var attribute = cache.attribute[attr];
-						if (attribute && blueprint[attr] && (attribute.modset || attribute.modadd || attribute.modmod || this.getBaseAttrValue(attr))) {
+						if (attribute && (blueprint[attr] || (attr === 'bstint' && blueprint.rof)) && (attribute.modset || attribute.modadd || attribute.modmod || this.getBaseAttrValue(attr))) {
 							this.attrModifier[attr] = getBlueprintGradeRollAttrModifier(bpid, bpgrade, bproll, attr);
 						}
 					}
@@ -1230,7 +1577,13 @@ window.edsy = new (function() {
 					if (this.attrModifier['ammoclip']) {
 						var ammoclip = this.getBaseAttrValue('ammoclip') * (1 + this.attrModifier['ammoclip']);
 						var bstsize = this.getEffectiveAttrValue('bstsize');
-						this.attrModifier['ammoclip'] = getModuleAttrModifier(this.module, 'ammoclip', ceil(ammoclip / bstsize) * bstsize);
+						if (this.module.ammo) {
+							ammoclip = max(1, ceil(Math.fround(Math.fround(this.getBaseAttrValue('ammoclip')) * Math.fround(1 + this.attrModifier['ammoclip']))));
+							if (this.module.ammo.alignBurst && bstsize > 1) ammoclip = ceil(Math.fround(ammoclip / Math.fround(bstsize))) * bstsize;
+						} else {
+							ammoclip = ceil(ammoclip / bstsize) * bstsize;
+						}
+						this.attrModifier['ammoclip'] = getModuleAttrModifier(this.module, 'ammoclip', ammoclip);
 					}
 					// when modifying damage falloff, cap at maximum range
 					if (this.attrModifier['dmgfall']) {
@@ -1268,6 +1621,13 @@ window.edsy = new (function() {
 					}
 					this.clearHash();
 				}
+			}
+			if (this.expid && !this.isExpeffectIDAllowed(this.expid))
+				this.setExpeffectID(0);
+			for (var attr in capacities) {
+				var modifier = getModuleAttrModifier(this.module, attr, capacities[attr].value);
+				if (capacities[attr].baseOnly) this.setAttrModifier(attr, modifier);
+				else this.setEffectiveAttrModifier(attr, modifier);
 			}
 			return true;
 		}, // setBlueprint()
@@ -1308,16 +1668,21 @@ window.edsy = new (function() {
 		}, // getExpeffectID()
 		
 		
+		isExpeffectIDAllowed: function(expid) {
+			if (!this.module || !eddb.expeffect[expid]) return false;
+			var mtype = eddb.mtype[this.module.mtype];
+			if (!mtype.expeffects || mtype.expeffects.indexOf(expid) < 0) return false;
+			var blocked = this.module.noexpeffects;
+			var blueprint = eddb.blueprint[this.bpid];
+			return !(blocked && (blocked['*'] || blocked[expid])) || !!(blueprint && blueprint.expeffect === expid);
+		}, // isExpeffectIDAllowed()
+
+
 		setExpeffectID: function(expid) {
 			if (!this.modid || (this.slotgroup === 'ship'))
 				return false;
 			if (expid) {
-				if (!eddb.expeffect[expid])
-					return false;
-				if (this.module.noexpeffects && (this.module.noexpeffects['*'] || this.module.noexpeffects[expid]))
-					return false;
-				var mtype = eddb.mtype[this.module.mtype];
-				if (!mtype.expeffects || mtype.expeffects.indexOf(expid) < 0)
+				if (!this.isExpeffectIDAllowed(expid))
 					return false;
 				this.expid = expid;
 			} else {
@@ -1339,7 +1704,42 @@ window.edsy = new (function() {
 		
 		
 		getAttrValue: function(attr, modified) {
+			if (isNominalIncrementalWeapon(this.module) && (attr === 'sfpc' || attr === 'sspc')) {
+				var cycle = getNominalIncrementalCycle(this.getAttrValue('ammoclip', modified), this.getAttrValue('bstsize', modified),
+					this.getAttrValue('bstint', modified), this.getAttrValue('bstrof', modified),
+					this.getAttrValue('rldtime', modified), this.getAttrValue('rldint', modified));
+				return cycle ? cycle[(attr === 'sfpc') ? 'shots' : 'period'] : NaN;
+			}
 			switch (attr) {
+			case 'integ':
+				var integrity = modified ? getGeneratedIntegrity(this) : undefined;
+				if (integrity !== undefined) return integrity;
+				break;
+
+			case 'agzresist':
+				// Guardian resistance is enabled independently of engineering strength.
+				// The weapon variant also applies a separate damage coefficient.
+				return (modified && (this.bpid === 'misc_agzr' || this.expid === 'wpnx_agzr')) ? 'Active' : getModuleAttrValue(this.module, attr);
+
+			case 'cargocap':
+				var capacity = modified ? getGeneratedCargoCapacity(this) : undefined;
+				if (capacity !== undefined) return capacity;
+				break;
+
+			case 'ammoclip':
+			case 'ammomax':
+				var capacity = modified ? getGeneratedAmmoCapacity(this, attr) : undefined;
+				if (capacity !== undefined) return capacity;
+				break;
+
+			case 'plswgt':
+			case 'colwgt':
+				// Preserve the individual damage channel while keeping ABS as a compatible aggregate.
+				if (modified && this.isAttrOverridden('abswgt'))
+					return 0;
+				var channel = (modified && this.bpid === 'wpn_pc') ? 2 : this.module.abschannel;
+				return (channel === (attr === 'plswgt' ? 2 : 4)) ? this.getAttrValue('abswgt', modified) : 0;
+
 			case 'fpc':
 			case 'sfpc':
 				var ammoclip = this.getAttrValue('ammoclip', modified);
@@ -1347,14 +1747,14 @@ window.edsy = new (function() {
 					// Auto Loader adds 1 round per 2 shots for an almost-but-not-quite +100% effective clip size
 					if (modified && this.expid === 'wpnx_aulo')
 						ammoclip += ammoclip - 1;
-					return ammoclip;
+					return ammoclip / getWeaponAmmoPerShot(this.module, this.getAttrValue('rounds', modified));
 				}
 				return this.getAttrValue('bstsize', modified);
 				
 			case 'spc':
 			case 'sspc':
 				var dmgmul = this.getAttrValue('dmgmul', modified);
-				var duration = this.getAttrValue('duration', modified) * (dmgmul ? WEAPON_CHARGE : 1.0);
+				var duration = getWeaponCycleCharge(this.module, this.getAttrValue('duration', modified), dmgmul);
 				if (this.modid == 84224 && attr === 'sspc') // TODO: bug? Imperial Hammer Rail Gun can keep firing through reloads without re-charging
 					duration = 0;
 				var bstsize = this.getAttrValue('bstsize', modified);
@@ -1367,35 +1767,65 @@ window.edsy = new (function() {
 					// Auto Loader adds 1 round per 2 shots for an almost-but-not-quite +100% effective clip size
 					if (modified && this.expid === 'wpnx_aulo')
 						ammoclip += ammoclip - 1;
-					spc *= ceil(ammoclip / bstsize);
+					spc *= ceil(this.getAttrValue('fpc', modified) / bstsize);
 				}
 				return spc + max(0, rldtime - duration - bstint);
 				
 			case 'rof':
-				return (this.getAttrValue('fpc', modified) / this.getAttrValue('spc', modified));
+				// Displayed burst rate excludes charge time, clip remainder and reload; continuous weapons omit it.
+				var bstint = this.getAttrValue('bstint', modified);
+				if (!(bstint > 0))
+					return (this.getAttrValue('fpc', modified) / this.getAttrValue('spc', modified));
+				var bstsize = this.getAttrValue('bstsize', modified);
+				return bstsize / (bstint + (bstsize > 1 ? ((bstsize - 1) / this.getAttrValue('bstrof', modified)) : 0));
 				
 			case 'srof':
 				return (this.getAttrValue('sfpc', modified) / this.getAttrValue('sspc', modified));
 				
+			case 'damage':
+				// Displayed damage weights anti-xeno at 0.1 and each other damage channel at 1.
+				var raw = getModuleAttrValue(this.module, 'damage', modified ? this.getEffectiveAttrModifier('damage') : undefined);
+				if (raw === undefined)
+					return undefined;
+				var axe = this.getAttrValue('axewgt', modified) || 0;
+				return raw * (1 - 0.9 * (axe / 100));
+
 			case 'dps':
+				// DPS uses weighted damage and the burst-cycle rate, without the full-charge multiplier. Continuous damage needs no rate division.
+				var damage = this.getAttrValue('damage', modified);
+				var bstint = this.getAttrValue('bstint', modified);
+				if (!(bstint > 0))
+					return damage;
+				var rounds = this.getAttrValue('rounds', modified);
+				var bstsize = this.getAttrValue('bstsize', modified);
+				var cycle = bstint + (bstsize > 1 ? ((bstsize - 1) / this.getAttrValue('bstrof', modified)) : 0);
+				return damage * rounds * bstsize / cycle;
+
 			case 'sdps':
 				var damage = this.getAttrValue('damage', modified);
 				var dmgmul = (1 + WEAPON_CHARGE * ((this.getAttrValue('dmgmul', modified) || 1) - 1));
 				var rounds = this.getAttrValue('rounds', modified);
-				var rof = this.getAttrValue((attr === 'sdps') ? 'srof' : 'rof', modified);
+				var rof = this.getAttrValue('srof', modified);
+				if (isNominalIncrementalWeapon(this.module) && isNaN(rof)) return NaN;
 				return (damage * dmgmul * rounds * (isFinite(rof) ? rof : 1));
 				
 			case 'eps':
 			case 'seps':
 				var distdraw = this.getAttrValue('distdraw', modified);
 				var rof = this.getAttrValue((attr === 'seps') ? 'srof' : 'rof', modified);
+				if (isNominalIncrementalWeapon(this.module) && isNaN(rof)) return NaN;
 				return (distdraw * (isFinite(rof) ? rof : 1));
 				
 			case 'hps':
 			case 'shps':
 				var thmload = this.getAttrValue('thmload', modified);
 				var rof = this.getAttrValue((attr === 'shps') ? 'srof' : 'rof', modified);
+				if (isNominalIncrementalWeapon(this.module) && isNaN(rof)) return NaN;
 				return (thmload * (isFinite(rof) ? rof : 1));
+
+			case 'brcdmg':
+				// Breach damage is displayed damage times the breach fraction.
+				return this.getAttrValue('damage', modified) * (this.getAttrValue('brcpct', modified) / 100);
 				
 			case 'engminmul':
 			case 'engoptmul':
@@ -1437,7 +1867,8 @@ window.edsy = new (function() {
 		
 		
 		getBaseAttrModifier: function(attr) {
-			return ((this.attrModifier || EMPTY_OBJ)[attr] || 0);
+			var modifier = (this.attrModifier || EMPTY_OBJ)[attr];
+			return (modifier === undefined && !(cache.attribute[attr] || EMPTY_OBJ).modset) ? 0 : modifier;
 		}, // getBaseAttrModifier()
 		
 		
@@ -1454,31 +1885,23 @@ window.edsy = new (function() {
 				return (abs(modifier) < MIN_MODIFIER) ? 0 : modifier; // TODO: check for within 10?
 				
 			case 'brcdmg':
+				// Scale all damage channels; breach damage retains the unscaled breach fraction.
 				return this.getEffectiveAttrModifier('damage');
 				
 			case 'rof':
 			case 'srof':
+			case 'dps':
+			case 'sdps':
 				// can't just combine modifiers, they're too interrelated
 				// instead, compare the derived values with and without modifiers
 				var base = this.getAttrValue(attr, false);
 				var value = this.getAttrValue(attr, true);
-				if (!isFinite(base) || !isFinite(value))
+				if (!isFinite(base) || !isFinite(value) || !base)
 					return 0;
 				var modifier = (value / base) - 1;
 				return (abs(modifier) < MIN_MODIFIER) ? 0 : modifier;
 				
-			case 'dps':
-			case 'sdps':
-				return getAttrModifierSum(attr,
-					getAttrModifierSum(attr,
-						getAttrModifierSum(attr,
-							this.getEffectiveAttrModifier('damage'),
-							this.getEffectiveAttrModifier('dmgmul') * WEAPON_CHARGE
-						),
-						this.getEffectiveAttrModifier('rounds')
-					),
-					this.getEffectiveAttrModifier(attr === 'sdps' ? 'srof' : 'rof')
-				);
+
 				
 			case 'eps':
 			case 'seps':
@@ -1495,15 +1918,12 @@ window.edsy = new (function() {
 				);
 				
 			case 'shotspd':
+				// A range increase also scales shot speed; a range decrease instead shortens flight time.
 				return max(0, this.getEffectiveAttrModifier('maximumrng'));
 				
 			case 'engminmass':
 			case 'engmaxmass':
-				// TODO: verify all combinations
-				// thrusters legacy negative optmass: negative minmass, negative maxmass
-				// thrusters legacy positive optmass:
-				// thrusters modern negative optmass: negative minmass, negative maxmass
-				// thrusters modern positive optmass: positive minmass, positive maxmass
+				// Scale minimum, optimal and maximum engine masses by the same factor.
 				return this.getEffectiveAttrModifier('engoptmass');
 				
 			case 'engminmul':
@@ -1520,38 +1940,40 @@ window.edsy = new (function() {
 			case 'minmulrot':
 			case 'optmulrot':
 			case 'maxmulrot':
+				// Scale minimum, optimal and maximum engine multipliers by the same factor.
 				return this.getEffectiveAttrModifier('engoptmul');
 				
 			case 'maxrng':
+				// Scale maximum sensor range and typical emission by the same factor.
 				return this.getEffectiveAttrModifier('typemis');
 				
 			case 'genminmass':
-				// TODO: verify all combinations
-				// shieldgen legacy negative optmass:
-				// shieldgen legacy positive optmass:
-				// shieldgen modern negative optmass: negative minmass
-				// shieldgen modern positive optmass:
+				// Scale minimum and optimal shield-generator mass by the modifier factor.
 				return this.getEffectiveAttrModifier('genoptmass');
 				
 			case 'genmaxmass':
-				// TODO: verify all combinations
-				// shieldgen legacy negative optmass:
-				// shieldgen legacy positive optmass: positive maxmass
-				// shieldgen modern negative optmass: unchanged maxmass
-				// shieldgen modern positive optmass:
+				// Maximum mass uses max(factor, 1), so a negative optimal-mass modifier leaves it unchanged.
 				return max(0, this.getEffectiveAttrModifier('genoptmass'));
 				
 			case 'genminmul':
 			case 'genmaxmul':
+				// Scale minimum, optimal and maximum shield multipliers by the same factor.
 				return this.getEffectiveAttrModifier('genoptmul');
 			}
 			
-			return 0;
+			return (cache.attribute[attr] || EMPTY_OBJ).modset ? undefined : 0;
 		}, // getRelatedAttrModifier()
 		
 		
 		getExperimentalAttrModifier: function(attr) {
-			var modExp = ((eddb.expeffect[this.expid] || EMPTY_OBJ)[attr] || 0);
+			// Fire-rate modifiers scale damage for continuous weapons.
+			if (this.expid === 'wpnx_inro' && this.getBaseAttrValue('bstint') === 0) {
+				if (attr === 'damage') return -0.05;
+				if (attr === 'bstint') return 0;
+			}
+			var modExp = (eddb.expeffect[this.expid] || EMPTY_OBJ)[attr];
+			if (modExp === undefined)
+				return (cache.attribute[attr] || EMPTY_OBJ).modset ? undefined : 0;
 			if (modExp) {
 				var attribute = cache.attribute[attr];
 				modExp /= ((attribute.modset || attribute.modadd) ? 1 : (attribute.modmod || 100));
@@ -1561,6 +1983,21 @@ window.edsy = new (function() {
 		
 		
 		getEffectiveAttrModifier: function(attr) {
+			var split = getGeneratedDamageSplitModifier(this, attr);
+			if (split !== undefined) return split;
+			if (attr === 'integ') {
+				var integrity = getGeneratedIntegrity(this);
+				if (integrity !== undefined) return getModuleAttrModifier(this.module, attr, integrity);
+			}
+			if (attr === 'cargocap') {
+				var capacity = getGeneratedCargoCapacity(this);
+				if (capacity !== undefined) return getModuleAttrModifier(this.module, attr, capacity);
+			}
+			if (attr === 'ammoclip' || attr === 'ammomax') {
+				var capacity = getGeneratedAmmoCapacity(this, attr);
+				if (capacity !== undefined) return getModuleAttrModifier(this.module, attr, capacity);
+			}
+
 			// get base, related and experimental modifiers
 			var modBase = this.getBaseAttrModifier(attr);
 			var modRel = this.getRelatedAttrModifier(attr);
@@ -1574,9 +2011,19 @@ window.edsy = new (function() {
 		setEffectiveAttrModifier: function(attr, modifier) {
 			if (attr === 'cost') {
 				return this.setDiscounts(getClosestDiscount(1 + (modifier || 0)));
-			} else if (attr === 'rof' || attr === 'srof') {
+			} else if (attr === 'rof') {
+				// Invert the displayed burst rate, independent of charge, clip size and reload.
+				var rate = this.getBaseAttrValue('rof') * (1 + (modifier || 0));
+				var size = this.getEffectiveAttrValue('bstsize');
+				var burst = size > 1 ? (size - 1) / this.getEffectiveAttrValue('bstrof') : 0;
+				if (!(rate > 0) || !isFinite(rate)) return false;
+				var interval = size / rate - burst;
+				if (!(interval > 0)) return false;
+				modifier = getModuleAttrModifier(this.module, 'bstint', interval);
+				attr = 'bstint';
+			} else if (attr === 'srof') {
 				var dmgmul = this.getEffectiveAttrValue('dmgmul');
-				var duration = this.getEffectiveAttrValue('duration') * (dmgmul ? WEAPON_CHARGE : 1.0);
+				var duration = getWeaponCycleCharge(this.module, this.getEffectiveAttrValue('duration'), dmgmul);
 				if (this.modid == 84224 && attr === 'srof') // TODO: bug? Imperial Hammer Rail Gun can keep firing through reloads without re-charging
 					duration = 0;
 				var bstsize = this.getEffectiveAttrValue('bstsize');
@@ -1600,20 +2047,29 @@ window.edsy = new (function() {
 			
 			// set the base modifier
 			var basemodifier = getAttrModifierDifference(attr, modifier, getAttrModifierSum(attr, modExp, modRel));
-			return this.setAttrModifier(attr, basemodifier);
+			return this.setAttrModifier(attr, basemodifier, true);
 		}, // setEffectiveAttrModifier()
 		
 		
-		setAttrModifier: function(attr, modifier) {
+		setAttrModifier: function(attr, modifier, explicitReset) {
 			if (!this.module)
 				return false;
 			if (attr === 'cost')
 				return this.setDiscounts(getClosestDiscount(1 + (modifier || 0)));
 			if (this.slotgroup === 'ship')
 				return false;
-			if (attr === 'rof' || attr === 'srof') {
+			if (attr === 'rof') {
+				var rate = this.getBaseAttrValue('rof') * (1 + (modifier || 0));
+				var size = this.getBaseAttrValue('bstsize');
+				var burst = size > 1 ? (size - 1) / this.getBaseAttrValue('bstrof') : 0;
+				if (!(rate > 0) || !isFinite(rate)) return false;
+				var interval = size / rate - burst;
+				if (!(interval > 0)) return false;
+				modifier = getModuleAttrModifier(this.module, 'bstint', interval);
+				attr = 'bstint';
+			} else if (attr === 'srof') {
 				var dmgmul = this.getBaseAttrValue('dmgmul');
-				var duration = this.getBaseAttrValue('duration') * (dmgmul ? WEAPON_CHARGE : 1.0);
+				var duration = getWeaponCycleCharge(this.module, this.getBaseAttrValue('duration'), dmgmul);
 				if (this.modid == 84224 && attr === 'srof') // TODO: bug? Imperial Hammer Rail Gun can keep firing through reloads without re-charging
 					duration = 0;
 				var bstsize = this.getBaseAttrValue('bstsize');
@@ -1629,7 +2085,16 @@ window.edsy = new (function() {
 				// TODO: how to handle bstint also appearing inside the max() when setting srof?
 			}
 			// set the modifier (or clear if it's tiny, probably just a rounding error)
-			if (!modifier || abs(modifier) < MIN_MODIFIER) {
+			if (modifier === undefined || modifier === null || (!(cache.attribute[attr] || EMPTY_OBJ).modset && abs(modifier) < MIN_MODIFIER)) {
+				if (explicitReset && this.bproll && getModuleAttrModificationIndex(this.module, attr) >= 0) {
+					// An explicit reset during generation must survive the later roll freeze.
+					this.attrModifier = this.attrModifier || {};
+					this.attrOverride = this.attrOverride || {};
+					this.attrModifier[attr] = cache.attribute[attr].modset ? this.getBaseAttrValue(attr) : 0;
+					this.attrOverride[attr] = true;
+					this.clearStats();
+					return true;
+				}
 				if (this.attrModifier) {
 					delete this.attrModifier[attr];
 					delete this.attrOverride[attr];
@@ -1649,7 +2114,7 @@ window.edsy = new (function() {
 					return false;
 				if (!this.attrModifier)
 					this.attrModifier = {};
-				this.attrModifier[attr] = getModuleAttrModifier(this.module, attr, getModuleAttrValue(this.module, attr, modifier));
+				this.attrModifier[attr] = cache.attribute[attr].modset ? getModuleAttrValue(this.module, attr, modifier) : getModuleAttrModifier(this.module, attr, getModuleAttrValue(this.module, attr, modifier));
 				if (!this.attrOverride)
 					this.attrOverride = {};
 				this.attrOverride[attr] = true;
@@ -1717,13 +2182,16 @@ window.edsy = new (function() {
 				if (mtype.modifiable && this.attrModifier) {
 					for (var a = 0;  a < mtype.modifiable.length;  a++) {
 						var attr = mtype.modifiable[a];
-						if (cache.attribute[attr] && this.attrModifier[attr]) {
+						if (cache.attribute[attr] && this.attrModifier[attr] !== undefined) {
+							// Builtin snapshots turn generated fields into explicit modifiers.
+							var split = getGeneratedDamageSplitModifier(this, attr);
+							var storedModifier = (split === undefined) ? this.attrModifier[attr] : split;
 							if (this.preeng || this.attrOverride[attr]) {
 								nummods++;
-								modulehash += hashEncode(((a & 0xF) << 20) | (float20Encode(this.attrModifier[attr]) & 0xFFFFF), 4);
+								modulehash += hashEncode(((a & 0xF) << 20) | (float20Encode(storedModifier) & 0xFFFFF), 4);
 							}
 							b_nummods++;
-							b_modulehash += hashEncode(((a & 0xF) << 20) | (float20Encode(this.attrModifier[attr]) & 0xFFFFF), 4);
+							b_modulehash += hashEncode(((a & 0xF) << 20) | (float20Encode(storedModifier) & 0xFFFFF), 4);
 						}
 					}
 				}
@@ -1906,7 +2374,7 @@ window.edsy = new (function() {
 								continue;
 							}
 						}
-						if (!this.setAttrModifier(attr, modifier)) {
+						if (!this.setAttrModifier(attr, modifier, true)) {
 							if (errors) errors.push(errortag + 'Invalid modification: '+attr+' '+modifier);
 						}
 					}
@@ -2325,6 +2793,26 @@ window.edsy = new (function() {
 		}, // getShipID()
 		
 		
+		// Configured full-charge SCO coefficients, before runtime eligibility and throttle feedback.
+		getScoSummary: function(slot) {
+			slot = slot || this.getSlot('component', CORE_ABBR_SLOT.FD);
+			var module = slot && slot.getModule();
+			var multipliers = eddb.ship[this.shipid].scomul;
+			if (!module || module.sco !== 'Available' || !multipliers)
+				return null;
+			var f32 = Math.fround;
+			var speedFactor = f32(1 + slot.getEffectiveAttrValue('scospd') / 100);
+			var fuelEnergy = f32(slot.getEffectiveAttrValue('scofuel') * 45000);
+			return {
+				scospd: f32(f32(speedFactor * f32(multipliers.speed)) - 1) * 100,
+				scoacc: f32(f32(slot.getEffectiveAttrValue('scoacc')) * f32(multipliers.charge)),
+				scoheat: f32(f32(slot.getEffectiveAttrValue('scoheat')) * f32(multipliers.heat)),
+				scofuel: fuelEnergy * f32(multipliers.fuel) / 45000,
+				scoconint: min(max(f32(f32(slot.getEffectiveAttrValue('scoconint')) * f32(multipliers.control)), 0), 1),
+			};
+		}, // getScoSummary()
+
+
 		getModule: function(modid) {
 			return ((cache.shipModules[this.shipid] || EMPTY_OBJ)[modid] || eddb.module[modid]);
 		}, // getModule()
@@ -2539,7 +3027,11 @@ window.edsy = new (function() {
 			var sys2 = ((sys0 === 'sys') ? 'wep' : ((sys0 === 'eng') ? 'sys' : 'eng'));
 			var dist0 = min(max(this.powerdist[sys0] + delta                 , 0), MAX_POWER_DIST, TOTAL_POWER_DIST);
 			delta = dist0 - this.powerdist[sys0];
-			var dist1 = min(max(this.powerdist[sys1] - (delta - (delta >> 1)), 0), MAX_POWER_DIST, TOTAL_POWER_DIST - dist0);
+			var delta1 = delta - (delta >> 1);
+			// Take a final half-pip from the smaller donor when topping off a channel.
+			if (delta === 1 && this.powerdist[sys1] > this.powerdist[sys2])
+				delta1 = 0;
+			var dist1 = min(max(this.powerdist[sys1] - delta1, 0, TOTAL_POWER_DIST - MAX_POWER_DIST - dist0), MAX_POWER_DIST, TOTAL_POWER_DIST - dist0);
 			var dist2 = TOTAL_POWER_DIST - dist0 - dist1;
 			this.powerdist[sys0] = dist0;
 			this.powerdist[sys1] = dist1;
@@ -2613,22 +3105,27 @@ window.edsy = new (function() {
 		
 		
 		updateStats: function() {
+			var power = getBuildPowerState(this);
 			var stats = this.stats = {
 				cost: 0,
 				cost_vehicle: 0,
 				cost_restock: 0,
 				cost_rearm: 0,
 				mass: 0,
-				pwrcap: 0,
-				pwrbst: 0,
-				pwrdraw_dep: [0,0,0,0,0,0],
-				pwrdraw_ret: [0,0,0,0,0,0],
+				pwrcap: power.capacity,
+				pwrbst: power.boost,
+				pwrdraw_dep: power.deployed,
+				pwrdraw_ret: power.retracted,
+				power_state: power,
 				thmload_ct: 0,
+				thmload_ct_dep: 0,
 				thmload_cfsd: 0,
 				thmload_hardpoint_wepfull: 0,
 				thmload_hardpoint_wepempty: 0,
+				thmload_hardpoint_nocap: 0,
 				thmload_iscb: 0,
 				spinup_iscb: 0,
+				heatpulses_iscb: [],
 				jumpbst: 0,
 				fuelcap: 0, 
 				cargocap: 0,
@@ -2643,16 +3140,23 @@ window.edsy = new (function() {
 				integ_imrp: 0,
 				dmgprot: 1,
 				dps: 0,
+				wep_cap_blocked: 0,
 				dps_abs: 0,
+				dps_pls: 0,
+				dps_col: 0,
 				dps_thm: 0,
 				dps_kin: 0,
 				dps_exp: 0,
 				dps_axe: 0,
 				dps_cau: 0,
+				dps_thg: 0,
 				dps_nodistdraw: 0,
 				dps_distdraw: 0,
+				sdps_nodistdraw: 0,
+				sdps_distdraw: 0,
 				ammotime_wepcap: 1/0,
 				ammotime_nocap: 1/0,
+				ammo_fuel: false,
 				wepcap_burst_cur: 0,
 				wepcap_burst_max: 0,
 				wepchg_sustain_cur: 0,
@@ -2664,10 +3168,7 @@ window.edsy = new (function() {
 			var thmmod_ihrp = 1;
 			var expmod_ihrp = 1;
 			var caumod_ihrp = 1;
-			var kinmin_ihrp = 1;
-			var thmmin_ihrp = 1;
-			var expmin_ihrp = 1;
-			var caumin_ihrp = 1;
+			var thgmod_ihrp = 1;
 			var kinmod_usb = 1;
 			var thmmod_usb = 1;
 			var expmod_usb = 1;
@@ -2681,18 +3182,12 @@ window.edsy = new (function() {
 			// cargo hatch
 			var slot = this.getSlot('ship', 'hatch');
 			stats.cost += slot.getCost();
-			var module = slot.getModule();
-			if (module && slot.getPowered()) {
-				var pwrdraw = slot.getEffectiveAttrValue('pwrdraw');
-				var priority = slot.getPriority();
-				stats.pwrdraw_dep[0] += pwrdraw;
-				stats.pwrdraw_dep[priority] += pwrdraw;
-				stats.pwrdraw_ret[0] += pwrdraw;
-				stats.pwrdraw_ret[priority] += pwrdraw;
-			}
+			var module;
 			
 			// all other modules
-			var wepcap = this.getSlot('component', CORE_ABBR_SLOT.PD).getEffectiveAttrValue('wepcap');
+			var slot_pd = this.getSlot('component', CORE_ABBR_SLOT.PD);
+			var wepcap = slot_pd.getEffectiveAttrValue('wepcap');
+			var wepheatmul = slot_pd.getEffectiveAttrValue('wepheatmul') || 5;
 			var weapons = [];
 			var slot_isg = null;
 			for (var sg = 0;  sg < GROUPS.length;  sg++) {
@@ -2703,8 +3198,6 @@ window.edsy = new (function() {
 						stats.cost += slot.getCost();
 						stats.cost_vehicle += slot.getEffectiveAttrValue('vslots') * slot.getEffectiveAttrValue('vcount') * (slot.getEffectiveAttrValue('ammocost') || 0);
 						stats.mass += slot.getEffectiveAttrValue('mass');
-						stats.pwrcap += slot.getEffectiveAttrValue('pwrcap');
-						stats.pwrbst += slot.getEffectiveAttrValue('pwrbst');
 						stats.fuelcap += slot.getEffectiveAttrValue('fuelcap');
 						stats.cargocap += slot.getEffectiveAttrValue('cargocap');
 						stats.cabincap += slot.getEffectiveAttrValue('cabincap');
@@ -2719,40 +3212,41 @@ window.edsy = new (function() {
 							stats.cost_restock += slot.getEffectiveAttrValue('afmrepcap') * (slot.getEffectiveAttrValue('ammocost') || 0);
 						} else if (mtypeid === 'imrp') {
 							stats.integ_imrp += slot.getEffectiveAttrValue('integ');
-							stats.dmgprot *= (1 - (slot.getEffectiveAttrValue('dmgprot') / 100));
 						} else if (mtypeid === 'ihrp' || mtypeid === 'imahrp') {
-							var kinmod = (1 - (slot.getEffectiveAttrValue('kinres') / 100));
-							var thmmod = (1 - (slot.getEffectiveAttrValue('thmres') / 100));
-							var expmod = (1 - (slot.getEffectiveAttrValue('expres') / 100));
-							var caumod = (1 - (slot.getEffectiveAttrValue('caures') / 100));
+							var kinmod = getResistanceContribution(slot.getEffectiveAttrValue('kinres'));
+							var thmmod = getResistanceContribution(slot.getEffectiveAttrValue('thmres'));
+							var expmod = getResistanceContribution(slot.getEffectiveAttrValue('expres'));
+							var caumod = getResistanceContribution(slot.getEffectiveAttrValue('caures'));
 							kinmod_ihrp *= kinmod;
 							thmmod_ihrp *= thmmod;
 							expmod_ihrp *= expmod;
 							caumod_ihrp *= caumod;
-							kinmin_ihrp = min(kinmin_ihrp, kinmod);
-							thmmin_ihrp = min(thmmin_ihrp, thmmod);
-							expmin_ihrp = min(expmin_ihrp, expmod);
-							caumin_ihrp = min(caumin_ihrp, caumod);
+							thgmod_ihrp *= getResistanceContribution(slot.getEffectiveAttrValue('thgres'));
 						} else if (mtypeid === 'iscb') {
 							stats.cost_restock += (slot.getEffectiveAttrValue('ammoclip') + slot.getEffectiveAttrValue('ammomax')) * (slot.getEffectiveAttrValue('ammocost') || 0);
 						}
 						
+						// Installed nominal repair uses configured capacity. Manual off and shedding both block launch, and neither changes this scalar.
+						if (mtypeid === 'idlc' || mtypeid === 'imlc' || mtypeid === 'irlc') {
+							var repairCapacity = slot.getEffectiveAttrValue('lmprepcap');
+							if (isFinite(repairCapacity)) stats.lmprepcap_max = max(stats.lmprepcap_max, max(0, repairCapacity));
+						}
 						var pwrdraw = slot.getEffectiveAttrValue('pwrdraw');
 						if (!pwrdraw || slot.getPowered()) {
-							var priority = slot.getPriority();
-							stats.pwrdraw_dep[0] += pwrdraw;
-							stats.pwrdraw_dep[priority] += pwrdraw;
-							if (slotgroup !== 'hardpoint' && ((slotgroup !== 'utility') || module.passive)) {
-								stats.pwrdraw_ret[0] += pwrdraw;
-								stats.pwrdraw_ret[priority] += pwrdraw;
+							var onlineRet = isSlotOnline(slot, power, false);
+							var onlineDep = isSlotOnline(slot, power, true);
+							
+							stats.jumpbst   += onlineRet ? slot.getEffectiveAttrValue('jumpbst') : 0;
+							stats.scooprate += onlineRet ? slot.getEffectiveAttrValue('scooprate') : 0;
+							stats.shieldbst += onlineDep ? slot.getEffectiveAttrValue('shieldbst') : 0;
+							stats.shieldrnf += onlineDep ? slot.getEffectiveAttrValue('shieldrnf') : 0;
+							if (mtypeid === 'imrp' && onlineDep) stats.dmgprot *= (1 - slot.getEffectiveAttrValue('dmgprot') / 100);
+							
+							if (slotgroup === 'hardpoint' && onlineDep && isWeaponCapacitorBlocked(slot, wepcap)) {
+								stats.wep_cap_blocked++;
+								continue;
 							}
-							
-							stats.jumpbst   += slot.getEffectiveAttrValue('jumpbst');
-							stats.scooprate += slot.getEffectiveAttrValue('scooprate');
-							stats.shieldbst += slot.getEffectiveAttrValue('shieldbst');
-							stats.shieldrnf += slot.getEffectiveAttrValue('shieldrnf');
-							
-							if (slotgroup === 'hardpoint') {
+							if (slotgroup === 'hardpoint' && onlineDep) {
 								var thmload = slot.getEffectiveAttrValue('thmload');
 								var distdraw = slot.getEffectiveAttrValue('distdraw');
 								var ammoclip = slot.getEffectiveAttrValue('ammoclip');
@@ -2762,53 +3256,73 @@ window.edsy = new (function() {
 								var spc = slot.getEffectiveAttrValue('spc') || 1;
 								var sspc = slot.getEffectiveAttrValue('sspc') || 1;
 								var sfpc = slot.getEffectiveAttrValue('sfpc');
-								var sdps = slot.getEffectiveAttrValue('sdps');
+								// Anti-xeno contributes one tenth of its raw damage to both ship DPS and its displayed share.
+								var dps = slot.getEffectiveAttrValue('dps');
+								var axe = (slot.getEffectiveAttrValue('axewgt') || 0) / 100;
+								var unweighted = dps / (1 - 0.9 * axe);
 								
-								thmload *= sfpc / sspc;
-								stats.thmload_hardpoint_wepfull += getEffectiveWeaponThermalLoad(thmload, distdraw, wepcap, 1.0);
-								stats.thmload_hardpoint_wepempty += getEffectiveWeaponThermalLoad(thmload, distdraw, wepcap, 0.0);
+								thmload = slot.getEffectiveAttrValue('shps');
+								if (!distdraw) stats.thmload_hardpoint_nocap += thmload;
+								stats.thmload_hardpoint_wepfull += getEffectiveWeaponThermalLoad(thmload, 1.0, wepheatmul);
+								stats.thmload_hardpoint_wepempty += getEffectiveWeaponThermalLoad(thmload, 0.0, wepheatmul);
 								
-								stats.dps += sdps;
-								stats.dps_abs += sdps * (slot.getEffectiveAttrValue('abswgt') / 100.0);
-								stats.dps_thm += sdps * (slot.getEffectiveAttrValue('thmwgt') / 100.0);
-								stats.dps_kin += sdps * (slot.getEffectiveAttrValue('kinwgt') / 100.0);
-								stats.dps_exp += sdps * (slot.getEffectiveAttrValue('expwgt') / 100.0);
-								stats.dps_axe += sdps * (slot.getEffectiveAttrValue('axewgt') / 100.0);
-								stats.dps_cau += sdps * (slot.getEffectiveAttrValue('cauwgt') / 100.0);
+								stats.dps += dps;
+								stats.dps_abs += unweighted * (slot.getEffectiveAttrValue('abswgt') / 100.0);
+								stats.dps_pls += unweighted * (slot.getEffectiveAttrValue('plswgt') / 100.0);
+								stats.dps_col += unweighted * (slot.getEffectiveAttrValue('colwgt') / 100.0);
+								stats.dps_thm += unweighted * (slot.getEffectiveAttrValue('thmwgt') / 100.0);
+								stats.dps_kin += unweighted * (slot.getEffectiveAttrValue('kinwgt') / 100.0);
+								stats.dps_exp += unweighted * (slot.getEffectiveAttrValue('expwgt') / 100.0);
+								stats.dps_axe += unweighted * 0.1 * axe;
+								stats.dps_cau += unweighted * (slot.getEffectiveAttrValue('cauwgt') / 100.0);
+								stats.dps_thg += unweighted * (slot.getEffectiveAttrValue('thgwgt') / 100.0);
 								
+								if (getWeaponCycleCharge(module, slot.getEffectiveAttrValue('duration'), slot.getEffectiveAttrValue('dmgmul')) > 0)
+									eps = distdraw * slot.getEffectiveAttrValue('fpc') / spc;
 								weapons.push( {key:spc, spc:spc, eps:eps, seps:seps} );
-								var ammotime = ammoclip ? (sspc * ((ammoclip + ammomax) / sfpc)) : 1/0;
+								var ammoPerShot = getWeaponAmmoPerShot(module, slot.getEffectiveAttrValue('rounds'));
+								var ammotime = ammoclip ? (sspc * ((ammoclip + ammomax) / ammoPerShot / sfpc)) : 1/0;
+								var fuelAmmo = (slot.getModuleID() === 83325 || slot.getExpeffectID() === 'wpnx_plsl' || slot.getExpeffectID() === 'hrgx_plsl');
+								if (fuelAmmo) {
+									stats.ammo_fuel = true;
+									ammotime = Infinity;
+								} else {
+									var terminalTime = getConfiguredTerminalAmmoTime(slot);
+									if (terminalTime !== undefined) ammotime = terminalTime;
+								}
 								if (distdraw) {
-									stats.dps_distdraw += sdps;
+									stats.dps_distdraw += dps;
+									stats.sdps_distdraw += slot.getEffectiveAttrValue('sdps');
 									stats.ammotime_wepcap = min(stats.ammotime_wepcap, ammotime);
 								} else {
-									stats.dps_nodistdraw += sdps;
+									stats.dps_nodistdraw += dps;
+									stats.sdps_nodistdraw += slot.getEffectiveAttrValue('sdps');
 									stats.ammotime_nocap = min(stats.ammotime_nocap, ammotime);
 								}
-							} else if (mtypeid === 'usb') {
-								kinmod_usb *= (1 - (slot.getEffectiveAttrValue('kinres') / 100));
-								thmmod_usb *= (1 - (slot.getEffectiveAttrValue('thmres') / 100));
-								expmod_usb *= (1 - (slot.getEffectiveAttrValue('expres') / 100));
-								caumod_usb *= (1 - (slot.getEffectiveAttrValue('caures') / 100));
+							} else if (mtypeid === 'usb' && onlineDep) {
+								kinmod_usb *= getResistanceContribution(slot.getEffectiveAttrValue('kinres'));
+								thmmod_usb *= getResistanceContribution(slot.getEffectiveAttrValue('thmres'));
+								expmod_usb *= getResistanceContribution(slot.getEffectiveAttrValue('expres'));
+								caumod_usb *= getResistanceContribution(slot.getEffectiveAttrValue('caures'));
 							} else if (mtypeid === 'ct') {
-								stats.thmload_ct += slot.getEffectiveAttrValue('engheat');
+								stats.thmload_ct += onlineRet ? slot.getEffectiveAttrValue('engheat') : 0;
+								stats.thmload_ct_dep += onlineDep ? slot.getEffectiveAttrValue('engheat') : 0;
 							} else if (mtypeid === 'cfsd' || mtypeid === 'cfsdo') {
-								stats.thmload_cfsd += slot.getEffectiveAttrValue('fsdheat');
-							} else if (mtypeid === 'idlc' || mtypeid === 'imlc' || mtypeid === 'irlc') {
-								stats.lmprepcap_max = max(stats.lmprepcap_max, slot.getEffectiveAttrValue('lmprepcap'));
+								stats.thmload_cfsd += onlineRet ? slot.getEffectiveAttrValue('fsdheat') : 0;
 							} else if (mtypeid === 'iex') {
 								stats.unlimit[module.unlimit] = (stats.unlimit[module.unlimit] || 0) + (module.unlimitcount || 0);
-							} else if (mtypeid === 'iscb') {
+							} else if (mtypeid === 'iscb' && onlineDep) {
 								var scbheat = slot.getEffectiveAttrValue('scbheat');
 								var spinup = slot.getEffectiveAttrValue('spinup');
 								stats.thmload_iscb += scbheat / spinup;
 								stats.spinup_iscb = max(stats.spinup_iscb, spinup);
+								stats.heatpulses_iscb.push({heat:scbheat, duration:spinup});
 								
 								var shieldrnfps = (slot.getEffectiveAttrValue('scbdur') * slot.getEffectiveAttrValue('shieldrnfps'));
 								var ammo = (slot.getEffectiveAttrValue('ammoclip') + slot.getEffectiveAttrValue('ammomax'));
 								stats.shieldrnfps += shieldrnfps;
 								stats.shieldrnfps_ammomax += shieldrnfps * ammo;
-							} else if (mtypeid === 'isg' && !slot_isg) {
+							} else if (mtypeid === 'isg' && onlineDep && !slot_isg) {
 								slot_isg = slot;
 							}
 						}
@@ -2837,6 +3351,9 @@ window.edsy = new (function() {
 			stats._range_laden   = getJumpRange(stats.mass + stats.cargocap, stats.fuelcap, fsdfuel, fsdopt, fsdmul, fsdpower, stats.jumpbst);
 			stats._range_unladen = getJumpRange(stats.mass                 , stats.fuelcap, fsdfuel, fsdopt, fsdmul, fsdpower, stats.jumpbst);
 			
+			stats.online_thrusters = isSlotOnline(this.getSlot('component', CORE_ABBR_SLOT.TH), power, false);
+			stats.online_fsd = isSlotOnline(this.getSlot('component', CORE_ABBR_SLOT.FD), power, false);
+
 			// derived Thruster stats
 			var boostcost = slot_hull.getEffectiveAttrValue('boostcost');
 			var topspd = slot_hull.getEffectiveAttrValue('topspd');
@@ -2876,10 +3393,11 @@ window.edsy = new (function() {
 						* effmulshd
 				) + stats.shieldrnf;
 				// shield resistance is stacking-penalized EXCLUDING the generator!
-				stats._skinres = getEffectiveDamageResistance(0, (1 - kinmod_usb) * 100, kinres);
-				stats._sthmres = getEffectiveDamageResistance(0, (1 - thmmod_usb) * 100, thmres);
-				stats._sexpres = getEffectiveDamageResistance(0, (1 - expmod_usb) * 100, expres);
-				stats._scaures = getEffectiveDamageResistance(0, (1 - caumod_usb) * 100, caures);
+				// Current ship definitions cap kinetic/thermal/explosive aggregates at 75%; caustic bypasses this cap.
+				stats._skinres = getEffectiveDamageResistance(kinmod_usb, 75, kinres);
+				stats._sthmres = getEffectiveDamageResistance(thmmod_usb, 75, thmres);
+				stats._sexpres = getEffectiveDamageResistance(expmod_usb, 75, expres);
+				stats._scaures = getEffectiveDamageResistance(caumod_usb, null, caures);
 			} else {
 				stats._shields = 0;
 			}
@@ -2894,10 +3412,11 @@ window.edsy = new (function() {
 			stats._armour = ((armour * (1 + stats.hullbst / 100)) + stats.hullrnf);
 			// armour resistance is stacking-penalized INCLUDING the bulkheads!
 //TODO console.log("armor kin/thm/exp/cau res");
-			stats._akinres = getEffectiveDamageResistance(kinres, (1 - kinmod_ihrp) * 100, 0, (1 - kinmin_ihrp) * 100);
-			stats._athmres = getEffectiveDamageResistance(thmres, (1 - thmmod_ihrp) * 100, 0, (1 - thmmin_ihrp) * 100);
-			stats._aexpres = getEffectiveDamageResistance(expres, (1 - expmod_ihrp) * 100, 0, (1 - expmin_ihrp) * 100);
-			stats._acaures = getEffectiveDamageResistance(caures, (1 - caumod_ihrp) * 100, 0, (1 - caumin_ihrp) * 100);
+			stats._akinres = getEffectiveDamageResistance(getResistanceContribution(kinres) * kinmod_ihrp, 75);
+			stats._athmres = getEffectiveDamageResistance(getResistanceContribution(thmres) * thmmod_ihrp, 75);
+			stats._aexpres = getEffectiveDamageResistance(getResistanceContribution(expres) * expmod_ihrp, 75);
+			stats._acaures = getEffectiveDamageResistance(getResistanceContribution(caures) * caumod_ihrp, null);
+			stats._athgres = getEffectiveDamageResistance(getResistanceContribution(slot.getEffectiveAttrValue('thgres')) * thgmod_ihrp, null);
 //TODO console.log("---");
 			
 			// derived Weapon stats
@@ -2907,28 +3426,15 @@ window.edsy = new (function() {
 			var powerdist_wep = this.getEffectivePowerDist('wep');
 			var powerdistWepMul = pow(powerdist_wep / MAX_POWER_DIST, 1.1);
 			weapons.sort(sortObjKeyAsc);
-			var eps = 0;
 			var seps = 0;
 			for (var i = 0;  i < weapons.length;  i++) {
-				eps += weapons[i].eps;
 				seps += weapons[i].seps;
 			}
-			var eps_cur = eps;
-			var eps_max = eps;
-			stats.wepcap_burst_cur = (wepcap / max(0, eps_cur - wepchg * powerdistWepMul));
-			stats.wepcap_burst_max = (wepcap / max(0, eps_max - wepchg));
-			for (var i = 0;  i < weapons.length;  i++) {
-				if (stats.wepcap_burst_cur >= weapons[i].spc) {
-					eps_cur = eps_cur - weapons[i].eps + weapons[i].seps;
-					stats.wepcap_burst_cur = (wepcap / max(0, eps_cur - wepchg * powerdistWepMul));
-				}
-				if (stats.wepcap_burst_max >= weapons[i].spc) {
-					eps_max = eps_max - weapons[i].eps + weapons[i].seps;
-					stats.wepcap_burst_max = (wepcap / max(0, eps_max - wepchg));
-				}
-			}
-			stats.wepchg_sustain_cur = min(max(wepchg * powerdistWepMul / seps, 0), 1);
-			stats.wepchg_sustain_max = min(max(wepchg                   / seps, 0), 1);
+			stats.wepcap_burst_cur = getNominalWeaponCapacitorTime(weapons, wepcap, wepchg * powerdistWepMul);
+			stats.wepcap_burst_max = getNominalWeaponCapacitorTime(weapons, wepcap, wepchg);
+			// No WEP-consuming weapons means no WEP duty restriction, including at zero recharge.
+			stats.wepchg_sustain_cur = seps > 0 ? min(max(wepchg * powerdistWepMul / seps, 0), 1) : 1;
+			stats.wepchg_sustain_max = seps > 0 ? min(max(wepchg                   / seps, 0), 1) : 1;
 		}, // updateStats()
 		
 		
@@ -3880,10 +4386,6 @@ if (false && current.dev) console.log(json.Ship+' '+modulejson.Item+' '+bpid+' g
 											} else if (attr) {
 												if (attr === 'damage') {
 													modjson_dmg = modjson;
-													if (bpid === 'wpn_aagf' || bpid === 'misc_agzr') {
-														// Damage modifiers on Anti-Guardian Zone Resistance blueprints were retroactively removed
-														continue;
-													}
 												}
 												modlist.push(modjson);
 											}
@@ -3931,7 +4433,7 @@ if (attrroll && abs(attrroll - bproll) > 0.0001) console.log(json.Ship+' '+modul
 										for (var attr in (bpmods || EMPTY_OBJ)) {
 											if (bpmods[attr]) {
 if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+attr+':'+bpmods[attr]+' modifier'); // TODO DEBUG
-												slot.setAttrModifier(attr, 0);
+												slot.setAttrModifier(attr, undefined);
 												slot.setBlueprintRoll(0);
 											}
 										}
@@ -4023,11 +4525,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					};
 					
 					var modifiers = {};
-					var mod_weapon_falloffrange_from_range = false;
+					var mod_weapon_falloffrange_from_range = null;
+					var ammoReserveMultiplier = null;
 					
 					if (modifierobj) { // after 2.4
 						for (var field in modifierobj) {
-							// 'field' has OutfittingFieldType_ / Override_ prefix
+							// Strip field-name prefixes from imported modifiers.
 							var attr = fdevmap.fieldAttr[field.slice(field.indexOf('_') + 1)];
 							var modifier = parseFloat(modifierobj[field]["value"]);
 							if (attr === 'rof') {
@@ -4062,15 +4565,64 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 							var attrmods = eddb.fdattrmod[field];
 							var expid = fdevmap.expeffect[field.toUpperCase()];
 							if (field === 'mod_weapon_clip_size_override') {
-								modifiers['ammoclip'] = getModuleAttrModifier(module, 'ammoclip', fieldmodifier);
+								// Absolute clip-size modifiers truncate toward zero.
+								modifiers['ammoclip'] = getModuleAttrModifier(module, 'ammoclip', Math.trunc(fieldmodifier));
 							} else if (field === 'mod_weapon_falloffrange_from_range') {
-								mod_weapon_falloffrange_from_range = true;
+								mod_weapon_falloffrange_from_range = fieldmodifier;
+							} else if (field === 'mod_weapon_clip_size') {
+								// Each clip entry is ceiled before the next one is applied.
+								var currentClip = getModuleAttrValue(module, 'ammoclip', modifiers['ammoclip']);
+								var scaledClip = Math.fround(Math.fround(currentClip) * Math.fround(1 + fieldmodifier));
+								modifiers['ammoclip'] = getModuleAttrModifier(module, 'ammoclip', max(1, ceil(scaledClip)));
+							} else if (field === 'mod_weapon_ammo_capacity' && module.ammo) {
+								// Keep each multiplier step in single precision, then use full precision
+								// for nominal ammo * multiplier and floor the resulting count.
+								if (ammoReserveMultiplier === null) ammoReserveMultiplier = Math.fround(module.ammo.multiplier);
+								ammoReserveMultiplier = Math.fround(ammoReserveMultiplier * Math.fround(1 + Math.fround(fieldmodifier)));
+								modifiers['ammomax'] = getModuleAttrModifier(module, 'ammomax', floor(module.ammo.reserve * ammoReserveMultiplier));
+							} else if (field === 'mod_cargorack_capacity') {
+								// Floor each single-precision cargo product before applying the next entry.
+								var currentCargo = getModuleAttrValue(module, 'cargocap', modifiers['cargocap']);
+								var cargoFactor = Math.fround(1 + Math.fround(fieldmodifier));
+								if (!(cargoFactor > 0)) cargoFactor = 0;
+								var scaledCargo = Math.fround(Math.fround(currentCargo) * cargoFactor);
+								modifiers['cargocap'] = getModuleAttrModifier(module, 'cargocap', floor(scaledCargo));
+							} else if ((field === 'mod_weapon_fire_rate' || field === 'mod_weapon_mass_fire_rate' || field === 'trade_weapon_fire_rate_damage') && module.mtype && module.mtype.charAt(0) === 'h') {
+								// Mode 0 shortens the shot interval. Any other mode scales the seven damage channels.
+								// Plain and mass variants use fire-rate coefficient 1; the damage trade uses -1 for rate and 1 for damage.
+								var fireCoeff = (field === 'trade_weapon_fire_rate_damage') ? -1 : 1;
+								var fireFactor = Math.fround(1 + Math.fround(Math.fround(fireCoeff) * Math.fround(fieldmodifier)));
+								if (module.bstint === 0) {
+									var currentDamage = getModuleAttrValue(module, 'damage', modifiers['damage']);
+									modifiers['damage'] = getModuleAttrModifier(module, 'damage', Math.fround(Math.fround(currentDamage) * fireFactor));
+								} else {
+									var currentInterval = getModuleAttrValue(module, 'bstint', modifiers['bstint']);
+									var fireRate = Math.fround(Math.fround(1 / Math.fround(currentInterval)) * fireFactor);
+									var nextInterval = Math.fround(1 / fireRate);
+									if (!(nextInterval > 0)) nextInterval = 0;
+									modifiers['bstint'] = getModuleAttrModifier(module, 'bstint', nextInterval);
+								}
+								if (field === 'mod_weapon_mass_fire_rate') {
+									// Apply the mass coefficient of 2 and clamp at zero.
+									var massFactor = Math.fround(1 + Math.fround(Math.fround(2) * Math.fround(fieldmodifier)));
+									if (!(massFactor > 0)) massFactor = 0;
+									var currentMass = getModuleAttrValue(module, 'mass', modifiers['mass']);
+									modifiers['mass'] = getModuleAttrModifier(module, 'mass', Math.fround(Math.fround(currentMass) * massFactor));
+								}
+								if (field === 'trade_weapon_fire_rate_damage') {
+									var damageFactor = Math.fround(1 + Math.fround(fieldmodifier));
+									var tradedDamage = getModuleAttrValue(module, 'damage', modifiers['damage']);
+									modifiers['damage'] = getModuleAttrModifier(module, 'damage', Math.fround(Math.fround(tradedDamage) * damageFactor));
+								}
 							} else if (attrmods) {
 								for (var attr in attrmods) {
 									var attribute = cache.attribute[attr];
 									var modifier = fieldmodifier * attrmods[attr];
 									modifiers[attr] = (attribute.modset ? modifier : getAttrModifierSum(attr, modifiers[attr], modifier));
 								}
+								// Range modifiers scale falloff only when the factor is at least 1.
+								if (field === 'mod_weapon_range' && fieldmodifier >= 0)
+									modifiers['dmgfall'] = getAttrModifierSum('dmgfall', modifiers['dmgfall'], fieldmodifier);
 							} else if (expid) {
 								specialobj = specialobj || {};
 								specialobj[field] = fieldmodifier;
@@ -4087,21 +4639,49 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					
 					if (specialobj) {
 						for (var field in specialobj) {
+							var expStrength = specialobj[field];
 							if (module.mtype === 'hrg' && (field === 'special_feedback_cascade' || field === 'special_plasma_slug' || field === 'special_super_penetrator'))
 								field += '_cooled';
 							eventengobj["ExperimentalEffect"] = field;
 							var expid = fdevmap.expeffect[field.toUpperCase()];
 							var expeffect = eddb.expeffect[expid];
 							if (expeffect) {
+								// Catalogue percentages represent coefficients at strength 1.
+								// Percentage modifiers use a single-precision coefficient-strength product.
+								// Absolute channel replacements ignore that strength.
+								if (typeof expStrength !== 'number' || !isFinite(expStrength))
+									expStrength = 1;
+								var expStrength32 = Math.fround(expStrength);
 								for (var attr in expeffect) {
 									var attribute = cache.attribute[attr];
 									var modifier = expeffect[attr];
 									if (!isModuleAttrModifiable(module, attr)) {
 										// ignore
-									} else if (modifier) {
+									} else if (modifier || (attribute.modset && modifier === 0)) {
 										modifier /= ((attribute.modset || attribute.modadd) ? 1 : (attribute.modmod || 100));
-										modifiers[attr] = (attribute.modset ? modifier : getAttrModifierSum(attr, modifiers[attr], modifier));
+										if (attribute.modset || expStrength32 === 1) {
+											modifiers[attr] = (attribute.modset ? modifier : getAttrModifierSum(attr, modifiers[attr], modifier));
+										} else if (attribute.modadd || attribute.modmod) {
+											modifiers[attr] = getAttrModifierSum(attr, modifiers[attr], Math.fround(Math.fround(modifier) * expStrength32));
+										} else if (attr === 'bstint' && expeffect.fireRate !== undefined) {
+											// Catalogue intervals encode a reciprocal fire-rate factor. Scale the rate coefficient first.
+											var rateCoefficient = expeffect.fireRate / 100;
+											var currentInterval = getModuleAttrValue(module, attr, modifiers[attr]);
+											var rateFactor = Math.fround(1 + Math.fround(Math.fround(rateCoefficient) * expStrength32));
+											var nextRate = Math.fround(Math.fround(1 / Math.fround(currentInterval)) * rateFactor);
+											modifiers[attr] = getModuleAttrModifier(module, attr, Math.fround(1 / nextRate));
+										} else {
+											var current = getModuleAttrValue(module, attr, modifiers[attr]);
+											var factor = Math.fround(1 + Math.fround(Math.fround(modifier) * expStrength32));
+											var scaled = Math.fround(Math.fround(current) * factor);
+											modifiers[attr] = getModuleAttrModifier(module, attr, scaled);
+										}
 									}
+								}
+								if (expeffect.fireRate !== undefined && getModuleAttrValue(module, 'bstint') === 0) {
+									var rateFactor = Math.fround(1 + Math.fround(Math.fround(expeffect.fireRate / 100) * expStrength32));
+									var damage = getModuleAttrValue(module, 'damage', modifiers['damage']);
+									modifiers['damage'] = getModuleAttrModifier(module, 'damage', Math.fround(Math.fround(damage) * rateFactor));
 								}
 							} else if (unknowns) {
 								var tag = slotname + ': ' + modulename;
@@ -4114,16 +4694,29 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 						}
 					}
 					
-					if (mod_weapon_falloffrange_from_range && modifiers['maximumrng']) {
-						modifiers['dmgfall'] = getModuleAttrModifier(module, 'dmgfall', getModuleAttrValue(module, 'maximumrng', modifiers['maximumrng']));
+					// Force Impact includes both shells. Keep Force Shell in the single effect selector
+					// because Cannon shot speed is not independently serialized; High Yield's numerical
+					// changes are already explicit finals above.
+					if ((eventengobj.BlueprintName || '').toUpperCase() === 'CANNON_FORCEIMPACT' &&
+						specialobj && specialobj.special_force_shell === 1 && specialobj.special_high_yield_shell === 1)
+						eventengobj.ExperimentalEffect = 'special_force_shell';
+
+					if (mod_weapon_falloffrange_from_range !== null && isFinite(mod_weapon_falloffrange_from_range)) {
+						// Falloff overrides clamp the single-precision maximum-range * strength product to [0, maximum range].
+						var range = getModuleAttrValue(module, 'maximumrng', modifiers['maximumrng']);
+						var falloff = Math.fround(Math.fround(range) * Math.fround(mod_weapon_falloffrange_from_range));
+						var range32 = Math.fround(range);
+						if (!(falloff > 0)) falloff = 0;
+						if (falloff > range32) falloff = range32;
+						modifiers['dmgfall'] = getModuleAttrModifier(module, 'dmgfall', falloff);
 					}
 					if (modifiers['bstint']) {
 						// translate bstint back to rof, considering modified bstsize/bstrof
-						var duration = 0; // TODO: verify that CAPI bstint modifier assumes 0 charge time for variable charge (dmgmul) weapons
 						var bstsize = getModuleAttrValue(module, 'bstsize', modifiers['bstsize']);
 						var bstrof = getModuleAttrValue(module, 'bstrof', modifiers['bstrof']);
 						var bstint = getModuleAttrValue(module, 'bstint', modifiers['bstint']);
-						var rof = (bstsize / ((bstsize / bstrof) + max(0, bstint - 1 / bstrof) + duration)) * (1 + (modifiers['rof'] || 0));
+						// A non-burst interval is the full shot period; default bstrof must not cap it at1/s.
+						var rof = bstsize / (bstint + (bstsize > 1 ? (bstsize - 1) / bstrof : 0)) * (1 + (modifiers['rof'] || 0));
 						modifiers['rof'] = getModuleAttrModifier(module, 'rof', rof);
 						delete modifiers['bstint'];
 					}
@@ -4131,11 +4724,16 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					for (var attr in modifiers) {
 						var modifier = modifiers[attr];
 						var field = fdevmap.attrField[attr];
-						if (modifier && field) {
-							eventengobj["Modifiers"].push({
+						// A calculated unchanged value must also override a named experimental's default.
+						if (field) {
+							var entry = {
 								"Label": field,
 								"Value": getModuleAttrValue(module, attr, modifier),
-							});
+							};
+							// Damage's displayed value weights anti-xeno at one tenth. The journal baseline stays the unweighted channel sum.
+							if (attr === 'damage')
+								entry.OriginalValue = getModuleAttrValue(module, attr);
+							eventengobj["Modifiers"].push(entry);
 						}
 					}
 					
@@ -4163,7 +4761,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				value = attribute.default;
 			
 			// apply modifier?
-			if (modifier && !isNaN(value) && (value || attribute.modset || attribute.modadd || attribute.modmod)) {
+			if ((modifier || (attribute.modset && modifier === 0)) && !isNaN(value) && (value || attribute.modset || attribute.modadd || attribute.modmod)) {
 				if (attribute.modset) {
 					value = modifier;
 				} else if (attribute.modadd) {
@@ -4176,6 +4774,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 				
 				// apply constraints
 				if (attribute.step)
+					// Explicit finals and quantized hash modifiers round to their represented integer.
+					// Generated and legacy percentage clip ceilings are applied separately.
 					value = round(value / attribute.step) * attribute.step;
 				if (attribute.min !== undefined)
 					value = max(value, attribute.min);
@@ -4189,10 +4789,12 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	var getAttrModifier = function(attr, base, value) {
 		var attribute = cache.attribute[attr];
-		if (!attribute || isNaN(value) || value == base)
+		if (!attribute || isNaN(value))
 			return undefined;
 		if (attribute.modset)
 			return value;
+		if (value == base)
+			return undefined;
 		if (attribute.modadd)
 			return value - base;
 		if (attribute.modmod)
@@ -4210,14 +4812,13 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	
 	var getAttrModifierSum = function(attr, modifier1, modifier2) {
+		var attribute = cache.attribute[attr] || EMPTY_OBJ;
+		if (attribute.modset)
+			return (modifier2 === undefined) ? modifier1 : modifier2;
 		if (!modifier1 || !modifier2)
 			return (modifier2 || modifier1);
-		var attribute = cache.attribute[attr];
-		if (attribute.modset)
-			return modifier2;
 		if (attribute.modadd)
 			return modifier1 + modifier2;
-		// modmod and standard
 		return ((1 + modifier1) * (1 + modifier2) - 1);
 	}; // getAttrModifierSum()
 	
@@ -4285,6 +4886,13 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 					attrflag[modifiable[a]] = 1;
 			}
 		}
+		if (mtype && mtype.blueprints && mtype.blueprints.indexOf('misc_agzr') >= 0 &&
+			!(module.noblueprints && (module.noblueprints['*'] || module.noblueprints.misc_agzr)))
+			attrflag.agzresist = 1;
+		if (attrflag.abswgt) {
+			attrflag.plswgt = 1;
+			attrflag.colwgt = 1;
+		}
 		if (attrflag.damage) {
 			attrflag.dps = 1;
 			if (attrflag.rldtime)
@@ -4318,20 +4926,70 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // isModuleAttrModifiable()
 	
 	
+	var getGeneratedCargoCapacity = function(slot) {
+		var module = slot.getModule();
+		var blueprint = eddb.blueprint[slot.bpid];
+		if (!module || !blueprint || !blueprint.cargocap || !slot.bproll || slot.isAttrOverridden('cargocap'))
+			return undefined;
+		var capacity = module.cargocap;
+		var bpmod = getBlueprintGradeRollAttrModifier(slot.bpid, slot.bpgrade, slot.bproll, 'cargocap');
+		var expmod = slot.getExperimentalAttrModifier('cargocap') || 0;
+		var f32 = Math.fround;
+		// Each cargo modifier floors its single-precision product before applying the next modifier.
+		for (var modifier of [bpmod, expmod]) {
+			if (modifier)
+				capacity = floor(f32(f32(capacity) * max(0, f32(1 + f32(modifier)))));
+		}
+		return capacity;
+	}; // getGeneratedCargoCapacity()
+
+
+	var getGeneratedAmmoCapacity = function(slot, attr, baseOnly) {
+		var module = slot.getModule();
+		if (!module || !module.ammo || !slot.bpid || !slot.bproll || slot.isAttrOverridden(attr))
+			return undefined;
+		var blueprint = eddb.blueprint[slot.bpid];
+		var bpmod = blueprint[attr] ? getBlueprintGradeRollAttrModifier(slot.bpid, slot.bpgrade, slot.bproll, attr) : 0;
+		var expmod = baseOnly ? 0 : (slot.getExperimentalAttrModifier(attr) || 0);
+		var f32 = Math.fround;
+		if (attr === 'ammomax') {
+			// Preserve the base ammunition count separately from its multiplier.
+			var multiplier = f32(module.ammo.multiplier);
+			if (bpmod) multiplier = f32(multiplier * f32(1 + bpmod));
+			if (expmod) multiplier = f32(multiplier * f32(1 + expmod));
+			return floor(module.ammo.reserve * multiplier);
+		}
+		var capacity = module.ammoclip;
+		if (bpmod) capacity = max(1, ceil(f32(f32(capacity) * f32(1 + bpmod))));
+		if (expmod) capacity = max(1, ceil(f32(f32(capacity) * f32(1 + expmod))));
+		var burstSize = slot.getEffectiveAttrValue('bstsize');
+		if (module.ammo.alignBurst && burstSize > 1)
+			capacity = ceil(f32(f32(capacity) / f32(burstSize))) * burstSize;
+		return capacity;
+	}; // getGeneratedAmmoCapacity()
+
+
 	var getModuleAttrValue = function(module, attr, modifier) {
 		if (!module)
 			return undefined;
 		var value = module[attr];
+		if (isNominalIncrementalWeapon(module) && (attr === 'sfpc' || attr === 'sspc')) {
+			var cycle = getNominalIncrementalCycle(getModuleAttrValue(module, 'ammoclip'), getModuleAttrValue(module, 'bstsize'),
+				getModuleAttrValue(module, 'bstint'), getModuleAttrValue(module, 'bstrof'),
+				getModuleAttrValue(module, 'rldtime'), getModuleAttrValue(module, 'rldint'));
+			return cycle ? cycle[(attr === 'sfpc') ? 'shots' : 'period'] : NaN;
+		}
 		switch (attr) {
 		case 'fpc':
 		case 'sfpc':
-			value = getModuleAttrValue(module, 'ammoclip') || getModuleAttrValue(module, 'bstsize');
+			value = getModuleAttrValue(module, 'ammoclip');
+			value = value ? value / getWeaponAmmoPerShot(module, getModuleAttrValue(module, 'rounds')) : getModuleAttrValue(module, 'bstsize');
 			break;
 			
 		case 'spc':
 		case 'sspc':
 			var dmgmul = getModuleAttrValue(module, 'dmgmul');
-			var duration = getModuleAttrValue(module, 'duration') * (dmgmul ? WEAPON_CHARGE : 1.0);
+			var duration = getWeaponCycleCharge(module, getModuleAttrValue(module, 'duration'), dmgmul);
 			if (module.name === eddb.module[84224].name && attr === 'sspc') // TODO: bug? Imperial Hammer Rail Gun can keep firing through reloads without re-charging
 				duration = 0;
 			var bstsize = getModuleAttrValue(module, 'bstsize');
@@ -4341,22 +4999,33 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			var ammoclip = getModuleAttrValue(module, 'ammoclip');
 			var rldtime = (attr === 'sspc') ? getModuleAttrValue(module, 'rldtime') : 0;
 			if (ammoclip) {
-				value *= ceil(ammoclip / bstsize);
+				value *= ceil(getModuleAttrValue(module, 'fpc') / bstsize);
 			}
 			value += max(0, rldtime - duration - bstint);
 			break;
 			
 		case 'rof':
 		case 'srof':
+			if (attr === 'rof' && getModuleAttrValue(module, 'bstint') > 0) {
+				var burstSize = getModuleAttrValue(module, 'bstsize');
+				value = burstSize / (getModuleAttrValue(module, 'bstint') + (burstSize > 1 ? (burstSize - 1) / getModuleAttrValue(module, 'bstrof') : 0));
+				break;
+			}
 			value = (getModuleAttrValue(module, (attr === 'srof') ? 'sfpc' : 'fpc') / getModuleAttrValue(module, (attr === 'srof') ? 'sspc' : 'spc'));
 			break;
 			
 		case 'dps':
 		case 'sdps':
-			var damage = getModuleAttrValue(module, 'damage');
-			var dmgmul = (1 + WEAPON_CHARGE * ((getModuleAttrValue(module, 'dmgmul') || 1) - 1));
+			// Keep the raw damage helper for Journal/import coordinates; derived DPS uses display weights.
+			var damage = getModuleAttrValue(module, 'damage') * (1 - 0.9 * (getModuleAttrValue(module, 'axewgt') / 100));
+			if (attr === 'dps' && !(getModuleAttrValue(module, 'bstint') > 0)) {
+				value = damage;
+				break;
+			}
+			var dmgmul = attr === 'sdps' ? (1 + WEAPON_CHARGE * ((getModuleAttrValue(module, 'dmgmul') || 1) - 1)) : 1;
 			var rounds = getModuleAttrValue(module, 'rounds');
 			var rof = getModuleAttrValue(module, (attr === 'sdps') ? 'srof' : 'rof');
+			if (isNominalIncrementalWeapon(module) && isNaN(rof)) return NaN;
 			value = (damage * dmgmul * rounds * (isFinite(rof) ? rof : 1));
 			break;
 			
@@ -4364,6 +5033,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		case 'seps':
 			var distdraw = getModuleAttrValue(module, 'distdraw');
 			var rof = getModuleAttrValue(module, (attr === 'seps') ? 'srof' : 'rof');
+			if (isNominalIncrementalWeapon(module) && isNaN(rof)) return NaN;
 			value = (distdraw * (isFinite(rof) ? rof : 1));
 			break;
 			
@@ -4371,6 +5041,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		case 'shps':
 			var thmload = getModuleAttrValue(module, 'thmload');
 			var rof = getModuleAttrValue(module, (attr === 'shps') ? 'srof' : 'rof');
+			if (isNominalIncrementalWeapon(module) && isNaN(rof)) return NaN;
 			value = (thmload * (isFinite(rof) ? rof : 1));
 			break;
 			
@@ -4393,7 +5064,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	
 	var getModuleAttrValueText = function(module, attr, value) {
 		var attribute = cache.attribute[attr];
-		if (!module || !attribute || isNaN(value) || !isFinite(value))
+		if (!module || !attribute || typeof value !== 'number' || !isFinite(value))
 			return value;
 		if (attribute.step) {
 			var step = attribute.step;
@@ -4439,7 +5110,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var text = '';
 		var base = getModuleAttrValue(module, attr);
 		var value = getModuleAttrValue(module, attr, modifier);
-		if (modifier && !isNaN(base) && !isNaN(value)) {
+		if ((modifier || ((cache.attribute[attr] || EMPTY_OBJ).modset && modifier === 0)) && !isNaN(base) && !isNaN(value)) {
 			text = ((value > base) ? '+' : '');
 			var attribute = cache.attribute[attr];
 			if (attribute.modset || attribute.modadd) {
@@ -4475,10 +5146,22 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 	}; // parseModuleAttrModifierText()
 	
 	
+	var isBlueprintGradeAvailable = function(bpid, grade) {
+		var blueprint = eddb.blueprint[bpid];
+		if (!blueprint || grade < 1 || grade > blueprint.maxgrade) return false;
+		for (var attr in blueprint) {
+			if (cache.attribute[attr] && Array.isArray(blueprint[attr]) && !isFinite(blueprint[attr][grade - 1])) return false;
+		}
+		return true;
+	}; // isBlueprintGradeAvailable()
+
+
 	var getBlueprintGradeRollAttrModifier = function(bpid, bpgrade, bproll, attr) {
 		var blueprint = eddb.blueprint[bpid];
 		if (!blueprint)
 			return null;
+		if (attr === 'bstint' && blueprint.rof)
+			return 1 / (1 + getBlueprintGradeRollAttrModifier(bpid, bpgrade, bproll, 'rof')) - 1;
 		var attribute = cache.attribute[attr];
 		if (!attribute || !blueprint[attr])
 			return null;
@@ -4494,6 +5177,8 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		var blueprint = eddb.blueprint[bpid];
 		if (!blueprint)
 			return null;
+		if (attr === 'bstint' && blueprint.rof)
+			return getBlueprintGradeAttrModifierRoll(bpid, bpgrade, 'rof', 1 / (1 + modifier) - 1);
 		var attribute = cache.attribute[attr];
 		if (!attribute || !blueprint[attr])
 			return null;
@@ -4851,7 +5536,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 			if (module.hidden) {
 				cache.hiddenmods.push(modid);
 			}
-			if (module.reserved || module.mtype == 'ipvh') { // hack: by putting all PVHs in reservedmods even though only LPVHs are reserved, they'll be flagged by per-slot scanning in the case of the FighterBay slot
+			if (module.reserved || module.mtype == 'ipvh' || modid == 81229 || modid == 26191) { // slot restrictions for vehicle hangars, Type-11 mining hardpoints and the hidden limpet module
 				cache.reservedmods.push(modid);
 			}
 		}
@@ -5166,11 +5851,14 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		slots_internal  : { header:'ui-shipyard-internal-label',      abbr:'ui-shipyard-internal-desc',      colgroup:'ui-shipyard-slots-label',   css:'tal', sortalt:true,                                 render:function(build) { return formatShipyardSlots(build, 'internal');} },
 		dps             : { header:'ui-shipyard-dps-label',           abbr:'ui-shipyard-dps-desc',           colgroup:'ui-shipyard-weapons-label', css:'tar', sortnum:true,        attr:'dps',     scale:1, buildstat:'dps' },
 		dps_abs         : { header:'ui-shipyard-dps-absolute-label',  abbr:'ui-shipyard-dps-absolute-desc',  colgroup:'ui-shipyard-weapons-label', css:'tar', sortnum:true,                                 render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_abs') / dps, 0) : ''); }, sortkey:function(build) { return (build.getStat('dps_abs') || 0) / (build.getStat('dps') || 0.000001); } },
+		dps_pls         : { header:'ui-shipyard-dps-plasma-label',  abbr:'ui-shipyard-dps-plasma-desc',  colgroup:'ui-shipyard-weapons-label', css:'tar', sortnum:true,                                 render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_pls') / dps, 0) : ''); }, sortkey:function(build) { return (build.getStat('dps_pls') || 0) / (build.getStat('dps') || 0.000001); } },
+		dps_col         : { header:'ui-shipyard-dps-collision-label',  abbr:'ui-shipyard-dps-collision-desc',  colgroup:'ui-shipyard-weapons-label', css:'tar', sortnum:true,                                 render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_col') / dps, 0) : ''); }, sortkey:function(build) { return (build.getStat('dps_col') || 0) / (build.getStat('dps') || 0.000001); } },
 		dps_kin         : { header:'ui-shipyard-dps-kinetic-label',   abbr:'ui-shipyard-dps-kinetic-desc',   colgroup:'ui-shipyard-weapons-label', css:'tar', sortnum:true,                                 render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_kin') / dps, 0) : ''); }, sortkey:function(build) { return (build.getStat('dps_kin') || 0) / (build.getStat('dps') || 0.000001); } },
 		dps_thm         : { header:'ui-shipyard-dps-thermal-label',   abbr:'ui-shipyard-dps-thermal-desc',   colgroup:'ui-shipyard-weapons-label', css:'tar', sortnum:true,                                 render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_thm') / dps, 0) : ''); }, sortkey:function(build) { return (build.getStat('dps_thm') || 0) / (build.getStat('dps') || 0.000001); } },
 		dps_exp         : { header:'ui-shipyard-dps-explosive-label', abbr:'ui-shipyard-dps-explosive-desc', colgroup:'ui-shipyard-weapons-label', css:'tar', sortnum:true,                                 render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_exp') / dps, 0) : ''); }, sortkey:function(build) { return (build.getStat('dps_exp') || 0) / (build.getStat('dps') || 0.000001); } },
 		dps_axe         : { header:'ui-shipyard-dps-antixeno-label',  abbr:'ui-shipyard-dps-antixeno-desc',  colgroup:'ui-shipyard-weapons-label', css:'tar', sortnum:true,                                 render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_axe') / dps, 0) : ''); }, sortkey:function(build) { return (build.getStat('dps_axe') || 0) / (build.getStat('dps') || 0.000001); } },
 		dps_cau         : { header:'ui-shipyard-dps-caustic-label',   abbr:'ui-shipyard-dps-caustic-desc',   colgroup:'ui-shipyard-weapons-label', css:'tar', sortnum:true,                                 render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_cau') / dps, 0) : ''); }, sortkey:function(build) { return (build.getStat('dps_cau') || 0) / (build.getStat('dps') || 0.000001); } },
+		dps_thg         : { header:'ui-shipyard-dps-thargoid-label',   abbr:'ui-shipyard-dps-thargoid-desc',   colgroup:'ui-shipyard-weapons-label', css:'tar', sortnum:true,                                 render:function(build) { var dps = build.getStat('dps'); return (dps ? formatPctHTML(build.getStat('dps_thg') / dps, 0) : ''); }, sortkey:function(build) { return (build.getStat('dps_thg') || 0) / (build.getStat('dps') || 0.000001); } },
 	}; // UI_SHIPYARD_COL{}
 	
 	var UI_SHIPYARD_SHIPS_COLS = [
@@ -5186,7 +5874,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		'label','_BUTTONS_','name_ship','cost',
 		'mass_unl','mass_ldn','jump_unl','jump_ldn','range_unl','range_ldn',
 		'topspd','bstspd','shields','armour','fuelcap','cargocap','cabincap',
-		'dps','dps_abs','dps_kin','dps_thm','dps_exp','dps_axe'
+		'dps','dps_abs','dps_pls','dps_col','dps_kin','dps_thm','dps_exp','dps_axe','dps_thg'
 	]; // UI_SHIPYARD_STOREDBUILD_COLS[]
 	
 	
@@ -7464,6 +8152,7 @@ if (true && current.dev) console.log(json.Ship+' '+modulejson.Item+' leftover '+
 		updateUIFitLimitedSlots();
 		document.forms.stats.elements.stats_cur_fuel.value = formatNumText(fit.getStat('fuelcap'), 0);
 		document.forms.stats.elements.stats_cur_cargo.value = '0';
+		document.forms.stats.elements.stats_cur_speed.value = '50';
 		updateUIStats();
 		setCurrentSlot('ship', 'hull');
 		return true;
@@ -8412,6 +9101,12 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		table.appendChild(tbody);
 		
 		document.getElementById('outfitting_details_module').appendChild(table);
+		var modes = document.createElement('table');
+		modes.id = 'outfitting_details_limpet_modes';
+		document.getElementById('outfitting_details_module').appendChild(modes);
+		var sco = document.createElement('table');
+		sco.id = 'outfitting_details_sco';
+		document.getElementById('outfitting_details_module').appendChild(sco);
 	}; // initUIDetails()
 	
 	
@@ -8800,6 +9495,8 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		document.getElementById('details_cost').style.display = (module ? 'block' : 'none');
 		document.getElementById('details_engineering').style.display = ((module && slot.isModifiable()) ? 'block' : 'none');
 		document.getElementById('outfitting_details_table').style.display = (module ? '' : 'none');
+		updateUIDetailsLimpetModes(module);
+		updateUIDetailsSco(slot);
 		
 		if (!module)
 			return true;
@@ -8833,15 +9530,46 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 				select.options[o].value = idlist[i];
 				select.options[o].setAttribute('edsy-text', 'expeffect-'+idlist[i]);
 				select.options[o].text = iddata[idlist[i]].name;
-				select.options[o].disabled = (module.noexpeffects && (module.noexpeffects['*'] || module.noexpeffects[idlist[i]]))
+				select.options[o].disabled = !slot.isExpeffectIDAllowed(idlist[i]);
 				o++;
 			}
 		}
 		while (select.options.length > o)
 			select.options.remove(select.options.length - 1);
 		
+
+		// set displayed cost and modification data
+		updateUIDetailsCost();
+		updateUIDetailsModifications();
+		updateTranslations(document.getElementById('outfitting_details_module'));
+		return true;
+	}; // updateUIDetailsModule()
+
+
+	var updateUIDetailsAttrRows = function(slot) {
+		var module = slot.getModule();
+		if (!module) return;
 		// rebuild attribute rows
-		var attrs = getModuleAttrs(module);
+		// Hide negligible damage shares, mass and jitter; show positive hull boost and caustic resistance.
+		// Continuous weapons omit burst timing. Omit breach percentage and empty default ammo/reload fields,
+		// while preserving explicit zero values.
+		var attrs = getModuleAttrs(module).filter(function(attr) {
+			if (attr === 'brcpct')
+				return false;
+			if (attr === 'kinwgt' || attr === 'thmwgt' || attr === 'expwgt' || attr === 'cauwgt' || attr === 'axewgt' || attr === 'thgwgt' || attr === 'plswgt' || attr === 'colwgt' || attr === 'abswgt')
+				return slot.getEffectiveAttrValue(attr) > 1.1920928955078125e-5;
+			if (attr === 'rof' || attr === 'srof' || attr === 'bstint')
+				return slot.getEffectiveAttrValue('bstint') > 0;
+			if (attr === 'mass' || attr === 'jitter')
+				return slot.getEffectiveAttrValue(attr) > 1.1920928955078125e-7;
+			if (attr === 'hullbst' || attr === 'caures')
+				return slot.getEffectiveAttrValue(attr) > 1.1920928955078125e-7;
+			if (attr === 'ammomax' && module.ammomax === undefined)
+				return slot.getEffectiveAttrValue(attr) >= 1;
+			if (attr === 'rldtime' && module.rldtime === undefined)
+				return slot.getEffectiveAttrValue(attr) > 1.1920928955078125e-7;
+			return true;
+		});
 		var tbody = document.getElementById('outfitting_details_attrs');
 		while (tbody.rows.length < attrs.length) {
 			addUIDetailsAttrRow();
@@ -8870,14 +9598,73 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 			tbody.rows[r].style.display = 'none';
 		}
 		
-		// set displayed cost and modification data
-		updateUIDetailsCost();
-		updateUIDetailsModifications();
-		updateTranslations(document.getElementById('outfitting_details_module'));
-		return true;
-	}; // updateUIDetailsModule()
+	}; // updateUIDetailsAttrRows()
 	
 	
+	var updateUIDetailsSco = function(slot) {
+		var table = document.getElementById('outfitting_details_sco');
+		table.replaceChildren();
+		var values = current.fit.getScoSummary(slot);
+		table.style.display = (values ? '' : 'none');
+		if (!values) return;
+		var tbody = document.createElement('tbody');
+		var tr = document.createElement('tr');
+		var th = createTranslatedElement('th', 'ui-details-sco-fitted');
+		th.colSpan = 2;
+		tr.appendChild(th);
+		tbody.appendChild(tr);
+		for (var attr of ['scospd','scoacc','scoheat','scofuel','scoconint']) {
+			tr = document.createElement('tr');
+			var td = document.createElement('td');
+			var abbr = createTranslatedElement('abbr', 'ui-details-sco-'+attr);
+			abbr.setAttribute('edsy-title', 'ui-details-sco-desc');
+			td.appendChild(abbr);
+			tr.appendChild(td);
+			td = document.createElement('td');
+			td.className = 'tar';
+			td.innerHTML = (attr === 'scoconint' ? formatPctHTML(values[attr], 2) : formatAttrHTML(attr, values[attr], attr === 'scospd' ? 2 : 6));
+			tr.appendChild(td);
+			tbody.appendChild(tr);
+		}
+		table.appendChild(tbody);
+	}; // updateUIDetailsSco()
+
+
+	var updateUIDetailsLimpetModes = function(module) {
+		var table = document.getElementById('outfitting_details_limpet_modes');
+		table.replaceChildren();
+		var modes = (module && module.limpetmodes) || EMPTY_ARR;
+		table.style.display = (modes.length ? '' : 'none');
+		var attrs = ['targetrng','lpactrng','limpettime','maxspd','multispd','fuelxfer','lmprepcap','hacktime','mincargo','maxcargo'];
+		for (var m = 0; m < modes.length; m++) {
+			var mode = modes[m];
+			var tbody = document.createElement('tbody');
+			var tr = document.createElement('tr');
+			var th = createTranslatedElement('th', 'limpet-mode-'+mode.id);
+			th.colSpan = 2;
+			tr.appendChild(th);
+			tbody.appendChild(tr);
+			for (var a = 0; a < attrs.length; a++) {
+				var attr = attrs[a];
+				if (!(attr in mode)) continue;
+				tr = document.createElement('tr');
+				var td = document.createElement('td');
+				var abbr = createTranslatedElement('abbr', 'attr-'+attr);
+				abbr.setAttribute('edsy-title', 'attr-'+attr+'-desc');
+				abbr.title = cache.attribute[attr].desc || '';
+				td.appendChild(abbr);
+				tr.appendChild(td);
+				td = document.createElement('td');
+				td.className = 'tar';
+				td.innerHTML = formatAttrHTML(attr, mode[attr]);
+				tr.appendChild(td);
+				tbody.appendChild(tr);
+			}
+			table.appendChild(tbody);
+		}
+	}; // updateUIDetailsLimpetModes()
+
+
 	var updateUIDetailsCost = function() {
 		var slot = getUIOutfittingSlot();
 		if (!slot)
@@ -8945,6 +9732,10 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		var slot = getUIOutfittingSlot();
 		if (!slot)
 			return false;
+		updateUIDetailsAttrRows(slot);
+		var experiments = document.forms.details.elements.expeffect.options;
+		for (var e = 1; e < experiments.length; e++)
+			experiments[e].disabled = !slot.isExpeffectIDAllowed(experiments[e].value);
 		var mtypeid = slot.getModuleMtype();
 		var modifiable = slot.isModifiable();
 		var modified = slot.isModified();
@@ -8977,7 +9768,10 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		
 		var maxgrade = ((bpid && !preeng) ? eddb.blueprint[bpid].maxgrade : 0);
 		for (var g = 1;  g <= MAX_BLUEPRINT_GRADE;  g++) {
-			document.getElementById('blueprint_grade_' + g).disabled = (g > maxgrade);
+			var gradeControl = document.getElementById('blueprint_grade_' + g);
+			var unavailable = bpid && g <= maxgrade && !isBlueprintGradeAvailable(bpid, g);
+			gradeControl.disabled = (g > maxgrade || unavailable);
+			gradeControl.title = unavailable ? 'Grade statistics unavailable. Import module final values to represent this grade.' : '';
 		}
 		if (bpgrade) {
 			document.forms.details.elements.blueprint_grade.value = bpgrade.toFixed(0);
@@ -9070,7 +9864,12 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		var slot = getUIOutfittingSlot();
 		if (!slot)
 			return false;
-		if (!((slot.getBlueprintID() && bpid) ? slot.setBlueprintID(bpid) : slot.setBlueprint(bpid, MAX_BLUEPRINT_GRADE, (bpid || !current.option.experimental) ? 1.0 : null)))
+		var grade = slot.getBlueprintID() ? (slot.getBlueprintGrade() || MAX_BLUEPRINT_GRADE) : MAX_BLUEPRINT_GRADE;
+		if (bpid && eddb.blueprint[bpid]) {
+			grade = min(grade, eddb.blueprint[bpid].maxgrade);
+			while (grade > 1 && !isBlueprintGradeAvailable(bpid, grade)) grade--;
+		}
+		if (!((slot.getBlueprintID() && bpid) ? slot.setBlueprint(bpid, grade, slot.getBlueprintRoll()) : slot.setBlueprint(bpid, grade, (bpid || !current.option.experimental) ? 1.0 : null)))
 			return false;
 		if (!bpid) {
 			slot.setBlueprintGrade(0);
@@ -9150,19 +9949,22 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 			return false;
 		text = text.trim();
 		if (text === '') {
-			if (!slot.setAttrModifier(attr))
+			if (!slot.setAttrModifier(attr, undefined, true))
 				return false;
 		} else {
 			if (text.slice(-1) === '%' && (attribute.unit !== '%' || text[0] === '+' || text[0] === '-')) {
 				var modifier = parseModuleAttrModifierText(module, attr, text);
 			} else {
-				var modifier = getModuleAttrModifier(module, attr, parseNumText(text));
+				var value = parseNumText(text);
+				// Damage is edited in its displayed units; stored channel damage stays unweighted.
+				if (attr === 'damage')
+					value /= 1 - 0.9 * (slot.getEffectiveAttrValue('axewgt') / 100);
+				var modifier = attr === 'rof' ? getAttrModifier(attr, slot.getBaseAttrValue(attr), value) : getModuleAttrModifier(module, attr, value);
 			}
 			if (!slot.setEffectiveAttrModifier(attr, modifier))
 				return false;
 		}
-		if (slot.getBlueprintRoll())
-			slot.setBlueprintRoll(0);
+		// Retain the generation inputs for untouched fields; the edited field is an explicit override.
 		if (current.outfitting_focus === 'slot') {
 			updateUIFitStoredBuildControls();
 			updateUIFitSlot(current.group, current.slot);
@@ -9193,6 +9995,13 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 	}; // setStatsCurCargo()
 	
 	
+	var setStatsCurSpeed = function(value) {
+		value = min(max(value, 0), 100);
+		document.forms.stats.elements.stats_cur_speed.value = formatNumText(value, (value % 1) ? 1 : 0);
+		updateUIStatsNavThr();
+	}; // setStatsCurSpeed()
+
+
 	var updateUIStatsPanels = function(enabledPanel) {
 		var space = document.getElementById('outfitting_stats_wrapper').clientWidth * 0.95;
 		var next = 0;
@@ -9305,7 +10114,8 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 			curTtlCrgo = (curTtlCrgo == cargocapPrev) ? cargocap : min(cargocap, curTtlCrgo);
 			document.forms.stats.elements.stats_cur_cargo.value = formatNumText(curTtlCrgo, 0);
 		}
-		// in-game, fuelres is included when displaying current mass but not max mass
+		// Current mass includes hull, fitted modules, cargo and both fuel reserves.
+		// Fully laden mass fills cargo and fuel capacity; the thruster limit comes from the fitted drive.
 		var curTtlMass = mass + curTtlFuel + fuelres + curTtlCrgo;
 		var maxTtlMass = mass + fuelcap              + cargocap;
 		
@@ -9337,6 +10147,8 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		var pwrcap_pwrbst = pwrcap * (1 + (current.fit.getStat('pwrbst') / 100.0));
 		var pwrdraw_ret = current.fit.getStat('pwrdraw_ret');
 		var pwrdraw_dep = current.fit.getStat('pwrdraw_dep');
+		var allocation_ret = getPowerAllocation(pwrdraw_ret, pwrcap_pwrbst);
+		var allocation_dep = getPowerAllocation(pwrdraw_dep, pwrcap_pwrbst);
 		
 		// update displays
 		// pwrbst does not increase the displayed MW output of the plant, so %usage remains the same
@@ -9353,7 +10165,7 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 			abbr.title = (formatNumText(pwrdraw_ret_ttl, 2) + ' / ' + formatNumText(pwrcap, 2) + ' MW (' + formatPctText(pwrdraw_ret_ttl / pwrcap, 1) + ')');
 			abbr.style.display = (width > 0.0) ? '' : 'none';
 			abbr.style.width = width.toFixed(3) + '%';
-			abbr.className = ((pwrdraw_ret_ttl > pwrcap_pwrbst) ? 'err' : ((pwrdraw_ret_ttl <= MAX_MALFUNCTION_PWRCAP * pwrcap_pwrbst) ? 'mfn' : ((pwrdraw_ret_ttl <= MAX_DAMAGED_PWRCAP * pwrcap_pwrbst) ? 'dmg' : '')));
+			abbr.className = ((p > allocation_ret.lastPriority) ? 'err' : ((pwrdraw_ret_ttl <= MAX_MALFUNCTION_PWRCAP * pwrcap_pwrbst) ? 'mfn' : ((pwrdraw_ret_ttl <= MAX_DAMAGED_PWRCAP * pwrcap_pwrbst) ? 'dmg' : '')));
 			
 			pwrdraw_dep_ttl += pwrdraw_dep[p];
 			var width = (90.0 * pwrdraw_dep[p] / pwrcap);
@@ -9363,13 +10175,13 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 			abbr.title = (formatNumText(pwrdraw_dep_ttl, 2) + ' / ' + formatNumText(pwrcap, 2) + ' MW (' + formatPctText(pwrdraw_dep_ttl / pwrcap, 1) + ')');
 			abbr.style.display = (width > 0.0) ? '' : 'none';
 			abbr.style.width = width.toFixed(3) + '%';
-			abbr.className = ((pwrdraw_dep_ttl > pwrcap_pwrbst) ? 'err' : ((pwrdraw_dep_ttl <= MAX_MALFUNCTION_PWRCAP * pwrcap_pwrbst) ? 'mfn' : ((pwrdraw_dep_ttl <= MAX_DAMAGED_PWRCAP * pwrcap_pwrbst) ? 'dmg' : '')));
+			abbr.className = ((p > allocation_dep.lastPriority) ? 'err' : ((pwrdraw_dep_ttl <= MAX_MALFUNCTION_PWRCAP * pwrcap_pwrbst) ? 'mfn' : ((pwrdraw_dep_ttl <= MAX_DAMAGED_PWRCAP * pwrcap_pwrbst) ? 'dmg' : '')));
 			
 			if (pwrdraw_ret_ttl <= MAX_MALFUNCTION_PWRCAP * pwrcap_pwrbst) {
 				classes += ' priority' + p + 'mfnret';
 			} else if (pwrdraw_ret_ttl <= MAX_DAMAGED_PWRCAP * pwrcap_pwrbst) {
 				classes += ' priority' + p + 'dmgret';
-			} else if (pwrdraw_ret_ttl > pwrcap_pwrbst) {
+			} else if (p > allocation_ret.lastPriority) {
 				classes += ' priority' + p + 'errret';
 			}
 			
@@ -9377,26 +10189,26 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 				classes += ' priority' + p + 'mfndep';
 			} else if (pwrdraw_dep_ttl <= MAX_DAMAGED_PWRCAP * pwrcap_pwrbst) {
 				classes += ' priority' + p + 'dmgdep';
-			} else if (pwrdraw_dep_ttl > pwrcap_pwrbst) {
+			} else if (p > allocation_dep.lastPriority) {
 				classes += ' priority' + p + 'errdep';
 			}
 		}
 		document.getElementById('outfitting_fit_slots').className = classes.substring(1);
 		/* TODO: powerdist in fit
 		document.getElementById('outfitting_stats_power_ret').innerHTML = (formatNumHTML(pwrdraw_ret[0], 2) + ' <small class="semantic">/</small> ' + formatAttrHTML('pwrcap', pwrcap, 2) + ' (' + formatPctHTML(pwrdraw_ret[0] / pwrcap, 1) + ')');
-		document.getElementById('outfitting_stats_power_ret').className = ((pwrdraw_ret[0] > pwrcap_pwrbst) ? 'error' : '');
+		document.getElementById('outfitting_stats_power_ret').className = ((allocation_ret.lastPriority < MAX_POWER_PRIORITY) ? 'error' : '');
 		document.getElementById('outfitting_stats_power_dep').innerHTML = (formatNumHTML(pwrdraw_dep[0], 2) + ' <small class="semantic">/</small> ' + formatAttrHTML('pwrcap', pwrcap, 2) + ' (' + formatPctHTML(pwrdraw_dep[0] / pwrcap, 1) + ')');
-		document.getElementById('outfitting_stats_power_dep').className = ((pwrdraw_dep[0] > pwrcap_pwrbst) ? 'error' : '');
+		document.getElementById('outfitting_stats_power_dep').className = ((allocation_dep.lastPriority < MAX_POWER_PRIORITY) ? 'error' : '');
 		*/
 		var abbr = createTranslatedElement('abbr', 'interp-number', {'number':(pwrdraw_ret[0]/pwrcap), 'number#':1, 'number%':true});
-		abbr.className = ((pwrdraw_ret[0] > pwrcap_pwrbst) ? 'error' : '');
+		abbr.className = ((allocation_ret.lastPriority < MAX_POWER_PRIORITY) ? 'error' : '');
 		abbr.setAttribute('edsy-vals-title', JSON.stringify({'pwrdraw':pwrdraw_ret[0], 'pwrdraw#':2, 'pwrcap':pwrcap, 'pwrcap#':2, 'percent':(pwrdraw_ret[0]/pwrcap), 'percent#':1, 'percent%':true}));
 		abbr.setAttribute('edsy-title', 'interp-pwrdraw-pwrcap-megawatts-percent');
 		abbr.title = formatNumText(pwrdraw_ret[0], 2) + ' / ' + formatNumText(pwrcap, 2) + ' MW (' + formatPctText(pwrdraw_ret[0] / pwrcap, 1) + ')';
 		abbr.innerHTML = formatPctHTML(pwrdraw_ret[0] / pwrcap, 1);
 		document.getElementById('outfitting_stats_power_ret').replaceChildren(abbr);
 		var abbr = createTranslatedElement('abbr', 'interp-number', {'number':(pwrdraw_dep[0]/pwrcap), 'number#':1, 'number%':true});
-		abbr.className = ((pwrdraw_dep[0] > pwrcap_pwrbst) ? 'error' : '');
+		abbr.className = ((allocation_dep.lastPriority < MAX_POWER_PRIORITY) ? 'error' : '');
 		abbr.setAttribute('edsy-vals-title', JSON.stringify({'pwrdraw':pwrdraw_dep[0], 'pwrdraw#':2, 'pwrcap':pwrcap, 'pwrcap#':2, 'percent':(pwrdraw_dep[0]/pwrcap), 'percent#':1, 'percent%':true}));
 		abbr.setAttribute('edsy-title', 'interp-pwrdraw-pwrcap-megawatts-percent');
 		abbr.title = formatNumText(pwrdraw_dep[0], 2) + ' / ' + formatNumText(pwrcap, 2) + ' MW (' + formatPctText(pwrdraw_dep[0] / pwrcap, 1) + ')';
@@ -9433,24 +10245,50 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		var scpNavRng = fuelcap / scooprate;
 		
 		// update displays
+		var online = current.fit.getStat('online_fsd');
 		var htmlNA = '<small class="semantic" edsy-text="n-a">N/A</small>';
 		var htmlLY = '<small edsy-text"unit-lightyears-abbr">LY</small';
-		document.getElementById('outfitting_stats_cur_jump'    ).innerHTML = formatNumHTML(curNavJmp, 2) + htmlLY;
-		document.getElementById('outfitting_stats_laden_jump'  ).innerHTML = formatNumHTML(ldnNavJmp, 2) + htmlLY;
-		document.getElementById('outfitting_stats_unladen_jump').innerHTML = formatNumHTML(unlNavJmp, 2) + htmlLY;
-		document.getElementById('outfitting_stats_max_jump'    ).innerHTML = formatNumHTML(maxNavJmp, 2) + htmlLY;
-		document.getElementById('outfitting_stats_cur_range'    ).innerHTML = formatNumHTML(curNavRng, 2) + htmlLY;
-		document.getElementById('outfitting_stats_laden_range'  ).innerHTML = formatNumHTML(ldnNavRng, 2) + htmlLY;
-		document.getElementById('outfitting_stats_unladen_range').innerHTML = formatNumHTML(unlNavRng, 2) + htmlLY;
+		document.getElementById('outfitting_stats_cur_jump'    ).innerHTML = online ? (formatNumHTML(curNavJmp, 2) + htmlLY) : htmlNA;
+		document.getElementById('outfitting_stats_laden_jump'  ).innerHTML = online ? (formatNumHTML(ldnNavJmp, 2) + htmlLY) : htmlNA;
+		document.getElementById('outfitting_stats_unladen_jump').innerHTML = online ? (formatNumHTML(unlNavJmp, 2) + htmlLY) : htmlNA;
+		document.getElementById('outfitting_stats_max_jump'    ).innerHTML = online ? (formatNumHTML(maxNavJmp, 2) + htmlLY) : htmlNA;
+		document.getElementById('outfitting_stats_cur_range'    ).innerHTML = online ? (formatNumHTML(curNavRng, 2) + htmlLY) : htmlNA;
+		document.getElementById('outfitting_stats_laden_range'  ).innerHTML = online ? (formatNumHTML(ldnNavRng, 2) + htmlLY) : htmlNA;
+		document.getElementById('outfitting_stats_unladen_range').innerHTML = online ? (formatNumHTML(unlNavRng, 2) + htmlLY) : htmlNA;
 		document.getElementById('outfitting_stats_scoop_jump' ).innerHTML = (scooprate ? formatTimeHTML(scpNavJmp, true) : htmlNA);
 		document.getElementById('outfitting_stats_scoop_range').innerHTML = (scooprate ? formatTimeHTML(scpNavRng, true) : htmlNA);
 		document.getElementById('outfitting_stats_scoop_speed').innerHTML = (scooprate ? formatAttrHTML('scooprate', scooprate) : htmlNA);
 	}; // updateUIStatsNavFSD()
 	
 	
+	var getHandlingSpeedMultiplier = function(curves, speedRatio, pips) {
+		var low = curves[0][0] + (curves[1][0] - curves[0][0]) * pips;
+		var high = curves[0][1] + (curves[1][1] - curves[0][1]) * pips;
+		var peak = curves[0][2] + (curves[1][2] - curves[0][2]) * pips;
+		var x = min(max(speedRatio, 0), 1);
+		return ((speedRatio <= peak) ? (low + (1 - low) * (peak > 0 ? x / peak : x)) : (high + (1 - high) * (1 - (x - peak) / (1 - peak))));
+	}; // getHandlingSpeedMultiplier()
+
+
+	var getNormalAccelerationLimits = function(hull, thrusters, mass, pips, speedRatio) {
+		var acceleration = getMassCurveMultiplier(mass,
+			thrusters.getEffectiveAttrValue('engminmass'), thrusters.getEffectiveAttrValue('engoptmass'), thrusters.getEffectiveAttrValue('engmaxmass'),
+			thrusters.getEffectiveAttrValue('minmulacc'), thrusters.getEffectiveAttrValue('optmulacc'), thrusters.getEffectiveAttrValue('maxmulacc')) / 100;
+		var envelope = getHandlingSpeedMultiplier(hull.getModule().hndcurve.accel, speedRatio, pips);
+		var limits = {};
+		for (var axis of ['fwd', 'rev', 'lat'])
+			limits[axis] = hull.getEffectiveAttrValue(axis + 'acc') * acceleration;
+		for (var axis of ['pitch', 'roll', 'yaw']) {
+			var maximum = hull.getEffectiveAttrValue(axis + 'acc');
+			var minimum = hull.getEffectiveAttrValue('min' + axis + 'acc');
+			limits[axis] = isNaN(acceleration) ? NaN : (minimum + (maximum - minimum) * pips) * envelope;
+		}
+		return limits;
+	}; // getNormalAccelerationLimits()
+
+
 	var updateUIStatsNavThr = function() {
 		// get primary stats
-		var fuelres = eddb.ship[current.fit.getShipID()].fuelreserve;
 		var mass = current.fit.getStat('mass');
 		var fuelcap = current.fit.getStat('fuelcap');
 		var cargocap = current.fit.getStat('cargocap');
@@ -9488,16 +10326,20 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		var curTtlFuel = min(max(parseNumText(document.forms.stats.elements.stats_cur_fuel.value) || 0, 0), fuelcap);
 		var curTtlCrgo = min(max(parseNumText(document.forms.stats.elements.stats_cur_cargo.value) || 0, 0), cargocap);
 		var powerdistEngMul = powerdist_eng / MAX_POWER_DIST;
-		var curNavSpdMul = getMassCurveMultiplier(mass + curTtlFuel + fuelres + curTtlCrgo, minmass, optmass, maxmass, minmulspd, optmulspd, maxmulspd) / 100;
+		// Handling mass includes hull, cargo and current main fuel; reserve fuel is excluded.
+		var curNavSpdMul = getMassCurveMultiplier(mass + curTtlFuel + curTtlCrgo, minmass, optmass, maxmass, minmulspd, optmulspd, maxmulspd) / 100;
 		var ldnNavSpdMul = getMassCurveMultiplier(mass + fuelcap              + cargocap  , minmass, optmass, maxmass, minmulspd, optmulspd, maxmulspd) / 100;
 		var unlNavSpdMul = getMassCurveMultiplier(mass + fuelcap                          , minmass, optmass, maxmass, minmulspd, optmulspd, maxmulspd) / 100;
 		var maxNavSpdMul = getMassCurveMultiplier(mass                                    , minmass, optmass, maxmass, minmulspd, optmulspd, maxmulspd) / 100;
 		var engcapEnough = (engcap >= boostcost + BOOST_MARGIN);
 		var curNavFrq = (boostcost / (engchg * pow(powerdist_eng / MAX_POWER_DIST, 1.1)));
 		var maxNavFrq = (boostcost / engchg);
-		var curHndRotMul = getMassCurveMultiplier(mass + curTtlFuel + fuelres + curTtlCrgo, minmass, optmass, maxmass, minmulrot, optmulrot, maxmulrot) / 100;
+		var curHndRotMul = getMassCurveMultiplier(mass + curTtlFuel + curTtlCrgo, minmass, optmass, maxmass, minmulrot, optmulrot, maxmulrot) / 100;
 		var maxHndRotMul = getMassCurveMultiplier(mass                                    , minmass, optmass, maxmass, minmulrot, optmulrot, maxmulrot) / 100;
 		
+		var online = current.fit.getStat('online_thrusters');
+		var htmlOffline = '<abbr edsy-title="ui-stats-nav-offline" title="Thrusters unavailable after power priorities settle with hardpoints retracted" edsy-text="n-a">N/A</abbr>';
+
 		// update nav displays
 		var htmlErrorTH = '<abbr class="error" edsy-title="ui-stats-nav-error-thruster" title="Thruster has insufficient maximum mass" edsy-text="ui-stats-nav-error-abbr">ERR</abbr>';
 		var htmlErrorPD = '<abbr class="error" edsy-title="ui-stats-nav-error-distributor" title="Power distributor has insufficient ENG capacitor to boost" edsy-text="ui-stats-nav-error-abbr">ERR</abbr>';
@@ -9507,30 +10349,40 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		var htmlMaxNavFrq = formatTimeHTML(max(boostint, maxNavFrq), true);
 		if (maxNavFrq <= boostint)
 			htmlMaxNavFrq = '<abbr class="" edsy-title="ui-stats-nav-boost-often" title="Can boost as often as possible">' + htmlMaxNavFrq + '</abbr>';
-		document.getElementById('outfitting_stats_cur_speed'    ).innerHTML = (isNaN(curNavSpdMul) ? htmlErrorTH : formatAttrHTML('topspd', curNavSpdMul * topspd * (powerdistEngMul + minthrust * (1 - powerdistEngMul))));
-		document.getElementById('outfitting_stats_laden_speed'  ).innerHTML = (isNaN(ldnNavSpdMul) ? htmlErrorTH : formatAttrHTML('topspd', ldnNavSpdMul * topspd));
-		document.getElementById('outfitting_stats_unladen_speed').innerHTML = (isNaN(unlNavSpdMul) ? htmlErrorTH : formatAttrHTML('topspd', unlNavSpdMul * topspd));
-		document.getElementById('outfitting_stats_max_speed'    ).innerHTML = (isNaN(maxNavSpdMul) ? htmlErrorTH : formatAttrHTML('topspd', maxNavSpdMul * topspd));
-		document.getElementById('outfitting_stats_cur_boost'    ).innerHTML = (isNaN(curNavSpdMul) ? htmlErrorTH : (!engcapEnough ? htmlErrorPD : formatAttrHTML('bstspd', curNavSpdMul * bstspd)));
-		document.getElementById('outfitting_stats_laden_boost'  ).innerHTML = (isNaN(ldnNavSpdMul) ? htmlErrorTH : (!engcapEnough ? htmlErrorPD : formatAttrHTML('bstspd', ldnNavSpdMul * bstspd)));
-		document.getElementById('outfitting_stats_unladen_boost').innerHTML = (isNaN(unlNavSpdMul) ? htmlErrorTH : (!engcapEnough ? htmlErrorPD : formatAttrHTML('bstspd', unlNavSpdMul * bstspd)));
-		document.getElementById('outfitting_stats_max_boost'    ).innerHTML = (isNaN(maxNavSpdMul) ? htmlErrorTH : (!engcapEnough ? htmlErrorPD : formatAttrHTML('bstspd', maxNavSpdMul * bstspd)));
-		document.getElementById('outfitting_stats_cur_boostfreq').innerHTML = (isNaN(curNavSpdMul) ? htmlErrorTH : (!engcapEnough ? htmlErrorPD : htmlCurNavFrq));
-		document.getElementById('outfitting_stats_max_boostfreq').innerHTML = (isNaN(maxNavSpdMul) ? htmlErrorTH : (!engcapEnough ? htmlErrorPD : htmlMaxNavFrq));
+		document.getElementById('outfitting_stats_cur_speed'    ).innerHTML = (!online ? htmlOffline : (isNaN(curNavSpdMul) ? htmlErrorTH : formatAttrHTML('topspd', curNavSpdMul * topspd * (powerdistEngMul + minthrust * (1 - powerdistEngMul)))));
+		document.getElementById('outfitting_stats_laden_speed'  ).innerHTML = (!online ? htmlOffline : (isNaN(ldnNavSpdMul) ? htmlErrorTH : formatAttrHTML('topspd', ldnNavSpdMul * topspd)));
+		document.getElementById('outfitting_stats_unladen_speed').innerHTML = (!online ? htmlOffline : (isNaN(unlNavSpdMul) ? htmlErrorTH : formatAttrHTML('topspd', unlNavSpdMul * topspd)));
+		document.getElementById('outfitting_stats_max_speed'    ).innerHTML = (!online ? htmlOffline : (isNaN(maxNavSpdMul) ? htmlErrorTH : formatAttrHTML('topspd', maxNavSpdMul * topspd)));
+		document.getElementById('outfitting_stats_cur_boost'    ).innerHTML = (!online ? htmlOffline : (isNaN(curNavSpdMul) ? htmlErrorTH : (!engcapEnough ? htmlErrorPD : formatAttrHTML('bstspd', curNavSpdMul * bstspd))));
+		document.getElementById('outfitting_stats_laden_boost'  ).innerHTML = (!online ? htmlOffline : (isNaN(ldnNavSpdMul) ? htmlErrorTH : (!engcapEnough ? htmlErrorPD : formatAttrHTML('bstspd', ldnNavSpdMul * bstspd))));
+		document.getElementById('outfitting_stats_unladen_boost').innerHTML = (!online ? htmlOffline : (isNaN(unlNavSpdMul) ? htmlErrorTH : (!engcapEnough ? htmlErrorPD : formatAttrHTML('bstspd', unlNavSpdMul * bstspd))));
+		document.getElementById('outfitting_stats_max_boost'    ).innerHTML = (!online ? htmlOffline : (isNaN(maxNavSpdMul) ? htmlErrorTH : (!engcapEnough ? htmlErrorPD : formatAttrHTML('bstspd', maxNavSpdMul * bstspd))));
+		document.getElementById('outfitting_stats_cur_boostfreq').innerHTML = (!online ? htmlOffline : (isNaN(curNavSpdMul) ? htmlErrorTH : (!engcapEnough ? htmlErrorPD : htmlCurNavFrq)));
+		document.getElementById('outfitting_stats_max_boostfreq').innerHTML = (!online ? htmlOffline : (isNaN(maxNavSpdMul) ? htmlErrorTH : (!engcapEnough ? htmlErrorPD : htmlMaxNavFrq)));
+
+		// Normal-space steady rates at the selected actual speed magnitude.
+		var speedRatio = min(max(parseNumText(document.forms.stats.elements.stats_cur_speed.value) || 0, 0), 100) / 100;
+		var curves = current.fit.getSlot('ship', 'hull').getModule().hndcurve;
+		var pitchYawMul = getHandlingSpeedMultiplier(curves.pitch, speedRatio, powerdistEngMul);
+		var rollMul = getHandlingSpeedMultiplier(curves.roll, speedRatio, powerdistEngMul);
 		
 		// update hnd displays
-		document.getElementById('outfitting_stats_cur_pitch'    ).innerHTML = (isNaN(curHndRotMul) ? htmlErrorTH : formatAttrHTML('pitch', curHndRotMul * (pitch * powerdistEngMul + minpitch * (1 - powerdistEngMul))));
-		document.getElementById('outfitting_stats_cur_roll'     ).innerHTML = (isNaN(curHndRotMul) ? htmlErrorTH : formatAttrHTML('roll' , curHndRotMul * (roll  * powerdistEngMul + minroll  * (1 - powerdistEngMul))));
-		document.getElementById('outfitting_stats_cur_yaw'      ).innerHTML = (isNaN(curHndRotMul) ? htmlErrorTH : formatAttrHTML('yaw'  , curHndRotMul * (yaw   * powerdistEngMul + minyaw   * (1 - powerdistEngMul))));
-		document.getElementById('outfitting_stats_cur_pitchtime').innerHTML = (isNaN(curHndRotMul) ? htmlErrorTH : formatTimeHTML(180.0 / (curHndRotMul * (pitch * powerdistEngMul + minpitch * (1 - powerdistEngMul))), true));
-		document.getElementById('outfitting_stats_cur_rolltime' ).innerHTML = (isNaN(curHndRotMul) ? htmlErrorTH : formatTimeHTML(180.0 / (curHndRotMul * (roll  * powerdistEngMul + minroll  * (1 - powerdistEngMul))), true));
-		document.getElementById('outfitting_stats_cur_yawtime'  ).innerHTML = (isNaN(curHndRotMul) ? htmlErrorTH : formatTimeHTML(180.0 / (curHndRotMul * (yaw   * powerdistEngMul + minyaw   * (1 - powerdistEngMul))), true));
-		document.getElementById('outfitting_stats_max_pitch'    ).innerHTML = (isNaN(maxHndRotMul) ? htmlErrorTH : formatAttrHTML('pitch', curHndRotMul * pitch));
-		document.getElementById('outfitting_stats_max_roll'     ).innerHTML = (isNaN(maxHndRotMul) ? htmlErrorTH : formatAttrHTML('roll' , curHndRotMul * roll));
-		document.getElementById('outfitting_stats_max_yaw'      ).innerHTML = (isNaN(maxHndRotMul) ? htmlErrorTH : formatAttrHTML('yaw'  , curHndRotMul * yaw));
-		document.getElementById('outfitting_stats_max_pitchtime').innerHTML = (isNaN(maxHndRotMul) ? htmlErrorTH : formatTimeHTML(180.0 / (curHndRotMul * pitch), true));
-		document.getElementById('outfitting_stats_max_rolltime' ).innerHTML = (isNaN(maxHndRotMul) ? htmlErrorTH : formatTimeHTML(180.0 / (curHndRotMul * roll), true));
-		document.getElementById('outfitting_stats_max_yawtime'  ).innerHTML = (isNaN(maxHndRotMul) ? htmlErrorTH : formatTimeHTML(180.0 / (curHndRotMul * yaw), true));
+		document.getElementById('outfitting_stats_cur_pitch'    ).innerHTML = (!online ? htmlOffline : (isNaN(curHndRotMul) ? htmlErrorTH : formatAttrHTML('pitch', curHndRotMul * pitchYawMul * (pitch * powerdistEngMul + minpitch * (1 - powerdistEngMul)))));
+		document.getElementById('outfitting_stats_cur_roll'     ).innerHTML = (!online ? htmlOffline : (isNaN(curHndRotMul) ? htmlErrorTH : formatAttrHTML('roll' , curHndRotMul * rollMul * (roll  * powerdistEngMul + minroll  * (1 - powerdistEngMul)))));
+		document.getElementById('outfitting_stats_cur_yaw'      ).innerHTML = (!online ? htmlOffline : (isNaN(curHndRotMul) ? htmlErrorTH : formatAttrHTML('yaw'  , curHndRotMul * pitchYawMul * (yaw   * powerdistEngMul + minyaw   * (1 - powerdistEngMul)))));
+		document.getElementById('outfitting_stats_cur_pitchtime').innerHTML = (!online ? htmlOffline : (isNaN(curHndRotMul) ? htmlErrorTH : formatTimeHTML(180.0 / (curHndRotMul * pitchYawMul * (pitch * powerdistEngMul + minpitch * (1 - powerdistEngMul))), true)));
+		document.getElementById('outfitting_stats_cur_rolltime' ).innerHTML = (!online ? htmlOffline : (isNaN(curHndRotMul) ? htmlErrorTH : formatTimeHTML(180.0 / (curHndRotMul * rollMul * (roll  * powerdistEngMul + minroll  * (1 - powerdistEngMul))), true)));
+		document.getElementById('outfitting_stats_cur_yawtime'  ).innerHTML = (!online ? htmlOffline : (isNaN(curHndRotMul) ? htmlErrorTH : formatTimeHTML(180.0 / (curHndRotMul * pitchYawMul * (yaw   * powerdistEngMul + minyaw   * (1 - powerdistEngMul))), true)));
+		document.getElementById('outfitting_stats_max_pitch'    ).innerHTML = (!online ? htmlOffline : (isNaN(maxHndRotMul) ? htmlErrorTH : formatAttrHTML('pitch', maxHndRotMul * pitch)));
+		document.getElementById('outfitting_stats_max_roll'     ).innerHTML = (!online ? htmlOffline : (isNaN(maxHndRotMul) ? htmlErrorTH : formatAttrHTML('roll' , maxHndRotMul * roll)));
+		document.getElementById('outfitting_stats_max_yaw'      ).innerHTML = (!online ? htmlOffline : (isNaN(maxHndRotMul) ? htmlErrorTH : formatAttrHTML('yaw'  , maxHndRotMul * yaw)));
+		document.getElementById('outfitting_stats_max_pitchtime').innerHTML = (!online ? htmlOffline : (isNaN(maxHndRotMul) ? htmlErrorTH : formatTimeHTML(180.0 / (maxHndRotMul * pitch), true)));
+		document.getElementById('outfitting_stats_max_rolltime' ).innerHTML = (!online ? htmlOffline : (isNaN(maxHndRotMul) ? htmlErrorTH : formatTimeHTML(180.0 / (maxHndRotMul * roll), true)));
+		document.getElementById('outfitting_stats_max_yawtime'  ).innerHTML = (!online ? htmlOffline : (isNaN(maxHndRotMul) ? htmlErrorTH : formatTimeHTML(180.0 / (maxHndRotMul * yaw), true)));
+		var limits = getNormalAccelerationLimits(current.fit.getSlot('ship', 'hull'), current.fit.getSlot('component', CORE_ABBR_SLOT.TH),
+			mass + curTtlFuel + curTtlCrgo, powerdistEngMul, speedRatio);
+		for (var axis of ['fwd', 'rev', 'lat', 'pitch', 'roll', 'yaw'])
+			document.getElementById('outfitting_stats_acc_' + axis).innerHTML = !online ? htmlOffline : (isNaN(limits[axis]) ? htmlErrorTH : formatAttrHTML(axis + 'acc', limits[axis]));
 	}; // updateUIStatsNavThr()
 	
 	
@@ -9541,11 +10393,11 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		var pwrdraw_ret = current.fit.getStat('pwrdraw_ret');
 		var pwrdraw_dep = current.fit.getStat('pwrdraw_dep');
 		var thmload_ct = current.fit.getStat('thmload_ct');
+		var thmload_ct_dep = current.fit.getStat('thmload_ct_dep');
 		var thmload_cfsd = current.fit.getStat('thmload_cfsd');
 		var thmload_hardpoint_wepfull = current.fit.getStat('thmload_hardpoint_wepfull');
 		var thmload_hardpoint_wepempty = current.fit.getStat('thmload_hardpoint_wepempty');
-		var thmload_iscb = current.fit.getStat('thmload_iscb');
-		var spinup_iscb = current.fit.getStat('spinup_iscb');
+		var heatpulses_iscb = current.fit.getStat('_shields') > 0 ? current.fit.getStat('heatpulses_iscb') : [];
 		var wepchg_sustain_cur = current.fit.getStat('wepchg_sustain_cur');
 		
 		var slot = current.fit.getSlot('ship', 'hull');
@@ -9556,31 +10408,39 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		var heateff = slot.getEffectiveAttrValue('heateff');
 		
 		// compute derived stats
-		// pwrbst does not increase the displayed MW output of the plant, so %usage remains the same
-		// instead, %usage is allowed to go to (e.g.) 104% before overloading
-		var thmload_pwrdraw_ret = pwrdraw_ret[0];
-		for (var p = MAX_POWER_PRIORITY;  p >= 1 && thmload_pwrdraw_ret > pwrcap_pwrbst;  p--) {
-			thmload_pwrdraw_ret -= pwrdraw_ret[p];
-		}
-		thmload_pwrdraw_ret *= heateff;
-		var thmload_pwrdraw_dep = pwrdraw_dep[0];
-		for (var p = MAX_POWER_PRIORITY;  p >= 1 && thmload_pwrdraw_dep > pwrcap_pwrbst;  p--) {
-			thmload_pwrdraw_dep -= pwrdraw_dep[p];
-		}
-		thmload_pwrdraw_dep *= heateff;
-		thmload_hardpoint_wepfull *= wepchg_sustain_cur;
-		thmload_hardpoint_wepempty *= wepchg_sustain_cur;
+		var powerMultiplier = 1 + current.fit.getStat('pwrbst') / 100;
+		var thmload_pwrdraw_ret = getPowerPlantHeatRate(getPowerAllocation(pwrdraw_ret, pwrcap_pwrbst).draw, pwrcap, powerMultiplier, heateff);
+		var thmload_pwrdraw_dep = getPowerPlantHeatRate(getPowerAllocation(pwrdraw_dep, pwrcap_pwrbst).draw, pwrcap, powerMultiplier, heateff);
+		var thmload_nocap = current.fit.getStat('thmload_hardpoint_nocap') || 0;
+		thmload_hardpoint_wepfull = thmload_nocap + (thmload_hardpoint_wepfull - thmload_nocap) * wepchg_sustain_cur;
+		var wepheatmul = current.fit.getSlot('component', CORE_ABBR_SLOT.PD).getEffectiveAttrValue('wepheatmul') || 5;
+		thmload_hardpoint_wepempty = thmload_nocap * wepheatmul + (thmload_hardpoint_wepempty - thmload_nocap * wepheatmul) * wepchg_sustain_cur;
 		
 		// update displays
 		updateUIStatsThmLevel('outfitting_stats_idl_heat'     , thmload_pwrdraw_ret       , 0                               , heatdismax, heatcap);
 		updateUIStatsThmLevel('outfitting_stats_thr_heat'     , thmload_ct                , thmload_pwrdraw_ret             , heatdismax, heatcap);
 		updateUIStatsThmLevel('outfitting_stats_fsd_heat'     , thmload_cfsd              , thmload_pwrdraw_ret + thmload_ct, heatdismax, heatcap);
-		updateUIStatsThmLevel('outfitting_stats_wpnfull_heat' , thmload_hardpoint_wepfull , thmload_pwrdraw_dep + thmload_ct, heatdismax, heatcap);
-		updateUIStatsThmLevel('outfitting_stats_wpnempty_heat', thmload_hardpoint_wepempty, thmload_pwrdraw_dep + thmload_ct, heatdismax, heatcap);
-		updateUIStatsThmLevel('outfitting_stats_scb_heat'     , thmload_iscb              , thmload_pwrdraw_dep + thmload_ct, heatdismax, heatcap, spinup_iscb);
+		updateUIStatsThmLevel('outfitting_stats_wpnfull_heat' , thmload_hardpoint_wepfull , thmload_pwrdraw_dep + thmload_ct_dep, heatdismax, heatcap);
+		updateUIStatsThmLevel('outfitting_stats_wpnempty_heat', thmload_hardpoint_wepempty, thmload_pwrdraw_dep + thmload_ct_dep, heatdismax, heatcap);
+		updateUIStatsThmPulses('outfitting_stats_scb_heat', heatpulses_iscb, thmload_pwrdraw_dep + thmload_ct_dep, heatdismax, heatcap);
 	}; // updateUIStatsThm()
 	
 	
+	var updateUIStatsThmPulses = function(elementid, pulses, thmloadBase, heatdismax, heatcap) {
+		var el = document.getElementById(elementid);
+		el.className = '';
+		var result = getNominalHeatPulseSummary(heatcap, heatdismax, thmloadBase, pulses);
+		if (!result) {
+			el.innerHTML = '<small class="semantic" edsy-text="n-a">N/A</small>';
+		} else if (result.peak > 1.5) {
+			el.innerHTML = ('<abbr class="error" edsy-vals="' + encodeHTML(JSON.stringify({'number':(result.peak/1.5),'number#':1,'number%':true,'seconds':result.overheatTime,'seconds#':1})) + '" edsy-title="interp-peak-heat-number-overheat-seconds" title="Peak heat level ' + formatPctText(result.peak / 1.5, 1) + '; over 100% for ' + formatNumText(result.overheatTime, 1) + 's">' + formatTimeHTML(result.timeToOverheat, true) + '</abbr>');
+		} else {
+			var heatpct = result.peak / 1.5;
+			el.innerHTML = ('<abbr edsy-vals="' + encodeHTML(JSON.stringify({'number':heatpct,'number#':6,'number%':true})) + '" edsy-title="interp-number" title="' + formatPctText(heatpct, 6) + '">' + formatPctHTML(heatpct, 1) + '</abbr>');
+		}
+	}; // updateUIStatsThmPulses()
+
+
 	var updateUIStatsThmLevel = function(elementid, thmload, thmloadBase, heatdismax, heatcap, duration) {
 		var el = document.getElementById(elementid);
 		el.className = '';
@@ -9631,7 +10491,7 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		var syscap = slot.getEffectiveAttrValue('syscap');
 		var syschg = slot.getEffectiveAttrValue('syschg');
 		for (var slotnum = 0;  slot = current.fit.getSlot('internal', slotnum);  slotnum++) {
-			if ((slot.getModule() || EMPTY_OBJ).mtype === 'isg' && slot.getPowered())
+			if ((slot.getModule() || EMPTY_OBJ).mtype === 'isg' && isSlotOnline(slot, current.fit.getStat('power_state'), true))
 				break;
 		}
 		var maxmass = slot ? slot.getEffectiveAttrValue('genmaxmass') : 0;
@@ -9650,13 +10510,9 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		var rawShdStr = current.fit.getStat('_shields');
 		var ammomaxHTML = formatNumHTML(shieldrnfps_ammomax / shieldrnfps, (shieldrnfps_ammomax % shieldrnfps) ? 1 : 0);
 		var powerdistSysMul = pow(powerdist_sys / MAX_POWER_DIST, 1.1);
-		var bgenFastTime = min((rawShdStr / 2 / bgenrate), (syscap / max(0, bgenrate * distdraw_mj - syschg * powerdistSysMul)));
-		var bgenSlowTime = (rawShdStr / 2 - bgenrate * bgenFastTime) / min(bgenrate, (syschg * powerdistSysMul) / distdraw_mj);
-		// TODO: does it really make sense to assume a full cap to start regen from 50-100%?
-		//var genFastTime = min((rawShdStr / 2 / genrate), (syscap / max(0, genrate * distdraw_mj - syschg * powerdistSysMul)));
-		//var genSlowTime = (rawShdStr / 2 - genrate * genFastTime) / min(genrate, (syschg * powerdistSysMul) / distdraw_mj);
-		var genFastTime = 0;
-		var genSlowTime = (rawShdStr / 2) / min(genrate, (syschg * powerdistSysMul) / distdraw_mj);
+		var sysRecharge = syschg * powerdistSysMul;
+		var rebuildTime = getShieldRecoveryTime(rawShdStr / 2, bgenrate, distdraw_mj, sysRecharge, syscap);
+		var regenTime = getShieldRecoveryTime(rawShdStr / 2, genrate, distdraw_mj, sysRecharge, 0);
 		
 		// update displays
 		var htmlNA = '<small class="semantic" edsy-text="n-a">N/A</small>';
@@ -9675,13 +10531,13 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 	//	document.getElementById('outfitting_stats_kin_shield_regen').innerHTML = (!hasSG ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('genrate', genrate / (1 - absShdRes) / (1 - kinShdRes))));
 	//	document.getElementById('outfitting_stats_thm_shield_regen').innerHTML = (!hasSG ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('genrate', genrate / (1 - absShdRes) / (1 - thmShdRes))));
 	//	document.getElementById('outfitting_stats_exp_shield_regen').innerHTML = (!hasSG ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('genrate', genrate / (1 - absShdRes) / (1 - expShdRes))));
-		document.getElementById('outfitting_stats_raw_shield_reinf').innerHTML = (!(hasSG && shieldrnfps) ? htmlNA : (!isEnough ? htmlErrorSG : (ammomaxHTML + '<small class="semantic">&times;</small>' + formatAttrHTML('shieldrnfps', shieldrnfps))));
-		document.getElementById('outfitting_stats_abs_shield_reinf').innerHTML = (!(hasSG && shieldrnfps) ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('shieldrnfps', shieldrnfps_ammomax / (1 - absShdRes))));
-		document.getElementById('outfitting_stats_kin_shield_reinf').innerHTML = (!(hasSG && shieldrnfps) ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('shieldrnfps', shieldrnfps_ammomax / (1 - absShdRes) / (1 - kinShdRes))));
-		document.getElementById('outfitting_stats_thm_shield_reinf').innerHTML = (!(hasSG && shieldrnfps) ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('shieldrnfps', shieldrnfps_ammomax / (1 - absShdRes) / (1 - thmShdRes))));
-		document.getElementById('outfitting_stats_exp_shield_reinf').innerHTML = (!(hasSG && shieldrnfps) ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('shieldrnfps', shieldrnfps_ammomax / (1 - absShdRes) / (1 - expShdRes))));
-		document.getElementById('outfitting_stats_shield_build').innerHTML = (!hasSG ? htmlNA : (!isEnough ? htmlErrorSG : formatTimeHTML(16 + bgenFastTime + bgenSlowTime)));
-		document.getElementById('outfitting_stats_shield_regen').innerHTML = (!hasSG ? htmlNA : (!isEnough ? htmlErrorSG : formatTimeHTML(genFastTime + genSlowTime)));
+		document.getElementById('outfitting_stats_raw_shield_reinf').innerHTML = (!(hasSG && shieldrnfps) ? htmlNA : (!isEnough ? htmlErrorSG : (ammomaxHTML + '<small class="semantic">&times;</small>' + formatAttrHTML('shields', shieldrnfps, 1))));
+		document.getElementById('outfitting_stats_abs_shield_reinf').innerHTML = (!(hasSG && shieldrnfps) ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('shields', shieldrnfps_ammomax / (1 - absShdRes), 1)));
+		document.getElementById('outfitting_stats_kin_shield_reinf').innerHTML = (!(hasSG && shieldrnfps) ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('shields', shieldrnfps_ammomax / (1 - absShdRes) / (1 - kinShdRes), 1)));
+		document.getElementById('outfitting_stats_thm_shield_reinf').innerHTML = (!(hasSG && shieldrnfps) ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('shields', shieldrnfps_ammomax / (1 - absShdRes) / (1 - thmShdRes), 1)));
+		document.getElementById('outfitting_stats_exp_shield_reinf').innerHTML = (!(hasSG && shieldrnfps) ? htmlNA : (!isEnough ? htmlErrorSG : formatAttrHTML('shields', shieldrnfps_ammomax / (1 - absShdRes) / (1 - expShdRes), 1)));
+		document.getElementById('outfitting_stats_shield_build').innerHTML = (!hasSG ? htmlNA : (!isEnough ? htmlErrorSG : formatTimeHTML(16 + rebuildTime)));
+		document.getElementById('outfitting_stats_shield_regen').innerHTML = (!hasSG ? htmlNA : (!isEnough ? htmlErrorSG : formatTimeHTML(regenTime)));
 	}; // updateUIStatsShd();
 	
 	
@@ -9701,6 +10557,7 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		var thmArmRes = current.fit.getStat('_athmres');
 		var expArmRes = current.fit.getStat('_aexpres')
 		var cauArmRes = current.fit.getStat('_acaures')
+		var thgArmRes = current.fit.getStat('_athgres');
 		var rawArmInt = current.fit.getStat('_armour')
 		var kinArmInt = (rawArmInt / (1 - kinArmRes / 100));
 		var thmArmInt = (rawArmInt / (1 - thmArmRes / 100));
@@ -9720,17 +10577,20 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		document.getElementById('outfitting_stats_thm_armour_resist').innerHTML = formatAttrHTML('thmres', thmArmRes);
 		document.getElementById('outfitting_stats_exp_armour_resist').innerHTML = formatAttrHTML('expres', expArmRes);
 		document.getElementById('outfitting_stats_cau_armour_resist').innerHTML = formatAttrHTML('caures', cauArmRes);
+		document.getElementById('outfitting_stats_thg_armour_resist').innerHTML = formatAttrHTML('thgres', thgArmRes);
 		document.getElementById('outfitting_stats_raw_armour_integ').innerHTML = formatNumHTML(rawArmInt, 1);
 		document.getElementById('outfitting_stats_mod_armour_integ').innerHTML = (integ_imrp ? formatNumHTML(integ_imrp, 1) : htmlNA);
 		document.getElementById('outfitting_stats_kin_armour_integ').innerHTML = formatNumHTML(kinArmInt, 1);
 		document.getElementById('outfitting_stats_thm_armour_integ').innerHTML = formatNumHTML(thmArmInt, 1);
 		document.getElementById('outfitting_stats_exp_armour_integ').innerHTML = formatNumHTML(expArmInt, 1);
 		document.getElementById('outfitting_stats_cau_armour_integ').innerHTML = formatNumHTML(cauArmInt, 1);
+		document.getElementById('outfitting_stats_thg_armour_integ').innerHTML = formatNumHTML(rawArmInt / (1 - thgArmRes / 100), 1);
 		document.getElementById('outfitting_stats_raw_armour_repair').innerHTML = (rawArmRep ? formatNumHTML(rawArmRep, 1) : htmlNA);
 		document.getElementById('outfitting_stats_kin_armour_repair').innerHTML = (rawArmRep ? formatNumHTML(kinArmRep, 1) : htmlNA);
 		document.getElementById('outfitting_stats_thm_armour_repair').innerHTML = (rawArmRep ? formatNumHTML(thmArmRep, 1) : htmlNA);
 		document.getElementById('outfitting_stats_exp_armour_repair').innerHTML = (rawArmRep ? formatNumHTML(expArmRep, 1) : htmlNA);
 		document.getElementById('outfitting_stats_cau_armour_repair').innerHTML = (rawArmRep ? formatNumHTML(cauArmRep, 1) : htmlNA);
+		document.getElementById('outfitting_stats_thg_armour_repair').innerHTML = (rawArmRep ? formatNumHTML(rawArmRep / (1 - thgArmRes / 100), 1) : htmlNA);
 	}; // updateUIStatsArm()
 	
 	
@@ -9738,13 +10598,15 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		// get primary stats
 		var dps = current.fit.getStat('dps');
 		var dps_abs = current.fit.getStat('dps_abs');
+		var dps_pls = current.fit.getStat('dps_pls');
+		var dps_col = current.fit.getStat('dps_col');
 		var dps_thm = current.fit.getStat('dps_thm');
 		var dps_kin = current.fit.getStat('dps_kin');
 		var dps_exp = current.fit.getStat('dps_exp');
 		var dps_axe = current.fit.getStat('dps_axe');
-		var dps_cau = current.fit.getStat('dps_cau');
-		var dps_nodistdraw = current.fit.getStat('dps_nodistdraw');
-		var dps_distdraw = current.fit.getStat('dps_distdraw');
+		var dps_thg = current.fit.getStat('dps_thg');
+		var dps_nodistdraw = current.fit.getStat('sdps_nodistdraw');
+		var dps_distdraw = current.fit.getStat('sdps_distdraw');
 		var ammotime_wepcap = current.fit.getStat('ammotime_wepcap');
 		var ammotime_nocap = current.fit.getStat('ammotime_nocap');
 		var wepcap_burst_cur = current.fit.getStat('wepcap_burst_cur');
@@ -9755,19 +10617,25 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		// compute derived stats
 		var curWpnSus = ((dps_nodistdraw + (dps_distdraw ? (dps_distdraw * wepchg_sustain_cur) : 0)) / dps);
 		var maxWpnSus = ((dps_nodistdraw + (dps_distdraw ? (dps_distdraw * wepchg_sustain_max) : 0)) / dps);
-		var ammWpnDur = min(ammotime_nocap, ((ammotime_wepcap <= wepcap_burst_max) ? ammotime_wepcap : (wepcap_burst_max + (ammotime_wepcap - wepcap_burst_max) / maxWpnSus)));
+		var ammWpnDur = min(ammotime_nocap, (!isFinite(ammotime_wepcap) || ammotime_wepcap <= wepcap_burst_max) ? ammotime_wepcap : (wepcap_burst_max + (ammotime_wepcap - wepcap_burst_max) / wepchg_sustain_max));
 		
 		// update displays
 		var htmlNA = '<small class="semantic" edsy-text="n-a">N/A</small>';
-		document.getElementById('outfitting_stats_wpn_raw_burst').innerHTML = (dps ? formatAttrHTML('dps', dps, 1) : htmlNA);
+		var htmlDps = dps ? formatAttrHTML('dps', dps, 1) : htmlNA;
+		if (current.fit.getStat('wep_cap_blocked')) htmlDps = '<abbr class="error" edsy-title="ui-stats-weapon-capacitor-blocked-desc" title="One or more weapons cannot fund a shot from the WEP capacitor and are excluded">' + formatAttrHTML('dps', dps, 1) + '</abbr>';
+		document.getElementById('outfitting_stats_wpn_raw_burst').innerHTML = htmlDps;
 		document.getElementById('outfitting_stats_wpn_abs_burst').innerHTML = (dps ? formatPctHTML(dps_abs / dps, 0) : htmlNA);
+		document.getElementById('outfitting_stats_wpn_pls_burst').innerHTML = (dps ? formatPctHTML(dps_pls / dps, 0) : htmlNA);
+		document.getElementById('outfitting_stats_wpn_col_burst').innerHTML = (dps ? formatPctHTML(dps_col / dps, 0) : htmlNA);
 		document.getElementById('outfitting_stats_wpn_thm_burst').innerHTML = (dps ? formatPctHTML(dps_thm / dps, 0) : htmlNA);
 		document.getElementById('outfitting_stats_wpn_kin_burst').innerHTML = (dps ? formatPctHTML(dps_kin / dps, 0) : htmlNA);
 		document.getElementById('outfitting_stats_wpn_exp_burst').innerHTML = (dps ? formatPctHTML(dps_exp / dps, 0) : htmlNA);
 		document.getElementById('outfitting_stats_wpn_axe_burst').innerHTML = (dps ? formatPctHTML(dps_axe / dps, 0) : htmlNA);
+		document.getElementById('outfitting_stats_wpn_thg_burst').innerHTML = (dps ? formatPctHTML(dps_thg / dps, 0) : htmlNA);
 		document.getElementById('outfitting_stats_wpn_cur_dur').innerHTML = (dps ? formatTimeHTML(wepcap_burst_cur) : htmlNA);
 		document.getElementById('outfitting_stats_wpn_max_dur').innerHTML = (dps ? formatTimeHTML(wepcap_burst_max) : htmlNA);
-		document.getElementById('outfitting_stats_wpn_amm_dur').innerHTML = (dps ? formatTimeHTML(ammWpnDur) : htmlNA);
+		var htmlFuel = '<abbr edsy-title="ui-stats-weapon-duration-fuel-desc" title="Ammunition uses ship fuel; firing endurance is not calculated" edsy-text="ui-stats-weapon-duration-fuel">Fuel</abbr>';
+		document.getElementById('outfitting_stats_wpn_amm_dur').innerHTML = (dps ? ((current.fit.getStat('ammo_fuel') && !isFinite(ammWpnDur)) ? htmlFuel : formatTimeHTML(ammWpnDur)) : htmlNA);
 		document.getElementById('outfitting_stats_wpn_cur_sus').innerHTML = (dps ? formatPctHTML(curWpnSus, 1) : htmlNA);
 		document.getElementById('outfitting_stats_wpn_max_sus').innerHTML = (dps ? formatPctHTML(maxWpnSus, 1) : htmlNA);
 	}; // updateUIStatsWpn()
@@ -12107,6 +12975,7 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		switch (e.target.name) {
 		case 'stats_cur_fuel':   setStatsCurFuel(value);   break;
 		case 'stats_cur_cargo':  setStatsCurCargo(value);  break;
+		case 'stats_cur_speed':  setStatsCurSpeed(value);  break;
 		}
 	}; // onUIStatsInputWheel()
 	
@@ -12116,6 +12985,7 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		switch (e.target.name) {
 		case 'stats_cur_fuel':   setStatsCurFuel(parseNumText(e.target.value) || 0);   break;
 		case 'stats_cur_cargo':  setStatsCurCargo(parseNumText(e.target.value) || 0);  break;
+		case 'stats_cur_speed':  setStatsCurSpeed(parseNumText(e.target.value) || 0);  break;
 		}
 	}; // onUIStatsInputChange()
 	
@@ -12435,7 +13305,7 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		if (cache.lang == lang)
 			return;
 		
-		var file = "lang-" + lang + ".json";
+		var file = "lang-" + lang + ".json?v=" + VERSIONS[3];
 		var response = await fetch(file);
 		if (!response.ok) {
 			console.log("ERROR: failed to load '" + file + "': " + response.status + " " + response.statusText);
@@ -12592,6 +13462,8 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		document.forms.stats.elements.stats_cur_fuel.addEventListener('change', onUIStatsInputChange);
 		document.forms.stats.elements.stats_cur_cargo.addEventListener('wheel', onUIStatsInputWheel);
 		document.forms.stats.elements.stats_cur_cargo.addEventListener('change', onUIStatsInputChange);
+		document.forms.stats.elements.stats_cur_speed.addEventListener('wheel', onUIStatsInputWheel);
+		document.forms.stats.elements.stats_cur_speed.addEventListener('change', onUIStatsInputChange);
 		document.getElementById('outfitting_fit_crewdist').addEventListener('click', onUIPowerDistClick);
 		document.getElementById('outfitting_fit_powerdist').addEventListener('click', onUIPowerDistClick);
 		document.getElementById('analysis_tabs').addEventListener('change', onUIAnalysisTabChange);
@@ -12643,14 +13515,14 @@ if(false && current.dev) console.log("setCurrentSlot(): slot "+slotgroup+ " #"+s
 		document.getElementById('popup_cancel').addEventListener('click', onUIPopupButtonClick);
 		document.getElementById('popup_okay').addEventListener('click', onUIPopupButtonClick);
 		
-		// check all source file versions
+		// Check application asset versions.
 		if (!verifyVersionSync()) {
 			document.forms.popup.addEventListener('submit', onFormSubmit);
 			showUITextPopup(
 					("<h1>" + getTranslation('message-version') + "</h1><h3>" + getTranslation('message-version-desc') + "</h3>"),
 					"",
 					null, true,
-					function() { window.location = 'update.html'; }, null
+					function() { window.location = 'update.html' + window.location.hash; }, null
 			);
 			return false;
 		}

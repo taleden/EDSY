@@ -10,8 +10,8 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 
 :root {
-	--edsy-versions-css: v-424019901-424019901-424019901-424019901; /* HTML,CSS,DB,JS */
-	--edsy-lastmodified-css: d-20260829;
+	--edsy-versions-css: v-424029903-424029903-424029903-424029903; /* HTML,CSS,DB,JS */
+	--edsy-lastmodified-css: d-20261026;
 	
 	--colorblack: black;
 	--colorwhite: white;
@@ -2739,6 +2739,27 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 }
 
 
+#outfitting_details_module #outfitting_details_limpet_modes TH,
+#outfitting_details_module #outfitting_details_sco TH {
+	padding-top: 0.5rem;
+	text-align: left;
+}
+#outfitting_details_module #outfitting_details_limpet_modes TD:last-child,
+#outfitting_details_module #outfitting_details_sco TD:last-child {
+	white-space: nowrap;
+}
+#outfitting_details_module #outfitting_details_limpet_modes TD SPAN,
+#outfitting_details_module #outfitting_details_sco TD SPAN {
+	display: inline;
+	padding-bottom: 0;
+}
+#outfitting_details_module #outfitting_details_limpet_modes TD ABBR,
+#outfitting_details_module #outfitting_details_sco TD ABBR {
+	position: static;
+	white-space: normal;
+}
+
+
 #outfitting_details_buttons {
 	flex: 0 0 auto;
 	min-width: 0;
@@ -3770,4 +3791,10 @@ BODY.onlybest.experimental #outfitting_modules.SLOT #outfitting_modules_picker.s
 	align-self: flex-end;
 	margin: 0.25rem;
 	padding: 0.125rem 0.5rem;
+}
+
+.acceleration_limits SUMMARY {
+	padding: 0.25em;
+	color: var(--colororange5);
+	cursor: pointer;
 }

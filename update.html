@@ -11,7 +11,7 @@
 				<h2>Updating EDSY...</h2>
 				<p>Your browser is attempting to reload the latest versions of all EDSY application resource files.</p>
 				<p>Progress:<span id="reload_progress"></span></p>
-				<div><a id="reload_button" class="button" href="index.html">Return to EDSY</a></div>
+				<div><button id="reload_retry" class="button" type="button" style="display:none">Retry update</button> <a id="reload_button" class="button" href="index.html">Return to EDSY</a></div>
 			</div>
 		</div>
 		<script type="application/javascript">
@@ -21,27 +21,46 @@ function reloadFile(url, re, label) {
 			url,
 			{ mode:"same-origin", credentials:"same-origin", cache:"reload" }
 	).then(
-			function(resp) { return resp.text(); }
+			function(resp) {
+				if (!resp.ok)
+					throw new Error(resp.status + ' ' + resp.statusText);
+				return resp.text();
+			}
 	).then(
 			function(text) {
-				window._edsy_reload = (window._edsy_reload || 0) - 1;
-				text = ((text.toLowerCase().match(re) || EMPTY_ARR)[1] || '');
+				var match = text.toLowerCase().match(re);
+				if (!match)
+					throw new Error('No application version found');
+				text = match[1];
 				console.log("got "+url+" v"+text);
 				var abbr = document.createElement('ABBR');
 				abbr.title = (text ? versionToString(text) : '?');
 				abbr.innerText = label;
 				document.getElementById('reload_progress').append(' ', abbr);
-				if (window._edsy_reload < 1) {
-					document.getElementById('reload_progress').append(' ... Complete!');
-					var a = document.getElementById('reload_button');
-					a.style.display = '';
-					a.innerText = 'Relaunch EDSY (in 3...)';
-					setTimeout(function() { a.innerText = 'Relaunch EDSY (in 2...)'; }, 1000);
-					setTimeout(function() { a.innerText = 'Relaunch EDSY (in 1...)'; }, 2000);
-					setTimeout(function() { a.innerText = 'Relaunch EDSY'; window.location = a.href; }, 3000);
-				}
 			}
-	);
+	).catch(function(error) {
+		window._edsy_reload_failed = true;
+		var abbr = document.createElement('ABBR');
+		abbr.title = error.message;
+		abbr.innerText = label + ' failed';
+		document.getElementById('reload_progress').append(' ', abbr);
+	}).then(function() {
+		window._edsy_reload--;
+		if (window._edsy_reload > 0)
+			return;
+		var a = document.getElementById('reload_button');
+		a.style.display = '';
+		if (window._edsy_reload_failed) {
+			document.getElementById('reload_progress').append(' ... Some files could not be updated. Please retry or return to EDSY.');
+			document.getElementById('reload_retry').style.display = '';
+			return;
+		}
+		document.getElementById('reload_progress').append(' ... Complete!');
+		a.innerText = 'Relaunch EDSY (in 3...)';
+		setTimeout(function() { a.innerText = 'Relaunch EDSY (in 2...)'; }, 1000);
+		setTimeout(function() { a.innerText = 'Relaunch EDSY (in 1...)'; }, 2000);
+		setTimeout(function() { a.innerText = 'Relaunch EDSY'; window.location = a.href; }, 3000);
+	});
 } // reloadFile()
 
 function versionToString(v) {
@@ -50,7 +69,10 @@ function versionToString(v) {
 } // versionToString()
 
 function onDOMContentLoaded(e) {
+	window._edsy_reload_failed = false;
+	document.getElementById('reload_button').href = 'index.html' + window.location.hash;
 	document.getElementById('reload_button').style.display = 'none';
+	document.getElementById('reload_retry').addEventListener('click', function() { window.location.reload(); });
 	reloadFile("index.html", /<meta +name *= *"edsy-versions-html" [ a-z0-9="_-]*content *= *"([0-9]+)(?:,[0-9]+)*"/i, "HTML");
 	reloadFile("edsy.css", /^[ \t]*--edsy-versions-css *: *v-[0-9]+-?([0-9]+)(?:-[0-9]+)* *;/im, "CSS");
 	reloadFile("eddb.js", /^[ \t]*edsy_versions_db *: *\[(?: *[0-9]+ *,){2} *([0-9]+)(?: *, *[0-9]+)* *\] *,/im, "DB");
