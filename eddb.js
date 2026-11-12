@@ -10,9 +10,9 @@ Frontier Customer Services (https://forums.frontier.co.uk/threads/elite-dangerou
 */
 'use strict';
 var eddb = {
-	version : 424029902,
-	edsy_versions_db : [424019901,424019901,424029902,424029901], /* HTML,CSS,DB,JS */
-	edsy_lastmodified_db : 20261020,
+	version : 424029903,
+	edsy_versions_db : [424019901,424019901,424029903,424029901], /* HTML,CSS,DB,JS */
+	edsy_lastmodified_db : 20261111,
 	ship : {
 		 1 : {
 			fdid:128049249, fdname:'SideWinder', eddbid:18,
@@ -571,7 +571,7 @@ var eddb = {
 			id:33, stype:'fr', name:'Type-7 Transporter', class:3, cost:16774470, retail:17472250,
 			topspd:180, bstspd:300, mnv:1, shields:156, armour:340, mass:300, fwdacc:20.11, revacc:15.02, latacc:15.13,
 			minthrust:33.333, boostcost:10, boostint:6, pitch:22, yaw:22, roll:60, pitchacc:200, yawacc:50, rollacc:200, minpitch:16, minyaw:16,
-			heatcap:232, heatdismin:NaN, heatdismax:NaN, fuelcost:50, fuelreserve:0.52, hardness:54, masslock:10, crew:1, // verify masslock // TODO: heatdismin,heatdismax
+			heatcap:232, heatdismin:2.22, heatdismax:34.8, fuelcost:50, fuelreserve:0.52, hardness:54, masslock:10, crew:1, // verify masslock
 			slots:{
 				hardpoint:[1,1,1,1],
 				utility  :[0,0,0,0],
@@ -1441,7 +1441,7 @@ var eddb = {
 			id:18, stype:'sh', name:'Anaconda Mk II', class:3, cost:372041780, retail:384958850,
 			topspd:190, bstspd:250, mnv:2, shields:450, armour:745, mass:940, fwdacc:NaN, revacc:NaN, latacc:NaN, // TODO: *acc
 			minthrust:47, boostcost:27, boostint:6, pitch:27, yaw:14, roll:65, pitchacc:NaN, yawacc:NaN, rollacc:NaN, minpitch:22, // TODO: *acc
-			heatcap:NaN, heatdismin:NaN, heatdismax:NaN, fuelcost:50, fuelreserve:1.08, hardness:65, masslock:24, crew:4, // TODO: heatcap,heatdismin,heatdismax
+			heatcap:337, heatdismin:3.16, heatdismax:68.6, fuelcost:50, fuelreserve:1.08, hardness:65, masslock:24, crew:4,
 			slots:{
 				hardpoint:[4,3,3,3,3,1,1],
 				utility  :[0,0,0,0,0,0,0,0],
